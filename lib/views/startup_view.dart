@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/view_models/startup_view_model.dart';
 
@@ -17,7 +18,7 @@ class StartUpView extends StatelessWidget {
               SizedBox(
                 width: 200,
                 height: 100,
-                child: Image.asset('assets/images/sailingYacht.png'),
+                child: SvgPicture.asset('assets/images/sailingYacht.svg'),
               ),
               SizedBox(
                 height: 50,

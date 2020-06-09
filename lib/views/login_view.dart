@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
@@ -83,8 +84,8 @@ class _LoginViewState extends State<LoginView>
                         top: 130, right: 20), //이미지가 쏠려서 패딩으로 위치 약간 수정
                     child: AnimatedBuilder(
                         animation: _aniController.view,
-                        child: Image(
-                          image: AssetImage('assets/images/sailingYacht.png'),
+                        child: SvgPicture.asset(
+                          'assets/images/sailingYacht.svg',
                           height: 130,
                         ),
                         builder: (context, child) {
