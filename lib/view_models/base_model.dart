@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
 class BaseModel extends ChangeNotifier {
-  //busy handle
+  //busy, not busy handle
 
 }
