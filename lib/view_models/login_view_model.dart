@@ -19,7 +19,9 @@ class LoginViewModel extends BaseModel {
       if (result) {
         print('Login Success');
         // loggedIn 화면으로 route (HomeView)
-        _navigationService.navigateTo('loggedIn');
+        _navigationService.navigateTo(
+          'loggedIn',
+        );
       } else {
         print('Login Failure');
       }

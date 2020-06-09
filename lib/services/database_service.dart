@@ -22,10 +22,12 @@ class DatabaseService {
   // Read: User정보 users Collection으로부터 읽기
   Future getUser(String uid) async {
     try {
+      // print('DB' + uid);
       var userData = await _usersCollectionReference.document(uid).get();
+      // print(userData);
       return UserModel.fromData(userData.data);
     } catch (e) {
-      return e.message;
+      print(e.toString());
     }
   }
 }

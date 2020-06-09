@@ -9,7 +9,6 @@ class StartUpViewModel extends BaseModel {
 
   Future handleStartUpLogic() async {
     // return true or false
-    print("startUpLogic");
     var hasUserLoggedIn = await _authService.isUserLoggedIn();
 
     if (hasUserLoggedIn) {
