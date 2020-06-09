@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "962026345665",
+    "firebase_url": "https://yachtone-8baf9.firebaseio.com",
+    "project_id": "yachtone-8baf9",
+    "storage_bucket": "yachtone-8baf9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962026345665:android:bfa999155a8d3ae4fa7040",
+        "android_client_info": {
+          "package_name": "com.example.yachtOne"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962026345665-9kquehlcfq1ophnelf40k1s3q6mtlt98.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCn4129uT0B7jGN_IFhRqO8LQdVdVDymmM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962026345665-9kquehlcfq1ophnelf40k1s3q6mtlt98.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "962026345665-p0jekgdi7q370e9sl04lq7n1mvic6tom.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.yachtOne"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
