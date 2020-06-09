@@ -1,3 +1,5 @@
 import 'package:flutter/material.dart';
 
-class BaseModel extends ChangeNotifier {}
+class BaseModel extends ChangeNotifier {
+  //busy handle
+}
