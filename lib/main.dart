@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(builder: (context) => StartUpView());
         }
       },
-      home: VoteSelectView(),
+      home: StartUpView(),
     );
   }
 }
