@@ -1,12 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:stacked/stacked.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/navigation_service.dart';
 import 'package:flutter/material.dart';
-import 'package:yachtOne/view_models/login_view_model.dart';
-import 'package:yachtOne/locator.dart';
 
 class LoadingView extends StatefulWidget {
   @override
@@ -15,9 +10,6 @@ class LoadingView extends StatefulWidget {
 
 class _LoadingViewState extends State<LoadingView>
     with SingleTickerProviderStateMixin {
-  final AuthService _authService = locator<AuthService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-
   // 애니메이션 컨트롤러, 애니메이션 선언
   AnimationController _aniController;
   Animation _animation;
@@ -47,6 +39,31 @@ class _LoadingViewState extends State<LoadingView>
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      backgroundColor: Color(0XFF051417),
+      body: Center(
+        child: AnimatedBuilder(
+            animation: _aniController.view,
+            child: SvgPicture.asset(
+              'assets/images/sailingYacht.svg',
+              height: 130,
+            ),
+            builder: (context, child) {
+              // translate는 offset 값에 tween을 넣어 child의 시작, 끝 위치 지정
+              return Transform.translate(
+                // offset: Offset(_animation.value * 150 + 130, 0),
+                offset: Offset(128, 0),
+                // angle: _controller.value * 2.0 * pi,
+                child: Transform.rotate(
+                  angle: sin(_animation.value * pi * 3) / 10,
+                  child: Transform(
+                    transform: Matrix4.rotationY(pi),
+                    child: child,
+                  ),
+                ),
+              );
+            }),
+      ),
+    );
   }
 }

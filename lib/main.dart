@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:yachtOne/views/home_view.dart';
+import 'package:yachtOne/views/loading_view.dart';
 import 'package:yachtOne/views/login_view.dart';
 import 'package:yachtOne/views/register_view.dart';
 import 'package:yachtOne/views/startup_view.dart';
+import 'package:yachtOne/views/vote_select_view.dart';
 
 import 'locator.dart';
 import 'services/navigation_service.dart';
@@ -31,11 +33,13 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(builder: (context) => RegisterView());
           case 'login':
             return MaterialPageRoute(builder: (context) => LoginView());
+          case 'vote':
+            return MaterialPageRoute(builder: (context) => VoteSelectView());
           default:
             return MaterialPageRoute(builder: (context) => StartUpView());
         }
       },
-      home: StartUpView(),
+      home: VoteSelectView(),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/view_models/home_view_model.dart';
+import 'package:yachtOne/views/loading_view.dart';
 // import 'package:stacked/stacked.dart';
 
 class HomeView extends StatefulWidget {
@@ -107,26 +108,12 @@ class _HomeViewState extends State<HomeView> {
                     );
                     // snapshot의 데이터가 fetch될 동안 아래 화면 보여준다.
                   } else {
-                    return Scaffold(
-                      body: Center(
-                        child: Container(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.blueAccent,
-                          ),
-                        ),
-                      ),
-                    );
+                    return LoadingView();
                   }
                 },
               );
             } else {
-              return Scaffold(
-                body: Center(
-                  child: Container(
-                    child: Text("StreamElse"),
-                  ),
-                ),
-              );
+              return LoadingView();
               ;
             }
           }),

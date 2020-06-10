@@ -7,6 +7,7 @@ import 'package:yachtOne/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:yachtOne/view_models/login_view_model.dart';
 import 'package:yachtOne/locator.dart';
+import 'package:yachtOne/views/constants/size.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -58,18 +59,7 @@ class _LoginViewState extends State<LoginView>
         body: Stack(
           children: <Widget>[
             Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0, .35, 1],
-                  colors: <Color>[
-                    const Color(0xFFFFDA7A),
-                    const Color(0xFFBFFFF4),
-                    const Color(0xFF82D2FF),
-                  ],
-                ),
-              ),
+              color: Color(0XFF051417),
             ),
             // 이걸로 column 전체 감싸줘야 키보드 열릴 때 화면 가변적으로 움직이게 됨
             SingleChildScrollView(
@@ -79,40 +69,19 @@ class _LoginViewState extends State<LoginView>
                 // mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 130, right: 20), //이미지가 쏠려서 패딩으로 위치 약간 수정
-                    child: AnimatedBuilder(
-                        animation: _aniController.view,
-                        child: SvgPicture.asset(
-                          'assets/images/sailingYacht.svg',
-                          height: 130,
-                        ),
-                        builder: (context, child) {
-                          // translate는 offset 값에 tween을 넣어 child의 시작, 끝 위치 지정
-                          return Transform.translate(
-                            offset: Offset(_animation.value * 300, 0),
-                            // angle: _controller.value * 2.0 * pi,
-                            child: Transform.rotate(
-                              angle: sin(_animation.value * pi * 3) / 10,
-                              child: child,
-                            ),
-                          );
-                        }),
-                  ),
                   SizedBox(
-                    height: 40,
+                    height: 200,
                   ),
                   Text(
-                    "yacht",
+                    "꾸  욱",
                     style: TextStyle(
-                      fontFamily: 'PostNoBills',
-                      fontSize: 50,
-                      color: const Color(0xFF333A54),
+                      fontFamily: 'NanumHandWriting',
+                      fontSize: 70,
+                      color: const Color(0xFFCFD8E4),
                     ),
                   ),
                   SizedBox(
-                    height: 150,
+                    height: 200,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -126,7 +95,7 @@ class _LoginViewState extends State<LoginView>
                         'Sign in with Google Account',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Color(0xFF093842),
+                          color: Color(0xFFCFD8E4),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -146,7 +115,7 @@ class _LoginViewState extends State<LoginView>
                     },
                     child: Text(
                       "계정이 없으신가요? 지금 가입하세요!",
-                      style: TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: 14, color: Color(0xFFCFD8E4)),
                     ),
                   ),
                   SizedBox(
@@ -174,7 +143,7 @@ class _LoginViewState extends State<LoginView>
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             filled: true,
-            fillColor: Color(0xFF79D0E5).withOpacity(.41),
+            fillColor: Color(0xFFABD8E3),
             labelText: "Email",
             labelStyle: TextStyle(fontSize: 11),
             // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
@@ -186,7 +155,7 @@ class _LoginViewState extends State<LoginView>
         ),
       ),
       SizedBox(
-        height: 2,
+        height: gap_xxxs,
       ),
       ConstrainedBox(
         constraints: BoxConstraints.tight(
@@ -197,7 +166,7 @@ class _LoginViewState extends State<LoginView>
           obscureText: true,
           decoration: InputDecoration(
               filled: true,
-              fillColor: Color(0xFF79D0E5).withOpacity(.41),
+              fillColor: Color(0xFFABD8E3),
               labelText: "Password",
               labelStyle: TextStyle(fontSize: 11),
               border: OutlineInputBorder(
@@ -206,14 +175,14 @@ class _LoginViewState extends State<LoginView>
               )),
         ),
       ),
-      SizedBox(height: 4),
+      SizedBox(height: gap_m),
       // Card는 child의 크기를 이어 받는다 -> ConstrainedBox로 제한
       FlatButton(
         //VIewModel의 login함수로 계정 정보를 넘긴다.
         onPressed: () => model.login(
             email: _emailController.text, password: _passwordController.text),
         child: Card(
-          color: Color(0xFF09C3CF).withOpacity(.56),
+          color: Color(0xFF09C3CF),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: ConstrainedBox(
@@ -222,7 +191,7 @@ class _LoginViewState extends State<LoginView>
             ),
             child: Center(
               child: Text(
-                "Login",
+                "로그인",
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

@@ -5,6 +5,7 @@ import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/register_view_model.dart';
+import 'package:yachtOne/views/constants/size.dart';
 
 class RegisterView extends StatelessWidget {
   final NavigationService _navigationService = locator<NavigationService>();
@@ -25,13 +26,44 @@ class RegisterView extends StatelessWidget {
       viewModelBuilder: () => RegisterViewModel(),
       onModelReady: (model) => model,
       builder: (context, model, child) => Scaffold(
-          backgroundColor: Colors.blueGrey,
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[_inputForm(model)],
+        body: Stack(
+          children: <Widget>[
+            Container(
+              color: Color(0XFF051417),
             ),
-          )),
+            // 이걸로 column 전체 감싸줘야 키보드 열릴 때 화면 가변적으로 움직이게 됨
+            SingleChildScrollView(
+              // reverse를 true로 둬야 Email Textform 클릭했을 때 column 맨 아래까지 키보드 위로 올라감.
+              reverse: true,
+              child: Column(
+                // mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 200,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "꾸  욱",
+                      style: TextStyle(
+                        fontFamily: 'NanumHandWriting',
+                        fontSize: 70,
+                        color: const Color(0xFFCFD8E4),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 140,
+                  ),
+                  // 아래 따로 위젯으로 만듬
+                  _inputForm(model),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -52,7 +84,7 @@ class RegisterView extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Color(0xFF79D0E5).withOpacity(.41),
+                fillColor: Color(0xFFABD8E3),
                 labelText: "닉네임",
                 labelStyle: TextStyle(fontSize: 11),
                 // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
@@ -64,7 +96,7 @@ class RegisterView extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 12,
+            height: gap_xxxs,
           ),
           ConstrainedBox(
             constraints: BoxConstraints.tight(
@@ -75,7 +107,7 @@ class RegisterView extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Color(0xFF79D0E5).withOpacity(.41),
+                fillColor: Color(0xFFABD8E3),
                 labelText: "Email",
                 labelStyle: TextStyle(fontSize: 11),
                 // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
@@ -86,9 +118,7 @@ class RegisterView extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 2,
-          ),
+          SizedBox(height: gap_xxxs),
           ConstrainedBox(
             constraints: BoxConstraints.tight(
               Size(250, 50),
@@ -104,7 +134,7 @@ class RegisterView extends StatelessWidget {
               },
               decoration: InputDecoration(
                   filled: true,
-                  fillColor: Color(0xFF79D0E5).withOpacity(.41),
+                  fillColor: Color(0xFFABD8E3),
                   labelText: "Password",
                   labelStyle: TextStyle(fontSize: 11),
                   border: OutlineInputBorder(
@@ -114,7 +144,7 @@ class RegisterView extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 2,
+            height: gap_xxxs,
           ),
           ConstrainedBox(
             constraints: BoxConstraints.tight(
@@ -132,7 +162,7 @@ class RegisterView extends StatelessWidget {
               },
               decoration: InputDecoration(
                   filled: true,
-                  fillColor: Color(0xFF79D0E5).withOpacity(.41),
+                  fillColor: Color(0xFFABD8E3),
                   labelText: "Confirm Password",
                   labelStyle: TextStyle(fontSize: 11),
                   border: OutlineInputBorder(
@@ -141,7 +171,7 @@ class RegisterView extends StatelessWidget {
                   )),
             ),
           ),
-          SizedBox(height: 4),
+          SizedBox(height: gap_m),
           // Card는 child의 크기를 이어 받는다 -> ConstrainedBox로 제한
           FlatButton(
             onPressed: () {
@@ -156,7 +186,7 @@ class RegisterView extends StatelessWidget {
               }
             },
             child: Card(
-              color: Color(0xFF09C3CF).withOpacity(.56),
+              color: Color(0xFF961A1A),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               child: ConstrainedBox(
@@ -185,7 +215,7 @@ class RegisterView extends StatelessWidget {
             },
             child: Text(
               "계정이 이미 있으면 로그인하세요!",
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 14, color: Color(0xFFCFD8E4)),
             ),
           ),
         ],
