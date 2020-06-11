@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:yachtOne/views/animation_test.dart';
+import 'package:yachtOne/views/animation_test2.dart';
 import 'package:yachtOne/views/home_view.dart';
 import 'package:yachtOne/views/loading_view.dart';
 import 'package:yachtOne/views/login_view.dart';
 import 'package:yachtOne/views/register_view.dart';
+import 'package:yachtOne/views/sliding_card.dart';
 import 'package:yachtOne/views/startup_view.dart';
 import 'package:yachtOne/views/vote_select_view.dart';
+import 'package:yachtOne/views/vote_select_view_test.dart';
 
 import 'locator.dart';
 import 'services/navigation_service.dart';
@@ -39,7 +43,7 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(builder: (context) => StartUpView());
         }
       },
-      home: StartUpView(),
+      home: VoteSelectTestView(),
     );
   }
 }
