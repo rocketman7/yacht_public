@@ -8,7 +8,8 @@ import 'package:yachtOne/views/register_view.dart';
 import 'package:yachtOne/views/sliding_card.dart';
 import 'package:yachtOne/views/startup_view.dart';
 import 'package:yachtOne/views/vote_select_view.dart';
-import 'package:yachtOne/views/vote_select_view_test.dart';
+import 'package:yachtOne/views/widgets/vote_card_widget.dart';
+import 'package:yachtOne/views/widgets/vote_selected_widget.dart';
 
 import 'locator.dart';
 import 'services/navigation_service.dart';
@@ -43,7 +44,7 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(builder: (context) => StartUpView());
         }
       },
-      home: VoteSelectTestView(),
+      home: VoteSelectView(),
     );
   }
 }

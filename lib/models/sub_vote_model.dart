@@ -14,12 +14,14 @@ class SubVote {
   final String title;
   final String voteImgUrl;
   final List<String> voteChoices;
+  final int numVoted;
   final int result;
 
   SubVote({
     this.title,
     this.voteImgUrl,
     this.voteChoices,
+    this.numVoted,
     this.result,
   });
 }
