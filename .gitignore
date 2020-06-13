@@ -31,6 +31,9 @@
 .pub/
 /build/
 
+# ios build related
+ios/Flutter/
+
 # Web related
 lib/generated_plugin_registrant.dart
 
