@@ -10,7 +10,7 @@ class SubVote {
 //     'choiceCounts': 2,
 //     'Result': null
 //   },
-
+  final int id;
   final String title;
   final String voteImgUrl;
   final List<String> voteChoices;
@@ -18,6 +18,7 @@ class SubVote {
   final int result;
 
   SubVote({
+    this.id,
     this.title,
     this.voteImgUrl,
     this.voteChoices,
