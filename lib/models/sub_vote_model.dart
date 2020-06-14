@@ -13,7 +13,7 @@ class SubVote {
   final int id;
   final String title;
   final String voteImgUrl;
-  final List<String> voteChoices;
+  final List<dynamic> voteChoices;
   final int numVoted;
   final int result;
 
@@ -25,4 +25,25 @@ class SubVote {
     this.numVoted,
     this.result,
   });
+
+// Json -> SubVoteModel
+  SubVote.fromData(Map<String, dynamic> data)
+      : id = data['id'],
+        title = data['title'],
+        voteImgUrl = data['voteImgUrl'],
+        voteChoices = data['voteChoices'],
+        numVoted = data['numVoted'],
+        result = data['result'];
+
+  // SubVoteModel -> Json 변환 함수
+  Map<String, dynamic> toJson() {
+    return {
+      'id': this.id,
+      'title': this.title,
+      'voteImgUrl': this.voteImgUrl,
+      'voteChoices': this.voteChoices,
+      'numVoted': this.numVoted,
+      'result': this.result,
+    };
+  }
 }

@@ -11,7 +11,7 @@ class VoteSelected extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double displayRatio = size.height / size.width;
-    print({size.width, size.height});
+
     return Padding(
       padding: EdgeInsets.only(
         right: gap_xxxs,

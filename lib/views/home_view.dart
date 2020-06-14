@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/locator.dart';
+import 'package:yachtOne/models/sub_vote_model.dart';
+import 'package:yachtOne/models/vote_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
+import 'package:yachtOne/services/database_service.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/home_view_model.dart';
 import 'package:yachtOne/views/loading_view.dart';
 // import 'package:stacked/stacked.dart';
@@ -13,6 +17,11 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   AuthService _authService = locator<AuthService>();
+  NavigationService _navigationService = locator<NavigationService>();
+  DatabaseService _databaseService = locator<DatabaseService>();
+
+  final VoteModel votesToday = voteToday;
+  final List<SubVote> subvotesToday = subVotes;
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +110,36 @@ class _HomeViewState extends State<HomeView> {
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          RaisedButton(
+                            onPressed: () {
+                              _navigationService.navigateWithArgTo(
+                                  'vote', snapshot.data.uid.toString());
+                            },
+                            child: Text(
+                              "Go To Vote View",
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          RaisedButton(
+                            onPressed: () {
+                              _databaseService.addVotes(
+                                  voteToday, subvotesToday);
+                            },
+                            child: Text(
+                              "Add Votes Test",
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                         ],

@@ -1,9 +1,9 @@
 import 'package:yachtOne/models/sub_vote_model.dart';
 
 class VoteModel {
-  final DateTime voteDate;
-  final DateTime voteStartDateTime;
-  final DateTime voteEndDateTime;
+  final String voteDate;
+  final dynamic voteStartDateTime;
+  final dynamic voteEndDateTime;
   final int voteCount;
   final List<int> voteResult;
   final List<SubVote> subVotes;
@@ -16,10 +16,30 @@ class VoteModel {
     this.voteResult,
     this.subVotes,
   });
+
+  // Json -> VoteModel 변환 constructor
+  VoteModel.fromData(Map<String, dynamic> data, List<SubVote> subVotesList)
+      : voteDate = data['voteDate'],
+        voteStartDateTime = data['voteStartDateTime'],
+        voteEndDateTime = data['voteEndDateTime'],
+        voteCount = data['voteCount'],
+        voteResult = data['voteResult'],
+        subVotes = subVotesList;
+
+  // VoteModel -> Json 변환 함수
+  Map<String, dynamic> toJson() {
+    return {
+      'voteDate': this.voteDate,
+      'voteStartDateTime': this.voteStartDateTime,
+      'voteEndDateTime': this.voteEndDateTime,
+      'voteCount': this.voteCount,
+      'voteResult': this.voteResult,
+    };
+  }
 }
 
 VoteModel voteToday = VoteModel(
-  voteDate: DateTime(2020, 09, 01),
+  voteDate: '20200901',
   voteStartDateTime: DateTime.utc(2020, 9, 1, 7, 0, 0), // KST 2020/09/01 16:00
   voteEndDateTime: DateTime.utc(2020, 6, 14, 23, 50, 0), // KST 2020/09/02 08:50
   voteCount: 5,

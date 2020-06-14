@@ -39,12 +39,13 @@ class _MyAppState extends State<MyApp> {
           case 'login':
             return MaterialPageRoute(builder: (context) => LoginView());
           case 'vote':
-            return MaterialPageRoute(builder: (context) => VoteSelectView());
+            return MaterialPageRoute(
+                builder: (context) => VoteSelectView(routeSettings.arguments));
           default:
             return MaterialPageRoute(builder: (context) => StartUpView());
         }
       },
-      home: VoteSelectView(),
+      home: StartUpView(),
     );
   }
 }
