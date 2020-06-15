@@ -8,6 +8,7 @@ import 'package:yachtOne/views/register_view.dart';
 import 'package:yachtOne/views/sliding_card.dart';
 import 'package:yachtOne/views/startup_view.dart';
 import 'package:yachtOne/views/vote_select_view.dart';
+import 'package:yachtOne/views/vote_view.dart';
 import 'package:yachtOne/views/widgets/vote_card_widget.dart';
 import 'package:yachtOne/views/widgets/vote_selected_widget.dart';
 
@@ -38,9 +39,12 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(builder: (context) => RegisterView());
           case 'login':
             return MaterialPageRoute(builder: (context) => LoginView());
-          case 'vote':
+          case 'voteSelect':
             return MaterialPageRoute(
                 builder: (context) => VoteSelectView(routeSettings.arguments));
+          case 'vote':
+            return MaterialPageRoute(
+                builder: (context) => VoteView(routeSettings.arguments));
           default:
             return MaterialPageRoute(builder: (context) => StartUpView());
         }

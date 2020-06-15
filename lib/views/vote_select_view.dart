@@ -38,9 +38,11 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   // Votes Selected 영역 위젯 관리
   List<Widget> _votesSelectedShowing = [];
   List<Widget> _votesSelectedNotShowing = [];
+  List<int> _passIdx = [];
 
   // DB에서 가져온 데이터를 VoteModel에 넣은 Object
   final VoteModel votes = voteToday;
+
   VoteModel votesFromDB;
 
   String diffHours;
@@ -49,6 +51,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
   String _now;
   Timer _everySecond;
+
   //애니메이션은 천천히 생각해보자.
 
   // voteData를 가져와 voteTodayCard에 넣어 위젯 리스트를 만드는 함수
@@ -56,7 +59,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     List<Widget> listItems = [];
     for (var i = 0; i < votesToday.subVotes.length; i++) {
       // print(votesFromDB.subVotes.length);
-      listItems.add(VoteCard(i, votes));
+      listItems.add(VoteCard(i, votesToday));
+      print(VoteCard(i, votesToday).idx);
     }
 
     setState(() {
@@ -67,7 +71,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   void getVoteSelectedWidget(VoteModel votesToday) {
     List<Widget> listItems = [];
     for (var i = 0; i < votesToday.subVotes.length; i++) {
-      listItems.add(VoteSelected(i, votes));
+      listItems.add(VoteSelected(i, votesToday));
     }
     setState(() {
       _votesSelectedNotShowing = listItems;
@@ -80,6 +84,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
       // TODO: subString 방법 말고 시간, 분, 초 각각 리턴해서 해야함
       var endTime = votes.voteEndDateTime;
       var diff = endTime.difference(DateTime.now());
+      print(diff);
       diffHours = diff.toString().substring(0, 2);
       diffMins = diff.toString().substring(3, 5);
       diffSecs = diff.toString().substring(6, 8);
@@ -92,26 +97,28 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   @override
   void initState() {
     super.initState();
+
+    // 투표, 선택된 투표 위젯 만들기 위해 initState에 투표 데이터 db에서 불러옴
     print("Async start");
     _model.getVoteDB('20200901').then((value) {
       print("Async done");
       getVoteTodayWidget(value);
       getVoteSelectedWidget(value);
-      return null;
+      votesFromDB = value;
+      return votesFromDB;
     });
     // getVoteTodayWidget();
     // getVoteSelectedWidget();
     getTimeLeft();
 
-    // sets first value
-    _now = DateTime.now().second.toString();
-    // defines a timer
-    _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
-      setState(() {
-        getTimeLeft();
-      });
-    });
-
+    // // sets first value
+    // _now = DateTime.now().second.toString();
+    // // defines a timer
+    // _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
+    //   setState(() {
+    //     getTimeLeft();
+    //   });
+    // });
     // print(diff);
 
     print("initState Called");
@@ -121,6 +128,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   // initState 다음에 호출되는 함수. MediaQuery를 가져오기 위해 initState에 두지 않고 여기에 둠
   void didChangeDependencies() {
     super.didChangeDependencies();
+    print("didChangeCalled");
+
     final Size size = MediaQuery.of(context).size;
     double displayRatio = size.height / size.width;
 
@@ -139,19 +148,25 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     // });
   }
 
+  @override
   void dispose() {
     super.dispose();
+    // dispose는 Navigator pushNamed에는 호출되지 않지만 백 버튼에는 호출됨.
+    // 백 버튼에 호출아래를 호출하지 않으면 dispose 됐는데 setState한다고 오류뜸
+    _everySecond.cancel();
   }
 
   // list의 데이터를 바꾸고 setState하면 아래 호출될 줄 알았는데 안 됨
   @override
   void didUpdateWidget(VoteSelectView oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     print("didUpdateWidget Called");
   }
 
   @override
   Widget build(BuildContext context) {
+    print("buildCalled");
     Size size = MediaQuery.of(context).size;
     double displayRatio = size.height / size.width;
 
@@ -161,7 +176,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
         home: FutureBuilder(
           future: Future.wait([
             model.getUserDB(widget.uid),
-            // model.getVoteDB('20200901'),
+            model.getVoteDB('20200901'),
           ]),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -248,7 +263,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                             ),
                           ),
                           SizedBox(
-                            height: gap_s,
+                            height: gap_l,
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(
@@ -259,11 +274,11 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  '5 Votes for Today',
+                                  '오늘의 투표: 5개',
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontFamily: 'AdventPro',
-                                      fontSize: 18,
+                                      // fontFamily: 'AdventPro',
+                                      fontSize: 22,
                                       textBaseline: TextBaseline.alphabetic),
                                 ),
                                 Text(
@@ -310,7 +325,9 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                             // 보여줘야할 위젯과 보여주지 않는 위젯을 서로 교환하며 리스트에 저장한다.
                                             _votesTodayNotShowing
                                                 .add(_votesTodayShowing[index]);
+                                            _passIdx.add(index);
                                             _votesTodayShowing.removeAt(index);
+
                                             _votesSelectedShowing.add(
                                                 _votesSelectedNotShowing[
                                                     index]);
@@ -335,31 +352,45 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
                                 Text(
-                                  'Votes Seleceted',
+                                  '선택한 투표',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'AdventPro',
-                                    fontSize: 18,
+                                    // fontFamily: 'AdventPro',
+                                    fontSize: 22,
                                   ),
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: _votesSelectedShowing.length == 0
-                                          ? Color(0xFF531818)
-                                          : Color(0xFFD72929),
-                                      borderRadius: BorderRadius.circular(8)),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: gap_m, horizontal: gap_xxl),
-                                    child: Text(
-                                      'GO VOTE',
-                                      style: TextStyle(
+                                FlatButton(
+                                  onPressed: () {
+                                    List<int> selectedFinal = [];
+                                    for (VoteSelected i
+                                        in _votesSelectedShowing) {
+                                      selectedFinal.add(i.idx);
+                                    }
+                                    selectedFinal.sort();
+
+                                    _navigationService.navigateWithArgTo(
+                                        'vote', [votesFromDB, selectedFinal]);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
                                         color: _votesSelectedShowing.length == 0
-                                            ? Color(0xFF605E5E)
-                                            : Color(0xFFFFFFFF),
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w700,
-                                        fontFamily: 'AdventPro',
+                                            ? Color(0xFF531818)
+                                            : Color(0xFFD72929),
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: gap_m, horizontal: gap_xxl),
+                                      child: Text(
+                                        'GO VOTE',
+                                        style: TextStyle(
+                                          color:
+                                              _votesSelectedShowing.length == 0
+                                                  ? Color(0xFF605E5E)
+                                                  : Color(0xFFFFFFFF),
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: 'AdventPro',
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -384,11 +415,32 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                   return GestureDetector(
                                       onDoubleTap: () {
                                         setState(() {
-                                          _votesSelectedNotShowing.add(
-                                              _votesSelectedShowing[index]);
+                                          // Selected 더블탭 -> 거기서 id 추출
+                                          // voteTodayShowing에서 자리찾기
+                                          // insert
+
+                                          VoteSelected temp =
+                                              _votesSelectedShowing[index];
+                                          int id = temp.idx;
+
+                                          List<int> indicesList = [];
+                                          for (VoteCard i
+                                              in _votesTodayShowing) {
+                                            indicesList.add(i.idx);
+                                          }
+                                          indicesList.add(id);
+
+                                          indicesList.sort();
+                                          print(index);
+                                          print(id);
+                                          id = indicesList.indexOf(id);
+                                          print(id);
+                                          _votesSelectedNotShowing.insert(
+                                              id, _votesSelectedShowing[index]);
                                           _votesSelectedShowing.removeAt(index);
-                                          _votesTodayShowing.add(
-                                              _votesTodayNotShowing[index]);
+
+                                          _votesTodayShowing.insert(
+                                              id, _votesTodayNotShowing[index]);
                                           _votesTodayNotShowing.removeAt(index);
                                         });
                                       },
