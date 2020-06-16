@@ -134,8 +134,8 @@ class _HomeViewState extends State<HomeView> {
                             ),
                             RaisedButton(
                               onPressed: () {
-                                _databaseService.addVotes(
-                                    voteToday, subvotesToday);
+                                // _databaseService.addVotes(
+                                //     voteToday, subvotesToday);
                               },
                               child: Text(
                                 "Add Votes Test",

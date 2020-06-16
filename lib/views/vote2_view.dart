@@ -17,15 +17,15 @@ import 'package:yachtOne/views/widgets/vote_card_widget.dart';
 import 'package:yachtOne/views/widgets/vote_selected_widget.dart';
 import 'package:flutter/material.dart';
 
-class VoteView extends StatefulWidget {
+class Vote2View extends StatefulWidget {
   final List<Object> votesToday;
-  VoteView(this.votesToday);
+  Vote2View(this.votesToday);
 
   @override
-  _VoteViewState createState() => _VoteViewState();
+  _Vote2ViewState createState() => _Vote2ViewState();
 }
 
-class _VoteViewState extends State<VoteView> {
+class _Vote2ViewState extends State<Vote2View> {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
@@ -35,8 +35,7 @@ class _VoteViewState extends State<VoteView> {
   String uid;
   VoteModel voteModel;
   List<int> voteList;
-
-  int voteIdx = 0;
+  int voteIdx = 1;
 
   @override
   Widget build(BuildContext context) {

@@ -111,7 +111,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     // getVoteSelectedWidget();
     getTimeLeft();
 
-    // // sets first value
+    // sets first value
     // _now = DateTime.now().second.toString();
     // // defines a timer
     // _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
@@ -119,7 +119,6 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     //     getTimeLeft();
     //   });
     // });
-    // print(diff);
 
     print("initState Called");
   }
@@ -369,7 +368,11 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                     selectedFinal.sort();
 
                                     _navigationService.navigateWithArgTo(
-                                        'vote', [votesFromDB, selectedFinal]);
+                                        'vote', [
+                                      widget.uid,
+                                      votesFromDB,
+                                      selectedFinal
+                                    ]);
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(

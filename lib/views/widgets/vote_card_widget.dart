@@ -32,13 +32,21 @@ class VoteCard extends StatelessWidget {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image(
-                height:
-                    displayRatio > 1.85 ? size.height * .44 : size.height * .49,
-                width:
-                    displayRatio > 1.85 ? size.width * .60 : size.width * .55,
-                fit: BoxFit.cover,
-                image: NetworkImage(vote.subVotes[idx].voteImgUrl),
+              child: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Color(0xFF0F2D3E),
+                  // Colors.grey,
+                  BlendMode.softLight,
+                ),
+                child: Image(
+                  height: displayRatio > 1.85
+                      ? size.height * .44
+                      : size.height * .49,
+                  width:
+                      displayRatio > 1.85 ? size.width * .60 : size.width * .55,
+                  fit: BoxFit.cover,
+                  image: NetworkImage(vote.subVotes[idx].voteImgUrl),
+                ),
               ),
             ),
             Positioned(
@@ -70,7 +78,7 @@ class VoteCard extends StatelessWidget {
                         height: gap_m,
                       ),
                       Text(
-                        vote.subVotes[idx].title,
+                        vote.subVotes[idx].description,
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         // overflow: TextOverflow.ellipsis,
@@ -112,8 +120,25 @@ class VoteCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Text(
-                            vote.subVotes[idx].voteChoices[0],
+                            vote.subVotes[idx].title,
                             style: TextStyle(color: Colors.white, fontSize: 35,
+                                // foreground: Paint()
+                                //   ..strokeWidth = 1
+                                //   ..color = Colors.black
+                                //   ..style = PaintingStyle.stroke,
+                                shadows: <Shadow>[
+                                  Shadow(
+                                    offset: Offset(3.0, 3.0),
+                                    blurRadius: 3.0,
+                                    color: Colors.black,
+                                  )
+                                ]
+                                // fontFamily: 'NanumHandWriting',
+                                ),
+                          ),
+                          Text(
+                            vote.subVotes[idx].voteChoices[0],
+                            style: TextStyle(color: Colors.white, fontSize: 28,
                                 // foreground: Paint()
                                 //   ..strokeWidth = 1
                                 //   ..color = Colors.black
@@ -132,7 +157,7 @@ class VoteCard extends StatelessWidget {
                             'vs',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 28,
+                                fontSize: 24,
                                 shadows: <Shadow>[
                                   Shadow(
                                     offset: Offset(3.0, 3.0),
@@ -146,7 +171,7 @@ class VoteCard extends StatelessWidget {
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 35,
+                                fontSize: 28,
                                 shadows: <Shadow>[
                                   Shadow(
                                     offset: Offset(3.0, 3.0),

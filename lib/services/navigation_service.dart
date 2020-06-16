@@ -11,4 +11,8 @@ class NavigationService {
   Future<dynamic> navigateWithArgTo(String routeName, var argument) {
     return navigatorKey.currentState.pushNamed(routeName, arguments: argument);
   }
+
+  // Future<dynamic> popAndNavigateWithArgTo(String routeName, var argument) {
+  //   return navigatorKey.currentState.
+  // }
 }
