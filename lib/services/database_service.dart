@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/models/user_model.dart';
+import 'package:yachtOne/models/user_vote_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
 
 class DatabaseService {
@@ -36,6 +37,7 @@ class DatabaseService {
     }
   }
 
+  // Create: Vote 데이터 DB에 넣기 (관리자만 접근)
   Future addVotes(VoteModel vote, List<SubVote> subVote) async {
     try {
       await _votesCollectionReference
@@ -53,6 +55,21 @@ class DatabaseService {
     }
   }
 
+  // Create: User 투표완료하면 userVote Collection에 넣기
+  Future addUserVote(UserVoteModel userVote) async {
+    try {
+      await _usersCollectionReference
+          .document(userVote.uid)
+          .collection('userVote')
+          .document(userVote.voteDate)
+          .setData(userVote.toJson());
+      print("setDone");
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  // Read: Vote 정보 Vote Collection으로부터 읽기
   Future getVotes(String voteDate) async {
     try {
       // print('DB' + uid);

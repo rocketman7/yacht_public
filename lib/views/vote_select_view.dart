@@ -368,7 +368,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                     selectedFinal.sort();
 
                                     _navigationService.navigateWithArgTo(
-                                        'vote', [
+                                        'vote0', [
                                       widget.uid,
                                       votesFromDB,
                                       selectedFinal

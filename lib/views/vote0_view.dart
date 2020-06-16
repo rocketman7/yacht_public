@@ -9,15 +9,15 @@ import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/vote_view_model.dart';
 import 'package:yachtOne/views/widgets/vote_widget.dart';
 
-class Vote2View extends StatefulWidget {
+class Vote0View extends StatefulWidget {
   final List<Object> votesToday;
-  Vote2View(this.votesToday);
+  Vote0View(this.votesToday);
 
   @override
-  _Vote2ViewState createState() => _Vote2ViewState();
+  _Vote0ViewState createState() => _Vote0ViewState();
 }
 
-class _Vote2ViewState extends State<Vote2View> {
+class _Vote0ViewState extends State<Vote0View> {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
@@ -27,7 +27,8 @@ class _Vote2ViewState extends State<Vote2View> {
   String uid;
   VoteModel voteModel;
   List<int> voteList;
-  int voteIdx = 2;
+
+  int voteIdx = 0;
 
   UserVoteModel userVote;
 
@@ -38,8 +39,14 @@ class _Vote2ViewState extends State<Vote2View> {
     uid = votesToday[0];
     voteModel = votesToday[1];
     voteList = votesToday[2];
-    userVote = votesToday[3];
+    userVote = UserVoteModel(
+      uid: uid,
+      voteDate: voteModel.voteDate,
+      subVoteCount: voteModel.voteCount,
+      voteSelected: List<int>.generate(voteModel.voteCount, (index) => 0),
+    );
 
+    print(uid);
     return ViewModelBuilder<VoteViewModel>.reactive(
       viewModelBuilder: () => VoteViewModel(),
       builder: (context, model, child) => MaterialApp(

@@ -59,7 +59,17 @@ class _LoginViewState extends State<LoginView>
         body: Stack(
           children: <Widget>[
             Container(
-              color: Color(0XFF051417),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0, 1],
+                  colors: <Color>[
+                    const Color(0xFF7BE0C8),
+                    const Color(0xFF53D3D8),
+                  ],
+                ),
+              ),
             ),
             // 이걸로 column 전체 감싸줘야 키보드 열릴 때 화면 가변적으로 움직이게 됨
             SingleChildScrollView(
@@ -77,7 +87,8 @@ class _LoginViewState extends State<LoginView>
                     style: TextStyle(
                       fontFamily: 'NanumHandWriting',
                       fontSize: 70,
-                      color: const Color(0xFFCFD8E4),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                   SizedBox(
@@ -95,7 +106,7 @@ class _LoginViewState extends State<LoginView>
                         'Sign in with Google Account',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Color(0xFFCFD8E4),
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -115,7 +126,10 @@ class _LoginViewState extends State<LoginView>
                     },
                     child: Text(
                       "계정이 없으신가요? 지금 가입하세요!",
-                      style: TextStyle(fontSize: 14, color: Color(0xFFCFD8E4)),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   SizedBox(

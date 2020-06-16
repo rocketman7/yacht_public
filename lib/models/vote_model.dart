@@ -18,8 +18,10 @@ class VoteModel {
   });
 
   // Json -> VoteModel 변환 constructor
-  VoteModel.fromData(Map<String, dynamic> data, List<SubVote> subVotesList)
-      : voteDate = data['voteDate'],
+  VoteModel.fromData(
+    Map<String, dynamic> data,
+    List<SubVote> subVotesList,
+  )   : voteDate = data['voteDate'],
         voteStartDateTime = data['voteStartDateTime'],
         voteEndDateTime = data['voteEndDateTime'],
         voteCount = data['voteCount'],
