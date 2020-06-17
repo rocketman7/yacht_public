@@ -44,6 +44,7 @@ class _Vote0ViewState extends State<Vote0View> {
       voteDate: voteModel.voteDate,
       subVoteCount: voteModel.voteCount,
       voteSelected: List<int>.generate(voteModel.voteCount, (index) => 0),
+      isVoted: false,
     );
 
     print(uid);

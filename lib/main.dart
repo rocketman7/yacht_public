@@ -11,8 +11,6 @@ import 'package:yachtOne/views/vote2_view.dart';
 import 'package:yachtOne/views/vote1_view.dart';
 import 'package:yachtOne/views/vote_select_view.dart';
 import 'package:yachtOne/views/vote0_view.dart';
-import 'package:yachtOne/views/widgets/vote_card_widget.dart';
-import 'package:yachtOne/views/widgets/vote_selected_widget.dart';
 
 import 'locator.dart';
 import 'services/navigation_service.dart';

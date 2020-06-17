@@ -5,7 +5,7 @@ class UserVoteModel {
   List<int> voteSelected;
   final List<int> voteResult;
   final bool voteVictory;
-  final bool isVoted;
+  bool isVoted;
 
   UserVoteModel({
     this.uid,

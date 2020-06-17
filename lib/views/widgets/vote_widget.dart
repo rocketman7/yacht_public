@@ -85,6 +85,7 @@ Widget kkuuk(
               tempList.fillRange(voteList[voteIdx], voteList[voteIdx] + 1, 1);
 
               userVote.voteSelected = tempList;
+              userVote.isVoted = true;
               print(tempList);
               model.addUserVoteDB(userVote);
 
@@ -116,7 +117,35 @@ Widget kkuuk(
         right: 50,
         child: RawMaterialButton(
           onPressed: () {},
-          onLongPress: () {},
+          onLongPress: () {
+            print('longPressed');
+            print(voteIdx);
+            print(voteList.length);
+            print('vote' + (voteIdx + 2).toString());
+            if (voteIdx + 1 < voteList.length) {
+              List<int> tempList = userVote.voteSelected;
+              tempList.fillRange(voteList[voteIdx], voteList[voteIdx] + 1, 2);
+
+              userVote.voteSelected = tempList;
+              print(tempList);
+              model.addUserVoteDB(userVote);
+
+              _navigationService.navigateWithArgTo(
+                  'vote' + (voteIdx + 1).toString(),
+                  [uid, voteModel, voteList, userVote]);
+            } else {
+              // TODO: userVote 모델로 만들어서 넘겨야함.
+              List<int> tempList = userVote.voteSelected;
+              tempList.fillRange(voteList[voteIdx], voteList[voteIdx] + 1, 2);
+
+              userVote.voteSelected = tempList;
+              userVote.isVoted = true;
+              print(tempList);
+              model.addUserVoteDB(userVote);
+
+              _navigationService.navigateTo('');
+            }
+          },
           elevation: 2.0,
           fillColor: Color(0xFFBDEEEF),
           // child: Icon(
