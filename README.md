@@ -1,16 +1,17 @@
 # yachtOne
 
-A new Flutter project.
+요트원 프로젝트입니다. 6월 8일에 시작했어요.
 
-## Getting Started
+## 진행 사항
 
-This project is a starting point for a Flutter application.
+~ 6/13 : 투표 선택 화면 초안과 DB연결 완료
+~ 6/17 : 투표 화면 초안과 DB연결 완료
 
-A few resources to get you started if this is your first Flutter project:
+***
+### TODO LIST:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- [ ] BaseModel의 busy처리
+- [ ] 각종 네트워크 예외처리
+- [ ] 코드 정리
+- [ ] DateTime <-> String Parser 만들기
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
