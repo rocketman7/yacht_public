@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/database_service.dart';
+import 'package:yachtOne/services/dialog_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/base_model.dart';
 
@@ -9,6 +10,7 @@ class RegisterViewModel extends BaseModel {
   final AuthService _authService = locator<AuthService>();
   final NavigationService _navigationService = locator<NavigationService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
+  final DialogService _dialogService = locator<DialogService>();
   Map<String, dynamic> userData;
 
   Future register({
@@ -30,6 +32,10 @@ class RegisterViewModel extends BaseModel {
         print('Register Failure');
       }
     } else {
+      var dialogResult = await _dialogService.showDialog(
+        title: '회원가입 오류',
+        description: result.toString(),
+      );
       print(result.toString());
     }
   }

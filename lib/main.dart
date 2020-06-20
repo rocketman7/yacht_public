@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yachtOne/managers/dialog_manager.dart';
 import 'package:yachtOne/views/animation_test.dart';
 import 'package:yachtOne/views/animation_test2.dart';
 import 'package:yachtOne/views/home_view.dart';
@@ -34,28 +35,36 @@ class _MyAppState extends State<MyApp> {
         switch (routeSettings.name) {
           // navigation service에서 접근할 route이름들 view설정
           case 'loggedIn':
-            return MaterialPageRoute(builder: (context) => HomeView());
+            return MaterialPageRoute(
+                builder: (context) => DialogManager(child: HomeView()));
           case 'register':
-            return MaterialPageRoute(builder: (context) => RegisterView());
+            return MaterialPageRoute(
+                builder: (context) => DialogManager(child: RegisterView()));
           case 'login':
-            return MaterialPageRoute(builder: (context) => LoginView());
+            return MaterialPageRoute(
+                builder: (context) => DialogManager(child: LoginView()));
           case 'voteSelect':
             return MaterialPageRoute(
-                builder: (context) => VoteSelectView(routeSettings.arguments));
+                builder: (context) => DialogManager(
+                    child: VoteSelectView(routeSettings.arguments)));
           case 'vote0':
             return MaterialPageRoute(
-                builder: (context) => Vote0View(routeSettings.arguments));
+                builder: (context) =>
+                    DialogManager(child: Vote0View(routeSettings.arguments)));
           case 'vote1':
             return MaterialPageRoute(
-                builder: (context) => Vote1View(routeSettings.arguments));
+                builder: (context) =>
+                    DialogManager(child: Vote1View(routeSettings.arguments)));
           case 'vote2':
             return MaterialPageRoute(
-                builder: (context) => Vote2View(routeSettings.arguments));
+                builder: (context) =>
+                    DialogManager(child: Vote2View(routeSettings.arguments)));
           default:
-            return MaterialPageRoute(builder: (context) => StartUpView());
+            return MaterialPageRoute(
+                builder: (context) => DialogManager(child: StartUpView()));
         }
       },
-      home: StartUpView(),
+      home: DialogManager(child: StartUpView()),
     );
   }
 }
