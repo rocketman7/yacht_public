@@ -13,6 +13,7 @@
 - [ ] BaseModel의 busy처리
 - [ ] 각종 네트워크 예외처리
 - [ ] Auth 예외처리, 닉네임 중복 방지
+- [ ] Dialog Service
 - [ ] 코드 정리
 - [ ] DateTime <-> String Parser 만들기
 
