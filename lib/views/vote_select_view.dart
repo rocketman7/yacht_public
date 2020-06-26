@@ -203,17 +203,17 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 ),
                 // backgroundColor: Color(0XFF051417),
                 body: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: [0, 1],
-                      colors: <Color>[
-                        const Color(0xFF0F2D3E),
-                        const Color(0xFF02030C),
-                      ],
-                    ),
-                  ),
+                  // decoration: BoxDecoration(
+                  //   gradient: LinearGradient(
+                  //     begin: Alignment.topCenter,
+                  //     end: Alignment.bottomCenter,
+                  //     stops: [0, 1],
+                  //     colors: <Color>[
+                  //       const Color(0xFF0F2D3E),
+                  //       const Color(0xFF02030C),
+                  //     ],
+                  //   ),
+                  // ),
                   child: SafeArea(
                     child: ListView(children: <Widget>[
                       Column(
@@ -243,7 +243,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                         snapshot.data[0].userName,
                                         style: TextStyle(
                                           fontFamily: 'AdventPro',
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           fontSize: 26,
                                         ),
                                       ),
@@ -254,7 +254,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                   snapshot.data[0].combo.toString() + ' Combo',
                                   style: TextStyle(
                                     fontFamily: 'AdventPro',
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontSize: 22,
                                   ),
                                 ),
@@ -275,7 +275,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 Text(
                                   '오늘의 투표: 5개',
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       // fontFamily: 'AdventPro',
                                       fontSize: 22,
                                       textBaseline: TextBaseline.alphabetic),
@@ -290,7 +290,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                       (diffSecs) +
                                       "초 ",
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       // fontFamily: 'AdventPro',
                                       fontSize: 14,
                                       textBaseline: TextBaseline.ideographic),
@@ -353,7 +353,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 Text(
                                   '선택한 투표',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     // fontFamily: 'AdventPro',
                                     fontSize: 22,
                                   ),

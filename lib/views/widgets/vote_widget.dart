@@ -10,10 +10,11 @@ Widget kkuuk(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: [0, 1],
+            stops: [0, 0.5, 1],
             colors: <Color>[
-              const Color(0xFF7BE0C8),
-              const Color(0xFF53D3D8),
+              Colors.white,
+              Color(0xFFC4FEF3),
+              Colors.white,
             ],
           ),
         ),
@@ -25,7 +26,7 @@ Widget kkuuk(
           Text(
             voteModel.subVotes[voteList[voteIdx]].title,
             style: TextStyle(
-              color: Colors.white,
+              color: Color(0xff5F5F5F),
               fontSize: 35,
               fontWeight: FontWeight.bold,
             ),
@@ -36,7 +37,7 @@ Widget kkuuk(
           Text(
             voteModel.subVotes[voteList[voteIdx]].description,
             style: TextStyle(
-              color: Colors.white.withOpacity(.7),
+              color: Color(0xff5F5F5F),
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -47,7 +48,7 @@ Widget kkuuk(
           Text(
             "꾸욱 눌러서 투표하기",
             style: TextStyle(
-              color: Colors.white.withOpacity(.7),
+              color: Color(0xff5F5F5F),
               fontSize: 15,
               fontWeight: FontWeight.bold,
             ),
@@ -89,10 +90,9 @@ Widget kkuuk(
               print(tempList);
               model.addUserVoteDB(userVote);
 
-              _navigationService.navigateTo('');
+              _navigationService.navigateTo('voteFeed');
             }
           },
-          hoverColor: Colors.white,
           color: Color(0xFFBDEEEF),
           // elevation: 2.0,
           // fillColor: Color(0xFFBDEEEF),
@@ -102,6 +102,7 @@ Widget kkuuk(
           // ),
           padding: EdgeInsets.all(40.0),
           shape: CircleBorder(),
+
           child: Text(
             voteModel.subVotes[voteList[voteIdx]].voteChoices[0],
             style: TextStyle(
@@ -143,7 +144,7 @@ Widget kkuuk(
               print(tempList);
               model.addUserVoteDB(userVote);
 
-              _navigationService.navigateTo('');
+              _navigationService.navigateTo('voteFeed');
             }
           },
           elevation: 2.0,

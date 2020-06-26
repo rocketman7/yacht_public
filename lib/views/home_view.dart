@@ -156,7 +156,6 @@ class _HomeViewState extends State<HomeView> {
               );
             } else {
               return LoadingView();
-              ;
             }
           }),
     );
