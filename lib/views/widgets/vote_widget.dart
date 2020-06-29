@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:yachtOne/locator.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/views/constants/size.dart';
 
-Widget kkuuk(
-    voteModel, voteIdx, voteList, userVote, uid, _navigationService, model) {
+Widget voteWidget(voteModel, voteIdx, voteList, userVote, uid, model) {
+  NavigationService _navigationService = locator<NavigationService>();
   return Stack(
     children: <Widget>[
       Container(
@@ -90,7 +92,8 @@ Widget kkuuk(
               print(tempList);
               model.addUserVoteDB(userVote);
 
-              _navigationService.navigateTo('voteFeed');
+              _navigationService.navigateWithArgTo(
+                  'voteComment', [uid, voteModel, voteList, userVote]);
             }
           },
           color: Color(0xFFBDEEEF),
@@ -143,8 +146,8 @@ Widget kkuuk(
               userVote.isVoted = true;
               print(tempList);
               model.addUserVoteDB(userVote);
-
-              _navigationService.navigateTo('voteFeed');
+              _navigationService.navigateWithArgTo(
+                  'voteComment', [uid, voteModel, voteList, userVote]);
             }
           },
           elevation: 2.0,

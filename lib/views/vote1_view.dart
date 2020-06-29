@@ -44,8 +44,7 @@ class _Vote1ViewState extends State<Vote1View> {
       viewModelBuilder: () => VoteViewModel(),
       builder: (context, model, child) => MaterialApp(
         home: Scaffold(
-          body: kkuuk(voteModel, voteIdx, voteList, userVote, uid,
-              _navigationService, model),
+          body: voteWidget(voteModel, voteIdx, voteList, userVote, uid, model),
         ),
       ),
     );

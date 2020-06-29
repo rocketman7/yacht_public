@@ -10,7 +10,7 @@ import 'package:yachtOne/views/sliding_card.dart';
 import 'package:yachtOne/views/startup_view.dart';
 import 'package:yachtOne/views/vote2_view.dart';
 import 'package:yachtOne/views/vote1_view.dart';
-import 'package:yachtOne/views/vote_feed.dart';
+import 'package:yachtOne/views/vote_comment_view.dart';
 import 'package:yachtOne/views/vote_select_view.dart';
 import 'package:yachtOne/views/vote0_view.dart';
 
@@ -60,9 +60,10 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(
                 builder: (context) =>
                     DialogManager(child: Vote2View(routeSettings.arguments)));
-          case 'voteFeed':
+          case 'voteComment':
             return MaterialPageRoute(
-                builder: (context) => DialogManager(child: VoteFeed()));
+                builder: (context) => DialogManager(
+                    child: VoteCommentView(routeSettings.arguments)));
           default:
             return MaterialPageRoute(
                 builder: (context) => DialogManager(child: StartUpView()));

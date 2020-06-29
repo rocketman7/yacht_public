@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
+import 'package:yachtOne/models/vote_comment_model.dart';
+
 import 'package:yachtOne/models/vote_model.dart';
 
 class DatabaseService {
@@ -14,6 +18,9 @@ class DatabaseService {
       Firestore.instance.collection('users'); //_databaseService 사용 왜 불가한지?
   final CollectionReference _votesCollectionReference =
       Firestore.instance.collection('votes');
+  final CollectionReference _postsCollectionReference =
+      Firestore.instance.collection('posts');
+
   int i = 0;
 
   // Create: User정보 users collection에 넣기
@@ -93,5 +100,51 @@ class DatabaseService {
       print("ERROR22");
       print(e.toString());
     }
+  }
+
+  Future postComment(VoteCommentModel voteCommentModel) async {
+    try {
+      // post numbering을 어떻게 할까?
+
+      int postCount;
+
+      // Stream<int> getPostCount() {
+      //   _postsCollectionReference
+      //       .document('20200901')
+      //       .collection('subVote001')
+      //       .snapshots()
+      //       .map((snapshot) => postCount = snapshot.documents.length);
+      //   print(postCount);
+      //   return postCount;
+      // }
+
+      // getPostCount().listen((event) {
+      //   return postCount;
+      // });
+
+      await _postsCollectionReference
+          .document('20200901')
+          .collection('subVote001')
+          .getDocuments()
+          .then((document) => postCount = document.documents.length);
+
+      await _postsCollectionReference
+          .document('20200901')
+          .collection('subVote001')
+          .document('post00' + (postCount + 1).toString())
+          .setData(voteCommentModel.toJson());
+    } catch (e) {}
+  }
+
+  Stream<List<VoteCommentModel>> getPostList() {
+    return _postsCollectionReference
+        .document('20200901')
+        .collection('subVote001')
+        .snapshots()
+        .map((snapshot) => snapshot.documents
+            .map((document) => VoteCommentModel.fromData(document.data))
+            .toList()
+            .reversed
+            .toList());
   }
 }
