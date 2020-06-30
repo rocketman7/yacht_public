@@ -131,7 +131,7 @@ class DatabaseService {
       await _postsCollectionReference
           .document('20200901')
           .collection('subVote001')
-          .document('post00' + (postCount + 1).toString())
+          .document('post' + (postCount + 1).toString().padLeft(5, '0'))
           .setData(voteCommentModel.toJson());
     } catch (e) {}
   }
@@ -142,7 +142,10 @@ class DatabaseService {
         .collection('subVote001')
         .snapshots()
         .map((snapshot) => snapshot.documents
-            .map((document) => VoteCommentModel.fromData(document.data))
+            .map((document) {
+              // print(DateTime.parse(document.data['postDateTime']).toUtc());
+              return VoteCommentModel.fromData(document.data);
+            })
             .toList()
             .reversed
             .toList());

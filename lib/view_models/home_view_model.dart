@@ -21,6 +21,11 @@ class HomeViewModel extends BaseModel {
   VoteModel votesToday;
   List<SubVote> subvotesToday;
 
+// Call this function when initialized
+  HomeViewModel() {
+    getUser();
+  }
+
   Future getUser() async {
     // Future 안에서 왜 _currentUser 받아올 때까지 기다리지 않고 다음 라인이 실행되나?
     //NoSuchMethodError (NoSuchMethodError: The getter 'uid' was called on null. 이 오류 왜 뜨는지 확인필요
@@ -30,7 +35,7 @@ class HomeViewModel extends BaseModel {
     // onAuthStateChanged의 변화를 listen하다가 data가 있을 때 다음 진행하도록 설정하니 에러 없음
     var _currentUser = await _authService.auth.currentUser();
 
-    _user = await _databaseService.getUser(_currentUser.uid);
+    UserModel _user = await _databaseService.getUser(_currentUser.uid);
     return _user;
   }
 

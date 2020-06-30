@@ -12,6 +12,8 @@ import 'package:yachtOne/views/constants/size.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/views/loading_view.dart';
 
+import 'package:yachtOne/views/widgets/navigation_bars_widget.dart';
+
 class VoteCommentView extends StatefulWidget {
   final List<Object> voteCommentViewArgObject;
   VoteCommentView(this.voteCommentViewArgObject);
@@ -48,31 +50,15 @@ class _VoteCommentViewState extends State<VoteCommentView> {
             //create: _databaseService.getPostList(),
             builder: (context, snapshot) {
               //builder (context, child) {}
-              List commentsList = snapshot.data;
+              List<VoteCommentModel> commentsList = snapshot.data;
               // List commentsList = Provider.of<List<VoteCommentModel>>(context);
               if (snapshot.data == null) {
-                //if (commentsList == null)
+                // print(snapshot.data);
                 return LoadingView();
               } else {
                 return Scaffold(
+                  bottomNavigationBar: bottomNavigationBar(),
                   backgroundColor: Color(0xFF363636),
-                  bottomNavigationBar: BottomNavigationBar(
-                    onTap: (index) => {},
-                    currentIndex: 0,
-                    backgroundColor: Colors.black,
-                    selectedItemColor: Colors.blue,
-                    unselectedItemColor: Colors.white,
-                    items: [
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.home),
-                        title: Text('Home'),
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Icon(Icons.monetization_on),
-                        title: Text('Vote'),
-                      ),
-                    ],
-                  ),
                   body: SafeArea(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -81,44 +67,7 @@ class _VoteCommentViewState extends State<VoteCommentView> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Image.asset(
-                                      'assets/images/avatar.png',
-                                      width: 60,
-                                    ),
-                                    SizedBox(
-                                      width: gap_xl,
-                                    ),
-                                    FlatButton(
-                                      onPressed: () => {},
-                                      child: Text(
-                                        // snapshot.data[0].userName,
-                                        'rocketman',
-                                        style: TextStyle(
-                                          fontFamily: 'AdventPro',
-                                          color: Color(0xFFC4FEF3),
-                                          fontSize: 26,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  // snapshot.data[0].combo.toString() + ' Combo',
-                                  '17 Combo',
-                                  style: TextStyle(
-                                    fontFamily: 'AdventPro',
-                                    color: Color(0xFFC4FEF3),
-                                    fontSize: 22,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            topBar(),
                             SizedBox(
                               height: displayRatio > 1.85 ? gap_l : gap_xs,
                             ),
@@ -233,12 +182,15 @@ class _VoteCommentViewState extends State<VoteCommentView> {
                                 GestureDetector(
                                   onTap: () {
                                     voteCommentModel = VoteCommentModel(
-                                        uid: 'UID',
-                                        userName: 'csejun',
-                                        postText: _commentController.text);
+                                      uid: 'UID',
+                                      userName: 'csejun',
+                                      postText: _commentController.text,
+                                      // postDateTime: DateTime.now(),
+                                    );
 
                                     model.postComments(
-                                        voteCommentModel: voteCommentModel);
+                                      voteCommentModel: voteCommentModel,
+                                    );
                                     _commentController.text = '';
                                   },
                                   child: Icon(
