@@ -76,6 +76,27 @@ class DatabaseService {
     }
   }
 
+  // Read: User의 Vote정보 가져오기
+  Future getUserVote(String uid, String voteDate) async {
+    try {
+      var userVoteData = await _usersCollectionReference
+          .document(uid)
+          .collection('userVote')
+          .document(voteDate)
+          .get();
+
+      // List<int> tempList = List<int>.from(userVoteData.data['voteSelected']);
+      // print(tempList.runtimeType);
+      // userVoteData.data['voteSelected'] = tempList;
+      // print(userVoteData.data['voteSelected'].runtimeType);
+
+      return UserVoteModel.fromData(userVoteData.data);
+    } catch (e) {
+      print("ERROR_getUserVote");
+      print(e.toString());
+    }
+  }
+
   // Read: Vote 정보 Vote Collection으로부터 읽기
   Future getVotes(String voteDate) async {
     try {
@@ -108,20 +129,6 @@ class DatabaseService {
 
       int postCount;
 
-      // Stream<int> getPostCount() {
-      //   _postsCollectionReference
-      //       .document('20200901')
-      //       .collection('subVote001')
-      //       .snapshots()
-      //       .map((snapshot) => postCount = snapshot.documents.length);
-      //   print(postCount);
-      //   return postCount;
-      // }
-
-      // getPostCount().listen((event) {
-      //   return postCount;
-      // });
-
       await _postsCollectionReference
           .document('20200901')
           .collection('subVote001')
@@ -142,10 +149,7 @@ class DatabaseService {
         .collection('subVote001')
         .snapshots()
         .map((snapshot) => snapshot.documents
-            .map((document) {
-              // print(DateTime.parse(document.data['postDateTime']).toUtc());
-              return VoteCommentModel.fromData(document.data);
-            })
+            .map((document) => VoteCommentModel.fromData(document.data))
             .toList()
             .reversed
             .toList());

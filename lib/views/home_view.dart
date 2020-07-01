@@ -48,7 +48,7 @@ class _HomeViewState extends State<HomeView> {
                       onWillPop: () => Future.value(false),
                       child: Scaffold(
                         backgroundColor: Color(0xFF363636),
-                        bottomNavigationBar: bottomNavigationBar(),
+                        bottomNavigationBar: bottomNavigationBar(context),
                         body: SafeArea(
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -58,7 +58,7 @@ class _HomeViewState extends State<HomeView> {
                               child: Column(
                                 children: <Widget>[
                                   //이미 snapshot에 data가 있는 상태이기 때문에 아래와 같이 입력하면 Text null에러가 나지 않는다.
-                                  topBar(),
+                                  topBar(currentUserModel),
                                   SizedBox(
                                     height: 15,
                                   ),

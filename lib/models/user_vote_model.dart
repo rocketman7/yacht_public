@@ -23,7 +23,8 @@ class UserVoteModel {
       : uid = data['uid'],
         voteDate = data['voteDate'],
         subVoteCount = data['subVoteCount'],
-        voteSelected = data['voteSelected'],
+        // List<int>를 json으로 가져오면 List<dynamic>으로 인식하여 int로 다시 cast해줌
+        voteSelected = data['voteSelected'].cast<int>(),
         voteResult = data['voteResult'],
         voteVictory = data['voteVictory'],
         isVoted = data['isVoted'];

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/locator.dart';
+import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/database_service.dart';
@@ -173,17 +174,17 @@ class _VoteSelectViewState extends State<VoteSelectView> {
         home: FutureBuilder(
           future: Future.wait([
             model.getUser(widget.uid),
-            model.getVote('20200901'),
+            // model.getVote('20200901'),
           ]),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               // print("rebuild");
               // getVoteTodayWidget(snapshot.data[1]);
               // getVoteSelectedWidget(snapshot.data[1]);
-
+              UserModel currentUser = snapshot.data[0];
               return Scaffold(
                 backgroundColor: Color(0xFF363636),
-                bottomNavigationBar: bottomNavigationBar(),
+                bottomNavigationBar: bottomNavigationBar(context),
                 body: Container(
                   child: SafeArea(
                     child: ListView(children: <Widget>[
@@ -194,7 +195,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            topBar(),
+                            topBar(currentUser),
                             SizedBox(
                               height: gap_l,
                             ),

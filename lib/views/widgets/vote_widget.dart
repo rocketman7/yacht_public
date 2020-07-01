@@ -93,7 +93,9 @@ Widget voteWidget(voteModel, voteIdx, voteList, userVote, uid, model) {
               model.addUserVoteDB(userVote);
 
               _navigationService.navigateWithArgTo(
-                  'voteComment', [uid, voteModel, voteList, userVote]);
+                'voteComment',
+                uid,
+              );
             }
           },
           color: Color(0xFFBDEEEF),
@@ -147,7 +149,9 @@ Widget voteWidget(voteModel, voteIdx, voteList, userVote, uid, model) {
               print(tempList);
               model.addUserVoteDB(userVote);
               _navigationService.navigateWithArgTo(
-                  'voteComment', [uid, voteModel, voteList, userVote]);
+                'voteComment',
+                uid,
+              );
             }
           },
           elevation: 2.0,

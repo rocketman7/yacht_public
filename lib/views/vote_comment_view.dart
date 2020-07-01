@@ -1,8 +1,7 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:provider/provider.dart';
 import 'package:yachtOne/locator.dart';
+import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
 import 'package:yachtOne/models/vote_comment_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
@@ -15,20 +14,20 @@ import 'package:yachtOne/views/loading_view.dart';
 import 'package:yachtOne/views/widgets/navigation_bars_widget.dart';
 
 class VoteCommentView extends StatefulWidget {
-  final List<Object> voteCommentViewArgObject;
-  VoteCommentView(this.voteCommentViewArgObject);
+  final String uid;
+  VoteCommentView(this.uid);
   @override
   _VoteCommentViewState createState() => _VoteCommentViewState();
 }
 
 class _VoteCommentViewState extends State<VoteCommentView> {
   final DatabaseService _databaseService = locator<DatabaseService>();
-  VoteCommentModel voteCommentModel;
-
   String uid;
+
+  VoteCommentModel voteCommentModel;
   VoteModel voteModel;
-  List<int> voteList;
   UserVoteModel userVoteModel;
+  // List<int> voteList;
 
   @override
   Widget build(BuildContext context) {
@@ -36,177 +35,143 @@ class _VoteCommentViewState extends State<VoteCommentView> {
     double displayRatio = size.height / size.width;
     final TextEditingController _commentController = TextEditingController();
 
-    uid = widget.voteCommentViewArgObject[0];
-    voteModel = widget.voteCommentViewArgObject[1];
-    voteList = widget.voteCommentViewArgObject[2];
-    userVoteModel = widget.voteCommentViewArgObject[3];
+    uid = widget.uid;
 
     return ViewModelBuilder<VoteCommentViewModel>.reactive(
       viewModelBuilder: () => VoteCommentViewModel(),
       builder: (context, model, child) => MaterialApp(
-        home: StreamBuilder(
-            //StreamProvider
-            stream: _databaseService.getPostList(),
-            //create: _databaseService.getPostList(),
+        home: FutureBuilder(
+            future: Future.wait([
+              model.getUser(uid),
+              model.getVotes('20200901'),
+              model.getUserVote(uid, '20200901'),
+            ]),
             builder: (context, snapshot) {
-              //builder (context, child) {}
-              List<VoteCommentModel> commentsList = snapshot.data;
-              // List commentsList = Provider.of<List<VoteCommentModel>>(context);
-              if (snapshot.data == null) {
-                // print(snapshot.data);
-                return LoadingView();
-              } else {
-                return Scaffold(
-                  bottomNavigationBar: bottomNavigationBar(),
-                  backgroundColor: Color(0xFF363636),
-                  body: SafeArea(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: displayRatio > 1.85 ? gap_l : gap_xs,
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            topBar(),
-                            SizedBox(
-                              height: displayRatio > 1.85 ? gap_l : gap_xs,
-                            ),
-// 피드 종목 선택 리스트뷰
-                            Container(
-                              height: displayRatio > 1.85 ? 30 : 20,
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: <Widget>[
-                                  subVoteList(
-                                      voteModel.subVotes[0].title.toString()),
-                                  subVoteList(
-                                      voteModel.subVotes[1].title.toString()),
-                                  subVoteList(
-                                      voteModel.subVotes[2].title.toString()),
-                                  subVoteList(
-                                      voteModel.subVotes[3].title.toString()),
-                                  subVoteList(
-                                      voteModel.subVotes[4].title.toString()),
-                                ],
+              if (snapshot.hasData) {
+                UserModel currentUserModel = snapshot.data[0];
+                VoteModel voteModel = snapshot.data[1];
+                UserVoteModel userVoteModel = snapshot.data[2];
+                return StreamBuilder(
+                    //StreamProvider
+                    stream: _databaseService.getPostList(),
+                    //create: _databaseService.getPostList(),
+                    builder: (context, snapshotStream) {
+                      //builder (context, child) {}
+                      List<VoteCommentModel> commentsList = snapshotStream.data;
+                      // List commentsList = Provider.of<List<VoteCommentModel>>(context);
+                      if (snapshotStream.data == null) {
+                        // print(snapshot.data);
+                        return LoadingView();
+                      } else {
+                        return Scaffold(
+                          bottomNavigationBar: bottomNavigationBar(context),
+                          backgroundColor: Color(0xFF363636),
+                          body: SafeArea(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    displayRatio > 1.85 ? gap_l : gap_xs,
                               ),
-                            ),
-                            SizedBox(
-                              height: gap_xs,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 60.0),
-                              child: Text(
-                                "Disney",
-                                style: feedTitle(),
-                              ),
-                            ),
-                            Text(
-                              "vs",
-                              style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.white,
-                                fontFamily: 'AdventPro',
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 60.0),
-                              child: Text(
-                                "Netflix",
-                                style: feedTitle(),
-                              ),
-                            ),
-                            SizedBox(
-                              height: gap_m,
-                            ),
-                            Container(
-                              height: 95,
-                              color: Color(0xFF164D59),
-                            ),
-                            SizedBox(
-                              height: gap_xxs,
-                            ),
-// 피드 섹션
-                            Container(
-                              // width: 320,
-                              height: 350,
-                              child: ListView.builder(
-                                itemCount: commentsList.length,
-                                scrollDirection: Axis.vertical,
-                                reverse: true,
-                                itemBuilder: (context, index) => comment(
-                                    commentsList[index].postText.toString()),
-                              ),
-                            ),
-                            SizedBox(
-                              height: gap_l,
-                            ),
-// 유저 코멘트 넣는 창
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Image.asset(
-                                  'assets/images/avatar.png',
-                                  width: 30,
-                                ),
-                                Container(
-                                  width: 300,
-                                  child: TextField(
-                                    controller: _commentController,
-                                    textAlign: TextAlign.start,
-                                    textAlignVertical: TextAlignVertical.top,
-                                    style: TextStyle(
-                                      color: Colors.white,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: <Widget>[
+                                    topBar(currentUserModel),
+                                    SizedBox(
+                                      height:
+                                          displayRatio > 1.85 ? gap_l : gap_xs,
                                     ),
-                                    maxLines: 3,
-                                    decoration: InputDecoration(
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFBDBDBD),
-                                            width: 1.0,
-                                          ),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFBDBDBD),
-                                            width: 1.0,
-                                          ),
-                                        ),
-                                        hintText: '주제에 관한 생각을 말해주세요',
-                                        hintStyle: TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xFF828282),
-                                        )),
-                                  ),
+// 피드 종목 선택 리스트뷰
+                                    Container(
+                                      height: displayRatio > 1.85 ? 30 : 20,
+                                      child: ListView(
+                                        scrollDirection: Axis.horizontal,
+                                        children: <Widget>[
+                                          subVoteList(voteModel
+                                              .subVotes[0].title
+                                              .toString()),
+                                          subVoteList(voteModel
+                                              .subVotes[1].title
+                                              .toString()),
+                                          subVoteList(voteModel
+                                              .subVotes[2].title
+                                              .toString()),
+                                          subVoteList(voteModel
+                                              .subVotes[3].title
+                                              .toString()),
+                                          subVoteList(voteModel
+                                              .subVotes[4].title
+                                              .toString()),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: gap_xs,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 60.0),
+                                      child: Text(
+                                        "Disney",
+                                        style: commentTitle(),
+                                      ),
+                                    ),
+                                    Text(
+                                      "vs",
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.white,
+                                        fontFamily: 'AdventPro',
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 60.0),
+                                      child: Text(
+                                        "Netflix",
+                                        style: commentTitle(),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: gap_m,
+                                    ),
+                                    Container(
+                                      height: 95,
+                                      color: Color(0xFF164D59),
+                                    ),
+                                    SizedBox(
+                                      height: gap_xxs,
+                                    ),
+// 피드 섹션
+                                    Container(
+                                      // width: 320,
+                                      height: 350,
+                                      child: ListView.builder(
+                                        itemCount: commentsList.length,
+                                        scrollDirection: Axis.vertical,
+                                        reverse: true,
+                                        itemBuilder: (context, index) =>
+                                            commentList(commentsList[index]),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: gap_l,
+                                    ),
+                                    commentInput(
+                                      _commentController,
+                                      currentUserModel,
+                                      model,
+                                      voteModel,
+                                      userVoteModel,
+                                    ),
+                                  ],
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    voteCommentModel = VoteCommentModel(
-                                      uid: 'UID',
-                                      userName: 'csejun',
-                                      postText: _commentController.text,
-                                      // postDateTime: DateTime.now(),
-                                    );
-
-                                    model.postComments(
-                                      voteCommentModel: voteCommentModel,
-                                    );
-                                    _commentController.text = '';
-                                  },
-                                  child: Icon(
-                                    Icons.check_circle,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  // backgroundColor: Color(0XFF051417),
-                );
+                          ),
+                          // backgroundColor: Color(0XFF051417),
+                        );
+                      }
+                    });
+              } else {
+                return LoadingView();
               }
             }),
       ),
@@ -228,7 +193,7 @@ class _VoteCommentViewState extends State<VoteCommentView> {
     );
   }
 
-  TextStyle feedTitle() {
+  TextStyle commentTitle() {
     return TextStyle(
       color: Colors.white,
       fontSize: 30,
@@ -237,7 +202,8 @@ class _VoteCommentViewState extends State<VoteCommentView> {
     );
   }
 
-  Widget comment(text) {
+// 댓글 리스트 위젯
+  Widget commentList(VoteCommentModel voteCommentModel) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: gap_xxs),
       child: Row(
@@ -257,7 +223,7 @@ class _VoteCommentViewState extends State<VoteCommentView> {
                 Row(
                   children: <Widget>[
                     Text(
-                      "csejun",
+                      voteCommentModel.userName,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -269,7 +235,7 @@ class _VoteCommentViewState extends State<VoteCommentView> {
                       width: 50,
                     ),
                     Text(
-                      "Disney",
+                      voteCommentModel.choice ?? '선택 안 함',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 13,
@@ -284,7 +250,7 @@ class _VoteCommentViewState extends State<VoteCommentView> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    text,
+                    voteCommentModel.postText,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -311,6 +277,81 @@ class _VoteCommentViewState extends State<VoteCommentView> {
           // Text("Just now"),
         ],
       ),
+    );
+  }
+
+// 유저 댓글 입력창
+  Widget commentInput(
+    TextEditingController controller,
+    UserModel userModel,
+    VoteCommentViewModel model,
+    VoteModel voteModel,
+    UserVoteModel userVoteModel,
+  ) {
+    // 유저 코멘트 넣는 창
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Image.asset(
+          'assets/images/avatar.png',
+          width: 30,
+        ),
+        Container(
+          width: 300,
+          child: TextField(
+            controller: controller,
+            textAlign: TextAlign.start,
+            textAlignVertical: TextAlignVertical.top,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+            maxLines: 3,
+            decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFFBDBDBD),
+                    width: 1.0,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Color(0xFFBDBDBD),
+                    width: 1.0,
+                  ),
+                ),
+                hintText: '주제에 관한 생각을 말해주세요',
+                hintStyle: TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFF828282),
+                )),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            voteCommentModel = VoteCommentModel(
+                uid: userModel.uid,
+                userName: userModel.userName,
+                postText: controller.text,
+                choice: userVoteModel.voteSelected[0] == 0
+                    ? null
+                    : voteModel.subVotes[0]
+                        .voteChoices[userVoteModel.voteSelected[0] - 1]
+
+                // postDateTime: DateTime.now(),
+                );
+
+            model.postComments(
+              voteCommentModel: voteCommentModel,
+            );
+            controller.text = '';
+          },
+          child: Icon(
+            Icons.check_circle,
+            color: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 }

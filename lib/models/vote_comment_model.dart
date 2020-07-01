@@ -5,6 +5,7 @@ class VoteCommentModel {
   final int like;
   final int dislike;
   final DateTime postDateTime;
+  final String choice;
 
   VoteCommentModel({
     this.uid,
@@ -13,6 +14,7 @@ class VoteCommentModel {
     this.like,
     this.dislike,
     this.postDateTime,
+    this.choice,
   });
 
   VoteCommentModel.fromData(Map<String, dynamic> data)
@@ -21,7 +23,8 @@ class VoteCommentModel {
         postText = data['postText'],
         like = data['like'],
         dislike = data['dislke'],
-        postDateTime = data['postDateTime'];
+        postDateTime = data['postDateTime'],
+        choice = data['choice'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -31,6 +34,7 @@ class VoteCommentModel {
       'like': this.like,
       'dislike': this.dislike,
       'postDateTime': this.postDateTime,
+      'choice': this.choice,
     };
   }
 }
