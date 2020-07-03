@@ -1,17 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
 import 'package:yachtOne/models/vote_comment_model.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yachtOne/models/vote_model.dart';
 
 class DatabaseService {
   Firestore _databaseService = Firestore.instance;
   Firestore get databaseService => _databaseService;
+
+  DateFormat dateFormat = DateFormat('yyyy-MM-dd_HH:mm:ss:SSS');
 
   //  collection references
   final CollectionReference _usersCollectionReference =
@@ -123,30 +125,26 @@ class DatabaseService {
     }
   }
 
-  Future postComment(VoteCommentModel voteCommentModel) async {
+  Future postComment(
+      int subVoteIndex, VoteCommentModel voteCommentModel) async {
     try {
       // post numbering을 어떻게 할까?
 
-      int postCount;
-
       await _postsCollectionReference
           .document('20200901')
-          .collection('subVote001')
-          .getDocuments()
-          .then((document) => postCount = document.documents.length);
-
-      await _postsCollectionReference
-          .document('20200901')
-          .collection('subVote001')
-          .document('post' + (postCount + 1).toString().padLeft(5, '0'))
+          .collection('subVote00' + (subVoteIndex + 1).toString())
+          .document('post_' +
+              dateFormat.format(DateTime.now().toUtc().add(
+                    Duration(hours: 9),
+                  )))
           .setData(voteCommentModel.toJson());
     } catch (e) {}
   }
 
-  Stream<List<VoteCommentModel>> getPostList() {
+  Stream<List<VoteCommentModel>> getPostList(int index) {
     return _postsCollectionReference
         .document('20200901')
-        .collection('subVote001')
+        .collection('subVote00' + (index + 1).toString())
         .snapshots()
         .map((snapshot) => snapshot.documents
             .map((document) => VoteCommentModel.fromData(document.data))

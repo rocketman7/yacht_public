@@ -19,9 +19,13 @@ class VoteCommentViewModel extends BaseModel {
   UserModel _user;
   VoteModel _votes;
   UserVoteModel _userVote;
+  int subVoteIndex;
 
-  Future postComments({@required VoteCommentModel voteCommentModel}) async {
-    await _databaseService.postComment(voteCommentModel);
+  Future postComments(
+    subVoteIndex,
+    VoteCommentModel voteCommentModel,
+  ) async {
+    await _databaseService.postComment(subVoteIndex, voteCommentModel);
   }
 
   Future getUser(String uid) async {
