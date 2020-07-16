@@ -99,17 +99,18 @@ class _VoteCommentViewState extends State<VoteCommentView>
                             ),
 // 피드 종목 선택 리스트뷰
                             TabBar(
-                                controller: _tabController,
-                                indicatorColor: Colors.red,
-                                labelColor: Colors.blue,
-                                unselectedLabelColor: Colors.white,
-                                isScrollable: true,
-                                tabs: List.generate(
-                                  5,
-                                  (index) => subVoteList(voteModel
-                                      .subVotes[index].title
-                                      .toString()),
-                                )),
+                              controller: _tabController,
+                              indicatorColor: Colors.red,
+                              labelColor: Colors.blue,
+                              unselectedLabelColor: Colors.white,
+                              isScrollable: true,
+                              tabs: List.generate(
+                                5,
+                                (index) => subVoteList(
+                                  voteModel.subVotes[index].title.toString(),
+                                ),
+                              ),
+                            ),
                             SizedBox(
                               height: gap_xs,
                             ),
@@ -118,12 +119,13 @@ class _VoteCommentViewState extends State<VoteCommentView>
                               child: TabBarView(
                                 controller: _tabController,
                                 children: List.generate(
-                                    5,
-                                    (index) => commentTabBarView(
-                                          index,
-                                          context,
-                                          voteModel,
-                                        )),
+                                  5,
+                                  (index) => commentTabBarView(
+                                    index,
+                                    context,
+                                    voteModel,
+                                  ),
+                                ),
                               ),
                             ),
 

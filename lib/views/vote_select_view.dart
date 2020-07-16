@@ -6,8 +6,6 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/vote_select_view_model.dart';
 import 'package:yachtOne/views/constants/size.dart';
@@ -60,7 +58,6 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     for (var i = 0; i < votesToday.subVotes.length; i++) {
       // print(votesFromDB.subVotes.length);
       listItems.add(VoteCard(i, votesToday));
-      print(VoteCard(i, votesToday).idx);
     }
 
     setState(() {
@@ -84,7 +81,6 @@ class _VoteSelectViewState extends State<VoteSelectView> {
       // TODO: subString 방법 말고 시간, 분, 초 각각 리턴해서 해야함
       var endTime = votes.voteEndDateTime;
       var diff = endTime.difference(DateTime.now());
-      print(diff);
       diffHours = diff.toString().substring(0, 2);
       diffMins = diff.toString().substring(3, 5);
       diffSecs = diff.toString().substring(6, 8);
@@ -101,6 +97,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     // 투표, 선택된 투표 위젯 만들기 위해 initState에 투표 데이터 db에서 불러옴
     print("Async start");
     _model.getVote('20200901').then((value) {
+      print('voteData got');
       getVoteTodayWidget(value);
       getVoteSelectedWidget(value);
       votesFromDB = value;
@@ -178,7 +175,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
           ]),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              // print("rebuild");
+              print("snapShotData Called");
               // getVoteTodayWidget(snapshot.data[1]);
               // getVoteSelectedWidget(snapshot.data[1]);
               UserModel currentUser = snapshot.data[0];
@@ -232,45 +229,44 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               height: gap_m,
                             ),
                             Container(
-                                height: displayRatio > 1.85
-                                    ? size.height * .45
-                                    : size.height * .50,
+                              height: displayRatio > 1.85
+                                  ? size.height * .45
+                                  : size.height * .50,
 
-                                // PageView.builder랑 똑같은데 preloadPageCount 만큼 미리 로드해놓는 것만 다름
-                                child: PreloadPageView.builder(
-                                  preloadPagesCount: 5,
-                                  controller: controller,
-                                  scrollDirection: Axis.horizontal,
-                                  // physics: BouncingScrollPhysics(),
-                                  itemCount: _votesTodayShowing.length,
-                                  itemBuilder: (context, index) {
-                                    // print('pageviewRebuilt');
-                                    return GestureDetector(
-                                        onDoubleTap: () {
-                                          // 투표 선택 최대 수를 제한하고
-                                          if (_votesTodayNotShowing.length <
-                                              3) {
-                                            setState(() {
-                                              // 더블 탭 하면 voteToday 섹션과 voteSelected 섹션에서
-                                              // 보여줘야할 위젯과 보여주지 않는 위젯을 서로 교환하며 리스트에 저장한다.
-                                              _votesTodayNotShowing.add(
-                                                  _votesTodayShowing[index]);
-                                              _passIdx.add(index);
-                                              _votesTodayShowing
-                                                  .removeAt(index);
+                              // PageView.builder랑 똑같은데 preloadPageCount 만큼 미리 로드해놓는 것만 다름
+                              child: PreloadPageView.builder(
+                                preloadPagesCount: 5,
+                                controller: controller,
+                                scrollDirection: Axis.horizontal,
+                                // physics: BouncingScrollPhysics(),
+                                itemCount: _votesTodayShowing.length,
+                                itemBuilder: (context, index) {
+                                  // print('pageviewRebuilt');
+                                  return GestureDetector(
+                                      onDoubleTap: () {
+                                        // 투표 선택 최대 수를 제한하고
+                                        if (_votesTodayNotShowing.length < 3) {
+                                          setState(() {
+                                            // 더블 탭 하면 voteToday 섹션과 voteSelected 섹션에서
+                                            // 보여줘야할 위젯과 보여주지 않는 위젯을 서로 교환하며 리스트에 저장한다.
+                                            _votesTodayNotShowing
+                                                .add(_votesTodayShowing[index]);
+                                            _passIdx.add(index);
+                                            _votesTodayShowing.removeAt(index);
 
-                                              _votesSelectedShowing.add(
-                                                  _votesSelectedNotShowing[
-                                                      index]);
-                                              _votesSelectedNotShowing
-                                                  .removeAt(index);
-                                            });
-                                          } else
-                                            return;
-                                        },
-                                        child: _votesTodayShowing[index]);
-                                  },
-                                )),
+                                            _votesSelectedShowing.add(
+                                                _votesSelectedNotShowing[
+                                                    index]);
+                                            _votesSelectedNotShowing
+                                                .removeAt(index);
+                                          });
+                                        } else
+                                          return;
+                                      },
+                                      child: _votesTodayShowing[index]);
+                                },
+                              ),
+                            ),
                             SizedBox(
                               height: gap_m,
                             ),
@@ -344,7 +340,6 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                           // Selected 더블탭 -> 거기서 id 추출
                                           // voteTodayShowing에서 자리찾기
                                           // insert
-
                                           VoteSelected temp =
                                               _votesSelectedShowing[index];
                                           int id = temp.idx;
@@ -355,12 +350,9 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                             indicesList.add(i.idx);
                                           }
                                           indicesList.add(id);
-
                                           indicesList.sort();
-                                          print(index);
-                                          print(id);
                                           id = indicesList.indexOf(id);
-                                          print(id);
+
                                           _votesSelectedNotShowing.insert(
                                               id, _votesSelectedShowing[index]);
                                           _votesSelectedShowing.removeAt(index);
@@ -382,8 +374,10 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 ),
                 // Code:
               );
-            } else
+            } else {
+              print("snapShotData notYet");
               return LoadingView();
+            }
           },
         ),
       ),

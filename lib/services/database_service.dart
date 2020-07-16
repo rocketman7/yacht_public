@@ -128,8 +128,6 @@ class DatabaseService {
   Future postComment(
       int subVoteIndex, VoteCommentModel voteCommentModel) async {
     try {
-      // post numbering을 어떻게 할까?
-
       await _postsCollectionReference
           .document('20200901')
           .collection('subVote00' + (subVoteIndex + 1).toString())
