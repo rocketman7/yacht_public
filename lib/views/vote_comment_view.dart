@@ -39,6 +39,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
   @override
   void initState() {
     super.initState();
+    // 주제 선택하는 좌우 스크롤 메뉴의 컨트롤러
     _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(() {
       setState(() {
@@ -128,7 +129,6 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                 ),
                               ),
                             ),
-
                             SizedBox(
                               height: gap_l,
                             ),
