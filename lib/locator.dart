@@ -1,8 +1,8 @@
 import 'package:get_it/get_it.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/database_service.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'package:yachtOne/services/dialog_service.dart';
+import 'services/auth_service.dart';
+import 'services/database_service.dart';
+import 'services/navigation_service.dart';
+import 'services/dialog_service.dart';
 
 GetIt locator = GetIt.instance;
 

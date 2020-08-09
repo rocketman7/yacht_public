@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/locator.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/database_service.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'package:yachtOne/view_models/register_view_model.dart';
-import 'package:yachtOne/views/constants/size.dart';
+import '../locator.dart';
+import '../services/auth_service.dart';
+import '../services/database_service.dart';
+import '../services/navigation_service.dart';
+import '../view_models/register_view_model.dart';
+import '../views/constants/size.dart';
 
 class RegisterView extends StatelessWidget {
   final NavigationService _navigationService = locator<NavigationService>();

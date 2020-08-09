@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/locator.dart';
-import 'package:yachtOne/models/user_model.dart';
-import 'package:yachtOne/models/vote_model.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'package:yachtOne/view_models/vote_select_view_model.dart';
-import 'package:yachtOne/views/constants/size.dart';
+import '../locator.dart';
+import '../models/user_model.dart';
+import '../models/vote_model.dart';
+import '../services/navigation_service.dart';
+import '../view_models/vote_select_view_model.dart';
+import '../views/constants/size.dart';
 import 'package:preload_page_view/preload_page_view.dart';
-import 'package:yachtOne/views/loading_view.dart';
-import 'package:yachtOne/views/widgets/navigation_bars_widget.dart';
-import 'package:yachtOne/views/widgets/vote_card_widget.dart';
-import 'package:yachtOne/views/widgets/vote_selected_widget.dart';
+import '../views/loading_view.dart';
+import '../views/widgets/navigation_bars_widget.dart';
+import '../views/widgets/vote_card_widget.dart';
+import '../views/widgets/vote_selected_widget.dart';
 
 class VoteSelectView extends StatefulWidget {
   final String uid;

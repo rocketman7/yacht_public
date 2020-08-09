@@ -1,7 +1,7 @@
-import 'package:yachtOne/locator.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'package:yachtOne/view_models/base_model.dart';
+import '../locator.dart';
+import '../services/auth_service.dart';
+import '../services/navigation_service.dart';
+import '../view_models/base_model.dart';
 
 class StartUpViewModel extends BaseModel {
   final AuthService _authService = locator<AuthService>();

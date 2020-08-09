@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:yachtOne/models/user_vote_model.dart';
-
 class UserModel {
   final String uid;
   final String userName;

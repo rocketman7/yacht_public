@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yachtOne/locator.dart';
-import 'package:yachtOne/models/dialog_model.dart';
-import 'package:yachtOne/services/dialog_service.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import '../locator.dart';
+import '../models/dialog_model.dart';
+import '../services/dialog_service.dart';
 
 class DialogManager extends StatefulWidget {
   final Widget child;

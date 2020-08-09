@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/navigation_service.dart';
+import '../services/auth_service.dart';
+import '../services/navigation_service.dart';
 import 'package:flutter/material.dart';
-import 'package:yachtOne/view_models/login_view_model.dart';
-import 'package:yachtOne/locator.dart';
-import 'package:yachtOne/views/constants/size.dart';
+import '../view_models/login_view_model.dart';
+import '../locator.dart';
+import '../views/constants/size.dart';
 
 class LoginView extends StatefulWidget {
   @override

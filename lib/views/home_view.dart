@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/locator.dart';
-import 'package:yachtOne/models/sub_vote_model.dart';
-import 'package:yachtOne/models/user_model.dart';
-import 'package:yachtOne/models/vote_model.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/database_service.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'package:yachtOne/view_models/home_view_model.dart';
-import 'package:yachtOne/views/constants/size.dart';
-import 'package:yachtOne/views/loading_view.dart';
+import '../locator.dart';
+import '../models/sub_vote_model.dart';
+import '../models/user_model.dart';
+import '../models/vote_model.dart';
+import '../services/auth_service.dart';
+import '../services/database_service.dart';
+import '../services/navigation_service.dart';
+import '../view_models/home_view_model.dart';
+import '../views/constants/size.dart';
+import '../views/loading_view.dart';
 
-import 'package:yachtOne/views/widgets/navigation_bars_widget.dart';
+import '../views/widgets/navigation_bars_widget.dart';
 // import 'package:stacked/stacked.dart';
 
 class HomeView extends StatefulWidget {

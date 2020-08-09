@@ -1,15 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/locator.dart';
-import 'package:yachtOne/models/user_vote_model.dart';
-import 'package:yachtOne/models/vote_model.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/database_service.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'package:yachtOne/view_models/vote_view_model.dart';
-import 'package:yachtOne/views/constants/size.dart';
-import 'package:yachtOne/views/widgets/vote_widget.dart';
+import '../locator.dart';
+import '../models/user_vote_model.dart';
+import '../models/vote_model.dart';
+import '../services/auth_service.dart';
+import '../services/database_service.dart';
+import '../services/navigation_service.dart';
+import '../view_models/vote_view_model.dart';
+import '../views/constants/size.dart';
+import '../views/widgets/vote_widget.dart';
 
 class Vote0View extends StatefulWidget {
   // votesToday Object를 voteSelectView로부터 받아온다.

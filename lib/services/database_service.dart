@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:yachtOne/models/sub_vote_model.dart';
-import 'package:yachtOne/models/user_model.dart';
-import 'package:yachtOne/models/user_vote_model.dart';
-import 'package:yachtOne/models/vote_comment_model.dart';
+import '../models/sub_vote_model.dart';
+import '../models/user_model.dart';
+import '../models/user_vote_model.dart';
+import '../models/vote_comment_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:yachtOne/models/vote_model.dart';
+import '../models/vote_model.dart';
 
 class DatabaseService {
   Firestore _databaseService = Firestore.instance;

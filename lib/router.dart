@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:yachtOne/managers/dialog_manager.dart';
-import 'package:yachtOne/views/home_view.dart';
-import 'package:yachtOne/views/login_view.dart';
-import 'package:yachtOne/views/register_view.dart';
-import 'package:yachtOne/views/startup_view.dart';
-import 'package:yachtOne/views/vote0_view.dart';
-import 'package:yachtOne/views/vote1_view.dart';
-import 'package:yachtOne/views/vote2_view.dart';
-import 'package:yachtOne/views/vote_comment_view.dart';
-import 'package:yachtOne/views/vote_select_view.dart';
+import 'managers/dialog_manager.dart';
+import 'views/home_view.dart';
+import 'views/login_view.dart';
+import 'views/register_view.dart';
+import 'views/startup_view.dart';
+import 'views/vote0_view.dart';
+import 'views/vote1_view.dart';
+import 'views/vote2_view.dart';
+import 'views/vote_comment_view.dart';
+import 'views/vote_select_view.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {

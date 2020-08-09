@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:yachtOne/locator.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/database_service.dart';
-import 'package:yachtOne/services/dialog_service.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'package:yachtOne/view_models/base_model.dart';
+import '../locator.dart';
+import '../services/auth_service.dart';
+import '../services/database_service.dart';
+import '../services/dialog_service.dart';
+import '../services/navigation_service.dart';
+import '../view_models/base_model.dart';
 
 class LoginViewModel extends BaseModel {
   final AuthService _authService = locator<AuthService>();

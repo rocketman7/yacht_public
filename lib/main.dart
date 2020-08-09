@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:yachtOne/managers/dialog_manager.dart';
-import 'package:yachtOne/router.dart';
-import 'package:yachtOne/views/animation_test.dart';
-import 'package:yachtOne/views/animation_test2.dart';
-import 'package:yachtOne/views/register_view.dart';
-import 'package:yachtOne/views/sliding_card.dart';
-import 'package:yachtOne/views/startup_view.dart';
+import 'managers/dialog_manager.dart';
+import 'router.dart';
+import 'views/animation_test.dart';
+import 'views/animation_test2.dart';
+import 'views/register_view.dart';
+import 'views/sliding_card.dart';
+import 'views/startup_view.dart';
 
 import 'locator.dart';
 import 'services/navigation_service.dart';

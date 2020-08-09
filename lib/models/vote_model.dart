@@ -1,4 +1,4 @@
-import 'package:yachtOne/models/sub_vote_model.dart';
+import '../models/sub_vote_model.dart';
 
 class VoteModel {
   final String voteDate;
