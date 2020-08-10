@@ -54,33 +54,43 @@ exports.sortRank = functions.https.onRequest(async (req, res) => {
   console.log(typeof userDocs);
   console.log(typeof userDocs[0]);
   console.log(userDocs);
+  console.log(userDocs.length);
   console.log(userDocs[0].combo.toString());
 
   const today = "20200809";
-  let testData = [];
+  let rankData = [];
 
-  userDocs.forEach((item, index, arr2) => {
-    console.log(item, index, arr2[index + 1]);
-    testData.push({
-      uid: item[index].uid,
-      combo: item[index].combo,
-      ranking: index,
-      userName: item[index].userName,
-    });
-  });
+  // userDocs.forEach((item, index, arr2) => {
+  //   // console.log(arr2[index + 1]);
+  //   rankData.push({
+  //     uid: arr2[index].item.uid,
+  //     combo: arr2[index].item.combo,
+  //     ranking: index,
+  //     userName: arr2[index].item.userName,
+  //   });
+  // });
 
   //첫번쨰 인수는 배열의 각각의 item
   //두번쨰 인수는 배열의 index
   //세번째 인수는 배열 그자체
 
-  console.log(testData);
-  // const testData = {
-  //   combo: userDocs[0].combo,
-  //   ranking: 0,
-  //   userName: userDocs[0].userName,
-  // };
+  for (var i = 0; i < userDocs.length; i++) {
+    rankData.push({
+      uid: userDocs[i].uid,
+      combo: userDocs[i].combo,
+      userName: userDocs[i].userName,
+    });
+  }
 
-  const pushData = await rank.doc("season001").collection.set(testData[0]);
+  console.log(rankData);
+  console.log(rankData[0]);
+
+  async function testParallelIndividualWrites(datas) {
+    await Promise.all(
+      datas.map((data) => rank.doc("season001").collection(today).add(data))
+    );
+  }
+  testParallelIndividualWrites(rankData);
 
   // Sort된 userDocs snapshot
   //   userDocs = [
@@ -98,7 +108,7 @@ exports.sortRank = functions.https.onRequest(async (req, res) => {
   //                 combo: 21 }
   //  ]
 
-  res.send(userDocs);
+  res.send(rankData);
 
   // var usersCombos = await users.get().then((snapshot) => {
   //   let arrayR = snapshot.docs.map((doc) => {
