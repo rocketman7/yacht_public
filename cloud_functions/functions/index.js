@@ -13,7 +13,110 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
   response.send("Hello from Firebase!");
 });
 
-// User 데이터에서 combo sorting하여 rank DB에 넣는 함수
+// 1) 사용자들 투표 채점, 2) 사용자 콤보 넣고 빼주고, 3) 랭킹 컬렉션에 순서대로 순위 넣어주고
+
+exports.scoreVote = functions.https.onRequest(async (req, res) => {
+  const db = admin.firestore();
+  // votes -> docu id: date -> voteResult array
+  const votes = db.collection("votes");
+  const users = db.collection("users");
+  const today = "20200901";
+
+  // today의 실제 결과 가져오기 (이전에 넣어야함)
+  let todayResult = [];
+  const resultSnapshot = await votes.doc(today).get();
+  todayResult = resultSnapshot.data().voteResult; // [1, 2, 2, 1, 2]
+
+  // user의 vote 선택 가져오기
+
+  let userCurrentCombo = {};
+  let userVotes = {};
+  let userScores = {};
+  var testScore = 0;
+  const userSnapshot = await users.get();
+  // userSnapshot에서 각 user의 uid를 리스트로 만듬
+  userSnapshot.forEach((doc) => {
+    userCurrentCombo[doc.id] = doc.data().combo;
+  });
+
+  // userCurrentCombo array로부터 userVote sub-col의 사용자 선택 가져와서 dictionary로 만들기
+  async function getEachUserVotesAndMakeDict(datas) {
+    await Promise.all(
+      datas.map((data) =>
+        users
+          .doc(data)
+          .collection("userVote")
+          .doc(today)
+          .get()
+          .then((doc) => {
+            userVotes[data] = doc.data().voteSelected;
+            console.log(userVotes);
+            return userVotes;
+          })
+      )
+    );
+    return userVotes;
+  }
+
+  allUserVotesDict = await getEachUserVotesAndMakeDict(
+    Object.keys(userCurrentCombo)
+  );
+  //{ m2UUvxsAwfdLFP4RB8q4SgkaNgr2: [ 2, 0, 2, 0, 0 ],
+  // itz7XAIaPxSOKrI7MFGEB6LgaBL2: [ 1, 0, 2, 0, 0 ],
+  // w9E2tSET3fTrtMoSB7ctTgWlGAO2: [ 0, 2, 2, 0, 0 ] }
+
+  // console.log("final console.log" + allUserVotesDict["itz7XAIaPxSOKrI7MFGEB6LgaBL2"]);
+
+  function scoreUserVotes(userVoteArr, resultArr) {
+    var score = 0;
+    for (var i = 0; i < resultArr.length; i++) {
+      if (userVoteArr[i] !== 0) {
+        if (userVoteArr[i] === resultArr[i]) {
+          score += 1;
+        } else {
+          score -= 1;
+        }
+      } else {
+        score += 0;
+      }
+      console.log("%d번 째 문제 현재 점수 %d", i, score);
+    }
+    return score;
+  }
+
+  for (let uid in allUserVotesDict) {
+    score = scoreUserVotes(allUserVotesDict[uid], todayResult);
+    userScores[uid] = score;
+  }
+  // testScore = scoreUserVotes([0, 1, 1, 0, 2], [1, 2, 2, 1, 2]);
+  // console.log("test Score is " + testScore);
+
+  // user collection에서 각 uid를 찾아 들어가 combo field 업데이트
+  async function updateUserCombo(datas) {
+    await Promise.all(
+      Object.keys(datas).map((uid) => {
+        let newCombo = userCurrentCombo[uid] + datas[uid];
+        // newCombo = userSnapshot.doc(uid).data().combo + datas[uid];
+        console.log(uid);
+
+        console.log(uid + " new Combo will be " + newCombo);
+        if (newCombo < 0) {
+          newCombo = 0;
+        }
+        users.doc(uid).update({ combo: newCombo });
+        return 0;
+      })
+    );
+  }
+
+  await updateUserCombo(userScores);
+
+  console.log(Object.keys(allUserVotesDict).length);
+  console.log(userScores);
+  res.send(userCurrentCombo);
+});
+
+// 3) User 데이터에서 combo sorting하여 rank DB에 넣는 함수
 exports.sortRank = functions.https.onRequest(async (req, res) => {
   // 1. users의 combo로 sorting해서
   // 2. combo order로 uid를 정렬
