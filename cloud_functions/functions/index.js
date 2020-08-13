@@ -58,6 +58,7 @@ exports.scoreVote = functions.https.onRequest(async (req, res) => {
     return userVotes;
   }
 
+  // 사용자 투표 데이터
   allUserVotesDict = await getEachUserVotesAndMakeDict(
     Object.keys(userCurrentCombo)
   );

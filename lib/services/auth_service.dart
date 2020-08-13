@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:yachtOne/locator.dart';
-import 'package:yachtOne/models/user_model.dart';
-import 'package:yachtOne/services/database_service.dart';
+import '../locator.dart';
+import '../models/user_model.dart';
+import '../services/database_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
