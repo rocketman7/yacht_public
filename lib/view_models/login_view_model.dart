@@ -12,12 +12,12 @@ class LoginViewModel extends BaseModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   final DialogService _dialogService = locator<DialogService>();
 
-  Future doThings() async {
-    print("dialog shown");
-    var dialogResult = await _dialogService.showDialog();
-    print(dialogResult);
-    print("dialog close");
-  }
+  // Future doThings() async {
+  //   print("dialog shown");
+  //   var dialogResult = await _dialogService.showDialog();
+  //   print(dialogResult);
+  //   print("dialog close");
+  // }
 
   // 로그인 function. View로부터 전달받은 계정정보를 input으로 authService의 로그인 함수를 호출.
   Future login({@required String email, @required String password}) async {
@@ -26,7 +26,7 @@ class LoginViewModel extends BaseModel {
     // 로그인 성공하면
     if (result is bool) {
       if (result == true) {
-        print('Login Success');
+        // print('Login Success');
         // loggedIn 화면으로 route (HomeView)
         _navigationService.navigateTo(
           'loggedIn',

@@ -13,6 +13,7 @@ class RegisterView extends StatelessWidget {
   final DatabaseService _databaseService = locator<DatabaseService>();
 
   // inputFormState 관리
+  // 회원가입 시 password 넣을 때 validate 해야 하기 때문에 FormKey 필요
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -80,6 +81,7 @@ class RegisterView extends StatelessWidget {
               Size(250, 50),
             ),
             child: TextFormField(
+              // 유저 네임 입력창
               controller: _userNameController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
@@ -103,6 +105,7 @@ class RegisterView extends StatelessWidget {
               Size(250, 50),
             ),
             child: TextFormField(
+              // 이메일 입력창
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(

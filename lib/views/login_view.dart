@@ -1,10 +1,9 @@
 import 'dart:math';
 
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:stacked/stacked.dart';
-import '../services/auth_service.dart';
-import '../services/navigation_service.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stacked/stacked.dart';
+import '../services/navigation_service.dart';
 import '../view_models/login_view_model.dart';
 import '../locator.dart';
 import '../views/constants/size.dart';
@@ -16,39 +15,38 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView>
     with SingleTickerProviderStateMixin {
-  final AuthService _authService = locator<AuthService>();
   final NavigationService _navigationService = locator<NavigationService>();
-
-  // 애니메이션 컨트롤러, 애니메이션 선언
-  AnimationController _aniController;
-  Animation _animation;
-
-  // input과 관련된 컨트롤러 선언
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _aniController = AnimationController(
-      duration: const Duration(seconds: 7),
-      vsync: this,
-    );
-    // Tween은 _animation의 두 사이 값을 지정
-    _animation = Tween<double>(begin: -1.0, end: 1.0).animate(
-      CurvedAnimation(
-        curve: Curves.easeIn,
-        parent: _aniController,
-      ),
-    );
-    _aniController.repeat();
-  }
+  // 애니메이션 컨트롤러, 애니메이션 선언
+  // AnimationController _aniController;
+  // Animation _animation;
 
-  @override
-  void dispose() {
-    _aniController.dispose();
-    super.dispose();
-  }
+  // input과 관련된 컨트롤러 선언
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _aniController = AnimationController(
+  //     duration: const Duration(seconds: 7),
+  //     vsync: this,
+  //   );
+  //   // Tween은 _animation의 두 사이 값을 지정
+  //   _animation = Tween<double>(begin: -1.0, end: 1.0).animate(
+  //     CurvedAnimation(
+  //       curve: Curves.easeIn,
+  //       parent: _aniController,
+  //     ),
+  //   );
+  //   _aniController.repeat();
+  // }
+
+  // @override
+  // void dispose() {
+  //   _aniController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +150,7 @@ class _LoginViewState extends State<LoginView>
         constraints: BoxConstraints.tight(
           Size(250, 50),
         ),
+        // email 입력창
         child: TextFormField(
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
@@ -175,6 +174,7 @@ class _LoginViewState extends State<LoginView>
         constraints: BoxConstraints.tight(
           Size(250, 50),
         ),
+        // pwd 입력창
         child: TextFormField(
           controller: _passwordController,
           obscureText: true,

@@ -35,6 +35,7 @@ dependencies:
   intl: ^0.16.1
   firebase_storage: ^3.1.6
   cloud_functions:
+  http: ^0.12.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

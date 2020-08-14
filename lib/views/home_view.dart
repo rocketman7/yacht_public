@@ -22,8 +22,8 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   AuthService _authService = locator<AuthService>();
   NavigationService _navigationService = locator<NavigationService>();
-  DatabaseService _databaseService = locator<DatabaseService>();
 
+  // addVote 버튼때문에 임시로 만든 것
   final VoteModel votesToday = voteToday;
   final List<SubVote> subvotesToday = subVotes;
 
@@ -44,6 +44,7 @@ class _HomeViewState extends State<HomeView> {
                 builder: (context, snapshot) {
                   UserModel currentUserModel = snapshot.data;
                   if (snapshot.hasData) {
+                    // WillPopScope: Back 버튼 막기
                     return WillPopScope(
                       onWillPop: () => Future.value(false),
                       child: Scaffold(
@@ -59,9 +60,7 @@ class _HomeViewState extends State<HomeView> {
                                 children: <Widget>[
                                   //이미 snapshot에 data가 있는 상태이기 때문에 아래와 같이 입력하면 Text null에러가 나지 않는다.
                                   topBar(currentUserModel),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
+                                  SizedBox(height: 15),
                                   Center(
                                     child: Container(
                                       // color: Colors.white,
@@ -107,21 +106,7 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 15),
-                                  Text(
-                                    currentUserModel.userName +
-                                        '  ' +
-                                        snapshot.data.combo.toString() +
-                                        ' Combo',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
+                                  SizedBox(height: 20),
                                   RaisedButton(
                                     onPressed: () {
                                       _navigationService.navigateWithArgTo(
@@ -135,21 +120,19 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  RaisedButton(
-                                    onPressed: () {
-                                      // _databaseService.addVotes(
-                                      //     voteToday, subvotesToday);
-                                    },
-                                    child: Text(
-                                      "Add Votes Test",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
+                                  SizedBox(height: 20),
+                                  // RaisedButton(
+                                  //   onPressed: () {
+                                  //     // _databaseService.addVotes(
+                                  //     //     voteToday, subvotesToday);
+                                  //   },
+                                  //   child: Text(
+                                  //     "Add Votes Test",
+                                  //     style: TextStyle(
+                                  //       fontSize: 20,
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),

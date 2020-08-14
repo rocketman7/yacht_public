@@ -24,6 +24,7 @@ class HomeViewModel extends BaseModel {
 // Call this function when initialized
   HomeViewModel() {
     getUser();
+    print("getUserInitialized");
   }
 
   Future getUser() async {
@@ -35,7 +36,7 @@ class HomeViewModel extends BaseModel {
     // onAuthStateChanged의 변화를 listen하다가 data가 있을 때 다음 진행하도록 설정하니 에러 없음
     var _currentUser = await _authService.auth.currentUser();
 
-    UserModel _user = await _databaseService.getUser(_currentUser.uid);
+    _user = await _databaseService.getUser(_currentUser.uid);
     return _user;
   }
 

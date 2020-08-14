@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'managers/dialog_manager.dart';
 import 'router.dart';
-import 'views/animation_test.dart';
-import 'views/animation_test2.dart';
-import 'views/register_view.dart';
-import 'views/sliding_card.dart';
+// import 'views/animation_test.dart';
+// import 'views/animation_test2.dart';
+// import 'views/register_view.dart';
+// import 'views/sliding_card.dart';
 import 'views/startup_view.dart';
 
 import 'locator.dart';
@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: locator<NavigationService>().navigatorKey,
-      onGenerateRoute: Router.generateRoute,
+      onGenerateRoute: Routers.generateRoute,
       home: DialogManager(child: StartUpView()),
     );
   }

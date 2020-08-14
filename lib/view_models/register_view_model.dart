@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import '../locator.dart';
 import '../services/auth_service.dart';
-import '../services/database_service.dart';
 import '../services/dialog_service.dart';
 import '../services/navigation_service.dart';
 import '../view_models/base_model.dart';
 
 class RegisterViewModel extends BaseModel {
   final AuthService _authService = locator<AuthService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
   final DialogService _dialogService = locator<DialogService>();
   Map<String, dynamic> userData;
 
@@ -36,7 +33,6 @@ class RegisterViewModel extends BaseModel {
         title: '회원가입 오류',
         description: result.toString(),
       );
-      print(result.toString());
     }
   }
 }

@@ -22,12 +22,14 @@ class DialogService {
     String title,
     String description,
     String buttonTitle = 'OK',
+    String cancelTitle,
   }) {
     _dialogCompleter = Completer<DialogResponse>();
     _showDialogListner(DialogRequest(
       title: title,
       description: description,
       buttonTitle: buttonTitle,
+      cancelTitle: cancelTitle,
     ));
     return _dialogCompleter.future;
   }

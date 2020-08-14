@@ -12,17 +12,17 @@ class VoteSelectViewModel extends BaseModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   //Code:
 
-  UserModel _user;
-  VoteModel _vote;
+  UserModel _userModel;
+  VoteModel _voteModel;
 
   Future getUser(String uid) async {
-    _user = await _databaseService.getUser(uid);
-    return _user;
+    _userModel = await _databaseService.getUser(uid);
+    return _userModel;
   }
 
   Future getVote(String date) async {
-    _vote = await _databaseService.getVotes(date);
-    return _vote;
+    _voteModel = await _databaseService.getVotes(date);
+    return _voteModel;
   }
 
   Future signOut() async {

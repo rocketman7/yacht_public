@@ -2,14 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/vote_model.dart';
 import '../services/navigation_service.dart';
 import '../view_models/vote_select_view_model.dart';
 import '../views/constants/size.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 import '../views/loading_view.dart';
 import '../views/widgets/navigation_bars_widget.dart';
 import '../views/widgets/vote_card_widget.dart';
@@ -27,27 +28,36 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
   VoteSelectViewModel _model = VoteSelectViewModel();
 
-  PreloadPageController controller = PreloadPageController();
-  double leftContainer = 0;
+  PreloadPageController _preloadPageController = PreloadPageController();
+  // double leftContainer = 0;
 
   // Votes for Today 영역 위젯 관리
   List<Widget> _votesTodayShowing = [];
   List<Widget> _votesTodayNotShowing = [];
+
   // Votes Selected 영역 위젯 관리
   List<Widget> _votesSelectedShowing = [];
   List<Widget> _votesSelectedNotShowing = [];
+
+  // 투표한 주제들의 인덱스
   List<int> _passIdx = [];
 
   // DB에서 가져온 데이터를 VoteModel에 넣은 Object
   final VoteModel votes = voteToday;
 
-  VoteModel votesFromDB;
+  VoteModel _voteFromDB;
 
   String diffHours;
   String diffMins;
   String diffSecs;
 
-  String _now;
+  DateTime _now;
+  var stringDate = DateFormat("yyyyMMdd");
+  var stringDateWithDash = DateFormat("yyyy-MM-dd");
+  String _nowToStr;
+
+  bool isVoteAvailable;
+
   Timer _everySecond;
 
   //애니메이션은 천천히 생각해보자.
@@ -79,8 +89,9 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     // print(diff);
     setState(() {
       // TODO: subString 방법 말고 시간, 분, 초 각각 리턴해서 해야함
-      var endTime = votes.voteEndDateTime;
-      var diff = endTime.difference(DateTime.now());
+      DateTime endTime = votes.voteEndDateTime;
+      Duration diff = endTime.difference(DateTime.now());
+
       diffHours = diff.toString().substring(0, 2);
       diffMins = diff.toString().substring(3, 5);
       diffSecs = diff.toString().substring(6, 8);
@@ -94,14 +105,21 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   void initState() {
     super.initState();
 
+    // 현재 시간 한국 시간으로 변경
+    _now = DateTime.now().toUtc().add(Duration(hours: 9));
+    // _nowToStr = stringDate.format(_now);
+    _nowToStr = "20200901"; //temp for test
+
+    print(_now.toString() + " and " + _nowToStr);
+
     // 투표, 선택된 투표 위젯 만들기 위해 initState에 투표 데이터 db에서 불러옴
     print("Async start");
-    _model.getVote('20200901').then((value) {
+    _model.getVote(_nowToStr).then((value) {
       print('voteData got');
       getVoteTodayWidget(value);
       getVoteSelectedWidget(value);
-      votesFromDB = value;
-      return votesFromDB;
+      _voteFromDB = value;
+      return _voteFromDB;
     });
     // getVoteTodayWidget();
     // getVoteSelectedWidget();
@@ -128,7 +146,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     final Size size = MediaQuery.of(context).size;
     double displayRatio = size.height / size.width;
 
-    controller = PreloadPageController(
+    _preloadPageController = PreloadPageController(
       initialPage: 0,
       // 페이지뷰 하나의 크기
       viewportFraction: displayRatio > 1.85 ? 0.63 : 0.58,
@@ -236,7 +254,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               // PageView.builder랑 똑같은데 preloadPageCount 만큼 미리 로드해놓는 것만 다름
                               child: PreloadPageView.builder(
                                 preloadPagesCount: 5,
-                                controller: controller,
+                                controller: _preloadPageController,
                                 scrollDirection: Axis.horizontal,
                                 // physics: BouncingScrollPhysics(),
                                 itemCount: _votesTodayShowing.length,
@@ -294,7 +312,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                     _navigationService.navigateWithArgTo(
                                         'vote0', [
                                       widget.uid,
-                                      votesFromDB,
+                                      _voteFromDB,
                                       selectedFinal
                                     ]);
                                   },

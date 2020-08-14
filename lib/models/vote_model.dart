@@ -25,7 +25,7 @@ class VoteModel {
         voteStartDateTime = data['voteStartDateTime'],
         voteEndDateTime = data['voteEndDateTime'],
         voteCount = data['voteCount'],
-        voteResult = data['voteResult'],
+        voteResult = data['voteResult'].cast<int>(),
         subVotes = subVotesList;
 
   // VoteModel -> Json 변환 함수

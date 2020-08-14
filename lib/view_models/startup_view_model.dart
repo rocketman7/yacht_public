@@ -8,8 +8,8 @@ class StartUpViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
 
   Future handleStartUpLogic() async {
-    // return true or false
-    var hasUserLoggedIn = await _authService.isUserLoggedIn();
+    // 유저정보 있으면 True, 없으면 False
+    bool hasUserLoggedIn = await _authService.isUserLoggedIn();
 
     if (hasUserLoggedIn) {
       _navigationService.navigateTo('loggedIn');

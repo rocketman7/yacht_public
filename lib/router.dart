@@ -10,7 +10,7 @@ import 'views/vote2_view.dart';
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_view.dart';
 
-class Router {
+class Routers {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       // navigation service에서 접근할 route이름들 view설정

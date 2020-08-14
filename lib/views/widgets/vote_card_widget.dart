@@ -88,7 +88,8 @@ class VoteCard extends StatelessWidget {
                         Text(
                           vote.subVotes[idx].description,
                           textAlign: TextAlign.center,
-                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                           // overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: Color(0xFF000000),
