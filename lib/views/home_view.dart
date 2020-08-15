@@ -24,8 +24,8 @@ class _HomeViewState extends State<HomeView> {
   NavigationService _navigationService = locator<NavigationService>();
 
   // addVote 버튼때문에 임시로 만든 것
-  final VoteModel votesToday = voteToday;
-  final List<SubVote> subvotesToday = subVotes;
+  // final VoteModel votesToday = voteToday;
+  // final List<SubVote> subvotesToday = subVotes;
 
   @override
   Widget build(BuildContext context) {

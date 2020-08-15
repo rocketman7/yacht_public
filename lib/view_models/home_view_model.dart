@@ -50,7 +50,7 @@ class HomeViewModel extends BaseModel {
     }
   }
 
-  Future addVotesTest() async {
-    await _databaseService.addVotes(voteToday, subvotesToday);
-  }
+  // Future addVotesTest() async {
+  //   await _databaseService.addVotes(voteToday, subvotesToday);
+  // }
 }

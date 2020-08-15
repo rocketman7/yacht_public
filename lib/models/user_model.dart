@@ -26,6 +26,7 @@ class UserModel {
       'uid': this.uid,
       'userName': this.userName,
       'email': this.email,
+      'combo': this.combo,
     };
   }
 }

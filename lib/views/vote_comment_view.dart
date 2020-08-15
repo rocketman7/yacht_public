@@ -312,20 +312,26 @@ class _VoteCommentViewState extends State<VoteCommentView>
               ),
             ),
           ]),
-          Text(
-            voteCommentModel.postDateTime == null
-                ? 'null'
-                : DateTime.now()
-                        .difference(voteCommentModel.postDateTime.toDate())
-                        .inMinutes
-                        .toString() +
-                    ' Mins ago',
-            textAlign: TextAlign.end,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontFamily: 'AdventPro',
-            ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                voteCommentModel.postDateTime == null
+                    ? 'null'
+                    : DateTime.now()
+                            .difference(voteCommentModel.postDateTime.toDate())
+                            .inMinutes
+                            .toString() +
+                        ' Mins ago',
+                textAlign: TextAlign.end,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontFamily: 'AdventPro',
+                ),
+              ),
+              Text("삭제"),
+            ],
           ),
           // Text("Just now"),
         ],

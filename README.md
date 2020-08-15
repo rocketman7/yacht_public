@@ -12,11 +12,11 @@
 - [ ] 각종 네트워크 예외처리
 - [ ] 코드 정리
 - [ ] DateTime <-> String Parser 만들기
+- [ ] 앱 설정 페이지 (푸쉬 알람 등)
 
 #### 로그인/회원가입
 
 - [ ] 구글 로그인 기능
-- [ ] userName 중복 방지 기능
 
 #### 꾸욱 페이지
 
@@ -36,6 +36,9 @@
 
 ### Cloud Functions
 
+- [ ] numVoted count 기능
+- [ ] sortRank에서 document 다 지우고 set하기
+
 - [x] 사용자 예측 채점: scoreVote
 - [x] 콤보 현황 rank에 넣기: sortRank
 
@@ -43,6 +46,7 @@
 
 ### 완료된 사항:
 
+- [x] userName 중복 방지 기능
 - [x] Auth: Email & Password 회원가입, 로그인, 가입 동시에 DB에 User모델 저장
 - [x] VoteSelect: 투표 리스트에서 기존 순서대로 투표 <-> 선택한 투표 교환,
 - [x] Vote: VoteSelect에서 선택한 List 가져와서 Vote화면 차례로 표시, 꾸욱-> 투표가 더 있으면 다음 투표, 아니면 댓글 페이지(현재는 홈 화면)

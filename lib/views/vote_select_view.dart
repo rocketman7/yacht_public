@@ -27,6 +27,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   final NavigationService _navigationService = locator<NavigationService>();
 
   VoteSelectViewModel _model = VoteSelectViewModel();
+  Future<dynamic> _userModelFuture;
 
   PreloadPageController _preloadPageController = PreloadPageController();
   // double leftContainer = 0;
@@ -39,17 +40,14 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   List<Widget> _votesSelectedShowing = [];
   List<Widget> _votesSelectedNotShowing = [];
 
-  // 투표한 주제들의 인덱스
-  List<int> _passIdx = [];
+  // 최종 선택한 주제 index
+  List<int> selectedFinal = [];
+  List<String> timeLeftArr = ["", "", ""]; // 시간, 분, 초 array
 
   // DB에서 가져온 데이터를 VoteModel에 넣은 Object
-  final VoteModel votes = voteToday;
+  // final VoteModel votes = voteToday;
 
   VoteModel _voteFromDB;
-
-  String diffHours;
-  String diffMins;
-  String diffSecs;
 
   DateTime _now;
   var stringDate = DateFormat("yyyyMMdd");
@@ -85,16 +83,15 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     });
   }
 
-  void getTimeLeft() {
-    // print(diff);
+  void getTimeLeft(VoteModel votesToday) {
     setState(() {
-      // TODO: subString 방법 말고 시간, 분, 초 각각 리턴해서 해야함
-      DateTime endTime = votes.voteEndDateTime;
+      DateTime endTime = votesToday.voteEndDateTime.toDate();
       Duration diff = endTime.difference(DateTime.now());
-
-      diffHours = diff.toString().substring(0, 2);
-      diffMins = diff.toString().substring(3, 5);
-      diffSecs = diff.toString().substring(6, 8);
+      String sDuration =
+          "${diff.inHours}:${diff.inMinutes.remainder(60).toString().padLeft(2, '0')}:${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
+      print(sDuration);
+      var diffFinal = sDuration.toString();
+      timeLeftArr = diffFinal.split(":");
     });
   }
 
@@ -104,7 +101,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   @override
   void initState() {
     super.initState();
-
+    print("initState Called");
     // 현재 시간 한국 시간으로 변경
     _now = DateTime.now().toUtc().add(Duration(hours: 9));
     // _nowToStr = stringDate.format(_now);
@@ -112,29 +109,29 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
     print(_now.toString() + " and " + _nowToStr);
 
-    // 투표, 선택된 투표 위젯 만들기 위해 initState에 투표 데이터 db에서 불러옴
+    // 오늘의 주제, 선택된 주제 위젯 만들기 위해 initState에 vote 데이터 db에서 불러옴
     print("Async start");
     _model.getVote(_nowToStr).then((value) {
       print('voteData got');
+
       getVoteTodayWidget(value);
       getVoteSelectedWidget(value);
+      getTimeLeft(value);
       _voteFromDB = value;
+
       return _voteFromDB;
     });
-    // getVoteTodayWidget();
-    // getVoteSelectedWidget();
-    getTimeLeft();
 
-    // sets first value
-    // _now = DateTime.now().second.toString();
-    // // defines a timer
-    // _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
-    //   setState(() {
-    //     getTimeLeft();
-    //   });
-    // });
+    // defines a timer
+    _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      setState(() {
+        getTimeLeft(_voteFromDB);
+      });
+    });
 
-    print("initState Called");
+    //get this user's UserModel
+    _userModelFuture = _model.getUser(widget.uid);
+    print("initState Done");
   }
 
   @override
@@ -165,7 +162,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   void dispose() {
     super.dispose();
     // dispose는 Navigator pushNamed에는 호출되지 않지만 백 버튼에는 호출됨.
-    // 백 버튼에 호출아래를 호출하지 않으면 dispose 됐는데 setState한다고 오류뜸
+    // 백 버튼에 아래를 호출하지 않으면 dispose 됐는데 setState한다고 오류뜸
     _everySecond.cancel();
   }
 
@@ -187,16 +184,22 @@ class _VoteSelectViewState extends State<VoteSelectView> {
       viewModelBuilder: () => VoteSelectViewModel(),
       builder: (context, model, child) => MaterialApp(
         home: FutureBuilder(
-          future: Future.wait([
-            model.getUser(widget.uid),
-            // model.getVote('20200901'),
-          ]),
+          // you shouldn't call the function directly inside the
+          // FutureBuilder's future method. Instead, you should 1st run
+          // your function in init state, and store the response
+          // in a new variable. Only then assign variable to the
+          // future of FutureBuilder.
+          future: _userModelFuture,
+          // Future.wait([
+          // model.getVote('20200901'),
+          // ]),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               print("snapShotData Called");
               // getVoteTodayWidget(snapshot.data[1]);
               // getVoteSelectedWidget(snapshot.data[1]);
-              UserModel currentUser = snapshot.data[0];
+              UserModel currentUser = snapshot.data;
+              print(currentUser);
               return Scaffold(
                 backgroundColor: Color(0xFF363636),
                 bottomNavigationBar: bottomNavigationBar(context),
@@ -215,6 +218,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               height: gap_l,
                             ),
                             Row(
+                              //오늘의 주제, 남은 시간
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -227,13 +231,12 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                       textBaseline: TextBaseline.alphabetic),
                                 ),
                                 Text(
-                                  // TODO: 간 숫자마다 같은 자리 차지하게 바꿔야함
                                   "투표 마감까지 " +
-                                      (diffHours) +
+                                      (timeLeftArr[0]) +
                                       "시간 " +
-                                      (diffMins) +
+                                      (timeLeftArr[1]) +
                                       "분 " +
-                                      (diffSecs) +
+                                      (timeLeftArr[2]) +
                                       "초 ",
                                   style: TextStyle(
                                       color: Colors.black,
@@ -262,14 +265,13 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                   // print('pageviewRebuilt');
                                   return GestureDetector(
                                       onDoubleTap: () {
-                                        // 투표 선택 최대 수를 제한하고
+                                        // 주제 선택 최대 수를 제한하고
                                         if (_votesTodayNotShowing.length < 3) {
                                           setState(() {
                                             // 더블 탭 하면 voteToday 섹션과 voteSelected 섹션에서
                                             // 보여줘야할 위젯과 보여주지 않는 위젯을 서로 교환하며 리스트에 저장한다.
                                             _votesTodayNotShowing
                                                 .add(_votesTodayShowing[index]);
-                                            _passIdx.add(index);
                                             _votesTodayShowing.removeAt(index);
 
                                             _votesSelectedShowing.add(
@@ -302,7 +304,6 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 ),
                                 FlatButton(
                                   onPressed: () {
-                                    List<int> selectedFinal = [];
                                     for (VoteSelected i
                                         in _votesSelectedShowing) {
                                       selectedFinal.add(i.idx);
@@ -358,25 +359,39 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                           // Selected 더블탭 -> 거기서 id 추출
                                           // voteTodayShowing에서 자리찾기
                                           // insert
+
+                                          // 선택한 주제들 중 더블탭한 선택 주제 위젯을 temp에 보관.
                                           VoteSelected temp =
                                               _votesSelectedShowing[index];
-                                          int id = temp.idx;
+                                          // 더블탭한 주제의 subVote idx추출
+                                          int subVoteIdx = temp.idx;
 
                                           List<int> indicesList = [];
+
+                                          // 오늘의 주제에 떠있는 주제들의 subVoteIdx를 indicesList에 넣기
                                           for (VoteCard i
                                               in _votesTodayShowing) {
                                             indicesList.add(i.idx);
                                           }
-                                          indicesList.add(id);
+                                          // 방금 더블탭한 subVoteIdx도 이 리스트에 추가
+                                          indicesList.add(subVoteIdx);
+                                          // 순서대로 sort
                                           indicesList.sort();
-                                          id = indicesList.indexOf(id);
 
+                                          // 이 리스트에서 더블탭한 것의 순서를 세고
+                                          subVoteIdx =
+                                              indicesList.indexOf(subVoteIdx);
+                                          // 선택주제에서 not showing 리스트에 위에서 센 순서 자리에 넣고,
+                                          // 선택 주제 showing에서 해당 위젯을 삭제
                                           _votesSelectedNotShowing.insert(
-                                              id, _votesSelectedShowing[index]);
+                                              subVoteIdx,
+                                              _votesSelectedShowing[index]);
                                           _votesSelectedShowing.removeAt(index);
 
-                                          _votesTodayShowing.insert(
-                                              id, _votesTodayNotShowing[index]);
+                                          // 오늘의 주제 showing에 다시 자리 찾아서 놓고
+                                          // 오늘의 주제 not showing에서 제거
+                                          _votesTodayShowing.insert(subVoteIdx,
+                                              _votesTodayNotShowing[index]);
                                           _votesTodayNotShowing.removeAt(index);
                                         });
                                       },

@@ -40,6 +40,7 @@ class AuthService {
         uid: authResult.user.uid,
         userName: userName,
         email: email,
+        combo: 0,
       );
 
       // Database에 User정보 넣기

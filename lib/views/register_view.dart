@@ -84,6 +84,12 @@ class RegisterView extends StatelessWidget {
               // 유저 네임 입력창
               controller: _userNameController,
               keyboardType: TextInputType.emailAddress,
+              // validator: ((value) {
+              //   if (model.checkUserNameDuplicate(value) == true) {
+              //     return "이미 존재하는 닉네임입니다";
+              //   }
+              //   return null;
+              // }),
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Color(0xFFABD8E3),

@@ -6,7 +6,7 @@ import '../models/sub_vote_model.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
 import '../models/vote_comment_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../models/vote_model.dart';
 
 class DatabaseService {
@@ -17,7 +17,7 @@ class DatabaseService {
 
   //  collection references
   final CollectionReference _usersCollectionReference =
-      Firestore.instance.collection('users'); //_databaseService 사용 왜 불가한지?
+      Firestore.instance.collection('users');
   final CollectionReference _votesCollectionReference =
       Firestore.instance.collection('votes');
   final CollectionReference _postsCollectionReference =
@@ -150,5 +150,33 @@ class DatabaseService {
             .toList()
             .reversed
             .toList());
+  }
+
+  Future<List<dynamic>> getAllUserSnapshot() async {
+    try {
+      List<dynamic> allUserName = [];
+      print(allUserName);
+      var userDocuments = await _usersCollectionReference.getDocuments();
+      print(userDocuments.documents.length);
+      // String temp = userDocuments.documents[0].data["userName"];
+      // print(temp + " temp");
+      // print(userDocuments.documents[0].data["userName"]);
+      // print(userDocuments.documents[1].data["userName"]);
+      // print(userDocuments.documents[2].data["userName"]);
+      // userDocuments.documents.forEach((element) {
+      //   print(element.data["userName"]);
+      //   allUserName.add(element.data["userName"].toString());
+      // });
+      for (var i = 0; i < userDocuments.documents.length; i++) {
+        allUserName.add(userDocuments.documents[i].data["userName"]);
+        print(allUserName);
+      }
+
+      print(allUserName);
+      return allUserName;
+    } catch (e) {
+      print("error");
+      return null;
+    }
   }
 }
