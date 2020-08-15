@@ -28,6 +28,13 @@ class VoteCommentViewModel extends BaseModel {
     await _databaseService.postComment(subVoteIndex, voteCommentModel);
   }
 
+  Future deleteComment(
+    subVoteIndex,
+    postDateTime,
+  ) async {
+    await _databaseService.deleteComment(subVoteIndex, postDateTime);
+  }
+
   Future getUser(String uid) async {
     _user = await _databaseService.getUser(uid);
     return _user;

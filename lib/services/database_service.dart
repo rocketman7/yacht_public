@@ -133,10 +133,21 @@ class DatabaseService {
           .document('20200901')
           .collection('subVote00' + (subVoteIndex + 1).toString())
           .document('post_' +
-              dateFormat.format(DateTime.now().toUtc().add(
-                    Duration(hours: 9),
-                  )))
+              dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                  voteCommentModel.postDateTime.millisecondsSinceEpoch)))
           .setData(voteCommentModel.toJson());
+    } catch (e) {}
+  }
+
+  Future deleteComment(subVoteIndex, postDateTime) async {
+    try {
+      await _postsCollectionReference
+          .document('20200901')
+          .collection('subVote00' + (subVoteIndex + 1).toString())
+          .document('post_' +
+              dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
+                  postDateTime.millisecondsSinceEpoch)))
+          .delete();
     } catch (e) {}
   }
 

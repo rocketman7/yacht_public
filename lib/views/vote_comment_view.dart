@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:yachtOne/services/dialog_service.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
@@ -25,6 +26,7 @@ class VoteCommentView extends StatefulWidget {
 class _VoteCommentViewState extends State<VoteCommentView>
     with TickerProviderStateMixin {
   final DatabaseService _databaseService = locator<DatabaseService>();
+  final DialogService _dialogService = locator<DialogService>();
   TabController _tabController;
 
   String uid;
@@ -87,6 +89,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   bottomNavigationBar: bottomNavigationBar(context),
                   backgroundColor: Color(0xFF363636),
                   body: SafeArea(
+                    bottom: false,
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: displayRatio > 1.85 ? gap_l : gap_xs,
@@ -125,12 +128,13 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                     index,
                                     context,
                                     voteModel,
+                                    model,
                                   ),
                                 ),
                               ),
                             ),
                             SizedBox(
-                              height: gap_l,
+                              height: gap_xs,
                             ),
                             commentInput(
                               _tabController.index,
@@ -159,6 +163,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
     int subVoteIndex,
     BuildContext context,
     VoteModel voteModel,
+    VoteCommentViewModel model,
   ) {
     return StreamBuilder(
         //StreamProvider
@@ -173,6 +178,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
             return LoadingView();
           } else {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(right: 60.0),
@@ -207,15 +213,17 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   height: gap_xxs,
                 ),
 // 피드 섹션
-                Container(
-                  // width: 320,
-                  height: 350,
-                  child: ListView.builder(
-                    itemCount: commentModelList.length,
-                    scrollDirection: Axis.vertical,
-                    reverse: true,
-                    itemBuilder: (context, index) =>
-                        commentList(commentModelList[index]),
+                Expanded(
+                  child: Container(
+                    // width: 320,
+                    height: 350,
+                    child: ListView.builder(
+                      itemCount: commentModelList.length,
+                      scrollDirection: Axis.vertical,
+                      reverse: true,
+                      itemBuilder: (context, index) => commentList(
+                          subVoteIndex, commentModelList[index], model),
+                    ),
                   ),
                 ),
               ],
@@ -249,7 +257,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
   }
 
 // 댓글 리스트 위젯
-  Widget commentList(VoteCommentModel voteCommentModel) {
+  Widget commentList(
+    int subVoteIndex,
+    VoteCommentModel voteCommentModel,
+    VoteCommentViewModel model,
+  ) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: gap_xxs),
       child: Row(
@@ -265,7 +277,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
               width: gap_s,
             ),
             Container(
-              width: 200,
+              width: 230,
               child: Column(
                 children: <Widget>[
                   Row(
@@ -312,8 +324,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
               ),
             ),
           ]),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.end,
+            direction: Axis.vertical,
+            // spacing: 1,
             children: [
               Text(
                 voteCommentModel.postDateTime == null
@@ -330,9 +344,34 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   fontFamily: 'AdventPro',
                 ),
               ),
-              Text("삭제"),
+              voteCommentModel.uid == widget.uid
+                  ? IconButton(
+                      iconSize: 20,
+                      onPressed: () {
+                        model.deleteComment(
+                            subVoteIndex, voteCommentModel.postDateTime);
+                      },
+                      icon: Icon(
+                        Icons.delete_outline,
+                        color: Colors.grey[500],
+                      )
+                      // Text(
+                      //   "삭제",
+                      //   textAlign: TextAlign.end,
+                      //   style: TextStyle(
+                      //     color: Colors.white,
+                      //     fontSize: 13,
+                      //     fontFamily: 'AdventPro',
+                      //   ),
+                      // ),
+                      )
+                  : Text(
+                      "",
+                      textAlign: TextAlign.end,
+                    ),
             ],
           ),
+
           // Text("Just now"),
         ],
       ),
@@ -398,11 +437,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   ? null
                   : voteModel.subVotes[subVoteIndex].voteChoices[
                       userVoteModel.voteSelected[subVoteIndex] - 1],
-              postDateTime: Timestamp.fromDate(DateTime.now()),
+              postDateTime: Timestamp.fromDate(DateTime.now().toUtc()),
 
               // postDateTime: DateTime.now(),
             );
-
+            print(voteCommentModel.postDateTime);
             model.postComments(
               subVoteIndex,
               voteCommentModel,
