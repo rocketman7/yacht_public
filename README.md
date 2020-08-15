@@ -13,24 +13,39 @@
 - [ ] 코드 정리
 - [ ] DateTime <-> String Parser 만들기
 - [ ] 앱 설정 페이지 (푸쉬 알람 등)
+- [ ] Bottom Navigation Bar 만들기
+- [ ] Top Bar에 들어갈 아이템 관련 팝업 (디자인 확정 이후 UI 작업하되 DB는 미리 준비)
+  
+
+- [x] Dialog Service
 
 #### 로그인/회원가입
 
 - [ ] 구글 로그인 기능
+- [ ] 휴대폰 본인인증 (twilio, 아임포트(다날pg), 구글 firebase, naver cloud platform 중 골라서 구현)
+
+- [x] userName 중복 방지 기능
+- [x] Auth 예외처리
+- [x] Auth: Email & Password 회원가입, 로그인, 가입 동시에 DB에 User모델 저장
+
+#### 주제 선택 페이지
+
+- [ ] Tag 기능
+
+- [x] VoteSelect: 투표 리스트에서 기존 순서대로 투표 <-> 선택한 투표 교환,
 
 #### 꾸욱 페이지
 
 - [ ] 꾸욱 animation
 
+- [x] Vote: VoteSelect에서 선택한 List 가져와서 Vote화면 차례로 표시, 꾸욱-> 투표가 더 있으면 다음 투표, 아니면 댓글 페이지(현재는 홈 화면)
+
 #### 주제별 커뮤니티
 
-- [ ] 투표 차트 -> 투표 통계 데이터가 있어야 함
-- [x] 자신이 쓴 코멘트 삭제 기능 완료/ 삭제 재확인 Dialog 필요
 - [ ] 실시간 주제 종목 데이터
+- [ ] 투표 차트 -> 투표 통계 데이터가 있어야 함
 
-#### 주제 선택 페이지
-
-- [ ] Tag 기능
+- [x] 자신이 쓴 코멘트 삭제 기능 완료/ 삭제 재확인 Dialog 처리 필요
 
 ---
 
@@ -46,9 +61,3 @@
 
 ### 완료된 사항:
 
-- [x] userName 중복 방지 기능
-- [x] Auth: Email & Password 회원가입, 로그인, 가입 동시에 DB에 User모델 저장
-- [x] VoteSelect: 투표 리스트에서 기존 순서대로 투표 <-> 선택한 투표 교환,
-- [x] Vote: VoteSelect에서 선택한 List 가져와서 Vote화면 차례로 표시, 꾸욱-> 투표가 더 있으면 다음 투표, 아니면 댓글 페이지(현재는 홈 화면)
-- [x] Auth 예외처리
-- [x] Dialog Service
