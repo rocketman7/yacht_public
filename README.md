@@ -11,13 +11,13 @@
 - [ ] BaseModel의 busy처리
 - [ ] 각종 네트워크 예외처리
 - [ ] 코드 정리
-- [ ] DateTime <-> String Parser 만들기
 - [ ] 앱 설정 페이지 (푸쉬 알람 등)
 - [ ] Bottom Navigation Bar 만들기
 - [ ] Top Bar에 들어갈 아이템 관련 팝업 (디자인 확정 이후 UI 작업하되 DB는 미리 준비)
   
 
 - [x] Dialog Service
+- [x] DateTime <-> String Parser 만들기 (VoteSelectView, VoteCommentView 에서 다룸)
 
 #### 로그인/회원가입
 
@@ -45,7 +45,7 @@
 - [ ] 실시간 주제 종목 데이터
 - [ ] 투표 차트 -> 투표 통계 데이터가 있어야 함
 
-- [x] 자신이 쓴 코멘트 삭제 기능 완료/ 삭제 재확인 Dialog 처리 필요
+- [x] 자신이 쓴 코멘트 삭제 기능 완료/ 삭제 재확인 Dialog 처리 완료 (8/16)
 
 ---
 

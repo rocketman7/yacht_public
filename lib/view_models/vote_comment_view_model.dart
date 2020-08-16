@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yachtOne/services/dialog_service.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
@@ -13,6 +14,7 @@ import '../view_models/base_model.dart';
 class VoteCommentViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
+  final DialogService _dialogService = locator<DialogService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
 
   VoteCommentModel voteFeedModel;
@@ -32,7 +34,19 @@ class VoteCommentViewModel extends BaseModel {
     subVoteIndex,
     postDateTime,
   ) async {
-    await _databaseService.deleteComment(subVoteIndex, postDateTime);
+    print("Dialog shown");
+    var dialogResult = await _dialogService.showDialog(
+        title: "코멘트 삭제",
+        description: "해당 코멘트를 정말 삭제하시겠습니까?",
+        buttonTitle: "Yes",
+        cancelTitle: "No");
+
+    if (dialogResult.confirmed) {
+      print("user Confirmed");
+      await _databaseService.deleteComment(subVoteIndex, postDateTime);
+    } else {
+      print("user Not Confirmed");
+    }
   }
 
   Future getUser(String uid) async {

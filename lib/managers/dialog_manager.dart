@@ -27,20 +27,48 @@ class _DialogManagerState extends State<DialogManager> {
   }
 
   void _showDialog(DialogRequest request) {
-    Alert(
-        context: context,
-        title: request.title,
-        desc: request.description,
-        closeFunction: () =>
-            _dialogService.dialogComplete(DialogResponse(confirmed: false)),
-        buttons: [
-          DialogButton(
-            child: Text(request.buttonTitle),
-            onPressed: () {
-              _dialogService.dialogComplete(DialogResponse(confirmed: true));
-              Navigator.of(context).pop();
-            },
-          )
-        ]).show();
+    (request.cancelTitle == null)
+        // cancel 버튼이 없을 때
+        ? Alert(
+            context: context,
+            title: request.title,
+            desc: request.description,
+            closeFunction: () =>
+                _dialogService.dialogComplete(DialogResponse(confirmed: false)),
+            buttons: [
+                DialogButton(
+                  child: Text(request.buttonTitle),
+                  onPressed: () {
+                    _dialogService
+                        .dialogComplete(DialogResponse(confirmed: true));
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ]).show()
+        : // cancle 버튼이 있을 때
+        Alert(
+            context: context,
+            title: request.title,
+            desc: request.description,
+            closeFunction: () =>
+                _dialogService.dialogComplete(DialogResponse(confirmed: false)),
+            buttons: [
+                DialogButton(
+                  child: Text(request.cancelTitle),
+                  onPressed: () {
+                    _dialogService
+                        .dialogComplete(DialogResponse(confirmed: false));
+                    Navigator.of(context).pop();
+                  },
+                ),
+                DialogButton(
+                  child: Text(request.buttonTitle),
+                  onPressed: () {
+                    _dialogService
+                        .dialogComplete(DialogResponse(confirmed: true));
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ]).show();
   }
 }
