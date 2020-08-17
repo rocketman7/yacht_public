@@ -32,7 +32,7 @@ exports.scoreVote = functions.https.onRequest(async (req, res) => {
   let userCurrentCombo = {};
   let userVotes = {};
   let userScores = {};
-  var testScore = 0;
+
   const userSnapshot = await users.get();
   // userSnapshot에서 각 user의 uid를 리스트로 만듬
   userSnapshot.forEach((doc) => {
