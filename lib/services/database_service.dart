@@ -71,7 +71,42 @@ class DatabaseService {
           .collection('userVote')
           .document(userVote.voteDate)
           .setData(userVote.toJson());
+
+      // batch.setData(_usersCollectionReference
+      //     .document(userVote.uid)
+      //     .collection('userVote')
+      //     .document(userVote.voteDate), userVote.toJson());
+
       print("setDone");
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future countUserVote(List<int> voteSelected) async {
+    try {
+      var increment = FieldValue.increment(1);
+      var decrement = FieldValue.increment(-1);
+
+      // voteSelected = [0, 1, 2, 0, 1]
+      for (var i = 0; i < voteSelected.length; i++) {
+        var vote = voteSelected[i];
+        if (vote != 0) {
+          if (vote == 1) {
+            _votesCollectionReference
+                .document('20200901')
+                .collection('subVotes')
+                .document(i.toString())
+                .updateData({'numVoted0': increment});
+          } else if (vote == 2) {
+            _votesCollectionReference
+                .document('20200901')
+                .collection('subVotes')
+                .document(i.toString())
+                .updateData({'numVoted1': increment});
+          }
+        }
+      }
     } catch (e) {
       return e.message;
     }

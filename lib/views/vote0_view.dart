@@ -171,6 +171,7 @@ class _Vote0ViewState extends State<Vote0View> with TickerProviderStateMixin {
                             userVote.isVoted = true;
                             print(tempList);
                             model.addUserVoteDB(userVote);
+                            model.counterUserVote(userVote.voteSelected);
 
                             _navigationService.navigateWithArgTo(
                               'voteComment',

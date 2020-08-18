@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  stacked: ^1.5.7+1
+  stacked: ^1.7.6
   provider: ^4.1.2
   firebase_core:
   firebase_auth:

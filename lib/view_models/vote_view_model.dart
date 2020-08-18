@@ -12,10 +12,12 @@ class VoteViewModel extends BaseModel {
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
 
-  UserVoteModel userVote;
-
-  Future addUserVoteDB(userVote) async {
+  Future addUserVoteDB(UserVoteModel userVote) async {
     await _databaseService.addUserVote(userVote);
     print("FUTURE CALLED");
+  }
+
+  Future counterUserVote(List<int> voteSelected) async {
+    await _databaseService.countUserVote(voteSelected);
   }
 }
