@@ -83,11 +83,10 @@ class DatabaseService {
     }
   }
 
+  // 유저 선택 리스트 받아서 각 subVote 문서에 numVoted increment
   Future countUserVote(List<int> voteSelected) async {
     try {
       var increment = FieldValue.increment(1);
-      var decrement = FieldValue.increment(-1);
-
       // voteSelected = [0, 1, 2, 0, 1]
       for (var i = 0; i < voteSelected.length; i++) {
         var vote = voteSelected[i];

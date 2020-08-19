@@ -4,9 +4,8 @@ import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/register_view.dart';
 import 'views/startup_view.dart';
-import 'views/vote0_view.dart';
-import 'views/vote1_view.dart';
-import 'views/vote2_view.dart';
+import 'views/ggook_view.dart';
+
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_view.dart';
 
@@ -27,18 +26,10 @@ class Routers {
         return MaterialPageRoute(
             builder: (context) =>
                 DialogManager(child: VoteSelectView(routeSettings.arguments)));
-      case 'vote0':
+      case 'ggook':
         return MaterialPageRoute(
             builder: (context) =>
-                DialogManager(child: Vote0View(routeSettings.arguments)));
-      case 'vote1':
-        return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: Vote1View(routeSettings.arguments)));
-      case 'vote2':
-        return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: Vote2View(routeSettings.arguments)));
+                DialogManager(child: GgookView(routeSettings.arguments)));
       case 'voteComment':
         return MaterialPageRoute(
             builder: (context) =>

@@ -5,9 +5,9 @@ import '../models/vote_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../services/navigation_service.dart';
-import '../view_models/base_model.dart';
+import 'base_model.dart';
 
-class VoteViewModel extends BaseModel {
+class GgookViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();

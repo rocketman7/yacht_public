@@ -311,10 +311,11 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                     selectedFinal.sort();
 
                                     _navigationService.navigateWithArgTo(
-                                        'vote0', [
+                                        'ggook', [
                                       widget.uid,
                                       _voteFromDB,
-                                      selectedFinal
+                                      selectedFinal,
+                                      0
                                     ]);
                                   },
                                   child: Container(
