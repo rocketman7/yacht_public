@@ -206,7 +206,10 @@ class VoteCard extends StatelessWidget {
                       child: Container(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          vote.subVotes[idx].numVoted.toString() + ' Voted',
+                          // (vote.subVotes[idx].numVoted0 +
+                          //             vote.subVotes[idx].numVoted1)
+                          //         .toString() +
+                          ' Voted',
                           textAlign: TextAlign.end,
                           style: TextStyle(
                             fontFamily: 'AdventPro',

@@ -13,7 +13,8 @@ import '../views/constants/size.dart';
 import 'package:stacked/stacked.dart';
 import '../views/loading_view.dart';
 import 'package:intl/intl.dart';
-
+import 'package:charts_flutter/flutter.dart' as charts;
+import '../models/vote_chart_model.dart';
 import '../views/widgets/navigation_bars_widget.dart';
 
 class VoteCommentView extends StatefulWidget {
@@ -165,6 +166,88 @@ class _VoteCommentViewState extends State<VoteCommentView>
     VoteModel voteModel,
     VoteCommentViewModel model,
   ) {
+    // 차트에 표시할 포맷
+    var f = new NumberFormat("##.0%");
+
+    // 각 투표수 가져오기
+    var numVoted0 = voteModel.subVotes[subVoteIndex].numVoted0;
+    var numVoted1 = voteModel.subVotes[subVoteIndex].numVoted1;
+
+    // 투표수 -> 퍼센티지 변환
+    double vote0Percentage = numVoted0 / (numVoted0 + numVoted1);
+    double vote1Percentage = numVoted1 / (numVoted0 + numVoted1);
+
+    // Bar 차트에 들어갈 데이터 오브젝트
+    var data = [
+      VoteChart(voteModel.subVotes[subVoteIndex].voteChoices[0],
+          vote0Percentage, Colors.red),
+      VoteChart(voteModel.subVotes[subVoteIndex].voteChoices[1],
+          vote1Percentage, Colors.blue),
+    ];
+
+    // 차트에 들어갈 데이터, 레이블 요소들
+    var series = [
+      charts.Series(
+          domainFn: (VoteChart numVotedData, _) => numVotedData.name,
+          measureFn: (VoteChart numVotedData, _) => numVotedData.votePercentage,
+          colorFn: (VoteChart numVotedData, _) => numVotedData.color,
+          id: 'Now',
+          data: data,
+          labelAccessorFn: (VoteChart numVotedData, _) =>
+              '${(f.format(numVotedData.votePercentage)).toString()}',
+          // insideLabelStyleAccessorFn: (VoteChart numVotedData, _) {
+          //   final color = charts.MaterialPalette.yellow.shadeDefault.darker;
+          //   return new charts.TextStyleSpec(color: color);
+          // },
+          outsideLabelStyleAccessorFn: (VoteChart numVotedData, _) {
+            final color = charts.MaterialPalette.yellow.shadeDefault.darker;
+            return new charts.TextStyleSpec(color: color);
+          }),
+    ];
+
+    // 차트 디스플레이 요소들
+    var chart = charts.BarChart(
+      series,
+      animate: true,
+      animationDuration: Duration(milliseconds: 800),
+      barRendererDecorator: new charts.BarLabelDecorator<String>(),
+      vertical: false,
+
+      /// Assign a custom style for the domain axis.
+      ///
+      /// This is an OrdinalAxisSpec to match up with BarChart's default
+      /// ordinal domain axis (use NumericAxisSpec or DateTimeAxisSpec for
+      /// other charts).
+      domainAxis: new charts.OrdinalAxisSpec(
+        showAxisLine: false,
+        renderSpec: new charts.SmallTickRendererSpec(
+          // Tick and Label styling here.
+          labelStyle: new charts.TextStyleSpec(
+              fontSize: 14, // size in Pts.
+              color: charts.MaterialPalette.white),
+
+          // Change the line colors to match text color.
+          lineStyle:
+              new charts.LineStyleSpec(color: charts.MaterialPalette.white),
+        ),
+      ),
+
+      /// Assign a custom style for the measure axis.
+      primaryMeasureAxis: new charts.NumericAxisSpec(
+        showAxisLine: false,
+        renderSpec: new charts.GridlineRendererSpec(
+          // Tick and Label styling here.
+          labelStyle: new charts.TextStyleSpec(
+              fontSize: 14, // size in Pts.
+              color: charts.MaterialPalette.white),
+
+          // Change the line colors to match text color.
+          lineStyle:
+              new charts.LineStyleSpec(color: charts.MaterialPalette.white),
+        ),
+      ),
+    );
+
     return StreamBuilder(
         //StreamProvider
         stream: _databaseService.getPostList(subVoteIndex),
@@ -205,9 +288,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 SizedBox(
                   height: gap_m,
                 ),
-                Container(
-                  height: 95,
-                  color: Color(0xFF164D59),
+                // space for chart
+                SizedBox(
+                  height: 95.0,
+                  child: chart,
                 ),
                 SizedBox(
                   height: gap_xxs,

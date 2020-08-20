@@ -15,7 +15,8 @@ class SubVote {
   final String description;
   final String voteImgUrl;
   final List<dynamic> voteChoices;
-  final int numVoted;
+  final int numVoted0;
+  final int numVoted1;
   final int result;
 
   SubVote({
@@ -24,7 +25,8 @@ class SubVote {
     this.description,
     this.voteImgUrl,
     this.voteChoices,
-    this.numVoted,
+    this.numVoted0,
+    this.numVoted1,
     this.result,
   });
 
@@ -35,7 +37,8 @@ class SubVote {
         description = data['description'],
         voteImgUrl = data['voteImgUrl'],
         voteChoices = data['voteChoices'],
-        numVoted = data['numVoted'],
+        numVoted0 = data['numVoted0'],
+        numVoted1 = data['numVoted1'],
         result = data['result'];
 
   // SubVoteModel -> Json 변환 함수
@@ -46,7 +49,8 @@ class SubVote {
       'description': this.description,
       'voteImgUrl': this.voteImgUrl,
       'voteChoices': this.voteChoices,
-      'numVoted': this.numVoted,
+      'numVoted0': this.numVoted0,
+      'numVoted1': this.numVoted1,
       'result': this.result,
     };
   }
