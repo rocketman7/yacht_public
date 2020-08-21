@@ -34,7 +34,7 @@ class HomeViewModel extends BaseModel {
     // currentUser는 initializing이 안 되면 null을 반환할 때도 있다.
     // 따라서 이 getUser() Future를 불러오기 전에 HomeView에서 StreamBuilder로
     // onAuthStateChanged의 변화를 listen하다가 data가 있을 때 다음 진행하도록 설정하니 에러 없음
-    var _currentUser = await _authService.auth.currentUser();
+    var _currentUser = _authService.auth.currentUser;
 
     _user = await _databaseService.getUser(_currentUser.uid);
     return _user;

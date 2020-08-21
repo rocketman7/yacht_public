@@ -17,7 +17,7 @@ class AuthService {
 
   // User 로그인여부 확인
   Future<bool> isUserLoggedIn() async {
-    var user = await _auth.currentUser();
+    var user = _auth.currentUser;
 
     // Todo: user정보 모델에 넣기
 

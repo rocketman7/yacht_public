@@ -35,7 +35,7 @@ class _HomeViewState extends State<HomeView> {
       viewModelBuilder: () => HomeViewModel(),
       // StreamBuilder로 onAuthChanged를 듣다가 아래 if 조건이 만족하면 model.getUser()의 FutureBuilder를 return.
       builder: (context, model, child) => StreamBuilder<Object>(
-          stream: _authService.auth.onAuthStateChanged,
+          stream: _authService.auth.authStateChanges(),
           builder: (context, snapshotStream) {
             if (snapshotStream.connectionState == ConnectionState.active &&
                 snapshotStream.hasData) {

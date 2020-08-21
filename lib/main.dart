@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'managers/dialog_manager.dart';
 import 'router.dart';
@@ -10,8 +11,10 @@ import 'views/startup_view.dart';
 import 'locator.dart';
 import 'services/navigation_service.dart';
 
-void main() {
+void main() async {
   setupLocator();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

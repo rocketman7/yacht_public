@@ -25,11 +25,12 @@ dependencies:
     sdk: flutter
   stacked: ^1.7.6
   provider: ^4.1.2
-  firebase_core: null
-  firebase_auth: null
-  cloud_firestore: null
-  cloud_functions: null
-  firebase_storage: null
+  firebase_core: ^0.5.0
+  firebase_auth: ^0.18.0+1
+  firebase_analytics: ^6.0.0
+  firebase_storage: ^4.0.0
+  cloud_firestore: ^0.14.0+2
+  cloud_functions: ^0.6.0
   get_it: ^4.0.2
   preload_page_view: ^0.1.4
   rflutter_alert: ^1.0.3
