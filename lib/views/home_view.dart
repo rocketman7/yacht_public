@@ -130,7 +130,15 @@ class _HomeViewState extends State<HomeView> {
                                         ),
                                       ),
                                     ),
-                                    // SizedBox(height: 20),
+                                    SizedBox(height: 20),
+                                    RaisedButton(
+                                      onPressed: () {
+                                        _navigationService.navigateWithArgTo(
+                                            'rank',
+                                            currentUserModel.uid.toString());
+                                      },
+                                      child: Text('rank 페이지 가기'),
+                                    ),
 
                                     ConstrainedBox(
                                       constraints: BoxConstraints.tight(

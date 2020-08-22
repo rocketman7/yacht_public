@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/models/rank_model.dart';
 import '../models/sub_vote_model.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
 import '../models/vote_comment_model.dart';
+import '../models/rank_model.dart';
 
 import '../models/vote_model.dart';
 
@@ -22,6 +24,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('votes');
   final CollectionReference _postsCollectionReference =
       FirebaseFirestore.instance.collection('posts');
+  final CollectionReference _rankCollectionReference =
+      FirebaseFirestore.instance.collection('rank');
 
   int i = 0;
 
@@ -146,7 +150,7 @@ class DatabaseService {
           .collection('subVotes')
           .get()
           .then((querySnapshot) {
-        querySnapshot.documents.forEach((result) {
+        querySnapshot.docs.forEach((result) {
           subVoteList.add(SubVote.fromData(result.data()));
         });
       });
@@ -192,6 +196,20 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((document) => VoteCommentModel.fromData(document.data()))
+            .toList()
+            .reversed
+            .toList());
+  }
+
+  // Read: Rank 정보 Rank Collection으로부터 읽기
+  Stream<List<RankModel>> getRankList() {
+    return _rankCollectionReference
+        .doc('season001')
+        .collection('20200809')
+        .orderBy('combo')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((document) => RankModel.fromData(document.data()))
             .toList()
             .reversed
             .toList());
