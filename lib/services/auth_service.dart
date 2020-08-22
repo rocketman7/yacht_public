@@ -43,6 +43,8 @@ class AuthService {
         combo: 0,
       );
 
+      // await authResult.user.sendEmailVerification();
+
       // Database에 User정보 넣기
       await _databaseService.createUser(_currentUser);
 

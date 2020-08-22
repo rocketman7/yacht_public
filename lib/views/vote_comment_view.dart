@@ -28,6 +28,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
     with TickerProviderStateMixin {
   final DatabaseService _databaseService = locator<DatabaseService>();
   final DialogService _dialogService = locator<DialogService>();
+
   TabController _tabController;
 
   String uid;
