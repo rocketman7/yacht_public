@@ -146,7 +146,7 @@ class DatabaseService {
           .collection('subVotes')
           .get()
           .then((querySnapshot) {
-        querySnapshot.documents.forEach((result) {
+        querySnapshot.docs.forEach((result) {
           subVoteList.add(SubVote.fromData(result.data()));
         });
       });
@@ -197,12 +197,12 @@ class DatabaseService {
             .toList());
   }
 
-  Future<List<dynamic>> getAllUserSnapshot() async {
+  Future<List<String>> getAllUserNameSnapshot() async {
     try {
-      List<dynamic> allUserName = [];
-      print(allUserName);
+      List<String> allUserName = [];
+
       var userDocuments = await _usersCollectionReference.get();
-      print(userDocuments.docs.length);
+      print("user count" + userDocuments.docs.length.toString());
       // String temp = userDocuments.documents[0].data["userName"];
       // print(temp + " temp");
       // print(userDocuments.documents[0].data["userName"]);
@@ -214,11 +214,35 @@ class DatabaseService {
       // });
       for (var i = 0; i < userDocuments.docs.length; i++) {
         allUserName.add(userDocuments.docs[i].data()["userName"]);
-        print(allUserName);
       }
 
-      print(allUserName);
       return allUserName;
+    } catch (e) {
+      print("error");
+      return null;
+    }
+  }
+
+  Future<List<String>> getAllUserPhoneSnapshot() async {
+    try {
+      List<String> allUserPhone = [];
+
+      var userDocuments = await _usersCollectionReference.get();
+
+      // String temp = userDocuments.documents[0].data["userName"];
+      // print(temp + " temp");
+      // print(userDocuments.documents[0].data["userName"]);
+      // print(userDocuments.documents[1].data["userName"]);
+      // print(userDocuments.documents[2].data["userName"]);
+      // userDocuments.documents.forEach((element) {
+      //   print(element.data["userName"]);
+      //   allUserName.add(element.data["userName"].toString());
+      // });
+      for (var i = 0; i < userDocuments.docs.length; i++) {
+        allUserPhone.add(userDocuments.docs[i].data()["phoneNumber"]);
+      }
+
+      return allUserPhone;
     } catch (e) {
       print("error");
       return null;

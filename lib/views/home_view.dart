@@ -131,40 +131,6 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                     ),
                                     // SizedBox(height: 20),
-
-                                    ConstrainedBox(
-                                      constraints: BoxConstraints.tight(
-                                        Size(150, 50),
-                                      ),
-                                      // pwd 입력창
-                                      child: TextField(
-                                        controller: _phoneNumberController,
-                                        obscureText: true,
-                                        decoration: InputDecoration(
-                                            filled: true,
-                                            fillColor: Color(0xFFABD8E3),
-                                            labelText: "Phone Number",
-                                            labelStyle: TextStyle(fontSize: 11),
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              borderSide: BorderSide.none,
-                                            )),
-                                      ),
-                                    ),
-
-                                    // RaisedButton(
-                                    //   onPressed: () {
-                                    //     // _databaseService.addVotes(
-                                    //     //     voteToday, subvotesToday);
-                                    //   },
-                                    //   child: Text(
-                                    //     "Add Votes Test",
-                                    //     style: TextStyle(
-                                    //       fontSize: 20,
-                                    //     ),
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                               ),

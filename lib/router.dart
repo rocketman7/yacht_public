@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yachtOne/views/phone_auth_view.dart';
 import 'managers/dialog_manager.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
@@ -13,12 +14,16 @@ class Routers {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       // navigation service에서 접근할 route이름들 view설정
+      case 'phoneAuth':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(child: PhoneAuthView()));
       case 'loggedIn':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: HomeView()));
       case 'register':
         return MaterialPageRoute(
-            builder: (context) => DialogManager(child: RegisterView()));
+            builder: (context) =>
+                DialogManager(child: RegisterView(routeSettings.arguments)));
       case 'login':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: LoginView()));

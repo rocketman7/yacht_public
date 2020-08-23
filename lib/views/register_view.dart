@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import '../locator.dart';
@@ -7,22 +8,29 @@ import '../services/navigation_service.dart';
 import '../view_models/register_view_model.dart';
 import '../views/constants/size.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
+  final AuthCredential credential;
+  RegisterView(this.credential);
+
+  @override
+  _RegisterViewState createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
 
-  // inputFormState 관리
-  // 회원가입 시 password 넣을 때 validate 해야 하기 때문에 FormKey 필요
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    print('register view built');
+    print(widget.credential.toString());
     return ViewModelBuilder<RegisterViewModel>.nonReactive(
       viewModelBuilder: () => RegisterViewModel(),
       onModelReady: (model) => model,
@@ -55,10 +63,10 @@ class RegisterView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 140,
+                    height: 80,
                   ),
                   // 아래 따로 위젯으로 만듬
-                  _inputForm(model),
+                  _inputForm(model, context, widget.credential),
                 ],
               ),
             ),
@@ -68,14 +76,16 @@ class RegisterView extends StatelessWidget {
     );
   }
 
-  Widget _inputForm(model) {
+  Widget _inputForm(model, context, AuthCredential credential) {
     // FormState를 사용할 inputForm들을 모두 Form 아래에 위치해서 key 지정 -> validator에 조건 지정
     // .currentState.validate() 으로 validate 여부 가릴 수 있음
     return Form(
       key: _formKey,
       child: Column(
         children: <Widget>[
-          // TextFormField 크기 제한
+          SizedBox(
+            height: gap_xxxs,
+          ),
           ConstrainedBox(
             constraints: BoxConstraints.tight(
               Size(250, 50),
@@ -191,6 +201,7 @@ class RegisterView extends StatelessWidget {
                   userName: _userNameController.text,
                   email: _emailController.text,
                   password: _passwordController.text,
+                  credential: credential,
                 );
               }
             },

@@ -9,12 +9,13 @@ class StartUpViewModel extends BaseModel {
 
   Future handleStartUpLogic() async {
     // 유저정보 있으면 True, 없으면 False
+    // _authService.signOut();
     bool hasUserLoggedIn = await _authService.isUserLoggedIn();
 
     if (hasUserLoggedIn) {
       _navigationService.navigateTo('loggedIn');
     } else {
-      _navigationService.navigateTo('login');
+      _navigationService.navigateTo('phoneAuth');
     }
   }
 }
