@@ -40,6 +40,9 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double displayRatio = size.height / size.width;
+
     uid = widget.uid;
 
     return ViewModelBuilder<RankViewModel>.reactive(
@@ -59,15 +62,13 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
                     bottom: false,
                     child: Column(
                       children: <Widget>[
+                        topBar(currentUserModel),
                         SizedBox(
-                          child: Container(
-                            color: Colors.red,
-                          ),
-                          height: 50,
+                          height: displayRatio > 1.85 ? gap_l : gap_xs,
                         ),
                         Container(
-                          height: 570,
-                          child: rankListView(context, currentUserModel, model),
+                          height: 500,
+                          child: rankListView(context),
                         ),
                         Expanded(
                           child: Container(
@@ -88,8 +89,6 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
 
   Widget rankListView(
     BuildContext context,
-    UserModel userModel,
-    RankViewModel model,
   ) {
     return StreamBuilder(
         stream: _databaseService.getRankList(),
@@ -98,22 +97,10 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
           if (snapshotStream.data == null) {
             return LoadingView();
           } else {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: 500,
-                  child: ListView.builder(
-                    itemCount: rankModelList.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) =>
-                        rankList(rankModelList[index], model),
-                  ),
-                ),
-              ],
+            return ListView.builder(
+              itemCount: rankModelList.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) => rankList(rankModelList[index]),
             );
           }
         });
@@ -121,10 +108,9 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
 
   Widget rankList(
     RankModel rankModel,
-    RankViewModel model,
   ) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.0),
+      padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
