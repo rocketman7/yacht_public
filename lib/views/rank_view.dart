@@ -67,12 +67,12 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
                           height: displayRatio > 1.85 ? gap_l : gap_xs,
                         ),
                         Container(
-                          height: 500,
-                          child: rankListView(context),
-                        ),
+                            height: 500,
+                            // child: rankListView(context, currentUserModel),
+                            child: rankListViewFinal(context)),
                         Expanded(
                           child: Container(
-                            color: Colors.blue,
+                            color: Colors.blue[50],
                           ),
                         )
                       ],
@@ -87,8 +87,96 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
     );
   }
 
+  Widget rankListViewFinal(BuildContext context) {
+    return ListView(
+      children: [
+        Container(
+          height: 50,
+          color: Colors.redAccent,
+        ),
+        Container(
+          height: 50,
+          color: Colors.blue,
+        ),
+        Container(
+          height: 50,
+          color: Colors.green,
+        ),
+        Container(
+          height: 50,
+          color: Colors.yellow,
+        ),
+        Container(
+          height: 50,
+          color: Colors.redAccent,
+        ),
+        Container(
+          height: 50,
+          color: Colors.blue,
+        ),
+        Container(
+          height: 50,
+          color: Colors.green,
+        ),
+        Container(
+          height: 50,
+          color: Colors.yellow,
+        ),
+        Container(
+          height: 50,
+          color: Colors.redAccent,
+        ),
+        Container(
+          height: 50,
+          color: Colors.blue,
+        ),
+        Container(
+          height: 50,
+          color: Colors.green,
+        ),
+        Container(
+          height: 50,
+          color: Colors.yellow,
+        ),
+        Container(
+          height: 50,
+          color: Colors.redAccent,
+        ),
+        Container(
+          height: 50,
+          color: Colors.blue,
+        ),
+        Container(
+          height: 50,
+          color: Colors.green,
+        ),
+        Container(
+          height: 50,
+          color: Colors.yellow,
+        ),
+        Container(
+          height: 50,
+          color: Colors.redAccent,
+        ),
+        Container(
+          height: 50,
+          color: Colors.blue,
+        ),
+        Container(
+          height: 50,
+          color: Colors.green,
+        ),
+        Container(
+          height: 50,
+          color: Colors.yellow,
+        ),
+      ],
+    );
+  }
+
   Widget rankListView(
     BuildContext context,
+    UserModel currentUserModel,
   ) {
     return StreamBuilder(
         stream: _databaseService.getRankList(),
@@ -100,7 +188,8 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
             return ListView.builder(
               itemCount: rankModelList.length,
               scrollDirection: Axis.vertical,
-              itemBuilder: (context, index) => rankList(rankModelList[index]),
+              itemBuilder: (context, index) =>
+                  rankList(rankModelList[index], currentUserModel),
             );
           }
         });
@@ -108,6 +197,7 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
 
   Widget rankList(
     RankModel rankModel,
+    UserModel currentUserModel,
   ) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.0),
@@ -139,7 +229,12 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
                       )
                     ],
                   ),
-                  Text(rankModel.uid)
+                  currentUserModel.uid == rankModel.uid
+                      ? Text(
+                          rankModel.uid,
+                          style: TextStyle(color: Colors.green),
+                        )
+                      : Text(rankModel.uid)
                 ],
               ),
             ),
