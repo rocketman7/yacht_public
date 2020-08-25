@@ -26,7 +26,8 @@ class _HomeViewState extends State<HomeView> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _phoneVerificationController =
       TextEditingController();
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
   // addVote 버튼때문에 임시로 만든 것
   // final VoteModel votesToday = voteToday;
   // final List<SubVote> subvotesToday = subVotes;
@@ -53,7 +54,10 @@ class _HomeViewState extends State<HomeView> {
                   if (snapshot.hasData) {
                     // WillPopScope: Back 버튼 막기
                     return WillPopScope(
-                      onWillPop: () => Future.value(false),
+                      onWillPop: () async {
+                        _navigatorKey.currentState.maybePop();
+                        return false;
+                      },
                       child: Scaffold(
                         resizeToAvoidBottomPadding: true,
                         backgroundColor: Color(0xFF363636),
