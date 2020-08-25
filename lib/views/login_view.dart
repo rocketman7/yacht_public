@@ -146,11 +146,8 @@ class _LoginViewState extends State<LoginView>
   Widget _inputForm(model) {
     return Column(children: <Widget>[
       // TextFormField 크기 제한
-      ConstrainedBox(
-        constraints: BoxConstraints.tight(
-          Size(250, 50),
-        ),
-        // email 입력창
+      Container(
+        width: 250,
         child: TextFormField(
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
@@ -170,11 +167,8 @@ class _LoginViewState extends State<LoginView>
       SizedBox(
         height: gap_xxxs,
       ),
-      ConstrainedBox(
-        constraints: BoxConstraints.tight(
-          Size(250, 50),
-        ),
-        // pwd 입력창
+      Container(
+        width: 250,
         child: TextFormField(
           controller: _passwordController,
           obscureText: true,

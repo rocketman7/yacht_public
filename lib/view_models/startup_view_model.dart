@@ -15,7 +15,7 @@ class StartUpViewModel extends BaseModel {
     if (hasUserLoggedIn) {
       _navigationService.navigateTo('loggedIn');
     } else {
-      _navigationService.navigateTo('phoneAuth');
+      _navigationService.navigateTo('login');
     }
   }
 }
