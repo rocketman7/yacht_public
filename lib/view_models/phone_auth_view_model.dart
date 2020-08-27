@@ -14,10 +14,11 @@ class PhoneAuthViewModel extends BaseModel {
   // authService로 폰 번호와 content 넘겨서 폰 인증 작업 시작
   Future<dynamic> phoneAuth(String phoneNumber, context) async {
     // 기존에 가입한 핸드폰 번호인지 check해야 함
-    List<String> allUserPhone =
-        await _databaseService.getAllUserPhoneSnapshot();
+    // 이미 가입한 핸드폰 있으면 false 반환
+    bool duplicatePhoneNumber =
+        await _databaseService.duplicatePhoneNumberCheck(phoneNumber);
 
-    if (allUserPhone.contains(phoneNumber)) {
+    if (duplicatePhoneNumber == false) {
       await _dialogService.showDialog(
         title: '핸드폰 인증 오류',
         description: '이미 가입한 핸드폰 번호입니다',

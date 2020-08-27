@@ -27,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
   final TextEditingController _phoneVerificationController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey();
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   // addVote 버튼때문에 임시로 만든 것
   // final VoteModel votesToday = voteToday;
   // final List<SubVote> subvotesToday = subVotes;
