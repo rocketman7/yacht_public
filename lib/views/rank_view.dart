@@ -67,9 +67,10 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
                           height: displayRatio > 1.85 ? gap_l : gap_xs,
                         ),
                         Container(
-                            height: 500,
-                            // child: rankListView(context, currentUserModel),
-                            child: rankListViewFinal(context)),
+                          height: 500,
+                          child: rankListView(context, currentUserModel),
+                          //child: rankListViewFinal(context)),
+                        ),
                         Expanded(
                           child: Container(
                             color: Colors.blue[50],
@@ -185,6 +186,7 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
           if (snapshotStream.data == null) {
             return LoadingView();
           } else {
+            print(rankModelList.length);
             return ListView.builder(
               itemCount: rankModelList.length,
               scrollDirection: Axis.vertical,
@@ -199,6 +201,8 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
     RankModel rankModel,
     UserModel currentUserModel,
   ) {
+    print(rankModel.uid);
+    print(currentUserModel.uid);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Row(

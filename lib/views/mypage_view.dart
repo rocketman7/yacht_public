@@ -1,3 +1,4 @@
+import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -26,6 +27,7 @@ class MypageView extends StatelessWidget {
                 if (snapshot.hasData) {
                   UserModel currentUserModel = snapshot.data[0];
                   return Scaffold(
+                      backgroundColor: Colors.black12,
                       body: SafeArea(
                           child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -33,17 +35,8 @@ class MypageView extends StatelessWidget {
                         child: Column(
                           children: [
                             topBar(currentUserModel),
-                            Flexible(
-                              flex: 1,
-                              child: Container(
-                                color: Colors.red,
-                              ),
-                            ),
-                            Flexible(
-                              flex: 7,
-                              child: Container(
-                                color: Colors.blue,
-                              ),
+                            ListView(
+                              children: _mypageList(),
                             )
                           ],
                         ),
@@ -54,5 +47,20 @@ class MypageView extends StatelessWidget {
                 }
               },
             )));
+  }
+
+  List<Widget> _mypageList() {
+    var result = [];
+
+    result.add(Padding(
+      padding: EdgeInsets.all(5.0),
+      child: Text('내 상금현황 보러가기'),
+    ));
+    result.add(Container(
+      height: 1,
+      width: 100,
+    ));
+
+    return result;
   }
 }

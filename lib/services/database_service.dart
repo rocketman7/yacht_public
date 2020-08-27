@@ -24,8 +24,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('votes');
   final CollectionReference _postsCollectionReference =
       FirebaseFirestore.instance.collection('posts');
-  final CollectionReference _rankCollectionReference =
-      FirebaseFirestore.instance.collection('rank');
+  final CollectionReference _ranksCollectionReference =
+      FirebaseFirestore.instance.collection('ranks');
 
   int i = 0;
 
@@ -203,10 +203,12 @@ class DatabaseService {
 
   // Read: Rank 정보 Rank Collection으로부터 읽기
   Stream<List<RankModel>> getRankList() {
-    return _rankCollectionReference
-        .doc('season001')
-        .collection('20200809')
-        .orderBy('combo')
+    return _ranksCollectionReference
+        .doc('koreaStockStandard')
+        .collection('season001')
+        .doc('20200901')
+        .collection('20200901')
+        //.orderBy('combo')
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((document) => RankModel.fromData(document.data()))
