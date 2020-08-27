@@ -23,6 +23,7 @@ class HomeViewModel extends BaseModel {
 
 // Call this function when initialized
   HomeViewModel() {
+    // _authService.signOut();
     getUser();
     print("getUserInitialized");
   }
