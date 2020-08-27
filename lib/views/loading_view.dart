@@ -17,10 +17,11 @@ class _LoadingViewState extends State<LoadingView>
   @override
   void initState() {
     super.initState();
-    _aniController = AnimationController(
+    var animationController = AnimationController(
       duration: const Duration(seconds: 7),
       vsync: this,
     );
+    _aniController = animationController;
     // Tween은 _animation의 두 사이 값을 지정
     _animation = Tween<double>(begin: -1.0, end: 1.0).animate(
       CurvedAnimation(
