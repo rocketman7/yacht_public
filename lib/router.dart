@@ -6,6 +6,8 @@ import 'views/login_view.dart';
 import 'views/register_view.dart';
 import 'views/startup_view.dart';
 import 'views/ggook_view.dart';
+import 'views/rank_view.dart';
+import 'views/mypage_view.dart';
 
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_view.dart';
@@ -39,6 +41,14 @@ class Routers {
         return MaterialPageRoute(
             builder: (context) =>
                 DialogManager(child: VoteCommentView(routeSettings.arguments)));
+      case 'rank':
+        return MaterialPageRoute(
+            builder: (context) =>
+                DialogManager(child: RankView(routeSettings.arguments)));
+      case 'mypage':
+        return MaterialPageRoute(
+            builder: (context) =>
+                DialogManager(child: MypageView(routeSettings.arguments)));
       default:
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: StartUpView()));

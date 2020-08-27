@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/models/rank_model.dart';
 import '../models/sub_vote_model.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
 import '../models/vote_comment_model.dart';
+import '../models/rank_model.dart';
 
 import '../models/vote_model.dart';
 
@@ -211,7 +213,23 @@ class DatabaseService {
             .toList());
   }
 
-  Future<List<String>> getAllUserNameSnapshot() async {
+  // Read: Rank 정보 Rank Collection으로부터 읽기
+  Stream<List<RankModel>> getRankList() {
+    return _ranksCollectionReference
+        .doc('koreaStockStandard')
+        .collection('season001')
+        .doc('20200901')
+        .collection('20200901')
+        //.orderBy('combo')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((document) => RankModel.fromData(document.data()))
+            .toList()
+            .reversed
+            .toList());
+  }
+
+  Future<List<dynamic>> getAllUserNameSnapshot() async {
     try {
       List<String> allUserName = [];
 
