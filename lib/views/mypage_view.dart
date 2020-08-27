@@ -35,8 +35,14 @@ class MypageView extends StatelessWidget {
                         child: Column(
                           children: [
                             topBar(currentUserModel),
-                            ListView(
-                              children: _mypageList(),
+                            Expanded(
+                              child: ListView(
+                                children: _mypageList(),
+                              ),
+                            ),
+                            Container(
+                              height: 30,
+                              color: Colors.green[100],
                             )
                           ],
                         ),
@@ -50,7 +56,7 @@ class MypageView extends StatelessWidget {
   }
 
   List<Widget> _mypageList() {
-    var result = [];
+    var result = List<Widget>();
 
     result.add(Padding(
       padding: EdgeInsets.all(5.0),
@@ -59,6 +65,7 @@ class MypageView extends StatelessWidget {
     result.add(Container(
       height: 1,
       width: 100,
+      color: Colors.white,
     ));
 
     return result;
