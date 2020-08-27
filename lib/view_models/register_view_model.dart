@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yachtOne/services/database_service.dart';
 import '../locator.dart';
@@ -16,9 +17,10 @@ class RegisterViewModel extends BaseModel {
     @required String userName,
     @required String email,
     @required String password,
+    AuthCredential credential,
   }) async {
-    var allUserName = await _databaseService.getAllUserSnapshot();
-    print("model" + allUserName.toString());
+    List<String> allUserName = await _databaseService.getAllUserNameSnapshot();
+
     if (allUserName.contains(userName)) {
       print("중복 닉네임이 있습니다");
       await _dialogService.showDialog(
@@ -28,7 +30,11 @@ class RegisterViewModel extends BaseModel {
       return true;
     } else {
       var result = await _authService.registerWithEmail(
-          userName: userName, email: email, password: password);
+        userName: userName,
+        email: email,
+        password: password,
+        phoneCredential: credential,
+      );
 
       // Register 성공하면,
       if (result is bool) {
@@ -47,6 +53,11 @@ class RegisterViewModel extends BaseModel {
         );
       }
     }
+  }
+
+  Future<dynamic> phoneAuth(String value, context) async {
+    // var user = _authService.currentUser;
+    return _authService.verifyPhoneNumber(value, context);
   }
   // Future checkUserNameDuplicate(@required userName) async {
   //   print("All user " + allUserName.toString());

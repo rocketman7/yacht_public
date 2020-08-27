@@ -17,15 +17,27 @@ class DatabaseService {
 
   DateFormat dateFormat = DateFormat('yyyy-MM-dd_HH:mm:ss:SSS');
 
+  CollectionReference get _usersCollectionReference =>
+      _databaseService.collection('users');
+  CollectionReference get _votesCollectionReference =>
+      _databaseService.collection('votes');
+  CollectionReference get _postsCollectionReference =>
+      _databaseService.collection('posts');
+  CollectionReference get _ranksCollectionReference =>
+      _databaseService.collection('ranks');
+
+  CollectionReference get usersCollectionReference => _usersCollectionReference;
+  CollectionReference get votesCollectionReference => _votesCollectionReference;
+  CollectionReference get postsCollectionReference => _postsCollectionReference;
+  CollectionReference get ranksCollectionReference => _ranksCollectionReference;
+
   //  collection references
-  final CollectionReference _usersCollectionReference =
-      FirebaseFirestore.instance.collection('users');
-  final CollectionReference _votesCollectionReference =
-      FirebaseFirestore.instance.collection('votes');
-  final CollectionReference _postsCollectionReference =
-      FirebaseFirestore.instance.collection('posts');
-  final CollectionReference _ranksCollectionReference =
-      FirebaseFirestore.instance.collection('ranks');
+  // final CollectionReference _usersCollectionReference =
+  //     _databaseService.collection('users');
+  // final CollectionReference _votesCollectionReference =
+  //     FirebaseFirestore.instance.collection('votes');
+  // final CollectionReference _postsCollectionReference =
+  //     FirebaseFirestore.instance.collection('posts');
 
   int i = 0;
 
@@ -217,12 +229,12 @@ class DatabaseService {
             .toList());
   }
 
-  Future<List<dynamic>> getAllUserSnapshot() async {
+  Future<List<dynamic>> getAllUserNameSnapshot() async {
     try {
-      List<dynamic> allUserName = [];
-      print(allUserName);
+      List<String> allUserName = [];
+
       var userDocuments = await _usersCollectionReference.get();
-      print(userDocuments.docs.length);
+      print("user count" + userDocuments.docs.length.toString());
       // String temp = userDocuments.documents[0].data["userName"];
       // print(temp + " temp");
       // print(userDocuments.documents[0].data["userName"]);
@@ -234,11 +246,52 @@ class DatabaseService {
       // });
       for (var i = 0; i < userDocuments.docs.length; i++) {
         allUserName.add(userDocuments.docs[i].data()["userName"]);
-        print(allUserName);
       }
 
-      print(allUserName);
       return allUserName;
+    } catch (e) {
+      print("error");
+      return null;
+    }
+  }
+
+  // Phone Number Duplicate Check
+  Future duplicatePhoneNumberCheck(String phoneNumber) async {
+    var duplicatePhoneNumber = await _usersCollectionReference
+        .where("phoneNumber", isEqualTo: phoneNumber)
+        .get();
+
+    // print('doc length is ' + duplicatePhoneNumber.docs.length.toString());
+    // duplicatePhoneNumber.docs.forEach((element) {
+    //   print(element.id);
+    //   print(element.data());
+    // });
+    if (duplicatePhoneNumber.docs.length > 0) {
+      return false;
+    } else
+      return true;
+  }
+
+  Future<List<String>> getAllUserPhoneSnapshot() async {
+    try {
+      List<String> allUserPhone = [];
+
+      var userDocuments = await _usersCollectionReference.get();
+
+      // String temp = userDocuments.documents[0].data["userName"];
+      // print(temp + " temp");
+      // print(userDocuments.documents[0].data["userName"]);
+      // print(userDocuments.documents[1].data["userName"]);
+      // print(userDocuments.documents[2].data["userName"]);
+      // userDocuments.documents.forEach((element) {
+      //   print(element.data["userName"]);
+      //   allUserName.add(element.data["userName"].toString());
+      // });
+      for (var i = 0; i < userDocuments.docs.length; i++) {
+        allUserPhone.add(userDocuments.docs[i].data()["phoneNumber"]);
+      }
+
+      return allUserPhone;
     } catch (e) {
       print("error");
       return null;

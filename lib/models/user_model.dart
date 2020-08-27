@@ -2,6 +2,7 @@ class UserModel {
   final String uid;
   final String userName;
   final String email;
+  final String phoneNumber;
   final int combo;
   // final List<UserVote> userVotes;
 
@@ -9,6 +10,7 @@ class UserModel {
     this.uid,
     this.userName,
     this.email,
+    this.phoneNumber,
     this.combo,
     // this.userVotes,
   });
@@ -19,6 +21,7 @@ class UserModel {
   )   : uid = data['uid'],
         userName = data['userName'],
         email = data['email'],
+        phoneNumber = data['phoneNumber'],
         combo = data['combo'];
   // UserModel -> Json 변환 함수
   Map<String, dynamic> toJson() {
@@ -26,6 +29,7 @@ class UserModel {
       'uid': this.uid,
       'userName': this.userName,
       'email': this.email,
+      'phoneNumber': this.phoneNumber,
       'combo': this.combo,
     };
   }

@@ -9,6 +9,7 @@ class StartUpViewModel extends BaseModel {
 
   Future handleStartUpLogic() async {
     // 유저정보 있으면 True, 없으면 False
+    // _authService.signOut();
     bool hasUserLoggedIn = await _authService.isUserLoggedIn();
 
     if (hasUserLoggedIn) {
