@@ -1,4 +1,5 @@
 import 'package:charts_flutter/flutter.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -9,9 +10,40 @@ import 'constants/size.dart';
 import 'loading_view.dart';
 import 'widgets/navigation_bars_widget.dart';
 
-class MypageView extends StatelessWidget {
+class MypageView extends StatefulWidget {
   final String uid;
   MypageView(this.uid);
+
+  @override
+  _MypageViewState createState() => _MypageViewState();
+}
+
+class _MypageViewState extends State<MypageView> {
+  String uid;
+
+  String _downloadURL;
+
+  /*String _downloadURL;
+  StorageReference _reference = FirebaseStorage.instance.ref().child('123.jpg');
+
+  Future downloadImage() async {
+    String downloadAddress = await _reference.getDownloadURL();
+    setState(() {
+      _downloadURL = downloadAddress;
+    });
+  }*/
+
+  @override
+  void initState() {
+    super.initState();
+
+    uid = widget.uid;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +54,12 @@ class MypageView extends StatelessWidget {
         viewModelBuilder: () => MypageViewModel(),
         builder: (context, model, child) => MaterialApp(
                 home: FutureBuilder(
-              future: Future.wait([model.getUser(uid)]),
+              future: Future.wait(
+                  [model.getUser(widget.uid), model.downloadImage()]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserModel currentUserModel = snapshot.data[0];
+                  _downloadURL = snapshot.data[1];
                   return Scaffold(
                       backgroundColor: Colors.grey,
                       body: SafeArea(
@@ -36,10 +70,9 @@ class MypageView extends StatelessWidget {
                           children: [
                             topBar(currentUserModel),
                             Expanded(
-                              child: ListView(
-                                children: _mypageList(model),
-                              ),
+                              child: ListView(children: _mypageList(model)),
                             ),
+                            Image.network(_downloadURL),
                             Container(
                               height: 30,
                               color: Colors.green[100],
@@ -126,6 +159,23 @@ class MypageView extends StatelessWidget {
       width: 100,
       color: Colors.black12,
     ));
+    result.add(Image.network(model.downloadAddress));
+    print(model.downloadImage().toString());
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
+    ));
+    /*result.add(GestureDetector(
+      onDoubleTap: () {
+        downloadImage();
+      },
+      child: _mypageListItem('사진 불러오기', null),
+    ));
+    if (_downloadURL != null) {
+      result.add(Container(
+          height: 200, width: 200, child: Image.network(_downloadURL)));
+    }*/
 
     return result;
   }

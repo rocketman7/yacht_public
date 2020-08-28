@@ -3,6 +3,7 @@ import 'services/auth_service.dart';
 import 'services/database_service.dart';
 import 'services/navigation_service.dart';
 import 'services/dialog_service.dart';
+import 'services/storage_service.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -13,4 +14,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => DatabaseService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
+  locator.registerLazySingleton(() => StorageService());
 }
