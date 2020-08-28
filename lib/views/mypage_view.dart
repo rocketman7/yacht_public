@@ -21,17 +21,7 @@ class MypageView extends StatefulWidget {
 class _MypageViewState extends State<MypageView> {
   String uid;
 
-  String _downloadURL;
-
-  /*String _downloadURL;
-  StorageReference _reference = FirebaseStorage.instance.ref().child('123.jpg');
-
-  Future downloadImage() async {
-    String downloadAddress = await _reference.getDownloadURL();
-    setState(() {
-      _downloadURL = downloadAddress;
-    });
-  }*/
+  // String _downloadURL;
 
   @override
   void initState() {
@@ -59,7 +49,7 @@ class _MypageViewState extends State<MypageView> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserModel currentUserModel = snapshot.data[0];
-                  _downloadURL = snapshot.data[1];
+                  //_downloadURL = snapshot.data[1];
                   return Scaffold(
                       backgroundColor: Colors.grey,
                       body: SafeArea(
@@ -72,7 +62,6 @@ class _MypageViewState extends State<MypageView> {
                             Expanded(
                               child: ListView(children: _mypageList(model)),
                             ),
-                            Image.network(_downloadURL),
                             Container(
                               height: 30,
                               color: Colors.green[100],
@@ -160,22 +149,11 @@ class _MypageViewState extends State<MypageView> {
       color: Colors.black12,
     ));
     result.add(Image.network(model.downloadAddress));
-    print(model.downloadImage().toString());
     result.add(Container(
       height: 1,
       width: 100,
       color: Colors.black12,
     ));
-    /*result.add(GestureDetector(
-      onDoubleTap: () {
-        downloadImage();
-      },
-      child: _mypageListItem('사진 불러오기', null),
-    ));
-    if (_downloadURL != null) {
-      result.add(Container(
-          height: 200, width: 200, child: Image.network(_downloadURL)));
-    }*/
 
     return result;
   }
