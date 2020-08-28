@@ -55,7 +55,7 @@ class VoteCommentViewModel extends BaseModel {
   }
 
   Future getVotes(String date) async {
-    _votes = await _databaseService.getVotes(date);
+    // _votes = await _databaseService.getVotes(date);
     return _votes;
   }
 

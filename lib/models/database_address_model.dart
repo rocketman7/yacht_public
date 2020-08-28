@@ -6,14 +6,14 @@ import 'package:yachtOne/services/database_service.dart';
 //     FirebaseFirestore.instance.collection('users');
 DatabaseService _databaseService = locator<DatabaseService>();
 
-class DatebaseAddressModel {
+class DatabaseAddressModel {
   final String uid;
   final String date;
   final String category;
   final String season;
   final String subVote;
 
-  DatebaseAddressModel({
+  DatabaseAddressModel({
     this.uid,
     this.date,
     this.category,

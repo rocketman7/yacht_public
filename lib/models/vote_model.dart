@@ -25,7 +25,8 @@ class VoteModel {
         voteStartDateTime = data['voteStartDateTime'],
         voteEndDateTime = data['voteEndDateTime'],
         voteCount = data['voteCount'],
-        voteResult = data['voteResult'].cast<int>(),
+        voteResult =
+            data['voteResult'] == null ? [] : data['voteResult'].cast<int>(),
         subVotes = subVotesList;
 
   // VoteModel -> Json 변환 함수
@@ -55,7 +56,6 @@ class VoteModel {
 //     voteImgUrl:
 //         'https://www.lifewire.com/thmb/7p4to3rZIu693iX4Cmd3iroVQE0=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-1066987348-66e3879d27d244b3b8276484db518bb5.jpg',
 //     voteChoices: ['KOSPI 상승', '하락'],
-//     numVoted: 13400,
 //   ),
 //   SubVote(
 //     id: 1,
@@ -63,7 +63,6 @@ class VoteModel {
 //     voteImgUrl:
 //         'https://image.freepik.com/free-vector/worl-currency-icons_23-2147535054.jpg',
 //     voteChoices: ['환율 상승', '하락'],
-//     numVoted: 15402,
 //   ),
 //   SubVote(
 //     id: 2,
@@ -71,7 +70,6 @@ class VoteModel {
 //     voteImgUrl:
 //         'https://cdn.dribbble.com/users/2394908/screenshots/10514933/tech-illustration-3_4x.jpg',
 //     voteChoices: ['네이버', '카카오'],
-//     numVoted: 7823,
 //   ),
 //   SubVote(
 //     id: 3,
@@ -79,7 +77,6 @@ class VoteModel {
 //     voteImgUrl:
 //         'https://cdn.dribbble.com/users/220973/screenshots/3719316/healthcare.png',
 //     voteChoices: ['대웅제약', '일양약품'],
-//     numVoted: 23142,
 //   ),
 //   SubVote(
 //     id: 4,
@@ -87,6 +84,5 @@ class VoteModel {
 //     voteImgUrl:
 //         'https://thumbs.dreamstime.com/z/semiconductor-isometric-background-130533461.jpg',
 //     voteChoices: ['삼성전자', '하이닉스'],
-//     numVoted: 11924,
 //   ),
 // ];

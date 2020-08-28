@@ -8,7 +8,7 @@ import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
 import '../models/vote_comment_model.dart';
 import '../models/rank_model.dart';
-
+import '../models/database_address_model.dart';
 import '../models/vote_model.dart';
 
 class DatabaseService {
@@ -62,15 +62,19 @@ class DatabaseService {
   }
 
   // Create: Vote 데이터 DB에 넣기 (관리자만 접근)
-  Future addVotes(VoteModel vote, List<SubVote> subVote) async {
+  Future addVotes(
+    VoteModel vote,
+    List<SubVote> subVote,
+    DatabaseAddressModel addressModel,
+  ) async {
     try {
-      await _votesCollectionReference
-          .doc(vote.voteDate.toString())
+      await addressModel
+          .votesSeasonCollection()
+          .doc(addressModel.date)
           .set(vote.toJson());
       for (i = 0; i < vote.subVotes.length; i++) {
-        await _votesCollectionReference
-            .doc(vote.voteDate.toString())
-            .collection('subVotes')
+        await addressModel
+            .votesSeasonSubVoteCollection()
             .doc(i.toString())
             .set(subVote[i].toJson());
       }
@@ -149,30 +153,34 @@ class DatabaseService {
   }
 
   // Read: Vote 정보 Vote Collection으로부터 읽기
-  Future getVotes(String voteDate) async {
+  Future<VoteModel> getVotes(DatabaseAddressModel addressModel) async {
     try {
       // print('DB' + uid);
       List<SubVote> subVoteList = [];
-      var voteData = await _votesCollectionReference.doc(voteDate).get();
+      var voteData = await addressModel
+          .votesSeasonCollection()
+          .doc(addressModel.date)
+          .get();
       // List<int> voteResult;
       // print(voteData.data['voteResult']);
 
-      await _votesCollectionReference
-          .doc(voteDate)
-          .collection('subVotes')
+      await addressModel
+          .votesSeasonSubVoteCollection()
           .get()
           .then((querySnapshot) {
         querySnapshot.docs.forEach((result) {
           subVoteList.add(SubVote.fromData(result.data()));
         });
       });
-      // print(subVoteList[0].title);
-      // print(subVotesList.length);
+      print(subVoteList[0].title);
+      print(subVoteList.length);
+      print(voteData.data());
       // print(userData);
       return VoteModel.fromData(voteData.data(), subVoteList);
     } catch (e) {
       print("ERROR22");
       print(e.toString());
+      return null;
     }
   }
 
