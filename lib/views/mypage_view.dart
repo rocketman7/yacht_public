@@ -27,7 +27,7 @@ class MypageView extends StatelessWidget {
                 if (snapshot.hasData) {
                   UserModel currentUserModel = snapshot.data[0];
                   return Scaffold(
-                      backgroundColor: Colors.black12,
+                      backgroundColor: Colors.grey,
                       body: SafeArea(
                           child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -37,7 +37,7 @@ class MypageView extends StatelessWidget {
                             topBar(currentUserModel),
                             Expanded(
                               child: ListView(
-                                children: _mypageList(),
+                                children: _mypageList(model),
                               ),
                             ),
                             Container(
@@ -55,7 +55,7 @@ class MypageView extends StatelessWidget {
             )));
   }
 
-  List<Widget> _mypageList() {
+  List<Widget> _mypageList(MypageViewModel model) {
     var result = List<Widget>();
 
     result.add(Padding(
@@ -65,9 +65,77 @@ class MypageView extends StatelessWidget {
     result.add(Container(
       height: 1,
       width: 100,
-      color: Colors.white,
+      color: Colors.black12,
+    ));
+    result.add(_mypageListItem('아이디(이메일)', null));
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
+    ));
+    result.add(_mypageListItem('푸쉬알림유무', null));
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
+    ));
+    result.add(_mypageListItem('내 활동', null));
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
+    ));
+    result.add(_mypageListItem('비밀번호 변경', null));
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
+    ));
+    result.add(_mypageListItem('계좌정보', null));
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
+    ));
+    result.add(_mypageListItem('이용약관', null));
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
+    ));
+    result.add(_mypageListItem('개인정보 취급 방침', null));
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
+    ));
+    result.add(_mypageListItem('사업자 정보', null));
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
+    ));
+    result.add(GestureDetector(
+      onDoubleTap: () {
+        model.logout();
+      },
+      child: _mypageListItem('로그아웃', null),
+    ));
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
     ));
 
     return result;
+  }
+
+  Widget _mypageListItem(String title, String navigateTo) {
+    return Padding(
+      padding: EdgeInsets.all(5.0),
+      child: Text(
+        title,
+      ),
+    );
   }
 }

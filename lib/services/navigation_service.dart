@@ -17,6 +17,11 @@ class NavigationService {
     return navigatorKey.currentState.pushNamed(routeName, arguments: argument);
   }
 
+  Future<dynamic> popAndNavigateWithArgTo(String routeName, var argument) {
+    return navigatorKey.currentState
+        .pushNamedAndRemoveUntil(routeName, (Route<dynamic> route) => false);
+  }
+
   // Future<dynamic> popAndNavigateWithArgTo(String routeName, var argument) {
   //   return navigatorKey.currentState.
   // }
