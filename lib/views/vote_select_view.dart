@@ -5,6 +5,8 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:preload_page_view/preload_page_view.dart';
+import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/temp_address_constant.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/vote_model.dart';
@@ -27,7 +29,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   final NavigationService _navigationService = locator<NavigationService>();
 
   VoteSelectViewModel _model = VoteSelectViewModel();
-  Future<dynamic> _userModelFuture;
+  Future<UserModel> _userModelFuture;
+  Future<VoteModel> _getVoteModelFuture;
 
   PreloadPageController _preloadPageController = PreloadPageController();
   // double leftContainer = 0;
@@ -45,9 +48,10 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   List<String> timeLeftArr = ["", "", ""]; // 시간, 분, 초 array
 
   // DB에서 가져온 데이터를 VoteModel에 넣은 Object
-  // final VoteModel votes = voteToday;
-
   VoteModel _voteFromDB;
+
+  // Datebase Address Reference 선언
+  DatabaseAddressModel _databaseAddressModel;
 
   DateTime _now;
   var stringDate = DateFormat("yyyyMMdd");
@@ -63,6 +67,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   // voteData를 가져와 voteTodayCard에 넣어 위젯 리스트를 만드는 함수
   void getVoteTodayWidget(VoteModel votesToday) {
     List<Widget> listItems = [];
+    print("getVOteTodayWIdget making " + votesToday.subVotes[0].id.toString());
     for (var i = 0; i < votesToday.subVotes.length; i++) {
       // print(votesFromDB.subVotes.length);
       listItems.add(VoteCard(i, votesToday));
@@ -105,18 +110,25 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     // 현재 시간 한국 시간으로 변경
     _now = DateTime.now().toUtc().add(Duration(hours: 9));
     // _nowToStr = stringDate.format(_now);
-    _nowToStr = "20200901"; //temp for test
+    // _nowToStr = "20200901"; //temp for test
+
+    _databaseAddressModel = DatabaseAddressModel(
+      uid: widget.uid,
+      date: date,
+      category: category,
+      season: season,
+    );
 
     print(_now.toString() + " and " + _nowToStr);
 
     // 오늘의 주제, 선택된 주제 위젯 만들기 위해 initState에 vote 데이터 db에서 불러옴
     print("Async start");
-    _model.getVote(_nowToStr).then((value) {
+    _getVoteModelFuture = _model.getVote(_databaseAddressModel).then((value) {
       print('voteData got');
 
       getVoteTodayWidget(value);
       getVoteSelectedWidget(value);
-      getTimeLeft(value);
+      // getTimeLeft(value);
       _voteFromDB = value;
 
       return _voteFromDB;
@@ -125,7 +137,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     // defines a timer
     _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
       setState(() {
-        getTimeLeft(_voteFromDB);
+        // getTimeLeft(_voteFromDB);
       });
     });
 
@@ -189,7 +201,11 @@ class _VoteSelectViewState extends State<VoteSelectView> {
           // your function in init state, and store the response
           // in a new variable. Only then assign variable to the
           // future of FutureBuilder.
-          future: _userModelFuture,
+          future: Future.wait([
+            _userModelFuture,
+            _getVoteModelFuture,
+            // _getDatabaseAddressModel,
+          ]),
           // Future.wait([
           // model.getVote('20200901'),
           // ]),
@@ -198,7 +214,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
               print("snapShotData Called");
               // getVoteTodayWidget(snapshot.data[1]);
               // getVoteSelectedWidget(snapshot.data[1]);
-              UserModel currentUser = snapshot.data;
+              UserModel currentUser = snapshot.data[0];
               print(currentUser);
               return Scaffold(
                 backgroundColor: Color(0xFF363636),
@@ -230,20 +246,20 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                       fontSize: 22,
                                       textBaseline: TextBaseline.alphabetic),
                                 ),
-                                Text(
-                                  "투표 마감까지 " +
-                                      (timeLeftArr[0]) +
-                                      "시간 " +
-                                      (timeLeftArr[1]) +
-                                      "분 " +
-                                      (timeLeftArr[2]) +
-                                      "초 ",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      // fontFamily: 'AdventPro',
-                                      fontSize: 14,
-                                      textBaseline: TextBaseline.ideographic),
-                                )
+                                // Text(
+                                //   "투표 마감까지 " +
+                                //       (timeLeftArr[0]) +
+                                //       "시간 " +
+                                //       (timeLeftArr[1]) +
+                                //       "분 " +
+                                //       (timeLeftArr[2]) +
+                                //       "초 ",
+                                //   style: TextStyle(
+                                //       color: Colors.black,
+                                //       // fontFamily: 'AdventPro',
+                                //       fontSize: 14,
+                                //       textBaseline: TextBaseline.ideographic),
+                                // )
                               ],
                             ),
                             SizedBox(

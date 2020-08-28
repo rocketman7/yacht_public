@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import '../locator.dart';
-import '../models/sub_vote_model.dart';
 import '../models/user_model.dart';
-import '../models/vote_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../services/navigation_service.dart';
 import '../view_models/home_view_model.dart';
 import '../views/constants/size.dart';
 import '../views/loading_view.dart';
-
 import '../views/widgets/navigation_bars_widget.dart';
-// import 'package:stacked/stacked.dart';
+
+// vote temp data 넣을 때 필요한 파일들
+// import '../models/database_address_model.dart';
+// import '../models/temp_address_constant.dart';
+// import '../models/vote_model.dart';
+// import '../models/sub_vote_model.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -22,15 +24,18 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   AuthService _authService = locator<AuthService>();
   NavigationService _navigationService = locator<NavigationService>();
+  DatabaseService _databaseService = locator<DatabaseService>();
 
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _phoneVerificationController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
   // addVote 버튼때문에 임시로 만든 것
   // final VoteModel votesToday = voteToday;
   // final List<SubVote> subvotesToday = subVotes;
+  // DatabaseAddressModel addressModel;
 
   //phone auth test
 
@@ -128,7 +133,7 @@ class _HomeViewState extends State<HomeView> {
                                             currentUserModel.uid.toString());
                                       },
                                       child: Text(
-                                        "Go To Vote View",
+                                        "주제선택 페이지로 가기",
                                         style: TextStyle(
                                           fontSize: 20,
                                         ),
@@ -177,8 +182,18 @@ class _HomeViewState extends State<HomeView> {
 
                                     // RaisedButton(
                                     //   onPressed: () {
-                                    //     // _databaseService.addVotes(
-                                    //     //     voteToday, subvotesToday);
+                                    //     addressModel = DatabaseAddressModel(
+                                    //       uid: currentUserModel.uid,
+                                    //       date: date,
+                                    //       category: category,
+                                    //       season: season,
+                                    //     );
+
+                                    //     _databaseService.addVotes(
+                                    //       voteToday,
+                                    //       subvotesToday,
+                                    //       addressModel,
+                                    //     );
                                     //   },
                                     //   child: Text(
                                     //     "Add Votes Test",
