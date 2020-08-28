@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:yachtOne/models/dialog_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -17,5 +19,28 @@ class MypageViewModel extends BaseModel {
   Future getUser(String uid) async {
     _user = await _databaseService.getUser(uid);
     return _user;
+  }
+
+  // 로그아웃 버튼이 눌렸을 경우..
+  Future logout() async {
+    var dialogResult = await _dialogService.showDialog(
+        title: '로그아웃',
+        description: '로그아웃하시겠습니까?',
+        buttonTitle: '네',
+        cancelTitle: '아니오');
+    print(dialogResult.toString());
+    print(dialogResult.fieldOne);
+    print(dialogResult.fieldTwo);
+    print(dialogResult.confirmed);
+    if (dialogResult.confirmed) {
+      print('DD');
+      _authService.signOut();
+
+      //_navigationService.navigatorKey.currentState.popAndPushNamed('login');
+      //_navigationService.navigateTo('login');
+      // _navigationService.navigatorKey.currentState
+      //     .pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
+      _navigationService.popAndNavigateWithArgTo('login', null);
+    }
   }
 }
