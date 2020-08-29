@@ -12,6 +12,8 @@ import 'widgets/navigation_bars_widget.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/shared_preferences_const.dart';
+
 class MypageView extends StatefulWidget {
   final String uid;
   MypageView(this.uid);
@@ -23,17 +25,27 @@ class MypageView extends StatefulWidget {
 class _MypageViewState extends State<MypageView> {
   String uid;
 
-  // String _downloadURL;
+  MypageViewModel _mypageViewModelforFuture = MypageViewModel();
+  bool _pushAlarm1, _pushAlarm2;
+  Future<dynamic> _pushAlarm1Future, _pushAlarm2Future;
 
   @override
   void initState() {
     super.initState();
+
+    _pushAlarm1Future =
+        _mypageViewModelforFuture.getSharedPreferences(pushAlarm1);
+    _pushAlarm2Future =
+        _mypageViewModelforFuture.getSharedPreferences(pushAlarm2);
 
     uid = widget.uid;
   }
 
   @override
   void dispose() {
+    // _mypageViewModelforFuture.setSharedPreferences(pushAlarm1, _pushAlarm1);
+    // _mypageViewModelforFuture.setSharedPreferences(pushAlarm2, _pushAlarm2);
+
     super.dispose();
   }
 
@@ -49,14 +61,14 @@ class _MypageViewState extends State<MypageView> {
               future: Future.wait([
                 model.getUser(widget.uid),
                 model.downloadImage(),
-                model.getSharedPreferencesValue('counter', int),
-                model.getSharedPreferencesValue('counter2', int)
+                _pushAlarm1Future,
+                _pushAlarm2Future,
               ]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserModel currentUserModel = snapshot.data[0];
-                  int counter = snapshot.data[2];
-                  int counter2 = snapshot.data[3];
+                  _pushAlarm1 = _pushAlarm1 ?? snapshot.data[2];
+                  _pushAlarm2 = _pushAlarm2 ?? snapshot.data[3];
                   return Scaffold(
                       backgroundColor: Colors.grey,
                       body: SafeArea(
@@ -69,57 +81,28 @@ class _MypageViewState extends State<MypageView> {
                             Expanded(
                               child: ListView(children: _mypageList(model)),
                             ),
-                            Container(
-                              height: 20,
-                              child: RaisedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    model.updateSharedPreferencesValue(
-                                        'counter2', counter2 + 1);
-                                  });
-                                },
-                                child: Text('shared pref2 test'),
-                              ),
+                            Switch(
+                              value: _pushAlarm1,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _pushAlarm1 = value;
+                                  _mypageViewModelforFuture
+                                      .setSharedPreferences(
+                                          pushAlarm1, _pushAlarm1);
+                                });
+                              },
                             ),
-                            Container(
-                              height: 20,
-                              child: Center(
-                                child: Text('현재 pref 숫자: $counter2'),
-                              ),
+                            Switch(
+                              value: _pushAlarm2,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _pushAlarm2 = value;
+                                  _mypageViewModelforFuture
+                                      .setSharedPreferences(
+                                          pushAlarm2, _pushAlarm2);
+                                });
+                              },
                             ),
-                            Container(
-                              height: 20,
-                              child: RaisedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    model.updateSharedPreferencesValue(
-                                        'counter', counter + 1);
-                                  });
-                                },
-                                child: Text('shared pref1 test'),
-                              ),
-                            ),
-                            Container(
-                              height: 20,
-                              child: Center(
-                                child: Text('현재 pref 숫자: $counter'),
-                              ),
-                            ),
-                            Container(
-                              height: 20,
-                              child: RaisedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    model.clearSharedPreferencesValue();
-                                  });
-                                },
-                                child: Text('clear sharedpref.'),
-                              ),
-                            ),
-                            // Switch(
-                            //   value: true,
-                            //   onChanged: (bool value) {},
-                            // ),
                             Container(
                               height: 30,
                               color: Colors.green[100],
@@ -138,63 +121,6 @@ class _MypageViewState extends State<MypageView> {
   List<Widget> _mypageList(MypageViewModel model) {
     var result = List<Widget>();
 
-    result.add(Padding(
-      padding: EdgeInsets.all(5.0),
-      child: Text('내 상금현황 보러가기'),
-    ));
-    result.add(Container(
-      height: 1,
-      width: 100,
-      color: Colors.black12,
-    ));
-    result.add(_mypageListItem('아이디(이메일)', null));
-    result.add(Container(
-      height: 1,
-      width: 100,
-      color: Colors.black12,
-    ));
-    result.add(_mypageListItem('푸쉬알림유무', null));
-    result.add(Container(
-      height: 1,
-      width: 100,
-      color: Colors.black12,
-    ));
-    result.add(_mypageListItem('내 활동', null));
-    result.add(Container(
-      height: 1,
-      width: 100,
-      color: Colors.black12,
-    ));
-    result.add(_mypageListItem('비밀번호 변경', null));
-    result.add(Container(
-      height: 1,
-      width: 100,
-      color: Colors.black12,
-    ));
-    result.add(_mypageListItem('계좌정보', null));
-    result.add(Container(
-      height: 1,
-      width: 100,
-      color: Colors.black12,
-    ));
-    result.add(_mypageListItem('이용약관', null));
-    result.add(Container(
-      height: 1,
-      width: 100,
-      color: Colors.black12,
-    ));
-    result.add(_mypageListItem('개인정보 취급 방침', null));
-    result.add(Container(
-      height: 1,
-      width: 100,
-      color: Colors.black12,
-    ));
-    result.add(_mypageListItem('사업자 정보', null));
-    result.add(Container(
-      height: 1,
-      width: 100,
-      color: Colors.black12,
-    ));
     result.add(GestureDetector(
       onDoubleTap: () {
         model.logout();
@@ -207,6 +133,12 @@ class _MypageViewState extends State<MypageView> {
       color: Colors.black12,
     ));
     result.add(Image.network(model.downloadAddress));
+    result.add(Container(
+      height: 1,
+      width: 100,
+      color: Colors.black12,
+    ));
+    result.add(_mypageListItem('푸쉬알림유무', null));
     result.add(Container(
       height: 1,
       width: 100,

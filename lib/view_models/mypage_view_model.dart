@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yachtOne/models/dialog_model.dart';
-import 'package:yachtOne/services/dialog_service.dart';
-import 'package:yachtOne/services/sharedPreferences_service.dart';
-import 'package:yachtOne/services/storage_service.dart';
+import '../models/dialog_model.dart';
+import '../services/dialog_service.dart';
+import '../services/sharedPreferences_service.dart';
+import '../services/storage_service.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
@@ -10,6 +10,7 @@ import '../services/database_service.dart';
 import '../services/navigation_service.dart';
 import '../services/storage_service.dart';
 import '../view_models/base_model.dart';
+import '../models/shared_preferences_const.dart';
 
 class MypageViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
@@ -50,15 +51,35 @@ class MypageViewModel extends BaseModel {
     return _downloadAddress;
   }
 
-  Future<void> updateSharedPreferencesValue(String name, var value) async {
-    _sharedPreferencesService.updateSharedPreferencesValue(name, value);
+  // Future<void> updateSharedPreferencesValue(String name, var value) async {
+  //   _sharedPreferencesService.updateSharedPreferencesValue(name, value);
+  // }
+
+  // Future<dynamic> getSharedPreferencesValue(String name, Type type) async {
+  //   return _sharedPreferencesService.getSharedPreferencesValue(name, type);
+  // }
+
+  // void clearSharedPreferencesValue() {
+  //   _sharedPreferencesService.clearSharedPreferencesValue();
+  // }
+
+  // Future<bool> getSharedPrefModel() async {
+  //   return await _sharedPreferencesService.getSharedPrefs();
+  // }
+
+  // Future<void> updateSharedPrefModel(String name, dynamic value) async {
+  //   _sharedPreferencesService.updateSharedPreferencesValue(name, value);
+  // }
+
+  Future<void> clearSharedPreferencesAll() async {
+    _sharedPreferencesService.clearSharedPreferencesAll();
   }
 
-  Future<dynamic> getSharedPreferencesValue(String name, Type type) async {
-    return _sharedPreferencesService.getSharedPreferencesValue(name, type);
+  Future<dynamic> getSharedPreferences(String key) async {
+    return await _sharedPreferencesService.getSharedPreferences(key);
   }
 
-  void clearSharedPreferencesValue() {
-    _sharedPreferencesService.clearSharedPreferencesValue();
+  Future<void> setSharedPreferences(String key, dynamic value) async {
+    _sharedPreferencesService.setSharedPreferences(key, value);
   }
 }
