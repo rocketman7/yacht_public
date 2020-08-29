@@ -105,6 +105,17 @@ class _MypageViewState extends State<MypageView> {
                                 child: Text('현재 pref 숫자: $counter'),
                               ),
                             ),
+                            Container(
+                              height: 20,
+                              child: RaisedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    model.clearSharedPreferencesValue();
+                                  });
+                                },
+                                child: Text('clear sharedpref.'),
+                              ),
+                            ),
                             // Switch(
                             //   value: true,
                             //   onChanged: (bool value) {},

@@ -46,4 +46,9 @@ class SharedPreferencesService {
       return _result;
     }
   }
+
+  Future<void> clearSharedPreferencesValue() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.clear();
+  }
 }
