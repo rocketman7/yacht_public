@@ -50,19 +50,11 @@ class MypageViewModel extends BaseModel {
     return _downloadAddress;
   }
 
-  Future<void> updateSharedPreferencesValue() async {
-    _sharedPreferencesService.updateSharedPreferencesValue();
+  Future<void> updateSharedPreferencesValue(String name, var value) async {
+    _sharedPreferencesService.updateSharedPreferencesValue(name, value);
   }
 
-  Future<int> getSharedPreferencesValue() async {
-    return _sharedPreferencesService.getSharedPreferencesValue();
-  }
-
-  Future<void> updateSharedPreferencesValue2(String name, var value) async {
-    _sharedPreferencesService.updateSharedPreferencesValue2(name, value);
-  }
-
-  Future<dynamic> getSharedPreferencesValue2(String name, var value) async {
-    return _sharedPreferencesService.getSharedPreferencesValue2(name, value);
+  Future<dynamic> getSharedPreferencesValue(String name, Type type) async {
+    return _sharedPreferencesService.getSharedPreferencesValue(name, type);
   }
 }

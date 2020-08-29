@@ -24,27 +24,10 @@ class _MypageViewState extends State<MypageView> {
   String uid;
 
   // String _downloadURL;
-  // Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  // Future<int> _counter;
-
-  // Future<void> _incrementCounter() async {
-  //   final SharedPreferences prefs = await _prefs;
-  //   final int counter = (prefs.getInt('counter') ?? 0) + 1;
-
-  //   setState(() {
-  //     _counter = prefs.setInt("counter", counter).then((bool success) {
-  //       return counter;
-  //     });
-  //   });
-  // }
 
   @override
   void initState() {
     super.initState();
-
-    // _counter = _prefs.then((SharedPreferences prefs) {
-    //   return (prefs.getInt('counter') ?? 0);
-    // });
 
     uid = widget.uid;
   }
@@ -66,18 +49,14 @@ class _MypageViewState extends State<MypageView> {
               future: Future.wait([
                 model.getUser(widget.uid),
                 model.downloadImage(),
-                // _counter,
-                model.getSharedPreferencesValue(),
-                model.getSharedPreferencesValue2('counter2', int)
+                model.getSharedPreferencesValue('counter', int),
+                model.getSharedPreferencesValue('counter2', int)
               ]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserModel currentUserModel = snapshot.data[0];
-                  //_downloadURL = snapshot.data[1];
-                  // int counter = snapshot.data[2];
-                  // int counter2 = snapshot.data[3];
-                  int counter2 = snapshot.data[2];
-                  int counter = snapshot.data[3];
+                  int counter = snapshot.data[2];
+                  int counter2 = snapshot.data[3];
                   return Scaffold(
                       backgroundColor: Colors.grey,
                       body: SafeArea(
@@ -95,7 +74,8 @@ class _MypageViewState extends State<MypageView> {
                               child: RaisedButton(
                                 onPressed: () {
                                   setState(() {
-                                    model.updateSharedPreferencesValue();
+                                    model.updateSharedPreferencesValue(
+                                        'counter2', counter2 + 1);
                                   });
                                 },
                                 child: Text('shared pref2 test'),
@@ -112,8 +92,8 @@ class _MypageViewState extends State<MypageView> {
                               child: RaisedButton(
                                 onPressed: () {
                                   setState(() {
-                                    model.updateSharedPreferencesValue2(
-                                        'counter2', counter + 1);
+                                    model.updateSharedPreferencesValue(
+                                        'counter', counter + 1);
                                   });
                                 },
                                 child: Text('shared pref1 test'),
@@ -125,19 +105,6 @@ class _MypageViewState extends State<MypageView> {
                                 child: Text('현재 pref 숫자: $counter'),
                               ),
                             ),
-                            // Container(
-                            //   height: 20,
-                            //   child: RaisedButton(
-                            //     onPressed: _incrementCounter,
-                            //     child: Text('shared pref test'),
-                            //   ),
-                            // ),
-                            // Container(
-                            //   height: 20,
-                            //   child: Center(
-                            //     child: Text('현재 pref 숫자: $counter'),
-                            //   ),
-                            // ),
                             // Switch(
                             //   value: true,
                             //   onChanged: (bool value) {},
