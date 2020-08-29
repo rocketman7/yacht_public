@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yachtOne/models/dialog_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -16,6 +17,8 @@ class MypageViewModel extends BaseModel {
   final DialogService _dialogService = locator<DialogService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final StorageService _storageService = locator<StorageService>();
+  final SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   UserModel _user;
   String _downloadAddress;
@@ -45,5 +48,21 @@ class MypageViewModel extends BaseModel {
   Future downloadImage() async {
     _downloadAddress = await _storageService.downloadImage();
     return _downloadAddress;
+  }
+
+  Future<void> updateSharedPreferencesValue() async {
+    _sharedPreferencesService.updateSharedPreferencesValue();
+  }
+
+  Future<int> getSharedPreferencesValue() async {
+    return _sharedPreferencesService.getSharedPreferencesValue();
+  }
+
+  Future<void> updateSharedPreferencesValue2(String name, var value) async {
+    _sharedPreferencesService.updateSharedPreferencesValue2(name, value);
+  }
+
+  Future<dynamic> getSharedPreferencesValue2(String name, var value) async {
+    return _sharedPreferencesService.getSharedPreferencesValue2(name, value);
   }
 }

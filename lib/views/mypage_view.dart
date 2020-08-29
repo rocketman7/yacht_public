@@ -10,6 +10,8 @@ import 'constants/size.dart';
 import 'loading_view.dart';
 import 'widgets/navigation_bars_widget.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class MypageView extends StatefulWidget {
   final String uid;
   MypageView(this.uid);
@@ -22,10 +24,27 @@ class _MypageViewState extends State<MypageView> {
   String uid;
 
   // String _downloadURL;
+  // Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  // Future<int> _counter;
+
+  // Future<void> _incrementCounter() async {
+  //   final SharedPreferences prefs = await _prefs;
+  //   final int counter = (prefs.getInt('counter') ?? 0) + 1;
+
+  //   setState(() {
+  //     _counter = prefs.setInt("counter", counter).then((bool success) {
+  //       return counter;
+  //     });
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
+
+    // _counter = _prefs.then((SharedPreferences prefs) {
+    //   return (prefs.getInt('counter') ?? 0);
+    // });
 
     uid = widget.uid;
   }
@@ -44,12 +63,21 @@ class _MypageViewState extends State<MypageView> {
         viewModelBuilder: () => MypageViewModel(),
         builder: (context, model, child) => MaterialApp(
                 home: FutureBuilder(
-              future: Future.wait(
-                  [model.getUser(widget.uid), model.downloadImage()]),
+              future: Future.wait([
+                model.getUser(widget.uid),
+                model.downloadImage(),
+                // _counter,
+                model.getSharedPreferencesValue(),
+                model.getSharedPreferencesValue2('counter2', int)
+              ]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserModel currentUserModel = snapshot.data[0];
                   //_downloadURL = snapshot.data[1];
+                  // int counter = snapshot.data[2];
+                  // int counter2 = snapshot.data[3];
+                  int counter2 = snapshot.data[2];
+                  int counter = snapshot.data[3];
                   return Scaffold(
                       backgroundColor: Colors.grey,
                       body: SafeArea(
@@ -62,6 +90,58 @@ class _MypageViewState extends State<MypageView> {
                             Expanded(
                               child: ListView(children: _mypageList(model)),
                             ),
+                            Container(
+                              height: 20,
+                              child: RaisedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    model.updateSharedPreferencesValue();
+                                  });
+                                },
+                                child: Text('shared pref2 test'),
+                              ),
+                            ),
+                            Container(
+                              height: 20,
+                              child: Center(
+                                child: Text('현재 pref 숫자: $counter2'),
+                              ),
+                            ),
+                            Container(
+                              height: 20,
+                              child: RaisedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    model.updateSharedPreferencesValue2(
+                                        'counter2', counter + 1);
+                                  });
+                                },
+                                child: Text('shared pref1 test'),
+                              ),
+                            ),
+                            Container(
+                              height: 20,
+                              child: Center(
+                                child: Text('현재 pref 숫자: $counter'),
+                              ),
+                            ),
+                            // Container(
+                            //   height: 20,
+                            //   child: RaisedButton(
+                            //     onPressed: _incrementCounter,
+                            //     child: Text('shared pref test'),
+                            //   ),
+                            // ),
+                            // Container(
+                            //   height: 20,
+                            //   child: Center(
+                            //     child: Text('현재 pref 숫자: $counter'),
+                            //   ),
+                            // ),
+                            // Switch(
+                            //   value: true,
+                            //   onChanged: (bool value) {},
+                            // ),
                             Container(
                               height: 30,
                               color: Colors.green[100],
