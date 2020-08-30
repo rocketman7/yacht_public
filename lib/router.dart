@@ -3,6 +3,7 @@ import 'package:yachtOne/views/phone_auth_view.dart';
 import 'managers/dialog_manager.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
+import 'views/mypage_documents/avatarSelect_view.dart';
 import 'views/register_view.dart';
 import 'views/startup_view.dart';
 import 'views/ggook_view.dart';
@@ -11,6 +12,7 @@ import 'views/mypage_view.dart';
 
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_view.dart';
+import 'views/mypage_documents/termsOfUse_View.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -49,6 +51,13 @@ class Routers {
         return MaterialPageRoute(
             builder: (context) =>
                 DialogManager(child: MypageView(routeSettings.arguments)));
+      case 'mypage_termsofuse':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(child: TermsOfUseView()));
+      case 'mypage_avatarselect':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(
+                child: AvatarSelectView(routeSettings.arguments)));
       default:
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: StartUpView()));
