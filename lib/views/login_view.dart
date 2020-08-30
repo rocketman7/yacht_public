@@ -19,6 +19,7 @@ class _LoginViewState extends State<LoginView>
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   // 애니메이션 컨트롤러, 애니메이션 선언
   // AnimationController _aniController;
   // Animation _animation;
@@ -53,90 +54,96 @@ class _LoginViewState extends State<LoginView>
     return ViewModelBuilder<LoginViewModel>.reactive(
       viewModelBuilder: () => LoginViewModel(),
       onModelReady: (model) => model,
-      builder: (context, model, child) => Scaffold(
-        body: Stack(
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0, 1],
-                  colors: <Color>[
-                    const Color(0xFF7BE0C8),
-                    const Color(0xFF53D3D8),
-                  ],
-                ),
-              ),
-            ),
-            // 이걸로 column 전체 감싸줘야 키보드 열릴 때 화면 가변적으로 움직이게 됨
-            SingleChildScrollView(
-              // reverse를 true로 둬야 Email Textform 클릭했을 때 column 맨 아래까지 키보드 위로 올라감.
-              reverse: true,
-              child: Column(
-                // mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 200,
-                  ),
-                  Text(
-                    "꾸  욱",
-                    style: TextStyle(
-                      fontFamily: 'NanumHandWriting',
-                      fontSize: 70,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 200,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image(
-                        image: AssetImage('assets/images/googleLogo.png'),
-                        height: 27,
-                      ),
-                      SizedBox(width: 15),
-                      Text(
-                        'Sign in with Google Account',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+      builder: (context, model, child) => WillPopScope(
+        onWillPop: () async {
+          _navigatorKey.currentState.maybePop();
+          return false;
+        },
+        child: Scaffold(
+          body: Stack(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0, 1],
+                    colors: <Color>[
+                      const Color(0xFF7BE0C8),
+                      const Color(0xFF53D3D8),
                     ],
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  // 아래 따로 위젯으로 만듬
-                  _inputForm(model),
-                  SizedBox(
-                    height: 11,
-                  ),
-                  FlatButton(
-                    onPressed: () {
-                      _navigationService.navigateTo('register');
-                    },
-                    child: Text(
-                      "계정이 없으신가요? 지금 가입하세요!",
+                ),
+              ),
+              // 이걸로 column 전체 감싸줘야 키보드 열릴 때 화면 가변적으로 움직이게 됨
+              SingleChildScrollView(
+                // reverse를 true로 둬야 Email Textform 클릭했을 때 column 맨 아래까지 키보드 위로 올라감.
+                reverse: true,
+                child: Column(
+                  // mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 200,
+                    ),
+                    Text(
+                      "꾸  욱",
                       style: TextStyle(
-                        fontSize: 14,
+                        fontFamily: 'NanumHandWriting',
+                        fontSize: 70,
+                        fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  )
-                ],
+                    SizedBox(
+                      height: 200,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image(
+                          image: AssetImage('assets/images/googleLogo.png'),
+                          height: 27,
+                        ),
+                        SizedBox(width: 15),
+                        Text(
+                          'Sign in with Google Account',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    // 아래 따로 위젯으로 만듬
+                    _inputForm(model),
+                    SizedBox(
+                      height: 11,
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        _navigationService.navigateTo('register');
+                      },
+                      child: Text(
+                        "계정이 없으신가요? 지금 가입하세요!",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
