@@ -11,6 +11,8 @@ import '../models/rank_model.dart';
 import '../models/database_address_model.dart';
 import '../models/vote_model.dart';
 
+import '../models/temp_address_constant.dart';
+
 class DatabaseService {
   FirebaseFirestore _databaseService = FirebaseFirestore.instance;
   FirebaseFirestore get databaseService => _databaseService;
@@ -304,5 +306,19 @@ class DatabaseService {
       print("error");
       return null;
     }
+  }
+
+  // database 및 time정보로 Database Address 모델 만들기
+  Future<DatabaseAddressModel> getAddress(String uid) async {
+    DatabaseAddressModel _databaseAddress;
+
+    _databaseAddress = DatabaseAddressModel(
+      uid: uid,
+      date: date,
+      category: category,
+      season: season,
+    );
+
+    return _databaseAddress;
   }
 }

@@ -38,7 +38,7 @@ class MypageViewModel extends BaseModel {
       print('DD');
       _authService.signOut();
 
-      _navigationService.popAndNavigateWithArgTo('login', null);
+      // _navigationService.popAndNavigateWithArgTo('login', null);
     }
   }
 

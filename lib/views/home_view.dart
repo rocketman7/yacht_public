@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/vote_model.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
@@ -30,8 +32,10 @@ class _HomeViewState extends State<HomeView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
-  Stream<User> _authUserState;
   Future<UserModel> _userModel;
+  Future<DatabaseAddressModel> _addressModel;
+  Future<VoteModel> _voteModel;
+  Future<List<Object>> _allModel;
   // addVote 버튼때문에 임시로 만든 것
   // final VoteModel votesToday = voteToday;
   // final List<SubVote> subvotesToday = subVotes;
@@ -43,7 +47,20 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     // _authUserState = _viewModel.authUserState;
-    _userModel = _viewModel.getUser();
+    // _addressModel = _viewModel.getAddress();
+    // _userModel = _viewModel.getUser(_viewModel.uid);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _allModel = _viewModel.getAllModel(_viewModel.uid);
+  }
+
+  @override
+  void didUpdateWidget(HomeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print("oldWidgetUpdate");
   }
 
   @override
@@ -53,14 +70,25 @@ class _HomeViewState extends State<HomeView> {
     double displayRatio = size.height / size.width;
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => HomeViewModel(),
-
+      onModelReady: (model) => print("onModelReady" + model.uid),
       // StreamBuilder로 onAuthChanged를 듣다가 아래 if 조건이 만족하면 model.getUser()의 FutureBuilder를 return.
       builder: (context, model, child) {
+        print("Start" + DateTime.now().toString());
         return FutureBuilder(
-          future: _userModel,
-          builder: (context, snapshot) {
-            UserModel userModel = snapshot.data;
+          future: _allModel,
+          builder: (
+            context,
+            snapshot,
+          ) {
             if (snapshot.hasData) {
+              print("End" + DateTime.now().toString());
+              List<Object> _allModels = snapshot.data;
+              DatabaseAddressModel address = _allModels[0];
+              print(address.category);
+              VoteModel vote = _allModels[2];
+
+              print(vote.voteDate);
+              // UserModel userModel = model.getUser(_widgetAddress.uid);
               // WillPopScope: Back 버튼 막기
               return WillPopScope(
                 onWillPop: () async {
@@ -82,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
                           child: Column(
                             children: <Widget>[
                               //이미 snapshot에 data가 있는 상태이기 때문에 아래와 같이 입력하면 Text null에러가 나지 않는다.
-                              topBar(userModel),
+                              // topBar(userModel),
                               SizedBox(height: 15),
                               Center(
                                 child: Container(
@@ -133,7 +161,7 @@ class _HomeViewState extends State<HomeView> {
                               RaisedButton(
                                 onPressed: () {
                                   _navigationService.navigateWithArgTo(
-                                      'voteSelect', userModel.uid.toString());
+                                      'voteSelect', model.uid.toString());
                                 },
                                 child: Text(
                                   "주제선택 페이지로 가기",
@@ -147,18 +175,36 @@ class _HomeViewState extends State<HomeView> {
                               RaisedButton(
                                 onPressed: () {
                                   _navigationService.navigateWithArgTo(
-                                      'rank', userModel.uid.toString());
+                                      'rank', model.uid.toString());
                                 },
                                 child: Text('rank 페이지 가기'),
                               ),
                               SizedBox(height: 20),
                               RaisedButton(
                                 onPressed: () {
-                                  _navigationService.navigateWithArgTo(
-                                      'mypage', userModel.uid.toString());
+                                  _navigationService
+                                      .navigateWithArgTo(
+                                          'mypage', model.uid.toString())
+                                      .then((value) {
+                                    // LoadingView(),
+                                    return setState(() => {
+                                          _allModel = _viewModel
+                                              .getAllModel(_viewModel.uid)
+                                        });
+                                  });
                                 },
                                 child: Text('mypage 페이지 가기'),
                               ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                vote.voteDate,
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.white,
+                                ),
+                              )
 
                               // RaisedButton(
                               //   onPressed: () {
