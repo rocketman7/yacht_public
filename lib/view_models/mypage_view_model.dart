@@ -8,9 +8,7 @@ import '../models/user_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../services/navigation_service.dart';
-import '../services/storage_service.dart';
 import '../view_models/base_model.dart';
-import '../models/shared_preferences_const.dart';
 
 class MypageViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
@@ -33,13 +31,13 @@ class MypageViewModel extends BaseModel {
 
   // 로그아웃 버튼이 눌렸을 경우..
   Future logout() async {
+    print("logoutbutton");
     var dialogResult = await _dialogService.showDialog(
         title: '로그아웃',
         description: '로그아웃하시겠습니까?',
         buttonTitle: '네',
         cancelTitle: '아니오');
     if (dialogResult.confirmed) {
-      print('DD');
       _authService.signOut();
 
       _navigationService.popAndNavigateWithArgTo('login', null);
@@ -50,26 +48,6 @@ class MypageViewModel extends BaseModel {
     _downloadAddress = await _storageService.downloadImage();
     return _downloadAddress;
   }
-
-  // Future<void> updateSharedPreferencesValue(String name, var value) async {
-  //   _sharedPreferencesService.updateSharedPreferencesValue(name, value);
-  // }
-
-  // Future<dynamic> getSharedPreferencesValue(String name, Type type) async {
-  //   return _sharedPreferencesService.getSharedPreferencesValue(name, type);
-  // }
-
-  // void clearSharedPreferencesValue() {
-  //   _sharedPreferencesService.clearSharedPreferencesValue();
-  // }
-
-  // Future<bool> getSharedPrefModel() async {
-  //   return await _sharedPreferencesService.getSharedPrefs();
-  // }
-
-  // Future<void> updateSharedPrefModel(String name, dynamic value) async {
-  //   _sharedPreferencesService.updateSharedPreferencesValue(name, value);
-  // }
 
   Future<void> clearSharedPreferencesAll() async {
     _sharedPreferencesService.clearSharedPreferencesAll();
