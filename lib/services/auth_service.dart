@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -16,17 +18,6 @@ class AuthService {
   // 현재 User 데이터를 user model에 넣어서 저장
   UserModel _currentUserModel;
   UserModel get currentUser => _currentUserModel;
-
-  // User 로그인여부 확인
-  Future<bool> isUserLoggedIn() async {
-    // await _auth.signOut();
-    var user = _auth.currentUser;
-
-    // Todo: user정보 모델에 넣기
-
-    // User 정보가 있으면 return true
-    return user != null;
-  }
 
   // Phone Auth
   Future verifyPhoneNumber(String value, context) async {
@@ -173,6 +164,14 @@ class AuthService {
     }
   }
   // 구글계정 로그인
+
+  Stream authState() {
+    var user = _auth.authStateChanges();
+    if (user == null) {
+      _navigationService.navigateTo('login');
+    }
+    return null;
+  }
 
   // 로그아웃
   Future signOut() async {

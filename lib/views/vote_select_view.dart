@@ -135,14 +135,14 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     });
 
     // defines a timer
-    // _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
-    //   setState(() {
-    //     // getTimeLeft(_voteFromDB);
-    //   });
-    // });
+    _everySecond = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      setState(() {
+        // getTimeLeft(_voteFromDB);
+      });
+    });
 
     //get this user's UserModel
-    _userModelFuture = _model.getUser(widget.uid);
+    // _userModelFuture = _model.getUser(widget.uid);
     print("initState Done");
   }
 

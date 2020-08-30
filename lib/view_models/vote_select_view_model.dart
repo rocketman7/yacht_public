@@ -23,7 +23,10 @@ class VoteSelectViewModel extends FutureViewModel {
   VoteModel _voteModel;
 
   Future<UserModel> getUser(String uid) async {
-    _userModel = await _databaseService.getUser(uid);
+    print(DateTime.now());
+    String getUid = _authService.auth.currentUser.uid;
+    print(DateTime.now().toString() + getUid);
+    _userModel = await _databaseService.getUser(getUid);
     return _userModel;
   }
 
@@ -34,20 +37,13 @@ class VoteSelectViewModel extends FutureViewModel {
 
   Future signOut() async {
     await _authService.signOut();
-    var hasUserLoggedIn = await _authService.isUserLoggedIn();
-    if (hasUserLoggedIn) {
-      _navigationService.navigateTo('loggedIn');
-    } else {
-      _navigationService.navigateTo('login');
-    }
   }
 
   @override
   Future futureToRun() async {
     // TODO: implement futureToRun
-    var uid = await Future.delayed(Duration(seconds: 3))
-        .then((value) => _authService.auth.currentUser.uid);
-    print('after 3 sec ' + uid);
+    var uid = await _authService.auth.currentUser.uid;
+
     return uid;
     // throw UnimplementedError();
   }
