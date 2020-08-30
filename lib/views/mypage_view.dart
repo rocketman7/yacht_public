@@ -29,18 +29,23 @@ class _MypageViewState extends State<MypageView> {
 
   final MypageViewModel _mypageViewModelforFuture = MypageViewModel();
   //GlobalKey<NavigatorState> _globalKey;
-  bool _pushAlarm1, _pushAlarm2;
-  Future<dynamic> _pushAlarm1Future, _pushAlarm2Future;
+  bool _sPrefpushAlarm1, _sPrefpushAlarm2;
+  int _sPrefcounter;
+  Future<dynamic> _sPrefpushAlarm1Future,
+      _sPrefpushAlarm2Future,
+      _sPrefcounterFuture;
 
   @override
   void initState() {
     super.initState();
     //_globalKey = _navigationService.navigatorKey;
 
-    _pushAlarm1Future =
-        _mypageViewModelforFuture.getSharedPreferences(pushAlarm1);
-    _pushAlarm2Future =
-        _mypageViewModelforFuture.getSharedPreferences(pushAlarm2);
+    _sPrefpushAlarm1Future =
+        _mypageViewModelforFuture.getSharedPreferences(sPrefpushAlarm1, bool);
+    _sPrefpushAlarm2Future =
+        _mypageViewModelforFuture.getSharedPreferences(sPrefpushAlarm2, bool);
+    _sPrefcounterFuture =
+        _mypageViewModelforFuture.getSharedPreferences(sPrefcounter, int);
 
     uid = widget.uid;
   }
@@ -64,14 +69,16 @@ class _MypageViewState extends State<MypageView> {
                 home: FutureBuilder(
               future: Future.wait([
                 model.getUser(widget.uid),
-                _pushAlarm1Future,
-                _pushAlarm2Future,
+                _sPrefpushAlarm1Future,
+                _sPrefpushAlarm2Future,
+                _sPrefcounterFuture
               ]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserModel currentUserModel = snapshot.data[0];
-                  _pushAlarm1 = _pushAlarm1 ?? snapshot.data[1];
-                  _pushAlarm2 = _pushAlarm2 ?? snapshot.data[2];
+                  _sPrefpushAlarm1 = _sPrefpushAlarm1 ?? snapshot.data[1];
+                  _sPrefpushAlarm2 = _sPrefpushAlarm2 ?? snapshot.data[2];
+                  _sPrefcounter = _sPrefcounter ?? snapshot.data[3];
                   return Scaffold(
                       //key: _globalKey,
                       backgroundColor: Colors.white,
@@ -86,26 +93,50 @@ class _MypageViewState extends State<MypageView> {
                               child: ListView(children: _mypageList(model)),
                             ),
                             Switch(
-                              value: _pushAlarm1,
+                              value: _sPrefpushAlarm1,
                               onChanged: (bool value) {
                                 setState(() {
-                                  _pushAlarm1 = value;
+                                  _sPrefpushAlarm1 = value;
                                   _mypageViewModelforFuture
                                       .setSharedPreferences(
-                                          pushAlarm1, _pushAlarm1);
+                                          sPrefpushAlarm1, _sPrefpushAlarm1);
                                 });
                               },
                             ),
                             Switch(
-                              value: _pushAlarm2,
+                              value: _sPrefpushAlarm2,
                               onChanged: (bool value) {
                                 setState(() {
-                                  _pushAlarm2 = value;
+                                  _sPrefpushAlarm2 = value;
                                   _mypageViewModelforFuture
                                       .setSharedPreferences(
-                                          pushAlarm2, _pushAlarm2);
+                                          sPrefpushAlarm2, _sPrefpushAlarm2);
                                 });
                               },
+                            ),
+                            GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _sPrefcounter += 1;
+                                    _mypageViewModelforFuture
+                                        .setSharedPreferences(
+                                            sPrefcounter, _sPrefcounter);
+                                  });
+                                },
+                                child: Container(
+                                  height: 30,
+                                  child: Text('sPrefcounter : $_sPrefcounter'),
+                                )),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  model.clearSharedPreferencesAll();
+                                });
+                              },
+                              child: Container(
+                                height: 20,
+                                child: Text('clear pref'),
+                              ),
                             ),
                             Container(
                               height: 30,

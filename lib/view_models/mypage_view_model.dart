@@ -53,8 +53,8 @@ class MypageViewModel extends BaseModel {
     _sharedPreferencesService.clearSharedPreferencesAll();
   }
 
-  Future<dynamic> getSharedPreferences(String key) async {
-    return await _sharedPreferencesService.getSharedPreferences(key);
+  Future<dynamic> getSharedPreferences(String key, Type type) async {
+    return await _sharedPreferencesService.getSharedPreferences(key, type);
   }
 
   Future<void> setSharedPreferences(String key, dynamic value) async {

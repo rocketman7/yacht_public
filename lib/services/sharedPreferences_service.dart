@@ -10,10 +10,26 @@ class SharedPreferencesService {
     preferences.clear();
   }
 
-  Future<dynamic> getSharedPreferences(String key) async {
+  Future<dynamic> getSharedPreferences(String key, Type type) async {
     final SharedPreferences preferences = await _preferences;
 
-    return preferences.get(key);
+    var temp = preferences.get(key);
+
+    if (temp != null) {
+      return temp;
+    } else {
+      switch (type) {
+        case bool:
+          return false;
+        case int:
+          return 0;
+        case double:
+          return 0.0;
+        case String:
+          return '';
+      }
+    }
+    // return preferences.get(key);
   }
 
   Future<void> setSharedPreferences(String key, var value) async {
