@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -27,11 +28,16 @@ class VoteCommentView extends StatefulWidget {
 class _VoteCommentViewState extends State<VoteCommentView>
     with TickerProviderStateMixin {
   final DatabaseService _databaseService = locator<DatabaseService>();
+  final VoteCommentViewModel _viewModel = VoteCommentViewModel();
   final DialogService _dialogService = locator<DialogService>();
 
-  TabController _tabController;
-
+  Future<List<Object>> _getAllModel;
+  Future<UserModel> _userModel;
+  Future<DatabaseAddressModel> _addressModel;
+  Future<VoteModel> _voteModel;
   String uid;
+
+  TabController _tabController;
 
   VoteCommentModel voteCommentModel;
   VoteModel voteModel;
@@ -44,6 +50,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
   void initState() {
     super.initState();
     // 주제 선택하는 좌우 스크롤 메뉴의 컨트롤러
+    _getAllModel = _viewModel.getAllModel(_viewModel.uid);
+
     _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(() {
       setState(() {
@@ -77,16 +85,19 @@ class _VoteCommentViewState extends State<VoteCommentView>
       viewModelBuilder: () => VoteCommentViewModel(),
       builder: (context, model, child) => MaterialApp(
         home: FutureBuilder(
-            future: Future.wait([
-              model.getUser(uid),
-              model.getVotes('20200901'),
-              model.getUserVote(uid, '20200901'),
-            ]),
+            future: _getAllModel,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                UserModel currentUserModel = snapshot.data[0];
-                VoteModel voteModel = snapshot.data[1];
-                UserVoteModel userVoteModel = snapshot.data[2];
+                print("snapShotData Called");
+                // getVoteTodayWidget(snapshot.data[1]);
+                // getVoteSelectedWidget(snapshot.data[1]);
+                List<Object> _allModel = snapshot.data;
+                DatabaseAddressModel address = _allModel[0];
+                UserModel user = _allModel[1];
+                VoteModel vote = _allModel[2];
+                UserVoteModel userVote = _allModel[3];
+                print('models ready');
+
                 return Scaffold(
                   bottomNavigationBar: bottomNavigationBar(context),
                   backgroundColor: Color(0xFF363636),
@@ -99,7 +110,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                       child: SingleChildScrollView(
                         child: Column(
                           children: <Widget>[
-                            topBar(currentUserModel),
+                            topBar(user),
                             SizedBox(
                               height: displayRatio > 1.85 ? gap_l : gap_xs,
                             ),
@@ -113,7 +124,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                               tabs: List.generate(
                                 5,
                                 (index) => subVoteList(
-                                  voteModel.subVotes[index].title.toString(),
+                                  vote.subVotes[index].title.toString(),
                                 ),
                               ),
                             ),
@@ -129,7 +140,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                   (index) => commentTabBarView(
                                     index,
                                     context,
-                                    voteModel,
+                                    vote,
                                     model,
                                   ),
                                 ),
@@ -141,10 +152,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
                             commentInput(
                               _tabController.index,
                               _commentTextController,
-                              currentUserModel,
+                              user,
                               model,
-                              voteModel,
-                              userVoteModel,
+                              vote,
+                              userVote,
                             ),
                           ],
                         ),

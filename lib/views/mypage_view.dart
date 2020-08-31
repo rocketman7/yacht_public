@@ -69,6 +69,10 @@ class _MypageViewState extends State<MypageView> {
               ]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  // if (snapshot.data[1] == null) {
+                  //   _pushAlarm1 = false;
+                  //   _pushAlarm2 = false;
+                  // }
                   UserModel currentUserModel = snapshot.data[0];
                   _pushAlarm1 = _pushAlarm1 ?? snapshot.data[1];
                   _pushAlarm2 = _pushAlarm2 ?? snapshot.data[2];

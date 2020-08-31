@@ -1,3 +1,6 @@
+import 'package:stacked/stacked.dart';
+import 'package:yachtOne/models/database_address_model.dart';
+
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
@@ -7,17 +10,31 @@ import '../services/database_service.dart';
 import '../services/navigation_service.dart';
 import 'base_model.dart';
 
-class GgookViewModel extends BaseModel {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final AuthService _authService = locator<AuthService>();
+class GgookViewModel extends BaseViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthService _authService = locator<AuthService>();
 
-  Future addUserVoteDB(UserVoteModel userVote) async {
+  DatabaseAddressModel _address;
+  String uid;
+
+  GgookViewModel() {
+    uid = _authService.auth.currentUser.uid;
+  }
+
+  Future addUserVoteDB(
+    DatabaseAddressModel address,
+    UserVoteModel userVote,
+  ) async {
     await _databaseService.addUserVote(userVote);
     print("FUTURE CALLED");
   }
 
   Future counterUserVote(List<int> voteSelected) async {
     await _databaseService.countUserVote(voteSelected);
+  }
+
+  Future<DatabaseAddressModel> getAddress() async {
+    _address = await _databaseService.getAddress(uid);
+    return _address;
   }
 }

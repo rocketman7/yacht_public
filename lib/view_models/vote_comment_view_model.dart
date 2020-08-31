@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -18,10 +19,38 @@ class VoteCommentViewModel extends BaseModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
 
   VoteCommentModel voteFeedModel;
-  UserModel _user;
-  VoteModel _votes;
+
   UserVoteModel _userVote;
   int subVoteIndex;
+
+  UserModel _user;
+  DatabaseAddressModel _address;
+  VoteModel _vote;
+  String uid;
+
+  VoteCommentViewModel() {
+    // _authService.signOut();
+
+    uid = _authService.auth.currentUser.uid;
+    // getUser();
+  }
+
+  Future<List<Object>> getAllModel(uid) async {
+    List<Object> _allModel = [];
+
+    _allModel.add(await getAddress());
+    _allModel.add(await getUser(uid));
+    _allModel.add(await getVote(_address));
+    _allModel.add(await getUserVote(_address));
+
+    print(_allModel);
+    return _allModel;
+  }
+
+  Future<DatabaseAddressModel> getAddress() async {
+    _address = await _databaseService.getAddress(uid);
+    return _address;
+  }
 
   Future postComments(
     subVoteIndex,
@@ -49,18 +78,18 @@ class VoteCommentViewModel extends BaseModel {
     }
   }
 
-  Future getUser(String uid) async {
+  Future<UserModel> getUser(String uid) async {
     _user = await _databaseService.getUser(uid);
     return _user;
   }
 
-  Future getVotes(String date) async {
-    // _votes = await _databaseService.getVotes(date);
-    return _votes;
+  Future<VoteModel> getVote(DatabaseAddressModel model) async {
+    _vote = await _databaseService.getVotes(model);
+    return _vote;
   }
 
-  Future getUserVote(String uid, String date) async {
-    _userVote = await _databaseService.getUserVote(uid, date);
+  Future getUserVote(DatabaseAddressModel model) async {
+    _userVote = await _databaseService.getUserVote(model);
     return _userVote;
   }
 }

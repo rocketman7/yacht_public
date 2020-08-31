@@ -33,14 +33,12 @@ class HomeViewModel extends BaseViewModel {
 
     uid = _authService.auth.currentUser.uid;
     // getUser();
-    print("getUserInitialized");
   }
 
   Future<List<Object>> getAllModel(uid) async {
     List<Object> _allModel = [];
 
-    _address = await getAddress();
-    _allModel.add(_address);
+    _allModel.add(await getAddress());
     _allModel.add(await getUser(uid));
     _allModel.add(await getVote(_address));
 

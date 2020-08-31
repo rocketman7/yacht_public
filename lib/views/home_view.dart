@@ -25,17 +25,16 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final AuthService _authService = locator<AuthService>();
   final NavigationService _navigationService = locator<NavigationService>();
   final HomeViewModel _viewModel = HomeViewModel();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
+  Future<List<Object>> _getAllModel;
   Future<UserModel> _userModel;
   Future<DatabaseAddressModel> _addressModel;
   Future<VoteModel> _voteModel;
-  Future<List<Object>> _allModel;
   // addVote 버튼때문에 임시로 만든 것
   // final VoteModel votesToday = voteToday;
   // final List<SubVote> subvotesToday = subVotes;
@@ -54,7 +53,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _allModel = _viewModel.getAllModel(_viewModel.uid);
+    _getAllModel = _viewModel.getAllModel(_viewModel.uid);
   }
 
   @override
@@ -70,24 +69,23 @@ class _HomeViewState extends State<HomeView> {
     double displayRatio = size.height / size.width;
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => HomeViewModel(),
-      onModelReady: (model) => print("onModelReady" + model.uid),
+      // onModelReady: (model) => print("onModelReady" + model.uid),
       // StreamBuilder로 onAuthChanged를 듣다가 아래 if 조건이 만족하면 model.getUser()의 FutureBuilder를 return.
       builder: (context, model, child) {
         print("Start" + DateTime.now().toString());
         return FutureBuilder(
-          future: _allModel,
+          future: _getAllModel, // address, user, vote 모델 순서대로
           builder: (
             context,
             snapshot,
           ) {
             if (snapshot.hasData) {
               print("End" + DateTime.now().toString());
-              List<Object> _allModels = snapshot.data;
-              DatabaseAddressModel address = _allModels[0];
-              print(address.category);
-              VoteModel vote = _allModels[2];
+              List<Object> _allModel = snapshot.data;
+              DatabaseAddressModel address = _allModel[0];
+              UserModel user = _allModel[1];
+              VoteModel vote = _allModel[2];
 
-              print(vote.voteDate);
               // UserModel userModel = model.getUser(_widgetAddress.uid);
               // WillPopScope: Back 버튼 막기
               return WillPopScope(
@@ -188,7 +186,7 @@ class _HomeViewState extends State<HomeView> {
                                       .then((value) {
                                     // LoadingView(),
                                     return setState(() => {
-                                          _allModel = _viewModel
+                                          _getAllModel = _viewModel
                                               .getAllModel(_viewModel.uid)
                                         });
                                   });
@@ -200,6 +198,26 @@ class _HomeViewState extends State<HomeView> {
                               ),
                               Text(
                                 vote.voteDate,
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                user.userName,
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                vote.subVotes[0].title.toString(),
                                 style: TextStyle(
                                   fontSize: 30,
                                   color: Colors.white,

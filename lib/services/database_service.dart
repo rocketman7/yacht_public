@@ -134,12 +134,11 @@ class DatabaseService {
   }
 
   // Read: User의 Vote정보 가져오기
-  Future getUserVote(String uid, String voteDate) async {
+  Future getUserVote(DatabaseAddressModel addressModel) async {
     try {
-      var userVoteData = await _usersCollectionReference
-          .doc(uid)
-          .collection('userVote')
-          .doc(voteDate)
+      var userVoteData = await addressModel
+          .userVoteSeasonCollection()
+          .doc(addressModel.date)
           .get();
 
       // List<int> tempList = List<int>.from(userVoteData.data['voteSelected']);
