@@ -337,7 +337,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
                                         _navigationService
                                             .navigateWithArgTo('ggook', [
-                                          model.uid,
+                                          address,
+                                          user,
                                           vote,
                                           listSelected,
                                           0,

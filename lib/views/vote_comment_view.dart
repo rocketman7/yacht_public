@@ -182,8 +182,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
     var f = new NumberFormat("##.0%");
 
     // 각 투표수 가져오기
-    var numVoted0 = voteModel.subVotes[subVoteIndex].numVoted0;
-    var numVoted1 = voteModel.subVotes[subVoteIndex].numVoted1;
+    var numVoted0 = voteModel.subVotes[subVoteIndex].numVoted0 ?? 0;
+    var numVoted1 = voteModel.subVotes[subVoteIndex].numVoted1 ?? 0;
 
     // 투표수 -> 퍼센티지 변환
     double vote0Percentage = numVoted0 / (numVoted0 + numVoted1);

@@ -1,10 +1,24 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:yachtOne/locator.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'package:yachtOne/views/constants/size.dart';
 
-Widget voteWidget(voteModel, voteIdx, voteList, userVote, uid, model) {
+import '../../locator.dart';
+import '../../models/user_model.dart';
+import '../../models/user_vote_model.dart';
+import '../../models/vote_model.dart';
+import '../../models/database_address_model.dart';
+import '../../services/navigation_service.dart';
+import '../../view_models/ggook_view_model.dart';
+import '../../views/constants/size.dart';
+
+Widget ggookWidget(
+  DatabaseAddressModel address,
+  UserModel user,
+  VoteModel vote,
+  List<int> listSelected,
+  int idx,
+  UserVoteModel userVote,
+  GgookViewModel model,
+) {
   return Stack(
     children: <Widget>[
       Container(
@@ -26,7 +40,7 @@ Widget voteWidget(voteModel, voteIdx, voteList, userVote, uid, model) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            voteModel.subVotes[voteList[voteIdx]].title,
+            vote.subVotes[listSelected[idx]].title,
             style: TextStyle(
               color: Color(0xff5F5F5F),
               fontSize: 35,
@@ -37,7 +51,7 @@ Widget voteWidget(voteModel, voteIdx, voteList, userVote, uid, model) {
             height: gap_m,
           ),
           Text(
-            voteModel.subVotes[voteList[voteIdx]].description,
+            vote.subVotes[listSelected[idx]].description,
             style: TextStyle(
               color: Color(0xff5F5F5F),
               fontSize: 20,
@@ -61,51 +75,80 @@ Widget voteWidget(voteModel, voteIdx, voteList, userVote, uid, model) {
           top: 240,
           left: 50,
           // child: RawMaterialButton
-          child:
-              ggookButton2(voteModel, voteIdx, voteList, userVote, uid, model)),
+          child: ggookButton(
+            address,
+            user,
+            vote,
+            listSelected,
+            idx,
+            userVote,
+            model,
+          )),
       Positioned(
           bottom: 240,
           right: 50,
-          child:
-              gookkButton(voteModel, voteIdx, voteList, userVote, uid, model)),
+          child: ggookButton(
+            address,
+            user,
+            vote,
+            listSelected,
+            idx,
+            userVote,
+            model,
+          )),
     ],
   );
 }
 
 // RawMaterialButton version
-Widget gookkButton(voteModel, voteIdx, voteList, userVote, uid, model) {
+Widget ggookButton(
+  DatabaseAddressModel address,
+  UserModel user,
+  VoteModel vote,
+  List<int> listSelected,
+  int idx,
+  UserVoteModel userVote,
+  GgookViewModel model,
+) {
   NavigationService _navigationService = locator<NavigationService>();
   return RawMaterialButton(
     onPressed: () {},
     onLongPress: () {
       print('longPressed');
-      print(voteIdx);
-      print(voteList.length);
-      print('vote' + (voteIdx + 2).toString());
-      if (voteIdx + 1 < voteList.length) {
+      print(idx);
+      print(listSelected.length);
+      print('vote' + (idx + 2).toString());
+      if (idx + 1 < listSelected.length) {
         List<int> tempList = userVote.voteSelected;
-        tempList.fillRange(voteList[voteIdx], voteList[voteIdx] + 1, 2);
+        tempList.fillRange(listSelected[idx], listSelected[idx] + 1, 2);
 
         userVote.voteSelected = tempList;
         print(tempList);
-        model.addUserVoteDB(userVote);
-        model.counterUserVote(userVote.voteSelected);
+        model.addUserVoteDB(address, userVote);
+        model.counterUserVote(address, userVote.voteSelected);
 
-        _navigationService.navigateWithArgTo(
-            'ggook', [uid, voteModel, voteList, voteIdx + 1]);
+        _navigationService.navigateWithArgTo('ggook', [
+          address,
+          user,
+          vote,
+          listSelected,
+          idx + 1,
+          userVote,
+          model,
+        ]);
       } else {
         // TODO: userVote 모델로 만들어서 넘겨야함.
         List<int> tempList = userVote.voteSelected;
-        tempList.fillRange(voteList[voteIdx], voteList[voteIdx] + 1, 2);
+        tempList.fillRange(listSelected[idx], listSelected[idx] + 1, 2);
 
         userVote.voteSelected = tempList;
         userVote.isVoted = true;
         print(tempList);
-        model.addUserVoteDB(userVote);
-        model.counterUserVote(userVote.voteSelected);
+        model.addUserVoteDB(address, userVote);
+        model.counterUserVote(address, userVote.voteSelected);
         _navigationService.navigateWithArgTo(
           'voteComment',
-          uid,
+          user.uid,
         );
       }
     },
@@ -118,7 +161,7 @@ Widget gookkButton(voteModel, voteIdx, voteList, userVote, uid, model) {
     padding: EdgeInsets.all(40.0),
     shape: CircleBorder(),
     child: Text(
-      voteModel.subVotes[voteList[voteIdx]].voteChoices[1],
+      vote.subVotes[listSelected[idx]].voteChoices[1],
       style: TextStyle(
           fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9EA6F1)),
     ),
@@ -126,7 +169,7 @@ Widget gookkButton(voteModel, voteIdx, voteList, userVote, uid, model) {
 }
 
 //LongPressGesturRecognizer version (누르는 시간 customized 가능)
-Widget ggookButton2(voteModel, voteIdx, voteList, userVote, uid, model) {
+Widget ggookButton2(voteModel, idx, listSelected, userVote, uid, model) {
   LongPressGestureRecognizer _longPressGesture = LongPressGestureRecognizer(
     duration: Duration(milliseconds: 3000),
   );
@@ -137,9 +180,9 @@ Widget ggookButton2(voteModel, voteIdx, voteList, userVote, uid, model) {
           GestureRecognizerFactoryWithHandlers<LongPressGestureRecognizer>(
               () => _longPressGesture, (_longPressGesture) {
         _longPressGesture.onLongPress = () {
-          if (voteIdx + 1 < voteList.length) {
+          if (idx + 1 < listSelected.length) {
             List<int> tempList = userVote.voteSelected;
-            tempList.fillRange(voteList[voteIdx], voteList[voteIdx] + 1, 1);
+            tempList.fillRange(listSelected[idx], listSelected[idx] + 1, 1);
 
             userVote.voteSelected = tempList;
             print(tempList);
@@ -147,12 +190,12 @@ Widget ggookButton2(voteModel, voteIdx, voteList, userVote, uid, model) {
 
             _navigationService.navigateWithArgTo(
               'ggook',
-              [uid, voteModel, voteList, voteIdx + 1],
+              [uid, voteModel, listSelected, idx + 1],
             );
           } else {
             // TODO: userVote 모델로 만들어서 넘겨야함.
             List<int> tempList = userVote.voteSelected;
-            tempList.fillRange(voteList[voteIdx], voteList[voteIdx] + 1, 1);
+            tempList.fillRange(listSelected[idx], listSelected[idx] + 1, 1);
 
             userVote.voteSelected = tempList;
             userVote.isVoted = true;
@@ -176,7 +219,7 @@ Widget ggookButton2(voteModel, voteIdx, voteList, userVote, uid, model) {
         alignment: Alignment.center,
         // padding: EdgeInsets.all(40),
         child: Text(
-          voteModel.subVotes[voteList[voteIdx]].voteChoices[0],
+          voteModel.subVotes[listSelected[idx]].voteChoices[0],
           style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

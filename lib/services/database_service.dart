@@ -86,12 +86,14 @@ class DatabaseService {
   }
 
   // Create: User 투표완료하면 userVote Collection에 넣기
-  Future addUserVote(UserVoteModel userVote) async {
+  Future addUserVote(
+    DatabaseAddressModel address,
+    UserVoteModel userVote,
+  ) async {
     try {
-      await _usersCollectionReference
-          .doc(userVote.uid)
-          .collection('userVote')
-          .doc(userVote.voteDate)
+      await address
+          .userVoteSeasonCollection()
+          .doc(address.date)
           .set(userVote.toJson());
 
       // batch.setData(_usersCollectionReference
@@ -106,23 +108,24 @@ class DatabaseService {
   }
 
   // 유저 선택 리스트 받아서 각 subVote 문서에 numVoted increment
-  Future countUserVote(List<int> voteSelected) async {
+  Future countUserVote(
+    DatabaseAddressModel address,
+    List<int> voteSelected,
+  ) async {
     try {
       var increment = FieldValue.increment(1);
       // voteSelected = [0, 1, 2, 0, 1]
-      for (var i = 0; i < voteSelected.length; i++) {
-        var vote = voteSelected[i];
+      for (int i = 0; i < voteSelected.length; i++) {
+        int vote = voteSelected[i];
         if (vote != 0) {
           if (vote == 1) {
-            _votesCollectionReference
-                .doc('20200901')
-                .collection('subVotes')
+            address
+                .votesSeasonSubVoteCollection()
                 .doc(i.toString())
                 .update({'numVoted0': increment});
           } else if (vote == 2) {
-            _votesCollectionReference
-                .doc('20200901')
-                .collection('subVotes')
+            address
+                .votesSeasonSubVoteCollection()
                 .doc(i.toString())
                 .update({'numVoted1': increment});
           }

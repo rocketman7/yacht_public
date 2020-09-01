@@ -25,12 +25,15 @@ class GgookViewModel extends BaseViewModel {
     DatabaseAddressModel address,
     UserVoteModel userVote,
   ) async {
-    await _databaseService.addUserVote(userVote);
+    await _databaseService.addUserVote(address, userVote);
     print("FUTURE CALLED");
   }
 
-  Future counterUserVote(List<int> voteSelected) async {
-    await _databaseService.countUserVote(voteSelected);
+  Future counterUserVote(
+    DatabaseAddressModel address,
+    List<int> voteSelected,
+  ) async {
+    await _databaseService.countUserVote(address, voteSelected);
   }
 
   Future<DatabaseAddressModel> getAddress() async {
