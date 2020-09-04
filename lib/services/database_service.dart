@@ -189,37 +189,33 @@ class DatabaseService {
   }
 
   Future postComment(
-      int subVoteIndex, VoteCommentModel voteCommentModel) async {
+      DatabaseAddressModel address, VoteCommentModel voteCommentModel) async {
     try {
-      await _postsCollectionReference
-          .doc('20200901')
-          .collection('subVote00' + (subVoteIndex + 1).toString())
-          .doc('post_' +
-              dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                  voteCommentModel.postDateTime.millisecondsSinceEpoch)))
+      await address
+          .postsSeasonSubVoteCollection()
+          .doc()
           .set(voteCommentModel.toJson());
     } catch (e) {}
   }
 
-  Future deleteComment(subVoteIndex, postDateTime) async {
+  Future deleteComment(
+    DatabaseAddressModel address,
+    String postUid,
+  ) async {
     try {
-      await _postsCollectionReference
-          .doc('20200901')
-          .collection('subVote00' + (subVoteIndex + 1).toString())
-          .doc('post_' +
-              dateFormat.format(DateTime.fromMillisecondsSinceEpoch(
-                  postDateTime.millisecondsSinceEpoch)))
-          .delete();
+      await address.postsSeasonSubVoteCollection().doc(postUid).delete();
     } catch (e) {}
   }
 
-  Stream<List<VoteCommentModel>> getPostList(int index) {
-    return _postsCollectionReference
-        .doc('20200901')
-        .collection('subVote00' + (index + 1).toString())
+  Stream<List<VoteCommentModel>> getPostList(DatabaseAddressModel address) {
+    return address
+        .postsSeasonSubVoteCollection()
+        .orderBy('postDateTime')
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((document) => VoteCommentModel.fromData(document.data()))
+            .map((document) {
+              return VoteCommentModel.fromData(document.id, document.data());
+            })
             .toList()
             .reversed
             .toList());

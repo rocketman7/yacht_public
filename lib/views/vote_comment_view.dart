@@ -19,8 +19,6 @@ import '../models/vote_chart_model.dart';
 import '../views/widgets/navigation_bars_widget.dart';
 
 class VoteCommentView extends StatefulWidget {
-  final String uid;
-  VoteCommentView(this.uid);
   @override
   _VoteCommentViewState createState() => _VoteCommentViewState();
 }
@@ -28,16 +26,19 @@ class VoteCommentView extends StatefulWidget {
 class _VoteCommentViewState extends State<VoteCommentView>
     with TickerProviderStateMixin {
   final DatabaseService _databaseService = locator<DatabaseService>();
-  final VoteCommentViewModel _viewModel = VoteCommentViewModel();
   final DialogService _dialogService = locator<DialogService>();
+  final VoteCommentViewModel _viewModel = VoteCommentViewModel();
+  final GlobalKey _globalKey = GlobalKey();
 
   Future<List<Object>> _getAllModel;
   Future<UserModel> _userModel;
   Future<DatabaseAddressModel> _addressModel;
   Future<VoteModel> _voteModel;
+  // Stream<List<VoteCommentModel>> _postStream;
   String uid;
 
   TabController _tabController;
+  ScrollController _controller;
 
   VoteCommentModel voteCommentModel;
   VoteModel voteModel;
@@ -61,6 +62,15 @@ class _VoteCommentViewState extends State<VoteCommentView>
   }
 
   @override
+  void didChangeDependencies() async {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    // List<Object> allModel = await _getAllModel;
+    // DatabaseAddressModel _address = allModel[0];
+    // _postStream = _viewModel.getPost(_address);
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _tabController.dispose();
@@ -73,7 +83,6 @@ class _VoteCommentViewState extends State<VoteCommentView>
     final TextEditingController _commentTextController =
         TextEditingController();
 
-    uid = widget.uid;
     DateTime now = DateTime.now();
     DateFormat dateFormat = DateFormat('yyyy-MM-dd_HH:mm:ss:SSS');
 
@@ -91,6 +100,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 print("snapShotData Called");
                 // getVoteTodayWidget(snapshot.data[1]);
                 // getVoteSelectedWidget(snapshot.data[1]);
+                uid = model.uid;
                 List<Object> _allModel = snapshot.data;
                 DatabaseAddressModel address = _allModel[0];
                 UserModel user = _allModel[1];
@@ -140,6 +150,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                   (index) => commentTabBarView(
                                     index,
                                     context,
+                                    address,
                                     vote,
                                     model,
                                   ),
@@ -152,10 +163,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
                             commentInput(
                               _tabController.index,
                               _commentTextController,
+                              address,
                               user,
-                              model,
                               vote,
                               userVote,
+                              model,
                             ),
                           ],
                         ),
@@ -175,26 +187,33 @@ class _VoteCommentViewState extends State<VoteCommentView>
   Widget commentTabBarView(
     int subVoteIndex,
     BuildContext context,
-    VoteModel voteModel,
-    VoteCommentViewModel model,
+    DatabaseAddressModel address,
+    VoteModel vote,
+    VoteCommentViewModel viewModel,
   ) {
+    address.subVote = subVoteIndex.toString();
+    // print("address" + address.date);
+
     // 차트에 표시할 포맷
     var f = new NumberFormat("##.0%");
 
     // 각 투표수 가져오기
-    var numVoted0 = voteModel.subVotes[subVoteIndex].numVoted0 ?? 0;
-    var numVoted1 = voteModel.subVotes[subVoteIndex].numVoted1 ?? 0;
+    var numVoted0 = vote.subVotes[subVoteIndex].numVoted0 ?? 0;
+    var numVoted1 = vote.subVotes[subVoteIndex].numVoted1 ?? 0;
 
     // 투표수 -> 퍼센티지 변환
-    double vote0Percentage = numVoted0 / (numVoted0 + numVoted1);
-    double vote1Percentage = numVoted1 / (numVoted0 + numVoted1);
+
+    double vote0Percentage =
+        (numVoted0 + numVoted1) == 0 ? 0 : numVoted0 / (numVoted0 + numVoted1);
+    double vote1Percentage =
+        (numVoted0 + numVoted1) == 0 ? 0 : numVoted1 / (numVoted0 + numVoted1);
 
     // Bar 차트에 들어갈 데이터 오브젝트
     var data = [
-      VoteChart(voteModel.subVotes[subVoteIndex].voteChoices[0],
-          vote0Percentage, Colors.red),
-      VoteChart(voteModel.subVotes[subVoteIndex].voteChoices[1],
-          vote1Percentage, Colors.blue),
+      VoteChart(vote.subVotes[subVoteIndex].voteChoices[0], vote0Percentage,
+          Colors.red),
+      VoteChart(vote.subVotes[subVoteIndex].voteChoices[1], vote1Percentage,
+          Colors.blue),
     ];
 
     // 차트에 들어갈 데이터, 레이블 요소들
@@ -259,14 +278,14 @@ class _VoteCommentViewState extends State<VoteCommentView>
         ),
       ),
     );
-
     return StreamBuilder(
         //StreamProvider
-        stream: _databaseService.getPostList(subVoteIndex),
+        stream: viewModel.getPost(address),
         //create: _databaseService.getPostList(),
         builder: (context, snapshotStream) {
           //builder (context, child) {}
           List<VoteCommentModel> commentModelList = snapshotStream.data;
+
           // List commentsList = Provider.of<List<VoteCommentModel>>(context);
           if (snapshotStream.data == null) {
             // print(snapshot.data);
@@ -278,7 +297,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 Padding(
                   padding: EdgeInsets.only(right: 60.0),
                   child: Text(
-                    voteModel.subVotes[subVoteIndex].voteChoices[0],
+                    vote.subVotes[subVoteIndex].voteChoices[0],
                     style: commentTitle(),
                   ),
                 ),
@@ -293,7 +312,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 Padding(
                   padding: EdgeInsets.only(left: 60.0),
                   child: Text(
-                    voteModel.subVotes[subVoteIndex].voteChoices[1],
+                    vote.subVotes[subVoteIndex].voteChoices[1],
                     style: commentTitle(),
                   ),
                 ),
@@ -314,12 +333,20 @@ class _VoteCommentViewState extends State<VoteCommentView>
                     // width: 320,
                     height: 350,
                     child: ListView.builder(
-                      itemCount: commentModelList.length,
-                      scrollDirection: Axis.vertical,
-                      reverse: true,
-                      itemBuilder: (context, index) => commentList(
-                          subVoteIndex, commentModelList[index], model),
-                    ),
+                        key: UniqueKey(),
+                        controller: _controller,
+                        // addAutomaticKeepAlives: true,
+                        itemCount: commentModelList.length,
+                        scrollDirection: Axis.vertical,
+                        reverse: true,
+                        itemBuilder: (context, index) {
+                          return commentList(
+                            subVoteIndex,
+                            address,
+                            commentModelList[index],
+                            viewModel,
+                          );
+                        }),
                   ),
                 ),
               ],
@@ -355,9 +382,12 @@ class _VoteCommentViewState extends State<VoteCommentView>
 // 댓글 리스트 위젯
   Widget commentList(
     int subVoteIndex,
-    VoteCommentModel voteCommentModel,
-    VoteCommentViewModel model,
+    DatabaseAddressModel address,
+    VoteCommentModel voteComment,
+    VoteCommentViewModel viewModel,
   ) {
+    address.subVote = subVoteIndex.toString();
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: gap_xxs),
       child: Row(
@@ -379,7 +409,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   Row(
                     children: <Widget>[
                       Text(
-                        voteCommentModel.userName,
+                        voteComment.userName,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -391,7 +421,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                         width: 50,
                       ),
                       Text(
-                        voteCommentModel.choice ?? '선택 안 함',
+                        voteComment.choice ?? '선택 안 함',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 13,
@@ -406,7 +436,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      voteCommentModel.postText,
+                      voteComment.postText,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -426,10 +456,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
             // spacing: 1,
             children: [
               Text(
-                voteCommentModel.postDateTime == null
+                voteComment.postDateTime == null
                     ? 'null'
                     : DateTime.now()
-                            .difference(voteCommentModel.postDateTime.toDate())
+                            .difference(voteComment.postDateTime.toDate())
                             .inMinutes
                             .toString() +
                         ' Mins ago',
@@ -440,12 +470,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   fontFamily: 'AdventPro',
                 ),
               ),
-              voteCommentModel.uid == widget.uid
+              voteComment.uid == uid
                   ? IconButton(
                       iconSize: 20,
                       onPressed: () {
-                        model.deleteComment(
-                            subVoteIndex, voteCommentModel.postDateTime);
+                        viewModel.deleteComment(address, voteComment.postUid);
                       },
                       icon: Icon(
                         Icons.delete_outline,
@@ -478,12 +507,13 @@ class _VoteCommentViewState extends State<VoteCommentView>
   Widget commentInput(
     int subVoteIndex,
     TextEditingController controller,
+    DatabaseAddressModel address,
     UserModel userModel,
-    VoteCommentViewModel model,
     VoteModel voteModel,
     UserVoteModel userVoteModel,
+    VoteCommentViewModel viewModel,
   ) {
-    print(subVoteIndex);
+    address.subVote = subVoteIndex.toString();
     // 유저 코멘트 넣는 창
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -537,9 +567,9 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
               // postDateTime: DateTime.now(),
             );
-            print(voteCommentModel.postDateTime);
-            model.postComments(
-              subVoteIndex,
+
+            viewModel.postComments(
+              address,
               voteCommentModel,
             );
             controller.text = '';

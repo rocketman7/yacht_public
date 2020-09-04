@@ -41,8 +41,7 @@ class Routers {
                 DialogManager(child: GgookView(routeSettings.arguments)));
       case 'voteComment':
         return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: VoteCommentView(routeSettings.arguments)));
+            builder: (context) => DialogManager(child: VoteCommentView()));
       case 'rank':
         return MaterialPageRoute(
             builder: (context) =>

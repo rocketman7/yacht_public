@@ -52,16 +52,35 @@ class VoteCommentViewModel extends BaseModel {
     return _address;
   }
 
+  Future<UserModel> getUser(String uid) async {
+    _user = await _databaseService.getUser(uid);
+    return _user;
+  }
+
+  Future<VoteModel> getVote(DatabaseAddressModel address) async {
+    _vote = await _databaseService.getVotes(address);
+    return _vote;
+  }
+
+  Future getUserVote(DatabaseAddressModel address) async {
+    _userVote = await _databaseService.getUserVote(address);
+    return _userVote;
+  }
+
+  Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
+    return _databaseService.getPostList(address);
+  }
+
   Future postComments(
-    subVoteIndex,
+    DatabaseAddressModel address,
     VoteCommentModel voteCommentModel,
   ) async {
-    await _databaseService.postComment(subVoteIndex, voteCommentModel);
+    await _databaseService.postComment(address, voteCommentModel);
   }
 
   Future deleteComment(
-    subVoteIndex,
-    postDateTime,
+    DatabaseAddressModel address,
+    String postUid,
   ) async {
     print("Dialog shown");
     var dialogResult = await _dialogService.showDialog(
@@ -72,24 +91,9 @@ class VoteCommentViewModel extends BaseModel {
 
     if (dialogResult.confirmed) {
       print("user Confirmed");
-      await _databaseService.deleteComment(subVoteIndex, postDateTime);
+      await _databaseService.deleteComment(address, postUid);
     } else {
       print("user Not Confirmed");
     }
-  }
-
-  Future<UserModel> getUser(String uid) async {
-    _user = await _databaseService.getUser(uid);
-    return _user;
-  }
-
-  Future<VoteModel> getVote(DatabaseAddressModel model) async {
-    _vote = await _databaseService.getVotes(model);
-    return _vote;
-  }
-
-  Future getUserVote(DatabaseAddressModel model) async {
-    _userVote = await _databaseService.getUserVote(model);
-    return _userVote;
   }
 }

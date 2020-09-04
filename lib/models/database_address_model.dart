@@ -11,7 +11,7 @@ class DatabaseAddressModel {
   final String date;
   final String category;
   final String season;
-  final String subVote;
+  String subVote;
 
   DatabaseAddressModel({
     this.uid,

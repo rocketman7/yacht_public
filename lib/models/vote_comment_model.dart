@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class VoteCommentModel {
+  final String postUid;
   final String uid;
   final String userName;
   final String postText;
@@ -10,6 +11,7 @@ class VoteCommentModel {
   final String choice;
 
   VoteCommentModel({
+    this.postUid,
     this.uid,
     this.userName,
     this.postText,
@@ -19,8 +21,9 @@ class VoteCommentModel {
     this.choice,
   });
 
-  VoteCommentModel.fromData(Map<String, dynamic> data)
-      : uid = data['uid'],
+  VoteCommentModel.fromData(String id, Map<String, dynamic> data)
+      : postUid = id,
+        uid = data['uid'],
         userName = data['userName'],
         postText = data['postText'],
         like = data['like'],

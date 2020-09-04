@@ -146,9 +146,8 @@ Widget ggookButton(
         print(tempList);
         model.addUserVoteDB(address, userVote);
         model.counterUserVote(address, userVote.voteSelected);
-        _navigationService.navigateWithArgTo(
+        _navigationService.navigateTo(
           'voteComment',
-          user.uid,
         );
       }
     },
