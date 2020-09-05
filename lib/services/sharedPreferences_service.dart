@@ -1,16 +1,22 @@
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
 
-class SharedPreferencesService {
+abstract class SharedPreferencesService {
+  Future<void> clearSharedPreferencesAll();
+  Future<dynamic> getSharedPreferencesValue(String key, Type type);
+  Future<void> setSharedPreferencesValue(String key, dynamic value);
+}
+
+class SharedPreferencesServiceLocal extends SharedPreferencesService {
   Future<SharedPreferences> _preferences = SharedPreferences.getInstance();
 
+  @override
   Future<void> clearSharedPreferencesAll() async {
     final SharedPreferences preferences = await _preferences;
     preferences.clear();
   }
 
-  Future<dynamic> getSharedPreferences(String key, Type type) async {
+  @override
+  Future getSharedPreferencesValue(String key, Type type) async {
     final SharedPreferences preferences = await _preferences;
 
     var temp = preferences.get(key);
@@ -29,10 +35,10 @@ class SharedPreferencesService {
           return '';
       }
     }
-    // return preferences.get(key);
   }
 
-  Future<void> setSharedPreferences(String key, var value) async {
+  @override
+  Future<void> setSharedPreferencesValue(String key, value) async {
     final SharedPreferences preferences = await _preferences;
 
     if (value is int) {

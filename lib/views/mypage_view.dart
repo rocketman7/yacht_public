@@ -12,49 +12,26 @@ import 'constants/size.dart';
 import 'loading_view.dart';
 import 'widgets/navigation_bars_widget.dart';
 
-import '../models/shared_preferences_const.dart';
+import '../models/sharedPreferences_const.dart';
 
 class MypageView extends StatefulWidget {
-  final String uid;
-  MypageView(this.uid);
-
   @override
   _MypageViewState createState() => _MypageViewState();
 }
 
 class _MypageViewState extends State<MypageView> {
-  String uid;
-
   final NavigationService _navigationService = locator<NavigationService>();
 
   final MypageViewModel _mypageViewModelforFuture = MypageViewModel();
-  //GlobalKey<NavigatorState> _globalKey;
-  bool _sPrefpushAlarm1, _sPrefpushAlarm2;
-  int _sPrefcounter;
-  Future<dynamic> _sPrefpushAlarm1Future,
-      _sPrefpushAlarm2Future,
-      _sPrefcounterFuture;
 
   @override
   void initState() {
     super.initState();
     //_globalKey = _navigationService.navigatorKey;
-
-    _sPrefpushAlarm1Future =
-        _mypageViewModelforFuture.getSharedPreferences(sPrefpushAlarm1, bool);
-    _sPrefpushAlarm2Future =
-        _mypageViewModelforFuture.getSharedPreferences(sPrefpushAlarm2, bool);
-    _sPrefcounterFuture =
-        _mypageViewModelforFuture.getSharedPreferences(sPrefcounter, int);
-
-    uid = widget.uid;
   }
 
   @override
   void dispose() {
-    // _mypageViewModelforFuture.setSharedPreferences(pushAlarm1, _pushAlarm1);
-    // _mypageViewModelforFuture.setSharedPreferences(pushAlarm2, _pushAlarm2);
-
     super.dispose();
   }
 
@@ -65,22 +42,16 @@ class _MypageViewState extends State<MypageView> {
 
     return ViewModelBuilder<MypageViewModel>.reactive(
         viewModelBuilder: () => MypageViewModel(),
+        onModelReady: (model) => model.getSharedPreferencesAll(),
         builder: (context, model, child) => MaterialApp(
                 home: FutureBuilder(
               future: Future.wait([
-                model.getUser(widget.uid),
-                _sPrefpushAlarm1Future,
-                _sPrefpushAlarm2Future,
-                _sPrefcounterFuture
+                model.getUser(),
               ]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserModel currentUserModel = snapshot.data[0];
-                  _sPrefpushAlarm1 = _sPrefpushAlarm1 ?? snapshot.data[1];
-                  _sPrefpushAlarm2 = _sPrefpushAlarm2 ?? snapshot.data[2];
-                  _sPrefcounter = _sPrefcounter ?? snapshot.data[3];
                   return Scaffold(
-                      //key: _globalKey,
                       backgroundColor: Colors.white,
                       body: SafeArea(
                           child: Padding(
@@ -92,52 +63,44 @@ class _MypageViewState extends State<MypageView> {
                             Expanded(
                               child: ListView(children: _mypageList(model)),
                             ),
-                            Switch(
-                              value: _sPrefpushAlarm1,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _sPrefpushAlarm1 = value;
-                                  _mypageViewModelforFuture
-                                      .setSharedPreferences(
-                                          sPrefpushAlarm1, _sPrefpushAlarm1);
-                                });
-                              },
+                            Row(
+                              children: [
+                                Text('푸쉬알람설정1 : '),
+                                Switch(
+                                    value: model.pushAlarm1,
+                                    onChanged: (bool value) {
+                                      model.pushAlarm1 = value;
+                                      model.setSharedPreferencesAll();
+                                    })
+                              ],
                             ),
-                            Switch(
-                              value: _sPrefpushAlarm2,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _sPrefpushAlarm2 = value;
-                                  _mypageViewModelforFuture
-                                      .setSharedPreferences(
-                                          sPrefpushAlarm2, _sPrefpushAlarm2);
-                                });
-                              },
+                            Row(
+                              children: [
+                                Text('푸쉬알람설정2 : '),
+                                Switch(
+                                    value: model.pushAlarm2,
+                                    onChanged: (bool value) {
+                                      model.pushAlarm2 = value;
+                                      model.setSharedPreferencesAll();
+                                    })
+                              ],
                             ),
-                            GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _sPrefcounter += 1;
-                                    _mypageViewModelforFuture
-                                        .setSharedPreferences(
-                                            sPrefcounter, _sPrefcounter);
-                                  });
-                                },
-                                child: Container(
-                                  height: 30,
-                                  child: Text('sPrefcounter : $_sPrefcounter'),
-                                )),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
+                            Row(
+                              children: [
+                                Text('유저카운터값 : ${model.userCounter}'),
+                                RaisedButton(
+                                    child: Text('클릭하여 1씩 증가'),
+                                    onPressed: () {
+                                      model.userCounter++;
+                                      model.setSharedPreferencesAll();
+                                    })
+                              ],
+                            ),
+                            RaisedButton(
+                                child: Text('클릭하여 Shared Preferences 초기화'),
+                                onPressed: () {
                                   model.clearSharedPreferencesAll();
-                                });
-                              },
-                              child: Container(
-                                height: 20,
-                                child: Text('clear pref'),
-                              ),
-                            ),
+                                }),
                             Container(
                               height: 30,
                               color: Colors.green[100],
@@ -191,7 +154,7 @@ class _MypageViewState extends State<MypageView> {
         GestureDetector(
           onTap: () {
             if (navigateTo != null)
-              _navigationService.navigateWithArgTo(navigateTo, uid);
+              _navigationService.navigateWithArgTo(navigateTo, model.uid);
           },
           child: Padding(
             padding: EdgeInsets.all(5.0),
