@@ -182,26 +182,24 @@ class _HomeViewState extends State<HomeView> {
                             // SizedBox(height: 20),
                             SizedBox(height: 20),
                             RaisedButton(
-                              onPressed: () {
-                                _navigationService.navigateWithArgTo(
-                                    'rank', model.uid.toString());
-                              },
+                              onPressed: () => widget.goToTab(3),
                               child: Text('rank 페이지 가기'),
                             ),
                             SizedBox(height: 20),
                             RaisedButton(
-                              onPressed: () {
-                                _navigationService
-                                    .navigateWithArgTo(
-                                        'mypage', model.uid.toString())
-                                    .then((value) {
-                                  // LoadingView(),
-                                  return setState(() => {
-                                        _getAllModel = _viewModel
-                                            .getAllModel(_viewModel.uid)
-                                      });
-                                });
-                              },
+                              onPressed: () => widget.goToTab(4),
+                              // () {
+                              //   _navigationService
+                              //       .navigateWithArgTo(
+                              //           'mypage', model.uid.toString())
+                              //       .then((value) {
+                              //     // LoadingView(),
+                              //     return setState(() => {
+                              //           _getAllModel = _viewModel
+                              //               .getAllModel(_viewModel.uid)
+                              //         });
+                              //   });
+                              // },
                               child: Text('mypage 페이지 가기'),
                             ),
                             SizedBox(

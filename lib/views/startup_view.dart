@@ -56,12 +56,14 @@ class _StartUpViewState extends State<StartUpView>
       HomeView(goToTab),
       VoteSelectView(),
       VoteCommentView(),
+      RankView(),
+      MypageView(),
     ];
     print("viewLIST DONE");
 
     _tabController = TabController(
       initialIndex: 0,
-      length: 3,
+      length: 5,
       vsync: this,
     );
     if (!isDisposed) {
