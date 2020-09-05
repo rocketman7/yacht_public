@@ -36,7 +36,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
   Future<VoteModel> _voteModel;
   // Stream<List<VoteCommentModel>> _postStream;
   String uid;
-
+  bool isDisposed = false;
   TabController _tabController;
   ScrollController _controller;
 
@@ -48,6 +48,13 @@ class _VoteCommentViewState extends State<VoteCommentView>
   // List<int> voteList;
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     // 주제 선택하는 좌우 스크롤 메뉴의 컨트롤러
@@ -55,9 +62,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
     _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(() {
-      setState(() {
-        _currentIndex = _tabController.index;
-      });
+      if (!isDisposed) {
+        setState(() {
+          _currentIndex = _tabController.index;
+        });
+      }
     });
   }
 
@@ -74,6 +83,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
   void dispose() {
     super.dispose();
     _tabController.dispose();
+    isDisposed = true;
   }
 
   @override
@@ -109,72 +119,81 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 print('models ready');
 
                 return Scaffold(
-                  bottomNavigationBar: bottomNavigationBar(context),
-                  backgroundColor: Color(0xFF363636),
-                  body: SafeArea(
-                    bottom: false,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: displayRatio > 1.85 ? gap_l : gap_xs,
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            topBar(user),
-                            SizedBox(
-                              height: displayRatio > 1.85 ? gap_l : gap_xs,
-                            ),
-// 피드 종목 선택 리스트뷰
-                            TabBar(
-                              controller: _tabController,
-                              indicatorColor: Colors.red,
-                              labelColor: Colors.blue,
-                              unselectedLabelColor: Colors.white,
-                              isScrollable: true,
-                              tabs: List.generate(
-                                5,
-                                (index) => subVoteList(
-                                  vote.subVotes[index].title.toString(),
-                                ),
+                  body: Container(
+                    color: Colors.black,
+
+                    // bottomNavigationBar: GgookBottomNaviBar(),
+                    // backgroundColor: Color(0xFF363636),
+                    child: SafeArea(
+                      bottom: false,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: displayRatio > 1.85 ? gap_l : gap_xs,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              // topBar(user),
+                              SizedBox(
+                                height: displayRatio > 1.85 ? gap_l : gap_xs,
                               ),
-                            ),
-                            SizedBox(
-                              height: gap_xs,
-                            ),
-                            Container(
-                              height: 570,
-                              child: TabBarView(
+// 피드 종목 선택 리스트뷰
+                              TabBar(
                                 controller: _tabController,
-                                children: List.generate(
+                                indicatorColor: Colors.red,
+                                labelColor: Colors.blue,
+                                unselectedLabelColor: Colors.white,
+                                isScrollable: true,
+                                tabs: List.generate(
                                   5,
-                                  (index) => commentTabBarView(
-                                    index,
-                                    context,
-                                    address,
-                                    vote,
-                                    model,
+                                  (index) => subVoteList(
+                                    vote.subVotes[index].title.toString(),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: gap_xs,
-                            ),
-                            commentInput(
-                              _tabController.index,
-                              _commentTextController,
-                              address,
-                              user,
-                              vote,
-                              userVote,
-                              model,
-                            ),
-                          ],
+                              SizedBox(
+                                height: gap_xs,
+                              ),
+                              Container(
+                                height: 570,
+                                child: TabBarView(
+                                  controller: _tabController,
+                                  children: List.generate(
+                                    5,
+                                    (index) => commentTabBarView(
+                                      index,
+                                      context,
+                                      address,
+                                      vote,
+                                      model,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: gap_xs,
+                              ),
+                              commentInput(
+                                _tabController.index,
+                                _commentTextController,
+                                address,
+                                user,
+                                vote,
+                                userVote,
+                                model,
+                              ),
+                              SizedBox(
+                                height: gap_xxxl,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                    // backgroundColor: Color(0XFF051417),
                   ),
-                  // backgroundColor: Color(0XFF051417),
                 );
               } else {
                 return LoadingView();

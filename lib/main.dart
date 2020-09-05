@@ -24,12 +24,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // key: navBarGlobalKey,
       navigatorKey: locator<NavigationService>().navigatorKey,
       onGenerateRoute: Routers.generateRoute,
-      home: DialogManager(child: StartUpView()),
+      home: DialogManager(
+          child: StartUpView(
+        key: navBarGlobalKey,
+      )),
     );
   }
 }

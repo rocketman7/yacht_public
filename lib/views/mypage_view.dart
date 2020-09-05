@@ -77,48 +77,47 @@ class _MypageViewState extends State<MypageView> {
                   _pushAlarm1 = _pushAlarm1 ?? snapshot.data[1];
                   _pushAlarm2 = _pushAlarm2 ?? snapshot.data[2];
                   return Scaffold(
-                      //key: _globalKey,
-                      backgroundColor: Colors.white,
-                      body: SafeArea(
-                          child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: displayRatio > 1.85 ? gap_l : gap_xs),
-                        child: Column(
-                          children: [
-                            topBar(currentUserModel),
-                            Expanded(
-                              child: ListView(children: _mypageList(model)),
-                            ),
-                            Switch(
-                              value: _pushAlarm1,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _pushAlarm1 = value;
-                                  _mypageViewModelforFuture
-                                      .setSharedPreferences(
-                                          pushAlarm1, _pushAlarm1);
-                                });
-                              },
-                            ),
-                            Switch(
-                              value: _pushAlarm2,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _pushAlarm2 = value;
-                                  _mypageViewModelforFuture
-                                      .setSharedPreferences(
-                                          pushAlarm2, _pushAlarm2);
-                                });
-                              },
-                            ),
-                            Container(
-                              height: 30,
-                              color: Colors.green[100],
-                            )
-                          ],
-                        ),
-                      )),
-                      bottomNavigationBar: bottomNavigationBar(context));
+                    //key: _globalKey,
+                    backgroundColor: Colors.white,
+                    body: SafeArea(
+                        child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: displayRatio > 1.85 ? gap_l : gap_xs),
+                      child: Column(
+                        children: [
+                          // topBar(currentUserModel),
+                          Expanded(
+                            child: ListView(children: _mypageList(model)),
+                          ),
+                          Switch(
+                            value: _pushAlarm1,
+                            onChanged: (bool value) {
+                              setState(() {
+                                _pushAlarm1 = value;
+                                _mypageViewModelforFuture.setSharedPreferences(
+                                    pushAlarm1, _pushAlarm1);
+                              });
+                            },
+                          ),
+                          Switch(
+                            value: _pushAlarm2,
+                            onChanged: (bool value) {
+                              setState(() {
+                                _pushAlarm2 = value;
+                                _mypageViewModelforFuture.setSharedPreferences(
+                                    pushAlarm2, _pushAlarm2);
+                              });
+                            },
+                          ),
+                          Container(
+                            height: 30,
+                            color: Colors.green[100],
+                          )
+                        ],
+                      ),
+                    )),
+                    bottomNavigationBar: GgookBottomNaviBar(),
+                  );
                 } else {
                   return LoadingView();
                 }

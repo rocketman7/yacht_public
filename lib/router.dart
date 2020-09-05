@@ -23,7 +23,8 @@ class Routers {
             builder: (context) => DialogManager(child: PhoneAuthView()));
       case 'loggedIn':
         return MaterialPageRoute(
-            builder: (context) => DialogManager(child: HomeView()));
+            builder: (context) =>
+                DialogManager(child: HomeView(routeSettings.arguments)));
       case 'register':
         return MaterialPageRoute(
             builder: (context) =>
@@ -33,8 +34,7 @@ class Routers {
             builder: (context) => DialogManager(child: LoginView()));
       case 'voteSelect':
         return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: VoteSelectView(routeSettings.arguments)));
+            builder: (context) => DialogManager(child: VoteSelectView()));
       case 'ggook':
         return MaterialPageRoute(
             builder: (context) =>

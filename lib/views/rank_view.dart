@@ -56,13 +56,13 @@ class _RankViewState extends State<RankView> with TickerProviderStateMixin {
               if (snapshot.hasData) {
                 UserModel currentUserModel = snapshot.data[0];
                 return Scaffold(
-                  bottomNavigationBar: bottomNavigationBar(context),
+                  bottomNavigationBar: GgookBottomNaviBar(),
                   backgroundColor: Color(0xFF363636),
                   body: SafeArea(
                     bottom: false,
                     child: Column(
                       children: <Widget>[
-                        topBar(currentUserModel),
+                        // topBar(currentUserModel),
                         SizedBox(
                           height: displayRatio > 1.85 ? gap_l : gap_xs,
                         ),

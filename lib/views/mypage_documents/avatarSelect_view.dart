@@ -62,7 +62,7 @@ class _AvatarSelectViewState extends State<AvatarSelectView> {
                             horizontal: displayRatio > 1.85 ? gap_l : gap_xs),
                         child: Column(
                           children: [
-                            topBar(currentUserModel),
+                            // topBar(currentUserModel),
                             CircleAvatar(
                               radius: (size.width ~/ 4).toDouble() / 2,
                               backgroundColor: Colors.white70,

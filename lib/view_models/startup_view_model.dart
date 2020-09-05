@@ -12,6 +12,10 @@ import '../view_models/base_model.dart';
 class StartUpViewModel extends StreamViewModel<User> {
   final AuthService _authService = locator<AuthService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  int index;
+  StartUpViewModel() {
+    index = 0;
+  }
 
   @override
   // TODO: implement stream
@@ -32,7 +36,7 @@ class StartUpViewModel extends StreamViewModel<User> {
       // return LoginView();
       _navigationService.navigateTo('login');
     } else {
-      _navigationService.navigateTo('loggedIn');
+      // _navigationService.navigateTo('loggedIn');
     }
   }
   // Stream<User> user;
