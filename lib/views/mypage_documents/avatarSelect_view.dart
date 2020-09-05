@@ -12,7 +12,7 @@ import '../constants/size.dart';
 import '../loading_view.dart';
 import '../widgets/navigation_bars_widget.dart';
 
-import '../../models/shared_preferences_const.dart';
+import '../../models/sharedPreferences_const.dart';
 
 class AvatarSelectView extends StatefulWidget {
   final String uid;
@@ -47,7 +47,7 @@ class _AvatarSelectViewState extends State<AvatarSelectView> {
         builder: (context, model, child) => MaterialApp(
                 home: FutureBuilder(
               future: Future.wait([
-                model.getUser(widget.uid),
+                model.getUser(),
                 model.downloadImage(),
               ]),
               builder: (context, snapshot) {

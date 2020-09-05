@@ -44,12 +44,10 @@ class Routers {
             builder: (context) => DialogManager(child: VoteCommentView()));
       case 'rank':
         return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: RankView(routeSettings.arguments)));
+            builder: (context) => DialogManager(child: RankView()));
       case 'mypage':
         return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: MypageView(routeSettings.arguments)));
+            builder: (context) => DialogManager(child: MypageView()));
       case 'mypage_termsofuse':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: TermsOfUseView()));

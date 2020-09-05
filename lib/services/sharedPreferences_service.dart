@@ -1,22 +1,44 @@
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
 
-class SharedPreferencesService {
+abstract class SharedPreferencesService {
+  Future<void> clearSharedPreferencesAll();
+  Future<dynamic> getSharedPreferencesValue(String key, Type type);
+  Future<void> setSharedPreferencesValue(String key, dynamic value);
+}
+
+class SharedPreferencesServiceLocal extends SharedPreferencesService {
   Future<SharedPreferences> _preferences = SharedPreferences.getInstance();
 
+  @override
   Future<void> clearSharedPreferencesAll() async {
     final SharedPreferences preferences = await _preferences;
     preferences.clear();
   }
 
-  Future<dynamic> getSharedPreferences(String key) async {
+  @override
+  Future getSharedPreferencesValue(String key, Type type) async {
     final SharedPreferences preferences = await _preferences;
 
-    return preferences.get(key);
+    var temp = preferences.get(key);
+
+    if (temp != null) {
+      return temp;
+    } else {
+      switch (type) {
+        case bool:
+          return false;
+        case int:
+          return 0;
+        case double:
+          return 0.0;
+        case String:
+          return '';
+      }
+    }
   }
 
-  Future<void> setSharedPreferences(String key, var value) async {
+  @override
+  Future<void> setSharedPreferencesValue(String key, value) async {
     final SharedPreferences preferences = await _preferences;
 
     if (value is int) {

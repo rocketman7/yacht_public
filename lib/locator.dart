@@ -16,5 +16,6 @@ void setupLocator() {
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => StorageService());
-  locator.registerLazySingleton(() => SharedPreferencesService());
+  locator.registerLazySingleton<SharedPreferencesService>(
+      () => SharedPreferencesServiceLocal());
 }

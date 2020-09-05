@@ -12,44 +12,26 @@ import 'constants/size.dart';
 import 'loading_view.dart';
 import 'widgets/navigation_bars_widget.dart';
 
-import '../models/shared_preferences_const.dart';
+import '../models/sharedPreferences_const.dart';
 
 class MypageView extends StatefulWidget {
-  final String uid;
-  MypageView(this.uid);
-
   @override
   _MypageViewState createState() => _MypageViewState();
 }
 
 class _MypageViewState extends State<MypageView> {
-  String uid;
-
   final NavigationService _navigationService = locator<NavigationService>();
 
   final MypageViewModel _mypageViewModelforFuture = MypageViewModel();
-  //GlobalKey<NavigatorState> _globalKey;
-  bool _pushAlarm1, _pushAlarm2;
-  Future<dynamic> _pushAlarm1Future, _pushAlarm2Future;
 
   @override
   void initState() {
     super.initState();
     //_globalKey = _navigationService.navigatorKey;
-
-    _pushAlarm1Future =
-        _mypageViewModelforFuture.getSharedPreferences(pushAlarm1);
-    _pushAlarm2Future =
-        _mypageViewModelforFuture.getSharedPreferences(pushAlarm2);
-
-    uid = widget.uid;
   }
 
   @override
   void dispose() {
-    // _mypageViewModelforFuture.setSharedPreferences(pushAlarm1, _pushAlarm1);
-    // _mypageViewModelforFuture.setSharedPreferences(pushAlarm2, _pushAlarm2);
-
     super.dispose();
   }
 
@@ -60,12 +42,11 @@ class _MypageViewState extends State<MypageView> {
 
     return ViewModelBuilder<MypageViewModel>.reactive(
         viewModelBuilder: () => MypageViewModel(),
+        onModelReady: (model) => model.getSharedPreferencesAll(),
         builder: (context, model, child) => MaterialApp(
                 home: FutureBuilder(
               future: Future.wait([
-                model.getUser(widget.uid),
-                _pushAlarm1Future,
-                _pushAlarm2Future,
+                model.getUser(),
               ]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -74,50 +55,64 @@ class _MypageViewState extends State<MypageView> {
                   //   _pushAlarm2 = false;
                   // }
                   UserModel currentUserModel = snapshot.data[0];
-                  _pushAlarm1 = _pushAlarm1 ?? snapshot.data[1];
-                  _pushAlarm2 = _pushAlarm2 ?? snapshot.data[2];
                   return Scaffold(
-                    //key: _globalKey,
-                    backgroundColor: Colors.white,
-                    body: SafeArea(
-                        child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: displayRatio > 1.85 ? gap_l : gap_xs),
-                      child: Column(
-                        children: [
-                          // topBar(currentUserModel),
-                          Expanded(
-                            child: ListView(children: _mypageList(model)),
-                          ),
-                          Switch(
-                            value: _pushAlarm1,
-                            onChanged: (bool value) {
-                              setState(() {
-                                _pushAlarm1 = value;
-                                _mypageViewModelforFuture.setSharedPreferences(
-                                    pushAlarm1, _pushAlarm1);
-                              });
-                            },
-                          ),
-                          Switch(
-                            value: _pushAlarm2,
-                            onChanged: (bool value) {
-                              setState(() {
-                                _pushAlarm2 = value;
-                                _mypageViewModelforFuture.setSharedPreferences(
-                                    pushAlarm2, _pushAlarm2);
-                              });
-                            },
-                          ),
-                          Container(
-                            height: 30,
-                            color: Colors.green[100],
-                          )
-                        ],
-                      ),
-                    )),
-                    bottomNavigationBar: GgookBottomNaviBar(),
-                  );
+                      backgroundColor: Colors.white,
+                      body: SafeArea(
+                          child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: displayRatio > 1.85 ? gap_l : gap_xs),
+                        child: Column(
+                          children: [
+                            // topBar(currentUserModel),
+                            Expanded(
+                              child: ListView(children: _mypageList(model)),
+                            ),
+                            Row(
+                              children: [
+                                Text('푸쉬알람설정1 : '),
+                                Switch(
+                                    value: model.pushAlarm1,
+                                    onChanged: (bool value) {
+                                      model.pushAlarm1 = value;
+                                      model.setSharedPreferencesAll();
+                                    })
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('푸쉬알람설정2 : '),
+                                Switch(
+                                    value: model.pushAlarm2,
+                                    onChanged: (bool value) {
+                                      model.pushAlarm2 = value;
+                                      model.setSharedPreferencesAll();
+                                    })
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('유저카운터값 : ${model.userCounter}'),
+                                RaisedButton(
+                                    child: Text('클릭하여 1씩 증가'),
+                                    onPressed: () {
+                                      model.userCounter++;
+                                      model.setSharedPreferencesAll();
+                                    })
+                              ],
+                            ),
+                            RaisedButton(
+                                child: Text('클릭하여 Shared Preferences 초기화'),
+                                onPressed: () {
+                                  model.clearSharedPreferencesAll();
+                                }),
+                            Container(
+                              height: 30,
+                              color: Colors.green[100],
+                            )
+                          ],
+                        ),
+                      )),
+                      bottomNavigationBar: bottomNavigationBar(context));
                 } else {
                   return LoadingView();
                 }
@@ -163,7 +158,7 @@ class _MypageViewState extends State<MypageView> {
         GestureDetector(
           onTap: () {
             if (navigateTo != null)
-              _navigationService.navigateWithArgTo(navigateTo, uid);
+              _navigationService.navigateWithArgTo(navigateTo, model.uid);
           },
           child: Padding(
             padding: EdgeInsets.all(5.0),

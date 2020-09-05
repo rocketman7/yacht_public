@@ -13,6 +13,8 @@ import '../models/vote_model.dart';
 
 import '../models/temp_address_constant.dart';
 
+import 'dart:math';
+
 class DatabaseService {
   FirebaseFirestore _databaseService = FirebaseFirestore.instance;
   FirebaseFirestore get databaseService => _databaseService;
@@ -221,20 +223,51 @@ class DatabaseService {
             .toList());
   }
 
-  // Read: Rank 정보 Rank Collection으로부터 읽기
-  Stream<List<RankModel>> getRankList() {
-    return _ranksCollectionReference
+  // Read: ranks collection 정보 읽어오기. 배치될 때에만 바뀌는 정보이므로 Future로 처리
+  Future<List<RankModel>> getRankList() async {
+    try {
+      List<RankModel> rankList = [];
+
+      await ranksCollectionReference
+          .doc('koreaStockStandard')
+          .collection('season001')
+          .doc('20200901')
+          .collection('20200901')
+          .orderBy('combo', descending: true)
+          .get()
+          .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+                rankList.add(RankModel.fromData(element.data()));
+              }));
+
+      return rankList;
+    } catch (e) {
+      print('rankList load error: ${e.toString()}');
+
+      return null;
+    }
+  }
+
+  Future<void> addRank() {
+    //for (i = 1; i < 101; i++) {
+    Random rnd;
+    rnd = new Random();
+    int rndCombo = 0 + rnd.nextInt(39);
+
+    ranksCollectionReference
         .doc('koreaStockStandard')
         .collection('season001')
         .doc('20200901')
         .collection('20200901')
-        //.orderBy('combo')
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((document) => RankModel.fromData(document.data()))
-            .toList()
-            .reversed
-            .toList());
+        .add({
+          'uid': 'm2UUvxsAwfdLFP4RB8q4SgkaNgr2',
+          'userName': 'csejun10',
+          'combo': rndCombo
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+    //}
+
+    return null;
   }
 
   Future<List<dynamic>> getAllUserNameSnapshot() async {
