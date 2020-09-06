@@ -31,10 +31,7 @@ class _MyAppState extends State<MyApp> {
       // key: navBarGlobalKey,
       navigatorKey: locator<NavigationService>().navigatorKey,
       onGenerateRoute: Routers.generateRoute,
-      home: DialogManager(
-          child: StartUpView(
-        key: navBarGlobalKey,
-      )),
+      home: DialogManager(child: StartUpView(0)),
     );
   }
 }

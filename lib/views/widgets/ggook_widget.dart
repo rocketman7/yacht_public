@@ -154,9 +154,7 @@ Widget ggookButton(
         print(tempList);
         model.addUserVoteDB(address, userVote);
         model.counterUserVote(address, userVote.voteSelected);
-        _navigationService.navigateTo(
-          'voteComment',
-        );
+        _navigationService.navigateWithArgTo('startup', 2);
       }
     },
     elevation: 2.0,

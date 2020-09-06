@@ -57,10 +57,12 @@ class Routers {
                 child: AvatarSelectView(routeSettings.arguments)));
       case 'startup':
         return MaterialPageRoute(
-            builder: (context) => DialogManager(child: StartUpView()));
+            builder: (context) =>
+                DialogManager(child: StartUpView(routeSettings.arguments)));
       default:
         return MaterialPageRoute(
-            builder: (context) => DialogManager(child: StartUpView()));
+            builder: (context) =>
+                DialogManager(child: StartUpView(routeSettings.arguments)));
     }
   }
 }
