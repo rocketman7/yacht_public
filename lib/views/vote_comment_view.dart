@@ -60,7 +60,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
     // 주제 선택하는 좌우 스크롤 메뉴의 컨트롤러
     _getAllModel = _viewModel.getAllModel(_viewModel.uid);
 
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       if (!isDisposed) {
         setState(() {
@@ -133,7 +133,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                         child: SingleChildScrollView(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               // topBar(user),
                               SizedBox(
@@ -147,7 +147,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                 unselectedLabelColor: Colors.white,
                                 isScrollable: true,
                                 tabs: List.generate(
-                                  5,
+                                  3,
                                   (index) => subVoteList(
                                     vote.subVotes[index].title.toString(),
                                   ),
@@ -161,7 +161,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                 child: TabBarView(
                                   controller: _tabController,
                                   children: List.generate(
-                                    5,
+                                    3,
                                     (index) => commentTabBarView(
                                       index,
                                       context,
