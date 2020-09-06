@@ -49,12 +49,10 @@ class Routers {
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: MypageView()));
       case 'mypage_termsofuse':
-        return MaterialPageRoute(
-            builder: (context) => DialogManager(child: TermsOfUseView()));
+        return MaterialPageRoute(builder: (context) => TermsOfUseView());
       case 'mypage_avatarselect':
         return MaterialPageRoute(
-            builder: (context) => DialogManager(
-                child: AvatarSelectView(routeSettings.arguments)));
+            builder: (context) => MypageAvatarSelectView());
       default:
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: StartUpView()));

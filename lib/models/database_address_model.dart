@@ -109,7 +109,9 @@ class DatabaseAddressModel {
   // ranks collection의 season subCollection의 날짜 data Ref.
   CollectionReference ranksSeasonDateCollection() {
     return _databaseService.ranksCollectionReference
-        .doc(season)
+        .doc(category)
+        .collection(season)
+        .doc(date)
         .collection(date);
   }
 }

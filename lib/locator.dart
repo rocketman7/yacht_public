@@ -5,6 +5,7 @@ import 'services/navigation_service.dart';
 import 'services/dialog_service.dart';
 import 'services/storage_service.dart';
 import 'services/sharedPreferences_service.dart';
+import 'services/customCacheManager_service.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -15,7 +16,8 @@ void setupLocator() {
   locator.registerLazySingleton(() => DatabaseService());
   locator.registerLazySingleton(() => NavigationService());
   locator.registerLazySingleton(() => DialogService());
-  locator.registerLazySingleton(() => StorageService());
+  locator.registerLazySingleton<StorageService>(() => StorageServiceFirebase());
   locator.registerLazySingleton<SharedPreferencesService>(
       () => SharedPreferencesServiceLocal());
+  locator.registerLazySingleton(() => CustomCacheManagerService());
 }

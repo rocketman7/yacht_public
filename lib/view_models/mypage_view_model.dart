@@ -57,11 +57,6 @@ class MypageViewModel extends ChangeNotifier {
     }
   }
 
-  Future downloadImage() async {
-    _downloadAddress = await _storageService.downloadImage();
-    return _downloadAddress;
-  }
-
   // shared preferences method
   void clearSharedPreferencesAll() {
     _sharedPreferencesService.clearSharedPreferencesAll();
@@ -92,5 +87,9 @@ class MypageViewModel extends ChangeNotifier {
         userCounterkey, userCounter);
 
     notifyListeners();
+  }
+
+  void navigateToMypageToDown(String routeName) {
+    _navigationService.navigateTo(routeName);
   }
 }

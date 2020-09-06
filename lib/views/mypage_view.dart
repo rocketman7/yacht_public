@@ -12,8 +12,6 @@ import 'constants/size.dart';
 import 'loading_view.dart';
 import 'widgets/navigation_bars_widget.dart';
 
-import '../models/sharedPreferences_const.dart';
-
 class MypageView extends StatefulWidget {
   @override
   _MypageViewState createState() => _MypageViewState();
@@ -21,8 +19,6 @@ class MypageView extends StatefulWidget {
 
 class _MypageViewState extends State<MypageView> {
   final NavigationService _navigationService = locator<NavigationService>();
-
-  final MypageViewModel _mypageViewModelforFuture = MypageViewModel();
 
   @override
   void initState() {
@@ -50,11 +46,6 @@ class _MypageViewState extends State<MypageView> {
               ]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  // if (snapshot.data[1] == null) {
-                  //   _pushAlarm1 = false;
-                  //   _pushAlarm2 = false;
-                  // }
-                  UserModel currentUserModel = snapshot.data[0];
                   return Scaffold(
                       backgroundColor: Colors.white,
                       body: SafeArea(
@@ -63,7 +54,6 @@ class _MypageViewState extends State<MypageView> {
                             horizontal: displayRatio > 1.85 ? gap_l : gap_xs),
                         child: Column(
                           children: [
-                            // topBar(currentUserModel),
                             Expanded(
                               child: ListView(children: _mypageList(model)),
                             ),
@@ -125,7 +115,7 @@ class _MypageViewState extends State<MypageView> {
 
     result.add(_mypageListItem(model, '(o)구현완료, (x)나중에 구현해야', null));
     result.add(_mypageListItem(model, '', null));
-    result.add(_mypageListItem(model, '내사진 변경', 'mypage_avatarselect'));
+    result.add(_mypageListItem(model, '(o)내사진 변경', 'mypage_avatarselect'));
     result.add(_mypageListItem(model, '닉네임 변경', null));
     result.add(_mypageListItem(model, '(x)내 상금현황 보러가기', null));
     result.add(_mypageListItem(model, '(x)아이디(이메일)', null));
@@ -157,8 +147,7 @@ class _MypageViewState extends State<MypageView> {
       children: [
         GestureDetector(
           onTap: () {
-            if (navigateTo != null)
-              _navigationService.navigateWithArgTo(navigateTo, model.uid);
+            if (navigateTo != null) model.navigateToMypageToDown(navigateTo);
           },
           child: Padding(
             padding: EdgeInsets.all(5.0),
