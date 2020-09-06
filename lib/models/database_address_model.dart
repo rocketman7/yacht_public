@@ -114,4 +114,8 @@ class DatabaseAddressModel {
         .doc(date)
         .collection(date);
   }
+
+  DocumentReference adminOpenSeason() {
+    return _databaseService.adminCollectionReference.doc('openSeason');
+  }
 }

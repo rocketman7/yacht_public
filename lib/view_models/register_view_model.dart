@@ -11,6 +11,7 @@ class RegisterViewModel extends BaseModel {
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final DialogService _dialogService = locator<DialogService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   Map<String, dynamic> userData;
 
   Future register({
@@ -41,7 +42,7 @@ class RegisterViewModel extends BaseModel {
         if (result) {
           print('Register Success');
           // HomeView로 이동
-          locator<NavigationService>().navigateTo('loggedIn');
+          _navigationService.navigateTo('startup');
         } else {
           // error 다뤄야함.
           print('Register Failure');

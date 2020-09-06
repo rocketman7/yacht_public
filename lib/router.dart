@@ -53,9 +53,14 @@ class Routers {
       case 'mypage_avatarselect':
         return MaterialPageRoute(
             builder: (context) => MypageAvatarSelectView());
+      case 'startup':
+        return MaterialPageRoute(
+            builder: (context) =>
+                DialogManager(child: StartUpView(routeSettings.arguments)));
       default:
         return MaterialPageRoute(
-            builder: (context) => DialogManager(child: StartUpView()));
+            builder: (context) =>
+                DialogManager(child: StartUpView(routeSettings.arguments)));
     }
   }
 }

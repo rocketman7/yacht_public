@@ -16,7 +16,9 @@ import '../view_models/startup_view_model.dart';
 import '../views/loading_view.dart';
 
 class StartUpView extends StatefulWidget {
-  StartUpView({Key key}) : super(key: key);
+  final int startIdx;
+  const StartUpView(this.startIdx);
+
   @override
   _StartUpViewState createState() => _StartUpViewState();
 }
@@ -26,8 +28,9 @@ class _StartUpViewState extends State<StartUpView>
   NavigationService _navigationService = locator<NavigationService>();
 
   final GlobalKey navBarGlobalKey = GlobalKey<NavigatorState>();
+  int _startIdx;
 
-  int _selectedIndex = 0;
+  int _selectedIndex;
   TabController _tabController;
   bool isDisposed = false;
   List<Widget> _viewList;
@@ -50,18 +53,22 @@ class _StartUpViewState extends State<StartUpView>
 
   @override
   void initState() {
+    _startIdx = widget.startIdx ?? 0;
+    _selectedIndex = _startIdx;
     // TODO: implement initState
     super.initState();
     _viewList = <Widget>[
       HomeView(goToTab),
       VoteSelectView(),
       VoteCommentView(),
+      RankView(),
+      MypageView(),
     ];
     print("viewLIST DONE");
 
     _tabController = TabController(
-      initialIndex: 0,
-      length: 3,
+      initialIndex: _startIdx ?? 0,
+      length: 5,
       vsync: this,
     );
     if (!isDisposed) {
@@ -96,6 +103,8 @@ class _StartUpViewState extends State<StartUpView>
       // onModelReady 콜 하고 아래 빌드. handleStartUpLogi이 Future함수 이므로 처리될 동안 LoadingView 빌드
       viewModelBuilder: () => StartUpViewModel(),
       builder: (context, model, child) {
+        print(widget.startIdx);
+
         print(_selectedIndex);
         return Scaffold(
           body: TabBarView(

@@ -25,11 +25,23 @@ class VoteSelectViewModel extends FutureViewModel {
   DatabaseAddressModel _address;
   VoteModel _vote;
   List<SubVote> _subVote;
+  Timer _everySecond;
+  DateTime _now;
+  bool _isGgookAvailable = true;
+
+  List<String> timeLeftArr = ["", "", ""];
+
+  Timer get everySecond => _everySecond;
+
+  DateTime getNow() {
+    return DateTime.now();
+  }
 
   VoteSelectViewModel() {
     // _authService.signOut();
 
     uid = _authService.auth.currentUser.uid;
+    _now = getNow();
     // getUser();
   }
 

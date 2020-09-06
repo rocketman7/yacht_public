@@ -29,7 +29,7 @@ class LoginViewModel extends BaseModel {
         // print('Login Success');
         // loggedIn 화면으로 route (HomeView)
         _navigationService.navigateTo(
-          'loggedIn',
+          'startup',
         );
       } else {
         print('Login Failure');
