@@ -51,7 +51,7 @@ Widget ggookWidget(
             height: gap_m,
           ),
           Text(
-            vote.subVotes[listSelected[idx]].description,
+            vote.subVotes[listSelected[idx]].description ?? "",
             style: TextStyle(
               color: Color(0xff5F5F5F),
               fontSize: 20,
@@ -81,6 +81,7 @@ Widget ggookWidget(
             vote,
             listSelected,
             idx,
+            0,
             userVote,
             model,
           )),
@@ -93,6 +94,7 @@ Widget ggookWidget(
             vote,
             listSelected,
             idx,
+            1,
             userVote,
             model,
           )),
@@ -107,6 +109,7 @@ Widget ggookButton(
   VoteModel vote,
   List<int> listSelected,
   int idx,
+  int choice,
   UserVoteModel userVote,
   GgookViewModel model,
 ) {
@@ -118,12 +121,15 @@ Widget ggookButton(
       print(idx);
       print(listSelected.length);
       print('vote' + (idx + 2).toString());
+      // 남은 투표 더 있을 때
       if (idx + 1 < listSelected.length) {
         List<int> tempList = userVote.voteSelected;
-        tempList.fillRange(listSelected[idx], listSelected[idx] + 1, 2);
+        print(tempList);
+        tempList.fillRange(
+            listSelected[idx], listSelected[idx] + 1, choice + 1);
 
         userVote.voteSelected = tempList;
-        print(tempList);
+        print("after 1vote" + userVote.voteSelected.toString());
         model.addUserVoteDB(address, userVote);
         model.counterUserVote(address, userVote.voteSelected);
 
@@ -134,12 +140,14 @@ Widget ggookButton(
           listSelected,
           idx + 1,
           userVote,
-          model,
         ]);
+        // 남은 투표 없을 때
       } else {
         // TODO: userVote 모델로 만들어서 넘겨야함.
         List<int> tempList = userVote.voteSelected;
-        tempList.fillRange(listSelected[idx], listSelected[idx] + 1, 2);
+        print(tempList);
+        tempList.fillRange(
+            listSelected[idx], listSelected[idx] + 1, choice + 1);
 
         userVote.voteSelected = tempList;
         userVote.isVoted = true;
@@ -160,7 +168,7 @@ Widget ggookButton(
     padding: EdgeInsets.all(40.0),
     shape: CircleBorder(),
     child: Text(
-      vote.subVotes[listSelected[idx]].voteChoices[1],
+      vote.subVotes[listSelected[idx]].voteChoices[choice],
       style: TextStyle(
           fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9EA6F1)),
     ),

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -40,10 +41,12 @@ class _HomeViewState extends State<HomeView> {
   Future<UserModel> _userModel;
   Future<DatabaseAddressModel> _addressModel;
   Future<VoteModel> _voteModel;
+
   // addVote 버튼때문에 임시로 만든 것
   // final VoteModel votesToday = voteToday;
   // final List<SubVote> subvotesToday = subVotes;
   // DatabaseAddressModel addressModel;
+  // final DatabaseService _databaseService = locator<DatabaseService>();
 
   //phone auth test
 
@@ -84,7 +87,9 @@ class _HomeViewState extends State<HomeView> {
     // final BottomNavigationBar navigationBar = navBarGlobalKey.currentWidget;
     print("homeViewBuild");
     Size size = MediaQuery.of(context).size;
-    double displayRatio = size.height / size.width;
+    deviceHeight = size.height;
+    deviceWidth = size.width;
+    double displayRatio = deviceHeight / deviceWidth;
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => HomeViewModel(),
       // onModelReady: (model) => print("onModelReady" + model.uid),
@@ -209,7 +214,7 @@ class _HomeViewState extends State<HomeView> {
                               vote.voteDate,
                               style: TextStyle(
                                 fontSize: 30,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                             SizedBox(
@@ -219,7 +224,7 @@ class _HomeViewState extends State<HomeView> {
                               user.userName,
                               style: TextStyle(
                                 fontSize: 30,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
                             SizedBox(
@@ -229,15 +234,14 @@ class _HomeViewState extends State<HomeView> {
                               vote.subVotes[0].title.toString(),
                               style: TextStyle(
                                 fontSize: 30,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
-                            )
-
+                            ),
                             // RaisedButton(
                             //   onPressed: () {
                             //     addressModel = DatabaseAddressModel(
-                            //       uid: currentUserModel.uid,
-                            //       date: date,
+                            //       uid: model.uid,
+                            //       date: '20200907',
                             //       category: category,
                             //       season: season,
                             //     );

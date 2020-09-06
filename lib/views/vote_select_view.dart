@@ -168,14 +168,14 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     // getTimeLeft(value);
 
     // final Size size = MediaQuery.of(context).size;
-    // double displayRatio = size.height / size.width;
+    double displayRatio = deviceHeight / deviceWidth;
 
-    // _preloadPageController = PreloadPageController(
-    //   initialPage: 0,
-    //   // 페이지뷰 하나의 크기
-    //   viewportFraction: displayRatio > 1.85 ? 0.63 : 0.58,
-    //   keepPage: true,
-    // );
+    _preloadPageController = PreloadPageController(
+      initialPage: 0,
+      // 페이지뷰 하나의 크기
+      viewportFraction: displayRatio > 1.85 ? 0.63 : 0.58,
+      keepPage: true,
+    );
     // controller.addListener(() {
     //   double value = controller.offset / 250;
 
@@ -211,6 +211,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     return ViewModelBuilder<VoteSelectViewModel>.reactive(
         viewModelBuilder: () => VoteSelectViewModel(),
         builder: (context, model, child) {
+          print(model.getNow());
           // print(uid + 'from FutureViewModel');
           return FutureBuilder(
             // you shouldn't call the function directly inside the

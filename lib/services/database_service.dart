@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/models/date_time_model.dart';
 import 'package:yachtOne/models/rank_model.dart';
 import '../models/sub_vote_model.dart';
 import '../models/user_model.dart';
@@ -10,8 +11,6 @@ import '../models/vote_comment_model.dart';
 import '../models/rank_model.dart';
 import '../models/database_address_model.dart';
 import '../models/vote_model.dart';
-
-import '../models/temp_address_constant.dart';
 
 import 'dart:math';
 
@@ -29,12 +28,14 @@ class DatabaseService {
       _databaseService.collection('posts');
   CollectionReference get _ranksCollectionReference =>
       _databaseService.collection('ranks');
+  CollectionReference get _adminCollectionReference =>
+      _databaseService.collection('admin');
 
   CollectionReference get usersCollectionReference => _usersCollectionReference;
   CollectionReference get votesCollectionReference => _votesCollectionReference;
   CollectionReference get postsCollectionReference => _postsCollectionReference;
   CollectionReference get ranksCollectionReference => _ranksCollectionReference;
-
+  CollectionReference get adminCollectionReference => _adminCollectionReference;
   //  collection references
   // final CollectionReference _usersCollectionReference =
   //     _databaseService.collection('users');
@@ -343,12 +344,35 @@ class DatabaseService {
   Future<DatabaseAddressModel> getAddress(String uid) async {
     DatabaseAddressModel _databaseAddress;
 
+    String tempCategory = 'koreaStockStandard';
+    DateTime start = DateTime(2020, 09, 06, 08, 50, 00);
+    DateTime end = DateTime(2020, 09, 06, 16, 00, 00);
+    List<DateTime> tempTime = [start, end];
+
+    String category = await DatabaseAddressModel().adminOpenSeason().get().then(
+      (doc) {
+        print(doc.data());
+        return doc.data()['category'];
+      },
+    );
+
+    String season = await DatabaseAddressModel().adminOpenSeason().get().then(
+          (doc) => doc.data()['season'],
+        );
+
+    String baseDate = DateTimeModel().baseDate(category);
+    // bool isVoteAvailable = DateTimeModel().isVoteAvailable(tempCategory);
+
+    // print("VOTE IS AVAILABLE" + isVoteAvailable.toString());
+
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: date,
+      date: baseDate,
       category: category,
       season: season,
     );
+
+    print("TODAY DATA ADDRESS" + _databaseAddress.date.toString());
 
     return _databaseAddress;
   }

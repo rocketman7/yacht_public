@@ -9,8 +9,8 @@ class VoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double displayRatio = size.height / size.width;
+    // Size size = MediaQuery.of(context).size;
+    double displayRatio = deviceHeight / deviceWidth;
     return Align(
       alignment: Alignment.center,
       child: Padding(
@@ -18,8 +18,8 @@ class VoteCard extends StatelessWidget {
           horizontal: gap_xxxs,
         ),
         child: Container(
-          height: displayRatio > 1.85 ? size.height * .44 : size.height * .49,
-          width: displayRatio > 1.85 ? size.width * .60 : size.width * .55,
+          height: displayRatio > 1.85 ? deviceHeight * .44 : deviceHeight * .49,
+          width: displayRatio > 1.85 ? deviceWidth * .60 : deviceWidth * .55,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             // color: Color(0xFFFFFFFF),
@@ -44,11 +44,11 @@ class VoteCard extends StatelessWidget {
                   ),
                   child: Image(
                     height: displayRatio > 1.85
-                        ? size.height * .44
-                        : size.height * .49,
+                        ? deviceHeight * .44
+                        : deviceHeight * .49,
                     width: displayRatio > 1.85
-                        ? size.width * .60
-                        : size.width * .55,
+                        ? deviceWidth * .60
+                        : deviceWidth * .55,
                     fit: BoxFit.cover,
                     image: NetworkImage(vote.subVotes[idx].voteImgUrl),
                   ),
@@ -56,15 +56,15 @@ class VoteCard extends StatelessWidget {
               ),
               Positioned(
                 top: displayRatio > 1.85
-                    ? size.height * .44 * .63
-                    : size.height * .49 * .63,
+                    ? deviceHeight * .44 * .63
+                    : deviceHeight * .49 * .63,
                 child: Container(
                     height: displayRatio > 1.85
-                        ? size.height * .44 * .25
-                        : size.height * .49 * .25,
+                        ? deviceHeight * .44 * .25
+                        : deviceHeight * .49 * .25,
                     width: displayRatio > 1.85
-                        ? size.width * .60
-                        : size.width * .55,
+                        ? deviceWidth * .60
+                        : deviceWidth * .55,
                     color: Color(0xFF9CA2C0).withOpacity(.7),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -86,7 +86,7 @@ class VoteCard extends StatelessWidget {
                           height: gap_m,
                         ),
                         Text(
-                          vote.subVotes[idx].description,
+                          vote.subVotes[idx].description ?? "",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
@@ -120,11 +120,11 @@ class VoteCard extends StatelessWidget {
                       // color: Colors.white,
                       child: SizedBox(
                         height: displayRatio > 1.85
-                            ? size.width * .5
-                            : size.width * .45,
+                            ? deviceWidth * .5
+                            : deviceWidth * .45,
                         width: displayRatio > 1.85
-                            ? size.width * .60
-                            : size.width * .55,
+                            ? deviceWidth * .60
+                            : deviceWidth * .55,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
@@ -202,7 +202,7 @@ class VoteCard extends StatelessWidget {
                       padding: EdgeInsets.only(
                         bottom: gap_l,
                       ),
-                      width: size.width,
+                      width: deviceWidth,
                       child: Container(
                         alignment: Alignment.centerRight,
                         child: Text(
