@@ -116,10 +116,10 @@ class _MypageViewState extends State<MypageView> {
     result.add(_mypageListItem(model, '(o)구현완료, (x)나중에 구현해야', null));
     result.add(_mypageListItem(model, '', null));
     result.add(_mypageListItem(model, '(o)내사진 변경', 'mypage_avatarselect'));
-    result.add(_mypageListItem(model, '닉네임 변경', null));
+    result.add(_mypageListItem(model, '(x)닉네임 변경', null));
     result.add(_mypageListItem(model, '(x)내 상금현황 보러가기', null));
     result.add(_mypageListItem(model, '(x)아이디(이메일)', null));
-    result.add(_mypageListItem(model, '푸쉬알림유무', null));
+    result.add(_mypageListItem(model, '(o)푸쉬알림유무', null));
     result.add(_mypageListItem(model, '(x)내 활동', null));
     result.add(_mypageListItem(model, '(x)비밀번호 변경', null));
     result.add(_mypageListItem(model, '(x)계좌정보', null));
