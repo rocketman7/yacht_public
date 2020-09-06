@@ -109,6 +109,7 @@ class _HomeViewState extends State<HomeView> {
               UserModel user = _allModel[1];
               VoteModel vote = _allModel[2];
 
+              subVoteLength = vote.subVotes.length;
               // UserModel userModel = model.getUser(_widgetAddress.uid);
               // WillPopScope: Back 버튼 막기
               return WillPopScope(

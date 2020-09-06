@@ -229,6 +229,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 DatabaseAddressModel address = _allModel[0];
                 UserModel user = _allModel[1];
                 VoteModel vote = _allModel[2];
+                subVoteLength = vote.subVotes.length;
                 print('models ready');
 
                 return Scaffold(

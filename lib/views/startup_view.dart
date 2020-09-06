@@ -116,46 +116,66 @@ class _StartUpViewState extends State<StartUpView>
           ),
 
           // _viewList[_selectedIndex],
-          bottomNavigationBar: BottomNavigationBar(
-            key: navBarGlobalKey,
-            type: BottomNavigationBarType.fixed,
-            onTap: (index) => {
-              print(index),
+          bottomNavigationBar: SizedBox(
+            height: 70,
+            child: BottomNavigationBar(
+              key: navBarGlobalKey,
+              type: BottomNavigationBarType.fixed,
+              onTap: (index) => {
+                print(index),
 
-              setState(() {
-                _selectedIndex = index;
-                _tabController.index = index;
-                // _viewList.insert(index, _viewList[index]);
-                // _viewList.removeAt(index);
-                print(_viewList.toString());
-              }),
-              // _navigationService.navigateTo(_viewList[index]),
-            },
-            currentIndex: _selectedIndex ?? 0,
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.white,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.monetization_on),
-                label: 'Vote',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.chat),
-                label: 'Comment',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.chat),
-                label: 'Ranking',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.face),
-                label: 'My Page',
-              ),
-            ],
+                setState(() {
+                  _selectedIndex = index;
+                  _tabController.index = index;
+                  // _viewList.insert(index, _viewList[index]);
+                  // _viewList.removeAt(index);
+                  print(_viewList.toString());
+                }),
+                // _navigationService.navigateTo(_viewList[index]),
+              },
+              currentIndex: _selectedIndex ?? 0,
+              selectedItemColor: Color(0xFF1EC8CF),
+              unselectedItemColor: Color(0xFFAAAAAA),
+              selectedFontSize: 0,
+              unselectedFontSize: 0,
+              items: [
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/icons/home.svg',
+                      color: Color(0xFFAAAAAA)),
+                  activeIcon: SvgPicture.asset('assets/icons/home.svg',
+                      color: Color(0xFF1EC8CF)),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/icons/vote.svg',
+                      color: Color(0xFFAAAAAA)),
+                  activeIcon: SvgPicture.asset('assets/icons/vote.svg',
+                      color: Color(0xFF1EC8CF)),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/icons/rank.svg',
+                      color: Color(0xFFAAAAAA)),
+                  activeIcon: SvgPicture.asset('assets/icons/rank.svg',
+                      color: Color(0xFF1EC8CF)),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/icons/comment.svg',
+                      color: Color(0xFFAAAAAA)),
+                  activeIcon: SvgPicture.asset('assets/icons/comment.svg',
+                      color: Color(0xFF1EC8CF)),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset('assets/icons/mypage.svg',
+                      color: Color(0xFFAAAAAA)),
+                  activeIcon: SvgPicture.asset('assets/icons/mypage.svg',
+                      color: Color(0xFF1EC8CF)),
+                  label: '',
+                ),
+              ],
+            ),
           ),
         );
         // model.stream;

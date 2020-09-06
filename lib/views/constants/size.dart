@@ -1,6 +1,8 @@
 double deviceHeight;
 double deviceWidth;
 
+int subVoteLength;
+
 const double gap_xxxs = 4.0;
 const double gap_xxs = 6.0;
 const double gap_xs = 10.0;

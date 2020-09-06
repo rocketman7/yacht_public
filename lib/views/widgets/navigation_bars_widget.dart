@@ -57,8 +57,8 @@ class _GgookBottomNaviBarState extends State<GgookBottomNaviBar> {
           // _navigationService.navigateTo(_viewList[index]),
         },
         currentIndex: _selectedIndex ?? 0,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.white,
+        selectedItemColor: Color(0xFF1EC8CF),
+        unselectedItemColor: Colors.blue,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

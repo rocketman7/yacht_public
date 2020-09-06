@@ -60,7 +60,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
     // 주제 선택하는 좌우 스크롤 메뉴의 컨트롤러
     _getAllModel = _viewModel.getAllModel(_viewModel.uid);
 
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: subVoteLength, vsync: this);
     _tabController.addListener(() {
       if (!isDisposed) {
         setState(() {
@@ -116,6 +116,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 UserModel user = _allModel[1];
                 VoteModel vote = _allModel[2];
                 UserVoteModel userVote = _allModel[3];
+                subVoteLength = vote.subVotes.length;
                 print('models ready');
 
                 return Scaffold(
@@ -147,7 +148,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                 unselectedLabelColor: Colors.white,
                                 isScrollable: true,
                                 tabs: List.generate(
-                                  3,
+                                  vote.subVotes.length,
                                   (index) => subVoteList(
                                     vote.subVotes[index].title.toString(),
                                   ),
