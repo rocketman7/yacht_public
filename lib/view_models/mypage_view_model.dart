@@ -8,6 +8,7 @@ import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../services/navigation_service.dart';
 import '../models/sharedPreferences_const.dart';
+import '../models/database_address_model.dart';
 
 class MypageViewModel extends ChangeNotifier {
   // Services Setting
@@ -20,6 +21,7 @@ class MypageViewModel extends ChangeNotifier {
   final StorageService _storageService = locator<StorageService>();
 
   // 변수 Setting
+  DatabaseAddressModel addressModel;
   UserModel _user;
   String _downloadAddress;
   String uid;
@@ -35,6 +37,7 @@ class MypageViewModel extends ChangeNotifier {
   }
 
   Future getUser() async {
+    addressModel = await _databaseService.getAddress(uid);
     _user = await _databaseService.getUser(uid);
     return _user;
   }

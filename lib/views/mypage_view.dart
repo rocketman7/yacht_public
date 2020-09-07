@@ -1,11 +1,6 @@
-import 'package:charts_flutter/flutter.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import '../services/navigation_service.dart';
 
-import '../locator.dart';
-import '../models/user_model.dart';
 import '../view_models/mypage_view_model.dart';
 
 import 'constants/size.dart';
@@ -18,12 +13,9 @@ class MypageView extends StatefulWidget {
 }
 
 class _MypageViewState extends State<MypageView> {
-  final NavigationService _navigationService = locator<NavigationService>();
-
   @override
   void initState() {
     super.initState();
-    //_globalKey = _navigationService.navigatorKey;
   }
 
   @override

@@ -6,7 +6,6 @@ import '../models/rank_model.dart';
 import '../view_models/rank_view_model.dart';
 import '../views/constants/size.dart';
 import '../views/loading_view.dart';
-import '../views/widgets/navigation_bars_widget.dart';
 
 class RankView extends StatelessWidget {
   @override
