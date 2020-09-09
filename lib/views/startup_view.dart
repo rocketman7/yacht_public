@@ -117,7 +117,7 @@ class _StartUpViewState extends State<StartUpView>
 
           // _viewList[_selectedIndex],
           bottomNavigationBar: SizedBox(
-            height: 70,
+            // height: 70,
             child: BottomNavigationBar(
               key: navBarGlobalKey,
               type: BottomNavigationBarType.fixed,
@@ -154,16 +154,16 @@ class _StartUpViewState extends State<StartUpView>
                   label: '',
                 ),
                 BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/rank.svg',
+                  icon: SvgPicture.asset('assets/icons/comment.svg',
                       color: Color(0xFFAAAAAA)),
-                  activeIcon: SvgPicture.asset('assets/icons/rank.svg',
+                  activeIcon: SvgPicture.asset('assets/icons/comment.svg',
                       color: Color(0xFF1EC8CF)),
                   label: '',
                 ),
                 BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/comment.svg',
+                  icon: SvgPicture.asset('assets/icons/rank.svg',
                       color: Color(0xFFAAAAAA)),
-                  activeIcon: SvgPicture.asset('assets/icons/comment.svg',
+                  activeIcon: SvgPicture.asset('assets/icons/rank.svg',
                       color: Color(0xFF1EC8CF)),
                   label: '',
                 ),

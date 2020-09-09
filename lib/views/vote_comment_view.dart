@@ -88,8 +88,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    double displayRatio = size.height / size.width;
+    // Size size = MediaQuery.of(context).size;
+    double displayRatio = deviceHeight / deviceWidth;
     final TextEditingController _commentTextController =
         TextEditingController();
 
@@ -120,32 +120,33 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 print('models ready');
 
                 return Scaffold(
+                  resizeToAvoidBottomPadding: false,
                   body: Container(
-                    color: Colors.black,
-
+                    color: Colors.white,
+                    height: deviceHeight,
                     // bottomNavigationBar: GgookBottomNaviBar(),
                     // backgroundColor: Color(0xFF363636),
-                    child: SafeArea(
-                      bottom: false,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: displayRatio > 1.85 ? gap_l : gap_xs,
-                        ),
-                        child: SingleChildScrollView(
+                    child: SingleChildScrollView(
+                      child: SafeArea(
+                        // bottom: true,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: displayRatio > 1.85 ? gap_l : gap_xs,
+                          ),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
-                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               // topBar(user),
                               SizedBox(
-                                height: displayRatio > 1.85 ? gap_l : gap_xs,
+                                height: displayRatio > 1.85 ? gap_xxl : gap_xs,
                               ),
 // 피드 종목 선택 리스트뷰
                               TabBar(
                                 controller: _tabController,
                                 indicatorColor: Colors.red,
                                 labelColor: Colors.blue,
-                                unselectedLabelColor: Colors.white,
+                                unselectedLabelColor: Colors.black,
                                 isScrollable: true,
                                 tabs: List.generate(
                                   vote.subVotes.length,
@@ -185,9 +186,9 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                 userVote,
                                 model,
                               ),
-                              SizedBox(
-                                height: gap_xxxl,
-                              )
+                              // SizedBox(
+                              //   height: gap_xxxl,
+                              // )
                             ],
                           ),
                         ),
@@ -251,7 +252,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
           //   return new charts.TextStyleSpec(color: color);
           // },
           outsideLabelStyleAccessorFn: (VoteChart numVotedData, _) {
-            final color = charts.MaterialPalette.yellow.shadeDefault.darker;
+            final color = charts.MaterialPalette.blue.shadeDefault.darker;
             return new charts.TextStyleSpec(color: color);
           }),
     ];
@@ -275,11 +276,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
           // Tick and Label styling here.
           labelStyle: new charts.TextStyleSpec(
               fontSize: 14, // size in Pts.
-              color: charts.MaterialPalette.white),
+              color: charts.MaterialPalette.black),
 
           // Change the line colors to match text color.
           lineStyle:
-              new charts.LineStyleSpec(color: charts.MaterialPalette.white),
+              new charts.LineStyleSpec(color: charts.MaterialPalette.black),
         ),
       ),
 
@@ -290,11 +291,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
           // Tick and Label styling here.
           labelStyle: new charts.TextStyleSpec(
               fontSize: 14, // size in Pts.
-              color: charts.MaterialPalette.white),
+              color: charts.MaterialPalette.black),
 
           // Change the line colors to match text color.
           lineStyle:
-              new charts.LineStyleSpec(color: charts.MaterialPalette.white),
+              new charts.LineStyleSpec(color: charts.MaterialPalette.black),
         ),
       ),
     );
@@ -325,7 +326,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   "vs",
                   style: TextStyle(
                     fontSize: 17,
-                    color: Colors.white,
+                    color: Colors.black,
                     fontFamily: 'AdventPro',
                   ),
                 ),
@@ -384,7 +385,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
         text,
         style: TextStyle(
           fontSize: 20,
-          color: Colors.white,
+          color: Colors.black,
         ),
       ),
     );
@@ -392,7 +393,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
   TextStyle commentTitle() {
     return TextStyle(
-      color: Colors.white,
+      color: Colors.black,
       fontSize: 30,
       fontFamily: 'AdventPro',
       fontWeight: FontWeight.bold,
@@ -431,7 +432,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                       Text(
                         voteComment.userName,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 16,
                           fontFamily: 'AdventPro',
                           fontWeight: FontWeight.bold,
@@ -443,7 +444,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                       Text(
                         voteComment.choice ?? '선택 안 함',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 13,
                           fontFamily: 'AdventPro',
                         ),
@@ -458,7 +459,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                     child: Text(
                       voteComment.postText,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 14,
                         fontFamily: 'AdventPro',
                       ),
@@ -485,7 +486,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                         ' Mins ago',
                 textAlign: TextAlign.end,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 13,
                   fontFamily: 'AdventPro',
                 ),
@@ -504,7 +505,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                       //   "삭제",
                       //   textAlign: TextAlign.end,
                       //   style: TextStyle(
-                      //     color: Colors.white,
+                      //     color: Colors.black,
                       //     fontSize: 13,
                       //     fontFamily: 'AdventPro',
                       //   ),
@@ -550,7 +551,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
             textAlign: TextAlign.start,
             textAlignVertical: TextAlignVertical.top,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
             ),
             maxLines: 3,
             decoration: InputDecoration(
@@ -596,7 +597,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
           },
           child: Icon(
             Icons.check_circle,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ],

@@ -41,7 +41,7 @@ class _LoadingViewState extends State<LoadingView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0XFF051417),
+      backgroundColor: Colors.white,
       body: Center(
         child: AnimatedBuilder(
             animation: _aniController.view,

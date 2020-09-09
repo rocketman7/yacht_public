@@ -16,10 +16,10 @@ import 'startup_view.dart';
 import '../views/widgets/navigation_bars_widget.dart';
 
 // vote temp data 넣을 때 필요한 파일들
-// import '../models/database_address_model.dart';
-// import '../models/temp_address_constant.dart';
-// import '../models/vote_model.dart';
-// import '../models/sub_vote_model.dart';
+import '../models/database_address_model.dart';
+import '../models/temp_address_constant.dart';
+import '../models/vote_model.dart';
+import '../models/sub_vote_model.dart';
 
 class HomeView extends StatefulWidget {
   Function goToTab;
@@ -43,10 +43,10 @@ class _HomeViewState extends State<HomeView> {
   Future<VoteModel> _voteModel;
 
   // addVote 버튼때문에 임시로 만든 것
-  // final VoteModel votesToday = voteToday;
-  // final List<SubVote> subvotesToday = subVotes;
-  // DatabaseAddressModel addressModel;
-  // final DatabaseService _databaseService = locator<DatabaseService>();
+  final VoteModel votesToday = voteToday;
+  final List<SubVote> subvotesToday = subVotes;
+  DatabaseAddressModel addressModel;
+  final DatabaseService _databaseService = locator<DatabaseService>();
 
   //phone auth test
 
@@ -242,7 +242,7 @@ class _HomeViewState extends State<HomeView> {
                             //   onPressed: () {
                             //     addressModel = DatabaseAddressModel(
                             //       uid: model.uid,
-                            //       date: '20200907',
+                            //       date: '20200909',
                             //       category: category,
                             //       season: season,
                             //     );
