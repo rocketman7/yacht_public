@@ -3,6 +3,7 @@ import 'package:stacked/stacked.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/rank_model.dart';
+import '../models/database_address_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 
@@ -12,6 +13,7 @@ class RankViewModel extends FutureViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
 
   // 변수 Setting
+  DatabaseAddressModel addressModel;
   List<RankModel> rankModel = [];
   UserModel user;
   String uid;
@@ -22,7 +24,8 @@ class RankViewModel extends FutureViewModel {
 
   // method
   Future getUserAndRankList() async {
-    rankModel = await _databaseService.getRankList();
+    addressModel = await _databaseService.getAddress(uid);
+    rankModel = await _databaseService.getRankList(addressModel);
     user = await _databaseService.getUser(uid);
 
     notifyListeners();

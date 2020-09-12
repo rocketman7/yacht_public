@@ -225,15 +225,13 @@ class DatabaseService {
   }
 
   // Read: ranks collection 정보 읽어오기. 배치될 때에만 바뀌는 정보이므로 Future로 처리
-  Future<List<RankModel>> getRankList() async {
+  Future<List<RankModel>> getRankList(
+      DatabaseAddressModel databaseAddressModel) async {
     try {
       List<RankModel> rankList = [];
 
-      await ranksCollectionReference
-          .doc('koreaStockStandard')
-          .collection('season001')
-          .doc('20200901')
-          .collection('20200901')
+      await databaseAddressModel
+          .ranksSeasonDateCollection()
           .orderBy('combo', descending: true)
           .get()
           .then((querysnapshot) => querysnapshot.docs.forEach((element) {
@@ -361,6 +359,7 @@ class DatabaseService {
         );
 
     String baseDate = DateTimeModel().baseDate(category);
+    // String baseDate = '20200901';
     // bool isVoteAvailable = DateTimeModel().isVoteAvailable(tempCategory);
 
     // print("VOTE IS AVAILABLE" + isVoteAvailable.toString());
