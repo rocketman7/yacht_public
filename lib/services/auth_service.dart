@@ -120,12 +120,12 @@ class AuthService {
 
       // Register 성공하면 return true
       return authResult.user != null;
-    } on PlatformException catch (e) {
+    } on FirebaseAuthException catch (e) {
       print(e.code);
       switch (e.code) {
-        case 'ERROR_INVALID_EMAIL':
+        case 'invalid-email':
           return "잘못된 이메일 형식입니다. 다시 확인해주세요.";
-        case 'ERROR_EMAIL_ALREADY_IN_USE':
+        case 'email-already-in-use':
           return "이미 가입된 이메일입니다.";
         default:
           print(e.message);
@@ -147,15 +147,15 @@ class AuthService {
 
       // 로그인 성공하면 return true
       return authResult.user != null;
-    } on PlatformException catch (e) {
+    } on FirebaseAuthException catch (e) {
       switch (e.code) {
-        case 'ERROR_INVALID_EMAIL':
-          print(e.code);
+        case 'invalid-email':
+          print("ECODE" + e.code);
           return "잘못된 이메일 형식입니다. 다시 확인해주세요.";
-        case 'ERROR_WRONG_PASSWORD':
+        case 'wrong-password':
           print(e.code);
           return "비밀번호가 틀렸습니다.";
-        case 'ERROR_USER_NOT_FOUND':
+        case 'user-not-found':
           print(e.code);
           return "가입된 이메일 주소가 없습니다.";
         default:

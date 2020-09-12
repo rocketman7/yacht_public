@@ -24,6 +24,7 @@ class LoginViewModel extends BaseModel {
     var result =
         await _authService.loginWithEmail(email: email, password: password);
     // 로그인 성공하면
+    print(result.toString());
     if (result is bool) {
       if (result == true) {
         // print('Login Success');
