@@ -198,3 +198,124 @@ exports.sortRank = functions.https.onRequest(async (req, res) => {
 
   res.send(rankData);
 });
+
+
+// exports.accVerify = functions.https.onRequest((req, resp) => {
+//   const options = {
+//     headers: {
+//       'Host': 'datahub-dev.scraping.co.kr',
+//       'Authorization': 'Token ed1ff970f8c64e73857026e430dca5484aa2933e',
+//       'Content-Length': 118,
+//       'Content-Type': 'application/json;charset=UTF-8',
+//     }
+//   };
+
+//   resp = req.request(options, 'http://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOwner');
+//   resp.send();
+
+//   resp.end();
+//   req.end();
+//   functions.logger.info("Hello logs!", { structuredData: true });
+//   resp.send("Hello from Firebase!");
+
+//   resp.end();
+//   req.end();
+// });
+
+
+exports.accVerifys = functions.https.onRequest((req, resp) => {
+  // functions.logger.info("Hello logs!", { structuredData: true });
+  // response.send("Hello from Firebase!");
+  // const options = {
+  //   Host: 'datahub-dev.scraping.co.kr',
+  //   Authorization: 'Token ed1ff970f8c64e73857026e430dca5484aa2933e',
+  // };
+
+  // resp = req.request(options, '/scrap/common/settlebank/accountOwner');
+  // resp.send();
+  // req = functions.reqPost('https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOwner')
+  // var https = require('https');
+
+  // var reqPost = https.request('https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOwner');
+
+  var http = require('http');
+
+  // Build the post string from an object
+  var post_data = JSON.stringify({
+        "OID" : null,
+        "CUSTID" : "123123",
+        "ACCTNO" : "17711040661",
+        "BANKCODE" : "278",
+        "CUSTNM" : "김세준"
+  });
+
+  // An object of options to indicate where to post to
+  var post_options = {
+    // Host: 'datahub-dev.scraping.co.kr',
+    // port: '80',
+    Authorization: 'Token ed1ff970f8c64e73857026e430dca5484aa2933e',
+    // path: '/scrap/common/settlebank/accountOwner',
+    uri: 'https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOwner',
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Content-Length': Buffer.byteLength(post_data)
+    }
+  };
+
+  // Set up the request
+  var post_req = http.request(post_options, function(res) {
+    res.setEncoding('utf8');
+    res.on('data', function (chunk) {
+        console.log('Response: ' + chunk);
+    });
+  });
+
+  // post the data
+  post_req.write(post_data);
+  post_req.end();
+
+  // resp.send(reqPost);
+
+  // jsonObject = JSON.stringify(
+  //   {
+  //     "OID" : null,
+  //     "CUSTID" : "123123",
+  //     "ACCTNO" : "17711040661",
+  //     "BANKCODE" : "278",
+  //     "CUSTNM" : "김세준"
+  //   }
+  // );
+
+  // var postheaders = {
+  //   'Content-Type' : 'application/json;charset=UTF-8',
+  //   'Content-Length' : 118
+  // };
+
+  // var optionspost = {
+  //   Host : 'datahub-dev.scraping.co.kr',
+  //   path : '/scrap/common/settlebank/accountOwner',
+  //   Authorization : 'Token ed1ff970f8c64e73857026e430dca5484aa2933e',
+  //   method : 'POST',
+  //   headers : postheaders
+  // };
+
+  // var reqPost = https.request(optionspost, function(res) {
+  //   console.log("statusCode: ", res.statusCode);
+  //   // uncomment it for header details
+  //   //  console.log("headers: ", res.headers);
+
+  //   res.on('data', function(d) {
+  //       console.info('POST result:\n');
+  //       process.stdout.write(d);
+  //       console.info('\n\nPOST completed');
+  //   });
+  // });
+
+  // // write the json data
+  // reqPost.write(jsonObject);
+  // reqPost.end();
+  // reqPost.on('error', function(e) {
+  //     console.error(e);
+  // });
+});
