@@ -10,9 +10,6 @@ import '../models/vote_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../services/navigation_service.dart';
-import '../view_models/base_model.dart';
-
-import '../models//temp_address_constant.dart';
 
 class VoteSelectViewModel extends FutureViewModel {
   final NavigationService _navigationService = locator<NavigationService>();

@@ -30,7 +30,7 @@ class HomeViewModel extends BaseViewModel {
 // Call this function when initialized
   HomeViewModel() {
     // _authService.signOut();
-
+    print("HOMEVIEWMODEL STARTED");
     uid = _authService.auth.currentUser.uid;
     // getUser();
   }

@@ -57,6 +57,7 @@ class _StartUpViewState extends State<StartUpView>
     _selectedIndex = _startIdx;
     // TODO: implement initState
     super.initState();
+
     _viewList = <Widget>[
       HomeView(goToTab),
       VoteSelectView(),
@@ -103,17 +104,19 @@ class _StartUpViewState extends State<StartUpView>
       // onModelReady 콜 하고 아래 빌드. handleStartUpLogi이 Future함수 이므로 처리될 동안 LoadingView 빌드
       viewModelBuilder: () => StartUpViewModel(),
       builder: (context, model, child) {
-        print(widget.startIdx);
+        // print(widget.startIdx);
 
-        print(_selectedIndex);
+        // print(_selectedIndex);
         return Scaffold(
-          body: TabBarView(
-            // key:
-            physics: NeverScrollableScrollPhysics(),
-            controller: _tabController,
-            children: _viewList,
-            // dragStartBehavior: DragStartBehavior.down,
-          ),
+          body: model.isBusy
+              ? LoadingView()
+              : TabBarView(
+                  // key:
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: _tabController,
+                  children: _viewList,
+                  // dragStartBehavior: DragStartBehavior.down,
+                ),
 
           // _viewList[_selectedIndex],
           bottomNavigationBar: SizedBox(

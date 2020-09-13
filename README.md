@@ -8,25 +8,26 @@
 
 #### General
 
+- [ ] Vote, SubVote 엑셀->csv 변환 파일 만들기
 - [ ] 2단계 인증 하기
-- [ ] 마이페이지 만들기(세준)
-- [ ] ios build 고치기(세준)
 - [ ] BaseModel의 busy처리
 - [ ] 각종 네트워크 예외처리
 - [ ] 코드 정리
 - [ ] 앱 설정 페이지 (푸쉬 알람 등)
-- [ ] Bottom Navigation Bar 만들기
 - [ ] Top Bar에 들어갈 아이템 관련 팝업 (디자인 확정 이후 UI 작업하되 DB는 미리 준비)
   
 
+- [x] 마이페이지 만들기(세준)
+- [x] Bottom Navigation Bar 만들기
+- [x] ios build 고치기(세준)
 - [x] Dialog Service
 - [x] DateTime <-> String Parser 만들기 (VoteSelectView, VoteCommentView 에서 다룸)
 
 #### 로그인/회원가입
 
 - [ ] 구글 로그인 기능
-- [ ] 휴대폰 본인인증 (twilio, 아임포트(다날pg), 구글 firebase, naver cloud platform 중 골라서 구현)
 
+- [x] 휴대폰 본인인증 (구글 firebase)
 - [x] userName 중복 방지 기능 (8/14)
 - [x] Auth 예외처리
 - [x] Auth: Email & Password 회원가입, 로그인, 가입 동시에 DB에 User모델 저장

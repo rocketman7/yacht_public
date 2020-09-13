@@ -34,6 +34,7 @@ class StartUpViewModel extends StreamViewModel<User> {
     print(data);
     if (data == null) {
       // return LoginView();
+      print("GOTOLOGIN");
       _navigationService.navigateTo('login');
     } else {
       // _navigationService.navigateTo('loggedIn');
