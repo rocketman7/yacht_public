@@ -126,7 +126,7 @@ class _LoginViewState extends State<LoginView>
                     ),
                     FlatButton(
                       onPressed: () {
-                        _navigationService.navigateTo('register');
+                        _navigationService.navigateTo('phoneAuth');
                       },
                       child: Text(
                         "계정이 없으신가요? 지금 가입하세요!",

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
+import 'package:yachtOne/models/user_vote_model.dart';
 
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -21,6 +22,7 @@ class VoteSelectViewModel extends FutureViewModel {
   UserModel _user;
   DatabaseAddressModel _address;
   VoteModel _vote;
+  UserVoteModel _userVote;
   List<SubVote> _subVote;
   Timer _everySecond;
   DateTime _now;
@@ -49,6 +51,7 @@ class VoteSelectViewModel extends FutureViewModel {
     _allModel.add(_address);
     _allModel.add(await getUser(uid));
     _allModel.add(await getVote(_address));
+    _allModel.add(await getUserVote(_address));
 
     print(_allModel);
     return _allModel;
@@ -70,6 +73,11 @@ class VoteSelectViewModel extends FutureViewModel {
   Future<VoteModel> getVote(DatabaseAddressModel addressModel) async {
     _vote = await _databaseService.getVotes(addressModel);
     return _vote;
+  }
+
+  Future<UserVoteModel> getUserVote(DatabaseAddressModel addressModel) async {
+    _userVote = await _databaseService.getUserVote(addressModel);
+    return _userVote;
   }
 
   Future signOut() async {

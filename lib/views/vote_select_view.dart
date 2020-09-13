@@ -7,6 +7,7 @@ import 'package:stacked/stacked.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/temp_address_constant.dart';
+import 'package:yachtOne/models/user_vote_model.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/vote_model.dart';
@@ -229,7 +230,9 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 DatabaseAddressModel address = _allModel[0];
                 UserModel user = _allModel[1];
                 VoteModel vote = _allModel[2];
+                UserVoteModel userVote = _allModel[3];
                 subVoteLength = vote.subVotes.length;
+                // print(userVote ?? "null");
                 print('models ready');
 
                 return Scaffold(
@@ -337,22 +340,28 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                     ),
                                   ),
                                   FlatButton(
-                                    onPressed: () {
-                                      for (VoteSelected i
-                                          in _votesSelectedShowing) {
-                                        listSelected.add(i.idx);
-                                      }
-                                      listSelected.sort();
+                                    onPressed: ((_votesSelectedShowing.length ==
+                                                0) ||
+                                            (userVote == null
+                                                ? false
+                                                : userVote.isVoted == true))
+                                        ? () {}
+                                        : () {
+                                            for (VoteSelected i
+                                                in _votesSelectedShowing) {
+                                              listSelected.add(i.idx);
+                                            }
+                                            listSelected.sort();
 
-                                      _navigationService
-                                          .navigateWithArgTo('ggook', [
-                                        address,
-                                        user,
-                                        vote,
-                                        listSelected,
-                                        0,
-                                      ]);
-                                    },
+                                            _navigationService
+                                                .navigateWithArgTo('ggook', [
+                                              address,
+                                              user,
+                                              vote,
+                                              listSelected,
+                                              0,
+                                            ]);
+                                          },
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color:
