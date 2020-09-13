@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:yachtOne/views/initial_view.dart';
 import 'managers/dialog_manager.dart';
 import 'router.dart';
 // import 'views/animation_test.dart';
@@ -37,7 +38,7 @@ class _MyAppState extends State<MyApp> {
         // key: navBarGlobalKey,
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: Routers.generateRoute,
-        home: DialogManager(child: StartUpView(0)),
+        home: DialogManager(child: InitialView()),
       ),
     );
   }
