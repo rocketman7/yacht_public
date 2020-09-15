@@ -86,6 +86,9 @@ flutter:
     - family: AdventPro
       fonts:
         - asset: assets/fonts/advent_pro/AdventPro-Regular.ttf
+    - family: Arkhip
+      fonts:
+        - asset: assets/fonts/arkhip_regular.ttf
         # - asset: assets/fonts/advent_pro/AdventPro-SemiBold.ttf
   #   - family: Trajan Pro
   #     fonts:

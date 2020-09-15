@@ -11,6 +11,7 @@ class DatabaseAddressModel {
   final String date;
   final String category;
   final String season;
+  final bool isVoting;
   String subVote;
 
   DatabaseAddressModel({
@@ -19,6 +20,7 @@ class DatabaseAddressModel {
     this.category,
     this.season,
     this.subVote,
+    this.isVoting,
   });
 
   // users collection의 userVote subCollection Ref.

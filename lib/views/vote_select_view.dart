@@ -8,6 +8,7 @@ import 'package:preload_page_view/preload_page_view.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/temp_address_constant.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
+import 'package:yachtOne/views/temp_not_voting_view.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/vote_model.dart';
@@ -235,229 +236,245 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 // print(userVote ?? "null");
                 print('models ready');
 
-                return Scaffold(
-                  body: Container(
-                    child: SafeArea(
-                      child: ListView(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: gap_l,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              // topBar(user),
-                              SizedBox(
-                                height: gap_l,
-                              ),
-                              Row(
-                                //오늘의 주제, 남은 시간
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    model.data,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        // fontFamily: 'AdventPro',
-                                        fontSize: 22,
-                                        textBaseline: TextBaseline.alphabetic),
-                                  ),
-                                  // Text(
-                                  //   "투표 마감까지 " +
-                                  //       (timeLeftArr[0]) +
-                                  //       "시간 " +
-                                  //       (timeLeftArr[1]) +
-                                  //       "분 " +
-                                  //       (timeLeftArr[2]) +
-                                  //       "초 ",
-                                  //   style: TextStyle(
-                                  //       color: Colors.black,
-                                  //       // fontFamily: 'AdventPro',
-                                  //       fontSize: 14,
-                                  //       textBaseline: TextBaseline.ideographic),
-                                  // )
-                                ],
-                              ),
-                              SizedBox(
-                                height: gap_m,
-                              ),
-                              Container(
-                                height: displayRatio > 1.85
-                                    ? size.height * .45
-                                    : size.height * .50,
-
-                                // PageView.builder랑 똑같은데 preloadPageCount 만큼 미리 로드해놓는 것만 다름
-                                child: PreloadPageView.builder(
-                                  preloadPagesCount: 5,
-                                  controller: _preloadPageController,
-                                  scrollDirection: Axis.horizontal,
-                                  // physics: BouncingScrollPhysics(),
-                                  itemCount: _votesTodayShowing.length,
-                                  itemBuilder: (context, index) {
-                                    // print('pageviewRebuilt');
-                                    return GestureDetector(
-                                        onDoubleTap: () {
-                                          // 주제 선택 최대 수를 제한하고
-                                          if (_votesTodayNotShowing.length <
-                                              3) {
-                                            setState(() {
-                                              // 더블 탭 하면 voteToday 섹션과 voteSelected 섹션에서
-                                              // 보여줘야할 위젯과 보여주지 않는 위젯을 서로 교환하며 리스트에 저장한다.
-                                              _votesTodayNotShowing.add(
-                                                  _votesTodayShowing[index]);
-                                              _votesTodayShowing
-                                                  .removeAt(index);
-
-                                              _votesSelectedShowing.add(
-                                                  _votesSelectedNotShowing[
-                                                      index]);
-                                              _votesSelectedNotShowing
-                                                  .removeAt(index);
-                                            });
-                                          } else
-                                            return;
-                                        },
-                                        child: _votesTodayShowing[index]);
-                                  },
+                return address.isVoting == true
+                    ? Scaffold(
+                        body: Container(
+                          child: SafeArea(
+                            child: ListView(children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: gap_l,
                                 ),
-                              ),
-                              SizedBox(
-                                height: gap_m,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Text(
-                                    '선택한 투표',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      // fontFamily: 'AdventPro',
-                                      fontSize: 22,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    // topBar(user),
+                                    SizedBox(
+                                      height: gap_l,
                                     ),
-                                  ),
-                                  FlatButton(
-                                    onPressed: ((_votesSelectedShowing.length ==
-                                                0) ||
-                                            (userVote == null
-                                                ? false
-                                                : userVote.isVoted == true))
-                                        ? () {}
-                                        : () {
-                                            for (VoteSelected i
-                                                in _votesSelectedShowing) {
-                                              listSelected.add(i.idx);
-                                            }
-                                            listSelected.sort();
-
-                                            _navigationService
-                                                .navigateWithArgTo('ggook', [
-                                              address,
-                                              user,
-                                              vote,
-                                              listSelected,
-                                              0,
-                                            ]);
-                                          },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color:
-                                              _votesSelectedShowing.length == 0
-                                                  ? Color(0xFF531818)
-                                                  : Color(0xFFD72929),
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: gap_m,
-                                            horizontal: gap_xxl),
-                                        child: Text(
-                                          'GO VOTE',
+                                    Row(
+                                      //오늘의 주제, 남은 시간
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          model.data,
                                           style: TextStyle(
-                                            color:
-                                                _votesSelectedShowing.length ==
-                                                        0
-                                                    ? Color(0xFF605E5E)
-                                                    : Color(0xFFFFFFFF),
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w700,
-                                            fontFamily: 'AdventPro',
-                                          ),
+                                              color: Colors.black,
+                                              // fontFamily: 'AdventPro',
+                                              fontSize: 22,
+                                              textBaseline:
+                                                  TextBaseline.alphabetic),
                                         ),
+                                        // Text(
+                                        //   "투표 마감까지 " +
+                                        //       (timeLeftArr[0]) +
+                                        //       "시간 " +
+                                        //       (timeLeftArr[1]) +
+                                        //       "분 " +
+                                        //       (timeLeftArr[2]) +
+                                        //       "초 ",
+                                        //   style: TextStyle(
+                                        //       color: Colors.black,
+                                        //       // fontFamily: 'AdventPro',
+                                        //       fontSize: 14,
+                                        //       textBaseline: TextBaseline.ideographic),
+                                        // )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: gap_m,
+                                    ),
+                                    Container(
+                                      height: displayRatio > 1.85
+                                          ? size.height * .45
+                                          : size.height * .50,
+
+                                      // PageView.builder랑 똑같은데 preloadPageCount 만큼 미리 로드해놓는 것만 다름
+                                      child: PreloadPageView.builder(
+                                        preloadPagesCount: 5,
+                                        controller: _preloadPageController,
+                                        scrollDirection: Axis.horizontal,
+                                        // physics: BouncingScrollPhysics(),
+                                        itemCount: _votesTodayShowing.length,
+                                        itemBuilder: (context, index) {
+                                          // print('pageviewRebuilt');
+                                          return GestureDetector(
+                                              onDoubleTap: () {
+                                                // 주제 선택 최대 수를 제한하고
+                                                if (_votesTodayNotShowing
+                                                        .length <
+                                                    3) {
+                                                  setState(() {
+                                                    // 더블 탭 하면 voteToday 섹션과 voteSelected 섹션에서
+                                                    // 보여줘야할 위젯과 보여주지 않는 위젯을 서로 교환하며 리스트에 저장한다.
+                                                    _votesTodayNotShowing.add(
+                                                        _votesTodayShowing[
+                                                            index]);
+                                                    _votesTodayShowing
+                                                        .removeAt(index);
+
+                                                    _votesSelectedShowing.add(
+                                                        _votesSelectedNotShowing[
+                                                            index]);
+                                                    _votesSelectedNotShowing
+                                                        .removeAt(index);
+                                                  });
+                                                } else
+                                                  return;
+                                              },
+                                              child: _votesTodayShowing[index]);
+                                        },
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: gap_l,
-                              ),
-                              Container(
-                                height: size.height * .2,
-                                // color: Colors.red,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: _votesSelectedShowing.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                        onDoubleTap: () {
-                                          setState(() {
-                                            // Selected 더블탭 -> 거기서 id 추출
-                                            // voteTodayShowing에서 자리찾기
-                                            // insert
+                                    SizedBox(
+                                      height: gap_m,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: <Widget>[
+                                        Text(
+                                          '선택한 투표',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            // fontFamily: 'AdventPro',
+                                            fontSize: 22,
+                                          ),
+                                        ),
+                                        FlatButton(
+                                          onPressed:
+                                              ((_votesSelectedShowing.length ==
+                                                          0) ||
+                                                      (userVote == null
+                                                          ? false
+                                                          : userVote.isVoted ==
+                                                              true))
+                                                  ? () {}
+                                                  : () {
+                                                      for (VoteSelected i
+                                                          in _votesSelectedShowing) {
+                                                        listSelected.add(i.idx);
+                                                      }
+                                                      listSelected.sort();
 
-                                            // 선택한 주제들 중 더블탭한 선택 주제 위젯을 temp에 보관.
-                                            VoteSelected temp =
-                                                _votesSelectedShowing[index];
-                                            // 더블탭한 주제의 subVote idx추출
-                                            int subVoteIdx = temp.idx;
+                                                      _navigationService
+                                                          .navigateWithArgTo(
+                                                              'ggook', [
+                                                        address,
+                                                        user,
+                                                        vote,
+                                                        listSelected,
+                                                        0,
+                                                      ]);
+                                                    },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: _votesSelectedShowing
+                                                            .length ==
+                                                        0
+                                                    ? Color(0xFF531818)
+                                                    : Color(0xFFD72929),
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: gap_m,
+                                                  horizontal: gap_xxl),
+                                              child: Text(
+                                                'GO VOTE',
+                                                style: TextStyle(
+                                                  color: _votesSelectedShowing
+                                                              .length ==
+                                                          0
+                                                      ? Color(0xFF605E5E)
+                                                      : Color(0xFFFFFFFF),
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontFamily: 'AdventPro',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: gap_l,
+                                    ),
+                                    Container(
+                                      height: size.height * .2,
+                                      // color: Colors.red,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: _votesSelectedShowing.length,
+                                        itemBuilder: (context, index) {
+                                          return GestureDetector(
+                                              onDoubleTap: () {
+                                                setState(() {
+                                                  // Selected 더블탭 -> 거기서 id 추출
+                                                  // voteTodayShowing에서 자리찾기
+                                                  // insert
 
-                                            List<int> indicesList = [];
+                                                  // 선택한 주제들 중 더블탭한 선택 주제 위젯을 temp에 보관.
+                                                  VoteSelected temp =
+                                                      _votesSelectedShowing[
+                                                          index];
+                                                  // 더블탭한 주제의 subVote idx추출
+                                                  int subVoteIdx = temp.idx;
 
-                                            // 오늘의 주제에 떠있는 주제들의 subVoteIdx를 indicesList에 넣기
-                                            for (VoteCard i
-                                                in _votesTodayShowing) {
-                                              indicesList.add(i.idx);
-                                            }
-                                            // 방금 더블탭한 subVoteIdx도 이 리스트에 추가
-                                            indicesList.add(subVoteIdx);
-                                            // 순서대로 sort
-                                            indicesList.sort();
+                                                  List<int> indicesList = [];
 
-                                            // 이 리스트에서 더블탭한 것의 순서를 세고
-                                            subVoteIdx =
-                                                indicesList.indexOf(subVoteIdx);
-                                            // 선택주제에서 not showing 리스트에 위에서 센 순서 자리에 넣고,
-                                            // 선택 주제 showing에서 해당 위젯을 삭제
-                                            _votesSelectedNotShowing.insert(
-                                                subVoteIdx,
-                                                _votesSelectedShowing[index]);
-                                            _votesSelectedShowing
-                                                .removeAt(index);
+                                                  // 오늘의 주제에 떠있는 주제들의 subVoteIdx를 indicesList에 넣기
+                                                  for (VoteCard i
+                                                      in _votesTodayShowing) {
+                                                    indicesList.add(i.idx);
+                                                  }
+                                                  // 방금 더블탭한 subVoteIdx도 이 리스트에 추가
+                                                  indicesList.add(subVoteIdx);
+                                                  // 순서대로 sort
+                                                  indicesList.sort();
 
-                                            // 오늘의 주제 showing에 다시 자리 찾아서 놓고
-                                            // 오늘의 주제 not showing에서 제거
-                                            _votesTodayShowing.insert(
-                                                subVoteIdx,
-                                                _votesTodayNotShowing[index]);
-                                            _votesTodayNotShowing
-                                                .removeAt(index);
-                                          });
+                                                  // 이 리스트에서 더블탭한 것의 순서를 세고
+                                                  subVoteIdx = indicesList
+                                                      .indexOf(subVoteIdx);
+                                                  // 선택주제에서 not showing 리스트에 위에서 센 순서 자리에 넣고,
+                                                  // 선택 주제 showing에서 해당 위젯을 삭제
+                                                  _votesSelectedNotShowing
+                                                      .insert(
+                                                          subVoteIdx,
+                                                          _votesSelectedShowing[
+                                                              index]);
+                                                  _votesSelectedShowing
+                                                      .removeAt(index);
+
+                                                  // 오늘의 주제 showing에 다시 자리 찾아서 놓고
+                                                  // 오늘의 주제 not showing에서 제거
+                                                  _votesTodayShowing.insert(
+                                                      subVoteIdx,
+                                                      _votesTodayNotShowing[
+                                                          index]);
+                                                  _votesTodayNotShowing
+                                                      .removeAt(index);
+                                                });
+                                              },
+                                              child:
+                                                  _votesSelectedShowing[index]);
                                         },
-                                        child: _votesSelectedShowing[index]);
-                                  },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            ]),
                           ),
                         ),
-                      ]),
-                    ),
-                  ),
-                );
+                      )
+                    : NotVotingView();
                 // Code:
 
               } else {

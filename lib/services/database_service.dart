@@ -342,10 +342,11 @@ class DatabaseService {
   Future<DatabaseAddressModel> getAddress(String uid) async {
     DatabaseAddressModel _databaseAddress;
 
-    String tempCategory = 'koreaStockStandard';
-    DateTime start = DateTime(2020, 09, 06, 08, 50, 00);
-    DateTime end = DateTime(2020, 09, 06, 16, 00, 00);
-    List<DateTime> tempTime = [start, end];
+    // 임시 데이터
+    // String tempCategory = 'koreaStockStandard';
+    // DateTime start = DateTime(2020, 09, 06, 08, 50, 00);
+    // DateTime end = DateTime(2020, 09, 06, 16, 00, 00);
+    // List<DateTime> tempTime = [start, end];
 
     String category = await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) {
@@ -359,6 +360,8 @@ class DatabaseService {
         );
 
     String baseDate = DateTimeModel().baseDate(category);
+
+    bool isVoting = DateTimeModel().isVoteAvailable(category);
     // String baseDate = '20200901';
     // bool isVoteAvailable = DateTimeModel().isVoteAvailable(tempCategory);
 
@@ -369,6 +372,7 @@ class DatabaseService {
       date: baseDate,
       category: category,
       season: season,
+      isVoting: isVoting,
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.date.toString());
