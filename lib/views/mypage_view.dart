@@ -114,7 +114,7 @@ class _MypageViewState extends State<MypageView> {
     result.add(_mypageListItem(model, '(o)푸쉬알림유무', null));
     result.add(_mypageListItem(model, '(x)내 활동', null));
     result.add(_mypageListItem(model, '(x)비밀번호 변경', null));
-    result.add(_mypageListItem(model, '(x)계좌정보', null));
+    result.add(_mypageListItem(model, '(k)계좌정보', 'mypage_accoutverification'));
     result.add(_mypageListItem(model, '(o)이용약관', 'mypage_termsofuse'));
     result.add(_mypageListItem(model, '(o)개인정보취급방침(^이용약관)', null));
     result.add(_mypageListItem(model, '(o)사업자정보(^이용약관)', null));

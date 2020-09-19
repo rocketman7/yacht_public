@@ -6,6 +6,7 @@ import 'services/dialog_service.dart';
 import 'services/storage_service.dart';
 import 'services/sharedPreferences_service.dart';
 import 'services/customCacheManager_service.dart';
+import 'services/accountVerification_service.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -20,4 +21,6 @@ void setupLocator() {
   locator.registerLazySingleton<SharedPreferencesService>(
       () => SharedPreferencesServiceLocal());
   locator.registerLazySingleton(() => CustomCacheManagerService());
+  locator.registerLazySingleton<AccountVerificationService>(
+      () => AccoutVerificationServiceMydata());
 }
