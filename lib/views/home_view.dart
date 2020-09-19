@@ -261,7 +261,7 @@ class _HomeViewState extends State<HomeView> {
                                         Text(
                                           "꾸욱",
                                           style: TextStyle(
-                                            fontSize: 28,
+                                            fontSize: 22,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFFFFFFFFF),
                                           ),

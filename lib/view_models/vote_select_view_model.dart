@@ -13,17 +13,16 @@ import '../services/database_service.dart';
 import '../services/navigation_service.dart';
 
 class VoteSelectViewModel extends FutureViewModel {
-  final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   //Code:
 
   String uid;
-  UserModel _user;
-  DatabaseAddressModel _address;
-  VoteModel _vote;
-  UserVoteModel _userVote;
-  List<SubVote> _subVote;
+  UserModel user;
+  DatabaseAddressModel address;
+  VoteModel vote;
+  UserVoteModel userVote;
+  List<SubVote> subVote;
   Timer _everySecond;
   DateTime _now;
   bool _isGgookAvailable = true;
@@ -44,40 +43,13 @@ class VoteSelectViewModel extends FutureViewModel {
     // getUser();
   }
 
-  Future<List<Object>> getAllModel(uid) async {
-    List<Object> _allModel = [];
-
-    _address = await getAddress();
-    _allModel.add(_address);
-    _allModel.add(await getUser(uid));
-    _allModel.add(await getVote(_address));
-    _allModel.add(await getUserVote(_address));
-
-    print(_allModel);
-    return _allModel;
-  }
-
-  Future<UserModel> getUser(String uid) async {
-    print(DateTime.now());
-    String getUid = _authService.auth.currentUser.uid;
-    print(DateTime.now().toString() + getUid);
-    _user = await _databaseService.getUser(getUid);
-    return _user;
-  }
-
-  Future<DatabaseAddressModel> getAddress() async {
-    _address = await _databaseService.getAddress(uid);
-    return _address;
-  }
-
-  Future<VoteModel> getVote(DatabaseAddressModel addressModel) async {
-    _vote = await _databaseService.getVotes(addressModel);
-    return _vote;
-  }
-
-  Future<UserVoteModel> getUserVote(DatabaseAddressModel addressModel) async {
-    _userVote = await _databaseService.getUserVote(addressModel);
-    return _userVote;
+  Future getAllModel(uid) async {
+    setBusy(true);
+    address = await _databaseService.getAddress(uid);
+    user = await _databaseService.getUser(uid);
+    vote = await _databaseService.getVotes(address);
+    userVote = await _databaseService.getUserVote(address);
+    setBusy(false);
   }
 
   Future signOut() async {
@@ -85,11 +57,6 @@ class VoteSelectViewModel extends FutureViewModel {
   }
 
   @override
-  Future futureToRun() async {
-    // TODO: implement futureToRun
-    var uid = await _authService.auth.currentUser.uid;
-
-    return uid;
-    // throw UnimplementedError();
-  }
+  Future futureToRun() => getAllModel(uid);
+  // throw UnimplementedError();
 }
