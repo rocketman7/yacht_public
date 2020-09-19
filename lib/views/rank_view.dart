@@ -53,12 +53,6 @@ class RankView extends StatelessWidget {
                                   },
                                   child: Text('rank DB 추가(비활성화)'),
                                 ),
-                                Container(
-                                  height: 30,
-                                  color: Colors.grey,
-                                  child: Text(
-                                      '나중에 bottom navigation bar 등 들어올 영역'),
-                                )
                               ],
                             ),
                           ),

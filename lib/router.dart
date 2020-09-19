@@ -13,6 +13,7 @@ import 'views/mypage_view.dart';
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_view.dart';
 import 'views/mypage_documents/termsOfUse_View.dart';
+import 'views/accountVerification_view.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -53,6 +54,9 @@ class Routers {
       case 'mypage_avatarselect':
         return MaterialPageRoute(
             builder: (context) => MypageAvatarSelectView());
+      case 'mypage_accoutverification':
+        return MaterialPageRoute(
+            builder: (context) => AccountVerificationView());
       case 'startup':
         return MaterialPageRoute(
             builder: (context) =>
