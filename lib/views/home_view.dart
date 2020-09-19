@@ -93,7 +93,7 @@ class _HomeViewState extends State<HomeView> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 18,
-                          vertical: 18,
+                          vertical: 30,
                         ),
                         child: Form(
                           key: _formKey,
@@ -157,10 +157,26 @@ class _HomeViewState extends State<HomeView> {
                                         fontSize: 20,
                                       ),
                                     ),
-                                    Text("5,000,000",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                        ))
+                                    Row(
+                                      children: <Widget>[
+                                        Text("5,000,000",
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: 'DmSans',
+                                              fontWeight: FontWeight.bold,
+                                            )),
+                                        Text(
+                                          " 원 ",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 18,
+                                        )
+                                      ],
+                                    )
                                   ],
                                 ),
                                 SizedBox(
@@ -179,6 +195,8 @@ class _HomeViewState extends State<HomeView> {
                                     Text("7",
                                         style: TextStyle(
                                           fontSize: 20,
+                                          fontFamily: 'DmSans',
+                                          fontWeight: FontWeight.bold,
                                         ))
                                   ],
                                 ),
@@ -198,13 +216,17 @@ class _HomeViewState extends State<HomeView> {
                                     Text("11",
                                         style: TextStyle(
                                           fontSize: 20,
+                                          fontFamily: 'DmSans',
+                                          fontWeight: FontWeight.bold,
                                         ))
                                   ],
                                 ),
                                 SizedBox(
                                   height: 14,
                                 ),
-                                Divider(),
+                                Divider(
+                                  thickness: 1,
+                                ),
                                 SizedBox(
                                   height: 14,
                                 ),
@@ -277,7 +299,9 @@ class _HomeViewState extends State<HomeView> {
                                 SizedBox(
                                   height: 14,
                                 ),
-                                Divider(),
+                                Divider(
+                                  thickness: 1,
+                                ),
                                 SizedBox(
                                   height: 14,
                                 ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -48,26 +49,18 @@ class _VoteCommentViewState extends State<VoteCommentView>
   // List<int> voteList;
 
   @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
-
-  @override
   void initState() {
     super.initState();
     // 주제 선택하는 좌우 스크롤 메뉴의 컨트롤러
-    _getAllModel = _viewModel.getAllModel(_viewModel.uid);
 
-    _tabController = TabController(length: subVoteLength, vsync: this);
-    _tabController.addListener(() {
-      if (!isDisposed) {
-        setState(() {
-          _currentIndex = _tabController.index;
-        });
-      }
-    });
+    // _tabController = TabController(length: 3, vsync: this);
+    // _tabController.addListener(() {
+    //   if (!isDisposed) {
+    //     setState(() {
+    //       _currentIndex = _tabController.index;
+    //     });
+    //   }
+    // });
   }
 
   @override
@@ -82,8 +75,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
-    isDisposed = true;
+    // _tabController.dispose();
+    // isDisposed = true;
   }
 
   @override
@@ -101,106 +94,120 @@ class _VoteCommentViewState extends State<VoteCommentView>
     print(nowString);
 
     return ViewModelBuilder<VoteCommentViewModel>.reactive(
-      viewModelBuilder: () => VoteCommentViewModel(),
-      builder: (context, model, child) => MaterialApp(
-        home: FutureBuilder(
-            future: _getAllModel,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                print("snapShotData Called");
-                // getVoteTodayWidget(snapshot.data[1]);
-                // getVoteSelectedWidget(snapshot.data[1]);
-                uid = model.uid;
-                List<Object> _allModel = snapshot.data;
-                DatabaseAddressModel address = _allModel[0];
-                UserModel user = _allModel[1];
-                VoteModel vote = _allModel[2];
-                UserVoteModel userVote = _allModel[3];
-                subVoteLength = vote.subVotes.length;
-                print('models ready');
-
-                return Scaffold(
-                  resizeToAvoidBottomPadding: false,
-                  body: Container(
-                    color: Colors.white,
-                    height: deviceHeight,
-                    // bottomNavigationBar: GgookBottomNaviBar(),
-                    // backgroundColor: Color(0xFF363636),
-                    child: SingleChildScrollView(
-                      child: SafeArea(
-                        // bottom: true,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: displayRatio > 1.85 ? gap_l : gap_xs,
+        viewModelBuilder: () => VoteCommentViewModel(),
+        builder: (context, model, child) {
+          return model.isBusy
+              ? LoadingView()
+              : Scaffold(
+                  body: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 18,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "커뮤니티",
+                            style: TextStyle(
+                              // fontFamily: 'Akrhip',
+                              fontSize: deviceHeight * .12 * 0.45,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: -2.0,
+                            ),
                           ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              // topBar(user),
-                              SizedBox(
-                                height: displayRatio > 1.85 ? gap_xxl : gap_xs,
-                              ),
-// 피드 종목 선택 리스트뷰
-                              TabBar(
-                                controller: _tabController,
-                                indicatorColor: Colors.red,
-                                labelColor: Colors.blue,
-                                unselectedLabelColor: Colors.black,
-                                isScrollable: true,
-                                tabs: List.generate(
-                                  vote.subVotes.length,
-                                  (index) => subVoteList(
-                                    vote.subVotes[index].title.toString(),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: gap_xs,
-                              ),
-                              Container(
-                                height: 570,
-                                child: TabBarView(
-                                  controller: _tabController,
-                                  children: List.generate(
-                                    3,
-                                    (index) => commentTabBarView(
-                                      index,
-                                      context,
-                                      address,
-                                      vote,
-                                      model,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: gap_xs,
-                              ),
-                              commentInput(
-                                _tabController.index,
-                                _commentTextController,
-                                address,
-                                user,
-                                vote,
-                                userVote,
-                                model,
-                              ),
-                              // SizedBox(
-                              //   height: gap_xxxl,
-                              // )
-                            ],
+                          SizedBox(
+                            height: 20,
                           ),
-                        ),
+                          Container(
+                              alignment: Alignment.center,
+                              height: deviceHeight * .12,
+                              color: Colors.blue[100],
+                              child: Text("Space for Calender")),
+                          SizedBox(
+                            height: 36,
+                          ),
+                          Text(
+                            "총 x개의 토론 주제",
+                            style: TextStyle(
+                              // fontFamily: 'Akrhip',
+                              fontSize: deviceHeight * .12 * 0.25,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: -2.0,
+                            ),
+                          ),
+                          Divider(
+                            color: Colors.black,
+                            thickness: 2,
+                          ),
+                          Flexible(
+                            child: Container(
+                              // height: 500,
+                              child: ListView.builder(
+                                itemCount: model.vote.subVotes.length + 1,
+                                itemBuilder: (context, index) {
+                                  if (index == 0) {
+                                    return ListTile(
+                                      leading: Container(
+                                        height: 60,
+                                        width: 60,
+                                        color: Colors.yellow,
+                                      ),
+                                      title: Text("Season 1",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      subtitle: Text("rocketman님 외에 50명 이야기중"),
+                                    );
+                                  } else {
+                                    return buildListTile(
+                                      model.vote.subVotes[index - 1],
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    // backgroundColor: Color(0XFF051417),
                   ),
                 );
-              } else {
-                return LoadingView();
-              }
-            }),
+        });
+  }
+
+  ListTile buildListTile(
+    SubVote subVote,
+  ) {
+    return ListTile(
+      leading: Container(
+        height: 60,
+        width: 60,
+        color: Colors.yellow,
+      ),
+      title: Text(subVote.title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          )),
+      subtitle: Text("rocketman님 외에 50명 이야기중"),
+    );
+  }
+
+  TabBar buildTabBar(VoteModel vote) {
+    return TabBar(
+      controller: _tabController,
+      indicatorColor: Colors.red,
+      labelColor: Colors.blue,
+      unselectedLabelColor: Colors.black,
+      isScrollable: true,
+      tabs: List.generate(
+        vote.subVotes.length,
+        (index) => subVoteList(
+          vote.subVotes[index].title.toString(),
+        ),
       ),
     );
   }

@@ -93,6 +93,10 @@ flutter:
     - family: DmSans
       fonts:
         - asset: assets/fonts/dm_sans/DMSans-Regular.ttf
+        - asset: assets/fonts/dm_sans/DMSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/dm_sans/DMSans-Bold.ttf
+          weight: 700
 
         # - asset: assets/fonts/advent_pro/AdventPro-SemiBold.ttf
   #   - family: Trajan Pro

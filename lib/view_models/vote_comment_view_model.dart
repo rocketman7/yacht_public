@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 import '../locator.dart';
@@ -12,7 +13,7 @@ import '../services/database_service.dart';
 import '../services/navigation_service.dart';
 import '../view_models/base_model.dart';
 
-class VoteCommentViewModel extends BaseModel {
+class VoteCommentViewModel extends FutureViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
   final DialogService _dialogService = locator<DialogService>();
@@ -20,12 +21,12 @@ class VoteCommentViewModel extends BaseModel {
 
   VoteCommentModel voteFeedModel;
 
-  UserVoteModel _userVote;
   int subVoteIndex;
 
-  UserModel _user;
-  DatabaseAddressModel _address;
-  VoteModel _vote;
+  DatabaseAddressModel address;
+  UserModel user;
+  VoteModel vote;
+  UserVoteModel userVote;
   String uid;
 
   VoteCommentViewModel() {
@@ -35,36 +36,13 @@ class VoteCommentViewModel extends BaseModel {
     // getUser();
   }
 
-  Future<List<Object>> getAllModel(uid) async {
-    List<Object> _allModel = [];
-
-    _allModel.add(await getAddress());
-    _allModel.add(await getUser(uid));
-    _allModel.add(await getVote(_address));
-    _allModel.add(await getUserVote(_address));
-
-    print(_allModel);
-    return _allModel;
-  }
-
-  Future<DatabaseAddressModel> getAddress() async {
-    _address = await _databaseService.getAddress(uid);
-    return _address;
-  }
-
-  Future<UserModel> getUser(String uid) async {
-    _user = await _databaseService.getUser(uid);
-    return _user;
-  }
-
-  Future<VoteModel> getVote(DatabaseAddressModel address) async {
-    _vote = await _databaseService.getVotes(address);
-    return _vote;
-  }
-
-  Future getUserVote(DatabaseAddressModel address) async {
-    _userVote = await _databaseService.getUserVote(address);
-    return _userVote;
+  Future getAllModel(uid) async {
+    setBusy(true);
+    address = await _databaseService.getAddress(uid);
+    user = await _databaseService.getUser(uid);
+    vote = await _databaseService.getVotes(address);
+    userVote = await _databaseService.getUserVote(address);
+    setBusy(false);
   }
 
   Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
@@ -96,4 +74,7 @@ class VoteCommentViewModel extends BaseModel {
       print("user Not Confirmed");
     }
   }
+
+  @override
+  Future futureToRun() => getAllModel(uid);
 }

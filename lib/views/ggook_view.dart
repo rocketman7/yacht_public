@@ -71,6 +71,7 @@ class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    List<int> _selectedIdx = List();
     ggookArgs =
         widget.ggookArgs; // address, user, vote, listSelected, idx(= 0),
     print(ggookArgs);
@@ -78,6 +79,10 @@ class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
     _user = ggookArgs[1];
     _vote = ggookArgs[2];
     _listSelected = ggookArgs[3];
+
+    print(_selectedIdx);
+    print(_selectedIdx.length);
+
     _idx = ggookArgs[4];
     _userVote = (ggookArgs.length > 5)
         ? ggookArgs[5]
