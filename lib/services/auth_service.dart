@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:yachtOne/services/navigation_service.dart';
+import 'package:yachtOne/view_models/phone_auth_view_model.dart';
+import 'package:yachtOne/views/phone_auth_view.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../services/database_service.dart';
@@ -19,68 +22,82 @@ class AuthService {
   UserModel _currentUserModel;
   UserModel get currentUser => _currentUserModel;
 
+  String _verificationId;
+  String get verificationId => _verificationId;
   // Phone Auth
-  Future verifyPhoneNumber(String value, context) async {
-    final TextEditingController _verificationCodeController =
-        TextEditingController();
+  Future sendPhoneAuthSms(String value, BuildContext context) async {
     // Firebase Auth의 verifyPhoneNumber method
     _auth.verifyPhoneNumber(
-        phoneNumber: value,
-        // 일부 안드로이드폰에서 사용자의 수동 입력없이 자동으로 verify되는 경우에만 아래 함수 trigger된다
-        verificationCompleted: (credential) => {},
-        verificationFailed: (e) => print(e.message),
-        codeAutoRetrievalTimeout: (e) => print(e.characters),
-        timeout: Duration(seconds: 60),
-        // code 보내지면 아래 함수 call
-        codeSent: (String verificationId, [int forceResendingToken]) {
-          //show dialog to take input from the user
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => AlertDialog(
-                    title: Text("Enter SMS Code"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        TextField(
-                          controller: _verificationCodeController,
-                          keyboardType: TextInputType.number,
-                        ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text("Confirm"),
-                        textColor: Colors.white,
-                        color: Colors.redAccent,
-                        onPressed: () async {
-                          final String code =
-                              _verificationCodeController.text.trim();
+      phoneNumber: value,
+      // 일부 안드로이드폰에서 사용자의 수동 입력없이 자동으로 verify되는 경우에만 아래 함수 trigger된다
+      verificationCompleted: (credential) => {},
+      verificationFailed: (e) => print(e.message),
+      codeAutoRetrievalTimeout: (e) => print(e.characters),
+      timeout: Duration(seconds: 120),
+      // code 보내지면 아래 함수 call
+      codeSent: (String verificationId, [int forceResendingToken]) {
+        // how to send this 'verificationId' to the ViewModel
+        // verificationId;
+        _verificationId = verificationId;
+      },
+    );
+  }
 
-                          print(
-                              "verficationID is " + verificationId.toString());
-                          AuthCredential credential =
-                              PhoneAuthProvider.credential(
-                                  verificationId: verificationId,
-                                  smsCode: code);
+  Future verifySms(String code, String verificationId) async {
+    print("verficationID is " + verificationId.toString());
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationId,
+      smsCode: code,
+    );
 
-                          print(credential);
-                          // UserCredential result =
-                          //     await _auth.signInWithCredential(credential);
+    // FirebaseApp fbWorkerApp =
+    //     Firebase.apps['auth-worker'];
+    // fbWorkerAuth = fbWorkerApp.auth();
 
-                          // User user = result.user;
-                          print("After Signin " + credential.toString());
-                          // print(result.user);
-                          if (credential != null) {
-                            Navigator.pop(context);
-                            _navigationService.navigateWithArgTo(
-                                'register', credential);
-                          }
-                        },
-                      )
-                    ],
-                  ));
-        });
+    print(Firebase.apps.length);
+    // await Firebase.initializeApp(
+    //     name: 'SecondaryAppForTest',
+    //     options: const FirebaseOptions(
+    //       apiKey: 'AIzaSyCzZB2ckDu2dvKmtXjla3jV79cZeMDNoaY',
+    //       appId: '1:122560218272:android:e495faa6a8ee5c3cedb5c5',
+    //       messagingSenderId: '122560218272',
+    //       projectId: 'yachtonesecondary',
+    //     ));
+// RejectedCredential
+// Indicates that credential related request data is invalid.
+
+// This can occur when there is a project number mismatch
+// (sessionInfo, spatula header, temporary proof), an incorrect
+// temporary proof phone number, or during game center sign in when
+// the user is already signed into a different game center account.
+    // FirebaseApp fbWorkerApp = Firebase.app('SecondaryAppForTest');
+    // await fbWorkerApp.delete();
+
+    // FirebaseAuth fbWorkerAuth = FirebaseAuth.instanceFor(app: fbWorkerApp);
+
+    // fbWorkerAuth.signInWithCredential(credential).then((value) {
+    //   print("SUCCESS");
+    //   _navigationService.navigateWithArgTo('register', credential);
+    // });
+
+    // credential을 만들 때 code check하지 않고 signInWithCredential에서 체크
+    await auth.signInWithCredential(credential).catchError((e) {
+      print("ERROR CATCH" + e.message);
+      credential = null;
+      return credential;
+    }).then((value) {
+      // value = null;
+      // auth.signOut();
+      if (value != null) {
+        _navigationService.navigateWithArgTo('register', credential);
+      }
+    });
+
+    // print(auth.currentUser.uid);
+    // print(credential);
+    // if (credential != null) {
+    //   _navigationService.navigateWithArgTo('register', credential);
+    // }
   }
 
   // 이메일 회원가입
@@ -88,25 +105,31 @@ class AuthService {
     @required userName,
     @required email,
     @required password,
-    @required AuthCredential phoneCredential,
+    @required PhoneAuthCredential phoneCredential,
   }) async {
     try {
-      final UserCredential authResult = await _auth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      // final UserCredential authResult = await _auth
+      //     .createUserWithEmailAndPassword(email: email, password: password);
 
+      final credential =
+          EmailAuthProvider.credential(email: email, password: password);
+
+      print("Register: " + phoneCredential.toString());
       // AuthCredential emailCredential = EmailAuthProvider.credential(
       //   email: email,
       //   password: password,
       // );
 
-      await authResult.user.linkWithCredential(phoneCredential);
+      var user = auth.currentUser;
+      print(phoneCredential.smsCode);
+      await user.linkWithCredential(credential);
 
       User _user = _auth.currentUser;
       String phoneNumber = _user.phoneNumber;
       print("my Phone Number is " + phoneNumber);
       // User 정보 UserModel에 넣기
       _currentUserModel = UserModel(
-        uid: authResult.user.uid,
+        uid: user.uid,
         userName: userName,
         email: email,
         phoneNumber: phoneNumber,
@@ -119,7 +142,7 @@ class AuthService {
       await _databaseService.createUser(_currentUserModel);
 
       // Register 성공하면 return true
-      return authResult.user != null;
+      return user != null;
     } on FirebaseAuthException catch (e) {
       print(e.code);
       switch (e.code) {

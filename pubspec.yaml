@@ -49,6 +49,7 @@ dependencies:
   cached_network_image: ^2.3.1
   flutter_cache_manager: ^1.4.1
   path: ^1.7.0
+  circular_check_box: ^1.0.4
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +90,10 @@ flutter:
     - family: Arkhip
       fonts:
         - asset: assets/fonts/arkhip_regular.ttf
+    - family: DmSans
+      fonts:
+        - asset: assets/fonts/dm_sans/DMSans-Regular.ttf
+
         # - asset: assets/fonts/advent_pro/AdventPro-SemiBold.ttf
   #   - family: Trajan Pro
   #     fonts:

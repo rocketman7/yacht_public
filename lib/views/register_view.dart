@@ -9,7 +9,7 @@ import '../view_models/register_view_model.dart';
 import '../views/constants/size.dart';
 
 class RegisterView extends StatefulWidget {
-  final AuthCredential credential;
+  final PhoneAuthCredential credential;
   RegisterView(this.credential);
 
   @override
@@ -18,8 +18,6 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   final NavigationService _navigationService = locator<NavigationService>();
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _userNameController = TextEditingController();
@@ -27,56 +25,318 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+
+  int _nickLength;
+  int _emailLength;
+  int _passwordLength;
+  int _confirmPasswordLength;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+
+    _nickLength = 0;
+    _emailLength = 0;
+    _passwordLength = 0;
+    _confirmPasswordLength = 0;
+  }
+
   @override
   Widget build(BuildContext context) {
-    print('register view built');
-    print(widget.credential.toString());
-    return ViewModelBuilder<RegisterViewModel>.nonReactive(
+    final PhoneAuthCredential credential = widget.credential;
+    final Size size = MediaQuery.of(context).size;
+    final deviceHeight = size.height;
+    final deviceWidth = size.width;
+
+    return ViewModelBuilder<RegisterViewModel>.reactive(
       viewModelBuilder: () => RegisterViewModel(),
       onModelReady: (model) => model,
       builder: (context, model, child) => Scaffold(
-        body: Stack(
-          children: <Widget>[
-            Container(
-              color: Color(0XFF051417),
-            ),
-            // 이걸로 column 전체 감싸줘야 키보드 열릴 때 화면 가변적으로 움직이게 됨
-            SingleChildScrollView(
-              // reverse를 true로 둬야 Email Textform 클릭했을 때 column 맨 아래까지 키보드 위로 올라감.
-              reverse: true,
-              child: Column(
-                // mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 200,
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "꾸  욱",
-                      style: TextStyle(
-                        fontFamily: 'NanumHandWriting',
-                        fontSize: 70,
-                        color: const Color(0xFFCFD8E4),
+          backgroundColor: Colors.white,
+          body: Form(
+            key: _formKey,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: SingleChildScrollView(
+                  reverse: true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      SizedBox(
+                        height: deviceHeight * .08,
                       ),
-                    ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Image(
+                          image: AssetImage('assets/images/ggookLogo.png'),
+                          height: 75,
+                        ),
+                      ),
+                      SizedBox(
+                        height: deviceHeight * .02,
+                      ),
+                      Text(
+                        "계정정보",
+                        style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 14,
+                      ),
+                      Text(
+                        "회원가입을 위해 아래 정보를 입력해주세요.",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          height: 1.2,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      TextFormField(
+                        onChanged: (text) {
+                          setState(() {
+                            _nickLength = text.length;
+                          });
+                        },
+                        textAlign: TextAlign.left,
+                        // 유저 네임 입력창
+                        controller: _userNameController,
+                        keyboardType: TextInputType.text,
+                        // validator: (value) {},
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontFamily: 'DmSans',
+                          // fontWeight: FontWeight.w700,
+                          letterSpacing: -1.0,
+                        ),
+                        // validator: ((value) {
+                        //   if (model.checkUserNameDuplicate(value) == true) {
+                        //     return "이미 존재하는 닉네임입니다";
+                        //   }
+                        //   return null;
+                        // }),
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFF2F2F2),
+                              width: 1.0,
+                            ),
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          alignLabelWithHint: true,
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFF2F2F2),
+                              width: 1.0,
+                            ),
+                          ),
+                          filled: false,
+                          hintText: "닉네임",
+                          hintStyle: TextStyle(
+                            fontSize: 15,
+                          ),
+                          // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      TextFormField(
+                        onChanged: (text) {
+                          setState(() {
+                            _emailLength = text.length;
+                          });
+                        },
+                        textAlign: TextAlign.left,
+                        // 유저 네임 입력창
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        // validator: (value) {},
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontFamily: 'DmSans',
+                          // fontWeight: FontWeight.w700,
+                          letterSpacing: -1.0,
+                        ),
+                        // validator: ((value) {
+                        //   if (model.checkUserNameDuplicate(value) == true) {
+                        //     return "이미 존재하는 닉네임입니다";
+                        //   }
+                        //   return null;
+                        // }),
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFF2F2F2),
+                              width: 1.0,
+                            ),
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          alignLabelWithHint: true,
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFF2F2F2),
+                              width: 1.0,
+                            ),
+                          ),
+                          filled: false,
+                          hintText: "이메일",
+                          hintStyle: TextStyle(
+                            fontSize: 15,
+                          ),
+                          // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      TextFormField(
+                        onChanged: (text) {
+                          setState(() {
+                            _passwordLength = text.length;
+                          });
+                        },
+                        textAlign: TextAlign.left,
+                        obscureText: true,
+                        controller: _passwordController,
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value.length < 7) {
+                            return "7자 이상 비밀번호를 입력하세요";
+                          }
+                          return null;
+                        },
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontFamily: 'DmSans',
+                          // fontWeight: FontWeight.w700,
+                          letterSpacing: -1.0,
+                        ),
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFF2F2F2),
+                              width: 1.0,
+                            ),
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          alignLabelWithHint: true,
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFF2F2F2),
+                              width: 1.0,
+                            ),
+                          ),
+                          filled: false,
+                          hintText: "비밀번호",
+                          hintStyle: TextStyle(
+                            fontSize: 15,
+                          ),
+                          // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      TextFormField(
+                        onChanged: (text) {
+                          setState(() {
+                            _confirmPasswordLength = text.length;
+                          });
+                        },
+                        textAlign: TextAlign.left,
+                        obscureText: true,
+                        controller: _confirmPasswordController,
+                        keyboardType: TextInputType.text,
+                        validator: (value) {
+                          if (value != _passwordController.text) {
+                            return "비밀번호가 다릅니다.";
+                          }
+                          return null;
+                        },
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontFamily: 'DmSans',
+                          // fontWeight: FontWeight.w700,
+                          letterSpacing: -1.0,
+                        ),
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFF2F2F2),
+                              width: 1.0,
+                            ),
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          alignLabelWithHint: true,
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFF2F2F2),
+                              width: 1.0,
+                            ),
+                          ),
+                          filled: false,
+                          hintText: "비밀번호 확인",
+                          hintStyle: TextStyle(
+                            fontSize: 15,
+                          ),
+                          // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: () async {
+                          if (_formKey.currentState.validate() &&
+                              (_nickLength *
+                                      _emailLength *
+                                      _passwordLength *
+                                      _confirmPasswordLength >
+                                  0)) {
+                            model.register(
+                              userName: _userNameController.text,
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                              credential: credential,
+                            );
+                          }
+                        },
+                        minWidth: double.infinity,
+                        height: 60,
+                        child: Text(
+                          "다음",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        color: (_nickLength *
+                                    _emailLength *
+                                    _passwordLength *
+                                    _confirmPasswordLength >
+                                0)
+                            ? Color(0xFF1EC8CF)
+                            : Color(0xFFB2B7BE),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    height: 80,
-                  ),
-                  // 아래 따로 위젯으로 만듬
-                  _inputForm(model, context, widget.credential),
-                ],
+                ),
               ),
             ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 
-  Widget _inputForm(model, context, AuthCredential credential) {
+  Widget _inputForm(model, context, PhoneAuthCredential credential) {
     // FormState를 사용할 inputForm들을 모두 Form 아래에 위치해서 key 지정 -> validator에 조건 지정
     // .currentState.validate() 으로 validate 여부 가릴 수 있음
     return Form(

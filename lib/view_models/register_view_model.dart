@@ -18,7 +18,7 @@ class RegisterViewModel extends BaseModel {
     @required String userName,
     @required String email,
     @required String password,
-    AuthCredential credential,
+    PhoneAuthCredential credential,
   }) async {
     List<String> allUserName = await _databaseService.getAllUserNameSnapshot();
 
@@ -56,10 +56,6 @@ class RegisterViewModel extends BaseModel {
     }
   }
 
-  Future<dynamic> phoneAuth(String value, context) async {
-    // var user = _authService.currentUser;
-    return _authService.verifyPhoneNumber(value, context);
-  }
   // Future checkUserNameDuplicate(@required userName) async {
   //   print("All user " + allUserName.toString());
   //   return true;

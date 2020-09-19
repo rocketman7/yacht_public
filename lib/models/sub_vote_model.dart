@@ -18,6 +18,7 @@ class SubVote {
   final int numVoted0;
   final int numVoted1;
   final int result;
+  final List<dynamic> issueCode;
 
   SubVote({
     this.id,
@@ -28,6 +29,7 @@ class SubVote {
     this.numVoted0,
     this.numVoted1,
     this.result,
+    this.issueCode,
   });
 
 // Json -> SubVoteModel
@@ -39,6 +41,7 @@ class SubVote {
         voteChoices = data['voteChoices'],
         numVoted0 = data['numVoted0'],
         numVoted1 = data['numVoted1'],
+        issueCode = data['issueCode'],
         result = data['result'];
 
   // SubVoteModel -> Json 변환 함수

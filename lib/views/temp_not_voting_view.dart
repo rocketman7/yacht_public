@@ -1,7 +1,15 @@
+import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:yachtOne/views/constants/size.dart';
 
-class NotVotingView extends StatelessWidget {
+class NotVotingView extends StatefulWidget {
+  @override
+  _NotVotingViewState createState() => _NotVotingViewState();
+}
+
+class _NotVotingViewState extends State<NotVotingView> {
+  bool selected = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,7 +18,7 @@ class NotVotingView extends StatelessWidget {
           height: deviceHeight,
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
                 children: <Widget>[
                   Container(
@@ -121,30 +129,54 @@ class NotVotingView extends StatelessWidget {
     );
   }
 
-  Widget singleChoice(String text, Color color) {
+  Widget singleChoice(
+    String text,
+    Color color,
+  ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      padding: const EdgeInsets.symmetric(vertical: 7.0),
       child: Stack(
+        alignment: Alignment.centerLeft,
         children: <Widget>[
-          Container(
-            height: deviceHeight * .15,
-            // color: Colors.redAccent,
-            child: FlatButton(
-              color: color,
-              onPressed: () {},
-              minWidth: double.infinity,
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                      color: Colors.black, width: 6, style: BorderStyle.solid),
-                  borderRadius: BorderRadius.circular(70.0)),
-              child: Text(
-                text,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: deviceHeight * .15 * .35,
-                  fontWeight: FontWeight.w700,
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Container(
+              height: deviceHeight * .15,
+              // color: Colors.redAccent,
+              child: FlatButton(
+                color: color,
+                onPressed: () {},
+                minWidth: double.infinity,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Colors.black,
+                        width: 5,
+                        style: BorderStyle.solid),
+                    borderRadius: BorderRadius.circular(70.0)),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: deviceHeight * .15 * .35,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
+            ),
+          ),
+          Transform.scale(
+            scale: 2.0,
+            child: CircularCheckBox(
+              materialTapTargetSize: MaterialTapTargetSize.padded,
+              visualDensity: VisualDensity(horizontal: 1, vertical: 0),
+              value: this.selected,
+              checkColor: Colors.white,
+              activeColor: Color(0xFF1EC8CF),
+              inactiveColor: Color(0xFF1EC8CF),
+              disabledColor: Colors.grey,
+              onChanged: (val) => this.setState(() {
+                this.selected = !this.selected;
+              }),
             ),
           ),
         ],
