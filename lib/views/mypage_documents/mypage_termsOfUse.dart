@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../services/navigation_service.dart';
 
-import '../../locator.dart';
 import '../loading_view.dart';
 
-class TermsOfUseView extends StatelessWidget {
+class MypageTermofuse extends StatelessWidget {
   Future<String> _termsOfUseFuture() async {
     return await rootBundle.loadString('assets/documents/termsOfUse.txt');
   }
@@ -16,21 +14,19 @@ class TermsOfUseView extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           String _termsOfUse = snapshot.data;
-          return SafeArea(
-            child: Scaffold(
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                '이용약관',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              elevation: 0,
+            ),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
                 child: Column(
                   children: [
-                    Text(
-                      '꾸욱 이용약관',
-                      style: TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      height: 1,
-                      color: Colors.black26,
-                    ),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -42,17 +38,6 @@ class TermsOfUseView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        /*_navigationService.navigateWithArgTo(
-                            'mypage', 'm2UUvxsAwfdLFP4RB8q4SgkaNgr2');*/
-                        Navigator.pop(context, false);
-                      },
-                      child: Container(
-                        height: 10.0,
-                        child: Text('돌아가기'),
-                      ),
-                    )
                   ],
                 ),
               ),
