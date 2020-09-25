@@ -54,8 +54,10 @@ class MypagePushAlarmSettingView extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     )),
-                Text('${model.pushAlarmSubTitles[pushAlarmIndex]}',
-                    style: TextStyle(fontSize: 12, color: Color(0xFFB9B9B9)))
+                Text(
+                  '${model.pushAlarmSubTitles[pushAlarmIndex]}',
+                  style: TextStyle(fontSize: 12, color: Color(0xFFB9B9B9)),
+                )
               ],
             ),
             Spacer(),

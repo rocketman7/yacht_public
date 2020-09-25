@@ -8,10 +8,66 @@ abstract class AccountVerificationService {
   Future<Object> accOccupyVerification(
       String accNum, String bankCode, String authText);
   int authTextGenerate();
+  int getBankListLength();
+  Map<String, String> getBankList();
+  Map<String, String> getBankLogoList();
 }
 
 class AccoutVerificationServiceMydata extends AccountVerificationService {
+  //나중에 DB로 옮기는게..?
   final String _token = 'ed1ff970f8c64e73857026e430dca5484aa2933e';
+
+  //나중에 DB로 옮기는게..?
+  final Map<String, String> bankList = {
+    '유안타증권': '209',
+    'KB증권': '218',
+    '미래에셋대우': '238',
+    '삼성증권': '240',
+    '한국투자증권': '243',
+    'NH투자증권': '247',
+    '교보증권': '261',
+    '하이투자증권': '262',
+    '현대차투자증권': '263',
+    '키움증권': '264',
+    '이베스트투자증권': '265',
+    'SK증권': '266',
+    '대신증권': '267',
+    '한화투자증권': '269',
+    '하나금융투자': '270',
+    '신한금융투자': '278',
+    '동부증권': '279',
+    '유진투자증권': '280',
+    '메리츠종합금융증권': '287',
+    '부국증권': '290',
+    '신영증권': '291',
+    '케이프투자증권': '292',
+  };
+
+  //나중에 DB로 옮기는게..?
+  final Map<String, String> bankLogoList = {
+    '유안타증권': 'assets/images/logo1.png',
+    'KB증권': 'assets/images/logo1.png',
+    '미래에셋대우': 'assets/images/logo1.png',
+    '삼성증권': 'assets/images/logo1.png',
+    '한국투자증권': 'assets/images/logo1.png',
+    'NH투자증권': 'assets/images/logo1.png',
+    '교보증권': 'assets/images/logo1.png',
+    '하이투자증권': 'assets/images/logo1.png',
+    '현대차투자증권': 'assets/images/logo1.png',
+    '키움증권': 'assets/images/logo1.png',
+    '이베스트투자증권': 'assets/images/logo1.png',
+    'SK증권': 'assets/images/logo1.png',
+    '대신증권': 'assets/images/logo1.png',
+    '한화투자증권': 'assets/images/logo1.png',
+    '하나금융투자': 'assets/images/logo1.png',
+    '신한금융투자': 'assets/images/logo1.png',
+    '동부증권': 'assets/images/logo1.png',
+    '유진투자증권': 'assets/images/logo1.png',
+    '메리츠종합금융증권': 'assets/images/logo1.png',
+    '부국증권': 'assets/images/logo1.png',
+    '신영증권': 'assets/images/logo1.png',
+    '케이프투자증권': 'assets/images/logo1.png',
+  };
 
   @override
   Future<Object> accOwnerVerification(
@@ -96,5 +152,20 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
     int randomAuthNum = random.nextInt(9000) + 1000;
 
     return randomAuthNum;
+  }
+
+  @override
+  int getBankListLength() {
+    return bankList.length;
+  }
+
+  @override
+  Map<String, String> getBankList() {
+    return bankList;
+  }
+
+  @override
+  Map<String, String> getBankLogoList() {
+    return bankLogoList;
   }
 }

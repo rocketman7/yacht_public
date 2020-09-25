@@ -23,6 +23,10 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   // 증권계좌가 인증되지 않았을 때 인증절차에서 필요한 ui 변수들. 이마저 viewmodel에 담는게 나은것인지?
   bool visibleButton1 = true;
   bool visibleBankList = false;
+  // 사용자가 선택, 입력한 증권계좌정보들
+  String secName = '';
+  String accNumber = '';
+  String accName = '';
 
   // method
   MypageAccountVerificationViewModel() {
@@ -55,6 +59,13 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
     notifyListeners();
     return null;
   }
+
+  int getBankListLength() => accountVerificationService.getBankListLength();
+
+  Map<String, String> getBankList() => accountVerificationService.getBankList();
+
+  Map<String, String> getBankLogoList() =>
+      accountVerificationService.getBankLogoList();
 
   @override
   Future futureToRun() => getModels();
