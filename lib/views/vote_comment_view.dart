@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
@@ -26,7 +27,7 @@ class VoteCommentView extends StatefulWidget {
 
 class _VoteCommentViewState extends State<VoteCommentView>
     with TickerProviderStateMixin {
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   final DialogService _dialogService = locator<DialogService>();
   final VoteCommentViewModel _viewModel = VoteCommentViewModel();
   final GlobalKey _globalKey = GlobalKey();
@@ -103,7 +104,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 18,
-                        vertical: 18,
+                        vertical: 35,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,7 +114,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                             style: TextStyle(
                               // fontFamily: 'Akrhip',
                               fontSize: deviceHeight * .12 * 0.45,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w900,
                               letterSpacing: -2.0,
                             ),
                           ),
@@ -164,6 +165,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                   } else {
                                     return buildListTile(
                                       model.vote.subVotes[index - 1],
+                                      index,
                                     );
                                   }
                                 },
@@ -180,8 +182,12 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
   ListTile buildListTile(
     SubVote subVote,
+    int index,
   ) {
     return ListTile(
+      onTap: () {
+        _navigationService.navigateWithArgTo('subjectComment', (index - 1));
+      },
       leading: Container(
         height: 60,
         width: 60,

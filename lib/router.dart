@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yachtOne/views/phone_auth_view.dart';
+import 'package:yachtOne/views/subject_community_view.dart';
 import 'managers/dialog_manager.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
@@ -43,6 +44,10 @@ class Routers {
       case 'voteComment':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: VoteCommentView()));
+      case 'subjectComment':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(
+                child: SubjectCommunityView(routeSettings.arguments)));
       case 'rank':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: RankView()));

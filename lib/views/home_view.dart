@@ -98,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
                         child: Form(
                           key: _formKey,
                           child: SingleChildScrollView(
-                            reverse: true,
+                            // reverse: true,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[

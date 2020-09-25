@@ -211,6 +211,7 @@ class DatabaseService {
   }
 
   Stream<List<VoteCommentModel>> getPostList(DatabaseAddressModel address) {
+    print("CALLED");
     return address
         .postsSeasonSubVoteCollection()
         .orderBy('postDateTime')
@@ -369,7 +370,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: baseDate,
+      date: '20200921',
       category: category,
       season: season,
       isVoting: isVoting,
