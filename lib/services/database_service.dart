@@ -349,11 +349,7 @@ class DatabaseService {
     // DateTime end = DateTime(2020, 09, 06, 16, 00, 00);
     // List<DateTime> tempTime = [start, end];
 
-    String category = 'koreaStockStandard';
-    String season = 'season001';
-    String baseDate = '20200918';
-
-    /*String category = await DatabaseAddressModel().adminOpenSeason().get().then(
+    String category = await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) {
         print(doc.data());
         return doc.data()['category'];
@@ -364,7 +360,7 @@ class DatabaseService {
           (doc) => doc.data()['season'],
         );
 
-    String baseDate = DateTimeModel().baseDate(category);*/
+    String baseDate = DateTimeModel().baseDate(category);
 
     bool isVoting = DateTimeModel().isVoteAvailable(category);
     // String baseDate = '20200901';
