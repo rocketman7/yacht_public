@@ -7,6 +7,7 @@ import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/views/home_view.dart';
 import 'package:yachtOne/views/login_view.dart';
 import 'package:yachtOne/views/mypage_view.dart';
+import 'package:yachtOne/views/mypage_main_view.dart';
 import 'package:yachtOne/views/rank_view.dart';
 import 'package:yachtOne/views/vote_comment_view.dart';
 import 'package:yachtOne/views/vote_select_view.dart';
@@ -63,7 +64,8 @@ class _StartUpViewState extends State<StartUpView>
       VoteSelectView(),
       VoteCommentView(),
       RankView(),
-      MypageView(),
+      MypageMainView(),
+      // MypageView(),
     ];
     print("viewLIST DONE");
 

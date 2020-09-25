@@ -20,15 +20,14 @@ class RankView extends StatelessWidget {
           return Scaffold(
               body: model.hasError
                   ? Container(
-                      child: Text('error발생. 뒤로가기 버튼을 눌러 페이지를 벗어나신 후 다시 시도하세요.'),
+                      child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                     )
                   : model.isBusy
                       ? LoadingView()
                       : SafeArea(
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    displayRatio > 1.85 ? gap_l : gap_xs),
+                                horizontal: 18.0, vertical: 18.0),
                             child: Column(
                               children: [
                                 // topBar(model.user),

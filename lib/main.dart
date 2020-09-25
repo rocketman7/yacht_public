@@ -39,6 +39,7 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: Routers.generateRoute,
         home: DialogManager(child: InitialView()),
+        theme: ThemeData(primaryColor: Colors.white),
       ),
     );
   }

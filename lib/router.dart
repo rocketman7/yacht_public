@@ -10,11 +10,15 @@ import 'views/startup_view.dart';
 import 'views/ggook_view.dart';
 import 'views/rank_view.dart';
 import 'views/mypage_view.dart';
+import 'views/mypage_main_view.dart';
 
+import 'views/mypage_documents/mypage_privacyPolicy.dart';
+import 'views/mypage_documents/mypage_termsOfUse.dart';
+import 'views/mypage_documents/mypage_businessInformation.dart';
+import 'views/mypage_documents/mypage_pushAlarmSetting_view.dart';
+import 'views/mypage_documents/mypage_accountVerification_view.dart';
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_view.dart';
-import 'views/mypage_documents/termsOfUse_View.dart';
-import 'views/accountVerification_view.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -54,14 +58,25 @@ class Routers {
       case 'mypage':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: MypageView()));
+      case 'mypage_main':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(child: MypageMainView()));
       case 'mypage_termsofuse':
-        return MaterialPageRoute(builder: (context) => TermsOfUseView());
+        return MaterialPageRoute(builder: (context) => MypageTermofuse());
+      case 'mypage_privacypolicy':
+        return MaterialPageRoute(builder: (context) => MypagePrivacyPolicy());
+      case 'mypage_businessinformation':
+        return MaterialPageRoute(
+            builder: (context) => MypageBusinessInformation());
+      case 'mypage_pushalarmsetting':
+        return MaterialPageRoute(
+            builder: (context) => MypagePushAlarmSettingView());
       case 'mypage_avatarselect':
         return MaterialPageRoute(
             builder: (context) => MypageAvatarSelectView());
       case 'mypage_accoutverification':
         return MaterialPageRoute(
-            builder: (context) => AccountVerificationView());
+            builder: (context) => MypageAccountVerificationView());
       case 'startup':
         return MaterialPageRoute(
             builder: (context) =>
