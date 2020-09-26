@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 import '../../view_models/mypage_accountVerification_view_model.dart';
-import '../loading_view.dart';
 import '../constants/size.dart';
 
 // 텍스트 입력 시 formkey 를 위해 얘만 stateful widget.
@@ -30,15 +30,20 @@ class _MypageAccountVerificationViewState
                   '계좌정보',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                // elevation: 1,
                 elevation: 0,
               ),
+              backgroundColor: Colors.white,
               resizeToAvoidBottomInset: false,
               body: model.hasError
                   ? Container(
                       child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                     )
                   : model.isBusy
-                      ? LoadingView()
+                      ? FlareActor(
+                          'assets/images/Loading.flr',
+                          animation: 'loading',
+                        )
                       : Form(
                           key: _formKey,
                           child: SafeArea(
@@ -183,7 +188,7 @@ class _MypageAccountVerificationViewState
                       Icons.keyboard_arrow_down,
                       color: Colors.transparent,
                     ),
-                    onPressed: () {},
+                    onPressed: null,
                   ),
           ],
         ),
@@ -284,7 +289,7 @@ class _MypageAccountVerificationViewState
                 Icons.keyboard_arrow_down,
                 color: Colors.transparent,
               ),
-              onPressed: () {},
+              onPressed: null,
             )
           ],
         ),
@@ -345,7 +350,7 @@ class _MypageAccountVerificationViewState
                 Icons.keyboard_arrow_down,
                 color: Colors.transparent,
               ),
-              onPressed: () {},
+              onPressed: null,
             )
           ],
         )

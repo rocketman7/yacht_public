@@ -4,7 +4,6 @@ import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
 
 import '../../view_models/mypage_friendsCode_view_model.dart';
-import '../loading_view.dart';
 
 class MypageFriendsCodeView extends StatelessWidget {
   @override
@@ -18,14 +17,14 @@ class MypageFriendsCodeView extends StatelessWidget {
               '친구에게 추천하기',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            elevation: 0,
+            elevation: 1,
           ),
+          backgroundColor: Colors.white,
           body: model.hasError
               ? Container(
                   child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                 )
               : model.isBusy
-                  // ? LoadingView()
                   ? FlareActor(
                       'assets/images/Loading.flr',
                       animation: 'loading',

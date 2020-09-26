@@ -17,8 +17,9 @@ class MypagePushAlarmSettingView extends StatelessWidget {
                   '푸쉬알림 설정',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                elevation: 0,
+                elevation: 1,
               ),
+              backgroundColor: Colors.white,
               body: model.hasError
                   ? Container(
                       child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),

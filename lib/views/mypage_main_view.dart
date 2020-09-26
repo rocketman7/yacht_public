@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:stacked/stacked.dart';
 
 import '../view_models/mypage_main_view_model.dart';
 
 import 'constants/size.dart';
 import 'loading_view.dart';
-import 'widgets/navigation_bars_widget.dart';
+import 'widgets/avatar_widget.dart';
 
 class MypageMainView extends StatelessWidget {
   @override
@@ -57,7 +56,7 @@ class MypageMainView extends StatelessWidget {
           children: [
             Container(
               height: 72,
-              width: deviceWidth - 36 - 70,
+              width: deviceWidth - 36 - 72,
               child: Stack(
                 children: [
                   model.user.accNumber == null
@@ -104,11 +103,7 @@ class MypageMainView extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              width: 70,
-              height: 70,
-              color: Color(0xFF1EC8CF),
-            )
+            avatarWidget('assets/images/avatar.png', model.user.item)
           ],
         ),
       ),
@@ -156,7 +151,7 @@ class MypageMainView extends StatelessWidget {
             height: 2,
             color: Colors.black,
           ),
-          makeMypageMainComponent(model, 'x회원정보수정', null),
+          makeMypageMainComponent(model, '회원정보 수정', 'mypage_editprofile'),
           makeMypageMainComponent(model, 'x내가 받은 상금 현황', null),
           makeMypageMainComponent(model, 'x내 활동', null),
           makeMypageMainComponent(model, '계좌 정보', 'mypage_accoutverification'),

@@ -20,8 +20,9 @@ class MypageTermofuse extends StatelessWidget {
                 '이용약관',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              elevation: 0,
+              elevation: 1,
             ),
+            backgroundColor: Colors.white,
             body: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
@@ -51,8 +52,9 @@ class MypageTermofuse extends StatelessWidget {
                 '이용약관',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              elevation: 0,
+              elevation: 1,
             ),
+            backgroundColor: Colors.white,
             body: SafeArea(
               child: Container(),
             ),
