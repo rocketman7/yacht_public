@@ -51,6 +51,8 @@ dependencies:
   path: ^1.7.0
   circular_check_box: ^1.0.4
 
+  flare_flutter: ^2.0.6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

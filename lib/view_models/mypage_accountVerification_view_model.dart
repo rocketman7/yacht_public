@@ -23,8 +23,13 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   // 증권계좌가 인증되지 않았을 때 인증절차에서 필요한 ui 변수들. 이마저 viewmodel에 담는게 나은것인지?
   bool visibleButton1 = true;
   bool visibleBankList = false;
+  bool visibleButton2 = false;
+  bool visibleAuthNumProcess = false;
+  bool verificationSuccess = false;
+  String verificationFailMsg = '';
   // 사용자가 선택, 입력한 증권계좌정보들
   String secName = '';
+  String bankCode = '';
   String accNumber = '';
   String accName = '';
 
@@ -37,27 +42,53 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
     user = await _databaseService.getUser(uid);
   }
 
-  Future<void> accOwnerVerificationRequest() async {
+  Future<bool> accOwnerVerificationRequest() async {
     accOwnerResp = await accountVerificationService.accOwnerVerification(
-        '17711040661', '278', '김세준');
+        accNumber, bankCode, accName);
+
+    bankCode = accountVerificationService.getBankList()['$secName'];
 
     print(accOwnerResp[0]);
     print(accOwnerResp[1]);
 
     notifyListeners();
-    return null;
+
+    return accOwnerResp[0];
   }
 
-  Future<void> accOccupyVerificationRequest() async {
-    authNum = AccoutVerificationServiceMydata().authTextGenerate();
+  Future<bool> accOccupyVerificationRequest() async {
+    // authNum = AccoutVerificationServiceMydata().authTextGenerate();
+    authNum = 5555;
+
+    bankCode = accountVerificationService.getBankList()['$secName'];
+
     accOccupyResp = await accountVerificationService.accOccupyVerification(
-        '17711040661', '278', authNum.toString());
+        accNumber, bankCode, authNum.toString());
 
     print(accOccupyResp[0]);
     print(accOccupyResp[1]);
 
     notifyListeners();
-    return null;
+
+    return accOccupyResp[0];
+  }
+
+  bool accVerification(String authNumInput) {
+    if (authNumInput == authNum.toString()) {
+      user.accNumber = accNumber;
+      user.secName = secName;
+      user.accName = accName;
+
+      setAccInformation();
+      return true;
+    } else {
+      verificationFailMsg = '인증번호가 틀립니다. 다시 입력해주세요';
+      return false;
+    }
+  }
+
+  Future setAccInformation() async {
+    _databaseService.setAccInformation(user, uid);
   }
 
   int getBankListLength() => accountVerificationService.getBankListLength();

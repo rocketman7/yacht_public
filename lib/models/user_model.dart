@@ -4,9 +4,10 @@ class UserModel {
   final String email;
   final String phoneNumber;
   final int combo;
-  final String accNumber;
-  final String accName;
-  final String secName;
+  final String friendsCode;
+  String accNumber;
+  String accName;
+  String secName;
   // final List<UserVote> userVotes;
 
   UserModel(
@@ -15,6 +16,7 @@ class UserModel {
       this.email,
       this.phoneNumber,
       this.combo,
+      this.friendsCode,
       this.accNumber,
       this.accName,
       this.secName
@@ -29,6 +31,7 @@ class UserModel {
         email = data['email'],
         phoneNumber = data['phoneNumber'],
         combo = data['combo'],
+        friendsCode = data['friendsCode'],
         accNumber = data['account']['accNumber'],
         accName = data['account']['accName'],
         secName = data['account']['secName'];
@@ -40,6 +43,7 @@ class UserModel {
       'email': this.email,
       'phoneNumber': this.phoneNumber,
       'combo': this.combo,
+      'friendsCode': this.friendsCode,
       'account': {
         'accNumber': this.accNumber,
         'accName': this.accName,

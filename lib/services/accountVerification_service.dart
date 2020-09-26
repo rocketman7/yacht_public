@@ -93,6 +93,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
 
     Map<String, dynamic> respBody;
     respBody = json.decode(resp.body);
+    print('$respBody');
 
     if (resp.statusCode == 200) {
       if (respBody['errCode'] == '0000') if (respBody['data']['OUTSTATCD'] ==

@@ -110,6 +110,11 @@ class DatabaseService {
     }
   }
 
+  // 계좌인증이 완료된 유저의 계좌정보 넣기
+  Future setAccInformation(UserModel user, String uid) async {
+    await _usersCollectionReference.doc(uid).set(user.toJson());
+  }
+
   // 유저 선택 리스트 받아서 각 subVote 문서에 numVoted increment
   Future countUserVote(
     DatabaseAddressModel address,

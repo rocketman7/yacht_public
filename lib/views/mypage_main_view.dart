@@ -207,7 +207,7 @@ class MypageMainView extends StatelessWidget {
             color: Colors.black,
           ),
           makeMypageMainComponent(model, '푸쉬알림 설정', 'mypage_pushalarmsetting'),
-          makeMypageMainComponent(model, 'x친구에게 추천하기', null),
+          makeMypageMainComponent(model, '친구에게 추천하기', 'mypage_friendscode'),
           SizedBox(
             height: 42,
           )

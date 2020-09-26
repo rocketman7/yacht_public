@@ -44,7 +44,19 @@ class MypageTermofuse extends StatelessWidget {
             ),
           );
         } else {
-          return LoadingView();
+          // return LoadingView();
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                '이용약관',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              elevation: 0,
+            ),
+            body: SafeArea(
+              child: Container(),
+            ),
+          );
         }
       },
       future: _termsOfUseFuture(),

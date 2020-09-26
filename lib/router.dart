@@ -17,6 +17,7 @@ import 'views/mypage_documents/mypage_termsOfUse.dart';
 import 'views/mypage_documents/mypage_businessInformation.dart';
 import 'views/mypage_documents/mypage_pushAlarmSetting_view.dart';
 import 'views/mypage_documents/mypage_accountVerification_view.dart';
+import 'views/mypage_documents/mypage_friendsCode_view.dart';
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_view.dart';
 
@@ -77,6 +78,8 @@ class Routers {
       case 'mypage_accoutverification':
         return MaterialPageRoute(
             builder: (context) => MypageAccountVerificationView());
+      case 'mypage_friendscode':
+        return MaterialPageRoute(builder: (context) => MypageFriendsCodeView());
       case 'startup':
         return MaterialPageRoute(
             builder: (context) =>

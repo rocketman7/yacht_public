@@ -44,7 +44,19 @@ class MypagePrivacyPolicy extends StatelessWidget {
             ),
           );
         } else {
-          return LoadingView();
+          // return LoadingView();
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                '개인정보처리방침',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              elevation: 0,
+            ),
+            body: SafeArea(
+              child: Container(),
+            ),
+          );
         }
       },
       future: _privacyPolicyFuture(),
