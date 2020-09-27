@@ -92,8 +92,8 @@ class _HomeViewState extends State<HomeView> {
                     child: SafeArea(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 18,
-                          vertical: 30,
+                          horizontal: 16,
+                          vertical: 16,
                         ),
                         child: Form(
                           key: _formKey,
@@ -104,10 +104,19 @@ class _HomeViewState extends State<HomeView> {
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    Container(
-                                      height: 70,
-                                      width: 70,
-                                      color: Color(0xFF1EC8CF),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          height: 72,
+                                          width: 72,
+                                          color: Color(0xFF1EC8CF),
+                                        ),
+                                        Container(
+                                          height: 4,
+                                          width: 72,
+                                          color: Color(0xFFFF402B),
+                                        ),
+                                      ],
                                     ),
                                     SizedBox(
                                       width: 16,
@@ -137,7 +146,7 @@ class _HomeViewState extends State<HomeView> {
                                         Text(model.user.userName,
                                             style: TextStyle(
                                               fontSize: 24,
-                                              fontFamily: 'DmSans',
+                                              // fontFamily: 'DmSans',
                                               fontWeight: FontWeight.bold,
                                             )),
                                       ],
@@ -155,6 +164,7 @@ class _HomeViewState extends State<HomeView> {
                                       "현재 상금가치",
                                       style: TextStyle(
                                         fontSize: 20,
+                                        letterSpacing: -1.0,
                                       ),
                                     ),
                                     Row(
@@ -163,17 +173,20 @@ class _HomeViewState extends State<HomeView> {
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontFamily: 'DmSans',
+                                              letterSpacing: -1.0,
                                               fontWeight: FontWeight.bold,
                                             )),
                                         Text(
                                           " 원 ",
                                           style: TextStyle(
                                             fontSize: 20,
+                                            letterSpacing: -1.0,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                         Icon(
                                           Icons.arrow_forward_ios,
-                                          size: 18,
+                                          size: 16,
                                         )
                                       ],
                                     )
@@ -190,14 +203,18 @@ class _HomeViewState extends State<HomeView> {
                                       "보유중인 꾸욱",
                                       style: TextStyle(
                                         fontSize: 20,
+                                        letterSpacing: -1.0,
                                       ),
                                     ),
-                                    Text("7",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'DmSans',
-                                          fontWeight: FontWeight.bold,
-                                        ))
+                                    Text(
+                                      "7",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        letterSpacing: -1.0,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
                                   ],
                                 ),
                                 SizedBox(
@@ -211,31 +228,37 @@ class _HomeViewState extends State<HomeView> {
                                       "현재 콤보",
                                       style: TextStyle(
                                         fontSize: 20,
+                                        letterSpacing: -1.0,
                                       ),
                                     ),
-                                    Text("11",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'DmSans',
-                                          fontWeight: FontWeight.bold,
-                                        ))
+                                    Text(
+                                      "11",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        letterSpacing: -1.0,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 14,
+                                  height: 12,
                                 ),
                                 Divider(
+                                  height: 0,
                                   thickness: 1,
                                 ),
                                 SizedBox(
-                                  height: 14,
+                                  height: 35,
                                 ),
                                 Row(
                                   children: <Widget>[
                                     Text("오늘의 예측",
                                         style: TextStyle(
                                           fontSize: 28,
-                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: -2.0,
+                                          fontWeight: FontWeight.w800,
                                         )),
                                     SizedBox(
                                       width: 3,
@@ -243,7 +266,7 @@ class _HomeViewState extends State<HomeView> {
                                     Text(model.vote.subVotes.length.toString(),
                                         style: TextStyle(
                                           fontSize: 28,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w800,
                                           color: Color(0xFF1EC8CF),
                                         ))
                                   ],
@@ -261,17 +284,24 @@ class _HomeViewState extends State<HomeView> {
                                 ),
                                 buildRow(model, 2),
                                 SizedBox(
-                                  height: 20,
+                                  height: 28,
                                 ),
                                 GestureDetector(
                                   onTap: () => widget.goToTab(1),
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: 50,
+                                      horizontal: 32,
                                     ),
-                                    height: 60,
+                                    height: 56,
                                     decoration: BoxDecoration(
                                         color: Colors.black,
+                                        boxShadow: [
+                                          new BoxShadow(
+                                            color: Colors.black.withOpacity(.1),
+                                            offset: new Offset(0, 4.0),
+                                            blurRadius: 8.0,
+                                          )
+                                        ],
                                         borderRadius:
                                             BorderRadius.all(Radius.circular(
                                           40,
@@ -283,8 +313,8 @@ class _HomeViewState extends State<HomeView> {
                                         Text(
                                           "꾸욱",
                                           style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
                                             color: Color(0xFFFFFFFFF),
                                           ),
                                         ),
@@ -297,20 +327,22 @@ class _HomeViewState extends State<HomeView> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 14,
+                                  height: 23,
                                 ),
                                 Divider(
+                                  height: 0,
                                   thickness: 1,
                                 ),
                                 SizedBox(
-                                  height: 14,
+                                  height: 32,
                                 ),
                                 Row(
                                   children: <Widget>[
                                     Text("시즌 상위",
                                         style: TextStyle(
                                           fontSize: 28,
-                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: -2.0,
+                                          fontWeight: FontWeight.w800,
                                         )),
                                     SizedBox(
                                       width: 3,
@@ -318,7 +350,7 @@ class _HomeViewState extends State<HomeView> {
                                     Text("5",
                                         style: TextStyle(
                                           fontSize: 28,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w800,
                                           color: Color(0xFF1EC8CF),
                                         ))
                                   ],
@@ -346,7 +378,7 @@ class _HomeViewState extends State<HomeView> {
         });
   }
 
-  Row buildRow(model, int idx) {
+  Row buildRow(HomeViewModel model, int idx) {
     // 선택지 수
     int numOfChoices = model.vote.subVotes[idx].issueCode.length;
     if (numOfChoices == 1) {
@@ -365,8 +397,9 @@ class _HomeViewState extends State<HomeView> {
             ),
             child: Text(model.vote.subVotes[idx].title,
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  letterSpacing: -1.0,
                   color: Color(0xFFFF74D5),
                 )),
           ),
@@ -388,8 +421,9 @@ class _HomeViewState extends State<HomeView> {
             ),
             child: Text(model.vote.subVotes[idx].voteChoices[0],
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  letterSpacing: -1.0,
                   color: Color(0xFFFF74D5),
                 )),
           ),
@@ -427,8 +461,9 @@ class _HomeViewState extends State<HomeView> {
             ),
             child: Text(model.vote.subVotes[idx].voteChoices[1],
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  letterSpacing: -1.0,
                   color: Color(0xFF71FF01),
                 )),
           ),

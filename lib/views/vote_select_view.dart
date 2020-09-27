@@ -222,13 +222,16 @@ class _VoteSelectViewState extends State<VoteSelectView> {
             : Scaffold(
                 body: SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
                     child: Column(
                       children: <Widget>[
                         Container(
                           // color: Colors.green[50],
                           width: double.infinity,
-                          height: deviceHeight * .12,
+                          // height: deviceHeight * .12,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,22 +240,25 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 "01:05:30",
                                 style: TextStyle(
                                   fontFamily: 'Akrhip',
-                                  fontSize: deviceHeight * .12 * 0.45,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: -2.5,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: -2,
                                 ),
                               ),
                               Text(
                                 "예측마감까지 남은시간",
                                 style: TextStyle(
                                   // fontFamily: 'Akrhip',
-                                  fontSize: deviceHeight * .12 * 0.17,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  letterSpacing: -2,
+                                  letterSpacing: -1,
                                 ),
                               ),
                             ],
                           ),
+                        ),
+                        SizedBox(
+                          height: 26,
                         ),
                         Expanded(
                           child: Container(
@@ -285,65 +291,64 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                             ),
                           ),
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(30.0),
-                          child: Container(
-                            color: Colors.blue,
-                            height: deviceHeight * .07,
-                            child: FlatButton(
-                              color: Colors.black,
-                              onPressed: ((selected
-                                              .where((item) => item == true)
-                                              .length ==
-                                          0) ||
-                                      (model.userVote == null
-                                          ? false
-                                          : model.userVote.isVoted == true))
-                                  ? () {}
-                                  : () {
-                                      for (int i = 0;
-                                          i < selected.length;
-                                          i++) {
-                                        selected[i] == true
-                                            ? listSelected.add(i)
-                                            : 0;
-                                      }
+                        GestureDetector(
+                          onTap: ((selected
+                                          .where((item) => item == true)
+                                          .length ==
+                                      0) ||
+                                  (model.userVote == null
+                                      ? false
+                                      : model.userVote.isVoted == true))
+                              ? () {}
+                              : () {
+                                  for (int i = 0; i < selected.length; i++) {
+                                    selected[i] == true
+                                        ? listSelected.add(i)
+                                        : 0;
+                                  }
 
-                                      _navigationService
-                                          .navigateWithArgTo('ggook', [
-                                        model.address,
-                                        model.user,
-                                        model.vote,
-                                        listSelected,
-                                        0,
-                                      ]);
-                                    },
-                              minWidth: double.infinity,
-                              // shape: RoundedRectangleBorder(
-                              //     borderRadius: BorderRadius.circular(30.0)),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10.0,
+                                  _navigationService
+                                      .navigateWithArgTo('ggook', [
+                                    model.address,
+                                    model.user,
+                                    model.vote,
+                                    listSelected,
+                                    0,
+                                  ]);
+                                },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 32,
+                            ),
+                            height: 56,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                boxShadow: [
+                                  new BoxShadow(
+                                    color: Colors.black.withOpacity(.1),
+                                    offset: new Offset(0, 4.0),
+                                    blurRadius: 8.0,
+                                  )
+                                ],
+                                borderRadius: BorderRadius.all(Radius.circular(
+                                  40,
+                                ))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "예측하러 가기",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800,
+                                    color: Color(0xFFFFFFFFF),
+                                  ),
                                 ),
-                                child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    // alignment: Alignment.centerLeft,
-                                    children: <Widget>[
-                                      Text(
-                                        "예측하러 가기",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: deviceHeight * .07 * .36,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Colors.white,
-                                      ),
-                                    ]),
-                              ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Color(0xFF666666),
+                                ),
+                              ],
                             ),
                           ),
                         ),

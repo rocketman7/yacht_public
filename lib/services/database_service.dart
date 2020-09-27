@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:yachtOne/models/date_time_model.dart';
+import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/rank_model.dart';
 import '../models/sub_vote_model.dart';
 import '../models/user_model.dart';
@@ -30,12 +31,16 @@ class DatabaseService {
       _databaseService.collection('ranks');
   CollectionReference get _adminCollectionReference =>
       _databaseService.collection('admin');
+  CollectionReference get _pricesCollectionReference =>
+      _databaseService.collection('prices');
 
   CollectionReference get usersCollectionReference => _usersCollectionReference;
   CollectionReference get votesCollectionReference => _votesCollectionReference;
   CollectionReference get postsCollectionReference => _postsCollectionReference;
   CollectionReference get ranksCollectionReference => _ranksCollectionReference;
   CollectionReference get adminCollectionReference => _adminCollectionReference;
+  CollectionReference get pricesCollectionReference =>
+      _pricesCollectionReference;
   //  collection references
   // final CollectionReference _usersCollectionReference =
   //     _databaseService.collection('users');
@@ -225,6 +230,32 @@ class DatabaseService {
             .toList());
   }
 
+  Stream<PriceModel> getRealtimeReturn(
+    DatabaseAddressModel address,
+    String issueCode,
+  ) {
+    // print(issueCode.length);
+
+    print(address.date);
+    // print(issueCode[i] + "in a loop");
+
+    return pricesCollectionReference
+        .doc(address.date)
+        .collection(issueCode)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      print(snapshot.toString());
+      print("SNAP");
+      print(snapshot.docs.toString() + "FIRSTDATA");
+      PriceModel temp = PriceModel.fromData(snapshot.docs.first.data());
+      print(temp.toString());
+      print(snapshot.docs.first.data()['issueCode']);
+      return PriceModel.fromData(snapshot.docs.first.data());
+      // return list;
+    });
+  }
+
   // Read: ranks collection 정보 읽어오기. 배치될 때에만 바뀌는 정보이므로 Future로 처리
   Future<List<RankModel>> getRankList(
       DatabaseAddressModel databaseAddressModel) async {
@@ -370,7 +401,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: '20200921',
+      date: baseDate,
       category: category,
       season: season,
       isVoting: isVoting,

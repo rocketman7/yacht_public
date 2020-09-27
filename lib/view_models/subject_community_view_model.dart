@@ -1,4 +1,5 @@
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/models/price_model.dart';
 import '../models/vote_comment_model.dart';
 import '../models/database_address_model.dart';
 import '../models/user_model.dart';
@@ -27,6 +28,9 @@ class SubjectCommunityViewModel extends FutureViewModel {
   SubjectCommunityViewModel(this.idx) {
     uid = _authService.auth.currentUser.uid;
   }
+
+  @override
+  Future futureToRun() => getAllModel(uid);
 
   Future getAllModel(uid) async {
     setBusy(true);
@@ -66,10 +70,23 @@ class SubjectCommunityViewModel extends FutureViewModel {
     }
   }
 
-  @override
-  Future futureToRun() => getAllModel(uid);
-
   Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
     return _databaseService.getPostList(address);
   }
+
+  Stream<PriceModel> getRealtimePrice(
+    DatabaseAddressModel address,
+    String issueCode,
+  ) {
+    return _databaseService.getRealtimeReturn(address, issueCode);
+  }
+
+//   List<String> listIssueCode(int idx) {
+//     List<String> issueCodes = [];
+//     print("CALLED");
+//     for (int i = 0; i < vote.subVotes[idx].issueCode.length; i++) {
+//       issueCodes.add(vote.subVotes[idx].issueCode[i]);
+//     }
+//     return issueCodes;
+//   }
 }

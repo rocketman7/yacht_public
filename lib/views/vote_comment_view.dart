@@ -103,8 +103,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   body: SafeArea(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 35,
+                        horizontal: 16,
+                        vertical: 20,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,8 +113,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
                             "커뮤니티",
                             style: TextStyle(
                               // fontFamily: 'Akrhip',
-                              fontSize: deviceHeight * .12 * 0.45,
-                              fontWeight: FontWeight.w900,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w800,
                               letterSpacing: -2.0,
                             ),
                           ),
@@ -123,24 +123,31 @@ class _VoteCommentViewState extends State<VoteCommentView>
                           ),
                           Container(
                               alignment: Alignment.center,
-                              height: deviceHeight * .12,
+                              height: 64,
                               color: Colors.blue[100],
                               child: Text("Space for Calender")),
                           SizedBox(
                             height: 36,
                           ),
                           Text(
-                            "총 x개의 토론 주제",
+                            "총 3개의 토론 주제",
                             style: TextStyle(
                               // fontFamily: 'Akrhip',
-                              fontSize: deviceHeight * .12 * 0.25,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: -2.0,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: -1.0,
                             ),
                           ),
+                          SizedBox(
+                            height: 8,
+                          ),
                           Divider(
+                            height: 0,
                             color: Colors.black,
                             thickness: 2,
+                          ),
+                          SizedBox(
+                            height: 16,
                           ),
                           Flexible(
                             child: Container(
