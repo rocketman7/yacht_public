@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 import '../view_models/mypage_main_view_model.dart';
 
 import 'constants/size.dart';
-import 'loading_view.dart';
 import 'widgets/avatar_widget.dart';
+
+import 'package:blobs/blobs.dart';
 
 class MypageMainView extends StatelessWidget {
   @override
@@ -19,7 +21,10 @@ class MypageMainView extends StatelessWidget {
                     child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                   )
                 : model.isBusy
-                    ? LoadingView()
+                    ? FlareActor(
+                        'assets/images/Loading.flr',
+                        animation: 'loading',
+                      )
                     : SafeArea(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -103,7 +108,7 @@ class MypageMainView extends StatelessWidget {
                 ],
               ),
             ),
-            avatarWidget('assets/images/avatar.png', model.user.item)
+            avatarWidget(model.user.avatarImage, model.user.item)
           ],
         ),
       ),
@@ -257,8 +262,173 @@ class MypageMainView extends StatelessWidget {
           makeMypageMainComponent(model, '이용약관', 'mypage_termsofuse'),
           makeMypageMainComponent(model, '개인정보취급방침', 'mypage_privacypolicy'),
           makeMypageMainComponent(model, '사업자정보', 'mypage_businessinformation'),
+          makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
           SizedBox(
             height: 42,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class MypageTempGGookView extends StatefulWidget {
+  @override
+  _MypageTempGGookViewState createState() => _MypageTempGGookViewState();
+}
+
+class _MypageTempGGookViewState extends State<MypageTempGGookView> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          SafeArea(
+              child: Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '카카오와 네이버\n수익률 높은 종목을\n꾸욱해주세요.',
+                  style: TextStyle(
+                      fontSize: 32,
+                      letterSpacing: -0.28,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 16,
+                      width: 48,
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 16,
+                            width: 16,
+                            child: CircleAvatar(
+                              maxRadius: 16,
+                              backgroundColor: Colors.transparent,
+                              backgroundImage:
+                                  AssetImage('assets/images/avatar.png'),
+                            ),
+                          ),
+                          Positioned(
+                            left: 8,
+                            child: Container(
+                              height: 16,
+                              width: 16,
+                              child: CircleAvatar(
+                                maxRadius: 16,
+                                backgroundColor: Colors.transparent,
+                                backgroundImage:
+                                    AssetImage('assets/images/avatar.png'),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 16,
+                            child: Container(
+                              height: 16,
+                              width: 16,
+                              child: CircleAvatar(
+                                maxRadius: 16,
+                                backgroundColor: Colors.transparent,
+                                backgroundImage:
+                                    AssetImage('assets/images/avatar.png'),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 24,
+                            child: Container(
+                              height: 16,
+                              width: 16,
+                              child: CircleAvatar(
+                                maxRadius: 16,
+                                backgroundColor: Colors.transparent,
+                                backgroundImage:
+                                    AssetImage('assets/images/avatar.png'),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      '345명이 이 주제에 참여했습니다.',
+                      style: TextStyle(fontSize: 16, letterSpacing: -0.28),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '네이버 전일가',
+                      style: TextStyle(fontSize: 16, letterSpacing: -0.28),
+                    ),
+                    Text(
+                      ' 322,450',
+                      style: TextStyle(
+                          fontSize: 16,
+                          letterSpacing: -0.28,
+                          fontFamily: 'DM Sans',
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFFF3E3E)),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '카카오 전일가',
+                      style: TextStyle(fontSize: 16, letterSpacing: -0.28),
+                    ),
+                    Text(
+                      ' 389,000',
+                      style: TextStyle(
+                          fontSize: 16,
+                          letterSpacing: -0.28,
+                          fontFamily: 'DM Sans',
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF3485FF)),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          )),
+          //애니메이션이 전체화면을 덮을 수도 있으니 여기에서 관리해야할듯?
+          Positioned(
+            left: 50,
+            top: 400,
+            child: Stack(
+              children: [
+                Blob.animatedFromID(
+                    size: 200,
+                    id: [
+                      '10-7-848634',
+                      '10-7-863638',
+                      '10-7-63404',
+                      '10-7-424041'
+                    ],
+                    loop: true,
+                    duration: Duration(milliseconds: 1000)),
+                Blob.animatedFromID(
+                    size: 180,
+                    id: [
+                      '10-7-848634',
+                      '10-7-863638',
+                      '10-7-63404',
+                      '10-7-424041'
+                    ],
+                    loop: true,
+                    duration: Duration(milliseconds: 1000)),
+              ],
+            ),
           )
         ],
       ),

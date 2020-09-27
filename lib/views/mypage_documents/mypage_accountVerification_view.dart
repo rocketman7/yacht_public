@@ -78,8 +78,8 @@ class _MypageAccountVerificationViewState
                                       )),
                               Padding(
                                 padding: const EdgeInsets.only(
-                                  left: 18,
-                                  right: 18,
+                                  left: 16,
+                                  right: 16,
                                 ),
                                 child: Column(
                                   children: [

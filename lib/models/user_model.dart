@@ -6,6 +6,7 @@ class UserModel {
   final int combo;
   final String friendsCode;
   final int item;
+  final String avatarImage;
   String accNumber;
   String accName;
   String secName;
@@ -19,6 +20,7 @@ class UserModel {
       this.combo,
       this.friendsCode,
       this.item,
+      this.avatarImage,
       this.accNumber,
       this.accName,
       this.secName
@@ -35,6 +37,7 @@ class UserModel {
         combo = data['combo'],
         friendsCode = data['friendsCode'],
         item = data['item'],
+        avatarImage = data['avatarImage'],
         accNumber = data['account']['accNumber'],
         accName = data['account']['accName'],
         secName = data['account']['secName'];
@@ -48,6 +51,7 @@ class UserModel {
       'combo': this.combo,
       'friendsCode': this.friendsCode,
       'item': this.item,
+      'avatarImage': this.avatarImage,
       'account': {
         'accNumber': this.accNumber,
         'accName': this.accName,

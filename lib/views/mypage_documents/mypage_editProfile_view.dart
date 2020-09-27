@@ -38,24 +38,30 @@ class MypageEditProfileView extends StatelessWidget {
                               height: 16,
                             ),
                             Center(
-                                child: avatarWidget('assets/images/avatar.png',
+                                child: avatarWidget(
+                                    model.sharedPrefForAvatarImage,
                                     model.user.item)),
                             SizedBox(
                               height: 10,
                             ),
                             Center(
-                              child: Container(
-                                alignment: Alignment.center,
-                                width: 83,
-                                height: 27,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(80.0)),
-                                  color: Color(0xFFEFEFEF),
-                                ),
-                                child: Text(
-                                  '사진 변경',
-                                  style: TextStyle(fontSize: 16),
+                              child: GestureDetector(
+                                onTap: () {
+                                  model.setAvatarImage('avatar007');
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  width: 83,
+                                  height: 27,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(80.0)),
+                                    color: Color(0xFFEFEFEF),
+                                  ),
+                                  child: Text(
+                                    '사진 변경',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ),
                               ),
                             ),

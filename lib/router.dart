@@ -9,7 +9,6 @@ import 'views/register_view.dart';
 import 'views/startup_view.dart';
 import 'views/ggook_view.dart';
 import 'views/rank_view.dart';
-import 'views/mypage_view.dart';
 import 'views/mypage_main_view.dart';
 
 import 'views/mypage_documents/mypage_privacyPolicy.dart';
@@ -57,9 +56,6 @@ class Routers {
       case 'rank':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: RankView()));
-      case 'mypage':
-        return MaterialPageRoute(
-            builder: (context) => DialogManager(child: MypageView()));
       case 'mypage_main':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: MypageMainView()));
@@ -83,6 +79,8 @@ class Routers {
         return MaterialPageRoute(builder: (context) => MypageFriendsCodeView());
       case 'mypage_editprofile':
         return MaterialPageRoute(builder: (context) => MypageEditProfileView());
+      case 'mypage_tempggook':
+        return MaterialPageRoute(builder: (context) => MypageTempGGookView());
       case 'startup':
         return MaterialPageRoute(
             builder: (context) =>

@@ -52,6 +52,7 @@ dependencies:
   circular_check_box: ^1.0.4
 
   flare_flutter: ^2.0.6
+  blobs: ^1.2.0
 
 dev_dependencies:
   flutter_test:

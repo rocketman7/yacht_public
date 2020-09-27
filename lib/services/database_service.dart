@@ -110,9 +110,16 @@ class DatabaseService {
     }
   }
 
-  // 계좌인증이 완료된 유저의 계좌정보 넣기
+  // 계좌인증이 완료된 유저의 계좌정보 넣기, 선택적으로 넣도록 수정?
   Future setAccInformation(UserModel user, String uid) async {
     await _usersCollectionReference.doc(uid).set(user.toJson());
+  }
+
+  // user콜렉션에서 아바타이미지 바꾸기
+  Future setAvatarImage(String avatarImage, String uid) async {
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'avatarImage': avatarImage});
   }
 
   // 유저 선택 리스트 받아서 각 subVote 문서에 numVoted increment
@@ -253,24 +260,24 @@ class DatabaseService {
   }
 
   Future<void> addRank() {
-    //for (i = 1; i < 101; i++) {
-    Random rnd;
-    rnd = new Random();
-    int rndCombo = 0 + rnd.nextInt(39);
+    for (i = 1; i < 11; i++) {
+      Random rnd;
+      rnd = new Random();
+      int rndCombo = 0 + rnd.nextInt(39);
 
-    ranksCollectionReference
-        .doc('koreaStockStandard')
-        .collection('season001')
-        .doc('20200901')
-        .collection('20200901')
-        .add({
-          'uid': 'm2UUvxsAwfdLFP4RB8q4SgkaNgr2',
-          'userName': 'csejun10',
-          'combo': rndCombo
-        })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
-    //}
+      ranksCollectionReference
+          .doc('koreaStockStandard')
+          .collection('season001')
+          .doc('20200921')
+          .collection('20200921')
+          .add({
+            'uid': '8cak3QUCF23iVnmAwfdLFP4QQ68j',
+            'userName': 'others2',
+            'combo': rndCombo
+          })
+          .then((value) => print("User Added"))
+          .catchError((error) => print("Failed to add user: $error"));
+    }
 
     return null;
   }

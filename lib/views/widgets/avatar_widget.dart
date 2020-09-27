@@ -20,7 +20,7 @@ Widget avatarWidget(String avatarImage, int itemNum) {
           child: CircleAvatar(
             maxRadius: 60,
             backgroundColor: Colors.transparent,
-            backgroundImage: AssetImage(avatarImage),
+            backgroundImage: AssetImage('assets/images/$avatarImage.png'),
           ),
         ),
         Positioned(
