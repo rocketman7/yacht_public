@@ -49,12 +49,12 @@ class VoteCommentViewModel extends FutureViewModel {
     return _databaseService.getPostList(address);
   }
 
-  Future postComments(
-    DatabaseAddressModel address,
-    VoteCommentModel voteCommentModel,
-  ) async {
-    await _databaseService.postComment(address, voteCommentModel);
-  }
+  // Future postComments(
+  //   DatabaseAddressModel address,
+  //   VoteCommentModel voteCommentModel,
+  // ) async {
+  //   await _databaseService.postComment(address, voteCommentModel);
+  // }
 
   Future deleteComment(
     DatabaseAddressModel address,

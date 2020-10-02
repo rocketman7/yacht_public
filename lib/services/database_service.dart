@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:yachtOne/models/date_time_model.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/rank_model.dart';
+import 'package:yachtOne/models/user_post_model.dart';
 import '../models/sub_vote_model.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
@@ -209,14 +210,35 @@ class DatabaseService {
   }
 
   Future postComment(
-      DatabaseAddressModel address, VoteCommentModel voteCommentModel) async {
+    DatabaseAddressModel address,
+    VoteCommentModel voteCommentModel,
+    UserPostModel userPostModel,
+  ) async {
     try {
+      String docUid;
+      docUid = address.postsSeasonSubVoteCollection().doc().id;
+
       await address
           .postsSeasonSubVoteCollection()
-          .doc()
+          .doc(docUid)
           .set(voteCommentModel.toJson());
+
+      await address
+          .userPostCollection()
+          .doc(docUid)
+          .set(userPostModel.toJson());
     } catch (e) {}
   }
+
+  // Future postComment(
+  //     DatabaseAddressModel address, VoteCommentModel voteCommentModel) async {
+  //   try {
+  //     await address
+  //         .postsSeasonSubVoteCollection()
+  //         .doc()
+  //         .set(voteCommentModel.toJson());
+  //   } catch (e) {}
+  // }
 
   Future deleteComment(
     DatabaseAddressModel address,

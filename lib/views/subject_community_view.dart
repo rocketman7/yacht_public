@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +10,7 @@ import 'package:yachtOne/view_models/subject_community_view_model.dart';
 import 'package:yachtOne/views/constants/size.dart';
 
 import 'loading_view.dart';
+import 'widgets/avatar_widget.dart';
 
 class SubjectCommunityView extends StatefulWidget {
   final int idx;
@@ -23,6 +25,7 @@ VoteCommentModel voteCommentModel;
 
 class _SubjectCommunityViewState extends State<SubjectCommunityView> {
   int idx;
+  bool isliked = false;
   @override
   Widget build(BuildContext context) {
     idx = widget.idx;
@@ -33,7 +36,19 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
       builder: (context, model, child) {
         // print("BUILDING" + model.idx.toString());
         return model.isBusy
-            ? LoadingView()
+            ? Scaffold(
+                body: Center(
+                  child: Container(
+                    height: 100,
+                    width: deviceWidth,
+                    child: FlareActor(
+                      'assets/images/Loading.flr',
+                      animation: 'loading',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              )
             : Scaffold(
                 body: SafeArea(
                 child: Padding(
@@ -84,14 +99,11 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                           height: 40,
                           child: Row(
                             children: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  40,
-                                ),
-                                child: Container(
-                                  height: deviceHeight * .045,
-                                  width: deviceHeight * .045,
-                                  color: Colors.amber,
+                              Container(
+                                height: 40,
+                                width: 40,
+                                child: avatarWidgetWithoutItem(
+                                  model.user.avatarImage,
                                 ),
                               ),
                               SizedBox(
@@ -166,6 +178,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                 1],
                                         postDateTime: Timestamp.fromDate(
                                             DateTime.now().toUtc()),
+                                        like: 0,
 
                                         // postDateTime: DateTime.now(),
                                       );
@@ -287,7 +300,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                             model.vote.subVotes[idx].voteChoices[0] +
                                 " ${(formatVotePct.format(vote0Percentage)).toString()}",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
@@ -386,7 +399,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                             model.vote.subVotes[idx].voteChoices[1] +
                                 " ${(formatVotePct.format(vote1Percentage)).toString()}",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
@@ -544,7 +557,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                     model.vote.subVotes[idx].voteChoices[0] +
                                         " ${(formatVotePct.format(vote0Percentage)).toString()}",
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -585,7 +598,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                       .toString(),
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 20,
+                                                    fontSize: 16,
                                                   ),
                                                 )
                                               : Text(
@@ -596,7 +609,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                           .toString(),
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 20,
+                                                    fontSize: 16,
                                                   ),
                                                 ),
                                         ),
@@ -651,7 +664,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                     model.vote.subVotes[idx].voteChoices[1] +
                                         " ${(formatVotePct.format(vote1Percentage)).toString()}",
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -691,7 +704,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                       .toString(),
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 20,
+                                                    fontSize: 16,
                                                   ),
                                                 )
                                               : Text(
@@ -702,7 +715,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                           .toString(),
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 20,
+                                                    fontSize: 16,
                                                   ),
                                                 ),
                                         ),
@@ -786,8 +799,9 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
         builder: (context, snapshot) {
           print(model.address);
           List<VoteCommentModel> commentList = snapshot.data;
+
           if (snapshot.data == null) {
-            return LoadingView();
+            return Container();
           } else {
             return Container(
                 // height: deviceHeight * .55,
@@ -827,16 +841,12 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
             children: [
               Row(
                 children: <Widget>[
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      40,
-                    ),
-                    child: Container(
-                      height: deviceHeight * .06,
-                      width: deviceHeight * .06,
-                      color: Colors.amber,
-                    ),
-                  ),
+                  Container(
+                      height: 40,
+                      width: 40,
+                      child: avatarWidgetWithoutItem(
+                        model.user.avatarImage ?? "avatar001",
+                      )),
                   SizedBox(
                     width: 8,
                   ),
@@ -870,14 +880,24 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                 alignment: Alignment.bottomRight,
                 child: Row(
                   children: <Widget>[
-                    Image.asset(
-                      'assets/icons/likes_fill.png',
-                      width: 20,
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isliked = !isliked;
+                          print("LIKE? " + isliked.toString());
+                        });
+                      },
+                      child: SvgPicture.asset(
+                        isliked == false
+                            ? 'assets/icons/likes_icon_unfilled.svg'
+                            : 'assets/icons/likes_icon.svg',
+                        width: 20,
+                      ),
                     ),
                     SizedBox(
                       width: 8,
                     ),
-                    Text("55")
+                    Text((voteComment.like ?? 0).toString())
                   ],
                 ),
               ),

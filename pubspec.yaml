@@ -50,7 +50,6 @@ dependencies:
   flutter_cache_manager: ^1.4.1
   path: ^1.7.0
   circular_check_box: ^1.0.4
-
   flare_flutter: ^2.0.6
   blobs: ^1.2.0
 

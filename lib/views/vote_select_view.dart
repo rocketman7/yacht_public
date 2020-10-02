@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:circular_check_box/circular_check_box.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -32,6 +33,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<UserModel> _userModelFuture;
   Future<VoteModel> _getVoteModelFuture;
@@ -218,7 +221,19 @@ class _VoteSelectViewState extends State<VoteSelectView> {
         // print(model.getNow());
         // print(uid + 'from FutureViewModel');
         return model.isBusy
-            ? LoadingView()
+            ? Scaffold(
+                body: Center(
+                  child: Container(
+                    height: 100,
+                    width: deviceWidth,
+                    child: FlareActor(
+                      'assets/images/Loading.flr',
+                      animation: 'loading',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              )
             : Scaffold(
                 body: SafeArea(
                   child: Padding(
@@ -261,36 +276,23 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                           height: 26,
                         ),
                         Expanded(
-                          child: Container(
-                            // color: Colors.black,
-                            child: SingleChildScrollView(
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              physics: BouncingScrollPhysics(
-                                  // android에서도 스크롤 많이 했을 때 바운스 생기게
-                                  parent: AlwaysScrollableScrollPhysics()),
-                              // physics: (),
-                              child: Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4.0),
-                                    child: buildStack(model, 0),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4.0),
-                                    child: buildStack(model, 1),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 4.0),
-                                    child: buildStack(model, 2),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                            child: Container(
+                          // color: Colors.black,
+// child: SingleChildScrollView(
+//                                 clipBehavior: Clip.antiAliasWithSaveLayer,
+//                                 physics: BouncingScrollPhysics(
+//                                     // android에서도 스크롤 많이 했을 때 바운스 생기게
+//                                     parent: AlwaysScrollableScrollPhysics()),
+//                                 // physics: (),
+//                                 child: Container(
+                          // height: 550,
+                          child: ListView.builder(
+                              // physics: NeverScrollableScrollPhysics(),
+                              itemCount: model.vote.voteCount,
+                              itemBuilder: (context, index) {
+                                return buildStack(model, index);
+                              }),
+                        )),
                         GestureDetector(
                           onTap: ((selected
                                           .where((item) => item == true)
@@ -365,168 +367,47 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     );
   }
 
-  Stack buildStack(VoteSelectViewModel model, int idx) {
+  Widget buildStack(VoteSelectViewModel model, int idx) {
     int numOfChoices = model.vote.subVotes[idx].issueCode.length;
+    Color hexToColor(String code) {
+      return Color(int.parse(code, radix: 16) + 0xFF0000000);
+    }
+
     if (numOfChoices == 1) {
-      return Stack(
-        alignment: Alignment.centerLeft,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: Container(
-              height: deviceHeight * .12,
-              // color: Colors.redAccent,
-              child: FlatButton(
-                color: Color(0xFFFF74D5),
-                onPressed: () {},
-                minWidth: double.infinity,
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        color: Colors.black,
-                        width: 5,
-                        style: BorderStyle.solid),
-                    borderRadius: BorderRadius.circular(70.0)),
-                child: Text(
-                  model.vote.subVotes[idx].title,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: deviceHeight * .12 * .35,
-                    fontWeight: FontWeight.w600,
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Stack(
+          alignment: Alignment.centerLeft,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Container(
+                height: 100,
+                // color: Colors.redAccent,
+                child: FlatButton(
+                  color: hexToColor(
+                    model.vote.subVotes[idx].colorCode[0],
+                  ),
+                  onPressed: () {},
+                  minWidth: double.infinity,
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: Colors.black,
+                          width: 5,
+                          style: BorderStyle.solid),
+                      borderRadius: BorderRadius.circular(70.0)),
+                  child: Text(
+                    model.vote.subVotes[idx].title,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 10.0,
-            ),
-            child: Container(
-              width: 35,
-              height: 35,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Transform.scale(
-            scale: 1.6,
-            child: CircularCheckBox(
-              materialTapTargetSize: MaterialTapTargetSize.padded,
-              visualDensity: VisualDensity(horizontal: 2, vertical: 0),
-              value: selected[idx],
-              hoverColor: Colors.white,
-              activeColor: Color(0xFF1EC8CF),
-              inactiveColor: Color(0xFF1EC8CF),
-              disabledColor: Colors.grey,
-              onChanged: (val) => this.setState(() {
-                this.selected[idx] = !this.selected[idx];
-              }),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return Stack(
-        alignment: Alignment.centerLeft,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Container(
-              height: deviceHeight * .206,
-              child: Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Container(
-                          height: deviceHeight * .105,
-                          width: deviceWidth * .65,
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFFDE34),
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.all(
-                              width: 4.0,
-                              color: Color(0xFF000000),
-                            ),
-                            // borderRadius: BorderRadius.all(
-                            //     Radius.circular(30)),
-                          ),
-                          child: Text(model.vote.subVotes[idx].voteChoices[0],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: model.vote.subVotes[idx]
-                                            .voteChoices[0].length >
-                                        5
-                                    ? deviceHeight * .12 * .30
-                                    : deviceHeight * .12 * .35,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF000000),
-                              )),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Container(
-                          height: deviceHeight * .105,
-                          width: deviceWidth * .65,
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Color(0xFF8DFF34),
-                            border: Border.all(
-                              width: 4.0,
-                              color: Color(0xFF000000),
-                            ),
-                            // borderRadius: BorderRadius.all(
-                            //     Radius.circular(30)),
-                          ),
-                          child: Text(model.vote.subVotes[idx].voteChoices[1],
-                              style: TextStyle(
-                                fontSize: model.vote.subVotes[idx]
-                                            .voteChoices[0].length >
-                                        5
-                                    ? deviceHeight * .12 * .30
-                                    : deviceHeight * .12 * .35,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF000000),
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 4.0,
-                        ),
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(
-                          40,
-                        )),
-                    child: Text("vs",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        )),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: deviceHeight * .130,
-            child: Padding(
+            Padding(
               padding: const EdgeInsets.only(
                 left: 10.0,
               ),
@@ -539,17 +420,13 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: deviceHeight * .123,
-            child: Transform.scale(
+            Transform.scale(
               scale: 1.6,
               child: CircularCheckBox(
-                key: UniqueKey(),
                 materialTapTargetSize: MaterialTapTargetSize.padded,
-                visualDensity: VisualDensity(horizontal: 1, vertical: 0),
+                visualDensity: VisualDensity(horizontal: 2, vertical: 0),
                 value: selected[idx],
-                checkColor: Colors.white,
+                hoverColor: Colors.white,
                 activeColor: Color(0xFF1EC8CF),
                 inactiveColor: Color(0xFF1EC8CF),
                 disabledColor: Colors.grey,
@@ -558,8 +435,150 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 }),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Stack(
+          alignment: Alignment.centerLeft,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 30.0),
+              child: Container(
+                height: 100,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
+                            decoration: BoxDecoration(
+                              color: hexToColor(
+                                model.vote.subVotes[idx].colorCode[0],
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(
+                                width: 4.0,
+                                color: Color(0xFF000000),
+                              ),
+                              // borderRadius: BorderRadius.all(
+                              //     Radius.circular(30)),
+                            ),
+                            child: Text(model.vote.subVotes[idx].voteChoices[0],
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                                style: TextStyle(
+                                  fontSize: model.vote.subVotes[idx]
+                                              .voteChoices[0].length >
+                                          4
+                                      ? 22
+                                      : 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                )),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: 100,
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
+                            decoration: BoxDecoration(
+                              color: hexToColor(
+                                model.vote.subVotes[idx].colorCode[1],
+                              ),
+                              border: Border.all(
+                                width: 4.0,
+                                color: Color(0xFF000000),
+                              ),
+                              // borderRadius: BorderRadius.all(
+                              //     Radius.circular(30)),
+                            ),
+                            child: Text(model.vote.subVotes[idx].voteChoices[1],
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                                style: TextStyle(
+                                  fontSize: model.vote.subVotes[idx]
+                                              .voteChoices[1].length >
+                                          5
+                                      ? 22
+                                      : 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF000000),
+                                )),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 4.0,
+                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(
+                            40,
+                          )),
+                      child: Text("vs",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 10.0,
+                ),
+                child: Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              child: Transform.scale(
+                scale: 1.6,
+                child: CircularCheckBox(
+                  key: UniqueKey(),
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  visualDensity: VisualDensity(horizontal: 1, vertical: 0),
+                  value: selected[idx],
+                  checkColor: Colors.white,
+                  activeColor: Color(0xFF1EC8CF),
+                  inactiveColor: Color(0xFF1EC8CF),
+                  disabledColor: Colors.grey,
+                  onChanged: (val) => this.setState(() {
+                    this.selected[idx] = !this.selected[idx];
+                  }),
+                ),
+              ),
+            ),
+          ],
+        ),
       );
     }
   }

@@ -1,5 +1,6 @@
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
+import 'package:yachtOne/models/user_post_model.dart';
 import '../models/vote_comment_model.dart';
 import '../models/database_address_model.dart';
 import '../models/user_model.dart';
@@ -33,14 +34,15 @@ class SubjectCommunityViewModel extends FutureViewModel {
   Future futureToRun() => getAllModel(uid);
 
   Future getAllModel(uid) async {
-    setBusy(true);
+    // setBusy(true);
     address = await _databaseService.getAddress(uid);
     address.subVote = idx.toString();
     print(address);
     user = await _databaseService.getUser(uid);
     vote = await _databaseService.getVotes(address);
     userVote = await _databaseService.getUserVote(address);
-    setBusy(false);
+    // setBusy(false);
+    notifyListeners();
   }
 
   Future postComments(
@@ -48,7 +50,20 @@ class SubjectCommunityViewModel extends FutureViewModel {
     VoteCommentModel voteCommentModel,
   ) async {
     print("Async Start");
-    await _databaseService.postComment(address, voteCommentModel);
+
+    UserPostModel userPostModel;
+    userPostModel = UserPostModel(
+      category: address.category,
+      season: address.season,
+      subVote: address.subVote,
+      date: address.date,
+      createdAt: voteCommentModel.postDateTime,
+    );
+    await _databaseService.postComment(
+      address,
+      voteCommentModel,
+      userPostModel,
+    );
   }
 
   Future deleteComment(

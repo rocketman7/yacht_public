@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
@@ -19,6 +21,9 @@ import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import '../models/vote_chart_model.dart';
 import '../views/widgets/navigation_bars_widget.dart';
+import 'constants/holiday.dart';
+import 'widgets/customized_horizontal_calendar/customized_date_helper.dart';
+import 'widgets/customized_horizontal_calendar/customized_horizontal_calendar.dart';
 
 class VoteCommentView extends StatefulWidget {
   @override
@@ -31,6 +36,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
   final DialogService _dialogService = locator<DialogService>();
   final VoteCommentViewModel _viewModel = VoteCommentViewModel();
   final GlobalKey _globalKey = GlobalKey();
+  ScrollController _calendarController = ScrollController();
 
   Future<List<Object>> _getAllModel;
   Future<UserModel> _userModel;
@@ -84,8 +90,6 @@ class _VoteCommentViewState extends State<VoteCommentView>
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
     double displayRatio = deviceHeight / deviceWidth;
-    final TextEditingController _commentTextController =
-        TextEditingController();
 
     DateTime now = DateTime.now();
     DateFormat dateFormat = DateFormat('yyyy-MM-dd_HH:mm:ss:SSS');
@@ -98,7 +102,19 @@ class _VoteCommentViewState extends State<VoteCommentView>
         viewModelBuilder: () => VoteCommentViewModel(),
         builder: (context, model, child) {
           return model.isBusy
-              ? LoadingView()
+              ? Scaffold(
+                  body: Center(
+                    child: Container(
+                      height: 100,
+                      width: deviceWidth,
+                      child: FlareActor(
+                        'assets/images/Loading.flr',
+                        animation: 'loading',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                )
               : Scaffold(
                   body: SafeArea(
                     child: Padding(
@@ -114,18 +130,14 @@ class _VoteCommentViewState extends State<VoteCommentView>
                             style: TextStyle(
                               // fontFamily: 'Akrhip',
                               fontSize: 32,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w900,
                               letterSpacing: -2.0,
                             ),
                           ),
                           SizedBox(
                             height: 20,
                           ),
-                          Container(
-                              alignment: Alignment.center,
-                              height: 64,
-                              color: Colors.blue[100],
-                              child: Text("Space for Calender")),
+                          buildHorizontalCalendar(),
                           SizedBox(
                             height: 36,
                           ),
@@ -152,31 +164,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                           Flexible(
                             child: Container(
                               // height: 500,
-                              child: ListView.builder(
-                                itemCount: model.vote.subVotes.length + 1,
-                                itemBuilder: (context, index) {
-                                  if (index == 0) {
-                                    return ListTile(
-                                      leading: Container(
-                                        height: 60,
-                                        width: 60,
-                                        color: Colors.yellow,
-                                      ),
-                                      title: Text("Season 1",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                      subtitle: Text("rocketman님 외에 50명 이야기중"),
-                                    );
-                                  } else {
-                                    return buildListTile(
-                                      model.vote.subVotes[index - 1],
-                                      index,
-                                    );
-                                  }
-                                },
-                              ),
+                              child: buildListView(model),
                             ),
                           )
                         ],
@@ -187,7 +175,111 @@ class _VoteCommentViewState extends State<VoteCommentView>
         });
   }
 
-  ListTile buildListTile(
+  ListView buildListView(VoteCommentViewModel model) {
+    return ListView.builder(
+      itemCount: model.vote.subVotes.length + 1,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return Column(
+            children: [
+              ListTile(
+                leading: Container(
+                  height: 60,
+                  width: 60,
+                  color: Colors.yellow,
+                ),
+                title: Text("시즌 1 커뮤니티",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )),
+                subtitle: Text("rocketman님 외에 50명 이야기중"),
+              ),
+              Divider(),
+            ],
+          );
+        } else {
+          return buildEachCommunity(
+            model.vote.subVotes[index - 1],
+            index,
+          );
+        }
+      },
+    );
+  }
+
+  Widget buildHorizontalCalendar() {
+    return HorizontalCalendar(
+      padding: EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 5,
+      ),
+      defaultDecoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(8),
+          color: Color(
+            0xFFE0E0E0,
+          )),
+      height: 80,
+      isDateDisabled: (dateTime) {
+        // dateTime을 넣고 휴일 여부를 bool로
+        return dateTime.isAfter(nextBusinessDay(DateTime.now()));
+      },
+      disabledDecoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(8),
+          color: Color(
+            0xFFF8F8F8,
+          )),
+      disabledDateTextStyle: TextStyle(
+        fontSize: 20,
+        color: Color(0xFFC2C2C2),
+        fontWeight: FontWeight.w800,
+      ),
+      disabledWeekDayTextStyle: TextStyle(
+        fontSize: 12,
+        color: Color(0xFFC2C2C2),
+      ),
+      dateWidth: 48,
+      onDateSelected: (dateTime) {
+        String newBaseDate = stringDate.format(dateTime);
+      },
+      scrollController: _calendarController,
+      minSelectedDateCount: 1,
+      initialSelectedDates: nextBusinessDay(DateTime.now()),
+      labelOrder: [LabelType.date, LabelType.weekday],
+      dateTextStyle: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w800,
+      ),
+      weekDayTextStyle: TextStyle(
+        fontSize: 12,
+      ),
+      firstDate: DateTime.now().subtract(Duration(days: 15)),
+      lastDate: nextBusinessDay(DateTime.now()).add(Duration(days: 3)),
+      selectedDateTextStyle: TextStyle(
+        fontSize: 20,
+        color: Colors.white,
+        fontWeight: FontWeight.w800,
+      ),
+      selectedWeekDayTextStyle: TextStyle(
+        fontSize: 12,
+        color: Colors.white,
+      ),
+      selectedDecoration: BoxDecoration(
+        color: Color(0xFF1EC8CF),
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+              blurRadius: 5,
+              color: Colors.black.withOpacity(.2),
+              offset: Offset(1, 4))
+        ],
+      ),
+    );
+  }
+
+  ListTile buildEachCommunity(
     SubVote subVote,
     int index,
   ) {
@@ -545,82 +637,82 @@ class _VoteCommentViewState extends State<VoteCommentView>
   }
 
 // 유저 댓글 입력창
-  Widget commentInput(
-    int subVoteIndex,
-    TextEditingController controller,
-    DatabaseAddressModel address,
-    UserModel userModel,
-    VoteModel voteModel,
-    UserVoteModel userVoteModel,
-    VoteCommentViewModel viewModel,
-  ) {
-    address.subVote = subVoteIndex.toString();
-    // 유저 코멘트 넣는 창
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Image.asset(
-          'assets/images/avatar.png',
-          width: 30,
-        ),
-        Container(
-          width: 300,
-          child: TextField(
-            controller: controller,
-            textAlign: TextAlign.start,
-            textAlignVertical: TextAlignVertical.top,
-            style: TextStyle(
-              color: Colors.black,
-            ),
-            maxLines: 3,
-            decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFFBDBDBD),
-                    width: 1.0,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFFBDBDBD),
-                    width: 1.0,
-                  ),
-                ),
-                hintText: '주제에 관한 생각을 말해주세요',
-                hintStyle: TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF828282),
-                )),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            voteCommentModel = VoteCommentModel(
-              uid: userModel.uid,
-              userName: userModel.userName,
-              postText: controller.text,
-              choice: userVoteModel.voteSelected[subVoteIndex] == 0
-                  ? null
-                  : voteModel.subVotes[subVoteIndex].voteChoices[
-                      userVoteModel.voteSelected[subVoteIndex] - 1],
-              postDateTime: Timestamp.fromDate(DateTime.now().toUtc()),
+  // Widget commentInput(
+  //   int subVoteIndex,
+  //   TextEditingController controller,
+  //   DatabaseAddressModel address,
+  //   UserModel userModel,
+  //   VoteModel voteModel,
+  //   UserVoteModel userVoteModel,
+  //   VoteCommentViewModel viewModel,
+  // ) {
+  //   address.subVote = subVoteIndex.toString();
+  //   // 유저 코멘트 넣는 창
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: <Widget>[
+  //       Image.asset(
+  //         'assets/images/avatar.png',
+  //         width: 30,
+  //       ),
+  //       Container(
+  //         width: 300,
+  //         child: TextField(
+  //           controller: controller,
+  //           textAlign: TextAlign.start,
+  //           textAlignVertical: TextAlignVertical.top,
+  //           style: TextStyle(
+  //             color: Colors.black,
+  //           ),
+  //           maxLines: 3,
+  //           decoration: InputDecoration(
+  //               focusedBorder: OutlineInputBorder(
+  //                 borderSide: BorderSide(
+  //                   color: Color(0xFFBDBDBD),
+  //                   width: 1.0,
+  //                 ),
+  //               ),
+  //               enabledBorder: OutlineInputBorder(
+  //                 borderSide: BorderSide(
+  //                   color: Color(0xFFBDBDBD),
+  //                   width: 1.0,
+  //                 ),
+  //               ),
+  //               hintText: '주제에 관한 생각을 말해주세요',
+  //               hintStyle: TextStyle(
+  //                 fontSize: 12,
+  //                 color: Color(0xFF828282),
+  //               )),
+  //         ),
+  //       ),
+  //       GestureDetector(
+  //         onTap: () {
+  //           voteCommentModel = VoteCommentModel(
+  //             uid: userModel.uid,
+  //             userName: userModel.userName,
+  //             postText: controller.text,
+  //             choice: userVoteModel.voteSelected[subVoteIndex] == 0
+  //                 ? null
+  //                 : voteModel.subVotes[subVoteIndex].voteChoices[
+  //                     userVoteModel.voteSelected[subVoteIndex] - 1],
+  //             postDateTime: Timestamp.fromDate(DateTime.now().toUtc()),
 
-              // postDateTime: DateTime.now(),
-            );
+  //             // postDateTime: DateTime.now(),
+  //           );
 
-            viewModel.postComments(
-              address,
-              voteCommentModel,
-            );
-            controller.text = '';
-          },
-          child: Icon(
-            Icons.check_circle,
-            color: Colors.black,
-          ),
-        ),
-      ],
-    );
-  }
+  //           viewModel.postComments(
+  //             address,
+  //             voteCommentModel,
+  //           );
+  //           controller.text = '';
+  //         },
+  //         child: Icon(
+  //           Icons.check_circle,
+  //           color: Colors.black,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }
