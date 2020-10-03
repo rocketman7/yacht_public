@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
@@ -21,6 +22,7 @@ import '../models/database_address_model.dart';
 import '../models/temp_address_constant.dart';
 import '../models/vote_model.dart';
 import '../models/sub_vote_model.dart';
+import 'widgets/avatar_widget.dart';
 
 class HomeView extends StatefulWidget {
   final Function goToTab;
@@ -82,7 +84,19 @@ class _HomeViewState extends State<HomeView> {
           // UserModel userModel = model.getUser(_widgetAddress.uid);
           // WillPopScope: Back 버튼 막기
           return model.isBusy
-              ? LoadingView()
+              ? Scaffold(
+                  body: Center(
+                    child: Container(
+                      height: 100,
+                      width: deviceWidth,
+                      child: FlareActor(
+                        'assets/images/Loading.flr',
+                        animation: 'loading',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                )
               : Scaffold(
                   body: WillPopScope(
                     onWillPop: () async {
@@ -104,20 +118,9 @@ class _HomeViewState extends State<HomeView> {
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    Column(
-                                      children: [
-                                        Container(
-                                          height: 72,
-                                          width: 72,
-                                          color: Color(0xFF1EC8CF),
-                                        ),
-                                        Container(
-                                          height: 4,
-                                          width: 72,
-                                          color: Color(0xFFFF402B),
-                                        ),
-                                      ],
-                                    ),
+                                    avatarWidget(
+                                        model.user.avatarImage ?? 'avatar001',
+                                        model.user.item),
                                     SizedBox(
                                       width: 16,
                                     ),
@@ -225,7 +228,7 @@ class _HomeViewState extends State<HomeView> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      "현재 콤보",
+                                      "현재 승점",
                                       style: TextStyle(
                                         fontSize: 20,
                                         letterSpacing: -1.0,
@@ -274,17 +277,28 @@ class _HomeViewState extends State<HomeView> {
                                 SizedBox(
                                   height: 8,
                                 ),
-                                buildRow(model, 0),
-                                SizedBox(
-                                  height: 8,
+                                LimitedBox(
+                                  maxHeight: 550,
+                                  // height: 350,
+                                  child: ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: model.vote.voteCount,
+                                      itemBuilder: (context, index) {
+                                        return buildRow(model, index);
+                                      }),
                                 ),
-                                buildRow(model, 1),
+                                // buildRow(model, 0),
+                                // SizedBox(
+                                //   height: 8,
+                                // ),
+                                // buildRow(model, 1),
+                                // SizedBox(
+                                //   height: 8,
+                                // ),
+                                // buildRow(model, 2),
                                 SizedBox(
-                                  height: 8,
-                                ),
-                                buildRow(model, 2),
-                                SizedBox(
-                                  height: 28,
+                                  height: 20,
                                 ),
                                 GestureDetector(
                                   onTap: () => widget.goToTab(1),
@@ -378,95 +392,157 @@ class _HomeViewState extends State<HomeView> {
         });
   }
 
-  Row buildRow(HomeViewModel model, int idx) {
+  Widget buildRow(HomeViewModel model, int idx) {
     // 선택지 수
     int numOfChoices = model.vote.subVotes[idx].issueCode.length;
+    Color hexToColor(String code) {
+      return Color(int.parse(code, radix: 16) + 0xFF0000000);
+    }
+
     if (numOfChoices == 1) {
-      return Row(
-        // #1
-        children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 4.0,
-                color: Color(0xFFFF74D5),
+      return Column(
+        children: [
+          Row(
+            // #1
+            children: <Widget>[
+              Container(
+                height: 60,
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 4.0,
+                    color: hexToColor(
+                      model.vote.subVotes[idx].colorCode[0],
+                    ),
+                  ),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Text(
+                  model.vote.subVotes[idx].title,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -1.0,
+                    color: hexToColor(
+                      model.vote.subVotes[idx].colorCode[0],
+                    ),
+                  ),
+                ),
               ),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Text(model.vote.subVotes[idx].title,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -1.0,
-                  color: Color(0xFFFF74D5),
-                )),
+            ],
           ),
+          SizedBox(
+            height: 8,
+          )
         ],
       );
     } else {
-      return Row(
-        // #1
-        children: <Widget>[
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 4.0,
-                color: Color(0xFFFF74D5),
+      return Column(
+        children: [
+          Row(
+            // #1
+            children: <Widget>[
+              Expanded(
+                flex: model.vote.subVotes[idx].voteChoices[0].length,
+                child: Container(
+                  height: 60,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 4.0,
+                      color: hexToColor(
+                        model.vote.subVotes[idx].colorCode[0],
+                      ),
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Text(
+                    model.vote.subVotes[idx].voteChoices[0],
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -1.0,
+                      color: hexToColor(
+                        model.vote.subVotes[idx].colorCode[0],
+                      ),
+                    ),
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                  ),
+                ),
               ),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: Text(model.vote.subVotes[idx].voteChoices[0],
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -1.0,
-                  color: Color(0xFFFF74D5),
-                )),
+              SizedBox(
+                width: 6,
+              ),
+              Container(
+                // height: 60,
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 4),
+                    // color: Colors.black,
+                    borderRadius: BorderRadius.all(Radius.circular(40))),
+                child: Text(
+                  "vs",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 6,
+              ),
+              Expanded(
+                flex: model.vote.subVotes[idx].voteChoices[1].length,
+                child: Container(
+                  height: 60,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 4.0,
+                      color: hexToColor(
+                        model.vote.subVotes[idx].colorCode[1],
+                      ),
+                    ),
+                    // borderRadius: BorderRadius.all(
+                    //     Radius.circular(30)),
+                  ),
+                  child: Text(
+                    model.vote.subVotes[idx].voteChoices[1],
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -1.0,
+                      color: hexToColor(
+                        model.vote.subVotes[idx].colorCode[1],
+                      ),
+                    ),
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                  ),
+                ),
+              ),
+              SizedBox(
+                  width: (model.vote.subVotes[idx].voteChoices[0].length +
+                              model.vote.subVotes[idx].voteChoices[1].length >
+                          9
+                      ? 0
+                      : (150 -
+                          (model.vote.subVotes[idx].voteChoices[0].length +
+                                  model.vote.subVotes[idx].voteChoices[1]
+                                      .length) *
+                              15.0)))
+            ],
           ),
           SizedBox(
-            width: 6,
-          ),
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                border: Border.all(width: 4),
-                // color: Colors.black,
-                borderRadius: BorderRadius.all(Radius.circular(40))),
-            child: Text(
-              "vs",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 6,
-          ),
-          Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              border: Border.all(
-                width: 4.0,
-                color: Color(0xFF71FF01),
-              ),
-              // borderRadius: BorderRadius.all(
-              //     Radius.circular(30)),
-            ),
-            child: Text(model.vote.subVotes[idx].voteChoices[1],
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -1.0,
-                  color: Color(0xFF71FF01),
-                )),
-          ),
+            height: 8,
+          )
         ],
       );
     }

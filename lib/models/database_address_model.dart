@@ -91,7 +91,7 @@ class DatabaseAddressModel {
   }
 
   // posts collection의 season subCollection의 개별 subVote 게시판 Ref.
-  CollectionReference postsSeasonSubVoteCollection() {
+  CollectionReference postsSubVoteCollection() {
     return _databaseService.postsCollectionReference
         .doc(category)
         .collection(season)
@@ -100,7 +100,7 @@ class DatabaseAddressModel {
   }
 
   // posts collection의 season subCollection의 시즌 전체 게시판 Ref.
-  CollectionReference postsSeasonSeasonPostCollection() {
+  CollectionReference postsSeasonCollection() {
     return _databaseService.postsCollectionReference
         .doc(category)
         .collection(season)

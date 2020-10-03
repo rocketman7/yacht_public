@@ -7,37 +7,28 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/vote_comment_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
-import 'package:yachtOne/view_models/subject_community_view_model.dart';
+import 'package:yachtOne/view_models/season_community_view_model.dart';
 import 'package:yachtOne/views/constants/size.dart';
 
 import 'widgets/avatar_widget.dart';
 
-class SubjectCommunityView extends StatefulWidget {
-  final subjectCommunityviewObject;
-
-  SubjectCommunityView(
-    this.subjectCommunityviewObject,
-  );
+class SeasonCommunityView extends StatefulWidget {
   @override
-  _SubjectCommunityViewState createState() => _SubjectCommunityViewState();
+  _SeasonCommunityViewState createState() => _SeasonCommunityViewState();
 }
 
 final TextEditingController _commentInputController = TextEditingController();
 final ScrollController _commentScrollController = ScrollController();
 VoteCommentModel voteCommentModel;
 
-class _SubjectCommunityViewState extends State<SubjectCommunityView> {
-  int idx;
-  VoteModel vote;
+class _SeasonCommunityViewState extends State<SeasonCommunityView> {
   bool isliked = false;
   @override
   Widget build(BuildContext context) {
-    vote = widget.subjectCommunityviewObject[0];
-    idx = widget.subjectCommunityviewObject[1];
     print(deviceHeight);
 
     return ViewModelBuilder.reactive(
-      viewModelBuilder: () => SubjectCommunityViewModel(vote.voteDate, idx),
+      viewModelBuilder: () => SeasonCommunityViewModel(),
       builder: (context, model, child) {
         // print("BUILDING" + model.idx.toString());
         return model.isBusy
@@ -57,12 +48,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
             : Scaffold(
                 body: SafeArea(
                 child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      18,
-                      18,
-                      18,
-                      0,
-                    ),
+                    padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -72,28 +58,20 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                             GestureDetector(
                                 onTap: () => Navigator.of(context).pop(),
                                 child: Icon(Icons.arrow_back_ios)),
-                            Expanded(
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    model.vote.subVotes[idx].title,
+                            Column(
+                              children: <Widget>[
+                                Text(model.seasonInfo.seasonName + " 커뮤니티",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
-                                    ),
-                                    maxLines: 1,
-                                    softWrap: false,
-                                    overflow: TextOverflow.fade,
-                                  ),
-                                  Text("총 투표 " +
-                                      ((model.vote.subVotes[idx].numVoted0 ??
-                                                  1) +
-                                              (model.vote.subVotes[idx]
-                                                      .numVoted1 ??
-                                                  1))
-                                          .toString()),
-                                ],
-                              ),
+                                    )),
+                                // Text("총 투표 " +
+                                //     ((model.vote.subVotes[idx].numVoted0 ?? 1) +
+                                //             (model.vote.subVotes[idx]
+                                //                     .numVoted1 ??
+                                //                 1))
+                                //         .toString()),
+                              ],
                             ),
                             Icon(Icons.share_rounded)
                           ],
@@ -102,8 +80,8 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                           color: Colors.black,
                           thickness: 2.0,
                         ),
-                        buildSquares(model, idx),
-                        SizedBox(height: 8),
+                        // buildSquares(model, idx),
+                        // SizedBox(height: 8),
                         Expanded(
                           child: buildCommentList(
                             model,
@@ -167,7 +145,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                             width: 1.0,
                                           ),
                                         ),
-                                        hintText: '주제에 관한 의견을 말해주세요',
+                                        hintText: '이번 시즌 관한 이야기를 나눠보세요',
                                         hintStyle: TextStyle(
                                           fontSize: 14,
                                           color: Color(0xFF828282),
@@ -180,22 +158,21 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                   right: 0,
                                   child: GestureDetector(
                                     onTap: () {
-                                      print(model.idx);
                                       voteCommentModel = VoteCommentModel(
                                         uid: model.user.uid,
                                         userName: model.user.userName,
                                         postText: _commentInputController.text,
-                                        choice: model.userVote == null
-                                            ? "선택안함"
-                                            : model.userVote.voteSelected[
-                                                        model.idx] ==
-                                                    0
-                                                ? "선택안함"
-                                                : model.vote.subVotes[model.idx]
-                                                        .voteChoices[
-                                                    model.userVote.voteSelected[
-                                                            model.idx] -
-                                                        1],
+                                        // choice: model.userVote == null
+                                        //     ? "선택안함"
+                                        //     : model.userVote.voteSelected[
+                                        //                 model.idx] ==
+                                        //             0
+                                        //         ? "선택안함"
+                                        //         : model.vote.subVotes[model.idx]
+                                        //                 .voteChoices[
+                                        //             model.userVote.voteSelected[
+                                        //                     model.idx] -
+                                        //                 1],
                                         postDateTime:
                                             Timestamp.fromDate(DateTime.now()),
                                         like: 0,
@@ -206,7 +183,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                       print(voteCommentModel.uid);
                                       _commentInputController.text = '';
                                       model.postComments(
-                                        model.newAddress,
+                                        model.address,
                                         voteCommentModel,
                                       );
                                     },
@@ -249,7 +226,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     );
   }
 
-  Widget buildSquares(SubjectCommunityViewModel model, int idx) {
+  Widget buildSquares(SeasonCommunityViewModel model, int idx) {
     // 각 투표수 가져오기
     var numVoted0 = model.vote.subVotes[idx].numVoted0 ?? 1;
     var numVoted1 = model.vote.subVotes[idx].numVoted1 ?? 1;
@@ -271,7 +248,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     if (length == 1) {
       return StreamBuilder(
           stream: model.getRealtimePrice(
-            model.newAddress,
+            model.address,
             model.vote.subVotes[idx].issueCode[0],
           ),
           builder: (context, snapshot) {
@@ -515,7 +492,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     } else {
       return StreamBuilder<PriceModel>(
           stream: model.getRealtimePrice(
-            model.newAddress,
+            model.address,
             model.vote.subVotes[idx].issueCode[0],
           ),
           builder: (context, snapshot0) {
@@ -817,10 +794,10 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
   }
 
   Widget buildCommentList(
-    SubjectCommunityViewModel model,
+    SeasonCommunityViewModel model,
   ) {
     return StreamBuilder<List<VoteCommentModel>>(
-        stream: model.getPost(model.newAddress),
+        stream: model.getPost(model.address),
         builder: (context, snapshot) {
           List<VoteCommentModel> commentList = snapshot.data;
 
@@ -847,7 +824,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
   }
 
   Column buildColumn(
-    SubjectCommunityViewModel model,
+    SeasonCommunityViewModel model,
     VoteCommentModel voteComment,
   ) {
     return Column(

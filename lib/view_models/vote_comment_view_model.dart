@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -27,7 +28,11 @@ class VoteCommentViewModel extends FutureViewModel {
   UserModel user;
   VoteModel vote;
   UserVoteModel userVote;
+  SeasonModel seasonInfo;
   String uid;
+
+  VoteModel newVote;
+//   UserVoteModel newUserVote;
 
   VoteCommentViewModel() {
     // _authService.signOut();
@@ -38,23 +43,31 @@ class VoteCommentViewModel extends FutureViewModel {
 
   Future getAllModel(uid) async {
     setBusy(true);
+
     address = await _databaseService.getAddress(uid);
     user = await _databaseService.getUser(uid);
     vote = await _databaseService.getVotes(address);
     userVote = await _databaseService.getUserVote(address);
+    seasonInfo = await _databaseService.getSeasonInfo(address);
     setBusy(false);
   }
 
-  Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
-    return _databaseService.getPostList(address);
+  Future getNewVote(address) async {
+    newVote = await _databaseService.getVotes(address);
+    print("GETNEWVOTE CALLED");
+    notifyListeners();
   }
 
-  Future postComments(
-    DatabaseAddressModel address,
-    VoteCommentModel voteCommentModel,
-  ) async {
-    await _databaseService.postComment(address, voteCommentModel);
+  Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
+    return _databaseService.getSubVotePostList(address);
   }
+
+  // Future postComments(
+  //   DatabaseAddressModel address,
+  //   VoteCommentModel voteCommentModel,
+  // ) async {
+  //   await _databaseService.postComment(address, voteCommentModel);
+  // }
 
   Future deleteComment(
     DatabaseAddressModel address,

@@ -49,13 +49,30 @@ Widget avatarWidget(String avatarImage, int itemNum) {
                   top: 1,
                   left: 20,
                   child: Text(
-                    itemNum.toString(),
+                    (itemNum ?? 0).toString(),
                     style: TextStyle(fontSize: 10, color: Colors.white),
                   ))
             ],
           ),
         )
       ],
+    ),
+  );
+}
+
+Widget avatarWidgetWithoutItem(
+  String avatarImage,
+) {
+  return Container(
+    // height: 40,
+    child: Container(
+      // height: 30,
+      // width: 30,
+      child: CircleAvatar(
+        maxRadius: 60,
+        backgroundColor: Colors.transparent,
+        backgroundImage: AssetImage('assets/images/$avatarImage.png'),
+      ),
     ),
   );
 }

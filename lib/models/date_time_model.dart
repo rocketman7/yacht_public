@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:yachtOne/models/temp_address_constant.dart';
+import 'package:yachtOne/views/constants/holiday.dart';
 
 class DateTimeModel {
   // HOUR24_MINUTE_SECOND
@@ -30,7 +31,7 @@ class DateTimeModel {
       case 'koreaStockStandard':
         // 지금 시간이 평일인지 체크하고 평일이면 그대로 반환, 주말이면 가장 가까운 월요일 반환
         DateTime _timeNow = DateTime.now();
-        DateTime _nearestWeekDay = weekDay(_timeNow);
+        DateTime _nearestWeekDay = nextBusinessDay(_timeNow);
         DateTime _marketStart = DateTime(_nearestWeekDay.year,
             _nearestWeekDay.month, _nearestWeekDay.day, 08, 50, 00);
         DateTime _marketEnd = DateTime(_nearestWeekDay.year,
