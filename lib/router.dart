@@ -20,6 +20,7 @@ import 'views/mypage_documents/mypage_friendsCode_view.dart';
 import 'views/mypage_documents/mypage_editProfile_view.dart';
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_view.dart';
+import 'views/portfolio_view.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -81,6 +82,8 @@ class Routers {
         return MaterialPageRoute(builder: (context) => MypageEditProfileView());
       case 'mypage_tempggook':
         return MaterialPageRoute(builder: (context) => MypageTempGGookView());
+      case 'portfolio':
+        return MaterialPageRoute(builder: (context) => PortfolioView());
       case 'startup':
         return MaterialPageRoute(
             builder: (context) =>

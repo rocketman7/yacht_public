@@ -9,6 +9,9 @@ import 'widgets/avatar_widget.dart';
 
 import 'package:blobs/blobs.dart';
 
+import 'dart:ui';
+import 'dart:math' as math;
+
 class MypageMainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -263,6 +266,7 @@ class MypageMainView extends StatelessWidget {
           makeMypageMainComponent(model, '개인정보취급방침', 'mypage_privacypolicy'),
           makeMypageMainComponent(model, '사업자정보', 'mypage_businessinformation'),
           makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
+          makeMypageMainComponent(model, '포트폴리오 임시', 'portfolio'),
           SizedBox(
             height: 42,
           )
@@ -277,10 +281,49 @@ class MypageTempGGookView extends StatefulWidget {
   _MypageTempGGookViewState createState() => _MypageTempGGookViewState();
 }
 
-class _MypageTempGGookViewState extends State<MypageTempGGookView> {
+class _MypageTempGGookViewState extends State<MypageTempGGookView>
+    with TickerProviderStateMixin {
+  // Animation<double> animation;
+  // // AnimationController animationController;
+  // AnimationController _animationController;
+  // Animation animation;
+
+  // BlobController blobCtrl;
+
+  int x = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // animationController =
+    //     AnimationController(vsync: this, duration: Duration(seconds: 3));
+    // animation = Tween<double>(begin: 1.0, end: 3.0).animate(animationController)
+    //   ..addListener(() {
+    //     setState(() {});
+    //   });
+    // animationController.forward();
+    //
+    // _animationController =
+    //     AnimationController(duration: Duration(seconds: 200), vsync: this);
+    // animation =
+    //     Tween<double>(begin: 1.0, end: 350.0).animate(_animationController);
+    // _animationController.addListener(() {
+    //   setState(() {});
+    // });
+    // _animationController.repeat();
+  }
+
+  @override
+  void dispose() {
+    // blobCtrl.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           SafeArea(
@@ -397,6 +440,23 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView> {
                           color: Color(0xFF3485FF)),
                     ),
                   ],
+                ),
+                GestureDetector(
+                  child: Text('디버그'),
+                  onTap: () {
+                    // BlobData blobData = blobCtrl.change();
+                    // print(blobData);
+                    setState(() {
+                      x += 10;
+                    });
+                  },
+                ),
+                GestureDetector(
+                  child: Text('선택애니메이션'),
+                  onTap: () {
+                    // print(blobCtrl.change().size);
+                    // animationController.forward();
+                  },
                 )
               ],
             ),
@@ -405,33 +465,528 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView> {
           Positioned(
             left: 50,
             top: 400,
-            child: Stack(
-              children: [
-                Blob.animatedFromID(
-                    size: 200,
-                    id: [
-                      '10-7-848634',
-                      '10-7-863638',
-                      '10-7-63404',
-                      '10-7-424041'
-                    ],
-                    loop: true,
-                    duration: Duration(milliseconds: 1000)),
-                Blob.animatedFromID(
-                    size: 180,
-                    id: [
-                      '10-7-848634',
-                      '10-7-863638',
-                      '10-7-63404',
-                      '10-7-424041'
-                    ],
-                    loop: true,
-                    duration: Duration(milliseconds: 1000)),
-              ],
+            child: Container(
+              width: 400,
+              height: 400,
+              child: Stack(
+                children: [
+                  Positioned(child: Test5Widget()),
+                  TestWidget(),
+                  Test3Widget(),
+                  Positioned(
+                      left: 10,
+                      top: 10,
+                      child: Test2Widget(
+                        blobColor: Color(0xFFFFDE34),
+                      )),
+                ],
+              ),
             ),
+          ),
+
+          // Positioned(
+          //   left: 190,
+          //   top: 600,
+          //   child: Container(
+          //     width: 400,
+          //     height: 400,
+          //     child: Stack(
+          //       children: [
+          //         Positioned(child: Test5Widget()),
+          //         TestWidget(),
+          //         Positioned(
+          //             left: 10,
+          //             top: 10,
+          //             child: Test2Widget(
+          //               blobColor: Color(0xFF8DFF34),
+          //             )),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+
+          Positioned(
+            left: 160,
+            top: 200,
+            child: ScaleBlobAnimation(),
           )
+          // Transform.scale(
+          //     scale: animation.value,
+          //     child: Positioned(left: 100, top: 100, child: TestWidget())),
+//           Positioned(left: 100, top: 100, child: TestWidget()),
+//           Positioned(
+//             left: 50,
+//             top: 400,
+//             child: Stack(
+//               children: [
+//                 // Transform.scale(
+//                 //   scale: animation.value,
+//                 //   child: Blob.fromID(id: ['10-7-848634'], size: 200),
+//                 // )
+// //
+//                 Transform.scale(
+//                   // scale: animation.value,
+//                   scale: 1,
+//                   child: Blob.animatedFromID(
+//                       size: 200,
+//                       id: [
+//                         '10-7-848634',
+//                         '10-7-863638',
+//                         '10-7-63404',
+//                         '10-7-424041',
+//                         '10-7-88922'
+//                       ],
+//                       styles: BlobStyles(
+//                         // color: Color(0xFFFFDE34).withOpacity(.5),
+//                         color: Color(0xFF000000),
+//                         // fillType: BlobFillType.stroke,
+//                         // strokeWidth: 10,
+//                       ),
+//                       controller: blobCtrl,
+//                       loop: true,
+//                       duration: Duration(milliseconds: 1000)),
+//                 ),
+//                 // Positioned(
+//                 //   top: 10,
+//                 //   left: 10,
+//                 //   child: Blob.animatedFromID(
+//                 //       size: 180,
+//                 //       id: [
+//                 //         '10-7-88922',
+//                 //         '10-7-848634',
+//                 //         '10-7-863638',
+//                 //         '10-7-63404',
+//                 //         '10-7-424041',
+//                 //       ],
+//                 //       styles: BlobStyles(
+//                 //         color: Color(0xFFFFDE34),
+//                 //       ),
+//                 //       controller: blobCtrl,
+//                 //       loop: true,
+//                 //       duration: Duration(milliseconds: 1000)),
+//                 // ),
+//                 // AnimatedBuilder(
+//                 //     animation: animation,
+//                 //     builder: (context, child) {
+//                 //       return Positioned(
+//                 //           left: 100,
+//                 //           top: 100,
+//                 //           child: Container(
+//                 //             height: animation.value,
+//                 //             width: animation.value,
+//                 //             color: Colors.red,
+//                 //           ));
+//                 //     }),
+//                 //
+//                 // Column(
+//                 //   mainAxisSize: MainAxisSize.min,
+//                 //   children: [
+//                 //     Container(
+//                 //       child: Stack(
+//                 //         alignment: Alignment.center,
+//                 //         children: [
+//                 //           Transform.rotate(
+//                 //             angle: (animation.value * 0.6) * 360.0,
+//                 //             child: Blob.fromID(
+//                 //               size: 190,
+//                 //               id: ['6-8-34659'],
+//                 //               styles: BlobStyles(
+//                 //                 color: Color(0xffff6b81).withOpacity(0.2),
+//                 //                 fillType: BlobFillType.fill,
+//                 //               ),
+//                 //             ),
+//                 //           ),
+//                 //           Transform.rotate(
+//                 //             angle: animation.value * 360.0,
+//                 //             child: Blob.fromID(
+//                 //               size: 200,
+//                 //               id: ['6-8-6090'],
+//                 //               styles: BlobStyles(
+//                 //                 color: Color(0xffFC427B),
+//                 //                 fillType: BlobFillType.stroke,
+//                 //               ),
+//                 //             ),
+//                 //           ),
+//                 //           Transform.rotate(
+//                 //             angle: (animation.value * 0.4) * 360.0,
+//                 //             child: Blob.fromID(
+//                 //               size: 200,
+//                 //               id: ['6-8-115566'],
+//                 //               styles: BlobStyles(
+//                 //                 color: Color(0xffB33771),
+//                 //                 fillType: BlobFillType.stroke,
+//                 //               ),
+//                 //             ),
+//                 //           ),
+//                 //           Center(
+//                 //               child: Text(
+//                 //             "blobs",
+//                 //             style: TextStyle(
+//                 //               fontFamily: 'Ropa',
+//                 //               fontSize: 30,
+//                 //               color: Color(0xffc44569),
+//                 //             ),
+//                 //           )),
+//                 //         ],
+//                 //       ),
+//                 //     ),
+//                 //   ],
+//                 // ),
+//                 //
+//                 // Positioned(
+//                 //     top: 80,
+//                 //     left: 60,
+//                 //     child: AnimatedBuilder(
+//                 //         animation: animation,
+//                 //         builder: (context, child) {
+//                 //           return Transform.translate(
+//                 //               offset: Offset(0, animation.value),
+//                 //               child: Text(
+//                 //                 '카카오',
+//                 //                 style: TextStyle(
+//                 //                     fontSize: 28, fontWeight: FontWeight.bold),
+//                 //               ));
+//                 //         }))
+//               ],
+//             ),
+//           )
         ],
       ),
     );
+  }
+}
+
+class TestWidget extends StatefulWidget {
+  @override
+  _TestWidgetState createState() => _TestWidgetState();
+}
+
+class _TestWidgetState extends State<TestWidget> {
+  BlobController blobCtrl;
+
+  @override
+  void dispose() {
+    // blobCtrl.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Blob.animatedFromID(
+        size: 200,
+        id: [
+          '10-7-848634',
+          '10-7-863638',
+          '10-7-63404',
+          '10-7-424041',
+          '10-7-88922'
+        ],
+        styles: BlobStyles(
+          color: Color(0xFF000000),
+        ),
+        controller: blobCtrl,
+        loop: true,
+        duration: Duration(milliseconds: 2000));
+  }
+}
+
+class Test2Widget extends StatefulWidget {
+  final Color blobColor;
+
+  const Test2Widget({Key key, this.blobColor}) : super(key: key);
+
+  @override
+  _Test2WidgetState createState() => _Test2WidgetState();
+}
+
+class _Test2WidgetState extends State<Test2Widget> {
+  BlobController blobCtrl;
+
+  @override
+  void dispose() {
+    // blobCtrl.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Blob.animatedFromID(
+        size: 180,
+        id: [
+          '10-7-88922',
+          '10-7-848634',
+          '10-7-863638',
+          '10-7-63404',
+          '10-7-424041',
+        ],
+        styles: BlobStyles(
+          color: widget.blobColor,
+          // color: Color(0xFFFFDE34).withOpacity(.5),
+        ),
+        controller: blobCtrl,
+        loop: true,
+        duration: Duration(milliseconds: 2000));
+  }
+}
+
+class Test3Widget extends StatefulWidget {
+  @override
+  _Test3WidgetState createState() => _Test3WidgetState();
+}
+
+class _Test3WidgetState extends State<Test3Widget>
+    with TickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+        duration: Duration(milliseconds: 1500), vsync: this);
+    animation =
+        Tween<double>(begin: 0.0, end: 100.0).animate(_animationController);
+    _animationController.addListener(() {
+      setState(() {});
+    });
+    _animationController.repeat();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // return Transform.rotate(
+    //   angle: (animation.value * 0.6) * 360.0,
+    //   child: Container(
+    //     width: 200,
+    //     height: 200,
+    //     decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+    //   ),
+    // );
+    return AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) {
+          return CustomPaint(
+              size: Size(200, 200),
+              painter: PieChart(percentage: animation.value));
+        });
+  }
+}
+
+class PieChart extends CustomPainter {
+  double percentage = 0;
+
+  PieChart({this.percentage});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = Colors.transparent
+      ..style = PaintingStyle.fill;
+
+    double radius = math.min(size.width / 2, size.height / 2);
+    Offset center = Offset(size.width / 2, size.height / 2);
+
+    canvas.drawCircle(center, radius, paint);
+
+    double arcAngle = 2 * math.pi * (percentage / 100);
+
+    paint..color = Colors.white;
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
+        -math.pi / 2, arcAngle, true, paint);
+  }
+
+  @override
+  bool shouldRepaint(PieChart old) {
+    return old.percentage != percentage;
+  }
+}
+
+class Test4Widget extends StatefulWidget {
+  @override
+  _Test4WidgetState createState() => _Test4WidgetState();
+}
+
+class _Test4WidgetState extends State<Test4Widget> {
+  BlobController blobCtrl;
+
+  @override
+  void dispose() {
+    // blobCtrl.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Blob.animatedFromID(
+        size: 220,
+        id: [
+          '10-7-863638',
+          '10-7-63404',
+          '10-7-424041',
+          '10-7-88922',
+          '10-7-848634',
+        ],
+        styles: BlobStyles(
+          color: Color(0xFFFFFFFF),
+        ),
+        controller: blobCtrl,
+        loop: true,
+        duration: Duration(milliseconds: 2000));
+  }
+}
+
+class Test5Widget extends StatefulWidget {
+  @override
+  _Test5WidgetState createState() => _Test5WidgetState();
+}
+
+class _Test5WidgetState extends State<Test5Widget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 200,
+      height: 200,
+      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+    );
+  }
+}
+
+class ScaleBlobAnimation extends StatefulWidget {
+  @override
+  _ScaleBlobAnimationState createState() => _ScaleBlobAnimationState();
+}
+
+class _ScaleBlobAnimationState extends State<ScaleBlobAnimation>
+    with TickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(duration: Duration(seconds: 1500), vsync: this);
+    animation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _animationController.addListener(() {
+      setState(() {});
+    });
+    _animationController.repeat();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // return AnimatedBuilder(
+    //     animation: animation,
+    //     builder: (context, child) {
+    //       return Transform.rotate(
+    //         angle: (animation.value * 0.6) * 360.0,
+    //         child: BlobAnimation(
+    //           blobColor: Color(0xFF0E3F44),
+    //           size: 200,
+    //         ),
+    //       );
+    //     });
+    return BlobAnimation(
+      blobColor: Color(0xFF0E3F44),
+      size: 200,
+    );
+  }
+}
+
+class BlobAnimation extends StatefulWidget {
+  final Color blobColor;
+  final double size;
+
+  const BlobAnimation({Key key, this.blobColor, this.size}) : super(key: key);
+  @override
+  _BlobAnimationState createState() => _BlobAnimationState();
+}
+
+class _BlobAnimationState extends State<BlobAnimation>
+    with TickerProviderStateMixin {
+  BlobController blobCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+
+    blobCtrl = BlobController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Blob.animatedFromID(
+            size: 180,
+            id: [
+              '10-7-88922',
+              '10-7-848634',
+              '10-7-863638',
+              '10-7-63404',
+              '10-7-424041',
+            ],
+            styles: BlobStyles(
+              color: widget.blobColor,
+              // color: Color(0xFFFFDE34).withOpacity(.5),
+            ),
+            controller: blobCtrl,
+            loop: true,
+            duration: Duration(milliseconds: 2000)),
+        FlatButton(
+          onPressed: () {
+            BlobData blobData = blobCtrl.change();
+            print(blobData.size);
+          },
+          child: Text('dd'),
+        )
+      ],
+    );
+    //
+    // return Container(
+    //   height: widget.size,
+    //   width: widget.size,
+    //   color: widget.blobColor,
+    // );
+    //
+    // return Column(
+    //   children: [
+    //     Blob.animatedRandom(
+    //         // id: ['10-7-88922'],
+    //         size: widget.size,
+    //         controller: blobCtrl,
+    //         styles: BlobStyles(color: Color(0xffc44569))),
+    //     FlatButton(
+    //       onPressed: () {
+    //         BlobData blobData = blobCtrl.change();
+    //         print(blobData.edges);
+    //       },
+    //       child: Text('dd'),
+    //     )
+    //   ],
+    // );
   }
 }

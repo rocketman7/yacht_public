@@ -1,0 +1,111 @@
+import 'package:intl/intl.dart';
+import 'package:stacked/stacked.dart';
+import 'dart:math' as math;
+
+import '../locator.dart';
+import '../models/portfolio_model.dart';
+import '../models/database_address_model.dart';
+import '../services/auth_service.dart';
+import '../services/database_service.dart';
+
+class PortfolioViewModel extends FutureViewModel {
+  // Services Setting
+  final AuthService _authService = locator<AuthService>();
+  final DatabaseService _databaseService = locator<DatabaseService>();
+
+  // 변수 Setting
+  DatabaseAddressModel addressModel;
+  PortfolioModel portfolioModel;
+  String uid;
+
+  // UI용 변수
+  List<double> startPercentage = []; // 실제 subPortfolio갯수보다 하나 많아야.
+  List<double> initialValueRatio = [];
+  List<double> valueIncreaseRatio = [];
+
+  PortfolioViewModel() {
+    uid = _authService.auth.currentUser.uid;
+  }
+
+  // method
+  // 포트폴리오 DB로부터 얻어오기 + UI용 변수들 계산
+  Future getPortfolio() async {
+    addressModel = await _databaseService.getAddress(uid);
+    portfolioModel = await _databaseService.getPortfolio(addressModel);
+
+    // 초기비중만큼 호를 나눠주기 위해 값 계산
+    int totalInitialValue = 0;
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      totalInitialValue += portfolioModel.subPortfolio[i].sharesNum *
+          portfolioModel.subPortfolio[i].initialPrice;
+    }
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      initialValueRatio.add((portfolioModel.subPortfolio[i].sharesNum *
+              portfolioModel.subPortfolio[i].initialPrice /
+              totalInitialValue) *
+          100.0);
+    }
+
+    // 얼마나 올랐는지(내렸는지) 보기 위한 값 계산
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      valueIncreaseRatio.add(portfolioModel.subPortfolio[i].currentPrice /
+          portfolioModel.subPortfolio[i].initialPrice);
+    }
+
+    // Arc의 시작점을 설정해주고, 나머지도 초기비중에 맞게 호의 길이만큼 설정해주는 작업
+    final random = math.Random();
+
+    startPercentage.add(random.nextInt(100).toDouble());
+
+    for (int i = 1; i < portfolioModel.subPortfolio.length; i++) {
+      startPercentage.add(startPercentage[i - 1] + initialValueRatio[i - 1]);
+      print('${startPercentage[i]}');
+    }
+
+    startPercentage.add(startPercentage[0]);
+
+    notifyListeners();
+  }
+
+  // 어드레스모델이 가리키는 날짜를 가져와서 xxxx.xx.xx 형식으로 변환
+  String getDateFormChange() {
+    return addressModel.date.substring(0, 4) +
+        '.' +
+        addressModel.date.substring(4, 6) +
+        '.' +
+        addressModel.date.substring(6, 8);
+  }
+
+  // 어드레스모델이 가리키는 시즌을 가져와서 SEASON# 형식으로 변환
+  String getSeasonUpperCase() {
+    String result;
+    int seasonNum;
+
+    seasonNum = int.parse(addressModel.season.substring(6, 9));
+
+    result = addressModel.season.toUpperCase().substring(0, 6) +
+        ' ' +
+        seasonNum.toString();
+
+    return result;
+  }
+
+  // 전일종가 기준 포트폴리오 총 가치를 계산하여 ###,###,### 형태로 반환
+  String getPortfolioValue() {
+    int totalValue = 0;
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      totalValue += portfolioModel.subPortfolio[i].sharesNum *
+          portfolioModel.subPortfolio[i].currentPrice;
+    }
+
+    var f = NumberFormat("#,###", "en_US");
+
+    return f.format(totalValue);
+  }
+
+  @override
+  Future futureToRun() => getPortfolio();
+}

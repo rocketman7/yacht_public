@@ -12,6 +12,7 @@ import '../models/vote_comment_model.dart';
 import '../models/rank_model.dart';
 import '../models/database_address_model.dart';
 import '../models/vote_model.dart';
+import '../models/portfolio_model.dart';
 
 import 'dart:math';
 
@@ -291,26 +292,47 @@ class DatabaseService {
   }
 
   Future<void> addRank() {
-    for (i = 1; i < 11; i++) {
-      Random rnd;
-      rnd = new Random();
-      int rndCombo = 0 + rnd.nextInt(39);
+    // for (i = 1; i < 11; i++) {
+    Random rnd;
+    rnd = new Random();
+    int rndCombo = 0 + rnd.nextInt(19);
 
-      ranksCollectionReference
-          .doc('koreaStockStandard')
-          .collection('season001')
-          .doc('20200921')
-          .collection('20200921')
-          .add({
-            'uid': '8cak3QUCF23iVnmAwfdLFP4QQ68j',
-            'userName': 'others2',
-            'combo': rndCombo
-          })
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
-    }
+    ranksCollectionReference
+        .doc('koreaStockStandard')
+        .collection('season001')
+        .doc('20201005')
+        .collection('20201005')
+        .add({
+          'uid': 'w9E2tSET3fTrtMoSB7ctTgWlGAO2',
+          'userName': 'rocketman',
+          'combo': rndCombo
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+    // }
 
     return null;
+  }
+
+  Future<PortfolioModel> getPortfolio(DatabaseAddressModel addressModel) async {
+    try {
+      List<SubPortfolio> subPortfolioList = [];
+
+      await addressModel
+          .votesSeasonAwardPortfolioCollection()
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((element) {
+          subPortfolioList.add(SubPortfolio.fromData(element.data()));
+        });
+      });
+
+      return PortfolioModel.fromData(subPortfolioList);
+    } catch (e) {
+      print("error at portfoliomodel get");
+      print(e.toString());
+      return null;
+    }
   }
 
   Future<List<dynamic>> getAllUserNameSnapshot() async {
@@ -413,6 +435,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
+      // date: '20200921',
       date: baseDate,
       category: category,
       season: season,
