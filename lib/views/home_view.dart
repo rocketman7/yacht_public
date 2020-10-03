@@ -228,7 +228,7 @@ class _HomeViewState extends State<HomeView> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      "현재 콤보",
+                                      "현재 승점",
                                       style: TextStyle(
                                         fontSize: 20,
                                         letterSpacing: -1.0,
@@ -406,6 +406,7 @@ class _HomeViewState extends State<HomeView> {
             // #1
             children: <Widget>[
               Container(
+                height: 60,
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -442,31 +443,42 @@ class _HomeViewState extends State<HomeView> {
           Row(
             // #1
             children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 4.0,
-                    color: hexToColor(
-                      model.vote.subVotes[idx].colorCode[0],
+              Expanded(
+                flex: model.vote.subVotes[idx].voteChoices[0].length,
+                child: Container(
+                  height: 60,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 4.0,
+                      color: hexToColor(
+                        model.vote.subVotes[idx].colorCode[0],
+                      ),
                     ),
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Text(model.vote.subVotes[idx].voteChoices[0],
+                  child: Text(
+                    model.vote.subVotes[idx].voteChoices[0],
                     style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -1.0,
-                        color: hexToColor(
-                          model.vote.subVotes[idx].colorCode[0],
-                        ))),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -1.0,
+                      color: hexToColor(
+                        model.vote.subVotes[idx].colorCode[0],
+                      ),
+                    ),
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                  ),
+                ),
               ),
               SizedBox(
                 width: 6,
               ),
               Container(
+                // height: 60,
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
@@ -484,20 +496,24 @@ class _HomeViewState extends State<HomeView> {
               SizedBox(
                 width: 6,
               ),
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 4.0,
-                    color: hexToColor(
-                      model.vote.subVotes[idx].colorCode[1],
+              Expanded(
+                flex: model.vote.subVotes[idx].voteChoices[1].length,
+                child: Container(
+                  height: 60,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 4.0,
+                      color: hexToColor(
+                        model.vote.subVotes[idx].colorCode[1],
+                      ),
                     ),
+                    // borderRadius: BorderRadius.all(
+                    //     Radius.circular(30)),
                   ),
-                  // borderRadius: BorderRadius.all(
-                  //     Radius.circular(30)),
-                ),
-                child: Text(model.vote.subVotes[idx].voteChoices[1],
+                  child: Text(
+                    model.vote.subVotes[idx].voteChoices[1],
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -505,8 +521,23 @@ class _HomeViewState extends State<HomeView> {
                       color: hexToColor(
                         model.vote.subVotes[idx].colorCode[1],
                       ),
-                    )),
+                    ),
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
+                  ),
+                ),
               ),
+              SizedBox(
+                  width: (model.vote.subVotes[idx].voteChoices[0].length +
+                              model.vote.subVotes[idx].voteChoices[1].length >
+                          9
+                      ? 0
+                      : (150 -
+                          (model.vote.subVotes[idx].voteChoices[0].length +
+                                  model.vote.subVotes[idx].voteChoices[1]
+                                      .length) *
+                              15.0)))
             ],
           ),
           SizedBox(

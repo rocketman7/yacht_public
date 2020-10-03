@@ -2,15 +2,18 @@ import 'dart:async';
 
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:stacked/stacked.dart';
 import 'package:preload_page_view/preload_page_view.dart';
+import 'package:stacked/stacked.dart';
+
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/temp_address_constant.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
 import 'package:yachtOne/views/temp_not_voting_view.dart';
+
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/vote_model.dart';
@@ -207,6 +210,13 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
   //   print("didUpdateWidget Called");
   // }
+  // void _settingModalBottomSheet(context, scaffoldKey) {
+  //   return scaffoldKey.currentState.showBottomSheet((context) {
+  //     return Column(children: [
+  //       Text("TT"),
+  //     ]);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -235,6 +245,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 ),
               )
             : Scaffold(
+                key: scaffoldKey,
                 body: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -290,7 +301,12 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               // physics: NeverScrollableScrollPhysics(),
                               itemCount: model.vote.voteCount,
                               itemBuilder: (context, index) {
-                                return buildStack(model, index);
+                                return buildStack(
+                                  model,
+                                  index,
+                                  context,
+                                  scaffoldKey,
+                                );
                               }),
                         )),
                         GestureDetector(
@@ -362,12 +378,16 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
         //  buildScaffold(model, displayRatio, size, userVote,
         //         address, user, vote);
-        // Code:
       },
     );
   }
 
-  Widget buildStack(VoteSelectViewModel model, int idx) {
+  Widget buildStack(
+    VoteSelectViewModel model,
+    int idx,
+    BuildContext context,
+    scaffoldKey,
+  ) {
     int numOfChoices = model.vote.subVotes[idx].issueCode.length;
     Color hexToColor(String code) {
       return Color(int.parse(code, radix: 16) + 0xFF0000000);
@@ -381,24 +401,100 @@ class _VoteSelectViewState extends State<VoteSelectView> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
-              child: Container(
-                height: 100,
-                // color: Colors.redAccent,
-                child: FlatButton(
-                  color: hexToColor(
-                    model.vote.subVotes[idx].colorCode[0],
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (
+                      context,
+                    ) =>
+                        Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 32.0,
+                      ),
+                      child: Container(
+                        color: Colors.white,
+                        height: 332,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                Container(
+                                  constraints: BoxConstraints(
+                                    maxHeight: 48,
+                                    minWidth: 100,
+                                  ),
+                                  alignment: Alignment.centerLeft,
+                                  padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                  decoration: BoxDecoration(
+                                    color: hexToColor(
+                                      model.vote.subVotes[idx].colorCode[0],
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                    border: Border.all(
+                                      width: 4.0,
+                                      color: Color(0xFF000000),
+                                    ),
+                                    // borderRadius: BorderRadius.all(
+                                    //     Radius.circular(30)),
+                                  ),
+                                  // color: Colors.redAccent,
+                                  child: Text(
+                                    model.vote.subVotes[idx].title,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      textBaseline: TextBaseline.ideographic,
+                                      color: Colors.black,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(child: SizedBox()),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              model.vote.subVotes[idx].description,
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 100,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
+                  decoration: BoxDecoration(
+                    color: hexToColor(
+                      model.vote.subVotes[idx].colorCode[0],
+                    ),
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                      width: 4.0,
+                      color: Color(0xFF000000),
+                    ),
+                    // borderRadius: BorderRadius.all(
+                    //     Radius.circular(30)),
                   ),
-                  onPressed: () {},
-                  minWidth: double.infinity,
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: Colors.black,
-                          width: 5,
-                          style: BorderStyle.solid),
-                      borderRadius: BorderRadius.circular(70.0)),
+                  // color: Colors.redAccent,
+                  // child: Baseline(
+                  //   baseline: 28,
+                  //   baselineType: TextBaseline.ideographic,
                   child: Text(
                     model.vote.subVotes[idx].title,
                     style: TextStyle(
+                      // textBaseline: TextBaseline.alphabetic,
                       color: Colors.black,
                       fontSize: 28,
                       fontWeight: FontWeight.w700,

@@ -93,7 +93,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
     DateTime now = DateTime.now();
     DateFormat dateFormat = DateFormat('yyyy-MM-dd_HH:mm:ss:SSS');
-
+    VoteModel newVote;
     print(now);
     String nowString = dateFormat.format(now);
     print(nowString);
@@ -101,106 +101,113 @@ class _VoteCommentViewState extends State<VoteCommentView>
     return ViewModelBuilder<VoteCommentViewModel>.reactive(
         viewModelBuilder: () => VoteCommentViewModel(),
         builder: (context, model, child) {
-          return model.isBusy
-              ? Scaffold(
-                  body: Center(
-                    child: Container(
-                      height: 100,
-                      width: deviceWidth,
-                      child: FlareActor(
-                        'assets/images/Loading.flr',
-                        animation: 'loading',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+          if (model.isBusy) {
+            return Scaffold(
+              body: Center(
+                child: Container(
+                  height: 100,
+                  width: deviceWidth,
+                  child: FlareActor(
+                    'assets/images/Loading.flr',
+                    animation: 'loading',
+                    fit: BoxFit.contain,
                   ),
-                )
-              : Scaffold(
-                  body: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 20,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "커뮤니티",
-                            style: TextStyle(
-                              // fontFamily: 'Akrhip',
-                              fontSize: 32,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -2.0,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          buildHorizontalCalendar(),
-                          SizedBox(
-                            height: 36,
-                          ),
-                          Text(
-                            "총 3개의 토론 주제",
-                            style: TextStyle(
-                              // fontFamily: 'Akrhip',
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: -1.0,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Divider(
-                            height: 0,
-                            color: Colors.black,
-                            thickness: 2,
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Flexible(
-                            child: Container(
-                              // height: 500,
-                              child: buildListView(model),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                ),
+              ),
+            );
+          } else {
+            return Scaffold(
+              body: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 20,
                   ),
-                );
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "커뮤니티",
+                        style: TextStyle(
+                          // fontFamily: 'Akrhip',
+                          fontSize: 32,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -2.0,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      buildHorizontalCalendar(model, newVote),
+                      SizedBox(
+                        height: 36,
+                      ),
+                      Text(
+                        "총 ${model.vote.voteCount.toString()}개의 예측 주제",
+                        style: TextStyle(
+                          // fontFamily: 'Akrhip',
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -1.0,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Divider(
+                        height: 0,
+                        color: Colors.black,
+                        thickness: 2,
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Flexible(
+                        child: Container(
+                          // height: 500,
+                          child:
+                              buildListView(model, model.newVote ?? model.vote),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
         });
   }
 
-  ListView buildListView(VoteCommentViewModel model) {
+  ListView buildListView(VoteCommentViewModel model, VoteModel vote) {
     return ListView.builder(
-      itemCount: model.vote.subVotes.length + 1,
+      itemCount: vote.subVotes.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
           return Column(
             children: [
               ListTile(
+                onTap: () {
+                  _navigationService.navigateTo('seasonComment');
+                },
                 leading: Container(
                   height: 60,
                   width: 60,
                   color: Colors.yellow,
                 ),
-                title: Text("시즌 1 커뮤니티",
+                title: Text(model.seasonInfo.seasonName + " 커뮤니티",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                     )),
-                subtitle: Text("rocketman님 외에 50명 이야기중"),
+                // subtitle: Text("rocketman님 외에 50명 이야기중"),
               ),
               Divider(),
             ],
           );
         } else {
           return buildEachCommunity(
-            model.vote.subVotes[index - 1],
+            vote,
+            vote.subVotes[index - 1],
             index,
           );
         }
@@ -208,7 +215,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
     );
   }
 
-  Widget buildHorizontalCalendar() {
+  Widget buildHorizontalCalendar(VoteCommentViewModel model, VoteModel vote) {
     return HorizontalCalendar(
       padding: EdgeInsets.symmetric(
         horizontal: 8,
@@ -243,6 +250,17 @@ class _VoteCommentViewState extends State<VoteCommentView>
       dateWidth: 48,
       onDateSelected: (dateTime) {
         String newBaseDate = stringDate.format(dateTime);
+        print(newBaseDate);
+        DatabaseAddressModel newAddress;
+        newAddress = DatabaseAddressModel(
+          uid: model.address.uid,
+          date: newBaseDate,
+          category: model.address.category,
+          season: model.address.season,
+          isVoting: model.address.isVoting,
+        );
+
+        model.getNewVote(newAddress);
       },
       scrollController: _calendarController,
       minSelectedDateCount: 1,
@@ -255,7 +273,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
       weekDayTextStyle: TextStyle(
         fontSize: 12,
       ),
-      firstDate: DateTime.now().subtract(Duration(days: 15)),
+      firstDate: DateTime(
+          int.parse(model.seasonInfo.startDate.substring(0, 4)),
+          int.parse(model.seasonInfo.startDate.substring(4, 6)),
+          int.parse(model.seasonInfo.startDate.substring(6))),
       lastDate: nextBusinessDay(DateTime.now()).add(Duration(days: 3)),
       selectedDateTextStyle: TextStyle(
         fontSize: 20,
@@ -280,12 +301,14 @@ class _VoteCommentViewState extends State<VoteCommentView>
   }
 
   ListTile buildEachCommunity(
+    VoteModel vote,
     SubVote subVote,
     int index,
   ) {
     return ListTile(
       onTap: () {
-        _navigationService.navigateWithArgTo('subjectComment', (index - 1));
+        _navigationService
+            .navigateWithArgTo('subjectComment', [vote, index - 1]);
       },
       leading: Container(
         height: 60,

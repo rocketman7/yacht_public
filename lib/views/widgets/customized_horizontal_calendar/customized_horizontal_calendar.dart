@@ -107,7 +107,7 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
   void _scrollToBottom() {
     if (widget.scrollController.hasClients) {
       widget.scrollController.animateTo(
-          widget.scrollController.position.maxScrollExtent - 30,
+          widget.scrollController.position.maxScrollExtent - 85,
           duration: Duration(milliseconds: 1000),
           curve: Curves.elasticOut);
     } else {

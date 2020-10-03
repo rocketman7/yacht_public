@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:yachtOne/models/date_time_model.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/rank_model.dart';
+import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/models/user_post_model.dart';
 import '../models/sub_vote_model.dart';
 import '../models/user_model.dart';
@@ -158,12 +159,10 @@ class DatabaseService {
   }
 
   // Read: User의 Vote정보 가져오기
-  Future getUserVote(DatabaseAddressModel addressModel) async {
+  Future getUserVote(DatabaseAddressModel address) async {
     try {
-      var userVoteData = await addressModel
-          .userVoteSeasonCollection()
-          .doc(addressModel.date)
-          .get();
+      var userVoteData =
+          await address.userVoteSeasonCollection().doc(address.date).get();
 
       // List<int> tempList = List<int>.from(userVoteData.data['voteSelected']);
       // print(tempList.runtimeType);
@@ -174,6 +173,18 @@ class DatabaseService {
     } catch (e) {
       print("ERROR_getUserVote");
       print(e.toString());
+    }
+  }
+
+  Future<SeasonModel> getSeasonInfo(DatabaseAddressModel address) async {
+    try {
+      var seasonInfoData =
+          await address.votesSeasonCollection().doc('seasonInfo').get();
+
+      return SeasonModel.fromData(seasonInfoData.data());
+    } catch (e) {
+      print(e.toString());
+      return null;
     }
   }
 
@@ -209,17 +220,17 @@ class DatabaseService {
     }
   }
 
-  Future postComment(
+  Future postSubVoteComment(
     DatabaseAddressModel address,
     VoteCommentModel voteCommentModel,
     UserPostModel userPostModel,
   ) async {
     try {
       String docUid;
-      docUid = address.postsSeasonSubVoteCollection().doc().id;
+      docUid = address.postsSubVoteCollection().doc().id;
 
       await address
-          .postsSeasonSubVoteCollection()
+          .postsSubVoteCollection()
           .doc(docUid)
           .set(voteCommentModel.toJson());
 
@@ -230,29 +241,57 @@ class DatabaseService {
     } catch (e) {}
   }
 
-  // Future postComment(
-  //     DatabaseAddressModel address, VoteCommentModel voteCommentModel) async {
-  //   try {
-  //     await address
-  //         .postsSeasonSubVoteCollection()
-  //         .doc()
-  //         .set(voteCommentModel.toJson());
-  //   } catch (e) {}
-  // }
+  Future postSeasonComment(
+    DatabaseAddressModel address,
+    VoteCommentModel voteCommentModel,
+    UserPostModel userPostModel,
+  ) async {
+    try {
+      String docUid;
+      docUid = address.postsSeasonCollection().doc().id;
+
+      await address
+          .postsSeasonCollection()
+          .doc(docUid)
+          .set(voteCommentModel.toJson());
+
+      await address
+          .userPostCollection()
+          .doc(docUid)
+          .set(userPostModel.toJson());
+    } catch (e) {}
+  }
 
   Future deleteComment(
     DatabaseAddressModel address,
     String postUid,
   ) async {
     try {
-      await address.postsSeasonSubVoteCollection().doc(postUid).delete();
+      await address.postsSubVoteCollection().doc(postUid).delete();
     } catch (e) {}
   }
 
-  Stream<List<VoteCommentModel>> getPostList(DatabaseAddressModel address) {
+  Stream<List<VoteCommentModel>> getSubVotePostList(
+      DatabaseAddressModel address) {
     print("CALLED");
     return address
-        .postsSeasonSubVoteCollection()
+        .postsSubVoteCollection()
+        .orderBy('postDateTime')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((document) {
+              return VoteCommentModel.fromData(document.id, document.data());
+            })
+            .toList()
+            .reversed
+            .toList());
+  }
+
+  Stream<List<VoteCommentModel>> getSeasonPostList(
+      DatabaseAddressModel address) {
+    print("CALLED");
+    return address
+        .postsSeasonCollection()
         .orderBy('postDateTime')
         .snapshots()
         .map((snapshot) => snapshot.docs
@@ -282,10 +321,17 @@ class DatabaseService {
       print(snapshot.toString());
       print("SNAP");
       print(snapshot.docs.toString() + "FIRSTDATA");
-      PriceModel temp = PriceModel.fromData(snapshot.docs.first.data());
-      print(temp.toString());
-      print(snapshot.docs.first.data()['issueCode']);
-      return PriceModel.fromData(snapshot.docs.first.data());
+      // PriceModel temp = PriceModel.fromData(snapshot.docs.first.data());
+      // print(temp.toString());
+      // print(snapshot.docs.first.data()['issueCode']);
+      if (snapshot.docs.isEmpty) {
+        print("Snapshot docs null");
+        return PriceModel(issueCode, 0, 0);
+      } else {
+        print("Snapshot docs exist");
+        // return PriceModel(issueCode, 0, 0);
+        return PriceModel.fromData(snapshot.docs.first.data());
+      }
       // return list;
     });
   }
