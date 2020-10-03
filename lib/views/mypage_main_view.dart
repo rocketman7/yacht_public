@@ -281,7 +281,6 @@ class MypageTempGGookView extends StatefulWidget {
   _MypageTempGGookViewState createState() => _MypageTempGGookViewState();
 }
 
-<<<<<<< HEAD
 class _MypageTempGGookViewState extends State<MypageTempGGookView>
     with TickerProviderStateMixin {
   // Animation<double> animation;
@@ -319,15 +318,6 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView>
     // blobCtrl.dispose();
 
     super.dispose();
-=======
-class _MypageTempGGookViewState extends State<MypageTempGGookView> {
-  BlobController blobCtrl;
-  @override
-  void initState() {
-    // TODO: implement initState
-    blobCtrl = BlobController();
-    super.initState();
->>>>>>> rocketman
   }
 
   @override
@@ -474,7 +464,6 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView> {
           //애니메이션이 전체화면을 덮을 수도 있으니 여기에서 관리해야할듯?
           Positioned(
             left: 50,
-<<<<<<< HEAD
             top: 400,
             child: Container(
               width: 400,
@@ -492,161 +481,6 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView> {
                       )),
                 ],
               ),
-=======
-            top: 300,
-            child: Stack(
-              children: [
-                Blob.animatedFromID(
-                    size: 200,
-                    id: [
-                      '10-7-848634',
-                      '10-7-863638',
-                      '10-7-63404',
-                      '10-7-424041',
-                      '10-7-88922'
-                    ],
-                    styles: BlobStyles(
-                      color: Color(0xFFFFDE34).withOpacity(.5),
-                      // strokeWidth: 0,
-                      // gradient: RadialGradient(
-                      //   colors: [
-                      //     Color(0xFFFFDE34),
-                      //     Color(0xFFFFDE34),
-                      //     Color(0xFFFFDE34).withOpacity(.2),
-                      //   ],
-                      //   radius: .4,
-                      //   stops: [0, 0.85, 0.9],
-                      //   // radius: 5,
-                      // ).createShader(
-                      //   Rect.fromLTRB(200, 200, 0, 0),
-                      // ),
-                    ),
-                    controller: blobCtrl,
-                    loop: true,
-                    duration: Duration(milliseconds: 1000)),
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Blob.animatedFromID(
-                      // debug: true,
-                      child: Center(
-                        child: Text(
-                          "카카오",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      size: 180,
-                      id: [
-                        '10-7-88922',
-                        '10-7-848634',
-                        '10-7-863638',
-                        '10-7-63404',
-                        '10-7-424041',
-                      ],
-                      styles: BlobStyles(
-                        color: Color(0xFFFFDE34),
-                        // strokeWidth: 0,
-                        // gradient: RadialGradient(
-                        //   colors: [
-                        //     Color(0xFFFFDE34),
-                        //     Color(0xFFFFDE34),
-                        //     Color(0xFFFFDE34).withOpacity(.2),
-                        //   ],
-                        //   radius: .4,
-                        //   stops: [0, 0.85, 0.9],
-                        //   // radius: 5,
-                        // ).createShader(
-                        //   Rect.fromLTRB(200, 200, 0, 0),
-                        // ),
-                      ),
-                      controller: blobCtrl,
-                      loop: true,
-                      duration: Duration(milliseconds: 1000)),
-                ),
-              ],
-            ),
-          ),
-
-          Positioned(
-            right: 50,
-            top: 500,
-            child: Stack(
-              children: [
-                Blob.animatedFromID(
-                    size: 200,
-                    id: [
-                      '10-7-848634',
-                      '10-7-863638',
-                      '10-7-63404',
-                      '10-7-424041',
-                      '10-7-88922'
-                    ],
-                    styles: BlobStyles(
-                      color: Color(0xFF8DFF34).withOpacity(.5),
-                      // strokeWidth: 0,
-                      // gradient: RadialGradient(
-                      //   colors: [
-                      //     Color(0xFFFFDE34),
-                      //     Color(0xFFFFDE34),
-                      //     Color(0xFFFFDE34).withOpacity(.2),
-                      //   ],
-                      //   radius: .4,
-                      //   stops: [0, 0.85, 0.9],
-                      //   // radius: 5,
-                      // ).createShader(
-                      //   Rect.fromLTRB(200, 200, 0, 0),
-                      // ),
-                    ),
-                    controller: blobCtrl,
-                    loop: true,
-                    duration: Duration(milliseconds: 1000)),
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Blob.animatedFromID(
-                      // debug: true,
-                      child: Center(
-                        child: Text(
-                          "네이버",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      size: 180,
-                      id: [
-                        '10-7-88922',
-                        '10-7-848634',
-                        '10-7-863638',
-                        '10-7-63404',
-                        '10-7-424041',
-                      ],
-                      styles: BlobStyles(
-                        color: Color(0xFF8DFF34),
-                        // strokeWidth: 0,
-                        // gradient: RadialGradient(
-                        //   colors: [
-                        //     Color(0xFFFFDE34),
-                        //     Color(0xFFFFDE34),
-                        //     Color(0xFFFFDE34).withOpacity(.2),
-                        //   ],
-                        //   radius: .4,
-                        //   stops: [0, 0.85, 0.9],
-                        //   // radius: 5,
-                        // ).createShader(
-                        //   Rect.fromLTRB(200, 200, 0, 0),
-                        // ),
-                      ),
-                      controller: blobCtrl,
-                      loop: true,
-                      duration: Duration(milliseconds: 1000)),
-                ),
-              ],
->>>>>>> rocketman
             ),
           ),
 
