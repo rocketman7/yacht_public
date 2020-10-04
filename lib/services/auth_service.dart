@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -126,6 +127,8 @@ class AuthService {
 
       User _user = _auth.currentUser;
       String phoneNumber = _user.phoneNumber;
+      var rng = Random();
+
       print("my Phone Number is " + phoneNumber);
       // User 정보 UserModel에 넣기
       _currentUserModel = UserModel(
@@ -134,6 +137,12 @@ class AuthService {
         email: email,
         phoneNumber: phoneNumber,
         combo: 0,
+        friendsCode: null,
+        item: 10,
+        avatarImage: "avatar00" + rng.nextInt(9).toString(),
+        accNumber: null,
+        accName: null,
+        secName: null,
       );
 
       // await authResult.user.sendEmailVerification();

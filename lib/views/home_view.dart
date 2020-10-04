@@ -210,7 +210,7 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                     ),
                                     Text(
-                                      "7",
+                                      model.user.item.toString(),
                                       style: TextStyle(
                                         fontSize: 20,
                                         letterSpacing: -1.0,

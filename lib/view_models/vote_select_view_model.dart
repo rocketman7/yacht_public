@@ -49,7 +49,9 @@ class VoteSelectViewModel extends FutureViewModel {
     user = await _databaseService.getUser(uid);
     vote = await _databaseService.getVotes(address);
     userVote = await _databaseService.getUserVote(address);
+    print(vote.voteEndDateTime);
     setBusy(false);
+    notifyListeners();
   }
 
   Future signOut() async {
