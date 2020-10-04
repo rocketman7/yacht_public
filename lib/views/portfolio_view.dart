@@ -293,10 +293,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
   List<Widget> result = [];
 
   for (int i = 0; i < model.portfolioModel.subPortfolio.length; i++) {
-    if (model.drawingMaxLength[i] ||
-            (i + 1 < model.portfolioModel.subPortfolio.length)
-        ? (model.drawingMaxLength[i + 1])
-        : false) {
+    if (model.drawingMaxLength[i]) {
       result.add(Container(
         height: 32,
         width: (deviceWidth - 32),
@@ -335,11 +332,11 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
         ),
       ));
     } else {
-      result.add(Row(
-        children: [
-          Container(
+      if (i + 1 < model.portfolioModel.subPortfolio.length) {
+        if (model.drawingMaxLength[i + 1]) {
+          result.add(Container(
             height: 32,
-            width: (deviceWidth - 32) / 2 - 10,
+            width: (deviceWidth - 32),
             child: Row(
               children: [
                 Container(
@@ -373,56 +370,294 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                 ),
               ],
             ),
-          ),
-          Spacer(),
-          Container(
-            height: 32,
-            width: (deviceWidth - 32) / 2 - 10,
-            child: Row(
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(int.parse(
-                          'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
-                          radix: 16))),
+          ));
+        } else {
+          result.add(Row(
+            children: [
+              Container(
+                height: 32,
+                width: (deviceWidth - 32) / 2 - 10,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(int.parse(
+                              'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                              radix: 16))),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+                      style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      '${model.getInitialRatio(model.orderDrawingItem[i])}',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'DmSans',
+                          fontWeight: FontWeight.w600,
+                          color: Color(int.parse(
+                              'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                              radix: 16))),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  width: 8,
+              ),
+              Spacer(),
+              Container(
+                height: 32,
+                width: (deviceWidth - 32) / 2 - 10,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(int.parse(
+                              'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
+                              radix: 16))),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].stockName}',
+                      style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      '${model.getInitialRatio(model.orderDrawingItem[i + 1])}',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: 'DmSans',
+                          fontWeight: FontWeight.w600,
+                          color: Color(int.parse(
+                              'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
+                              radix: 16))),
+                    ),
+                  ],
                 ),
-                Text(
-                  '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].stockName}',
-                  style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  '${model.getInitialRatio(model.orderDrawingItem[i + 1])}',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'DmSans',
-                      fontWeight: FontWeight.w600,
-                      color: Color(int.parse(
-                          'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
-                          radix: 16))),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ));
+              ),
+            ],
+          ));
 
-      i += 1;
+          i += 1;
+        }
+      } else {
+        result.add(Container(
+          height: 32,
+          width: (deviceWidth - 32),
+          child: Row(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(int.parse(
+                        'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                        radix: 16))),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Text(
+                '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+                style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Text(
+                '${model.getInitialRatio(model.orderDrawingItem[i])}',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'DmSans',
+                    fontWeight: FontWeight.w600,
+                    color: Color(int.parse(
+                        'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                        radix: 16))),
+              ),
+            ],
+          ),
+        ));
+      }
     }
   }
 
-  // int lastI = 0;
+  // for (int i = 0; i < model.portfolioModel.subPortfolio.length; i++) {
+  //   if (model.drawingMaxLength[i]) {
+  //     result.add(Container(
+  //       height: 32,
+  //       width: (deviceWidth - 32),
+  //       child: Row(
+  //         children: [
+  //           Container(
+  //             width: 8,
+  //             height: 8,
+  //             decoration: BoxDecoration(
+  //                 shape: BoxShape.circle,
+  //                 color: Color(int.parse(
+  //                     'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+  //                     radix: 16))),
+  //           ),
+  //           SizedBox(
+  //             width: 8,
+  //           ),
+  //           Text(
+  //             '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+  //             style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+  //           ),
+  //           SizedBox(
+  //             width: 8,
+  //           ),
+  //           Text(
+  //             '${model.getInitialRatio(model.orderDrawingItem[i])}',
+  //             style: TextStyle(
+  //                 fontSize: 18,
+  //                 fontFamily: 'DmSans',
+  //                 fontWeight: FontWeight.w600,
+  //                 color: Color(int.parse(
+  //                     'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+  //                     radix: 16))),
+  //           ),
+  //         ],
+  //       ),
+  //     ));
+  //   } else if (i + 1 < model.portfolioModel.subPortfolio.length) {
+  //     if (model.drawingMaxLength[i + 1]) {
+  //       result.add(Container(
+  //         height: 32,
+  //         width: (deviceWidth - 32),
+  //         child: Row(
+  //           children: [
+  //             Container(
+  //               width: 8,
+  //               height: 8,
+  //               decoration: BoxDecoration(
+  //                   shape: BoxShape.circle,
+  //                   color: Color(int.parse(
+  //                       'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+  //                       radix: 16))),
+  //             ),
+  //             SizedBox(
+  //               width: 8,
+  //             ),
+  //             Text(
+  //               '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+  //               style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+  //             ),
+  //             SizedBox(
+  //               width: 8,
+  //             ),
+  //             Text(
+  //               '${model.getInitialRatio(model.orderDrawingItem[i])}',
+  //               style: TextStyle(
+  //                   fontSize: 18,
+  //                   fontFamily: 'DmSans',
+  //                   fontWeight: FontWeight.w600,
+  //                   color: Color(int.parse(
+  //                       'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+  //                       radix: 16))),
+  //             ),
+  //           ],
+  //         ),
+  //       ));
+  //     } else {
+  //       result.add(Row(
+  //         children: [
+  //           Container(
+  //             height: 32,
+  //             width: (deviceWidth - 32) / 2 - 10,
+  //             child: Row(
+  //               children: [
+  //                 Container(
+  //                   width: 8,
+  //                   height: 8,
+  //                   decoration: BoxDecoration(
+  //                       shape: BoxShape.circle,
+  //                       color: Color(int.parse(
+  //                           'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+  //                           radix: 16))),
+  //                 ),
+  //                 SizedBox(
+  //                   width: 8,
+  //                 ),
+  //                 Text(
+  //                   '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+  //                   style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+  //                 ),
+  //                 SizedBox(
+  //                   width: 8,
+  //                 ),
+  //                 Text(
+  //                   '${model.getInitialRatio(model.orderDrawingItem[i])}',
+  //                   style: TextStyle(
+  //                       fontSize: 18,
+  //                       fontFamily: 'DmSans',
+  //                       fontWeight: FontWeight.w600,
+  //                       color: Color(int.parse(
+  //                           'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+  //                           radix: 16))),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           Spacer(),
+  //           Container(
+  //             height: 32,
+  //             width: (deviceWidth - 32) / 2 - 10,
+  //             child: Row(
+  //               children: [
+  //                 Container(
+  //                   width: 8,
+  //                   height: 8,
+  //                   decoration: BoxDecoration(
+  //                       shape: BoxShape.circle,
+  //                       color: Color(int.parse(
+  //                           'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
+  //                           radix: 16))),
+  //                 ),
+  //                 SizedBox(
+  //                   width: 8,
+  //                 ),
+  //                 Text(
+  //                   '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].stockName}',
+  //                   style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+  //                 ),
+  //                 SizedBox(
+  //                   width: 8,
+  //                 ),
+  //                 Text(
+  //                   '${model.getInitialRatio(model.orderDrawingItem[i + 1])}',
+  //                   style: TextStyle(
+  //                       fontSize: 18,
+  //                       fontFamily: 'DmSans',
+  //                       fontWeight: FontWeight.w600,
+  //                       color: Color(int.parse(
+  //                           'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
+  //                           radix: 16))),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ));
 
-  // for (int i = 0; i < model.portfolioModel.subPortfolio.length - 1; i += 2) {
-  //   if (!model.drawingMaxLength[i + 1]) {
+  //       i += 1;
+  //     }
+  //   } else {
   //     result.add(Row(
   //       children: [
   //         Container(
@@ -503,53 +738,8 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
   //       ],
   //     ));
 
-  //     lastI = i;
+  //     i += 1;
   //   }
-  // }
-
-  // for (int i = lastI + 2; i < model.portfolioModel.subPortfolio.length; i++) {
-  //   result.add(Row(
-  //     children: [
-  //       Container(
-  //         height: 32,
-  //         width: (deviceWidth - 32),
-  //         child: Row(
-  //           children: [
-  //             Container(
-  //               width: 8,
-  //               height: 8,
-  //               decoration: BoxDecoration(
-  //                   shape: BoxShape.circle,
-  //                   color: Color(int.parse(
-  //                       'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-  //                       radix: 16))),
-  //             ),
-  //             SizedBox(
-  //               width: 8,
-  //             ),
-  //             Text(
-  //               '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
-  //               style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
-  //             ),
-  //             SizedBox(
-  //               width: 8,
-  //             ),
-  //             Text(
-  //               '${model.getInitialRatio(model.orderDrawingItem[i])}',
-  //               style: TextStyle(
-  //                   fontSize: 18,
-  //                   fontFamily: 'DmSans',
-  //                   fontWeight: FontWeight.w600,
-  //                   color: Color(int.parse(
-  //                       'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-  //                       radix: 16))),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       Spacer(),
-  //     ],
-  //   ));
   // }
 
   return result;
