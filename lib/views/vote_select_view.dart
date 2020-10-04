@@ -404,6 +404,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
               child: GestureDetector(
                 onTap: () {
                   showModalBottomSheet(
+                    backgroundColor: Colors.white,
                     context: context,
                     builder: (
                       context,
@@ -414,7 +415,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                         vertical: 32.0,
                       ),
                       child: Container(
-                        color: Colors.black,
+                        color: Colors.white,
                         // height: 280,
                         constraints: BoxConstraints(
                           maxHeight: 300,
