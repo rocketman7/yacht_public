@@ -5,6 +5,7 @@ import 'dart:math' as math;
 import '../locator.dart';
 import '../models/portfolio_model.dart';
 import '../models/database_address_model.dart';
+import '../models/season_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 
@@ -16,6 +17,7 @@ class PortfolioViewModel extends FutureViewModel {
   // 변수 Setting
   DatabaseAddressModel addressModel;
   PortfolioModel portfolioModel;
+  SeasonModel seasonModel;
   String uid;
 
   // UI용 변수
@@ -41,6 +43,7 @@ class PortfolioViewModel extends FutureViewModel {
   Future getPortfolio() async {
     addressModel = await _databaseService.getAddress(uid);
     portfolioModel = await _databaseService.getPortfolio(addressModel);
+    seasonModel = await _databaseService.getSeasonInfo(addressModel);
 
     // 초기비중만큼 호를 나눠주기 위해 값 계산
     for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
@@ -95,29 +98,88 @@ class PortfolioViewModel extends FutureViewModel {
     startPercentage.add(startPercentage[0]);
 
     // 글자수에 맞게 아이템을 그릴 순서를 정렬해주자.
-    List<int> orderDrawingItemTemp = [];
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      if (portfolioModel.subPortfolio[i].stockName.length >
-          maxItemsNameLength + 1) {
-        orderDrawingItemTemp.add(i + portfolioModel.subPortfolio.length);
-      } else {
-        orderDrawingItemTemp.add(i);
-      }
-    }
+    // List<int> orderDrawingItemTemp = [];
+    // for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+    //   if (portfolioModel.subPortfolio[i].stockName.length >
+    //       maxItemsNameLength + 1) {
+    //     orderDrawingItemTemp.add(i + portfolioModel.subPortfolio.length);
+    //   } else {
+    //     orderDrawingItemTemp.add(i);
+    //   }
+    // }
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      if (orderDrawingItemTemp[i] < portfolioModel.subPortfolio.length) {
-        orderDrawingItem.add(i);
-        drawingMaxLength.add(false);
-      }
-    }
+    // for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+    //   if (orderDrawingItemTemp[i] < portfolioModel.subPortfolio.length) {
+    //     orderDrawingItem.add(i);
+    //     drawingMaxLength.add(false);
+    //   }
+    // }
 
+    // for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+    //   if (orderDrawingItemTemp[i] >= portfolioModel.subPortfolio.length) {
+    //     orderDrawingItem.add(i);
+    //     drawingMaxLength.add(true);
+    //   }
+    // }
+
+    List<double> initialValueTemp = [];
+    double temp;
+    int iTemp;
+    bool bTemp;
     for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      if (orderDrawingItemTemp[i] >= portfolioModel.subPortfolio.length) {
-        orderDrawingItem.add(i);
+      initialValueTemp.add(getInitialRatioDouble(i));
+      orderDrawingItem.add(i);
+
+      if (portfolioModel.subPortfolio[i].stockName.length > maxItemsNameLength)
         drawingMaxLength.add(true);
+      else
+        drawingMaxLength.add(false);
+    }
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      print(portfolioModel.subPortfolio[i].stockName);
+    }
+    print(initialValueTemp);
+    print(orderDrawingItem);
+    print(drawingMaxLength);
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      for (int j = i; j < portfolioModel.subPortfolio.length; j++) {
+        if (initialValueTemp[j] > initialValueTemp[i]) {
+          temp = initialValueTemp[j];
+          initialValueTemp[j] = initialValueTemp[i];
+          initialValueTemp[i] = temp;
+
+          bTemp = drawingMaxLength[j];
+          drawingMaxLength[j] = drawingMaxLength[i];
+          drawingMaxLength[i] = bTemp;
+
+          iTemp = orderDrawingItem[j];
+          orderDrawingItem[j] = orderDrawingItem[i];
+          orderDrawingItem[i] = iTemp;
+        }
       }
     }
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      print(portfolioModel.subPortfolio[i].stockName);
+    }
+    print(initialValueTemp);
+    print(orderDrawingItem);
+    print(drawingMaxLength);
+
+    // for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+    //   print(initialValueTemp[i]);
+    //   print(drawingMaxLength[i]);
+    // }
+
+    // print(orderDrawingItem);
+
+    // orderDrawingItem.add(0);
+    // orderDrawingItem.add(1);
+    // orderDrawingItem.add(2);
+    // orderDrawingItem.add(3);
+    // orderDrawingItem.add(4);
 
     notifyListeners();
   }
@@ -159,15 +221,20 @@ class PortfolioViewModel extends FutureViewModel {
     return f.format(totalValue);
   }
 
-  // 포트폴리오 구성종목의 초기비중을 리턴 (반올림해서 String으로)
-  String getInitialRatio(int i) {
+  // 포트폴리우 구성종목의 초기비중을 리턴
+  double getInitialRatioDouble(int i) {
     double ratio = (portfolioModel.subPortfolio[i].initialPrice *
             portfolioModel.subPortfolio[i].sharesNum) /
         totalInitialValue.toDouble();
 
+    return ratio;
+  }
+
+  // 포트폴리오 구성종목의 초기비중을 리턴 (반올림해서 String으로)
+  String getInitialRatio(int i) {
     var f = NumberFormat("##", "en_US");
 
-    return f.format(ratio * 100) + '%';
+    return f.format(getInitialRatioDouble(i) * 100) + '%';
   }
 
   @override

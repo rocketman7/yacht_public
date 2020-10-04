@@ -21,19 +21,19 @@ class _PortfolioViewState extends State<PortfolioView>
   void initState() {
     super.initState();
 
-    _animationController = AnimationController(
-        duration: Duration(milliseconds: 1000), vsync: this);
+    _animationController =
+        AnimationController(duration: Duration(milliseconds: 700), vsync: this);
     animation =
         Tween<double>(begin: 0.0, end: 100.0).animate(_animationController);
 
     _animationController.addListener(() {
       setState(() {
-        print(animation.value);
+        // print(animation.value);
       });
     });
 
     // _animationController.repeat();
-    _animationController.forward();
+    // _animationController.forward();
   }
 
   @override
@@ -56,6 +56,9 @@ class _PortfolioViewState extends State<PortfolioView>
               ),
             );
           } else {
+            if (!_animationController.isCompleted)
+              _animationController.forward();
+
             return Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
@@ -88,7 +91,7 @@ class _PortfolioViewState extends State<PortfolioView>
                               width: 8,
                             ),
                             Text(
-                              '${model.getSeasonUpperCase()}',
+                              '${model.seasonModel.seasonName}',
                               style:
                                   TextStyle(fontFamily: 'DmSans', fontSize: 14),
                             )
@@ -103,23 +106,32 @@ class _PortfolioViewState extends State<PortfolioView>
                             Stack(
                               children: [
                                 makePortfolioArc(model),
-                                // CustomPaint(
-                                //   size:
-                                //       Size(deviceWidth - 64, deviceWidth - 64),
-                                //   painter: PortfolioArcChartLoading(
-                                //       center: Offset(
-                                //           (deviceWidth - 64) / 2 + 16,
-                                //           (deviceWidth - 64) / 2),
-                                //       percentage1: 0,
-                                //       percentage2: 50),
-                                // ),
+                                AnimatedBuilder(
+                                    animation: animation,
+                                    builder: (context, child) {
+                                      return CustomPaint(
+                                        size: Size(
+                                            deviceWidth - 64, deviceWidth - 64),
+                                        painter: PortfolioArcChartLoading(
+                                            center: Offset(
+                                                (deviceWidth - 64) / 2 + 16,
+                                                (deviceWidth - 64) / 2),
+                                            percentage1:
+                                                model.startPercentage[0],
+                                            percentage2:
+                                                model.startPercentage[0] +
+                                                    animation.value),
+                                      );
+                                    }),
+                                makePortfolioArcLine(model),
                                 Center(
                                   child: Container(
                                     width: deviceWidth - 64,
                                     height: deviceWidth - 64,
                                     child: Center(
                                         child: Text(
-                                      '${model.getSeasonUpperCase()}',
+                                      '${model.seasonModel.seasonName}',
+                                      // '${model.getSeasonUpperCase()}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 12,
@@ -164,6 +176,62 @@ class _PortfolioViewState extends State<PortfolioView>
           }
         });
   }
+}
+
+Widget makePortfolioArcLine(PortfolioViewModel model) {
+  double portfolioArcRadius = deviceWidth - 64;
+  const double portfolioArcRadiusCenter = 112;
+
+  return Container(
+    width: portfolioArcRadius,
+    height: portfolioArcRadius,
+    child: Stack(
+      children: makePortfolioArcLineComponents(
+          model, portfolioArcRadius, portfolioArcRadiusCenter),
+    ),
+  );
+}
+
+List<Widget> makePortfolioArcLineComponents(PortfolioViewModel model,
+    double portfolioArcRadius, double portfolioArcRadiusCenter) {
+  List<Widget> result = [];
+
+  // 경계선 그리는 부분.
+  result.add(
+    CustomPaint(
+      size: Size(
+          (portfolioArcRadius - portfolioArcRadiusCenter) / 3 +
+              portfolioArcRadiusCenter,
+          (portfolioArcRadius - portfolioArcRadiusCenter) / 3 +
+              portfolioArcRadiusCenter),
+      painter: PortfolioArcLine(
+        center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
+        color: '6B6B6B',
+      ),
+    ),
+  );
+
+  result.add(CustomPaint(
+    size: Size(
+        (portfolioArcRadius - portfolioArcRadiusCenter) / 3 * 2 +
+            portfolioArcRadiusCenter,
+        (portfolioArcRadius - portfolioArcRadiusCenter) / 3 * 2 +
+            portfolioArcRadiusCenter),
+    painter: PortfolioArcLine(
+      center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
+      color: '000000',
+    ),
+  ));
+
+  result.add(CustomPaint(
+    size: Size(portfolioArcRadius, portfolioArcRadius),
+    painter: PortfolioArcLine(
+      center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
+      color: '6B6B6B',
+    ),
+  ));
+
+  return result;
 }
 
 Widget makePortfolioArc(PortfolioViewModel model) {
@@ -212,41 +280,6 @@ List<Widget> makePortfolioArcComponents(PortfolioViewModel model,
         percentage2: 100),
   ));
 
-  // 경계선 그리는 부분.
-  result.add(
-    CustomPaint(
-      size: Size(
-          (portfolioArcRadius - portfolioArcRadiusCenter) / 3 +
-              portfolioArcRadiusCenter,
-          (portfolioArcRadius - portfolioArcRadiusCenter) / 3 +
-              portfolioArcRadiusCenter),
-      painter: PortfolioArcLine(
-        center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-        color: '6B6B6B',
-      ),
-    ),
-  );
-
-  result.add(CustomPaint(
-    size: Size(
-        (portfolioArcRadius - portfolioArcRadiusCenter) / 3 * 2 +
-            portfolioArcRadiusCenter,
-        (portfolioArcRadius - portfolioArcRadiusCenter) / 3 * 2 +
-            portfolioArcRadiusCenter),
-    painter: PortfolioArcLine(
-      center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-      color: '000000',
-    ),
-  ));
-
-  result.add(CustomPaint(
-    size: Size(portfolioArcRadius, portfolioArcRadius),
-    painter: PortfolioArcLine(
-      center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-      color: '6B6B6B',
-    ),
-  ));
-
   return result;
 }
 
@@ -258,10 +291,50 @@ Widget makePortfolioItems(PortfolioViewModel model) {
 
 List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
   List<Widget> result = [];
-  int lastI = 0;
 
-  for (int i = 0; i < model.portfolioModel.subPortfolio.length - 1; i += 2) {
-    if (!model.drawingMaxLength[i + 1]) {
+  for (int i = 0; i < model.portfolioModel.subPortfolio.length; i++) {
+    if (model.drawingMaxLength[i] ||
+            (i + 1 < model.portfolioModel.subPortfolio.length)
+        ? (model.drawingMaxLength[i + 1])
+        : false) {
+      result.add(Container(
+        height: 32,
+        width: (deviceWidth - 32),
+        child: Row(
+          children: [
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(int.parse(
+                      'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                      radix: 16))),
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Text(
+              '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+              style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Text(
+              '${model.getInitialRatio(model.orderDrawingItem[i])}',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: 'DmSans',
+                  fontWeight: FontWeight.w600,
+                  color: Color(int.parse(
+                      'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                      radix: 16))),
+            ),
+          ],
+        ),
+      ));
+    } else {
       result.add(Row(
         children: [
           Container(
@@ -342,54 +415,142 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
         ],
       ));
 
-      lastI = i;
+      i += 1;
     }
   }
 
-  for (int i = lastI + 2; i < model.portfolioModel.subPortfolio.length; i++) {
-    result.add(Row(
-      children: [
-        Container(
-          height: 32,
-          width: (deviceWidth - 32),
-          child: Row(
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(int.parse(
-                        'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-                        radix: 16))),
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              Text(
-                '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
-                style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
-              ),
-              SizedBox(
-                width: 8,
-              ),
-              Text(
-                '${model.getInitialRatio(model.orderDrawingItem[i])}',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'DmSans',
-                    fontWeight: FontWeight.w600,
-                    color: Color(int.parse(
-                        'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-                        radix: 16))),
-              ),
-            ],
-          ),
-        ),
-        Spacer(),
-      ],
-    ));
-  }
+  // int lastI = 0;
+
+  // for (int i = 0; i < model.portfolioModel.subPortfolio.length - 1; i += 2) {
+  //   if (!model.drawingMaxLength[i + 1]) {
+  //     result.add(Row(
+  //       children: [
+  //         Container(
+  //           height: 32,
+  //           width: (deviceWidth - 32) / 2 - 10,
+  //           child: Row(
+  //             children: [
+  //               Container(
+  //                 width: 8,
+  //                 height: 8,
+  //                 decoration: BoxDecoration(
+  //                     shape: BoxShape.circle,
+  //                     color: Color(int.parse(
+  //                         'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+  //                         radix: 16))),
+  //               ),
+  //               SizedBox(
+  //                 width: 8,
+  //               ),
+  //               Text(
+  //                 '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+  //                 style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+  //               ),
+  //               SizedBox(
+  //                 width: 8,
+  //               ),
+  //               Text(
+  //                 '${model.getInitialRatio(model.orderDrawingItem[i])}',
+  //                 style: TextStyle(
+  //                     fontSize: 18,
+  //                     fontFamily: 'DmSans',
+  //                     fontWeight: FontWeight.w600,
+  //                     color: Color(int.parse(
+  //                         'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+  //                         radix: 16))),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         Spacer(),
+  //         Container(
+  //           height: 32,
+  //           width: (deviceWidth - 32) / 2 - 10,
+  //           child: Row(
+  //             children: [
+  //               Container(
+  //                 width: 8,
+  //                 height: 8,
+  //                 decoration: BoxDecoration(
+  //                     shape: BoxShape.circle,
+  //                     color: Color(int.parse(
+  //                         'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
+  //                         radix: 16))),
+  //               ),
+  //               SizedBox(
+  //                 width: 8,
+  //               ),
+  //               Text(
+  //                 '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].stockName}',
+  //                 style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+  //               ),
+  //               SizedBox(
+  //                 width: 8,
+  //               ),
+  //               Text(
+  //                 '${model.getInitialRatio(model.orderDrawingItem[i + 1])}',
+  //                 style: TextStyle(
+  //                     fontSize: 18,
+  //                     fontFamily: 'DmSans',
+  //                     fontWeight: FontWeight.w600,
+  //                     color: Color(int.parse(
+  //                         'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
+  //                         radix: 16))),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ));
+
+  //     lastI = i;
+  //   }
+  // }
+
+  // for (int i = lastI + 2; i < model.portfolioModel.subPortfolio.length; i++) {
+  //   result.add(Row(
+  //     children: [
+  //       Container(
+  //         height: 32,
+  //         width: (deviceWidth - 32),
+  //         child: Row(
+  //           children: [
+  //             Container(
+  //               width: 8,
+  //               height: 8,
+  //               decoration: BoxDecoration(
+  //                   shape: BoxShape.circle,
+  //                   color: Color(int.parse(
+  //                       'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+  //                       radix: 16))),
+  //             ),
+  //             SizedBox(
+  //               width: 8,
+  //             ),
+  //             Text(
+  //               '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+  //               style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+  //             ),
+  //             SizedBox(
+  //               width: 8,
+  //             ),
+  //             Text(
+  //               '${model.getInitialRatio(model.orderDrawingItem[i])}',
+  //               style: TextStyle(
+  //                   fontSize: 18,
+  //                   fontFamily: 'DmSans',
+  //                   fontWeight: FontWeight.w600,
+  //                   color: Color(int.parse(
+  //                       'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+  //                       radix: 16))),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       Spacer(),
+  //     ],
+  //   ));
+  // }
 
   return result;
 }
@@ -472,21 +633,25 @@ class PortfolioArcChartLoading extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Colors.black.withOpacity(0.5)
+      ..color = Colors.transparent
       ..style = PaintingStyle.fill;
 
     double radius = size.width / 2;
 
-    // double arcAngle1 = 2 * math.pi * (percentage1 / 100);
+    double arcAngle1 = 2 * math.pi * (percentage1 / 100);
     double arcAngle2 = 2 * math.pi * (percentage2 / 100);
 
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), 0,
-        arcAngle2, true, paint);
-    // -math.pi / 2, arcAngle, true, paint);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle1,
+        arcAngle2 - arcAngle1, true, paint);
+
+    paint..color = Colors.white;
+
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle2,
+        2 * math.pi - arcAngle2 + arcAngle1, true, paint);
   }
 
   @override
   bool shouldRepaint(PortfolioArcChartLoading oldDelegate) {
-    return false;
+    return true;
   }
 }
