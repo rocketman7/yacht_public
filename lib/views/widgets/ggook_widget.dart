@@ -51,7 +51,7 @@ Widget ggookWidget(
             height: gap_m,
           ),
           Text(
-            vote.subVotes[listSelected[idx]].description ?? "",
+            vote.subVotes[listSelected[idx]].selectDescription ?? "",
             style: TextStyle(
               color: Color(0xff5F5F5F),
               fontSize: 20,

@@ -12,9 +12,12 @@ class SubVote {
 //   },
   final int id;
   final String title;
-  final String description;
+  final String selectDescription;
+  final String ggookDescription;
   final String voteImgUrl;
   final List<dynamic> voteChoices;
+  final List<dynamic> tag0;
+  final List<dynamic> tag1;
   final int numVoted0;
   final int numVoted1;
   final int result;
@@ -24,9 +27,12 @@ class SubVote {
   SubVote({
     this.id,
     this.title,
-    this.description,
+    this.selectDescription,
+    this.ggookDescription,
     this.voteImgUrl,
     this.voteChoices,
+    this.tag0,
+    this.tag1,
     this.numVoted0,
     this.numVoted1,
     this.result,
@@ -38,9 +44,12 @@ class SubVote {
   SubVote.fromData(Map<String, dynamic> data)
       : id = data['id'],
         title = data['title'],
-        description = data['description'],
+        selectDescription = data['selectDescription'],
+        ggookDescription = data['ggookDescription'],
         voteImgUrl = data['voteImgUrl'],
         voteChoices = data['voteChoices'],
+        tag0 = data['tag0'],
+        tag1 = data['tag1'],
         numVoted0 = data['numVoted0'],
         numVoted1 = data['numVoted1'],
         issueCode = data['issueCode'],
@@ -52,7 +61,10 @@ class SubVote {
     return {
       'id': this.id,
       'title': this.title,
-      'description': this.description,
+      'selectDescription': this.selectDescription,
+      'ggookDescription': this.ggookDescription,
+      'tag0': this.tag0,
+      'tag1': this.tag1,
       'voteImgUrl': this.voteImgUrl,
       'voteChoices': this.voteChoices,
       'numVoted0': this.numVoted0,
