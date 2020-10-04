@@ -14,26 +14,33 @@ class PortfolioView extends StatefulWidget {
 
 class _PortfolioViewState extends State<PortfolioView>
     with TickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation animation;
+  AnimationController _chartAnimationController;
+  Animation chartAnimation;
+
+  AnimationController _itemAnimationController;
+  Animation itemAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    _animationController =
+    _chartAnimationController =
         AnimationController(duration: Duration(milliseconds: 700), vsync: this);
-    animation =
-        Tween<double>(begin: 0.0, end: 100.0).animate(_animationController);
+    chartAnimation = Tween<double>(begin: 0.0, end: 100.0)
+        .animate(_chartAnimationController);
 
-    _animationController.addListener(() {
-      setState(() {
-        // print(animation.value);
-      });
+    _chartAnimationController.addListener(() {
+      setState(() {});
     });
 
-    // _animationController.repeat();
-    // _animationController.forward();
+    _itemAnimationController =
+        AnimationController(duration: Duration(milliseconds: 70), vsync: this);
+    itemAnimation =
+        Tween<double>(begin: 0.0, end: 100.0).animate(_itemAnimationController);
+
+    _itemAnimationController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
@@ -56,8 +63,11 @@ class _PortfolioViewState extends State<PortfolioView>
               ),
             );
           } else {
-            if (!_animationController.isCompleted)
-              _animationController.forward();
+            if (!_chartAnimationController.isCompleted)
+              _chartAnimationController.forward();
+            if (_chartAnimationController.isCompleted &&
+                !_itemAnimationController.isCompleted)
+              _itemAnimationController.forward();
 
             return Scaffold(
                 backgroundColor: Colors.white,
@@ -106,23 +116,25 @@ class _PortfolioViewState extends State<PortfolioView>
                             Stack(
                               children: [
                                 makePortfolioArc(model),
-                                AnimatedBuilder(
-                                    animation: animation,
-                                    builder: (context, child) {
-                                      return CustomPaint(
-                                        size: Size(
-                                            deviceWidth - 64, deviceWidth - 64),
-                                        painter: PortfolioArcChartLoading(
-                                            center: Offset(
-                                                (deviceWidth - 64) / 2 + 16,
-                                                (deviceWidth - 64) / 2),
-                                            percentage1:
-                                                model.startPercentage[0],
-                                            percentage2:
-                                                model.startPercentage[0] +
-                                                    animation.value),
-                                      );
-                                    }),
+                                !_chartAnimationController.isCompleted
+                                    ? AnimatedBuilder(
+                                        animation: chartAnimation,
+                                        builder: (context, child) {
+                                          return CustomPaint(
+                                            size: Size(deviceWidth - 64,
+                                                deviceWidth - 64),
+                                            painter: PortfolioArcChartLoading(
+                                                center: Offset(
+                                                    (deviceWidth - 64) / 2 + 16,
+                                                    (deviceWidth - 64) / 2),
+                                                percentage1:
+                                                    model.startPercentage[0],
+                                                percentage2:
+                                                    model.startPercentage[0] +
+                                                        chartAnimation.value),
+                                          );
+                                        })
+                                    : Container(),
                                 makePortfolioArcLine(model),
                                 Center(
                                   child: Container(
@@ -145,29 +157,35 @@ class _PortfolioViewState extends State<PortfolioView>
                             SizedBox(
                               height: 24,
                             ),
-                            makePortfolioItems(model),
+                            _itemAnimationController.isCompleted
+                                ? makePortfolioItems(model)
+                                : Container(),
                           ],
                         )),
                         SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${model.getPortfolioValue()}원',
-                              style: TextStyle(
-                                  fontSize: 28,
-                                  fontFamily: 'DmSans',
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: -1.0),
-                            ),
-                          ],
-                        ),
+                        _itemAnimationController.isCompleted
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${model.getPortfolioValue()}원',
+                                    style: TextStyle(
+                                        fontSize: 28,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: -1.0),
+                                  ),
+                                ],
+                              )
+                            : Container(),
                         SizedBox(height: 8),
-                        Text(
-                          '시즌상금 가치(전일종가 기준)',
-                          style: TextStyle(fontSize: 14),
-                        ),
+                        _itemAnimationController.isCompleted
+                            ? Text(
+                                '시즌상금 가치(전일종가 기준)',
+                                style: TextStyle(fontSize: 14),
+                              )
+                            : Container(),
                         SizedBox(height: 32),
                       ],
                     ),
@@ -253,21 +271,26 @@ List<Widget> makePortfolioArcComponents(PortfolioViewModel model,
   List<Widget> result = [];
 
   for (int i = 0; i < model.portfolioModel.subPortfolio.length; i++) {
-    result.add(CustomPaint(
-      size: Size(
-          portfolioArcRadiusCenter +
-              (portfolioArcRadius - portfolioArcRadiusCenter) /
-                  3 *
-                  model.valueIncreaseRatio[i],
-          portfolioArcRadiusCenter +
-              (portfolioArcRadius - portfolioArcRadiusCenter) /
-                  3 *
-                  model.valueIncreaseRatio[i]),
-      painter: PortfolioArcChart(
-          center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-          color: model.portfolioModel.subPortfolio[i].colorCode,
-          percentage1: model.startPercentage[i],
-          percentage2: model.startPercentage[i + 1]),
+    result.add(InkWell(
+      onTap: () {
+        print('$i 번째 component tap');
+      },
+      child: CustomPaint(
+        size: Size(
+            portfolioArcRadiusCenter +
+                (portfolioArcRadius - portfolioArcRadiusCenter) /
+                    3 *
+                    model.valueIncreaseRatio[i],
+            portfolioArcRadiusCenter +
+                (portfolioArcRadius - portfolioArcRadiusCenter) /
+                    3 *
+                    model.valueIncreaseRatio[i]),
+        painter: PortfolioArcChart(
+            center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
+            color: model.portfolioModel.subPortfolio[i].colorCode,
+            percentage1: model.startPercentage[i],
+            percentage2: model.startPercentage[i + 1]),
+      ),
     ));
   }
 
@@ -496,252 +519,6 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
     }
   }
 
-  // for (int i = 0; i < model.portfolioModel.subPortfolio.length; i++) {
-  //   if (model.drawingMaxLength[i]) {
-  //     result.add(Container(
-  //       height: 32,
-  //       width: (deviceWidth - 32),
-  //       child: Row(
-  //         children: [
-  //           Container(
-  //             width: 8,
-  //             height: 8,
-  //             decoration: BoxDecoration(
-  //                 shape: BoxShape.circle,
-  //                 color: Color(int.parse(
-  //                     'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-  //                     radix: 16))),
-  //           ),
-  //           SizedBox(
-  //             width: 8,
-  //           ),
-  //           Text(
-  //             '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
-  //             style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
-  //           ),
-  //           SizedBox(
-  //             width: 8,
-  //           ),
-  //           Text(
-  //             '${model.getInitialRatio(model.orderDrawingItem[i])}',
-  //             style: TextStyle(
-  //                 fontSize: 18,
-  //                 fontFamily: 'DmSans',
-  //                 fontWeight: FontWeight.w600,
-  //                 color: Color(int.parse(
-  //                     'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-  //                     radix: 16))),
-  //           ),
-  //         ],
-  //       ),
-  //     ));
-  //   } else if (i + 1 < model.portfolioModel.subPortfolio.length) {
-  //     if (model.drawingMaxLength[i + 1]) {
-  //       result.add(Container(
-  //         height: 32,
-  //         width: (deviceWidth - 32),
-  //         child: Row(
-  //           children: [
-  //             Container(
-  //               width: 8,
-  //               height: 8,
-  //               decoration: BoxDecoration(
-  //                   shape: BoxShape.circle,
-  //                   color: Color(int.parse(
-  //                       'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-  //                       radix: 16))),
-  //             ),
-  //             SizedBox(
-  //               width: 8,
-  //             ),
-  //             Text(
-  //               '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
-  //               style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
-  //             ),
-  //             SizedBox(
-  //               width: 8,
-  //             ),
-  //             Text(
-  //               '${model.getInitialRatio(model.orderDrawingItem[i])}',
-  //               style: TextStyle(
-  //                   fontSize: 18,
-  //                   fontFamily: 'DmSans',
-  //                   fontWeight: FontWeight.w600,
-  //                   color: Color(int.parse(
-  //                       'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-  //                       radix: 16))),
-  //             ),
-  //           ],
-  //         ),
-  //       ));
-  //     } else {
-  //       result.add(Row(
-  //         children: [
-  //           Container(
-  //             height: 32,
-  //             width: (deviceWidth - 32) / 2 - 10,
-  //             child: Row(
-  //               children: [
-  //                 Container(
-  //                   width: 8,
-  //                   height: 8,
-  //                   decoration: BoxDecoration(
-  //                       shape: BoxShape.circle,
-  //                       color: Color(int.parse(
-  //                           'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-  //                           radix: 16))),
-  //                 ),
-  //                 SizedBox(
-  //                   width: 8,
-  //                 ),
-  //                 Text(
-  //                   '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
-  //                   style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
-  //                 ),
-  //                 SizedBox(
-  //                   width: 8,
-  //                 ),
-  //                 Text(
-  //                   '${model.getInitialRatio(model.orderDrawingItem[i])}',
-  //                   style: TextStyle(
-  //                       fontSize: 18,
-  //                       fontFamily: 'DmSans',
-  //                       fontWeight: FontWeight.w600,
-  //                       color: Color(int.parse(
-  //                           'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-  //                           radix: 16))),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           Spacer(),
-  //           Container(
-  //             height: 32,
-  //             width: (deviceWidth - 32) / 2 - 10,
-  //             child: Row(
-  //               children: [
-  //                 Container(
-  //                   width: 8,
-  //                   height: 8,
-  //                   decoration: BoxDecoration(
-  //                       shape: BoxShape.circle,
-  //                       color: Color(int.parse(
-  //                           'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
-  //                           radix: 16))),
-  //                 ),
-  //                 SizedBox(
-  //                   width: 8,
-  //                 ),
-  //                 Text(
-  //                   '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].stockName}',
-  //                   style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
-  //                 ),
-  //                 SizedBox(
-  //                   width: 8,
-  //                 ),
-  //                 Text(
-  //                   '${model.getInitialRatio(model.orderDrawingItem[i + 1])}',
-  //                   style: TextStyle(
-  //                       fontSize: 18,
-  //                       fontFamily: 'DmSans',
-  //                       fontWeight: FontWeight.w600,
-  //                       color: Color(int.parse(
-  //                           'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
-  //                           radix: 16))),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ],
-  //       ));
-
-  //       i += 1;
-  //     }
-  //   } else {
-  //     result.add(Row(
-  //       children: [
-  //         Container(
-  //           height: 32,
-  //           width: (deviceWidth - 32) / 2 - 10,
-  //           child: Row(
-  //             children: [
-  //               Container(
-  //                 width: 8,
-  //                 height: 8,
-  //                 decoration: BoxDecoration(
-  //                     shape: BoxShape.circle,
-  //                     color: Color(int.parse(
-  //                         'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-  //                         radix: 16))),
-  //               ),
-  //               SizedBox(
-  //                 width: 8,
-  //               ),
-  //               Text(
-  //                 '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
-  //                 style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
-  //               ),
-  //               SizedBox(
-  //                 width: 8,
-  //               ),
-  //               Text(
-  //                 '${model.getInitialRatio(model.orderDrawingItem[i])}',
-  //                 style: TextStyle(
-  //                     fontSize: 18,
-  //                     fontFamily: 'DmSans',
-  //                     fontWeight: FontWeight.w600,
-  //                     color: Color(int.parse(
-  //                         'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
-  //                         radix: 16))),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         Spacer(),
-  //         Container(
-  //           height: 32,
-  //           width: (deviceWidth - 32) / 2 - 10,
-  //           child: Row(
-  //             children: [
-  //               Container(
-  //                 width: 8,
-  //                 height: 8,
-  //                 decoration: BoxDecoration(
-  //                     shape: BoxShape.circle,
-  //                     color: Color(int.parse(
-  //                         'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
-  //                         radix: 16))),
-  //               ),
-  //               SizedBox(
-  //                 width: 8,
-  //               ),
-  //               Text(
-  //                 '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].stockName}',
-  //                 style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
-  //               ),
-  //               SizedBox(
-  //                 width: 8,
-  //               ),
-  //               Text(
-  //                 '${model.getInitialRatio(model.orderDrawingItem[i + 1])}',
-  //                 style: TextStyle(
-  //                     fontSize: 18,
-  //                     fontFamily: 'DmSans',
-  //                     fontWeight: FontWeight.w600,
-  //                     color: Color(int.parse(
-  //                         'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
-  //                         radix: 16))),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ));
-
-  //     i += 1;
-  //   }
-  // }
-
   return result;
 }
 
@@ -801,10 +578,18 @@ class PortfolioArcLine extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
-    double radius = size.width / 2;
+    final double radius = size.width / 2;
 
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), 0,
-        2 * math.pi, false, paint);
+    double startAngle = 0;
+    final double maxAngle = 2 * math.pi;
+    final double space = 2 * math.pi / 200;
+
+    while (startAngle < maxAngle) {
+      canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
+          startAngle, space, false, paint);
+
+      startAngle += 2 * space;
+    }
   }
 
   @override
