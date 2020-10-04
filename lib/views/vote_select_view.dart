@@ -5,6 +5,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:stacked/stacked.dart';
@@ -403,112 +404,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
               padding: const EdgeInsets.only(left: 20.0),
               child: GestureDetector(
                 onTap: () {
-                  showModalBottomSheet(
-                    backgroundColor: Colors.white,
-                    context: context,
-                    builder: (
-                      context,
-                    ) =>
-                        Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 32.0,
-                      ),
-                      child: Container(
-                        color: Colors.white,
-                        // height: 280,
-                        constraints: BoxConstraints(
-                          maxHeight: 300,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              children: [
-                                Container(
-                                  constraints: BoxConstraints(
-                                    maxHeight: 48,
-                                    minWidth: 100,
-                                  ),
-                                  alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                  decoration: BoxDecoration(
-                                    color: hexToColor(
-                                      model.vote.subVotes[idx].colorCode[0],
-                                    ),
-                                    borderRadius: BorderRadius.circular(50),
-                                    border: Border.all(
-                                      width: 4.0,
-                                      color: Color(0xFF000000),
-                                    ),
-                                    // borderRadius: BorderRadius.all(
-                                    //     Radius.circular(30)),
-                                  ),
-                                  // color: Colors.redAccent,
-                                  child: Text(
-                                    model.vote.subVotes[idx].title,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      textBaseline: TextBaseline.ideographic,
-                                      color: Colors.black,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(child: SizedBox()),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 14,
-                            ),
-                            Text(
-                              model.vote.subVotes[idx].selectDescription,
-                              style: TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: -2.0,
-                              ),
-                              maxLines: 2,
-                            ),
-                            Text(
-                              "현재 ${model.vote.subVotes[idx].numVoted0 + model.vote.subVotes[idx].numVoted1}명이 이 주제를 예측하였습니다",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'DmSans',
-                                color: Color(0xFF1EC8CF),
-                              ),
-                            ),
-                            SizedBox(height: 15),
-                            Wrap(
-                              spacing: 6,
-                              runSpacing: -5,
-                              direction: Axis.horizontal,
-                              children: buildChip(hexToColor, model, idx),
-                              // Container(
-                              //   alignment: Alignment.center,
-                              //   padding: EdgeInsets.fromLTRB(10, 6, 10, 6),
-                              //   decoration: BoxDecoration(
-                              //     color: hexToColor(
-                              //       model.vote.subVotes[idx].colorCode[0],
-                              //     ),
-                              //     borderRadius: BorderRadius.circular(50),
-                              //   ),
-                              //   child: Text(
-                              //     "시총 0.9조",
-                              //     style: TextStyle(
-                              //       fontSize: 16,
-                              //       fontFamily: 'DmSans',
-                              //       fontWeight: FontWeight.w700,
-                              //     ),
-                              //   ),
-                              // ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
+                  buildModalBottomSheet(
+                      context, hexToColor, model, idx, numOfChoices);
                 },
                 child: Container(
                   height: 100,
@@ -582,101 +479,109 @@ class _VoteSelectViewState extends State<VoteSelectView> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(left: 30.0),
-              child: Container(
-                height: 100,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            height: 100,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
-                            decoration: BoxDecoration(
-                              color: hexToColor(
-                                model.vote.subVotes[idx].colorCode[0],
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(
-                                width: 4.0,
-                                color: Color(0xFF000000),
-                              ),
-                              // borderRadius: BorderRadius.all(
-                              //     Radius.circular(30)),
-                            ),
-                            child: Text(model.vote.subVotes[idx].voteChoices[0],
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                softWrap: false,
-                                style: TextStyle(
-                                  fontSize: model.vote.subVotes[idx]
-                                              .voteChoices[0].length >
-                                          4
-                                      ? 22
-                                      : 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                )),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 100,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
-                            decoration: BoxDecoration(
-                              color: hexToColor(
-                                model.vote.subVotes[idx].colorCode[1],
-                              ),
-                              border: Border.all(
-                                width: 4.0,
-                                color: Color(0xFF000000),
-                              ),
-                              // borderRadius: BorderRadius.all(
-                              //     Radius.circular(30)),
-                            ),
-                            child: Text(model.vote.subVotes[idx].voteChoices[1],
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                softWrap: false,
-                                style: TextStyle(
-                                  fontSize: model.vote.subVotes[idx]
-                                              .voteChoices[1].length >
-                                          5
-                                      ? 22
-                                      : 24,
-                                  fontWeight: FontWeight.bold,
+              child: GestureDetector(
+                onTap: () {
+                  buildModalBottomSheet(
+                      context, hexToColor, model, idx, numOfChoices);
+                },
+                child: Container(
+                  height: 100,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              height: 100,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
+                              decoration: BoxDecoration(
+                                color: hexToColor(
+                                  model.vote.subVotes[idx].colorCode[0],
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(
+                                  width: 4.0,
                                   color: Color(0xFF000000),
-                                )),
+                                ),
+                                // borderRadius: BorderRadius.all(
+                                //     Radius.circular(30)),
+                              ),
+                              child:
+                                  Text(model.vote.subVotes[idx].voteChoices[0],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      softWrap: false,
+                                      style: TextStyle(
+                                        fontSize: model.vote.subVotes[idx]
+                                                    .voteChoices[0].length >
+                                                4
+                                            ? 22
+                                            : 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      )),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 4.0,
+                          SizedBox(
+                            width: 8,
                           ),
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(
-                            40,
-                          )),
-                      child: Text("vs",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    )
-                  ],
+                          Expanded(
+                            child: Container(
+                              height: 100,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
+                              decoration: BoxDecoration(
+                                color: hexToColor(
+                                  model.vote.subVotes[idx].colorCode[1],
+                                ),
+                                border: Border.all(
+                                  width: 4.0,
+                                  color: Color(0xFF000000),
+                                ),
+                                // borderRadius: BorderRadius.all(
+                                //     Radius.circular(30)),
+                              ),
+                              child:
+                                  Text(model.vote.subVotes[idx].voteChoices[1],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      softWrap: false,
+                                      style: TextStyle(
+                                        fontSize: model.vote.subVotes[idx]
+                                                    .voteChoices[1].length >
+                                                5
+                                            ? 22
+                                            : 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF000000),
+                                      )),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 4.0,
+                            ),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(
+                              40,
+                            )),
+                        child: Text("vs",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -719,37 +624,305 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     }
   }
 
-  List<Widget> buildChip(
-      Color hexToColor(String code), VoteSelectViewModel model, int idx) {
-    List<Widget> _widgets = [];
-    int tagLength = model.vote.subVotes[idx].tag0.length;
-    print("TAGIS" + tagLength.toString());
-    for (int i = 0; i < tagLength; i++) {
-      _widgets.add(Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: Chip(
-          padding: EdgeInsets.symmetric(
-            horizontal: 3.0,
-            vertical: 0,
-          ),
-          // labelPadding: EdgeInsets.symmetric(
-          //   horizontal: 5.0,
-          //   vertical: 0,
-          // ),
-          label: Text(
-            model.vote.subVotes[idx].tag0[i],
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: 'DmSans',
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          backgroundColor: hexToColor(
-            model.vote.subVotes[idx].colorCode[0],
+  Future buildModalBottomSheet(
+    BuildContext context,
+    Color hexToColor(String code),
+    VoteSelectViewModel model,
+    int idx,
+    int numOfChoices,
+  ) {
+    return showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (
+        context,
+      ) =>
+          Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 32.0,
+        ),
+        child: Container(
+          color: Colors.white,
+          // height: double.maxFinite,
+          constraints: BoxConstraints(
+              // maxHeight: 300,
+              ),
+          child: Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 14),
+                child: Row(
+                  children: [
+                    numOfChoices == 1
+                        ? Container(
+                            constraints: BoxConstraints(
+                              maxHeight: 48,
+                              minWidth: 100,
+                            ),
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                            decoration: BoxDecoration(
+                              color: hexToColor(
+                                model.vote.subVotes[idx].colorCode[0],
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(
+                                width: 4.0,
+                                color: Color(0xFF000000),
+                              ),
+                              // borderRadius: BorderRadius.all(
+                              //     Radius.circular(30)),
+                            ),
+                            // color: Colors.redAccent,
+                            child: Text(
+                              model.vote.subVotes[idx].title,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                textBaseline: TextBaseline.ideographic,
+                                color: Colors.black,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          )
+                        : Stack(children: <Widget>[
+                            Row(
+                              children: [
+                                Container(
+                                  constraints: BoxConstraints(
+                                    maxHeight: 48,
+                                    minWidth: 100,
+                                  ),
+                                  alignment: Alignment.centerLeft,
+                                  padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                  decoration: BoxDecoration(
+                                    color: hexToColor(
+                                      model.vote.subVotes[idx].colorCode[0],
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                    border: Border.all(
+                                      width: 4.0,
+                                      color: Color(0xFF000000),
+                                    ),
+                                    // borderRadius: BorderRadius.all(
+                                    //     Radius.circular(30)),
+                                  ),
+                                  // color: Colors.redAccent,
+                                  child: Text(
+                                    model.vote.subVotes[idx].voteChoices[0],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      textBaseline: TextBaseline.ideographic,
+                                      color: Colors.black,
+                                      fontSize: model.vote.subVotes[idx]
+                                                  .voteChoices[0].length <
+                                              6
+                                          ? 22
+                                          : 18,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Container(
+                                  constraints: BoxConstraints(
+                                    maxHeight: 48,
+                                    minWidth: 100,
+                                  ),
+                                  alignment: Alignment.centerLeft,
+                                  padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                  decoration: BoxDecoration(
+                                    color: hexToColor(
+                                      model.vote.subVotes[idx].colorCode[1],
+                                    ),
+                                    borderRadius: BorderRadius.circular(50),
+                                    border: Border.all(
+                                      width: 4.0,
+                                      color: Color(0xFF000000),
+                                    ),
+                                    // borderRadius: BorderRadius.all(
+                                    //     Radius.circular(30)),
+                                  ),
+                                  // color: Colors.redAccent,
+                                  child: Text(
+                                    model.vote.subVotes[idx].voteChoices[1],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      textBaseline: TextBaseline.ideographic,
+                                      color: Colors.black,
+                                      fontSize: model.vote.subVotes[idx]
+                                                  .voteChoices[1].length <
+                                              6
+                                          ? 22
+                                          : 18,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ]),
+                    Expanded(child: SizedBox()),
+                  ],
+                ),
+              ),
+              // Expanded(child: SizedBox()),
+
+              Text(
+                model.vote.subVotes[idx].selectDescription,
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -2.0,
+                ),
+                maxLines: 2,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+                child: Text(
+                  "현재 ${model.vote.subVotes[idx].numVoted0 + model.vote.subVotes[idx].numVoted1}명이 이 주제를 예측하였습니다",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'DmSans',
+                    color: Color(0xFF1EC8CF),
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+                child: Wrap(
+                  spacing: 6,
+                  runSpacing: -5,
+                  direction: Axis.horizontal,
+                  children: buildChip(hexToColor, model, idx, numOfChoices),
+                  // Container(
+                  //   alignment: Alignment.center,
+                  //   padding: EdgeInsets.fromLTRB(10, 6, 10, 6),
+                  //   decoration: BoxDecoration(
+                  //     color: hexToColor(
+                  //       model.vote.subVotes[idx].colorCode[0],
+                  //     ),
+                  //     borderRadius: BorderRadius.circular(50),
+                  //   ),
+                  //   child: Text(
+                  //     "시총 0.9조",
+                  //     style: TextStyle(
+                  //       fontSize: 16,
+                  //       fontFamily: 'DmSans',
+                  //       fontWeight: FontWeight.w700,
+                  //     ),
+                  //   ),
+                  // ),
+                ),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Row(
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () {},
+                    color: Color(0xFFE4E4E4),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 14,
+                    ),
+                    child: Text("해제",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'DmSans',
+                          fontWeight: FontWeight.w700,
+                        )),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: RaisedButton(
+                      onPressed: () {},
+                      color: Color(0xFF1EC8CF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 14,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/double_check_icon.svg',
+                            width: 20,
+                          ),
+                          SizedBox(width: 8),
+                          Text("선택하기",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontFamily: 'DmSans',
+                                fontWeight: FontWeight.w700,
+                              )),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
-      ));
+      ),
+    );
+  }
+
+  List<Widget> buildChip(
+    Color hexToColor(String code),
+    VoteSelectViewModel model,
+    int idx,
+    int numOfChoices,
+  ) {
+    List<Widget> _widgets = [];
+
+    int tag0Length = model.vote.subVotes[idx].tag0.length;
+    print("TAGIS" + tag0Length.toString());
+    for (int j = 0; j < numOfChoices; j++) {
+      for (int i = 0; i < tag0Length; i++) {
+        _widgets.add(Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 4.0, 0),
+          child: Chip(
+            padding: EdgeInsets.symmetric(
+              horizontal: 3.0,
+              vertical: 0,
+            ),
+            // labelPadding: EdgeInsets.symmetric(
+            //   horizontal: 5.0,
+            //   vertical: 0,
+            // ),
+            label: Text(
+              j == 0
+                  ? model.vote.subVotes[idx].tag0[i]
+                  : model.vote.subVotes[idx].tag1[i],
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'DmSans',
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            backgroundColor: hexToColor(
+              model.vote.subVotes[idx].colorCode[j],
+            ),
+          ),
+        ));
+      }
     }
+
     return _widgets;
   }
 
