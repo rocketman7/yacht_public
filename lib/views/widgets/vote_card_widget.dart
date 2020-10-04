@@ -86,7 +86,7 @@ class VoteCard extends StatelessWidget {
                           height: gap_m,
                         ),
                         Text(
-                          vote.subVotes[idx].description ?? "",
+                          vote.subVotes[idx].selectDescription ?? "",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,

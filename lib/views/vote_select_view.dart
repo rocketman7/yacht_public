@@ -414,8 +414,11 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                         vertical: 32.0,
                       ),
                       child: Container(
-                        color: Colors.white,
-                        height: 332,
+                        color: Colors.black,
+                        // height: 280,
+                        constraints: BoxConstraints(
+                          maxHeight: 300,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -456,14 +459,49 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               ],
                             ),
                             SizedBox(
-                              height: 8,
+                              height: 14,
                             ),
                             Text(
-                              model.vote.subVotes[idx].description,
+                              model.vote.subVotes[idx].selectDescription,
                               style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w700,
+                                letterSpacing: -2.0,
                               ),
+                              maxLines: 2,
+                            ),
+                            Text(
+                              "현재 ${model.vote.subVotes[idx].numVoted0 + model.vote.subVotes[idx].numVoted1}명이 이 주제를 예측하였습니다",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'DmSans',
+                                color: Color(0xFF1EC8CF),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: -5,
+                              direction: Axis.horizontal,
+                              children: buildChip(hexToColor, model, idx),
+                              // Container(
+                              //   alignment: Alignment.center,
+                              //   padding: EdgeInsets.fromLTRB(10, 6, 10, 6),
+                              //   decoration: BoxDecoration(
+                              //     color: hexToColor(
+                              //       model.vote.subVotes[idx].colorCode[0],
+                              //     ),
+                              //     borderRadius: BorderRadius.circular(50),
+                              //   ),
+                              //   child: Text(
+                              //     "시총 0.9조",
+                              //     style: TextStyle(
+                              //       fontSize: 16,
+                              //       fontFamily: 'DmSans',
+                              //       fontWeight: FontWeight.w700,
+                              //     ),
+                              //   ),
+                              // ),
                             )
                           ],
                         ),
@@ -473,6 +511,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 },
                 child: Container(
                   height: 100,
+
                   alignment: Alignment.center,
                   padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
                   decoration: BoxDecoration(
@@ -677,6 +716,40 @@ class _VoteSelectViewState extends State<VoteSelectView> {
         ),
       );
     }
+  }
+
+  List<Widget> buildChip(
+      Color hexToColor(String code), VoteSelectViewModel model, int idx) {
+    List<Widget> _widgets = [];
+    int tagLength = model.vote.subVotes[idx].tag0.length;
+    print("TAGIS" + tagLength.toString());
+    for (int i = 0; i < tagLength; i++) {
+      _widgets.add(Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: Chip(
+          padding: EdgeInsets.symmetric(
+            horizontal: 3.0,
+            vertical: 0,
+          ),
+          // labelPadding: EdgeInsets.symmetric(
+          //   horizontal: 5.0,
+          //   vertical: 0,
+          // ),
+          label: Text(
+            model.vote.subVotes[idx].tag0[i],
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: 'DmSans',
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          backgroundColor: hexToColor(
+            model.vote.subVotes[idx].colorCode[0],
+          ),
+        ),
+      ));
+    }
+    return _widgets;
   }
 
   // Scaffold buildScaffold(
