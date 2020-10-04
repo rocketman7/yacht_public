@@ -22,6 +22,15 @@ class PortfolioViewModel extends FutureViewModel {
   List<double> startPercentage = []; // 실제 subPortfolio갯수보다 하나 많아야.
   List<double> initialValueRatio = [];
   List<double> valueIncreaseRatio = [];
+  double maxValueIncreaseRatio = 0;
+  double minValueIncreaseRatio = 0;
+  double maxOfMaxMin = 0;
+
+  int totalInitialValue = 0;
+
+  int maxItemsNameLength = 7;
+  List<int> orderDrawingItem = [];
+  List<bool> drawingMaxLength = [];
 
   PortfolioViewModel() {
     uid = _authService.auth.currentUser.uid;
@@ -34,8 +43,6 @@ class PortfolioViewModel extends FutureViewModel {
     portfolioModel = await _databaseService.getPortfolio(addressModel);
 
     // 초기비중만큼 호를 나눠주기 위해 값 계산
-    int totalInitialValue = 0;
-
     for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
       totalInitialValue += portfolioModel.subPortfolio[i].sharesNum *
           portfolioModel.subPortfolio[i].initialPrice;
@@ -48,10 +55,32 @@ class PortfolioViewModel extends FutureViewModel {
           100.0);
     }
 
-    // 얼마나 올랐는지(내렸는지) 보기 위한 값 계산
+    // 얼마나 올랐는지(내렸는지) 보기 위한 값 계산. 최종적으로 1~3값으로 치환되어야함
     for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
       valueIncreaseRatio.add(portfolioModel.subPortfolio[i].currentPrice /
           portfolioModel.subPortfolio[i].initialPrice);
+
+      valueIncreaseRatio[i] -= 1.0;
+    }
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      if (valueIncreaseRatio[i] > maxValueIncreaseRatio)
+        maxValueIncreaseRatio = valueIncreaseRatio[i];
+
+      if (valueIncreaseRatio[i] < minValueIncreaseRatio)
+        minValueIncreaseRatio = valueIncreaseRatio[i];
+    }
+
+    maxValueIncreaseRatio.abs() > minValueIncreaseRatio.abs()
+        ? maxOfMaxMin = maxValueIncreaseRatio
+        : maxOfMaxMin = minValueIncreaseRatio;
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      if (maxOfMaxMin >= 0) {
+        valueIncreaseRatio[i] = 2 + valueIncreaseRatio[i] / maxOfMaxMin;
+      } else {
+        valueIncreaseRatio[i] = 2 - valueIncreaseRatio[i] / maxOfMaxMin;
+      }
     }
 
     // Arc의 시작점을 설정해주고, 나머지도 초기비중에 맞게 호의 길이만큼 설정해주는 작업
@@ -61,10 +90,34 @@ class PortfolioViewModel extends FutureViewModel {
 
     for (int i = 1; i < portfolioModel.subPortfolio.length; i++) {
       startPercentage.add(startPercentage[i - 1] + initialValueRatio[i - 1]);
-      print('${startPercentage[i]}');
     }
 
     startPercentage.add(startPercentage[0]);
+
+    // 글자수에 맞게 아이템을 그릴 순서를 정렬해주자.
+    List<int> orderDrawingItemTemp = [];
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      if (portfolioModel.subPortfolio[i].stockName.length >
+          maxItemsNameLength + 1) {
+        orderDrawingItemTemp.add(i + portfolioModel.subPortfolio.length);
+      } else {
+        orderDrawingItemTemp.add(i);
+      }
+    }
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      if (orderDrawingItemTemp[i] < portfolioModel.subPortfolio.length) {
+        orderDrawingItem.add(i);
+        drawingMaxLength.add(false);
+      }
+    }
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      if (orderDrawingItemTemp[i] >= portfolioModel.subPortfolio.length) {
+        orderDrawingItem.add(i);
+        drawingMaxLength.add(true);
+      }
+    }
 
     notifyListeners();
   }
@@ -104,6 +157,17 @@ class PortfolioViewModel extends FutureViewModel {
     var f = NumberFormat("#,###", "en_US");
 
     return f.format(totalValue);
+  }
+
+  // 포트폴리오 구성종목의 초기비중을 리턴 (반올림해서 String으로)
+  String getInitialRatio(int i) {
+    double ratio = (portfolioModel.subPortfolio[i].initialPrice *
+            portfolioModel.subPortfolio[i].sharesNum) /
+        totalInitialValue.toDouble();
+
+    var f = NumberFormat("##", "en_US");
+
+    return f.format(ratio * 100) + '%';
   }
 
   @override
