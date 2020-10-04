@@ -24,9 +24,16 @@ class MypageMainView extends StatelessWidget {
                     child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                   )
                 : model.isBusy
-                    ? FlareActor(
-                        'assets/images/Loading.flr',
-                        animation: 'loading',
+                    ? Center(
+                        child: Container(
+                          height: 100,
+                          width: deviceWidth,
+                          child: FlareActor(
+                            'assets/images/Loading.flr',
+                            animation: 'loading',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
                       )
                     : SafeArea(
                         child: Padding(

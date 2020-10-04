@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
 
+import 'constants/size.dart';
 import '../models/rank_model.dart';
 import '../view_models/rank_view_model.dart';
 import '../views/widgets/avatar_widget.dart';
@@ -19,9 +20,16 @@ class RankView extends StatelessWidget {
                       child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                     )
                   : model.isBusy
-                      ? FlareActor(
-                          'assets/images/Loading.flr',
-                          animation: 'loading',
+                      ? Center(
+                          child: Container(
+                            height: 100,
+                            width: deviceWidth,
+                            child: FlareActor(
+                              'assets/images/Loading.flr',
+                              animation: 'loading',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         )
                       : SafeArea(
                           child: Padding(
