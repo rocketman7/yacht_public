@@ -236,7 +236,9 @@ class _VoteSelectViewState extends State<VoteSelectView> {
             ),
           );
         } else {
-          Duration diff = getTimeLeft(model);
+          Duration diff = getTimeLeft(model).inSeconds < 0
+              ? Duration(hours: 0, minutes: 0, seconds: 0)
+              : getTimeLeft(model);
           String strDurationHM =
               "${diff.inHours.toString().padLeft(2, '0')}:${diff.inMinutes.remainder(60).toString().padLeft(2, '0')}:";
           String strDurationSec =
@@ -286,7 +288,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 ]),
                           ),
                           Text(
-                            "예측마감까지 남은시간",
+                            "예측마감까지 남은 시간",
                             style: TextStyle(
                               // fontFamily: 'Akrhip',
                               fontSize: 14,
@@ -422,13 +424,15 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                   alignment: Alignment.center,
                   padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
                   decoration: BoxDecoration(
-                    color: hexToColor(
-                      model.vote.subVotes[idx].colorCode[0],
-                    ),
+                    color: selected[idx]
+                        ? hexToColor(
+                            model.vote.subVotes[idx].colorCode[0],
+                          )
+                        : Colors.white,
                     borderRadius: BorderRadius.circular(50),
                     border: Border.all(
                       width: 4.0,
-                      color: Color(0xFF000000),
+                      color: selected[idx] ? Colors.black : Color(0xFFC1C1C1),
                     ),
                     // borderRadius: BorderRadius.all(
                     //     Radius.circular(30)),
@@ -441,7 +445,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                     model.vote.subVotes[idx].title,
                     style: TextStyle(
                       // textBaseline: TextBaseline.alphabetic,
-                      color: Colors.black,
+                      color: selected[idx] ? Colors.black : Color(0xFFC1C1C1),
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
                     ),
@@ -506,13 +510,17 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               alignment: Alignment.center,
                               padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
                               decoration: BoxDecoration(
-                                color: hexToColor(
-                                  model.vote.subVotes[idx].colorCode[0],
-                                ),
+                                color: selected[idx]
+                                    ? hexToColor(
+                                        model.vote.subVotes[idx].colorCode[0],
+                                      )
+                                    : Colors.white,
                                 borderRadius: BorderRadius.circular(50),
                                 border: Border.all(
                                   width: 4.0,
-                                  color: Color(0xFF000000),
+                                  color: selected[idx]
+                                      ? Colors.black
+                                      : Color(0xFFC1C1C1),
                                 ),
                                 // borderRadius: BorderRadius.all(
                                 //     Radius.circular(30)),
@@ -525,11 +533,13 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                       style: TextStyle(
                                         fontSize: model.vote.subVotes[idx]
                                                     .voteChoices[0].length >
-                                                4
+                                                5
                                             ? 22
                                             : 24,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: selected[idx]
+                                            ? Colors.black
+                                            : Color(0xFFC1C1C1),
                                       )),
                             ),
                           ),
@@ -542,12 +552,16 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               alignment: Alignment.center,
                               padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
                               decoration: BoxDecoration(
-                                color: hexToColor(
-                                  model.vote.subVotes[idx].colorCode[1],
-                                ),
+                                color: selected[idx]
+                                    ? hexToColor(
+                                        model.vote.subVotes[idx].colorCode[1],
+                                      )
+                                    : Colors.white,
                                 border: Border.all(
                                   width: 4.0,
-                                  color: Color(0xFF000000),
+                                  color: selected[idx]
+                                      ? Colors.black
+                                      : Color(0xFFC1C1C1),
                                 ),
                                 // borderRadius: BorderRadius.all(
                                 //     Radius.circular(30)),
@@ -564,7 +578,9 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                             ? 22
                                             : 24,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xFF000000),
+                                        color: selected[idx]
+                                            ? Colors.black
+                                            : Color(0xFFC1C1C1),
                                       )),
                             ),
                           ),
@@ -575,18 +591,24 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.black,
-                              width: 4.0,
-                            ),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(
-                              40,
-                            )),
+                          border: Border.all(
+                            color: selected[idx]
+                                ? Colors.black
+                                : Color(0xFFC1C1C1),
+                            width: 4.0,
+                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(
+                            40,
+                          ),
+                        ),
                         child: Text("vs",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
+                              color: selected[idx]
+                                  ? Colors.black
+                                  : Color(0xFFC1C1C1),
                             )),
                       )
                     ],

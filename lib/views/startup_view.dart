@@ -14,6 +14,7 @@ import 'package:yachtOne/views/widgets/navigation_bars_widget.dart';
 import '../locator.dart';
 import '../view_models/startup_view_model.dart';
 import '../views/loading_view.dart';
+import 'intro_view.dart';
 
 class StartUpView extends StatefulWidget {
   final int startIdx;
@@ -108,10 +109,10 @@ class _StartUpViewState extends State<StartUpView>
         // print(widget.startIdx);
 
         // print(_selectedIndex);
-        return Scaffold(
-          body: model.isBusy
-              ? LoadingView()
-              : TabBarView(
+        return model.isBusy
+            ? IntroView()
+            : Scaffold(
+                body: TabBarView(
                   // key:
                   physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
@@ -119,69 +120,69 @@ class _StartUpViewState extends State<StartUpView>
                   // dragStartBehavior: DragStartBehavior.down,
                 ),
 
-          // _viewList[_selectedIndex],
-          bottomNavigationBar: SizedBox(
-            // height: 70,
-            child: BottomNavigationBar(
-              key: navBarGlobalKey,
-              type: BottomNavigationBarType.fixed,
-              onTap: (index) => {
-                print(index),
+                // _viewList[_selectedIndex],
+                bottomNavigationBar: SizedBox(
+                  // height: 70,
+                  child: BottomNavigationBar(
+                    key: navBarGlobalKey,
+                    type: BottomNavigationBarType.fixed,
+                    onTap: (index) => {
+                      print(index),
 
-                setState(() {
-                  _selectedIndex = index;
-                  _tabController.index = index;
-                  // _viewList.insert(index, _viewList[index]);
-                  // _viewList.removeAt(index);
-                  print(_viewList.toString());
-                }),
-                // _navigationService.navigateTo(_viewList[index]),
-              },
-              currentIndex: _selectedIndex ?? 0,
-              selectedItemColor: Color(0xFF1EC8CF),
-              unselectedItemColor: Color(0xFFAAAAAA),
-              selectedFontSize: 0,
-              unselectedFontSize: 0,
-              items: [
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/home.svg',
-                      color: Color(0xFFAAAAAA)),
-                  activeIcon: SvgPicture.asset('assets/icons/home.svg',
-                      color: Color(0xFF1EC8CF)),
-                  label: '',
+                      setState(() {
+                        _selectedIndex = index;
+                        _tabController.index = index;
+                        // _viewList.insert(index, _viewList[index]);
+                        // _viewList.removeAt(index);
+                        print(_viewList.toString());
+                      }),
+                      // _navigationService.navigateTo(_viewList[index]),
+                    },
+                    currentIndex: _selectedIndex ?? 0,
+                    selectedItemColor: Color(0xFF1EC8CF),
+                    unselectedItemColor: Color(0xFFAAAAAA),
+                    selectedFontSize: 0,
+                    unselectedFontSize: 0,
+                    items: [
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/icons/home.svg',
+                            color: Color(0xFFAAAAAA)),
+                        activeIcon: SvgPicture.asset('assets/icons/home.svg',
+                            color: Color(0xFF1EC8CF)),
+                        label: '',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/icons/vote.svg',
+                            color: Color(0xFFAAAAAA)),
+                        activeIcon: SvgPicture.asset('assets/icons/vote.svg',
+                            color: Color(0xFF1EC8CF)),
+                        label: '',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/icons/comment.svg',
+                            color: Color(0xFFAAAAAA)),
+                        activeIcon: SvgPicture.asset('assets/icons/comment.svg',
+                            color: Color(0xFF1EC8CF)),
+                        label: '',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/icons/rank.svg',
+                            color: Color(0xFFAAAAAA)),
+                        activeIcon: SvgPicture.asset('assets/icons/rank.svg',
+                            color: Color(0xFF1EC8CF)),
+                        label: '',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset('assets/icons/mypage.svg',
+                            color: Color(0xFFAAAAAA)),
+                        activeIcon: SvgPicture.asset('assets/icons/mypage.svg',
+                            color: Color(0xFF1EC8CF)),
+                        label: '',
+                      ),
+                    ],
+                  ),
                 ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/vote.svg',
-                      color: Color(0xFFAAAAAA)),
-                  activeIcon: SvgPicture.asset('assets/icons/vote.svg',
-                      color: Color(0xFF1EC8CF)),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/comment.svg',
-                      color: Color(0xFFAAAAAA)),
-                  activeIcon: SvgPicture.asset('assets/icons/comment.svg',
-                      color: Color(0xFF1EC8CF)),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/rank.svg',
-                      color: Color(0xFFAAAAAA)),
-                  activeIcon: SvgPicture.asset('assets/icons/rank.svg',
-                      color: Color(0xFF1EC8CF)),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset('assets/icons/mypage.svg',
-                      color: Color(0xFFAAAAAA)),
-                  activeIcon: SvgPicture.asset('assets/icons/mypage.svg',
-                      color: Color(0xFF1EC8CF)),
-                  label: '',
-                ),
-              ],
-            ),
-          ),
-        );
+              );
         // model.stream;
       },
     );

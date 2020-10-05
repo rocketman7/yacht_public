@@ -14,13 +14,15 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 });
 
 // 1) 사용자들 투표 채점, 2) 사용자 콤보 넣고 빼주고, 3) 랭킹 컬렉션에 순서대로 순위 넣어주고
-
 exports.scoreVote = functions.https.onRequest(async (req, res) => {
   const db = admin.firestore();
   // votes -> docu id: date -> voteResult array
   const votes = db.collection("votes");
   const users = db.collection("users");
-  const today = "20200901";
+  const today = "20201005";
+
+  var now = new Date();
+  var strDate = now.toISOString().slice(0, 10).replace(/-/g, "");
 
   // today의 실제 결과 가져오기 (이전에 넣어야함)
   let todayResult = [];

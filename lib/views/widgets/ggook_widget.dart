@@ -131,7 +131,8 @@ Widget ggookButton(
         userVote.voteSelected = tempList;
         print("after 1vote" + userVote.voteSelected.toString());
         model.addUserVoteDB(address, userVote);
-        model.counterUserVote(address, userVote.voteSelected);
+
+        // model.counterUserVote(address, userVote.voteSelected);
 
         _navigationService.navigateWithArgTo('ggook', [
           address,
@@ -153,6 +154,7 @@ Widget ggookButton(
         userVote.isVoted = true;
         print(tempList);
         model.addUserVoteDB(address, userVote);
+        // 마지막 선택에서만 counter 콜해야됨
         model.counterUserVote(address, userVote.voteSelected);
         _navigationService.navigateWithArgTo('startup', 2);
       }

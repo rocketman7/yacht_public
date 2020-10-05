@@ -131,7 +131,7 @@ class _HomeViewState extends State<HomeView> {
                                         Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: 3,
-                                            horizontal: 8,
+                                            horizontal: 12,
                                           ),
                                           decoration: BoxDecoration(
                                               color: Colors.black,
@@ -140,7 +140,7 @@ class _HomeViewState extends State<HomeView> {
                                                 30,
                                               )),
                                           child: Text(
-                                            "SEASON 1",
+                                            model.seasonInfo.seasonName,
                                             style: TextStyle(
                                               color: Colors.white,
                                             ),
@@ -210,7 +210,7 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                     ),
                                     Text(
-                                      model.user.item.toString(),
+                                      "7",
                                       style: TextStyle(
                                         fontSize: 20,
                                         letterSpacing: -1.0,
@@ -443,12 +443,12 @@ class _HomeViewState extends State<HomeView> {
           Row(
             // #1
             children: <Widget>[
-              Expanded(
-                flex: model.vote.subVotes[idx].voteChoices[0].length,
+              Flexible(
+                flex: model.vote.subVotes[idx].voteChoices[0].length + 2,
                 child: Container(
                   height: 60,
                   alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 4.0,
@@ -463,7 +463,7 @@ class _HomeViewState extends State<HomeView> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: -1.0,
+                      letterSpacing: -2.0,
                       color: hexToColor(
                         model.vote.subVotes[idx].colorCode[0],
                       ),
@@ -496,12 +496,12 @@ class _HomeViewState extends State<HomeView> {
               SizedBox(
                 width: 6,
               ),
-              Expanded(
-                flex: model.vote.subVotes[idx].voteChoices[1].length,
+              Flexible(
+                flex: model.vote.subVotes[idx].voteChoices[1].length + 2,
                 child: Container(
                   height: 60,
                   alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 4.0,
@@ -517,7 +517,7 @@ class _HomeViewState extends State<HomeView> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: -1.0,
+                      letterSpacing: -2.0,
                       color: hexToColor(
                         model.vote.subVotes[idx].colorCode[1],
                       ),

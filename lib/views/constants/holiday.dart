@@ -1,6 +1,13 @@
 import 'package:intl/intl.dart';
 
 var stringDate = DateFormat("yyyyMMdd");
+DateTime strToDate(String strDate) {
+  return DateTime(
+    int.parse(strDate.substring(0, 4)),
+    int.parse(strDate.substring(4, 6)),
+    int.parse(strDate.substring(6)),
+  );
+}
 
 bool checkHoliday(DateTime dateTime) {
   String dateTimeStr = stringDate.format(dateTime);

@@ -81,9 +81,9 @@ class DateTimeModel {
         return yyyyMMdd(dateTime[0]);
       } else if (_timeNow.isAfter(dateTime[1])) {
         // 오늘 평일이고 다음날도 평일이면 다음날 반환
-        // 오늘 평일이고 다음날 주말이면 weekDay함수에 의해 다음 월요일 반환
+        // 오늘 평일이고 다음날 주말/휴일이면 nextBuinewssDay함수에 의해 다음 월요일 반환
         // 오늘 토요일이고 다음날 일요일이면 weekDay함수에 의해 다음 월요일 반환
-        return yyyyMMdd(weekDay(_timeNow.add(Duration(days: 1))));
+        return yyyyMMdd(nextBusinessDay(_timeNow.add(Duration(days: 1))));
       }
     }
     throw "DateTimeERROR";

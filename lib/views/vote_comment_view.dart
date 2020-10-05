@@ -230,7 +230,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
       height: 80,
       isDateDisabled: (dateTime) {
         // dateTime을 넣고 휴일 여부를 bool로
-        return dateTime.isAfter(nextBusinessDay(DateTime.now()));
+        return dateTime.isAfter(strToDate(model.address.date));
       },
       disabledDecoration: BoxDecoration(
           shape: BoxShape.rectangle,
@@ -264,7 +264,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
       },
       scrollController: _calendarController,
       minSelectedDateCount: 1,
-      initialSelectedDates: nextBusinessDay(DateTime.now()),
+      initialSelectedDates: strToDate(model.address.date),
       labelOrder: [LabelType.date, LabelType.weekday],
       dateTextStyle: TextStyle(
         fontSize: 20,

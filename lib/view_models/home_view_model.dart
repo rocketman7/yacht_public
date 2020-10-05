@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/season_model.dart';
 
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -24,6 +25,7 @@ class HomeViewModel extends FutureViewModel {
   // UserModel get user => _user;
   DatabaseAddressModel address;
   VoteModel vote;
+  SeasonModel seasonInfo;
 
   String uid;
   // String get uid => _uid;
@@ -47,6 +49,7 @@ class HomeViewModel extends FutureViewModel {
     address = await _databaseService.getAddress(uid);
     user = await _databaseService.getUser(uid);
     vote = await _databaseService.getVotes(address);
+    seasonInfo = await _databaseService.getSeasonInfo(address);
     print("LENGTH" + vote.subVotes[0].issueCode.length.toString());
     setBusy(false);
   }

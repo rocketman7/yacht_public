@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:yachtOne/models/vote_comment_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
 import 'package:yachtOne/view_models/subject_community_view_model.dart';
 import 'package:yachtOne/views/constants/size.dart';
-
 import 'widgets/avatar_widget.dart';
 
 class SubjectCommunityView extends StatefulWidget {
@@ -288,7 +288,12 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                 Row(
                   children: <Widget>[
                     Flexible(
-                      flex: numVoted0,
+                      flex: ((deviceWidth - 32) / 40) * numVoted1 - numVoted1 >
+                              numVoted0
+                          ? numVoted0
+                          : (((deviceWidth - 32) / 40) * numVoted1 - numVoted1)
+                                  .round() +
+                              1,
                       child: Stack(children: <Widget>[
                         Container(
                           // width: 150,
@@ -329,6 +334,8 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         // Container(
@@ -386,7 +393,12 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                       ]),
                     ),
                     Flexible(
-                      flex: numVoted1,
+                      flex: ((deviceWidth - 32) / 40) * numVoted0 - numVoted0 >
+                              numVoted1
+                          ? numVoted1
+                          : (((deviceWidth - 32) / 40) * numVoted0 - numVoted0)
+                                  .round() -
+                              1,
                       child: Stack(children: <Widget>[
                         Container(
                           // 종목2
@@ -428,6 +440,8 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         // Container(
@@ -488,8 +502,13 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                 // vs or 가운데 수익률 마크
                 Positioned(
                     // 기기width에서 padding 빼고 vote0이 차지하는 비중 곱한 뒤 vs위젯 width의 절반을 마이너스 offset
-                    left: (deviceWidth - 32) * vote0Percentage - 40,
-                    top: (deviceHeight * .17 / 2) - 20,
+                    left: vote0Percentage > vote1Percentage
+                        ? min(
+                            (deviceWidth - 32) * vote0Percentage - 40 - 2,
+                            deviceWidth - 32 - 80 - 4,
+                          )
+                        : max(2, (deviceWidth - 32) * vote0Percentage - 40 - 2),
+                    top: (132 / 2) - 20,
                     child: Container(
                       alignment: Alignment.center,
                       width: 80,
@@ -499,16 +518,27 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                           borderRadius: BorderRadius.circular(
                             40,
                           )),
-                      child: Text(
-                          " ${(formatReturnPct.format(price0.pricePctChange)).toString()}",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: price0.pricePctChange < 0
-                                ? Color(0xFF3485FF)
-                                : Color(0xFFFF3E3E),
-                            fontWeight: FontWeight.bold,
-                          )),
-                    )),
+                      child: price0.pricePctChange < 0
+                          ? Text(
+                              formatReturnPct
+                                  .format(price0.pricePctChange)
+                                  .toString(),
+                              style: TextStyle(
+                                color: Color(0xFF3485FF),
+                                fontSize: 20,
+                              ),
+                            )
+                          : Text(
+                              "+" +
+                                  formatReturnPct
+                                      .format(price0.pricePctChange)
+                                      .toString(),
+                              style: TextStyle(
+                                color: Color(0xFFFF3E3E),
+                                fontSize: 16,
+                              ),
+                            ),
+                    ))
               ]);
             }
           });
@@ -539,125 +569,86 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                         Row(
                           children: <Widget>[
                             Flexible(
-                              flex: numVoted0,
-                              child: Stack(children: <Widget>[
-                                Container(
-                                  // width: 150,
-                                  height: deviceHeight * .17,
-                                  decoration: BoxDecoration(
-                                    color: length == 1
-                                        ? Color(0xFFFF3E3E)
-                                        : hexToColor(
-                                            model.vote.subVotes[idx]
-                                                .colorCode[0],
-                                          ),
-                                    border: Border(
-                                      left: BorderSide(
-                                        //                   <--- left side
-                                        color: Colors.black,
-                                        width: 2.0,
+                              // 고급수학 applied
+                              flex: ((deviceWidth - 32) / 20) * numVoted1 -
+                                          numVoted1 >
+                                      numVoted0
+                                  ? numVoted0
+                                  : (((deviceWidth - 32) / 20) * numVoted1 -
+                                              numVoted1)
+                                          .round() +
+                                      1,
+                              child: Stack(
+                                children: <Widget>[
+                                  Container(
+                                    // width: 150,
+                                    height: 132,
+                                    decoration: BoxDecoration(
+                                      color: hexToColor(
+                                        model.vote.subVotes[idx].colorCode[0],
                                       ),
-                                      top: BorderSide(
-                                        //                    <--- top side
-                                        color: Colors.black,
-                                        width: 2.0,
-                                      ),
-                                      right: BorderSide(
-                                        //                    <--- top side
-                                        color: Colors.black,
-                                        width: 1.0,
-                                      ),
-                                      bottom: BorderSide(
-                                        //                    <--- top side
-                                        color: Colors.black,
-                                        width: 2.0,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(12, 12, 0, 0),
-                                  child: Text(
-                                    model.vote.subVotes[idx].voteChoices[0] +
-                                        " ${(formatVotePct.format(vote0Percentage)).toString()}",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Container(
-                                  // 종목 1
-                                  height: deviceHeight * .17,
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 0, 6, 9),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 6,
-                                          vertical: 3,
+                                      border: Border(
+                                        left: BorderSide(
+                                          //                   <--- left side
+                                          color: Colors.black,
+                                          width: 2.0,
                                         ),
-                                        decoration: BoxDecoration(
-                                            color: Color(
-                                                0xFFFCDE34), // 지고 있을 때 종목 컬러랑 같게하고 이기고 있을 때 색 변화주면 됨.
-                                            borderRadius: BorderRadius.circular(
-                                              30,
-                                            )),
-                                        child: Container(
-                                          padding: EdgeInsets.all(6),
-                                          decoration: BoxDecoration(
-                                              color: (price0.pricePctChange < 0)
-                                                  ? Color(0xFF3485FF)
-                                                  : Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                30,
-                                              )),
-                                          child: price0.pricePctChange < 0
-                                              ? Text(
-                                                  formatReturnPct
-                                                      .format(
-                                                          price0.pricePctChange)
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                  ),
-                                                )
-                                              : Text(
-                                                  "+" +
-                                                      formatReturnPct
-                                                          .format(price0
-                                                              .pricePctChange)
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
+                                        top: BorderSide(
+                                          //                    <--- top side
+                                          color: Colors.black,
+                                          width: 2.0,
+                                        ),
+                                        right: BorderSide(
+                                          //                    <--- top side
+                                          color: Colors.black,
+                                          width: 1.0,
+                                        ),
+                                        bottom: BorderSide(
+                                          //                    <--- top side
+                                          color: Colors.black,
+                                          width: 2.0,
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ]),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(12, 12, 0, 0),
+                                    child: Text(
+                                      model.vote.subVotes[idx].voteChoices[0] +
+                                          " ${(formatVotePct.format(vote0Percentage)).toString()}",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                      maxLines: model.vote.subVotes[idx]
+                                                  .voteChoices[0].length >
+                                              5
+                                          ? 2
+                                          : 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Flexible(
-                              flex: numVoted1,
+                              flex: ((deviceWidth - 32) / 20) * numVoted0 -
+                                          numVoted0 >
+                                      numVoted1
+                                  ? numVoted1
+                                  : (((deviceWidth - 32) / 20) * numVoted0 -
+                                              numVoted0)
+                                          .round() -
+                                      1,
                               child: Stack(children: <Widget>[
                                 Container(
                                   // 종목2
                                   // width: 150,
-                                  height: deviceHeight * .17,
+                                  height: 132,
                                   decoration: BoxDecoration(
-                                    color: length == 1
-                                        ? Color(0xFF3485FF)
-                                        : hexToColor(
-                                            model.vote.subVotes[idx]
-                                                .colorCode[1],
-                                          ),
+                                    color: hexToColor(
+                                      model.vote.subVotes[idx].colorCode[1],
+                                    ),
                                     border: Border(
                                       left: BorderSide(
                                         //                   <--- left side
@@ -691,61 +682,12 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Container(
-                                  height: deviceHeight * .17,
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(0, 0, 6, 9),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 6,
-                                          vertical: 3,
-                                        ),
-                                        decoration: BoxDecoration(
-                                            color: Color(
-                                                0xFFFFE609), // 지고 있을 때 종목 컬러랑 같게하고 이기고 있을 때 색 변화주면 됨.
-                                            borderRadius: BorderRadius.circular(
-                                              30,
-                                            )),
-                                        child: Container(
-                                          padding: EdgeInsets.all(6),
-                                          decoration: BoxDecoration(
-                                              color: (price1.pricePctChange < 0)
-                                                  ? Color(0xFF3485FF)
-                                                  : Colors.red,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                30,
-                                              )),
-                                          child: price1.pricePctChange < 0
-                                              ? Text(
-                                                  formatReturnPct
-                                                      .format(
-                                                          price1.pricePctChange)
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                  ),
-                                                )
-                                              : Text(
-                                                  "+" +
-                                                      formatReturnPct
-                                                          .format(price1
-                                                              .pricePctChange)
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                        ),
-                                      ),
-                                    ),
+                                    maxLines: model.vote.subVotes[idx]
+                                                .voteChoices[1].length >
+                                            5
+                                        ? 2
+                                        : 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ]),
@@ -753,19 +695,80 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                           ],
                         ),
                         // vs or 가운데 수익률 마크
-                        (length == 1)
-                            ? Positioned(
-                                // 기기width에서 padding 빼고 vote0이 차지하는 비중 곱한 뒤 vs위젯 width의 절반을 마이너스 offset
-                                left: (deviceWidth - 32) * vote0Percentage - 20,
-                                top: (deviceHeight * .17 / 2) - 20,
+                        Positioned(
+                            // 기기width에서 padding 빼고 vote0이 차지하는 비중 곱한 뒤 vs위젯 width의 절반을 마이너스 offset
+                            left: vote0Percentage > vote1Percentage
+                                ? min(
+                                    (deviceWidth - 32) * vote0Percentage -
+                                        20 -
+                                        2,
+                                    deviceWidth - 32 - 40 - 4,
+                                  )
+                                : max(
+                                    2,
+                                    (deviceWidth - 32) * vote0Percentage -
+                                        20 -
+                                        2),
+                            //  (deviceWidth - 32) * vote0Percentage -
+                            //             20 <
+                            //         0
+                            //     ? 2
+                            //     : (deviceWidth - 32) * vote0Percentage -
+                            //                 20 >
+                            //             deviceWidth - 32 - 40 - 2
+                            //         ? deviceWidth - 32 - 40 - 2
+                            //         : (deviceWidth - 32) * vote0Percentage -
+                            //             20 -
+                            //             2,
+                            top: (132 / 2) - 20,
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(
+                                    40,
+                                  )),
+                              child: Text("vs",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            )),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          child: Container(
+                            // 종목 1
+                            // height: 60,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(6, 0, 0, 6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                    color: price0.pricePctChange >
+                                            price1.pricePctChange
+                                        ? Color(0xFFFCDE34)
+                                        : hexToColor(
+                                            model.vote.subVotes[idx]
+                                                .colorCode[0],
+                                          ), // 지고 있을 때 종목 컬러랑 같게하고 이기고 있을 때 색 변화주면 됨.
+                                    borderRadius: BorderRadius.circular(
+                                      30,
+                                    )),
                                 child: Container(
-                                  alignment: Alignment.center,
-                                  width: 40,
-                                  height: 40,
+                                  padding: EdgeInsets.all(6),
                                   decoration: BoxDecoration(
-                                      color: Colors.black,
+                                      color: (price0.pricePctChange < 0)
+                                          ? Color(0xFF3485FF)
+                                          : Colors.red,
                                       borderRadius: BorderRadius.circular(
-                                        40,
+                                        30,
                                       )),
                                   child: price0.pricePctChange < 0
                                       ? Text(
@@ -773,8 +776,8 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                               .format(price0.pricePctChange)
                                               .toString(),
                                           style: TextStyle(
-                                            color: Color(0xFF3485FF),
-                                            fontSize: 20,
+                                            color: Colors.white,
+                                            fontSize: 16,
                                           ),
                                         )
                                       : Text(
@@ -783,31 +786,71 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                   .format(price0.pricePctChange)
                                                   .toString(),
                                           style: TextStyle(
-                                            color: Color(0xFFFF3E3E),
-                                            fontSize: 20,
+                                            color: Colors.white,
+                                            fontSize: 16,
                                           ),
                                         ),
-                                ))
-                            : Positioned(
-                                // 기기width에서 padding 빼고 vote0이 차지하는 비중 곱한 뒤 vs위젯 width의 절반을 마이너스 offset
-                                left: (deviceWidth - 32) * vote0Percentage - 20,
-                                top: (deviceHeight * .17 / 2) - 20,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: Container(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 6, 6),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                    color: price0.pricePctChange <
+                                            price1.pricePctChange
+                                        ? Color(0xFFFCDE34)
+                                        : hexToColor(
+                                            model.vote.subVotes[idx]
+                                                .colorCode[1],
+                                          ), // 지고 있을 때 종목 컬러랑 같게하고 이기고 있을 때 색 변화주면 됨.
+                                    borderRadius: BorderRadius.circular(
+                                      30,
+                                    )),
                                 child: Container(
-                                  alignment: Alignment.center,
-                                  width: 40,
-                                  height: 40,
+                                  padding: EdgeInsets.all(6),
                                   decoration: BoxDecoration(
-                                      color: Colors.black,
+                                      color: (price1.pricePctChange < 0)
+                                          ? Color(0xFF3485FF)
+                                          : Colors.red,
                                       borderRadius: BorderRadius.circular(
-                                        40,
+                                        30,
                                       )),
-                                  child: Text("vs",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                )),
+                                  child: price1.pricePctChange < 0
+                                      ? Text(
+                                          formatReturnPct
+                                              .format(price1.pricePctChange)
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        )
+                                      : Text(
+                                          "+" +
+                                              formatReturnPct
+                                                  .format(price1.pricePctChange)
+                                                  .toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ]);
                     }
                   });
@@ -850,6 +893,9 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     SubjectCommunityViewModel model,
     VoteCommentModel voteComment,
   ) {
+    Duration timeElapsed =
+        DateTime.now().difference(voteComment.postDateTime.toDate());
+
     return Column(
       children: <Widget>[
         Divider(
@@ -876,6 +922,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(voteComment.userName,
                           style: TextStyle(
@@ -884,13 +931,16 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                           )),
                       Text(
                           voteComment.postDateTime == null
-                              ? 'null'
-                              : DateTime.now()
-                                      .difference(
-                                          voteComment.postDateTime.toDate())
-                                      .inMinutes
-                                      .toString() +
-                                  ' 분 전',
+                              ? ' '
+                              : (timeElapsed.inMinutes < 1)
+                                  ? "방금 전"
+                                  : (timeElapsed.inMinutes < 60)
+                                      ? timeElapsed.inMinutes.toString() + "분 전"
+                                      : (timeElapsed.inHours < 24)
+                                          ? timeElapsed.inHours.toString() +
+                                              "시간 전"
+                                          : timeElapsed.inDays.toString() +
+                                              "일 전",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,

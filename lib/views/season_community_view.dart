@@ -827,6 +827,9 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
     SeasonCommunityViewModel model,
     VoteCommentModel voteComment,
   ) {
+    Duration timeElapsed =
+        DateTime.now().difference(voteComment.postDateTime.toDate());
+
     return Column(
       children: <Widget>[
         Divider(
@@ -853,6 +856,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(voteComment.userName,
                           style: TextStyle(
@@ -861,13 +865,16 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                           )),
                       Text(
                           voteComment.postDateTime == null
-                              ? 'null'
-                              : DateTime.now()
-                                      .difference(
-                                          voteComment.postDateTime.toDate())
-                                      .inMinutes
-                                      .toString() +
-                                  ' 분 전',
+                              ? ' '
+                              : (timeElapsed.inMinutes < 1)
+                                  ? "방금 전"
+                                  : (timeElapsed.inMinutes < 60)
+                                      ? timeElapsed.inMinutes.toString() + "분 전"
+                                      : (timeElapsed.inHours < 24)
+                                          ? timeElapsed.inHours.toString() +
+                                              "시간 전"
+                                          : timeElapsed.inDays.toString() +
+                                              "일 전",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
