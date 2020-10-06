@@ -39,6 +39,7 @@ class VoteSelectViewModel extends FutureViewModel {
     // _authService.signOut();
 
     uid = _authService.auth.currentUser.uid;
+
     _now = getNow();
     // getUser();
   }

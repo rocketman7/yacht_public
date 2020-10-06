@@ -9,10 +9,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:stacked/stacked.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/temp_address_constant.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
+import 'package:yachtOne/services/dialog_service.dart';
 import 'package:yachtOne/views/temp_not_voting_view.dart';
 
 import '../locator.dart';
@@ -75,7 +77,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   bool isVoteAvailable;
 
   List<bool> selected = List<bool>.filled(5, false, growable: true);
-
+  int numSelected = 0;
+  bool canSelect = true;
   //애니메이션은 천천히 생각해보자.
 
   // voteData를 가져와 voteTodayCard에 넣어 위젯 리스트를 만드는 함수
@@ -122,12 +125,69 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     }
   }
 
+  FToast fToast;
+
+  _showToast(String message) {
+    Widget toast = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25.0),
+        color: Colors.greenAccent,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 25,
+            height: 25,
+            padding: EdgeInsets.all(4),
+            // decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.all(
+            //         Radius.circular(100.0)),
+            //     color: Color(0xFF1EC8CF),
+            //     border: Border.all(
+            //         color: Colors.white,
+            //         width: 2)),
+            child: SvgPicture.asset(
+              'assets/icons/dog_foot.svg',
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            width: 12.0,
+          ),
+          Text(message),
+        ],
+      ),
+    );
+
+    fToast.showToast(
+      child: toast,
+      gravity: ToastGravity.TOP,
+      toastDuration: Duration(seconds: 2),
+    );
+
+    // Custom Toast Position
+    // fToast.showToast(
+    //     child: toast,
+    //     toastDuration: Duration(seconds: 2),
+    //     positionedToastBuilder: (context, child) {
+    //       return Positioned(
+    //         child: child,
+    //         top: 16.0,
+    //         left: 16.0,
+    //       );
+    // });
+  }
+
   // 위젯 생성 함수와 PageController의 리스터를 이니셜라이징
   // controller의 offset 수치를 listen하여 수식을 통해 value를 계산하고
   // setState로 반영하여 계속 리빌드 시킨다
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
     print("initState Called");
 
     // _getAllModel = _viewModel.getAllModel(_viewModel.uid);
@@ -210,9 +270,12 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
   @override
   Widget build(BuildContext context) {
-    print("buildCalled");
-    Size size = MediaQuery.of(context).size;
-    double displayRatio = size.height / size.width;
+    // print("buildCalled");
+
+    // print(numSelected);
+    numSelected = selected.where((item) => item == true).length;
+
+    // print(numSelected);
     return ViewModelBuilder<VoteSelectViewModel>.reactive(
       viewModelBuilder: () => VoteSelectViewModel(),
       initialiseSpecialViewModelsOnce: true,
@@ -247,64 +310,139 @@ class _VoteSelectViewState extends State<VoteSelectView> {
             key: scaffoldKey,
             body: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
+                padding: const EdgeInsets.fromLTRB(
+                  16,
+                  16,
+                  16,
+                  16,
                 ),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      // color: Colors.green[50],
-                      width: double.infinity,
-                      // height: deviceHeight * .12,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          RichText(
-                            text: TextSpan(
-                                text: strDurationHM.toString(),
-                                style: TextStyle(
-                                  fontFamily: 'Akrhip',
-                                  color: diff.inHours < 1
-                                      ? Colors.red
-                                      : Colors.black,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: -2,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: strDurationSec.toString(),
-                                      style: TextStyle(
-                                        fontFamily: 'Akrhip',
-                                        color: diff.inHours < 1
-                                            ? Colors.red
-                                            : Color(0xFFC1C1C1),
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.w800,
-                                        letterSpacing: -2,
-                                      ))
-                                ]),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          // padding: EdgeInsets.only(bottom: 40),
+                          // color: Colors.green[50],
+                          width: double.infinity,
+                          // height: deviceHeight * .12,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              RichText(
+                                text: TextSpan(
+                                    text: strDurationHM.toString(),
+                                    style: TextStyle(
+                                      fontFamily: 'Akrhip',
+                                      color: diff.inHours < 1
+                                          ? Colors.red
+                                          : Colors.black,
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w800,
+                                      letterSpacing: -2,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: strDurationSec.toString(),
+                                          style: TextStyle(
+                                            fontFamily: 'Akrhip',
+                                            color: diff.inHours < 1
+                                                ? Colors.red
+                                                : Color(0xFFC1C1C1),
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.w800,
+                                            letterSpacing: -2,
+                                          ))
+                                    ]),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "예측마감까지 남은 시간",
+                                    style: TextStyle(
+                                      // fontFamily: 'Akrhip',
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: -1,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 25,
+                                        height: 25,
+                                        padding: EdgeInsets.all(4),
+                                        // decoration: BoxDecoration(
+                                        //     borderRadius: BorderRadius.all(
+                                        //         Radius.circular(100.0)),
+                                        //     color: Color(0xFF1EC8CF),
+                                        //     border: Border.all(
+                                        //         color: Colors.white,
+                                        //         width: 2)),
+                                        child: SvgPicture.asset(
+                                          'assets/icons/dog_foot.svg',
+                                          color: Color(0xFF1EC8CF),
+                                        ),
+                                      ),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        (model.user.item - numSelected)
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          letterSpacing: -1.0,
+                                          fontFamily: 'DmSans',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
-                          Text(
-                            "예측마감까지 남은 시간",
-                            style: TextStyle(
-                              // fontFamily: 'Akrhip',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: -1,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 26,
-                    ),
-                    Expanded(
-                        child: Container(
-                      // color: Colors.black,
+                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.end,
+                        //   children: [
+                        //     Text(
+                        //       "승점 ",
+                        //       style: TextStyle(
+                        //         fontSize: 16,
+                        //         letterSpacing: -1.0,
+                        //         fontFamily: 'DmSans',
+                        //         fontWeight: FontWeight.bold,
+                        //       ),
+                        //     ),
+                        //     Text(
+                        //       numSelected.toString(),
+                        //       style: TextStyle(
+                        //         fontSize: 16,
+                        //         letterSpacing: -1.0,
+                        //         fontFamily: 'DmSans',
+                        //         fontWeight: FontWeight.bold,
+                        //       ),
+                        //     ),
+                        //     Text(
+                        //       "점 도전",
+                        //       style: TextStyle(
+                        //         fontSize: 16,
+                        //         letterSpacing: -1.0,
+                        //         fontFamily: 'DmSans',
+                        //         fontWeight: FontWeight.bold,
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Expanded(
+                            child: Container(
+                          // color: Colors.black,
 // child: SingleChildScrollView(
 //                                 clipBehavior: Clip.antiAliasWithSaveLayer,
 //                                 physics: BouncingScrollPhysics(
@@ -312,73 +450,106 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 //                                     parent: AlwaysScrollableScrollPhysics()),
 //                                 // physics: (),
 //                                 child: Container(
-                      // height: 550,
-                      child: ListView.builder(
-                          // physics: NeverScrollableScrollPhysics(),
-                          itemCount: model.vote.voteCount,
-                          itemBuilder: (context, index) {
-                            return buildStack(
-                              model,
-                              index,
-                              context,
-                              scaffoldKey,
-                            );
-                          }),
-                    )),
-                    GestureDetector(
-                      onTap: ((selected.where((item) => item == true).length ==
-                                  0) ||
-                              (model.userVote == null
-                                  ? false
-                                  : model.userVote.isVoted == true))
-                          ? () {}
-                          : () {
-                              for (int i = 0; i < selected.length; i++) {
-                                selected[i] == true ? listSelected.add(i) : 0;
-                              }
+                          // height: 550,
+                          child: ListView.builder(
+                              // physics: NeverScrollableScrollPhysics(),
+                              itemCount: model.vote.voteCount,
+                              itemBuilder: (context, index) {
+                                return buildStack(
+                                  model,
+                                  index,
+                                  context,
+                                  numSelected,
+                                  scaffoldKey,
+                                );
+                              }),
+                        )),
+                      ],
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: ((numSelected == 0) ||
+                                (model.userVote == null
+                                    ? false
+                                    : model.userVote.isVoted == true))
+                            ? () {}
+                            : () {
+                                for (int i = 0; i < selected.length; i++) {
+                                  selected[i] == true ? listSelected.add(i) : 0;
+                                }
 
-                              _navigationService.navigateWithArgTo('ggook', [
-                                model.address,
-                                model.user,
-                                model.vote,
-                                listSelected,
-                                0,
-                              ]);
-                            },
+                                _navigationService.navigateWithArgTo('ggook', [
+                                  model.address,
+                                  model.user,
+                                  model.vote,
+                                  listSelected,
+                                  0,
+                                ]);
+                              },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 32,
+                          ),
+                          height: 56,
+                          decoration: BoxDecoration(
+                              color: Colors.black,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(.1),
+                                  offset: new Offset(0, 4.0),
+                                  blurRadius: 8.0,
+                                )
+                              ],
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                40,
+                              ))),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                "예측하러 가기",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFFFFFFFFF),
+                                ),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Color(0xFF666666),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 48,
                       child: Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: 32,
+                          horizontal: 8,
+                          vertical: 4,
                         ),
-                        height: 56,
                         decoration: BoxDecoration(
-                            color: Colors.black,
-                            boxShadow: [
-                              new BoxShadow(
-                                color: Colors.black.withOpacity(.1),
-                                offset: new Offset(0, 4.0),
-                                blurRadius: 8.0,
-                              )
-                            ],
-                            borderRadius: BorderRadius.all(Radius.circular(
-                              40,
-                            ))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "예측하러 가기",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800,
-                                color: Color(0xFFFFFFFFF),
-                              ),
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              color: Color(0xFF666666),
-                            ),
-                          ],
+                          color: numSelected == 0
+                              ? Color(0xFFFFDE34)
+                              : Color(0xFF1EC8CF),
                         ),
+                        child: Text(
+                            numSelected == 0
+                                ? "주제를 선택하여 승점에 도전해보세요!"
+                                : "선택한 주제 $numSelected개, 승점 $numSelected점에 도전해보세요!",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'DmSans',
+                              fontWeight: FontWeight.w500,
+                              color: numSelected == 0
+                                  ? Colors.black
+                                  : Colors.white,
+                            )),
                       ),
                     ),
                   ],
@@ -398,6 +569,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     VoteSelectViewModel model,
     int idx,
     BuildContext context,
+    int numSelected,
     scaffoldKey,
   ) {
     int numOfChoices = model.vote.subVotes[idx].issueCode.length;
@@ -407,7 +579,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
     if (numOfChoices == 1) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        padding: EdgeInsets.fromLTRB(
+            0, 4, 0, idx == model.vote.voteCount - 1 ? 76 : 4),
         child: Stack(
           alignment: Alignment.centerLeft,
           children: <Widget>[
@@ -476,8 +649,19 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 activeColor: Color(0xFF1EC8CF),
                 inactiveColor: Color(0xFF1EC8CF),
                 disabledColor: Colors.grey,
-                onChanged: (val) => this.setState(() {
-                  this.selected[idx] = !this.selected[idx];
+                onChanged: (newValue) => setState(() {
+                  if (model.user.item - numSelected == 0) {
+                    // 선택되면 안됨
+                    if (newValue) {
+                      selected[idx] = selected[idx];
+
+                      _showToast("보유 중인 아이템이 부족합니다.");
+                    } else {
+                      selected[idx] = newValue;
+                    }
+                  } else {
+                    selected[idx] = newValue;
+                  }
                 }),
               ),
             ),
@@ -486,7 +670,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
       );
     } else {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        padding: EdgeInsets.fromLTRB(
+            0, 4, 0, idx == model.vote.voteCount - 1 ? 76 : 4),
         child: Stack(
           alignment: Alignment.centerLeft,
           children: <Widget>[
@@ -643,8 +828,18 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                   activeColor: Color(0xFF1EC8CF),
                   inactiveColor: Color(0xFF1EC8CF),
                   disabledColor: Colors.grey,
-                  onChanged: (val) => this.setState(() {
-                    this.selected[idx] = !this.selected[idx];
+                  onChanged: (newValue) => setState(() {
+                    if (model.user.item - numSelected == 0) {
+                      // 선택되면 안됨
+                      if (newValue) {
+                        selected[idx] = selected[idx];
+                        _showToast("보유 중인 아이템이 부족합니다.");
+                      } else {
+                        selected[idx] = newValue;
+                      }
+                    } else {
+                      selected[idx] = newValue;
+                    }
                   }),
                 ),
               ),
@@ -904,6 +1099,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                       setState(() {
                         selected[idx] = false;
                       });
+                      Navigator.of(context).pop();
                     },
                     color: Color(0xFFE4E4E4),
                     shape: RoundedRectangleBorder(
@@ -925,7 +1121,14 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                     child: RaisedButton(
                       onPressed: () {
                         setState(() {
-                          selected[idx] = true;
+                          if (model.user.item - numSelected == 0) {
+                            // 선택되면 안됨
+
+                            _showToast("보유 중인 아이템이 부족합니다.");
+                          } else {
+                            selected[idx] = true;
+                            Navigator.of(context).pop();
+                          }
                         });
                       },
                       color: Color(0xFF1EC8CF),

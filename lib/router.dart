@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/phone_auth_view.dart';
 import 'package:yachtOne/views/season_community_view.dart';
 import 'package:yachtOne/views/subject_community_view.dart';
@@ -65,6 +66,9 @@ class Routers {
       case 'mypage_main':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: MypageMainView()));
+      case 'initial':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(child: InitialView()));
       case 'mypage_termsofuse':
         return MaterialPageRoute(builder: (context) => MypageTermofuse());
       case 'mypage_privacypolicy':

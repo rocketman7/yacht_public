@@ -89,7 +89,6 @@ class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
         : UserVoteModel(
             uid: _user.uid,
             voteDate: _address.date,
-            subVoteCount: _vote.voteCount,
             voteSelected: List<int>.generate(_vote.voteCount, (index) => 0),
             isVoted: false,
           );

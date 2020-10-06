@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/portfolio_model.dart';
 import 'package:yachtOne/models/season_model.dart';
+import 'package:yachtOne/models/user_vote_model.dart';
 
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -25,7 +28,9 @@ class HomeViewModel extends FutureViewModel {
   // UserModel get user => _user;
   DatabaseAddressModel address;
   VoteModel vote;
+  UserVoteModel userVote;
   SeasonModel seasonInfo;
+  PortfolioModel portfolioModel;
 
   String uid;
   // String get uid => _uid;
@@ -49,9 +54,24 @@ class HomeViewModel extends FutureViewModel {
     address = await _databaseService.getAddress(uid);
     user = await _databaseService.getUser(uid);
     vote = await _databaseService.getVotes(address);
+    userVote = await _databaseService.getUserVote(address);
     seasonInfo = await _databaseService.getSeasonInfo(address);
+    portfolioModel = await _databaseService.getPortfolio(address);
     print("LENGTH" + vote.subVotes[0].issueCode.length.toString());
     setBusy(false);
+  }
+
+  String getPortfolioValue() {
+    int totalValue = 0;
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      totalValue += portfolioModel.subPortfolio[i].sharesNum *
+          portfolioModel.subPortfolio[i].currentPrice;
+    }
+
+    var f = NumberFormat("#,###", "en_US");
+
+    return f.format(totalValue);
   }
 
   Future signOut() async {

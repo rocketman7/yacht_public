@@ -30,6 +30,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
   int idx;
   VoteModel vote;
   bool isliked = false;
+
   @override
   Widget build(BuildContext context) {
     vote = widget.subjectCommunityviewObject[0];
@@ -893,6 +894,11 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     SubjectCommunityViewModel model,
     VoteCommentModel voteComment,
   ) {
+    // String avatarImage = "avatar001";
+    // model.getAvatar(voteComment.uid);
+
+    // print(model.avatarImage);
+
     Duration timeElapsed =
         DateTime.now().difference(voteComment.postDateTime.toDate());
 
@@ -914,9 +920,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                   Container(
                       height: 40,
                       width: 40,
-                      child: avatarWidgetWithoutItem(
-                        model.user.avatarImage ?? "avatar001",
-                      )),
+                      child: avatarWidgetWithoutItem(model.user.avatarImage)),
                   SizedBox(
                     width: 8,
                   ),

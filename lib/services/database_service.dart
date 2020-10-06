@@ -7,6 +7,7 @@ import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/rank_model.dart';
 import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/models/user_post_model.dart';
+import 'package:yachtOne/models/user_vote_stats_model.dart';
 import '../models/sub_vote_model.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
@@ -165,12 +166,27 @@ class DatabaseService {
       var userVoteData =
           await address.userVoteSeasonCollection().doc(address.date).get();
 
+      var userVoteStatsData =
+          await address.userVoteSeasonStatsCollection().get();
       // List<int> tempList = List<int>.from(userVoteData.data['voteSelected']);
       // print(tempList.runtimeType);
       // userVoteData.data['voteSelected'] = tempList;
       // print(userVoteData.data['voteSelected'].runtimeType);
+      int temp = userVoteStatsData.data()['maxWinningPoint'];
 
-      return UserVoteModel.fromData(userVoteData.data());
+      UserVoteStatsModel tempStatModel = UserVoteStatsModel.fromData(
+        userVoteStatsData.data(),
+      );
+
+      print(userVoteData.data());
+      print(tempStatModel);
+
+      print("TEMP" + temp.toString());
+      return UserVoteModel.fromData(
+          userVoteData.data(),
+          UserVoteStatsModel.fromData(
+            userVoteStatsData.data(),
+          ));
     } catch (e) {
       print("ERROR_getUserVote");
       print(e.toString());
@@ -187,6 +203,11 @@ class DatabaseService {
       print(e.toString());
       return null;
     }
+  }
+
+  Future<String> getAvatar(uid) async {
+    var user = await usersCollectionReference.doc(uid).get();
+    return user.data()['avatarImage'];
   }
 
   // Read: Vote 정보 Vote Collection으로부터 읽기

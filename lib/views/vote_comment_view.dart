@@ -277,7 +277,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
           int.parse(model.seasonInfo.startDate.substring(0, 4)),
           int.parse(model.seasonInfo.startDate.substring(4, 6)),
           int.parse(model.seasonInfo.startDate.substring(6))),
-      lastDate: nextBusinessDay(DateTime.now()).add(Duration(days: 3)),
+      lastDate: strToDate(model.address.date).add(Duration(days: 3)),
       selectedDateTextStyle: TextStyle(
         fontSize: 20,
         color: Colors.white,

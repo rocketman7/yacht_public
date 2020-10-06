@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:yachtOne/views/initial_view.dart';
+import 'package:yachtOne/views/intro_view.dart';
 import 'managers/dialog_manager.dart';
 import 'router.dart';
 // import 'views/animation_test.dart';
@@ -31,16 +34,45 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: MaterialApp(
         // showPerformanceOverlay: true,
         // key: navBarGlobalKey,
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: Routers.generateRoute,
-        home: DialogManager(child: InitialView()),
+        home: InitialView(),
         theme: ThemeData(primaryColor: Colors.white),
       ),
     );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => new _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  startTime() async {
+    var _duration = Duration(seconds: 4);
+    return Timer(_duration, navigationPage);
+  }
+
+  NavigationService _navigationService = locator<NavigationService>();
+
+  void navigationPage() {
+    _navigationService.navigateTo('initial');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startTime();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IntroView();
   }
 }

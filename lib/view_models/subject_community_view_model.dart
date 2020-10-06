@@ -27,6 +27,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
   VoteModel vote;
   UserVoteModel userVote;
   DatabaseAddressModel newAddress;
+  String avatarImage;
 
   SubjectCommunityViewModel(this.date, this.idx) {
     uid = _authService.auth.currentUser.uid;
@@ -94,6 +95,10 @@ class SubjectCommunityViewModel extends FutureViewModel {
     }
   }
 
+  Future getAvatar(String uid) async {
+    avatarImage = await _databaseService.getAvatar(uid);
+  }
+
   Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
     return _databaseService.getSubVotePostList(address);
   }
@@ -102,6 +107,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
     DatabaseAddressModel address,
     String issueCode,
   ) {
+    print("Price Stream returns");
     return _databaseService.getRealtimeReturn(address, issueCode);
   }
 

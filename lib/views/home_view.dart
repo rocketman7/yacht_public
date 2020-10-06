@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
@@ -104,15 +105,15 @@ class _HomeViewState extends State<HomeView> {
                       return false;
                     },
                     child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
-                        child: Form(
-                          key: _formKey,
-                          child: SingleChildScrollView(
-                            // reverse: true,
+                      child: Form(
+                        key: _formKey,
+                        child: SingleChildScrollView(
+                          // reverse: true,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -170,28 +171,27 @@ class _HomeViewState extends State<HomeView> {
                                         letterSpacing: -1.0,
                                       ),
                                     ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text("5,000,000",
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: 'DmSans',
-                                              letterSpacing: -1.0,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        Text(
-                                          " 원 ",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            letterSpacing: -1.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Icon(
-                                          Icons.arrow_forward_ios,
-                                          size: 16,
-                                        )
-                                      ],
+                                    GestureDetector(
+                                      onTap: () {
+                                        _navigationService
+                                            .navigateTo('portfolio');
+                                      },
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text(
+                                              '${model.getPortfolioValue()} 원 ',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: 'DmSans',
+                                                letterSpacing: -1.0,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          Icon(
+                                            Icons.arrow_forward_ios,
+                                            size: 16,
+                                          )
+                                        ],
+                                      ),
                                     )
                                   ],
                                 ),
@@ -203,20 +203,41 @@ class _HomeViewState extends State<HomeView> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      "보유중인 꾸욱",
+                                      "보유 중인 아이템",
                                       style: TextStyle(
                                         fontSize: 20,
                                         letterSpacing: -1.0,
                                       ),
                                     ),
-                                    Text(
-                                      "7",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        letterSpacing: -1.0,
-                                        fontFamily: 'DmSans',
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 25,
+                                          height: 25,
+                                          padding: EdgeInsets.all(4),
+                                          // decoration: BoxDecoration(
+                                          //     borderRadius: BorderRadius.all(
+                                          //         Radius.circular(100.0)),
+                                          //     color: Color(0xFF1EC8CF),
+                                          //     border: Border.all(
+                                          //         color: Colors.white,
+                                          //         width: 2)),
+                                          child: SvgPicture.asset(
+                                            'assets/icons/dog_foot.svg',
+                                            color: Color(0xFF1EC8CF),
+                                          ),
+                                        ),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          model.user.item.toString(),
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            letterSpacing: -1.0,
+                                            fontFamily: 'DmSans',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     )
                                   ],
                                 ),
@@ -235,7 +256,9 @@ class _HomeViewState extends State<HomeView> {
                                       ),
                                     ),
                                     Text(
-                                      "11",
+                                      model.userVote.userVoteStats
+                                          .currentWinningPoint
+                                          .toString(),
                                       style: TextStyle(
                                         fontSize: 20,
                                         letterSpacing: -1.0,
@@ -408,7 +431,10 @@ class _HomeViewState extends State<HomeView> {
               Container(
                 height: 60,
                 alignment: Alignment.center,
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   border: Border.all(
                     width: 4.0,

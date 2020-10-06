@@ -3,6 +3,7 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
+import 'package:yachtOne/views/constants/holiday.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
@@ -49,6 +50,7 @@ class VoteCommentViewModel extends FutureViewModel {
     vote = await _databaseService.getVotes(address);
     userVote = await _databaseService.getUserVote(address);
     seasonInfo = await _databaseService.getSeasonInfo(address);
+
     setBusy(false);
   }
 
