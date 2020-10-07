@@ -14,18 +14,29 @@ bool checkHoliday(DateTime dateTime) {
   return holidayListKr.contains(dateTimeStr);
 }
 
-DateTime nextBusinessDay(DateTime dateTime) {
+DateTime closestBusinessDay(DateTime dateTime) {
   // holiday랑 주말 거르고 다음 영업일 return
   String dateTimeStr = stringDate.format(dateTime);
   if (dateTime.weekday == 6 ||
       dateTime.weekday == 7 ||
       holidayListKr.contains(dateTimeStr)) {
-    return nextBusinessDay(dateTime.add(Duration(days: 1)));
+    return closestBusinessDay(dateTime.add(Duration(days: 1)));
   } else {
     return dateTime;
+  } // return dateTime;
+}
+
+DateTime nextNthBusinessDay(DateTime dateTime, int n) {
+  // holiday랑 주말 거르고 다음 영업일 return
+  // if n = 3, i = 0
+  DateTime tempDate = dateTime;
+
+  for (int i = 0; i < n; i++) {
+    dateTime = closestBusinessDay(dateTime.add(Duration(days: 1)));
+    print(dateTime);
   }
 
-  // return dateTime;
+  return dateTime;
 }
 
 const List<String> holidayListKr = [

@@ -163,30 +163,48 @@ class DatabaseService {
   // Read: User의 Vote정보 가져오기
   Future getUserVote(DatabaseAddressModel address) async {
     try {
+      UserVoteStatsModel userVoteStats;
+      // userVoteData get
       var userVoteData =
           await address.userVoteSeasonCollection().doc(address.date).get();
 
+      // 오늘 예측참여 안 한 유저에게는 null model 넣어주기
+      UserVoteModel tempUserVote = UserVoteModel(
+        isVoted: false,
+        uid: address.uid,
+      );
+      if (userVoteData.data() == null) {
+        print("TEMP MODEL" + tempUserVote.isVoted.toString());
+        await address
+            .userVoteSeasonCollection()
+            .doc(address.date)
+            .set(tempUserVote.toJson());
+
+        // userVoteData =
+        //     await address.userVoteSeasonCollection().doc(address.date).get();
+      }
+
       var userVoteStatsData =
           await address.userVoteSeasonStatsCollection().get();
-      // List<int> tempList = List<int>.from(userVoteData.data['voteSelected']);
-      // print(tempList.runtimeType);
-      // userVoteData.data['voteSelected'] = tempList;
-      // print(userVoteData.data['voteSelected'].runtimeType);
-      int temp = userVoteStatsData.data()['maxWinningPoint'];
 
-      UserVoteStatsModel tempStatModel = UserVoteStatsModel.fromData(
-        userVoteStatsData.data(),
+      UserVoteStatsModel tempUserVoteStats = UserVoteStatsModel(
+        currentWinningPoint: 0,
       );
+      if (userVoteStatsData.data() == null) {
+        print("TEMP MODEL" + tempUserVoteStats.toString());
+
+        await address
+            .userVoteSeasonStatsCollection()
+            .set(tempUserVoteStats.toJson());
+        userVoteStats = tempUserVoteStats;
+      } else {
+        userVoteStats = UserVoteStatsModel.fromData(userVoteStatsData.data());
+      }
 
       print(userVoteData.data());
-      print(tempStatModel);
 
-      print("TEMP" + temp.toString());
       return UserVoteModel.fromData(
-          userVoteData.data(),
-          UserVoteStatsModel.fromData(
-            userVoteStatsData.data(),
-          ));
+          userVoteData.data() ?? tempUserVote.toJson(), userVoteStats);
     } catch (e) {
       print("ERROR_getUserVote");
       print(e.toString());
@@ -284,6 +302,50 @@ class DatabaseService {
     } catch (e) {}
   }
 
+  Future likeSubVoteComment(
+    DatabaseAddressModel address,
+    VoteCommentModel voteComment,
+    String uid,
+  ) async {
+    if (voteComment.likedBy.contains(uid)) {
+      print("True Called");
+      voteComment.likedBy.remove(uid);
+      await address
+          .postsSubVoteCollection()
+          .doc(voteComment.postUid)
+          .update({"likedBy": voteComment.likedBy});
+    } else {
+      print("false Called");
+      voteComment.likedBy.add(uid);
+      print(voteComment.likedBy);
+      await address
+          .postsSubVoteCollection()
+          .doc(voteComment.postUid)
+          .update({"likedBy": voteComment.likedBy});
+    }
+  }
+
+  Future likeSeasonComment(
+    DatabaseAddressModel address,
+    VoteCommentModel voteComment,
+    String uid,
+  ) async {
+    if (voteComment.likedBy.contains(uid)) {
+      voteComment.likedBy.remove(uid);
+      await address
+          .postsSeasonCollection()
+          .doc(voteComment.postUid)
+          .update({"likedBy": voteComment.likedBy});
+    } else {
+      voteComment.likedBy.add(uid);
+      // print(voteComment.likedBy);
+      await address
+          .postsSeasonCollection()
+          .doc(voteComment.postUid)
+          .update({"likedBy": voteComment.likedBy});
+    }
+  }
+
   Future deleteComment(
     DatabaseAddressModel address,
     String postUid,
@@ -347,10 +409,10 @@ class DatabaseService {
       // print(temp.toString());
       // print(snapshot.docs.first.data()['issueCode']);
       if (snapshot.docs.isEmpty) {
-        print("Snapshot docs null");
+        print("Price Snapshot  null");
         return PriceModel(issueCode, 0, 0);
       } else {
-        print("Snapshot docs exist");
+        print("Price Snapshot  exist");
         // return PriceModel(issueCode, 0, 0);
         return PriceModel.fromData(snapshot.docs.first.data());
       }

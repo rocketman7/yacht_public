@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
@@ -190,9 +191,20 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   _navigationService.navigateTo('seasonComment');
                 },
                 leading: Container(
-                  height: 60,
-                  width: 60,
-                  color: Colors.yellow,
+                  width: 52,
+                  height: 52,
+                  padding: EdgeInsets.all(4),
+                  // decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.all(
+                  //         Radius.circular(100.0)),
+                  //     color: Color(0xFF1EC8CF),
+                  //     border: Border.all(
+                  //         color: Colors.white,
+                  //         width: 2)),
+                  child: SvgPicture.asset(
+                    'assets/icons/dog_foot.svg',
+                    color: Color(0xFF1EC8CF),
+                  ),
                 ),
                 title: Text(model.seasonInfo.seasonName + " 커뮤니티",
                     style: TextStyle(
@@ -277,7 +289,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
           int.parse(model.seasonInfo.startDate.substring(0, 4)),
           int.parse(model.seasonInfo.startDate.substring(4, 6)),
           int.parse(model.seasonInfo.startDate.substring(6))),
-      lastDate: strToDate(model.address.date).add(Duration(days: 3)),
+      lastDate: nextNthBusinessDay(strToDate(model.address.date), 3),
       selectedDateTextStyle: TextStyle(
         fontSize: 20,
         color: Colors.white,

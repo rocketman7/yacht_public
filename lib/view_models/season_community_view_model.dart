@@ -88,6 +88,16 @@ class SeasonCommunityViewModel extends FutureViewModel {
     }
   }
 
+  Future likeComment(
+    VoteCommentModel voteComment,
+  ) async {
+    await _databaseService.likeSeasonComment(
+      address,
+      voteComment,
+      uid,
+    );
+  }
+
   Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
     return _databaseService.getSeasonPostList(address);
   }

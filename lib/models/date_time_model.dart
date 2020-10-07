@@ -31,7 +31,7 @@ class DateTimeModel {
       case 'koreaStockStandard':
         // 지금 시간이 평일인지 체크하고 평일이면 그대로 반환, 주말이면 가장 가까운 월요일 반환
         DateTime _timeNow = DateTime.now();
-        DateTime _nearestWeekDay = nextBusinessDay(_timeNow);
+        DateTime _nearestWeekDay = closestBusinessDay(_timeNow);
         DateTime _marketStart = DateTime(_nearestWeekDay.year,
             _nearestWeekDay.month, _nearestWeekDay.day, 08, 50, 00);
         DateTime _marketEnd = DateTime(_nearestWeekDay.year,
@@ -83,7 +83,7 @@ class DateTimeModel {
         // 오늘 평일이고 다음날도 평일이면 다음날 반환
         // 오늘 평일이고 다음날 주말/휴일이면 nextBuinewssDay함수에 의해 다음 월요일 반환
         // 오늘 토요일이고 다음날 일요일이면 weekDay함수에 의해 다음 월요일 반환
-        return yyyyMMdd(nextBusinessDay(_timeNow.add(Duration(days: 1))));
+        return yyyyMMdd(closestBusinessDay(_timeNow.add(Duration(days: 1))));
       }
     }
     throw "DateTimeERROR";

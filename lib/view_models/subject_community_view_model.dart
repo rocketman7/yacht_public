@@ -95,6 +95,16 @@ class SubjectCommunityViewModel extends FutureViewModel {
     }
   }
 
+  Future likeComment(
+    VoteCommentModel voteComment,
+  ) async {
+    await _databaseService.likeSubVoteComment(
+      newAddress,
+      voteComment,
+      uid,
+    );
+  }
+
   Future getAvatar(String uid) async {
     avatarImage = await _databaseService.getAvatar(uid);
   }

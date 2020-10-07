@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:align_positioned/align_positioned.dart';
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -129,13 +130,15 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
   _showToast(String message) {
     Widget toast = Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 14.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.circular(100.0),
         color: Colors.greenAccent,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: 25,
@@ -154,9 +157,19 @@ class _VoteSelectViewState extends State<VoteSelectView> {
             ),
           ),
           SizedBox(
-            width: 12.0,
+            width: 8.0,
           ),
-          Text(message),
+          Flexible(
+            child: Text(
+              message,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );
@@ -249,6 +262,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     super.dispose();
     // dispose는 Navigator pushNamed에는 호출되지 않지만 백 버튼에는 호출됨.
     // 백 버튼에 아래를 호출하지 않으면 dispose 됐는데 setState한다고 오류뜸
+
     _timer.cancel();
     isDisposed = true;
   }
@@ -336,7 +350,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                     style: TextStyle(
                                       fontFamily: 'Akrhip',
                                       color: diff.inHours < 1
-                                          ? Colors.red
+                                          ? Color(0xFFE41818)
                                           : Colors.black,
                                       fontSize: 32,
                                       fontWeight: FontWeight.w800,
@@ -348,7 +362,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                           style: TextStyle(
                                             fontFamily: 'Akrhip',
                                             color: diff.inHours < 1
-                                                ? Colors.red
+                                                ? Color(0xFFE41818)
                                                 : Color(0xFFC1C1C1),
                                             fontSize: 32,
                                             fontWeight: FontWeight.w800,
@@ -495,7 +509,9 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                           ),
                           height: 56,
                           decoration: BoxDecoration(
-                              color: Colors.black,
+                              color: diff.inSeconds == 0
+                                  ? Color(0xFFC1C1C1)
+                                  : Colors.black,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(.1),
@@ -534,21 +550,27 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: numSelected == 0
-                              ? Color(0xFFFFDE34)
-                              : Color(0xFF1EC8CF),
+                          color: diff.inSeconds == 0
+                              ? Color(0xFFE41818)
+                              : numSelected == 0
+                                  ? Color(0xFFFFDE34)
+                                  : Color(0xFF1EC8CF),
                         ),
                         child: Text(
-                            numSelected == 0
-                                ? "주제를 선택하여 승점에 도전해보세요!"
-                                : "선택한 주제 $numSelected개, 승점 $numSelected점에 도전해보세요!",
+                            diff.inSeconds == 0
+                                ? "오늘의 예측이 마감되었습니다."
+                                : numSelected == 0
+                                    ? "주제를 선택하여 승점에 도전해보세요!"
+                                    : "선택한 주제 $numSelected개, 승점 $numSelected점에 도전해보세요!",
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'DmSans',
                               fontWeight: FontWeight.w500,
-                              color: numSelected == 0
-                                  ? Colors.black
-                                  : Colors.white,
+                              color: diff.inSeconds == 0
+                                  ? Colors.white
+                                  : numSelected == 0
+                                      ? Colors.black
+                                      : Colors.white,
                             )),
                       ),
                     ),
@@ -918,123 +940,110 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               ),
                             ),
                           )
-                        : Stack(
-                            alignment: AlignmentDirectional.centerStart,
-                            children: <Widget>[
-                                Row(
-                                  children: [
-                                    Container(
-                                      constraints: BoxConstraints(
-                                        maxHeight: 48,
-                                        minWidth: 100,
-                                      ),
-                                      alignment: Alignment.centerLeft,
-                                      padding:
-                                          EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                      decoration: BoxDecoration(
-                                        color: hexToColor(
-                                          model.vote.subVotes[idx].colorCode[0],
-                                        ),
-                                        borderRadius: BorderRadius.circular(50),
-                                        border: Border.all(
-                                          width: 4.0,
-                                          color: Color(0xFF000000),
-                                        ),
-                                        // borderRadius: BorderRadius.all(
-                                        //     Radius.circular(30)),
-                                      ),
-                                      // color: Colors.redAccent,
-                                      child: Text(
-                                        model.vote.subVotes[idx].voteChoices[0],
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          textBaseline:
-                                              TextBaseline.ideographic,
-                                          color: Colors.black,
-                                          fontSize: model.vote.subVotes[idx]
-                                                      .voteChoices[0].length <
-                                                  6
-                                              ? 22
-                                              : 18,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Container(
-                                      constraints: BoxConstraints(
-                                        maxHeight: 48,
-                                        minWidth: 100,
-                                      ),
-                                      alignment: Alignment.centerLeft,
-                                      padding:
-                                          EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                      decoration: BoxDecoration(
-                                        color: hexToColor(
-                                          model.vote.subVotes[idx].colorCode[1],
-                                        ),
-                                        borderRadius: BorderRadius.circular(50),
-                                        border: Border.all(
-                                          width: 4.0,
-                                          color: Color(0xFF000000),
-                                        ),
-                                        // borderRadius: BorderRadius.all(
-                                        //     Radius.circular(30)),
-                                      ),
-                                      // color: Colors.redAccent,
-                                      child: Text(
-                                        model.vote.subVotes[idx].voteChoices[1],
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          textBaseline:
-                                              TextBaseline.ideographic,
-                                          color: Colors.black,
-                                          fontSize: model.vote.subVotes[idx]
-                                                      .voteChoices[1].length <
-                                                  6
-                                              ? 22
-                                              : 18,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                        : Row(
+                            children: [
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxHeight: 48,
+                                  // minWidth: 100,
                                 ),
-                                Positioned(
-                                  left: model.vote.subVotes[idx].voteChoices[0]
-                                              .length <
-                                          6
-                                      ? model.vote.subVotes[idx].voteChoices[0]
-                                                  .length *
-                                              18.0 +
-                                          16 +
-                                          14
-                                      : model.vote.subVotes[idx].voteChoices[0]
-                                                  .length *
-                                              15.0 +
-                                          16 +
-                                          14,
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.black,
-                                          width: 4.0,
-                                        ),
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(
-                                          40,
-                                        )),
-                                    child: Text("vs",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        )),
+                                alignment: Alignment.centerLeft,
+                                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                decoration: BoxDecoration(
+                                  color: hexToColor(
+                                    model.vote.subVotes[idx].colorCode[0],
                                   ),
-                                )
-                              ]),
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(
+                                    width: 4.0,
+                                    color: Color(0xFF000000),
+                                  ),
+                                  // borderRadius: BorderRadius.all(
+                                  //     Radius.circular(30)),
+                                ),
+                                // color: Colors.redAccent,
+                                child: Text(
+                                  model.vote.subVotes[idx].voteChoices[0],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    textBaseline: TextBaseline.ideographic,
+                                    color: Colors.black,
+                                    fontSize: model.vote.subVotes[idx]
+                                                .voteChoices[0].length <
+                                            6
+                                        ? 22
+                                        : 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Stack(
+                                children: [
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxHeight: 48,
+                                      // minWidth: 100,
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                    padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                    decoration: BoxDecoration(
+                                      color: hexToColor(
+                                        model.vote.subVotes[idx].colorCode[1],
+                                      ),
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(
+                                        width: 4.0,
+                                        color: Color(0xFF000000),
+                                      ),
+                                      // borderRadius: BorderRadius.all(
+                                      //     Radius.circular(30)),
+                                    ),
+                                    // color: Colors.redAccent,
+                                    child: Text(
+                                      model.vote.subVotes[idx].voteChoices[1],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        textBaseline: TextBaseline.ideographic,
+                                        color: Colors.black,
+                                        fontSize: model.vote.subVotes[idx]
+                                                    .voteChoices[1].length <
+                                                6
+                                            ? 22
+                                            : 18,
+                                        letterSpacing: 0,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                  AlignPositioned.expand(
+                                    alignment: Alignment.centerLeft,
+                                    dx: -4,
+                                    moveByChildWidth: -0.5,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Colors.black,
+                                            width: 4.0,
+                                          ),
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                            40,
+                                          )),
+                                      child: Text("vs",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                     Expanded(child: SizedBox()),
                   ],
                 ),

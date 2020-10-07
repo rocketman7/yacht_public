@@ -3,7 +3,6 @@ import 'package:yachtOne/models/user_vote_stats_model.dart';
 class UserVoteModel {
   final String uid;
   final String voteDate;
-
   List<int> voteSelected;
   final List<int> voteResult;
   final bool voteVictory;
@@ -28,7 +27,9 @@ class UserVoteModel {
   )   : uid = data['uid'],
         voteDate = data['voteDate'],
         // List<int>를 json으로 가져오면 List<dynamic>으로 인식하여 int로 다시 cast해줌
-        voteSelected = data['voteSelected'].cast<int>(),
+        voteSelected = data['voteSelected'] == null
+            ? null
+            : data['voteSelected'].cast<int>(),
         voteResult = data['voteResult'],
         voteVictory = data['voteVictory'],
         isVoted = data['isVoted'],

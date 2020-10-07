@@ -29,47 +29,22 @@ class UserVoteStatsModel {
     );
   }
 
+  UserVoteStatsModel.fromData(
+    Map<String, dynamic> data,
+  )   : firstVote = data['firstVote'],
+        currentWinningPoint = data['currentWinningPoint'],
+        // List<int>를 json으로 가져오면 List<dynamic>으로 인식하여 int로 다시 cast해줌
+        maxWinningPoint = data['maxWinningPoint'],
+        participation = data['participation'] == null
+            ? null
+            : List<bool>.from(data['participation']);
+
   Map<String, dynamic> toJson() {
     return {
-      'firstVote': firstVote,
-      'currentWinningPoint': currentWinningPoint,
-      'maxWinningPoint': maxWinningPoint,
-      'participation': participation,
+      'firstVote': this.firstVote,
+      'currentWinningPoint': this.currentWinningPoint,
+      'maxWinningPoint': this.maxWinningPoint,
+      'participation': this.participation,
     };
-  }
-
-  factory UserVoteStatsModel.fromData(Map<String, dynamic> data) {
-    if (data == null) return null;
-
-    return UserVoteStatsModel(
-      firstVote: data['firstVote'],
-      currentWinningPoint: data['currentWinningPoint'],
-      maxWinningPoint: data['maxWinningPoint'],
-      participation: List<bool>.from(data['participation']),
-    );
-  }
-
-  @override
-  String toString() {
-    return 'UserVoteStatsModel(firstVote: $firstVote, currentWinningPoint: $currentWinningPoint, maxWinningPoint: $maxWinningPoint, participation: $participation)';
-  }
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is UserVoteStatsModel &&
-        o.firstVote == firstVote &&
-        o.currentWinningPoint == currentWinningPoint &&
-        o.maxWinningPoint == maxWinningPoint &&
-        listEquals(o.participation, participation);
-  }
-
-  @override
-  int get hashCode {
-    return firstVote.hashCode ^
-        currentWinningPoint.hashCode ^
-        maxWinningPoint.hashCode ^
-        participation.hashCode;
   }
 }

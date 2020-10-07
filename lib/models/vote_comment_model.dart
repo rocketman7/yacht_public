@@ -5,8 +5,7 @@ class VoteCommentModel {
   final String uid;
   final String userName;
   final String postText;
-  final int like;
-  final int dislike;
+  final List<dynamic> likedBy;
   final Timestamp postDateTime;
   final String choice;
 
@@ -15,8 +14,7 @@ class VoteCommentModel {
     this.uid,
     this.userName,
     this.postText,
-    this.like,
-    this.dislike,
+    this.likedBy,
     this.postDateTime,
     this.choice,
   });
@@ -26,8 +24,7 @@ class VoteCommentModel {
         uid = data['uid'],
         userName = data['userName'],
         postText = data['postText'],
-        like = data['like'],
-        dislike = data['dislke'],
+        likedBy = data['likedBy'] ?? [],
         postDateTime = data['postDateTime'],
         choice = data['choice'];
 
@@ -36,8 +33,7 @@ class VoteCommentModel {
       'uid': this.uid,
       'userName': this.userName,
       'postText': this.postText,
-      'like': this.like,
-      'dislike': this.dislike,
+      'likedBy': this.likedBy,
       'postDateTime': this.postDateTime,
       'choice': this.choice,
     };
