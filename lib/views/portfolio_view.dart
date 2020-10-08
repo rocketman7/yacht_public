@@ -223,9 +223,11 @@ List<Widget> makePortfolioArcLineComponents(PortfolioViewModel model,
           (portfolioArcRadius - portfolioArcRadiusCenter) / 3 +
               portfolioArcRadiusCenter),
       painter: PortfolioArcLine(
-        center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-        color: '6B6B6B',
-      ),
+          center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
+          color: 'B2B7BE',
+          standartRadius:
+              (portfolioArcRadius - portfolioArcRadiusCenter) / 3 * 2 +
+                  portfolioArcRadiusCenter),
     ),
   );
 
@@ -236,17 +238,21 @@ List<Widget> makePortfolioArcLineComponents(PortfolioViewModel model,
         (portfolioArcRadius - portfolioArcRadiusCenter) / 3 * 2 +
             portfolioArcRadiusCenter),
     painter: PortfolioArcLine(
-      center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-      color: '000000',
-    ),
+        center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
+        color: '000000',
+        standartRadius:
+            (portfolioArcRadius - portfolioArcRadiusCenter) / 3 * 2 +
+                portfolioArcRadiusCenter),
   ));
 
   result.add(CustomPaint(
     size: Size(portfolioArcRadius, portfolioArcRadius),
     painter: PortfolioArcLine(
-      center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-      color: '6B6B6B',
-    ),
+        center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
+        color: 'B2B7BE',
+        standartRadius:
+            (portfolioArcRadius - portfolioArcRadiusCenter) / 3 * 2 +
+                portfolioArcRadiusCenter),
   ));
 
   return result;
@@ -568,13 +574,14 @@ class PortfolioArcChart extends CustomPainter {
 class PortfolioArcLine extends CustomPainter {
   Offset center;
   String color;
+  double standartRadius;
 
-  PortfolioArcLine({this.center, this.color});
+  PortfolioArcLine({this.center, this.color, this.standartRadius});
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Color(int.parse('FF$color', radix: 16)).withOpacity(0.2)
+      ..color = Color(int.parse('FF$color', radix: 16)).withOpacity(0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
@@ -582,7 +589,7 @@ class PortfolioArcLine extends CustomPainter {
 
     double startAngle = 0;
     final double maxAngle = 2 * math.pi;
-    final double space = 2 * math.pi / 200;
+    final double space = 2 * math.pi / 200 * (standartRadius / size.width);
 
     while (startAngle < maxAngle) {
       canvas.drawArc(Rect.fromCircle(center: center, radius: radius),

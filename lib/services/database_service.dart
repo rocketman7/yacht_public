@@ -74,6 +74,20 @@ class DatabaseService {
     }
   }
 
+  // Read: 다른 유저들의 특정 필드값 읽기
+  Future getOthersInfo(String uid, String field) async {
+    try {
+      var value = await _usersCollectionReference
+          .doc(uid)
+          .get()
+          .then((querysnapshot) => {querysnapshot.data()['$field']});
+
+      return value.toList()[0].toString();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   // Create: Vote 데이터 DB에 넣기 (관리자만 접근)
   Future addVotes(
     VoteModel vote,
@@ -503,8 +517,8 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20200921',
-      date: baseDate,
+      date: '20201005',
+      // date: baseDate,
       category: category,
       season: season,
       isVoting: isVoting,

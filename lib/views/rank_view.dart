@@ -60,15 +60,17 @@ class RankView extends StatelessWidget {
                                                 30,
                                               )),
                                           child: Text(
-                                            "SEASON 1",
+                                            "${model.seasonModel.seasonName}",
                                             style: TextStyle(
                                                 color: Colors.white,
+                                                fontFamily: 'DmSans',
                                                 fontSize: 12),
                                           ),
                                         ),
                                         Text(model.user.userName,
                                             style: TextStyle(
                                               fontSize: 24,
+                                              letterSpacing: -1.0,
                                               fontFamily: 'DmSans',
                                               fontWeight: FontWeight.bold,
                                             )),
@@ -88,7 +90,37 @@ class RankView extends StatelessWidget {
                                     ),
                                     Spacer(),
                                     Text(
-                                      '5,768,654',
+                                      '${model.getPortfolioValue()}',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'DmSans',
+                                          letterSpacing: -1.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        model.navigateToPortfolioPage();
+                                      },
+                                      child: Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 16,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      '시즌 목표 승점',
+                                      style: TextStyle(
+                                          fontSize: 20, letterSpacing: -1.0),
+                                    ),
+                                    Spacer(),
+                                    Text(
+                                      '${model.seasonModel.winningCombo}',
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontFamily: 'DmSans',
@@ -103,34 +135,13 @@ class RankView extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      '시즌 목표 콤보',
+                                      '현재 승점',
                                       style: TextStyle(
                                           fontSize: 20, letterSpacing: -1.0),
                                     ),
                                     Spacer(),
                                     Text(
-                                      '30',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'DmSans',
-                                          letterSpacing: -1.0,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '현재 콤보',
-                                      style: TextStyle(
-                                          fontSize: 20, letterSpacing: -1.0),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      '6',
+                                      '${model.user.combo}',
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontFamily: 'DmSans',
@@ -151,7 +162,7 @@ class RankView extends StatelessWidget {
                                     ),
                                     Spacer(),
                                     Text(
-                                      '6',
+                                      '0',
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontFamily: 'DmSans',
@@ -189,27 +200,24 @@ class RankView extends StatelessWidget {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              '2020.09.21',
+                                              '${model.getDateFormChange()}',
                                               style: TextStyle(
-                                                  fontSize: 14,
-                                                  letterSpacing: -1.0),
-                                            ),
-                                            SizedBox(
-                                              width: 8,
+                                                  fontFamily: 'DmSans',
+                                                  fontSize: 14),
                                             ),
                                             Container(
                                               height: 8,
                                               width: 1,
-                                              color: Color(0xFFDFDFDF),
+                                              color: Color(0xFFD8D8D8),
                                             ),
                                             SizedBox(
-                                              width: 9,
+                                              width: 8,
                                             ),
                                             Text(
-                                              '10,345명의 참여자',
+                                              '${model.getUsersNum()}명 경쟁 중!',
                                               style: TextStyle(
-                                                  fontSize: 14,
-                                                  letterSpacing: -1.0),
+                                                  fontFamily: 'DmSans',
+                                                  fontSize: 14),
                                             )
                                           ],
                                         ),
@@ -226,9 +234,10 @@ class RankView extends StatelessWidget {
                                     itemCount: model.rankModel.length,
                                     itemBuilder: (context, index) =>
                                         makesRankListView(
-                                            model.rankModel[index],
-                                            index,
-                                            model.uid),
+                                      model,
+                                      model.rankModel[index],
+                                      index,
+                                    ),
                                   ),
                                 ),
                                 // RaisedButton(
@@ -237,6 +246,13 @@ class RankView extends StatelessWidget {
                                 //   },
                                 //   child: Text('rank DB 추가'),
                                 // ),
+                                RaisedButton(
+                                  onPressed: () {
+                                    model.getOthersAvatar(
+                                        'HPyTUH8vU0fFzssMtmttCdTodLA2');
+                                  },
+                                  child: Text('test'),
+                                ),
                               ],
                             ),
                           ),
@@ -244,7 +260,7 @@ class RankView extends StatelessWidget {
         });
   }
 
-  makesRankListView(RankModel ranksModel, int index, String uid) {
+  makesRankListView(RankViewModel model, RankModel ranksModel, int index) {
     return Padding(
         padding: EdgeInsets.all(10.0),
         child: Row(
@@ -276,7 +292,9 @@ class RankView extends StatelessWidget {
               child: CircleAvatar(
                 maxRadius: 36,
                 backgroundColor: Colors.transparent,
-                backgroundImage: AssetImage('assets/images/avatar.png'),
+                backgroundImage: AssetImage(
+                    // 'assets/images/${model.getOthersAvatar(ranksModel.uid)}.png'),
+                    'assets/images/avatar.png'),
               ),
             ),
             SizedBox(
@@ -287,7 +305,7 @@ class RankView extends StatelessWidget {
                   fontSize: 20,
                   letterSpacing: -0.28,
                 )),
-            ranksModel.uid == uid
+            ranksModel.uid == model.uid
                 ? Row(
                     children: [
                       SizedBox(
@@ -316,7 +334,15 @@ class RankView extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 24,
                     letterSpacing: -2.0,
-                    fontWeight: FontWeight.bold))
+                    fontWeight: FontWeight.bold)),
+            Text('${model.user.previousRank}'),
+            RaisedButton(
+              onPressed: () {
+                var value = model.getOthersAvatar(ranksModel.uid);
+                print(value);
+              },
+              child: Text('test'),
+            ),
           ],
         ));
   }

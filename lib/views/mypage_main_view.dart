@@ -274,6 +274,7 @@ class MypageMainView extends StatelessWidget {
           makeMypageMainComponent(model, '사업자정보', 'mypage_businessinformation'),
           makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
           makeMypageMainComponent(model, '포트폴리오 임시', 'portfolio'),
+          makeMypageMainComponent(model, '랭킹페이지 임시', 'ranknew'),
           SizedBox(
             height: 42,
           )
