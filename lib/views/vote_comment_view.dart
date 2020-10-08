@@ -130,9 +130,9 @@ class _VoteCommentViewState extends State<VoteCommentView>
                       Text(
                         "커뮤니티",
                         style: TextStyle(
-                          // fontFamily: 'Akrhip',
+                          fontFamily: 'DmSans',
                           fontSize: 32,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w800,
                           letterSpacing: -2.0,
                         ),
                       ),
@@ -191,21 +191,22 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   _navigationService.navigateTo('seasonComment');
                 },
                 leading: Container(
-                  width: 52,
-                  height: 52,
-                  padding: EdgeInsets.all(4),
-                  // decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.all(
-                  //         Radius.circular(100.0)),
-                  //     color: Color(0xFF1EC8CF),
-                  //     border: Border.all(
-                  //         color: Colors.white,
-                  //         width: 2)),
-                  child: SvgPicture.asset(
-                    'assets/icons/dog_foot.svg',
-                    color: Color(0xFF1EC8CF),
-                  ),
-                ),
+                    alignment: Alignment.center,
+                    width: 60,
+                    height: 60,
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        color: Color(0xFFFFC7C7),
+                        border: Border.all(color: Colors.black, width: 2)),
+                    child: Text(
+                      model.seasonInfo.seasonName,
+                      style: TextStyle(
+                        fontFamily: 'DmSans',
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -1.0,
+                      ),
+                    )),
                 title: Text(model.seasonInfo.seasonName + " 커뮤니티",
                     style: TextStyle(
                       fontSize: 22,
