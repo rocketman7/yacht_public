@@ -7,15 +7,16 @@ class SeasonModel {
   final int correctPoint;
   final int wrongPoint;
   final int initialAwardValue;
+  final int winningCombo;
 
   SeasonModel(
-    this.seasonName,
-    this.startDate,
-    this.winningPoint,
-    this.correctPoint,
-    this.wrongPoint,
-    this.initialAwardValue,
-  );
+      this.seasonName,
+      this.startDate,
+      this.winningPoint,
+      this.correctPoint,
+      this.wrongPoint,
+      this.initialAwardValue,
+      this.winningCombo);
 
   SeasonModel copyWith({
     String seasonName,
@@ -24,6 +25,7 @@ class SeasonModel {
     int correctPoint,
     int wrongPoint,
     int initialAwardValue,
+    int winningcombo,
   }) {
     return SeasonModel(
       seasonName ?? this.seasonName,
@@ -32,6 +34,7 @@ class SeasonModel {
       correctPoint ?? this.correctPoint,
       wrongPoint ?? this.wrongPoint,
       initialAwardValue ?? this.initialAwardValue,
+      winningcombo ?? this.winningCombo,
     );
   }
 
@@ -43,6 +46,7 @@ class SeasonModel {
       'correctPoint': correctPoint,
       'wrongPoint': wrongPoint,
       'initialAwardValue': initialAwardValue,
+      'winningCombo': winningCombo
     };
   }
 
@@ -56,6 +60,7 @@ class SeasonModel {
       map['correctPoint'],
       map['wrongPoint'],
       map['initialAwardValue'],
+      map['winningCombo'],
     );
   }
 
@@ -64,7 +69,7 @@ class SeasonModel {
 
   @override
   String toString() {
-    return 'SeasonModel(seasonName: $seasonName, startDate: $startDate, winningPoint: $winningPoint, correctPoint: $correctPoint, wrongPoint: $wrongPoint, initialAwardValue: $initialAwardValue)';
+    return 'SeasonModel(seasonName: $seasonName, startDate: $startDate, winningPoint: $winningPoint, correctPoint: $correctPoint, wrongPoint: $wrongPoint, initialAwardValue: $initialAwardValue, winningCombo: $winningCombo)';
   }
 
   @override
@@ -77,7 +82,8 @@ class SeasonModel {
         o.winningPoint == winningPoint &&
         o.correctPoint == correctPoint &&
         o.wrongPoint == wrongPoint &&
-        o.initialAwardValue == initialAwardValue;
+        o.initialAwardValue == initialAwardValue &&
+        o.winningCombo == winningCombo;
   }
 
   @override
@@ -87,6 +93,7 @@ class SeasonModel {
         winningPoint.hashCode ^
         correctPoint.hashCode ^
         wrongPoint.hashCode ^
-        initialAwardValue.hashCode;
+        initialAwardValue.hashCode ^
+        winningCombo.hashCode;
   }
 }

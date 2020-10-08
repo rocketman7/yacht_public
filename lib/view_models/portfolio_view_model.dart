@@ -97,31 +97,6 @@ class PortfolioViewModel extends FutureViewModel {
 
     startPercentage.add(startPercentage[0]);
 
-    // 글자수에 맞게 아이템을 그릴 순서를 정렬해주자.
-    // List<int> orderDrawingItemTemp = [];
-    // for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-    //   if (portfolioModel.subPortfolio[i].stockName.length >
-    //       maxItemsNameLength + 1) {
-    //     orderDrawingItemTemp.add(i + portfolioModel.subPortfolio.length);
-    //   } else {
-    //     orderDrawingItemTemp.add(i);
-    //   }
-    // }
-
-    // for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-    //   if (orderDrawingItemTemp[i] < portfolioModel.subPortfolio.length) {
-    //     orderDrawingItem.add(i);
-    //     drawingMaxLength.add(false);
-    //   }
-    // }
-
-    // for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-    //   if (orderDrawingItemTemp[i] >= portfolioModel.subPortfolio.length) {
-    //     orderDrawingItem.add(i);
-    //     drawingMaxLength.add(true);
-    //   }
-    // }
-
     List<double> initialValueTemp = [];
     double temp;
     int iTemp;
@@ -135,13 +110,6 @@ class PortfolioViewModel extends FutureViewModel {
       else
         drawingMaxLength.add(false);
     }
-
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      print(portfolioModel.subPortfolio[i].stockName);
-    }
-    print(initialValueTemp);
-    print(orderDrawingItem);
-    print(drawingMaxLength);
 
     for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
       for (int j = i; j < portfolioModel.subPortfolio.length; j++) {
@@ -160,26 +128,6 @@ class PortfolioViewModel extends FutureViewModel {
         }
       }
     }
-
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      print(portfolioModel.subPortfolio[i].stockName);
-    }
-    print(initialValueTemp);
-    print(orderDrawingItem);
-    print(drawingMaxLength);
-
-    // for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-    //   print(initialValueTemp[i]);
-    //   print(drawingMaxLength[i]);
-    // }
-
-    // print(orderDrawingItem);
-
-    // orderDrawingItem.add(0);
-    // orderDrawingItem.add(1);
-    // orderDrawingItem.add(2);
-    // orderDrawingItem.add(3);
-    // orderDrawingItem.add(4);
 
     notifyListeners();
   }

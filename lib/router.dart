@@ -11,6 +11,7 @@ import 'views/register_view.dart';
 import 'views/startup_view.dart';
 import 'views/ggook_view.dart';
 import 'views/rank_view.dart';
+import 'views/ranknew_view.dart';
 import 'views/mypage_main_view.dart';
 
 import 'views/mypage_documents/mypage_privacyPolicy.dart';
@@ -62,6 +63,8 @@ class Routers {
       case 'rank':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: RankView()));
+      case 'ranknew':
+        return MaterialPageRoute(builder: (context) => RanknewView());
 
       case 'mypage_main':
         return MaterialPageRoute(
