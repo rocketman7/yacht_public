@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
-import 'package:flare_flutter/flare_actor.dart';
 
 import '../view_models/mypage_main_view_model.dart';
 
@@ -24,22 +24,12 @@ class MypageMainView extends StatelessWidget {
                     child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                   )
                 : model.isBusy
-                    ? Center(
-                        child: Container(
-                          height: 100,
-                          width: deviceWidth,
-                          child: FlareActor(
-                            'assets/images/Loading.flr',
-                            animation: 'loading',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      )
+                    ? Container()
                     : SafeArea(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 18,
-                            vertical: 18,
+                            horizontal: 16,
+                            vertical: 16,
                           ),
                           child: Column(
                             children: [
@@ -58,7 +48,6 @@ class MypageMainView extends StatelessWidget {
                           ),
                         ),
                       ),
-            // bottomNavigationBar: bottomNavigationBar(context)
           );
         });
   }
@@ -70,51 +59,99 @@ class MypageMainView extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              height: 72,
+              // height: 200,
               width: deviceWidth - 36 - 72,
-              child: Stack(
+              child: Column(
                 children: [
                   model.user.accNumber == null
-                      ? Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 3,
-                            horizontal: 8,
-                          ),
-                          decoration: BoxDecoration(
-                              color: Color(0xFFFFCA42),
-                              borderRadius: BorderRadius.circular(
-                                30,
-                              )),
-                          child: Text(
-                            "⚠️증권계좌 미인증회원",
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          ),
+                      ? Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 3,
+                                horizontal: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Color(0xFFFFCA42),
+                                  borderRadius: BorderRadius.circular(
+                                    30,
+                                  )),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 16,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/notification.svg',
+                                      color: Color(0xFFFFFFFF),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 3,
+                                  ),
+                                  Text(
+                                    "증권계좌 미인증회원",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(),
+                            ),
+                          ],
                         )
-                      : Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 3,
-                            horizontal: 8,
-                          ),
-                          decoration: BoxDecoration(
-                              color: Color(0xFF1EC8CF),
-                              borderRadius: BorderRadius.circular(
-                                30,
-                              )),
-                          child: Text(
-                            "☑️증권계좌 인증회원",
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          ),
+                      : Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 3,
+                                horizontal: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Color(0xFF1EC8CF),
+                                  borderRadius: BorderRadius.circular(
+                                    30,
+                                  )),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 16,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/check.svg',
+                                      color: Color(0xFFFFFFFF),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 3,
+                                  ),
+                                  Text(
+                                    "증권계좌 인증회원",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(),
+                            ),
+                          ],
                         ),
-                  Positioned(
-                    top: 10,
-                    child: Text(
-                      model.user.userName,
-                      style: TextStyle(
-                          fontSize: 48,
-                          fontFamily: 'DmSans',
-                          fontWeight: FontWeight.w900),
-                    ),
-                  )
+                  Row(
+                    children: [
+                      Text(
+                        model.user.userName,
+                        style: TextStyle(
+                            fontSize: 48,
+                            fontFamily: 'DmSans',
+                            fontWeight: FontWeight.w900),
+                      ),
+                      Expanded(
+                        child: Container(),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -131,6 +168,7 @@ class MypageMainView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () {
             if (navigateTo != null) model.navigateToMypageToDown(navigateTo);
           },
@@ -155,6 +193,9 @@ class MypageMainView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(
+            height: 24,
+          ),
           Text(
             '나의 계정설정',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -242,9 +283,9 @@ class MypageMainView extends StatelessWidget {
             height: 2,
             color: Colors.black,
           ),
-          makeMypageMainComponent(model, 'x1:1 문의내역', null),
-          makeMypageMainComponent(model, 'x자주묻는 질문', null),
-          makeMypageMainComponent(model, 'x공지사항', null),
+          makeMypageMainComponent(model, '1:1 문의내역', 'oneonone'),
+          makeMypageMainComponent(model, '자주 묻는 질문', 'faq'),
+          makeMypageMainComponent(model, '공지사항', 'notice'),
           SizedBox(
             height: 42,
           )
@@ -272,9 +313,8 @@ class MypageMainView extends StatelessWidget {
           makeMypageMainComponent(model, '이용약관', 'mypage_termsofuse'),
           makeMypageMainComponent(model, '개인정보취급방침', 'mypage_privacypolicy'),
           makeMypageMainComponent(model, '사업자정보', 'mypage_businessinformation'),
+          makeMypageMainComponent(model, '', null),
           makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
-          makeMypageMainComponent(model, '포트폴리오 임시', 'portfolio'),
-          makeMypageMainComponent(model, '랭킹페이지 임시', 'ranknew'),
           SizedBox(
             height: 42,
           )

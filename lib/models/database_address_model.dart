@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/services/database_service.dart';
+import '../views/constants/holiday.dart';
 
 // final CollectionReference _usersCollectionReference =
 //     FirebaseFirestore.instance.collection('users');
@@ -110,11 +111,14 @@ class DatabaseAddressModel {
 
   // ranks collection의 season subCollection의 날짜 data Ref.
   CollectionReference ranksSeasonDateCollection() {
+    DateTime previousdate = strToDate(date);
+    previousdate = previousBusinessDay(previousdate);
+
     return _databaseService.ranksCollectionReference
         .doc(category)
         .collection(season)
-        .doc(date)
-        .collection(date);
+        .doc(stringDate.format(previousdate))
+        .collection(stringDate.format(previousdate));
   }
 
   DocumentReference adminOpenSeason() {

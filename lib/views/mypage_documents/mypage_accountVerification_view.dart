@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
-import 'package:flare_flutter/flare_actor.dart';
 
 import '../../view_models/mypage_accountVerification_view_model.dart';
 import '../constants/size.dart';
@@ -18,6 +18,21 @@ class _MypageAccountVerificationViewState
   final TextEditingController _accNumberController = TextEditingController();
   final TextEditingController _accNameController = TextEditingController();
   final TextEditingController _authNumController = TextEditingController();
+  FocusNode myFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    myFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    myFocusNode.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +55,7 @@ class _MypageAccountVerificationViewState
                       child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                     )
                   : model.isBusy
-                      ? FlareActor(
-                          'assets/images/Loading.flr',
-                          animation: 'loading',
-                        )
+                      ? Container()
                       : Form(
                           key: _formKey,
                           child: SafeArea(
@@ -56,11 +68,25 @@ class _MypageAccountVerificationViewState
                                       child: Padding(
                                         padding: const EdgeInsets.only(
                                             left: 16, top: 8, bottom: 8),
-                                        child: Text(
-                                          '⚠️ 증권계좌 인증이 완료되지 않았습니다.',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              height: 16,
+                                              child: SvgPicture.asset(
+                                                'assets/icons/notification.svg',
+                                                color: Color(0xFFFFFFFF),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            Text(
+                                              '증권계좌 인증이 완료되지 않았습니다.',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            ),
+                                          ],
                                         ),
                                       ))
                                   : Container(
@@ -69,11 +95,25 @@ class _MypageAccountVerificationViewState
                                       child: Padding(
                                         padding: const EdgeInsets.only(
                                             left: 16, top: 8, bottom: 8),
-                                        child: Text(
-                                          '☑️ 증권계좌 인증이 완료되었습니다!',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              height: 16,
+                                              child: SvgPicture.asset(
+                                                'assets/icons/check.svg',
+                                                color: Color(0xFFFFFFFF),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 3,
+                                            ),
+                                            Text(
+                                              '증권계좌 인증이 완료되었습니다!',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            ),
+                                          ],
                                         ),
                                       )),
                               Padding(
@@ -129,26 +169,53 @@ class _MypageAccountVerificationViewState
                 height: 40,
                 child: RaisedButton(
                   // disabledColor: Color(0xFFB2B7BE),
-                  color: Color(0xFF1EC8CF),
+                  color:
+                      model.ableButton2 ? Color(0xFF1EC8CF) : Color(0xFFB2B7BE),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
-                  onPressed: () {
-                    if (_accNameController.text != '' &&
-                        _accNumberController.text != '' &&
-                        model.secName != '') {
-                      model.accNumber = _accNumberController.text;
-                      model.accName = _accNameController.text;
-                      model.visibleButton2 = false;
-                      model.visibleAuthNumProcess = true;
+                  onPressed: () async {
+                    if (model.ableButton2) {
+                      if (_accNameController.text != '' &&
+                          _accNumberController.text != '' &&
+                          model.secName != '') {
+                        model.accNumber = _accNumberController.text;
+                        model.accName = _accNameController.text;
+                        print('secName: ${model.secName}');
+                        print('accNumber: ${model.accNumber}');
+                        print('accName: ${model.accName}');
 
-                      model.accOccupyVerificationRequest();
-                      model.accOwnerVerificationRequest();
+                        model.ableButton2 = false;
 
-                      model.notifyListeners();
-                    } else {}
+                        model.notifyListeners();
+
+                        String result = await model.accVerificationRequest();
+
+                        if (result == 'success') {
+                          model.visibleButton2 = false;
+                          model.visibleAuthNumProcess = true;
+
+                          model.accVerificationFailMsg = '';
+
+                          // 이제 위에 적은 값들 수정 안되게
+                          model.accNameInsertProcess = true;
+                          model.accNumberInsertProcess = true;
+                        } else {
+                          model.accVerificationFailMsg = result;
+                        }
+
+                        model.ableButton2 = true;
+                        model.notifyListeners();
+                      } else {
+                        model.accVerificationFailMsg = '값들을 모두 입력하여주세요!';
+
+                        model.notifyListeners();
+                      }
+                    } else {
+                      return null;
+                    }
                   },
                   child: Text(
-                    '계좌 인증 코드 전송하기',
+                    model.ableButton2 ? '계좌 인증 코드 전송하기' : '진행 중',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white,
@@ -156,6 +223,13 @@ class _MypageAccountVerificationViewState
                   ),
                 ))
             : Container(),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+          '${model.accVerificationFailMsg}',
+          style: TextStyle(color: Color(0xFFC5C5C7)),
+        ),
         model.visibleAuthNumProcess ? authNumProcess(model) : Container()
       ],
     );
@@ -168,7 +242,7 @@ class _MypageAccountVerificationViewState
           children: [
             Text(
               '은행',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16, letterSpacing: -1),
             ),
             Spacer(),
             Text(
@@ -181,6 +255,7 @@ class _MypageAccountVerificationViewState
                     onPressed: () {
                       model.visibleBankList = true;
                       model.secName = '';
+                      myFocusNode.unfocus();
                       model.notifyListeners();
                     })
                 : IconButton(
@@ -210,6 +285,7 @@ class _MypageAccountVerificationViewState
               onTap: () {
                 model.secName = model.getBankList().keys.toList()[index];
                 model.visibleBankList = false;
+                myFocusNode.requestFocus();
                 model.notifyListeners();
               },
               child: Row(
@@ -247,12 +323,14 @@ class _MypageAccountVerificationViewState
           children: [
             Text(
               '계좌번호',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16, letterSpacing: -1),
             ),
             // Spacer(),
             Expanded(
               // width: 200,
               child: TextField(
+                readOnly: model.accNumberInsertProcess,
+                focusNode: myFocusNode,
                 textAlign: TextAlign.right,
                 controller: _accNumberController,
                 keyboardType: TextInputType.phone,
@@ -273,14 +351,14 @@ class _MypageAccountVerificationViewState
                   focusedBorder: UnderlineInputBorder(
                     borderSide: const BorderSide(
                       color: Color(0xFFF2F2F2),
-                      width: 1.0,
+                      width: 0.0,
                     ),
                   ),
                   filled: false,
-                  hintText: "계좌번호",
-                  hintStyle: TextStyle(
-                    fontSize: 15,
-                  ),
+                  // hintText: "계좌번호",
+                  // hintStyle: TextStyle(
+                  //   fontSize: 12,
+                  // ),
                 ),
               ),
             ),
@@ -309,12 +387,13 @@ class _MypageAccountVerificationViewState
           children: [
             Text(
               '예금주',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 16, letterSpacing: -1),
             ),
             // Spacer(),
             Expanded(
               // width: 200,
               child: TextField(
+                readOnly: model.accNameInsertProcess,
                 textAlign: TextAlign.right,
                 controller: _accNameController,
                 style: TextStyle(
@@ -334,14 +413,12 @@ class _MypageAccountVerificationViewState
                   focusedBorder: UnderlineInputBorder(
                     borderSide: const BorderSide(
                       color: Color(0xFFF2F2F2),
-                      width: 1.0,
+                      width: 0.0,
                     ),
                   ),
                   filled: false,
-                  hintText: "예금주 이름",
-                  hintStyle: TextStyle(
-                    fontSize: 15,
-                  ),
+                  // hintText: "예금주 이름",
+                  // hintStyle: TextStyle(fontSize: 16, letterSpacing: -1),
                 ),
               ),
             ),
@@ -353,7 +430,11 @@ class _MypageAccountVerificationViewState
               onPressed: null,
             )
           ],
-        )
+        ),
+        Container(
+          height: 1,
+          color: Color(0xFFE3E3E3),
+        ),
       ],
     );
   }
@@ -361,46 +442,61 @@ class _MypageAccountVerificationViewState
   Widget authNumProcess(MypageAccountVerificationViewModel model) {
     return Column(
       children: [
-        Container(
-          height: 1,
-          color: Color(0xFFE3E3E3),
-        ),
         SizedBox(
           height: 32,
         ),
-        Center(
-          child: TextField(
-            textAlign: TextAlign.center,
-            controller: _authNumController,
-            keyboardType: TextInputType.phone,
-            style: TextStyle(
-              fontSize: 32,
-              fontFamily: 'DM Sans',
-              letterSpacing: 3.0,
+        Row(
+          children: [
+            Flexible(
+              flex: 1,
+              child: Container(),
             ),
-            cursorColor: Colors.white,
-            decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Color(0xFFF2F2F2),
-                  width: 0.0,
+            Flexible(
+              flex: 1,
+              child: GestureDetector(
+                onTap: () {
+                  _authNumController.text = '';
+                },
+                child: TextField(
+                  // focusNode: ,
+                  textAlign: TextAlign.center,
+                  controller: _authNumController,
+                  keyboardType: TextInputType.phone,
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontFamily: 'DM Sans',
+                    letterSpacing: 3.0,
+                  ),
+                  cursorColor: Colors.white,
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xFFF2F2F2),
+                        width: 0.0,
+                      ),
+                    ),
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    alignLabelWithHint: true,
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Color(0xFFF2F2F2),
+                        width: 0.0,
+                      ),
+                    ),
+                    filled: false,
+                    hintText: "0000",
+                    hintStyle: TextStyle(
+                      fontSize: 36,
+                    ),
+                  ),
                 ),
               ),
-              floatingLabelBehavior: FloatingLabelBehavior.never,
-              alignLabelWithHint: true,
-              focusedBorder: UnderlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Color(0xFFF2F2F2),
-                  width: 0.0,
-                ),
-              ),
-              filled: false,
-              hintText: "0000",
-              hintStyle: TextStyle(
-                fontSize: 32,
-              ),
             ),
-          ),
+            Flexible(
+              flex: 1,
+              child: Container(),
+            ),
+          ],
         ),
         RaisedButton(
           color: Color(0xFF1EC8CF),

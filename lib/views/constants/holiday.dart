@@ -39,6 +39,20 @@ DateTime nextNthBusinessDay(DateTime dateTime, int n) {
   return dateTime;
 }
 
+DateTime previousBusinessDay(DateTime dateTime) {
+  // 랭킹페이지를 위한 전영업일 불러오기
+  DateTime previousDay = dateTime.add(Duration(days: -1));
+  String previousDayStr = stringDate.format(previousDay);
+
+  if (previousDay.weekday == 6 ||
+      previousDay.weekday == 7 ||
+      holidayListKr.contains(previousDayStr)) {
+    return previousBusinessDay(previousDay);
+  } else {
+    return previousDay;
+  }
+}
+
 const List<String> holidayListKr = [
   '20200930',
   '20201001',

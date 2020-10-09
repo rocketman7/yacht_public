@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flare_flutter/flare_actor.dart';
 
 import '../../view_models/mypage_pushAlarmSetting_view_model.dart';
-import '../loading_view.dart';
 
 class MypagePushAlarmSettingView extends StatelessWidget {
   @override
@@ -26,10 +24,7 @@ class MypagePushAlarmSettingView extends StatelessWidget {
                       child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                     )
                   : model.isBusy
-                      ? FlareActor(
-                          'assets/images/Loading.flr',
-                          animation: 'loading',
-                        )
+                      ? Container()
                       : SafeArea(
                           child: Padding(
                           padding: const EdgeInsets.symmetric(

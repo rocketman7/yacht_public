@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../loading_view.dart';
-
 class MypageBusinessInformation extends StatelessWidget {
   Future<String> _businessInformationFuture() async {
     return await rootBundle
@@ -46,7 +44,6 @@ class MypageBusinessInformation extends StatelessWidget {
             ),
           );
         } else {
-          // return LoadingView();
           return Scaffold(
             appBar: AppBar(
               title: Text(
@@ -55,6 +52,7 @@ class MypageBusinessInformation extends StatelessWidget {
               ),
               elevation: 0,
             ),
+            backgroundColor: Colors.white,
             body: SafeArea(
               child: Container(),
             ),

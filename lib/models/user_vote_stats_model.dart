@@ -17,13 +17,13 @@ class UserVoteStatsModel {
 
   UserVoteStatsModel copyWith({
     String firstVote,
-    int currentWinningPoint,
+    int currentWinPoint,
     int maxWinningPoint,
     List<bool> participation,
   }) {
     return UserVoteStatsModel(
       firstVote: firstVote ?? this.firstVote,
-      currentWinPoint: currentWinningPoint ?? this.currentWinPoint,
+      currentWinPoint: currentWinPoint ?? this.currentWinPoint,
       maxWinPoint: maxWinningPoint ?? this.maxWinPoint,
       participation: participation ?? this.participation,
     );
@@ -32,7 +32,7 @@ class UserVoteStatsModel {
   UserVoteStatsModel.fromData(
     Map<String, dynamic> data,
   )   : firstVote = data['firstVote'],
-        currentWinPoint = data['currentWinningPoint'],
+        currentWinPoint = data['currentWinPoint'],
         // List<int>를 json으로 가져오면 List<dynamic>으로 인식하여 int로 다시 cast해줌
         maxWinPoint = data['maxWinningPoint'],
         participation = data['participation'] == null
@@ -42,7 +42,7 @@ class UserVoteStatsModel {
   Map<String, dynamic> toJson() {
     return {
       'firstVote': this.firstVote,
-      'currentWinningPoint': this.currentWinPoint,
+      'currentWinPoint': this.currentWinPoint,
       'maxWinningPoint': this.maxWinPoint,
       'participation': this.participation,
     };

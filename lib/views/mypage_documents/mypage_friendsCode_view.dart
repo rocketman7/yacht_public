@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
-import 'package:flare_flutter/flare_actor.dart';
 
 import '../../view_models/mypage_friendsCode_view_model.dart';
 
@@ -25,10 +24,7 @@ class MypageFriendsCodeView extends StatelessWidget {
                   child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                 )
               : model.isBusy
-                  ? FlareActor(
-                      'assets/images/Loading.flr',
-                      animation: 'loading',
-                    )
+                  ? Container()
                   : SafeArea(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16),

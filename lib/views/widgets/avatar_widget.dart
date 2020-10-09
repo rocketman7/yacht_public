@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 Widget avatarWidget(String avatarImage, int itemNum) {
   return Container(
@@ -37,16 +38,22 @@ Widget avatarWidget(String avatarImage, int itemNum) {
                     border: Border.all(color: Colors.white, width: 2)),
               ),
               Positioned(
-                top: 3,
+                // top: 3,
+                top: 3.5,
                 left: 6,
                 child: Container(
                   width: 9,
                   height: 9,
-                  child: Image.asset('assets/images/itemlogo.png'),
+                  // child: Image.asset('assets/images/itemlogo.png'),
+                  child: SvgPicture.asset(
+                    'assets/icons/dog_foot.svg',
+                    color: Color(0xFFFFFFFF),
+                  ),
                 ),
               ),
               Positioned(
-                  top: 1,
+                  // top: 1,
+                  top: 1.5,
                   left: 20,
                   child: Text(
                     (itemNum ?? 0).toString(),
