@@ -57,7 +57,7 @@ class HomeViewModel extends FutureViewModel {
     userVote = await _databaseService.getUserVote(address);
     seasonInfo = await _databaseService.getSeasonInfo(address);
     portfolioModel = await _databaseService.getPortfolio(address);
-    print(userVote.userVoteStats.currentWinningPoint.toString());
+    print(userVote.userVoteStats.currentWinPoint.toString());
     print("LENGTH" + vote.subVotes[0].issueCode.length.toString());
     setBusy(false);
   }

@@ -15,7 +15,10 @@ abstract class AccountVerificationService {
 
 class AccoutVerificationServiceMydata extends AccountVerificationService {
   //나중에 DB로 옮기는게..?
-  final String _token = 'ed1ff970f8c64e73857026e430dca5484aa2933e';
+  //test token
+  // final String _token = 'ed1ff970f8c64e73857026e430dca5484aa2933e';
+  //real token
+  final String _token = '98179f2e46aa498bacd828857eab5273ed539e34';
 
   //나중에 DB로 옮기는게..?
   final Map<String, String> bankList = {
@@ -82,10 +85,12 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
     };
 
     resp = await http.post(
-        'https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOwner',
+        // 'https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOwner',
+        'https://api.mydatahub.co.kr/scrap/common/settlebank/accountOwner',
         headers: {
           'Authorization': 'Token $_token',
-          'Host': 'datahub-dev.scraping.co.kr',
+          // 'Host': 'datahub-dev.scraping.co.kr',
+          'Host': 'api.mydatahub.co.kr',
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(body),
@@ -100,9 +105,9 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
           '0021')
         return [true, 'success'];
       else
-        return [false, 'errorO:${respBody['data']['OUTSTATCD']}'];
+        return [false, '다시 시도해주세요:${respBody['data']['OUTRSLTMSG']}'];
       else
-        return [false, 'errorC:${respBody['errCode']}'];
+        return [false, '다시 시도해주세요:${respBody['errCode']}'];
     } else {
       return [false, 'connect error'];
     }
@@ -121,10 +126,12 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
     };
 
     resp = await http.post(
-        'https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOccupation',
+        // 'https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOccupation',
+        'https://api.mydatahub.co.kr/scrap/common/settlebank/accountOccupation',
         headers: {
           'Authorization': 'Token $_token',
-          'Host': 'datahub-dev.scraping.co.kr',
+          // 'Host': 'datahub-dev.scraping.co.kr',
+          'Host': 'api.mydatahub.co.kr',
           'Content-Type': 'application/json;charset=UTF-8'
         },
         body: json.encode(body),
@@ -139,9 +146,9 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
           '0021') {
         return [true, 'success'];
       } else
-        return [false, 'errorO:${respBody['data']['OUTSTATCD']}'];
+        return [false, '다시 시도해주세요:${respBody['data']['OUTRSLTMSG']}'];
       else
-        return [false, 'errorC:${respBody['errCode']}'];
+        return [false, '다시 시도해주세요:${respBody['errCode']}'];
     } else {
       return [false, 'connect error'];
     }

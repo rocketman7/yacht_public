@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../view_models/ranknew_view_model.dart';
 
+// 15개씩 로딩하는 애 연습. 현재는 rank_view 가 진퉁
+
 const String LoadingIndicatorTitle = '^';
 
 class CreationAwareListItem extends StatefulWidget {

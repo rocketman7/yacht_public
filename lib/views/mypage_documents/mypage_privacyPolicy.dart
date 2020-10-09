@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../loading_view.dart';
-
 class MypagePrivacyPolicy extends StatelessWidget {
   Future<String> _privacyPolicyFuture() async {
     return await rootBundle.loadString('assets/documents/privacyPolicy.txt');
@@ -45,7 +43,6 @@ class MypagePrivacyPolicy extends StatelessWidget {
             ),
           );
         } else {
-          // return LoadingView();
           return Scaffold(
             appBar: AppBar(
               title: Text(
@@ -54,6 +51,7 @@ class MypagePrivacyPolicy extends StatelessWidget {
               ),
               elevation: 0,
             ),
+            backgroundColor: Colors.white,
             body: SafeArea(
               child: Container(),
             ),

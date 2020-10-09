@@ -7,11 +7,11 @@ import 'managers/dialog_manager.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/mypage_documents/avatarSelect_view.dart';
+import 'views/oneOnOne_view.dart';
 import 'views/register_view.dart';
 import 'views/startup_view.dart';
 import 'views/ggook_view.dart';
 import 'views/rank_view.dart';
-import 'views/ranknew_view.dart';
 import 'views/mypage_main_view.dart';
 
 import 'views/mypage_documents/mypage_privacyPolicy.dart';
@@ -24,6 +24,8 @@ import 'views/mypage_documents/mypage_editProfile_view.dart';
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_view.dart';
 import 'views/portfolio_view.dart';
+import 'views/faq_view.dart';
+import 'views/notice_view.dart';
 
 class Routers {
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -63,8 +65,6 @@ class Routers {
       case 'rank':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: RankView()));
-      case 'ranknew':
-        return MaterialPageRoute(builder: (context) => RanknewView());
 
       case 'mypage_main':
         return MaterialPageRoute(
@@ -96,6 +96,12 @@ class Routers {
         return MaterialPageRoute(builder: (context) => MypageTempGGookView());
       case 'portfolio':
         return MaterialPageRoute(builder: (context) => PortfolioView());
+      case 'faq':
+        return MaterialPageRoute(builder: (context) => FaqView());
+      case 'notice':
+        return MaterialPageRoute(builder: (context) => NoticeView());
+      case 'oneonone':
+        return MaterialPageRoute(builder: (context) => OneOnOneView());
       case 'startup':
         return MaterialPageRoute(
             builder: (context) =>

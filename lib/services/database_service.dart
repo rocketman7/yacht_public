@@ -2,12 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:yachtOne/models/date_time_model.dart';
-import 'package:yachtOne/models/price_model.dart';
-import 'package:yachtOne/models/rank_model.dart';
-import 'package:yachtOne/models/season_model.dart';
-import 'package:yachtOne/models/user_post_model.dart';
-import 'package:yachtOne/models/user_vote_stats_model.dart';
+
+import '../models/date_time_model.dart';
+import '../models/faq_model.dart';
+import '../models/notice_model.dart';
+import '../models/oneOnOne_model.dart';
+import '../models/price_model.dart';
+import '../models/season_model.dart';
+import '../models/user_post_model.dart';
+import '../models/user_vote_stats_model.dart';
 import '../models/sub_vote_model.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
@@ -202,7 +205,7 @@ class DatabaseService {
           await address.userVoteSeasonStatsCollection().get();
 
       UserVoteStatsModel tempUserVoteStats = UserVoteStatsModel(
-        currentWinningPoint: 0,
+        currentWinPoint: 0,
       );
       if (userVoteStatsData.data() == null) {
         print("TEMP MODEL" + tempUserVoteStats.toString());
@@ -221,6 +224,35 @@ class DatabaseService {
           userVoteData.data() ?? tempUserVote.toJson(), userVoteStats);
     } catch (e) {
       print("ERROR_getUserVote");
+      print(e.toString());
+    }
+  }
+
+  // Read: User의 Vote/stat정보 가져오기
+  Future getUserVoteStat(DatabaseAddressModel address) async {
+    try {
+      UserVoteStatsModel userVoteStats;
+
+      var userVoteStatsData =
+          await address.userVoteSeasonStatsCollection().get();
+
+      UserVoteStatsModel tempUserVoteStats = UserVoteStatsModel(
+        currentWinPoint: 0,
+      );
+      if (userVoteStatsData.data() == null) {
+        print("TEMP MODEL" + tempUserVoteStats.toString());
+
+        await address
+            .userVoteSeasonStatsCollection()
+            .set(tempUserVoteStats.toJson());
+        userVoteStats = tempUserVoteStats;
+      } else {
+        userVoteStats = UserVoteStatsModel.fromData(userVoteStatsData.data());
+      }
+
+      return userVoteStats;
+    } catch (e) {
+      print("ERROR_getUserVoteStat");
       print(e.toString());
     }
   }
@@ -442,7 +474,8 @@ class DatabaseService {
 
       await databaseAddressModel
           .ranksSeasonDateCollection()
-          .orderBy('combo', descending: true)
+          // .orderBy('combo', descending: true)
+          .orderBy('todayRank', descending: false)
           .get()
           .then((querysnapshot) => querysnapshot.docs.forEach((element) {
                 rankList.add(RankModel.fromData(element.data()));
@@ -465,12 +498,13 @@ class DatabaseService {
     ranksCollectionReference
         .doc('koreaStockStandard')
         .collection('season001')
-        .doc('20201005')
-        .collection('20201005')
+        .doc('20201008')
+        .collection('20201008')
         .add({
-          'uid': 'w9E2tSET3fTrtMoSB7ctTgWlGAO2',
-          'userName': 'rocketman',
-          'combo': rndCombo
+          'uid': 'm2UUvxsAwfdLFP4RB8q4SgkaNgr2',
+          'userName': 'csejun',
+          'combo': rndCombo,
+          'avatarImage': 'avatar007'
         })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
@@ -496,6 +530,70 @@ class DatabaseService {
     } catch (e) {
       print("error at portfoliomodel get");
       print(e.toString());
+      return null;
+    }
+  }
+
+  // Read: Faq List 불러오자
+  Future<List<FaqModel>> getFaq() async {
+    try {
+      List<FaqModel> faqList = [];
+
+      await adminCollectionReference
+          .doc('adminPost')
+          .collection('faq')
+          .get()
+          .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+                faqList.add(FaqModel.fromData(element.data()));
+              }));
+
+      return faqList;
+    } catch (e) {
+      print('faqList load error: ${e.toString()}');
+
+      return null;
+    }
+  }
+
+  // Read: Notice List 불러오자
+  Future<List<NoticeModel>> getNotice() async {
+    try {
+      List<NoticeModel> noticeList = [];
+
+      await adminCollectionReference
+          .doc('adminPost')
+          .collection('notice')
+          .orderBy('noticeDateTime', descending: true)
+          .get()
+          .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+                noticeList.add(NoticeModel.fromData(element.data()));
+              }));
+
+      return noticeList;
+    } catch (e) {
+      print('noticeList load error: ${e.toString()}');
+
+      return null;
+    }
+  }
+
+  // Read: Faq List 불러오자
+  Future<List<OneOnOneModel>> getOneOnOne() async {
+    try {
+      List<OneOnOneModel> oneOnOneList = [];
+
+      await adminCollectionReference
+          .doc('adminPost')
+          .collection('oneOnOne')
+          .get()
+          .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+                oneOnOneList.add(OneOnOneModel.fromData(element.data()));
+              }));
+
+      return oneOnOneList;
+    } catch (e) {
+      print('oneOnOneList load error: ${e.toString()}');
+
       return null;
     }
   }
@@ -600,8 +698,8 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: '20201005',
-      // date: baseDate,
+      // date: '20201005',
+      date: baseDate,
       category: category,
       season: season,
       isVoting: isVoting,

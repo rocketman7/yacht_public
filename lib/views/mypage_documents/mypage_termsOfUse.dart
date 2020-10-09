@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../loading_view.dart';
-
 class MypageTermofuse extends StatelessWidget {
   Future<String> _termsOfUseFuture() async {
     return await rootBundle.loadString('assets/documents/termsOfUse.txt');
@@ -45,7 +43,6 @@ class MypageTermofuse extends StatelessWidget {
             ),
           );
         } else {
-          // return LoadingView();
           return Scaffold(
             appBar: AppBar(
               title: Text(

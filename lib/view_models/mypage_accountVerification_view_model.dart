@@ -24,9 +24,13 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   bool visibleButton1 = true;
   bool visibleBankList = false;
   bool visibleButton2 = false;
+  bool ableButton2 = true;
   bool visibleAuthNumProcess = false;
   bool verificationSuccess = false;
+  String accVerificationFailMsg = '';
   String verificationFailMsg = '';
+  bool accNumberInsertProcess = false;
+  bool accNameInsertProcess = false;
   // 사용자가 선택, 입력한 증권계좌정보들
   String secName = '';
   String bankCode = '';
@@ -42,25 +46,32 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
     user = await _databaseService.getUser(uid);
   }
 
-  Future<bool> accOwnerVerificationRequest() async {
+  Future<String> accOwnerVerificationRequest() async {
+    bankCode = accountVerificationService.getBankList()['$secName'];
+
+    print(bankCode);
+
     accOwnerResp = await accountVerificationService.accOwnerVerification(
         accNumber, bankCode, accName);
-
-    bankCode = accountVerificationService.getBankList()['$secName'];
 
     print(accOwnerResp[0]);
     print(accOwnerResp[1]);
 
     notifyListeners();
 
-    return accOwnerResp[0];
+    if (accOwnerResp[0])
+      return 'success';
+    else
+      return accOwnerResp[1];
   }
 
-  Future<bool> accOccupyVerificationRequest() async {
-    // authNum = AccoutVerificationServiceMydata().authTextGenerate();
-    authNum = 5555;
+  Future<String> accOccupyVerificationRequest() async {
+    authNum = AccoutVerificationServiceMydata().authTextGenerate();
+    // authNum = 5555;
 
     bankCode = accountVerificationService.getBankList()['$secName'];
+
+    print(bankCode);
 
     accOccupyResp = await accountVerificationService.accOccupyVerification(
         accNumber, bankCode, authNum.toString());
@@ -70,7 +81,30 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
 
     notifyListeners();
 
-    return accOccupyResp[0];
+    if (accOccupyResp[0])
+      return 'success';
+    else
+      return accOccupyResp[1];
+
+    // return accOccupyResp[0];
+  }
+
+  Future<String> accVerificationRequest() async {
+    accVerificationFailMsg = '';
+
+    String result1, result2;
+    result1 = await accOwnerVerificationRequest();
+    result2 = await accOccupyVerificationRequest();
+
+    if (result1 == 'success' && result2 == 'success') {
+      return 'success';
+    } else if (result1 == 'success') {
+      accVerificationFailMsg = result2;
+      return result2;
+    } else {
+      accVerificationFailMsg = result1;
+      return result1;
+    }
   }
 
   bool accVerification(String authNumInput) {
