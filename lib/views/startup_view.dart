@@ -127,8 +127,6 @@ class _StartUpViewState extends State<StartUpView>
                     key: navBarGlobalKey,
                     type: BottomNavigationBarType.fixed,
                     onTap: (index) => {
-                      print(index),
-
                       setState(() {
                         _selectedIndex = index;
                         _tabController.index = index;

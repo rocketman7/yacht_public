@@ -201,9 +201,7 @@ class DatabaseService {
       var userVoteStatsData =
           await address.userVoteSeasonStatsCollection().get();
 
-      UserVoteStatsModel tempUserVoteStats = UserVoteStatsModel(
-        currentWinningPoint: 0,
-      );
+      UserVoteStatsModel tempUserVoteStats = UserVoteStatsModel();
       if (userVoteStatsData.data() == null) {
         print("TEMP MODEL" + tempUserVoteStats.toString());
 
@@ -600,7 +598,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: '20201005',
+      date: baseDate,
       // date: baseDate,
       category: category,
       season: season,

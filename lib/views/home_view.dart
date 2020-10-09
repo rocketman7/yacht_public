@@ -257,7 +257,7 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                     Text(
                                       model.userVote.userVoteStats
-                                          .currentWinningPoint
+                                          .currentWinPoint
                                           .toString(),
                                       style: TextStyle(
                                         fontSize: 20,
@@ -300,6 +300,7 @@ class _HomeViewState extends State<HomeView> {
                                 SizedBox(
                                   height: 8,
                                 ),
+                                Text(model.address.date),
                                 LimitedBox(
                                   maxHeight: 550,
                                   // height: 350,

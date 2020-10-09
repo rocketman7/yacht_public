@@ -4,14 +4,14 @@ import 'package:flutter/foundation.dart';
 
 class UserVoteStatsModel {
   final String firstVote;
-  final int currentWinningPoint;
-  final int maxWinningPoint;
+  final int currentWinPoint;
+  final int maxWinPoint;
   final List<bool> participation;
 
   UserVoteStatsModel({
     this.firstVote,
-    this.currentWinningPoint,
-    this.maxWinningPoint,
+    this.currentWinPoint,
+    this.maxWinPoint,
     this.participation,
   });
 
@@ -23,8 +23,8 @@ class UserVoteStatsModel {
   }) {
     return UserVoteStatsModel(
       firstVote: firstVote ?? this.firstVote,
-      currentWinningPoint: currentWinningPoint ?? this.currentWinningPoint,
-      maxWinningPoint: maxWinningPoint ?? this.maxWinningPoint,
+      currentWinPoint: currentWinningPoint ?? this.currentWinPoint,
+      maxWinPoint: maxWinningPoint ?? this.maxWinPoint,
       participation: participation ?? this.participation,
     );
   }
@@ -32,9 +32,9 @@ class UserVoteStatsModel {
   UserVoteStatsModel.fromData(
     Map<String, dynamic> data,
   )   : firstVote = data['firstVote'],
-        currentWinningPoint = data['currentWinningPoint'],
+        currentWinPoint = data['currentWinningPoint'],
         // List<int>를 json으로 가져오면 List<dynamic>으로 인식하여 int로 다시 cast해줌
-        maxWinningPoint = data['maxWinningPoint'],
+        maxWinPoint = data['maxWinningPoint'],
         participation = data['participation'] == null
             ? null
             : List<bool>.from(data['participation']);
@@ -42,8 +42,8 @@ class UserVoteStatsModel {
   Map<String, dynamic> toJson() {
     return {
       'firstVote': this.firstVote,
-      'currentWinningPoint': this.currentWinningPoint,
-      'maxWinningPoint': this.maxWinningPoint,
+      'currentWinningPoint': this.currentWinPoint,
+      'maxWinningPoint': this.maxWinPoint,
       'participation': this.participation,
     };
   }
