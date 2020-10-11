@@ -216,7 +216,7 @@ class DatabaseService {
         userVoteStats = UserVoteStatsModel.fromData(userVoteStatsData.data());
       }
 
-      print(userVoteData.data());
+      print("USERVOTE" + userVoteData.data().toString());
 
       return UserVoteModel.fromData(
           userVoteData.data() ?? tempUserVote.toJson(), userVoteStats);

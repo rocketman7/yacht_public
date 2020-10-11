@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:yachtOne/services/navigation_service.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 import 'package:yachtOne/view_models/phone_auth_view_model.dart';
 import 'package:yachtOne/views/phone_auth_view.dart';
 import '../locator.dart';
@@ -18,6 +19,8 @@ class AuthService {
 
   final DatabaseService _databaseService = locator<DatabaseService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   // 현재 User 데이터를 user model에 넣어서 저장
   UserModel _currentUserModel;
@@ -25,6 +28,9 @@ class AuthService {
 
   String _verificationId;
   String get verificationId => _verificationId;
+
+  PhoneAuthCredential _authCredential;
+  PhoneAuthCredential get authCredential => _authCredential;
   // Phone Auth
   Future sendPhoneAuthSms(String value, BuildContext context) async {
     // Firebase Auth의 verifyPhoneNumber method
@@ -88,8 +94,13 @@ class AuthService {
       return credential;
     }).then((value) {
       // value = null;
-      // auth.signOut();
       if (value != null) {
+        // auth.signOut();
+        _authCredential = credential;
+        print("VALUE IS NOT NULL AND CREDENTIAL IS " +
+            credential.toString() +
+            auth.currentUser.uid); // auth.signOut();
+        // print("SignOut");
         _navigationService.navigateWithArgTo('register', credential);
       }
     });
@@ -122,6 +133,7 @@ class AuthService {
       // );
 
       var user = auth.currentUser;
+      print("UID" + auth.currentUser.uid);
       print(phoneCredential.smsCode);
       await user.linkWithCredential(credential);
 
@@ -151,7 +163,8 @@ class AuthService {
       await _databaseService.createUser(_currentUserModel);
 
       // Register 성공하면 return true
-      return user != null;
+
+      return (user != null);
     } on FirebaseAuthException catch (e) {
       print(e.code);
       switch (e.code) {

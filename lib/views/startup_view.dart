@@ -100,7 +100,7 @@ class _StartUpViewState extends State<StartUpView>
     // HomeView에서 다른 페이지로 간 뒤에 backbutton으로 다시 홈에 오면 stream trigger가 안됨.
     print("StartuUpView");
     return ViewModelBuilder<StartUpViewModel>.reactive(
-      onModelReady: (model) => model.stream,
+      // onModelReady: (model) => model.stream,
       // ViewModel이 세팅되면 아래 함수 call
       // onModelReady: (model) => model.handleStartUpLogic(),
       // onModelReady 콜 하고 아래 빌드. handleStartUpLogi이 Future함수 이므로 처리될 동안 LoadingView 빌드
@@ -125,6 +125,7 @@ class _StartUpViewState extends State<StartUpView>
                   // height: 70,
                   child: BottomNavigationBar(
                     key: navBarGlobalKey,
+
                     type: BottomNavigationBarType.fixed,
                     onTap: (index) => {
                       setState(() {
@@ -140,11 +141,14 @@ class _StartUpViewState extends State<StartUpView>
                     selectedItemColor: Color(0xFF1EC8CF),
                     unselectedItemColor: Color(0xFFAAAAAA),
                     selectedFontSize: 0,
+                    // iconSize: 25,
                     unselectedFontSize: 0,
                     items: [
                       BottomNavigationBarItem(
-                        icon: SvgPicture.asset('assets/icons/home.svg',
-                            color: Color(0xFFAAAAAA)),
+                        icon: GestureDetector(
+                          child: SvgPicture.asset('assets/icons/home.svg',
+                              color: Color(0xFFAAAAAA)),
+                        ),
                         activeIcon: SvgPicture.asset('assets/icons/home.svg',
                             color: Color(0xFF1EC8CF)),
                         label: '',

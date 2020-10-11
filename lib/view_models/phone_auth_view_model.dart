@@ -4,15 +4,19 @@ import 'package:yachtOne/managers/dialog_manager.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/services/dialog_service.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 import 'package:yachtOne/view_models/base_model.dart';
 
 import '../locator.dart';
 
-class PhoneAuthViewModel extends BaseViewModel {
+class PhoneAuthViewModel extends FutureViewModel {
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final DialogService _dialogService = locator<DialogService>();
+  SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
+  bool isTwoFactorAuthed = false;
   String get verificationId => _authService.verificationId;
 
   // authService로 폰 번호와 content 넘겨서 폰 인증 작업 시작
@@ -43,6 +47,18 @@ class PhoneAuthViewModel extends BaseViewModel {
 
   Future matchCode(String code) async {
     print(verificationId);
+    // setTwoFactorAuth(false);
     await _authService.verifySms(code, verificationId);
   }
+
+  @override
+  Future futureToRun() =>
+      _sharedPreferencesService.setSharedPreferencesValue('twoFactor', false);
+
+  // void setTwoFactorAuth(bool isTwoFactored) {
+  //   _sharedPreferencesService.setSharedPreferencesValue(
+  //       "twoFactor", isTwoFactored);
+  //   isTwoFactorAuthed = isTwoFactored;
+  //   notifyListeners();
+  // }
 }

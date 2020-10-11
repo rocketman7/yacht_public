@@ -10,8 +10,10 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/vote_comment_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/subject_community_view_model.dart';
 import 'package:yachtOne/views/constants/size.dart';
+import '../locator.dart';
 import 'widgets/avatar_widget.dart';
 
 class SubjectCommunityView extends StatefulWidget {
@@ -30,10 +32,10 @@ final ScrollController _commentScrollController = ScrollController();
 VoteCommentModel voteCommentModel;
 
 class _SubjectCommunityViewState extends State<SubjectCommunityView> {
+  final NavigationService _navigationService = locator<NavigationService>();
   int idx;
   VoteModel vote;
   bool isliked = false;
-
   @override
   void initState() {
     super.initState();
@@ -88,9 +90,11 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                           children: <Widget>[
                             GestureDetector(
                                 onTap: () {
-                                  FocusScope.of(_scaffoldKey.currentContext)
+                                  FocusScope.of(_navigationService
+                                          .navigatorKey.currentContext)
                                       .unfocus();
-                                  Navigator.of(_scaffoldKey.currentContext)
+                                  Navigator.of(_navigationService
+                                          .navigatorKey.currentContext)
                                       .pop();
                                 },
                                 child: Icon(Icons.arrow_back_ios)),
@@ -302,7 +306,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
             print("STREAM BUILDING");
             if (snapshot.data == null) {
               print("SNAP NULL");
-              return Center(child: CircularProgressIndicator());
+              return Center(child: Container());
             } else {
               print("SNAP RECEIVED");
               PriceModel price0;
@@ -549,7 +553,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                   .toString(),
                               style: TextStyle(
                                 color: Color(0xFF3485FF),
-                                fontSize: 20,
+                                fontSize: 16,
                               ),
                             )
                           : Text(
@@ -574,18 +578,18 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
           ),
           builder: (context, snapshot0) {
             if (snapshot0.data == null) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: Container());
             } else {
               PriceModel price0;
               price0 = snapshot0.data;
               return StreamBuilder<PriceModel>(
                   stream: model.getRealtimePrice(
-                    model.address,
+                    model.newAddress,
                     model.vote.subVotes[idx].issueCode[1],
                   ),
                   builder: (context, snapshot1) {
                     if (snapshot1.data == null) {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(child: Container());
                     } else {
                       PriceModel price1;
                       price1 = snapshot1.data;
@@ -893,6 +897,19 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
 
           if (snapshot.data == null) {
             return Container();
+          } else if (snapshot.data.length == 0) {
+            return Center(
+              child: Text(
+                "아직 의견이 없습니다.\n ${model.user.userName}님이 첫 번째 의견을 나눠보세요.",
+                style: TextStyle(
+                  fontFamily: 'DmSans',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF999999),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            );
           } else {
             return Container(
 

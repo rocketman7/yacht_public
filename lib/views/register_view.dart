@@ -45,6 +45,8 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
+    AuthService _auth = AuthService();
+
     final PhoneAuthCredential credential = widget.credential;
     final Size size = MediaQuery.of(context).size;
     final deviceHeight = size.height;

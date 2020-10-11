@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yachtOne/services/database_service.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 import '../locator.dart';
 import '../services/auth_service.dart';
 import '../services/dialog_service.dart';
@@ -12,6 +13,8 @@ class RegisterViewModel extends BaseModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   final DialogService _dialogService = locator<DialogService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
   Map<String, dynamic> userData;
 
   Future register({
@@ -40,8 +43,17 @@ class RegisterViewModel extends BaseModel {
       // Register 성공하면,
       if (result is bool) {
         if (result) {
-          print('Register Success');
           // HomeView로 이동
+
+          _sharedPreferencesService.setSharedPreferencesValue(
+              "twoFactor", true);
+
+          print('Register Success AND' +
+              _sharedPreferencesService
+                  .getSharedPreferencesValue('twoFactor', bool)
+                  .toString());
+          notifyListeners();
+
           _navigationService.navigateTo('startup');
         } else {
           // error 다뤄야함.

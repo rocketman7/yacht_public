@@ -10,9 +10,11 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/vote_comment_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/season_community_view_model.dart';
 import 'package:yachtOne/views/constants/size.dart';
 
+import '../locator.dart';
 import 'widgets/avatar_widget.dart';
 
 class SeasonCommunityView extends StatefulWidget {
@@ -26,6 +28,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 VoteCommentModel voteCommentModel;
 
 class _SeasonCommunityViewState extends State<SeasonCommunityView> {
+  final NavigationService _navigationService = locator<NavigationService>();
   bool isliked;
   @override
   Widget build(BuildContext context) {
@@ -62,9 +65,11 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                             children: <Widget>[
                               GestureDetector(
                                   onTap: () {
-                                    FocusScope.of(_scaffoldKey.currentContext)
+                                    FocusScope.of(_navigationService
+                                            .navigatorKey.currentContext)
                                         .unfocus();
-                                    Navigator.of(_scaffoldKey.currentContext)
+                                    Navigator.of(_navigationService
+                                            .navigatorKey.currentContext)
                                         .pop();
                                   },
                                   child: Icon(Icons.arrow_back_ios)),
@@ -814,6 +819,19 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
 
           if (snapshot.data == null) {
             return Container();
+          } else if (snapshot.data.length == 0) {
+            return Center(
+              child: Text(
+                "아직 의견이 없습니다.\n ${model.user.userName}님이 첫 번째 의견을 나눠보세요.",
+                style: TextStyle(
+                  fontFamily: 'DmSans',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF999999),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            );
           } else {
             return Container(
                 // height: deviceHeight * .55,

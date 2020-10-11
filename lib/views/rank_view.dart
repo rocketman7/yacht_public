@@ -129,7 +129,7 @@ class RankView extends StatelessWidget {
                                     ),
                                     Spacer(),
                                     Text(
-                                      '${model.seasonModel.winningCombo}',
+                                      '${model.seasonModel.winningPoint}',
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontFamily: 'DmSans',
@@ -211,14 +211,14 @@ class RankView extends StatelessWidget {
                                     SizedBox(
                                       width: 3,
                                     ),
-                                    Text(
-                                      '${model.returnDigitFormat(model.myRank)}',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'DmSans',
-                                          letterSpacing: -1.0,
-                                          fontWeight: FontWeight.bold),
-                                    )
+                                    // Text(
+                                    //   '${model.returnDigitFormat(model.myRank)}',
+                                    //   style: TextStyle(
+                                    //       fontSize: 20,
+                                    //       fontFamily: 'DmSans',
+                                    //       letterSpacing: -1.0,
+                                    //       fontWeight: FontWeight.bold),
+                                    // )
                                   ],
                                 ),
                                 SizedBox(

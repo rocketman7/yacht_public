@@ -3,50 +3,30 @@ import 'dart:convert';
 class SeasonModel {
   final String seasonName;
   final String startDate;
-  final int winningPoint;
+  final int maxDailyVote;
   final int correctPoint;
   final int wrongPoint;
   final int initialAwardValue;
-  final int winningCombo;
+  final int winningPoint;
 
   SeasonModel(
       this.seasonName,
       this.startDate,
-      this.winningPoint,
+      this.maxDailyVote,
       this.correctPoint,
       this.wrongPoint,
       this.initialAwardValue,
-      this.winningCombo);
-
-  SeasonModel copyWith({
-    String seasonName,
-    String startDate,
-    int winningPoint,
-    int correctPoint,
-    int wrongPoint,
-    int initialAwardValue,
-    int winningcombo,
-  }) {
-    return SeasonModel(
-      seasonName ?? this.seasonName,
-      startDate ?? this.startDate,
-      winningPoint ?? this.winningPoint,
-      correctPoint ?? this.correctPoint,
-      wrongPoint ?? this.wrongPoint,
-      initialAwardValue ?? this.initialAwardValue,
-      winningcombo ?? this.winningCombo,
-    );
-  }
+      this.winningPoint);
 
   Map<String, dynamic> toJson() {
     return {
       'seasonName': seasonName,
       'startDate': startDate,
-      'winningPoint': winningPoint,
+      'winningPoint': maxDailyVote,
       'correctPoint': correctPoint,
       'wrongPoint': wrongPoint,
       'initialAwardValue': initialAwardValue,
-      'winningCombo': winningCombo
+      'winningPoint': winningPoint
     };
   }
 
@@ -56,21 +36,16 @@ class SeasonModel {
     return SeasonModel(
       map['seasonName'],
       map['startDate'],
-      map['winningPoint'],
+      map['maxDailyVote'],
       map['correctPoint'],
       map['wrongPoint'],
       map['initialAwardValue'],
-      map['winningCombo'],
+      map['winningPoint'],
     );
   }
 
   factory SeasonModel.fromJson(String source) =>
       SeasonModel.fromData(json.decode(source));
-
-  @override
-  String toString() {
-    return 'SeasonModel(seasonName: $seasonName, startDate: $startDate, winningPoint: $winningPoint, correctPoint: $correctPoint, wrongPoint: $wrongPoint, initialAwardValue: $initialAwardValue, winningCombo: $winningCombo)';
-  }
 
   @override
   bool operator ==(Object o) {
@@ -79,21 +54,21 @@ class SeasonModel {
     return o is SeasonModel &&
         o.seasonName == seasonName &&
         o.startDate == startDate &&
-        o.winningPoint == winningPoint &&
+        o.maxDailyVote == maxDailyVote &&
         o.correctPoint == correctPoint &&
         o.wrongPoint == wrongPoint &&
         o.initialAwardValue == initialAwardValue &&
-        o.winningCombo == winningCombo;
+        o.winningPoint == winningPoint;
   }
 
   @override
   int get hashCode {
     return seasonName.hashCode ^
         startDate.hashCode ^
-        winningPoint.hashCode ^
+        maxDailyVote.hashCode ^
         correctPoint.hashCode ^
         wrongPoint.hashCode ^
         initialAwardValue.hashCode ^
-        winningCombo.hashCode;
+        winningPoint.hashCode;
   }
 }

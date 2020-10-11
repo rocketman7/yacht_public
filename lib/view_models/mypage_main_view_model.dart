@@ -1,4 +1,5 @@
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 
 import '../services/dialog_service.dart';
 import '../locator.dart';
@@ -13,6 +14,8 @@ class MypageMainViewModel extends FutureViewModel {
   final AuthService _authService = locator<AuthService>();
   final DialogService _dialogService = locator<DialogService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
+  SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   // 변수 Setting
   String uid;
@@ -39,9 +42,10 @@ class MypageMainViewModel extends FutureViewModel {
         buttonTitle: '네',
         cancelTitle: '아니오');
     if (dialogResult.confirmed) {
+      _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
       _authService.signOut();
 
-      // _navigationService.popAndNavigateWithArgTo('login', null);
+      _navigationService.popAndNavigateWithArgTo('initial');
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 import 'package:yachtOne/views/home_view.dart';
 import 'package:yachtOne/views/login_view.dart';
 
@@ -9,37 +10,53 @@ import '../services/auth_service.dart';
 import '../services/navigation_service.dart';
 import '../view_models/base_model.dart';
 
-class StartUpViewModel extends StreamViewModel<User> {
+class StartUpViewModel extends BaseViewModel {
   final AuthService _authService = locator<AuthService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
+
   int index;
+  String uid;
   StartUpViewModel() {
     index = 0;
+    uid = _authService.auth.currentUser.uid;
   }
 
-  @override
-  // TODO: implement stream
-  Stream<User> get stream {
-    print("stream");
-    return _authService.auth.authStateChanges();
-  }
+  // bool isTwoFactorAuthed;
 
-  @override
-  void onCancel() {
-    print("Subscribe Canceled");
-  }
+  // @override
+  // // TODO: implement stream
+  // Stream<User> get stream {
+  //   print("stream");
 
-  @override
-  void onData(data) {
-    print(data);
-    if (data == null) {
-      // return LoginView();
-      print("GOTOLOGIN");
-      _navigationService.navigateTo('login');
-    } else {
-      // _navigationService.navigateTo('loggedIn');
-    }
-  }
+  //   return _authService.auth.authStateChanges();
+  // }
+
+  // @override
+  // void onCancel() {
+  //   print("Subscribe Canceled");
+  // }
+
+  // @override
+  // void onData(data) async {
+  //   isTwoFactorAuthed = await _sharedPreferencesService
+  //       .getSharedPreferencesValue("twoFactor", bool);
+  //   print("TWOFACTOR" + isTwoFactorAuthed.toString());
+  //   notifyListeners();
+
+  //   print(data);
+  //   // if (!isTwoFactorAuthed) {
+  //   //   _navigationService.navigateWithArgTo(
+  //   //       // 'register', _authService.authCredential);
+  //   // } else {
+  //   if (data == null) {
+  //     // return LoginView();
+  //     print("GOTOLOGIN");
+  //     _navigationService.navigateTo('login');
+  //   } else {}
+  // }
+  // }
   // Stream<User> user;
 
   // Stream handleStartUpLogic() async {

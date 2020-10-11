@@ -357,8 +357,9 @@ exports.sortRank = functions.https.onRequest(async (req, res) => {
             ) {
               console.log(statsData.data());
 
-              var temp = statsData.data();
-              temp["uid"] = statsData.data().uid;
+              var temp = {};
+              temp["uid"] = uid;
+              temp["currentWinPoint"] = statsData.data().currentWinPoint;
               // temp["avatarImage"] = datas.avatarImage;
               // temp["userName"] = datas.userName;
 
