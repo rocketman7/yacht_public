@@ -416,35 +416,35 @@ class _HomeViewState extends State<HomeView> {
                                 SizedBox(
                                   height: 32,
                                 ),
-                                Row(
-                                  children: <Widget>[
-                                    Text("시즌 상위",
-                                        style: TextStyle(
-                                          fontSize: 28,
-                                          letterSpacing: -2.0,
-                                          fontWeight: FontWeight.w800,
-                                        )),
-                                    SizedBox(
-                                      width: 3,
-                                    ),
-                                    Text("5",
-                                        style: TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.w800,
-                                          color: Color(0xFF1EC8CF),
-                                        ))
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  "10,345명의 참여자",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color(0xFF9C9C9C),
-                                  ),
-                                ),
+                                // Row(
+                                //   children: <Widget>[
+                                //     Text("시즌 상위",
+                                //         style: TextStyle(
+                                //           fontSize: 28,
+                                //           letterSpacing: -2.0,
+                                //           fontWeight: FontWeight.w800,
+                                //         )),
+                                //     SizedBox(
+                                //       width: 3,
+                                //     ),
+                                //     Text("5",
+                                //         style: TextStyle(
+                                //           fontSize: 28,
+                                //           fontWeight: FontWeight.w800,
+                                //           color: Color(0xFF1EC8CF),
+                                //         ))
+                                //   ],
+                                // ),
+                                // SizedBox(
+                                //   height: 8,
+                                // ),
+                                // Text(
+                                //   "10,345명의 참여자",
+                                //   style: TextStyle(
+                                //     fontSize: 14,
+                                //     color: Color(0xFF9C9C9C),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),

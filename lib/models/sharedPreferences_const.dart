@@ -11,3 +11,4 @@ const String avatarKey = 'avatar';
 
 // 각 화면별 튜토리얼 상태저장
 const String portfolioTutorialKey = 'portfolioTutorial';
+const String voteSelectTutorialKey = 'voteSelectTutorial';

@@ -208,10 +208,11 @@ class _PortfolioViewState extends State<PortfolioView>
                         ),
                       ),
                     ),
-                    // model.portfolioTutorial
-                    //     ? Container()
-                    //     :
-                    model.tutorialStatus != 0 ? tutorial(model) : Container(),
+                    model.portfolioTutorial
+                        ? Container()
+                        : model.tutorialStatus != 0
+                            ? tutorial(model)
+                            : Container(),
                   ],
                 ));
           }

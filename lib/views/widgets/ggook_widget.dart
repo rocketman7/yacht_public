@@ -153,23 +153,6 @@ Widget ggookWidget(
             //     ),
             //   ],
             // ),
-            GestureDetector(
-              child: Text('디버그'),
-              onTap: () {
-                // BlobData blobData = blobCtrl.change();
-                // print(blobData);
-                // setState(() {
-                //   x += 10;
-                // });
-              },
-            ),
-            GestureDetector(
-              child: Text('선택애니메이션'),
-              onTap: () {
-                // print(blobCtrl.change().size);
-                // animationController.forward();
-              },
-            )
           ],
         ),
       )),
@@ -507,9 +490,7 @@ class _Test2WidgetState extends State<Test2Widget> {
             ),
             styles: BlobStyles(
               color: vote.subVotes[listSelected[idx]].issueCode.length == 1
-                  ? choice == 0
-                      ? Color(0xFFFF3E3E)
-                      : Color(0xFF3485FF)
+                  ? choice == 0 ? Color(0xFFFF3E3E) : Color(0xFF3485FF)
                   : hexToColor(
                       vote.subVotes[listSelected[idx]].colorCode[choice]),
               // color: Color(0xFFFFDE34).withOpacity(.5),

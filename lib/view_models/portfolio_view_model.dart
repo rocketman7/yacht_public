@@ -16,15 +16,13 @@ class PortfolioViewModel extends FutureViewModel {
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   SharedPreferencesService _sharedPreferencesService =
-      locator<SharedPreferencesService>();
+      locator<SharedPreferencesService>(); //
 
   // 변수 Setting
   DatabaseAddressModel addressModel;
   PortfolioModel portfolioModel;
   SeasonModel seasonModel;
   String uid;
-
-  bool portfolioTutorial;
 
   // UI용 변수
   List<double> startPercentage = []; // 실제 subPortfolio갯수보다 하나 많아야.
@@ -41,6 +39,7 @@ class PortfolioViewModel extends FutureViewModel {
   List<bool> drawingMaxLength = [];
 
   // 튜토리얼 변수
+  bool portfolioTutorial;
   int tutorialStatus = 2; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
   int tutorialTotalStep = 2; // 튜토리얼 총 단계
 
@@ -56,8 +55,6 @@ class PortfolioViewModel extends FutureViewModel {
     seasonModel = await _databaseService.getSeasonInfo(addressModel);
     portfolioTutorial = await _sharedPreferencesService
         .getSharedPreferencesValue(portfolioTutorialKey, bool);
-
-    print(portfolioTutorial);
 
     // 초기비중만큼 호를 나눠주기 위해 값 계산
     for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
@@ -206,7 +203,6 @@ class PortfolioViewModel extends FutureViewModel {
     tutorialStatus--;
 
     if (tutorialStatus == 0) {
-      print('dfwefwf');
       _sharedPreferencesService.setSharedPreferencesValue(
           portfolioTutorialKey, true);
     }
