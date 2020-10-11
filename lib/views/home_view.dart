@@ -34,6 +34,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final NavigationService _navigationService = locator<NavigationService>();
+  final AuthService _authService = locator<AuthService>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   // GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
@@ -51,6 +52,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+
     // _authUserState = _viewModel.authUserState;
     // _addressModel = _viewModel.getAddress();
     // _userModel = _viewModel.getUser(_viewModel.uid);
@@ -70,6 +72,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     // final BottomNavigationBar navigationBar = navBarGlobalKey.currentWidget;
+    // _authService.auth.signOut();
     print("homeViewBuild");
     Size size = MediaQuery.of(context).size;
     deviceHeight = size.height;
@@ -257,8 +260,12 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                     Text(
                                       model.userVote.userVoteStats
-                                          .currentWinPoint
-                                          .toString(),
+                                                  .currentWinPoint ==
+                                              null
+                                          ? 0.toString()
+                                          : model.userVote.userVoteStats
+                                              .currentWinPoint
+                                              .toString(),
                                       style: TextStyle(
                                         fontSize: 20,
                                         letterSpacing: -1.0,
@@ -279,28 +286,60 @@ class _HomeViewState extends State<HomeView> {
                                   height: 35,
                                 ),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text("오늘의 예측",
-                                        style: TextStyle(
-                                          fontSize: 28,
-                                          letterSpacing: -2.0,
-                                          fontWeight: FontWeight.w800,
-                                        )),
-                                    SizedBox(
-                                      width: 3,
+                                    Row(
+                                      children: [
+                                        Text("오늘의 예측",
+                                            style: TextStyle(
+                                              fontSize: 28,
+                                              letterSpacing: -2.0,
+                                              fontWeight: FontWeight.w800,
+                                            )),
+                                        SizedBox(
+                                          width: 3,
+                                        ),
+                                        Text(
+                                            model.vote.subVotes.length
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.w800,
+                                              color: Color(0xFF1EC8CF),
+                                            )),
+                                      ],
                                     ),
-                                    Text(model.vote.subVotes.length.toString(),
+                                    Text(
+                                        "대상일자: " +
+                                            model.address.date
+                                                .toString()
+                                                .substring(0, 4) +
+                                            "/" +
+                                            model.address.date
+                                                .toString()
+                                                .substring(4, 6) +
+                                            "/" +
+                                            model.address.date
+                                                .toString()
+                                                .substring(
+                                                  6,
+                                                )
+                                        //  +
+                                        // "일",
+                                        ,
                                         style: TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.w800,
-                                          color: Color(0xFF1EC8CF),
-                                        ))
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'DmSans'
+                                            // color: Color(0xFF1EC8CF),
+                                            )),
                                   ],
                                 ),
                                 SizedBox(
                                   height: 8,
                                 ),
-                                Text(model.address.date),
+
                                 LimitedBox(
                                   maxHeight: 550,
                                   // height: 350,
@@ -573,122 +612,5 @@ class _HomeViewState extends State<HomeView> {
         ],
       );
     }
-  }
-
-  Column buildColumn(model, VoteModel vote, UserModel user) {
-    return Column(
-      children: <Widget>[
-        //이미 snapshot에 data가 있는 상태이기 때문에 아래와 같이 입력하면 Text null에러가 나지 않는다.
-        // topBar(userModel),
-        // SizedBox(height: 15),
-        Center(
-          child: Container(
-            // color: Colors.white,
-            padding: EdgeInsets.all(8),
-            // constraints: BoxConstraints.expand(),
-            alignment: Alignment.center,
-            width: 200,
-            height: 50,
-            // transform: Matrix4.rotationZ(.5),
-            decoration: BoxDecoration(
-              // color: Colors.blueGrey,
-              border: Border.all(
-                color: Colors.white,
-                width: 0.5,
-                style: BorderStyle.none,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(40)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black,
-                  blurRadius: 4.0,
-                  spreadRadius: 2.0,
-                  offset: Offset(4, 4),
-                )
-              ],
-              gradient: LinearGradient(
-                colors: [
-                  Colors.blue,
-                  Colors.blueGrey,
-                ],
-              ),
-              // shape: BoxShape.circle,
-            ),
-            child: FlatButton(
-              onPressed: () {
-                model.signOut();
-              },
-              child: Text(
-                "Sign Out",
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-          ),
-        ),
-        SizedBox(height: 20),
-        RaisedButton(
-          onPressed: () => widget.goToTab(1),
-          child: Text(
-            "주제선택 페이지로 가기",
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-        ),
-        // SizedBox(height: 20),
-        SizedBox(height: 20),
-        RaisedButton(
-          onPressed: () => widget.goToTab(3),
-          child: Text('rank 페이지 가기'),
-        ),
-        SizedBox(height: 20),
-        RaisedButton(
-          onPressed: () => widget.goToTab(4),
-          // () {
-          //   _navigationService
-          //       .navigateWithArgTo(
-          //           'mypage', model.uid.toString())
-          //       .then((value) {
-          //     // LoadingView(),
-          //     return setState(() => {
-          //           _getAllModel = _viewModel
-          //               .getAllModel(_viewModel.uid)
-          //         });
-          //   });
-          // },
-          child: Text('mypage 페이지 가기'),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Text(
-          vote.voteDate,
-          style: TextStyle(
-            fontSize: 30,
-            color: Colors.black,
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Text(
-          user.userName,
-          style: TextStyle(
-            fontSize: 30,
-            color: Colors.black,
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Text(
-          vote.subVotes[0].title.toString(),
-          style: TextStyle(
-            fontSize: 30,
-            color: Colors.black,
-          ),
-        ),
-      ],
-    );
   }
 }

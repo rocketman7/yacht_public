@@ -8,6 +8,7 @@ import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/portfolio_model.dart';
 import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -22,6 +23,8 @@ class HomeViewModel extends FutureViewModel {
   final AuthService _authService = locator<AuthService>();
   final NavigationService _navigationService = locator<NavigationService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
+  SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   // UserModel _user;
   UserModel user;
@@ -42,11 +45,16 @@ class HomeViewModel extends FutureViewModel {
     // _authService.signOut();
     print("HOMEVIEWMODEL STARTED");
     uid = _authService.auth.currentUser.uid;
+    // _sharedPreferencesService.setSharedPreferencesValue('twoFactor', true);
     // getUser();
+    if (_authService.auth.currentUser.email != null) {
+      _sharedPreferencesService.setSharedPreferencesValue('twoFactor', true);
+    }
   }
 
   Future getAllModel(uid) async {
     setBusy(true);
+
     // _allModel.add(await getAddress());
     // _allModel.add(await getUser(uid));
     // _allModel.add(await getVote(address));

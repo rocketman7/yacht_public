@@ -129,7 +129,7 @@ class RankView extends StatelessWidget {
                                     ),
                                     Spacer(),
                                     Text(
-                                      '${model.seasonModel.winningCombo}',
+                                      '${model.seasonModel.winningPoint}',
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontFamily: 'DmSans',

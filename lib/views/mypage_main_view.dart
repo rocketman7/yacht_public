@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 
+import '../locator.dart';
 import '../view_models/mypage_main_view_model.dart';
 
 import 'constants/size.dart';
@@ -13,6 +15,7 @@ import 'dart:ui';
 import 'dart:math' as math;
 
 class MypageMainView extends StatelessWidget {
+  final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MypageMainViewModel>.reactive(
