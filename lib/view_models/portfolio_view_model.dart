@@ -8,17 +8,23 @@ import '../models/database_address_model.dart';
 import '../models/season_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
+import '../services/sharedPreferences_service.dart';
+import '../models/sharedPreferences_const.dart';
 
 class PortfolioViewModel extends FutureViewModel {
   // Services Setting
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
+  SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   // 변수 Setting
   DatabaseAddressModel addressModel;
   PortfolioModel portfolioModel;
   SeasonModel seasonModel;
   String uid;
+
+  bool portfolioTutorial;
 
   // UI용 변수
   List<double> startPercentage = []; // 실제 subPortfolio갯수보다 하나 많아야.
@@ -34,6 +40,10 @@ class PortfolioViewModel extends FutureViewModel {
   List<int> orderDrawingItem = [];
   List<bool> drawingMaxLength = [];
 
+  // 튜토리얼 변수
+  int tutorialStatus = 2; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
+  int tutorialTotalStep = 2; // 튜토리얼 총 단계
+
   PortfolioViewModel() {
     uid = _authService.auth.currentUser.uid;
   }
@@ -44,6 +54,10 @@ class PortfolioViewModel extends FutureViewModel {
     addressModel = await _databaseService.getAddress(uid);
     portfolioModel = await _databaseService.getPortfolio(addressModel);
     seasonModel = await _databaseService.getSeasonInfo(addressModel);
+    portfolioTutorial = await _sharedPreferencesService
+        .getSharedPreferencesValue(portfolioTutorialKey, bool);
+
+    print(portfolioTutorial);
 
     // 초기비중만큼 호를 나눠주기 위해 값 계산
     for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
@@ -185,6 +199,19 @@ class PortfolioViewModel extends FutureViewModel {
     var f = NumberFormat("##", "en_US");
 
     return f.format(getInitialRatioDouble(i) * 100) + '%';
+  }
+
+  // 튜토리얼이 한 단계 진행되었을 때
+  void tutorialStepProgress() {
+    tutorialStatus--;
+
+    if (tutorialStatus == 0) {
+      print('dfwefwf');
+      _sharedPreferencesService.setSharedPreferencesValue(
+          portfolioTutorialKey, true);
+    }
+
+    notifyListeners();
   }
 
   @override

@@ -8,3 +8,6 @@ const List<String> pushAlarmKey = [
 
 // avatar의 asset image 주소를 저장
 const String avatarKey = 'avatar';
+
+// 각 화면별 튜토리얼 상태저장
+const String portfolioTutorialKey = 'portfolioTutorial';

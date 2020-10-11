@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/intro_view.dart';
 import 'managers/dialog_manager.dart';
@@ -32,6 +33,12 @@ class _MyAppState extends State<MyApp> {
   GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
   @override
   Widget build(BuildContext context) {
+    // 아이폰 프로 같은애들 기존에 지가 다크테마 쓰고있어서 스테이터스바 글씨색 하얀색일 경우를 위해
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarBrightness: Brightness.light,
+    ));
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -42,7 +49,9 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: Routers.generateRoute,
         home: InitialView(),
-        theme: ThemeData(primaryColor: Colors.white),
+        theme: ThemeData(
+          primaryColor: Colors.white,
+        ),
       ),
     );
   }

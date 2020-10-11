@@ -249,6 +249,15 @@ class _MypageAccountVerificationViewState
               style: TextStyle(fontSize: 16, letterSpacing: -1),
             ),
             Spacer(),
+            model.selectSecLogo != 100
+                ? Image.asset(
+                    '${model.getBankLogoList().values.toList()[model.selectSecLogo]}',
+                    width: 20,
+                    height: 20)
+                : Container(),
+            SizedBox(
+              width: 5,
+            ),
             Text(
               '${model.secName}',
               style: TextStyle(fontSize: 16),
@@ -259,6 +268,7 @@ class _MypageAccountVerificationViewState
                     onPressed: () {
                       model.visibleBankList = true;
                       model.secName = '';
+                      model.selectSecLogo = 100;
                       myFocusNode.unfocus();
                       model.notifyListeners();
                     })
@@ -289,6 +299,7 @@ class _MypageAccountVerificationViewState
               onTap: () {
                 model.secName = model.getBankList().keys.toList()[index];
                 model.visibleBankList = false;
+                model.selectSecLogo = index;
                 myFocusNode.requestFocus();
                 model.notifyListeners();
               },
@@ -547,6 +558,10 @@ class _MypageAccountVerificationViewState
               style: TextStyle(fontSize: 16),
             ),
             Spacer(),
+            Image.asset(
+                '${model.getBankLogoList().values.toList()[model.selectSecLogo]}',
+                width: 20,
+                height: 20),
             Text(
               '${model.user.secName}',
               style: TextStyle(fontSize: 16),

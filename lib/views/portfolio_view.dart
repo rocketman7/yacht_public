@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'dart:ui';
@@ -89,116 +90,129 @@ class _PortfolioViewState extends State<PortfolioView>
                           letterSpacing: -2.0)),
                   elevation: 0,
                 ),
-                body: SafeArea(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 4),
-                    child: Column(
-                      children: [
-                        Row(
+                body: Stack(
+                  children: [
+                    SafeArea(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.only(left: 16.0, right: 16.0, top: 4),
+                        child: Column(
                           children: [
-                            Text(
-                              '${model.getDateFormChange()}',
-                              style:
-                                  TextStyle(fontFamily: 'DmSans', fontSize: 14),
-                            ),
-                            Container(
-                              height: 8,
-                              width: 1,
-                              color: Color(0xFFD8D8D8),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              '${model.seasonModel.seasonName}',
-                              style:
-                                  TextStyle(fontFamily: 'DmSans', fontSize: 14),
-                            )
-                          ],
-                        ),
-                        Expanded(
-                            child: ListView(
-                          children: [
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Stack(
+                            Row(
                               children: [
-                                makePortfolioArc(model),
-                                !_chartAnimationController.isCompleted
-                                    ? AnimatedBuilder(
-                                        animation: chartAnimation,
-                                        builder: (context, child) {
-                                          return CustomPaint(
-                                            size: Size(deviceWidth - 64,
-                                                deviceWidth - 64),
-                                            painter: PortfolioArcChartLoading(
-                                                center: Offset(
-                                                    (deviceWidth - 64) / 2 + 16,
-                                                    (deviceWidth - 64) / 2),
-                                                percentage1:
-                                                    model.startPercentage[0],
-                                                percentage2:
-                                                    model.startPercentage[0] +
-                                                        chartAnimation.value),
-                                          );
-                                        })
-                                    : Container(),
-                                makePortfolioArcLine(model),
-                                Center(
-                                  child: Container(
-                                    width: deviceWidth - 64,
-                                    height: deviceWidth - 64,
-                                    child: Center(
-                                        child: Text(
-                                      '${model.seasonModel.seasonName}',
-                                      // '${model.getSeasonUpperCase()}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'DmSans'),
-                                    )),
-                                  ),
+                                Text(
+                                  '${model.getDateFormChange()}',
+                                  style: TextStyle(
+                                      fontFamily: 'DmSans', fontSize: 14),
                                 ),
+                                Container(
+                                  height: 8,
+                                  width: 1,
+                                  color: Color(0xFFD8D8D8),
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  '${model.seasonModel.seasonName}',
+                                  style: TextStyle(
+                                      fontFamily: 'DmSans', fontSize: 14),
+                                )
                               ],
                             ),
-                            SizedBox(
-                              height: 24,
-                            ),
+                            Expanded(
+                                child: ListView(
+                              children: [
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Stack(
+                                  children: [
+                                    makePortfolioArc(model),
+                                    !_chartAnimationController.isCompleted
+                                        ? AnimatedBuilder(
+                                            animation: chartAnimation,
+                                            builder: (context, child) {
+                                              return CustomPaint(
+                                                size: Size(deviceWidth - 64,
+                                                    deviceWidth - 64),
+                                                painter: PortfolioArcChartLoading(
+                                                    center: Offset(
+                                                        (deviceWidth - 64) / 2 +
+                                                            16,
+                                                        (deviceWidth - 64) / 2),
+                                                    percentage1: model
+                                                        .startPercentage[0],
+                                                    percentage2:
+                                                        model.startPercentage[
+                                                                0] +
+                                                            chartAnimation
+                                                                .value),
+                                              );
+                                            })
+                                        : Container(),
+                                    makePortfolioArcLine(model),
+                                    Center(
+                                      child: Container(
+                                        width: deviceWidth - 64,
+                                        height: deviceWidth - 64,
+                                        child: Center(
+                                            child: Text(
+                                          '${model.seasonModel.seasonName}',
+                                          // '${model.getSeasonUpperCase()}',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'DmSans'),
+                                        )),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 24,
+                                ),
+                                _itemAnimationController.isCompleted
+                                    ? makePortfolioItems(model)
+                                    : Container(),
+                              ],
+                            )),
+                            SizedBox(height: 8),
                             _itemAnimationController.isCompleted
-                                ? makePortfolioItems(model)
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${model.getPortfolioValue()}원',
+                                        style: TextStyle(
+                                            fontSize: 28,
+                                            fontFamily: 'DmSans',
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: -1.0),
+                                      ),
+                                    ],
+                                  )
                                 : Container(),
+                            SizedBox(height: 8),
+                            _itemAnimationController.isCompleted
+                                ? Text(
+                                    '시즌상금 가치(전일종가 기준)',
+                                    style: TextStyle(fontSize: 14),
+                                  )
+                                : Container(),
+                            SizedBox(height: 32),
                           ],
-                        )),
-                        SizedBox(height: 8),
-                        _itemAnimationController.isCompleted
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '${model.getPortfolioValue()}원',
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        fontFamily: 'DmSans',
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: -1.0),
-                                  ),
-                                ],
-                              )
-                            : Container(),
-                        SizedBox(height: 8),
-                        _itemAnimationController.isCompleted
-                            ? Text(
-                                '시즌상금 가치(전일종가 기준)',
-                                style: TextStyle(fontSize: 14),
-                              )
-                            : Container(),
-                        SizedBox(height: 32),
-                      ],
+                        ),
+                      ),
                     ),
-                  ),
+                    // model.portfolioTutorial
+                    //     ? Container()
+                    //     :
+                    model.tutorialStatus != 0 ? tutorial(model) : Container(),
+                  ],
                 ));
           }
         });
@@ -645,4 +659,223 @@ class PortfolioArcChartLoading extends CustomPainter {
   bool shouldRepaint(PortfolioArcChartLoading oldDelegate) {
     return true;
   }
+}
+
+// 튜토리얼
+Widget tutorial(PortfolioViewModel model) {
+  return GestureDetector(
+    onTap: () {
+      model.tutorialStepProgress();
+    },
+    child: SafeArea(
+      child: (model.tutorialStatus - model.tutorialTotalStep == 0)
+          ? Stack(
+              children: [
+                // ClipPath(
+                //   clipper: TutorialClipper1(),
+                //   child: Container(
+                //     width: deviceWidth,
+                //     height: deviceHeight,
+                //     decoration: BoxDecoration(
+                //         border: Border.all(width: 1, color: Colors.amber),
+                //         color: Colors.black38),
+                //   ),
+                // ),
+                // Column(
+                //   children: [
+                //     Container(
+                //       width: deviceWidth,
+                //       height: 90,
+                //       decoration: BoxDecoration(
+                //           border: Border.all(width: 1, color: Colors.amber),
+                //           color: Colors.black38),
+                //     ),
+                //     Container(
+                //       width: deviceWidth,
+                //       height: 450,
+                //       decoration: BoxDecoration(
+                //           border: Border.all(width: 1, color: Colors.amber),
+                //           color: Colors.white10),
+                //     ),
+                //     Container(
+                //       width: deviceWidth,
+                //       height: 200,
+                //       decoration: BoxDecoration(
+                //           border: Border.all(width: 1, color: Colors.amber),
+                //           color: Colors.black38),
+                //     )
+                //   ],
+                // ),
+                Container(
+                  width: deviceWidth,
+                  height: deviceHeight,
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.amber),
+                      color: Colors.black38),
+                ),
+                Column(
+                  children: [
+                    Text('1A가',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'DmSans',
+                            color: Colors.transparent)),
+                    SizedBox(height: 44),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 10,
+                          ),
+                          child: Text(
+                            '이번 시즌 우승상금으로 선택된 포트폴리오에요.',
+                            style: TextStyle(fontSize: 14, color: Colors.white),
+                          ),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFE81B1B),
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black38,
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset:
+                                    Offset(1, 1), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(),
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            )
+          : Stack(
+              children: [
+                // ClipPath(
+                //   clipper: TutorialClipper2(),
+                //   child: Container(
+                //     width: deviceWidth,
+                //     height: deviceHeight,
+                //     decoration: BoxDecoration(
+                //         border: Border.all(width: 1, color: Colors.amber),
+                //         color: Colors.black38),
+                //   ),
+                // ),
+                // Column(
+                //   children: [
+                //     Container(
+                //       width: deviceWidth,
+                //       height: deviceHeight - 240,
+                //       decoration: BoxDecoration(
+                //           border: Border.all(width: 1, color: Colors.amber),
+                //           color: Colors.black38),
+                //     ),
+                //     Container(
+                //         width: deviceWidth,
+                //         height: 90,
+                //         decoration: BoxDecoration(
+                //             border: Border.all(width: 1, color: Colors.amber),
+                //             color: Colors.black12))
+                //   ],
+                // ),
+
+                Container(
+                  width: deviceWidth,
+                  height: deviceHeight,
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.amber),
+                      color: Colors.black38),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('1A가',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'DmSans',
+                            color: Colors.transparent)),
+                    SizedBox(height: 44),
+                    Expanded(
+                      child: Container(),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 10,
+                      ),
+                      child: Text(
+                        '매일 변하는 상금가치, 오늘은 얼마일까요?',
+                        style: TextStyle(fontSize: 14, color: Colors.white),
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE81B1B),
+                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black38,
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            offset: Offset(1, 1), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 48),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          '1A가',
+                          style: TextStyle(
+                              fontSize: 28,
+                              fontFamily: 'DmSans',
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: -1.0,
+                              color: Colors.transparent),
+                        ),
+                      ],
+                    ),
+                    Text('1A가',
+                        style:
+                            TextStyle(fontSize: 14, color: Colors.transparent)),
+                  ],
+                )
+              ],
+            ),
+    ),
+  );
+}
+
+class TutorialClipper1 extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    return Path()
+      ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
+      ..addRect(Rect.fromLTWH(0, 90, size.width, 100 + deviceWidth - 100))
+      // ..addOval(Rect.fromCircle(
+      //     center: Offset(size.width - 44, size.height - 44), radius: 40))
+      ..fillType = PathFillType.evenOdd;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
+}
+
+class TutorialClipper2 extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    return Path()
+      ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
+      ..addRect(Rect.fromLTWH(0, deviceHeight - 235, size.width, size.height))
+      ..fillType = PathFillType.evenOdd;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 }

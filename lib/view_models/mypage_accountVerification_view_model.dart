@@ -31,6 +31,7 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   String verificationFailMsg = '';
   bool accNumberInsertProcess = false;
   bool accNameInsertProcess = false;
+  int selectSecLogo = 100;
   // 사용자가 선택, 입력한 증권계좌정보들
   String secName = '';
   String bankCode = '';
