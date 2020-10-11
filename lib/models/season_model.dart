@@ -22,7 +22,7 @@ class SeasonModel {
     return {
       'seasonName': seasonName,
       'startDate': startDate,
-      'winningPoint': maxDailyVote,
+      'maxDailyVote': maxDailyVote,
       'correctPoint': correctPoint,
       'wrongPoint': wrongPoint,
       'initialAwardValue': initialAwardValue,
