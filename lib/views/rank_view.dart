@@ -11,6 +11,7 @@ import '../view_models/rank_view_model.dart';
 import '../views/widgets/avatar_widget.dart';
 
 class RankView extends StatelessWidget {
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<RankViewModel>.reactive(
@@ -42,226 +43,232 @@ class RankView extends StatelessWidget {
                             ],
                           ),
                         )
-                      : SafeArea(
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                left: 16.0, right: 16.0, top: 20),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    avatarWidget(model.user.avatarImage,
-                                        model.user.item),
-                                    SizedBox(
-                                      width: 12,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 3,
-                                            horizontal: 8,
+                      : WillPopScope(
+                          onWillPop: () async {
+                            _navigatorKey.currentState.maybePop();
+                            return false;
+                          },
+                          child: SafeArea(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 16.0, right: 16.0, top: 20),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      avatarWidget(model.user.avatarImage,
+                                          model.user.item),
+                                      SizedBox(
+                                        width: 12,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 3,
+                                              horizontal: 8,
+                                            ),
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  30,
+                                                )),
+                                            child: Text(
+                                              "${model.seasonModel.seasonName}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: 'DmSans',
+                                                  fontSize: 12),
+                                            ),
                                           ),
-                                          decoration: BoxDecoration(
-                                              color: Colors.black,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                30,
-                                              )),
-                                          child: Text(
-                                            "${model.seasonModel.seasonName}",
-                                            style: TextStyle(
-                                                color: Colors.white,
+                                          Text(model.user.userName,
+                                              style: TextStyle(
+                                                fontSize: 24,
+                                                letterSpacing: -1.0,
                                                 fontFamily: 'DmSans',
-                                                fontSize: 12),
-                                          ),
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 16,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '현재 상금가치(원)',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          letterSpacing: -1.0,
                                         ),
-                                        Text(model.user.userName,
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        '${model.getPortfolioValue()}',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: 'DmSans',
+                                            letterSpacing: -0.5,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          model.navigateToPortfolioPage();
+                                        },
+                                        child: Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 16,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '시즌 목표 승점',
+                                        style: TextStyle(
+                                            fontSize: 20, letterSpacing: -1.0),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        '${model.seasonModel.winningPoint}',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: 'DmSans',
+                                            letterSpacing: -1.0,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '현재 승점',
+                                        style: TextStyle(
+                                            fontSize: 20, letterSpacing: -1.0),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        '${model.myWinPoint}',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: 'DmSans',
+                                            letterSpacing: -1.0,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '현재 순위',
+                                        style: TextStyle(
+                                            fontSize: 20, letterSpacing: -1.0),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        model.myRank == 0
+                                            ? '-'
+                                            : '${model.returnDigitFormat(model.myRank)}',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: 'DmSans',
+                                            letterSpacing: -1.0,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    height: 1,
+                                    color: Color(0xFFDFDFDF),
+                                  ),
+                                  SizedBox(
+                                    height: 31,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '오늘의 랭킹',
+                                            textAlign: TextAlign.start,
                                             style: TextStyle(
-                                              fontSize: 24,
-                                              letterSpacing: -1.0,
-                                              fontFamily: 'DmSans',
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 16,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '현재 상금가치(원)',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        letterSpacing: -1.0,
+                                                fontSize: 28,
+                                                letterSpacing: -2.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                '${model.getDateFormChange()}',
+                                                style: TextStyle(
+                                                    fontFamily: 'DmSans',
+                                                    fontSize: 14),
+                                              ),
+                                              Container(
+                                                height: 8,
+                                                width: 1,
+                                                color: Color(0xFFD8D8D8),
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text(
+                                                '${model.getUsersNum()}명 경쟁 중!',
+                                                style: TextStyle(
+                                                    fontFamily: 'DmSans',
+                                                    fontSize: 14),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 12,
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      '${model.getPortfolioValue()}',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'DmSans',
-                                          letterSpacing: -0.5,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        model.navigateToPortfolioPage();
-                                      },
-                                      child: Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 16,
+                                      Spacer()
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount: model.rankModel.length,
+                                      itemBuilder: (context, index) =>
+                                          makesRankListView(
+                                        model,
+                                        model.rankModel[index],
+                                        index,
                                       ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '시즌 목표 승점',
-                                      style: TextStyle(
-                                          fontSize: 20, letterSpacing: -1.0),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      '${model.seasonModel.winningPoint}',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'DmSans',
-                                          letterSpacing: -1.0,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '현재 승점',
-                                      style: TextStyle(
-                                          fontSize: 20, letterSpacing: -1.0),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      '${model.myWinPoint}',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'DmSans',
-                                          letterSpacing: -1.0,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '현재 순위',
-                                      style: TextStyle(
-                                          fontSize: 20, letterSpacing: -1.0),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      model.myRank == 0
-                                          ? '-'
-                                          : '${model.returnDigitFormat(model.myRank)}',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'DmSans',
-                                          letterSpacing: -1.0,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  height: 1,
-                                  color: Color(0xFFDFDFDF),
-                                ),
-                                SizedBox(
-                                  height: 31,
-                                ),
-                                Row(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '오늘의 랭킹',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              fontSize: 28,
-                                              letterSpacing: -2.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${model.getDateFormChange()}',
-                                              style: TextStyle(
-                                                  fontFamily: 'DmSans',
-                                                  fontSize: 14),
-                                            ),
-                                            Container(
-                                              height: 8,
-                                              width: 1,
-                                              color: Color(0xFFD8D8D8),
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            Text(
-                                              '${model.getUsersNum()}명 경쟁 중!',
-                                              style: TextStyle(
-                                                  fontFamily: 'DmSans',
-                                                  fontSize: 14),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 12,
-                                        ),
-                                      ],
-                                    ),
-                                    Spacer()
-                                  ],
-                                ),
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: model.rankModel.length,
-                                    itemBuilder: (context, index) =>
-                                        makesRankListView(
-                                      model,
-                                      model.rankModel[index],
-                                      index,
                                     ),
                                   ),
-                                ),
-                                // RaisedButton(
-                                //   onPressed: () {
-                                //     model.addRank();
-                                //   },
-                                //   child: Text('rank DB 추가'),
-                                // ),
-                              ],
+                                  // RaisedButton(
+                                  //   onPressed: () {
+                                  //     model.addRank();
+                                  //   },
+                                  //   child: Text('rank DB 추가'),
+                                  // ),
+                                ],
+                              ),
                             ),
                           ),
                         ));

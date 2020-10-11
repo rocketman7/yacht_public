@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/services/navigation_service.dart';
+import '../locator.dart';
 import '../view_models/mypage_main_view_model.dart';
 
 import 'constants/size.dart';
@@ -12,6 +14,7 @@ import 'dart:ui';
 import 'dart:math' as math;
 
 class MypageMainView extends StatelessWidget {
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MypageMainViewModel>.reactive(
@@ -24,26 +27,32 @@ class MypageMainView extends StatelessWidget {
                   )
                 : model.isBusy
                     ? Container()
-                    : SafeArea(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 16,
-                          ),
-                          child: Column(
-                            children: [
-                              mypageMainTopBar(model),
-                              Expanded(
-                                child: ListView(
-                                  children: [
-                                    mypageMainAccPref(model),
-                                    // mypageMainAppPref(model),
-                                    mypageMainCSCenter(model),
-                                    mypageMainTermsOfUse(model),
-                                  ],
+                    : WillPopScope(
+                        onWillPop: () async {
+                          _navigatorKey.currentState.maybePop();
+                          return false;
+                        },
+                        child: SafeArea(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                            child: Column(
+                              children: [
+                                mypageMainTopBar(model),
+                                Expanded(
+                                  child: ListView(
+                                    children: [
+                                      mypageMainAccPref(model),
+                                      // mypageMainAppPref(model),
+                                      mypageMainCSCenter(model),
+                                      mypageMainTermsOfUse(model),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -146,7 +155,9 @@ class MypageMainView extends StatelessWidget {
                           style: TextStyle(
                               fontSize: model.user.userName.length > 8
                                   ? 32
-                                  : model.user.userName.length > 6 ? 40 : 48,
+                                  : model.user.userName.length > 6
+                                      ? 40
+                                      : 48,
                               fontFamily: 'DmSans',
                               fontWeight: FontWeight.w900),
                         ),

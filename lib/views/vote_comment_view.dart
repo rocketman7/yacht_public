@@ -89,6 +89,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
     // Size size = MediaQuery.of(context).size;
     double displayRatio = deviceHeight / deviceWidth;
 
@@ -118,59 +119,65 @@ class _VoteCommentViewState extends State<VoteCommentView>
             );
           } else {
             return Scaffold(
-              body: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 20,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "커뮤니티",
-                        style: TextStyle(
-                          fontFamily: 'DmSans',
-                          fontSize: 32,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -2.0,
+              body: WillPopScope(
+                onWillPop: () async {
+                  _navigatorKey.currentState.maybePop();
+                  return false;
+                },
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 20,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "커뮤니티",
+                          style: TextStyle(
+                            fontFamily: 'DmSans',
+                            fontSize: 32,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -2.0,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      buildHorizontalCalendar(model, newVote),
-                      SizedBox(
-                        height: 36,
-                      ),
-                      Text(
-                        "총 ${model.vote.voteCount.toString()}개의 예측 주제",
-                        style: TextStyle(
-                          // fontFamily: 'Akrhip',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -1.0,
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Divider(
-                        height: 0,
-                        color: Colors.black,
-                        thickness: 2,
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Flexible(
-                        child: Container(
-                          // height: 500,
-                          child:
-                              buildListView(model, model.newVote ?? model.vote),
+                        buildHorizontalCalendar(model, newVote),
+                        SizedBox(
+                          height: 36,
                         ),
-                      )
-                    ],
+                        Text(
+                          "총 ${model.vote.voteCount.toString()}개의 예측 주제",
+                          style: TextStyle(
+                            // fontFamily: 'Akrhip',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -1.0,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Divider(
+                          height: 0,
+                          color: Colors.black,
+                          thickness: 2,
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Flexible(
+                          child: Container(
+                            // height: 500,
+                            child: buildListView(
+                                model, model.newVote ?? model.vote),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
