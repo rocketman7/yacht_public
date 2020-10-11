@@ -312,13 +312,15 @@ class _RegisterViewState extends State<RegisterView> {
                         },
                         minWidth: double.infinity,
                         height: 60,
-                        child: Text(
-                          "다음",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
+                        child: model.isBusy
+                            ? CircularProgressIndicator()
+                            : Text(
+                                "다음",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
                         color: (_nickLength *
                                     _emailLength *
                                     _passwordLength *

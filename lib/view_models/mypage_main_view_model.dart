@@ -23,7 +23,9 @@ class MypageMainViewModel extends FutureViewModel {
 
   // method
   MypageMainViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    _authService.auth.currentUser.uid == null
+        ? _authService.auth.signOut()
+        : uid = _authService.auth.currentUser.uid;
   }
 
   Future getModels() async {
@@ -45,7 +47,7 @@ class MypageMainViewModel extends FutureViewModel {
     _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
     _authService.signOut();
 
-    //   _navigationService.popAndNavigateWithArgTo('initial');
+    _navigationService.popAndNavigateWithArgTo('initial');
     // }
   }
 

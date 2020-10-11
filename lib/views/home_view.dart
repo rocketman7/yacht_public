@@ -186,7 +186,7 @@ class _HomeViewState extends State<HomeView> {
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontFamily: 'DmSans',
-                                                letterSpacing: -1.0,
+                                                letterSpacing: -0.5,
                                                 fontWeight: FontWeight.bold,
                                               )),
                                           Icon(
@@ -252,19 +252,22 @@ class _HomeViewState extends State<HomeView> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      "현재 승점",
+                                      "현재 / 목표 승점",
                                       style: TextStyle(
                                         fontSize: 20,
                                         letterSpacing: -1.0,
                                       ),
                                     ),
                                     Text(
-                                      model.userVote.userVoteStats
-                                                  .currentWinPoint ==
-                                              null
-                                          ? 0.toString()
-                                          : model.userVote.userVoteStats
-                                              .currentWinPoint
+                                      (model.userVote.userVoteStats
+                                                      .currentWinPoint ==
+                                                  null
+                                              ? 0.toString()
+                                              : model.userVote.userVoteStats
+                                                  .currentWinPoint
+                                                  .toString()) +
+                                          "   /   " +
+                                          model.seasonInfo.winningPoint
                                               .toString(),
                                       style: TextStyle(
                                         fontSize: 20,
@@ -315,11 +318,11 @@ class _HomeViewState extends State<HomeView> {
                                             model.address.date
                                                 .toString()
                                                 .substring(0, 4) +
-                                            "/" +
+                                            "." +
                                             model.address.date
                                                 .toString()
                                                 .substring(4, 6) +
-                                            "/" +
+                                            "." +
                                             model.address.date
                                                 .toString()
                                                 .substring(

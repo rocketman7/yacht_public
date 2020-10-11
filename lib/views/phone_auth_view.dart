@@ -145,24 +145,17 @@ class _PhoneAuthViewState extends State<PhoneAuthView> {
                                       context);
                                 }
                               },
-                              child: model.isBusy
-                                  ? SizedBox(
-                                      height: 15,
-                                      width: 15,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 3,
-                                      ))
-                                  : Text(
-                                      _textValue,
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        color: Color(0xFF1EC8CF),
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                              child: Text(
+                                _textValue,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  color: Color(0xFF1EC8CF),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
                         )
@@ -248,13 +241,15 @@ class _PhoneAuthViewState extends State<PhoneAuthView> {
                         },
                         minWidth: double.infinity,
                         height: 60,
-                        child: Text(
-                          "다음",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
+                        child: model.isBusy
+                            ? CircularProgressIndicator()
+                            : Text(
+                                "다음",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
                         color: (_smsCodeLength == 6)
                             ? Color(0xFF1EC8CF)
                             : Color(0xFFB2B7BE),
@@ -274,9 +269,7 @@ class _PhoneAuthViewState extends State<PhoneAuthView> {
                             },
                             child: Text("로그인하기",
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xFF1EC8CF),
-                                )),
+                                    fontSize: 14, color: Color(0xFF1EC8CF))),
                           ),
                         )
                       ],

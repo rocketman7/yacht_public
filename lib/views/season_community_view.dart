@@ -24,8 +24,9 @@ class SeasonCommunityView extends StatefulWidget {
 
 final TextEditingController _commentInputController = TextEditingController();
 final ScrollController _commentScrollController = ScrollController();
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 VoteCommentModel voteCommentModel;
+int _textLength;
 
 class _SeasonCommunityViewState extends State<SeasonCommunityView> {
   final NavigationService _navigationService = locator<NavigationService>();
@@ -53,10 +54,11 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                 ),
               )
             : Scaffold(
-                key: _scaffoldKey,
                 body: SafeArea(
-                  child: Padding(
-                      padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
+                    child: Form(
+                      key: _formKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
@@ -88,7 +90,9 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                   //         .toString()),
                                 ],
                               ),
-                              Icon(Icons.share_rounded)
+                              SizedBox(
+                                width: 15,
+                              ),
                             ],
                           ),
                           Divider(
@@ -125,12 +129,18 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                       minHeight: 40,
                                     ),
                                     width: deviceWidth * .75,
-                                    child: TextField(
+                                    child: TextFormField(
                                       // scrollController: _commentScrollController,
                                       // scrollPhysics: ScrollPhysics(),
                                       controller: _commentInputController,
                                       textAlign: TextAlign.start,
-
+                                      validator: (value) {
+                                        if (value.length < 1) {
+                                          print(value.length);
+                                          return "의견을 입력해주세요.";
+                                        }
+                                        return null;
+                                      },
                                       // textAlignVertical: TextAlignVertical.top,
                                       style: TextStyle(
                                         fontSize: 14,
@@ -173,35 +183,37 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                     right: 0,
                                     child: GestureDetector(
                                       onTap: () {
-                                        voteCommentModel = VoteCommentModel(
-                                          uid: model.user.uid,
+                                        if (_formKey.currentState.validate()) {
+                                          voteCommentModel = VoteCommentModel(
+                                            uid: model.user.uid,
 
-                                          userName: model.user.userName,
-                                          postText:
-                                              _commentInputController.text,
-                                          // choice: model.userVote == null
-                                          //     ? "선택안함"
-                                          //     : model.userVote.voteSelected[
-                                          //                 model.idx] ==
-                                          //             0
-                                          //         ? "선택안함"
-                                          //         : model.vote.subVotes[model.idx]
-                                          //                 .voteChoices[
-                                          //             model.userVote.voteSelected[
-                                          //                     model.idx] -
-                                          //                 1],
-                                          postDateTime: Timestamp.fromDate(
-                                              DateTime.now()),
+                                            userName: model.user.userName,
+                                            postText:
+                                                _commentInputController.text,
+                                            // choice: model.userVote == null
+                                            //     ? "선택안함"
+                                            //     : model.userVote.voteSelected[
+                                            //                 model.idx] ==
+                                            //             0
+                                            //         ? "선택안함"
+                                            //         : model.vote.subVotes[model.idx]
+                                            //                 .voteChoices[
+                                            //             model.userVote.voteSelected[
+                                            //                     model.idx] -
+                                            //                 1],
+                                            postDateTime: Timestamp.fromDate(
+                                                DateTime.now()),
 
-                                          // postDateTime: DateTime.now(),
-                                        );
-                                        print("TAP");
-                                        print(voteCommentModel.uid);
-                                        _commentInputController.text = '';
-                                        model.postComments(
-                                          model.address,
-                                          voteCommentModel,
-                                        );
+                                            // postDateTime: DateTime.now(),
+                                          );
+                                          print("TAP");
+                                          print(voteCommentModel.uid);
+                                          model.postComments(
+                                            model.address,
+                                            voteCommentModel,
+                                          );
+                                          _commentInputController.text = '';
+                                        }
                                       },
                                       child: Align(
                                         alignment: Alignment.topRight,
@@ -236,8 +248,9 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                             ),
                           )
                         ],
-                      )),
-                ));
+                      ),
+                    )),
+              ));
       },
     );
   }

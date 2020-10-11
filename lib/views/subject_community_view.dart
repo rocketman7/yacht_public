@@ -33,6 +33,7 @@ VoteCommentModel voteCommentModel;
 
 class _SubjectCommunityViewState extends State<SubjectCommunityView> {
   final NavigationService _navigationService = locator<NavigationService>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int idx;
   VoteModel vote;
   bool isliked = false;
@@ -47,6 +48,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
   }
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  int _textLength;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +75,6 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                 ),
               )
             : Scaffold(
-                // key: _scaffoldKey,
                 body: SafeArea(
                 child: Padding(
                     padding: const EdgeInsets.fromLTRB(
@@ -82,195 +83,223 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                       18,
                       0,
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            GestureDetector(
-                                onTap: () {
-                                  FocusScope.of(_navigationService
-                                          .navigatorKey.currentContext)
-                                      .unfocus();
-                                  Navigator.of(_navigationService
-                                          .navigatorKey.currentContext)
-                                      .pop();
-                                },
-                                child: Icon(Icons.arrow_back_ios)),
-                            Expanded(
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    model.vote.subVotes[idx].title,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    maxLines: 1,
-                                    softWrap: false,
-                                    overflow: TextOverflow.fade,
-                                  ),
-                                  Text("총 투표 " +
-                                      ((model.vote.subVotes[idx].numVoted0 ??
-                                                  1) +
-                                              (model.vote.subVotes[idx]
-                                                      .numVoted1 ??
-                                                  1))
-                                          .toString()),
-                                ],
-                              ),
-                            ),
-                            Icon(Icons.share_rounded)
-                          ],
-                        ),
-                        Divider(
-                          color: Colors.black,
-                          thickness: 2.0,
-                        ),
-                        buildSquares(model, idx),
-                        SizedBox(height: 8),
-                        Expanded(
-                          child: buildCommentList(
-                            model,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Container(
-                          // height: 100,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Container(
-                                height: 40,
-                                width: 40,
-                                child: avatarWidgetWithoutItem(
-                                  model.user.avatarImage,
+                              GestureDetector(
+                                  onTap: () {
+                                    FocusScope.of(_navigationService
+                                            .navigatorKey.currentContext)
+                                        .unfocus();
+                                    Navigator.of(_navigationService
+                                            .navigatorKey.currentContext)
+                                        .pop();
+                                  },
+                                  child: Icon(
+                                    Icons.arrow_back_ios,
+                                  )),
+                              Expanded(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      model.vote.subVotes[idx].title,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      overflow: TextOverflow.fade,
+                                    ),
+                                    Text("총 투표 " +
+                                        ((model.vote.subVotes[idx].numVoted0 ??
+                                                    1) +
+                                                (model.vote.subVotes[idx]
+                                                        .numVoted1 ??
+                                                    1))
+                                            .toString()),
+                                  ],
                                 ),
                               ),
                               SizedBox(
-                                width: 8,
+                                width: 15,
                               ),
-                              Stack(children: <Widget>[
+                            ],
+                          ),
+                          Divider(
+                            color: Colors.black,
+                            thickness: 2.0,
+                          ),
+                          buildSquares(model, idx),
+                          SizedBox(height: 8),
+                          Expanded(
+                            child: buildCommentList(
+                              model,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Container(
+                            // height: 100,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
                                 Container(
-                                  // height: 40,
-                                  constraints: BoxConstraints(
-                                    minHeight: 40,
-                                  ),
-                                  width: deviceWidth * .75,
-                                  child: TextField(
-                                    // scrollController: _commentScrollController,
-                                    // scrollPhysics: ScrollPhysics(),
-                                    controller: _commentInputController,
-                                    textAlign: TextAlign.start,
-                                    keyboardType: TextInputType.text,
-                                    // textAlignVertical: TextAlignVertical.top,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.black,
-                                    ),
-                                    // minLines: 1,
-                                    maxLines: null,
-                                    maxLength: 80,
-                                    // maxLengthEnforced: true,
-                                    decoration: InputDecoration(
-                                        isDense: true,
-                                        contentPadding:
-                                            EdgeInsets.fromLTRB(15, 12, 40, 12),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFBDBDBD),
-                                            width: 1.0,
-                                          ),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          borderSide: BorderSide(
-                                            color: Color(0xFFBDBDBD),
-                                            width: 1.0,
-                                          ),
-                                        ),
-                                        hintText: '주제에 관한 의견을 말해주세요',
-                                        hintStyle: TextStyle(
-                                          fontSize: 14,
-                                          color: Color(0xFF828282),
-                                        )),
+                                  height: 40,
+                                  width: 40,
+                                  child: avatarWidgetWithoutItem(
+                                    model.user.avatarImage,
                                   ),
                                 ),
-                                Positioned(
-                                  bottom: 0,
-                                  top: 0,
-                                  right: 0,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      print(model.idx);
-                                      print(model.userVote.voteSelected);
-                                      voteCommentModel = VoteCommentModel(
-                                        uid: model.uid,
-                                        userName: model.user.userName,
-                                        postText: _commentInputController.text,
-                                        choice: model.userVote.voteSelected ==
-                                                null
-                                            ? "선택안함"
-                                            : model.userVote.voteSelected[
-                                                        model.idx] ==
-                                                    0
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Stack(children: <Widget>[
+                                  Container(
+                                    // height: 40,
+                                    constraints: BoxConstraints(
+                                      minHeight: 40,
+                                    ),
+                                    width: deviceWidth * .75,
+                                    child: TextFormField(
+                                      // scrollController: _commentScrollController,
+                                      // scrollPhysics: ScrollPhysics(),
+                                      controller: _commentInputController,
+                                      // onChanged: (text) {
+                                      //   setState(() {
+                                      //     _textLength = text.length;
+                                      //   });
+                                      // },
+                                      validator: (value) {
+                                        if (value.length < 1) {
+                                          print(value.length);
+                                          return "의견을 입력해주세요.";
+                                        }
+                                        return null;
+                                      },
+                                      textAlign: TextAlign.start,
+                                      keyboardType: TextInputType.text,
+                                      // textAlignVertical: TextAlignVertical.top,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      // minLines: 1,
+                                      maxLines: null,
+                                      maxLength: 80,
+
+                                      // maxLengthEnforced: true,
+                                      decoration: InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.fromLTRB(
+                                              15, 12, 40, 12),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFBDBDBD),
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)),
+                                            borderSide: BorderSide(
+                                              color: Color(0xFFBDBDBD),
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          hintText: '주제에 관한 의견을 말해주세요',
+                                          hintStyle: TextStyle(
+                                            fontSize: 14,
+                                            color: Color(0xFF828282),
+                                          )),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    top: 0,
+                                    right: 0,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        print(model.idx);
+                                        print(model.userVote.voteSelected);
+                                        if (_formKey.currentState.validate()) {
+                                          voteCommentModel = VoteCommentModel(
+                                            uid: model.uid,
+                                            userName: model.user.userName,
+                                            postText:
+                                                _commentInputController.text,
+                                            choice: model.userVote
+                                                        .voteSelected ==
+                                                    null
                                                 ? "선택안함"
-                                                : model.vote.subVotes[model.idx]
-                                                        .voteChoices[
-                                                    model.userVote.voteSelected[
+                                                : model.userVote.voteSelected[
+                                                            model.idx] ==
+                                                        0
+                                                    ? "선택안함"
+                                                    : model
+                                                        .vote
+                                                        .subVotes[model.idx]
+                                                        .voteChoices[model
+                                                                .userVote
+                                                                .voteSelected[
                                                             model.idx] -
                                                         1],
-                                        postDateTime:
-                                            Timestamp.fromDate(DateTime.now()),
+                                            postDateTime: Timestamp.fromDate(
+                                                DateTime.now()),
 
-                                        // postDateTime: DateTime.now(),
-                                      );
-                                      print("TAP");
-                                      print(voteCommentModel.uid);
-                                      _commentInputController.text = '';
-                                      FocusScope.of(context).unfocus();
-                                      model.postComments(
-                                        model.newAddress,
-                                        voteCommentModel,
-                                      );
-                                    },
-                                    child: Align(
-                                      alignment: Alignment.topRight,
-                                      child: Container(
-                                        height: 42,
-                                        width: 42,
-                                        decoration: BoxDecoration(
-                                          // color: Colors.white,
-                                          shape: BoxShape.circle,
-                                          boxShadow: [
-                                            BoxShadow(
-                                                blurRadius: 8,
-                                                color: Colors.black
-                                                    .withOpacity(.2),
-                                                spreadRadius: 0)
-                                          ],
-                                        ),
-                                        child: Image.asset(
-                                          'assets/icons/post_comment_button.png',
-                                          // width: 50,
+                                            // postDateTime: DateTime.now(),
+                                          );
+                                          print("TAP");
+                                          print(voteCommentModel.uid);
+
+                                          FocusScope.of(context).unfocus();
+                                          model.postComments(
+                                            model.newAddress,
+                                            voteCommentModel,
+                                          );
+                                          _commentInputController.text = '';
+                                        }
+                                      },
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: Container(
+                                          height: 42,
+                                          width: 42,
+                                          decoration: BoxDecoration(
+                                            // color: Colors.white,
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  blurRadius: 8,
+                                                  color: Colors.black
+                                                      .withOpacity(.2),
+                                                  spreadRadius: 0)
+                                            ],
+                                          ),
+                                          child: Image.asset(
+                                            'assets/icons/post_comment_button.png',
+                                            // width: 50,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ]),
-                              SizedBox(width: 8),
-                              // Expanded(
-                              //   child:
-                              // ),
-                            ],
-                          ),
-                        )
-                      ],
+                                ]),
+                                SizedBox(width: 8),
+                                // Expanded(
+                                //   child:
+                                // ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     )),
               ));
       },
@@ -970,11 +999,19 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(voteComment.userName,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          )),
+                      Row(
+                        children: [
+                          Text(voteComment.userName,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(voteComment.choice)
+                        ],
+                      ),
                       Text(
                           voteComment.postDateTime == null
                               ? ' '

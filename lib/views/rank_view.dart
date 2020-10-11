@@ -97,7 +97,9 @@ class RankView extends StatelessWidget {
                                     Text(
                                       '현재 상금가치(원)',
                                       style: TextStyle(
-                                          fontSize: 20, letterSpacing: -1.0),
+                                        fontSize: 20,
+                                        letterSpacing: -1.0,
+                                      ),
                                     ),
                                     Spacer(),
                                     Text(
@@ -105,7 +107,7 @@ class RankView extends StatelessWidget {
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontFamily: 'DmSans',
-                                          letterSpacing: -1.0,
+                                          letterSpacing: -0.5,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     GestureDetector(

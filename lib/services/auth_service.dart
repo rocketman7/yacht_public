@@ -88,7 +88,7 @@ class AuthService {
     // });
 
     // credential을 만들 때 code check하지 않고 signInWithCredential에서 체크
-    await auth.signInWithCredential(credential).catchError((e) {
+    return await auth.signInWithCredential(credential).catchError((e) {
       print("ERROR CATCH" + e.message);
       credential = null;
       return credential;
@@ -96,12 +96,13 @@ class AuthService {
       // value = null;
       if (value != null) {
         // auth.signOut();
-        _authCredential = credential;
+
         print("VALUE IS NOT NULL AND CREDENTIAL IS " +
             credential.toString() +
             auth.currentUser.uid); // auth.signOut();
         // print("SignOut");
-        _navigationService.navigateWithArgTo('register', credential);
+
+        return credential;
       }
     });
 
@@ -148,10 +149,9 @@ class AuthService {
         userName: userName,
         email: email,
         phoneNumber: phoneNumber,
-        combo: 0,
         friendsCode: null,
         item: 10,
-        avatarImage: "avatar00" + rng.nextInt(9).toString(),
+        avatarImage: "avatar00" + (rng.nextInt(9) + 1).toString(),
         accNumber: null,
         accName: null,
         secName: null,

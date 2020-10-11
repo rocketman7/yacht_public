@@ -3,11 +3,10 @@ class UserModel {
   final String userName;
   final String email;
   final String phoneNumber;
-  final int combo;
   final String friendsCode;
   final int item;
   final String avatarImage;
-  final int previousRank;
+
   String accNumber;
   String accName;
   String secName;
@@ -18,11 +17,9 @@ class UserModel {
     this.userName,
     this.email,
     this.phoneNumber,
-    this.combo,
     this.friendsCode,
     this.item,
     this.avatarImage,
-    this.previousRank,
     this.accNumber,
     this.accName,
     this.secName,
@@ -36,11 +33,9 @@ class UserModel {
         userName = data['userName'],
         email = data['email'],
         phoneNumber = data['phoneNumber'],
-        combo = data['combo'],
         friendsCode = data['friendsCode'],
         item = data['item'],
         avatarImage = data['avatarImage'],
-        previousRank = data['previousRank'],
         accNumber = data['account']['accNumber'],
         accName = data['account']['accName'],
         secName = data['account']['secName'];
@@ -51,11 +46,9 @@ class UserModel {
       'userName': this.userName,
       'email': this.email,
       'phoneNumber': this.phoneNumber,
-      'combo': this.combo,
       'friendsCode': this.friendsCode,
       'item': this.item,
       'avatarImage': this.avatarImage,
-      'previousRank': this.previousRank,
       'account': {
         'accNumber': this.accNumber,
         'accName': this.accName,

@@ -44,7 +44,9 @@ class HomeViewModel extends FutureViewModel {
   HomeViewModel() {
     // _authService.signOut();
     print("HOMEVIEWMODEL STARTED");
+
     uid = _authService.auth.currentUser.uid;
+
     // _sharedPreferencesService.setSharedPreferencesValue('twoFactor', true);
     // getUser();
     if (_authService.auth.currentUser.email != null) {

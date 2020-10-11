@@ -207,13 +207,15 @@ class _LoginViewState extends State<LoginView>
                         },
                         minWidth: double.infinity,
                         height: 60,
-                        child: Text(
-                          "로그인",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
+                        child: model.isBusy
+                            ? CircularProgressIndicator()
+                            : Text(
+                                "로그인",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
                         color: (_passwordLength == 0)
                             ? Color(0xFFB2B7BE)
                             : Color(0xFF1EC8CF),
