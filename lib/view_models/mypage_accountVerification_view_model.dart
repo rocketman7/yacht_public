@@ -85,8 +85,6 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
       return 'success';
     else
       return accOccupyResp[1];
-
-    // return accOccupyResp[0];
   }
 
   Future<String> accVerificationRequest() async {
@@ -94,13 +92,15 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
 
     String result1, result2;
     result1 = await accOwnerVerificationRequest();
-    result2 = await accOccupyVerificationRequest();
 
-    if (result1 == 'success' && result2 == 'success') {
-      return 'success';
-    } else if (result1 == 'success') {
-      accVerificationFailMsg = result2;
-      return result2;
+    if (result1 == 'success') {
+      result2 = await accOccupyVerificationRequest();
+      if (result2 == 'success')
+        return 'success';
+      else {
+        accVerificationFailMsg = result2;
+        return result2;
+      }
     } else {
       accVerificationFailMsg = result1;
       return result1;

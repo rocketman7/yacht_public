@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 
 import '../locator.dart';
 import '../models/user_model.dart';
-import '../models/user_vote_stats_model.dart';
 import '../models/rank_model.dart';
 import '../models/season_model.dart';
 import '../models/portfolio_model.dart';
@@ -26,9 +25,9 @@ class RankViewModel extends FutureViewModel {
       portfolioModel; //상금 현재가치 불러올려고 굳이 접근해야하는건데 이런건 처음 앱 실행시 한번에 불러오고 저장해두면 안되나?
   List<RankModel> rankModel = [];
   UserModel user;
-  UserVoteStatsModel userVoteStatsModel;
   String uid;
-  int myRank;
+  int myRank = 0;
+  int myWinPoint = 0;
   String myRankChange;
   String myRankChangeSymbol;
   List<String> rankChange = [];
@@ -45,7 +44,6 @@ class RankViewModel extends FutureViewModel {
     rankModel = await _databaseService.getRankList(addressModel);
     portfolioModel = await _databaseService.getPortfolio(addressModel);
     user = await _databaseService.getUser(uid);
-    userVoteStatsModel = await _databaseService.getUserVoteStat(addressModel);
     seasonModel = await _databaseService.getSeasonInfo(addressModel);
 
     // 순위변동 구해주자.
@@ -73,6 +71,8 @@ class RankViewModel extends FutureViewModel {
         myRank = rankModel[i].todayRank;
         myRankChangeSymbol = rankChangeSymbol[i];
         myRankChange = rankChange[i];
+
+        myWinPoint = rankModel[i].currentWinPoint;
       }
     }
 
