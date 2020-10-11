@@ -4,6 +4,7 @@ import 'package:yachtOne/managers/dialog_manager.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/services/dialog_service.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
 import 'package:yachtOne/view_models/base_model.dart';
 
@@ -13,6 +14,7 @@ class PhoneAuthViewModel extends FutureViewModel {
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final DialogService _dialogService = locator<DialogService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
@@ -42,13 +44,27 @@ class PhoneAuthViewModel extends FutureViewModel {
       await _authService.sendPhoneAuthSms(phoneNumber, context);
       setBusy(false);
     }
-    setBusy(false);
   }
 
   Future matchCode(String code) async {
+    setBusy(true);
     print(verificationId);
     // setTwoFactorAuth(false);
-    await _authService.verifySms(code, verificationId);
+
+    var credential = await _authService.verifySms(code, verificationId);
+
+    print("AFTER PHONEAUTH " + credential.toString());
+
+    if (credential == null) {
+      setBusy(false);
+      await _dialogService.showDialog(
+        title: '인증번호 오류',
+        description: '인증번호를 다시 입력해주세요.',
+      );
+    } else {
+      setBusy(false);
+      _navigationService.navigateWithArgTo('register', credential);
+    }
   }
 
   @override

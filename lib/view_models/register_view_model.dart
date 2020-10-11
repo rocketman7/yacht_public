@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
 import '../locator.dart';
@@ -8,7 +9,7 @@ import '../services/dialog_service.dart';
 import '../services/navigation_service.dart';
 import '../view_models/base_model.dart';
 
-class RegisterViewModel extends BaseModel {
+class RegisterViewModel extends BaseViewModel {
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final DialogService _dialogService = locator<DialogService>();
@@ -23,9 +24,11 @@ class RegisterViewModel extends BaseModel {
     @required String password,
     PhoneAuthCredential credential,
   }) async {
+    setBusy(true);
     List<String> allUserName = await _databaseService.getAllUserNameSnapshot();
 
     if (allUserName.contains(userName)) {
+      setBusy(false);
       print("중복 닉네임이 있습니다");
       await _dialogService.showDialog(
         title: '회원가입 오류',
@@ -42,6 +45,7 @@ class RegisterViewModel extends BaseModel {
 
       // Register 성공하면,
       if (result is bool) {
+        setBusy(false);
         if (result) {
           // HomeView로 이동
 
@@ -60,6 +64,7 @@ class RegisterViewModel extends BaseModel {
           print('Register Failure');
         }
       } else {
+        setBusy(false);
         var dialogResult = await _dialogService.showDialog(
           title: '회원가입 오류',
           description: result.toString(),

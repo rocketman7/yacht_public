@@ -347,7 +347,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 padding: const EdgeInsets.all(2.0),
                 child: Center(
                   child: Text(
-                    subVote.title + "긴테스트테스트트트",
+                    subVote.title,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,

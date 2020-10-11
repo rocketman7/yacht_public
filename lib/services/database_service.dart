@@ -2,7 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/services/auth_service.dart';
+import 'package:yachtOne/services/navigation_service.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 
+import '../locator.dart';
 import '../models/date_time_model.dart';
 import '../models/faq_model.dart';
 import '../models/notice_model.dart';
@@ -25,6 +29,11 @@ import 'dart:math';
 class DatabaseService {
   FirebaseFirestore _databaseService = FirebaseFirestore.instance;
   FirebaseFirestore get databaseService => _databaseService;
+
+  // final AuthService _authService = locator<AuthService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+  SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   DateFormat dateFormat = DateFormat('yyyy-MM-dd_HH:mm:ss:SSS');
 
@@ -75,6 +84,10 @@ class DatabaseService {
       return UserModel.fromData(userData.data());
     } catch (e) {
       print(e.toString());
+      _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
+      AuthService().auth.signOut();
+      print("getUSER ERROR");
+      _navigationService.popAndNavigateWithArgTo('initial');
     }
   }
 
