@@ -26,8 +26,8 @@ class RankViewModel extends FutureViewModel {
   List<RankModel> rankModel = [];
   UserModel user;
   String uid;
-  int myRank;
-  int myWinPoint;
+  int myRank = 0;
+  int myWinPoint = 0;
   String myRankChange;
   String myRankChangeSymbol;
   List<String> rankChange = [];

@@ -79,10 +79,12 @@ class PortfolioViewModel extends FutureViewModel {
         : maxOfMaxMin = minValueIncreaseRatio;
 
     for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      if (maxOfMaxMin >= 0) {
+      if (maxOfMaxMin > 0) {
         valueIncreaseRatio[i] = 2 + valueIncreaseRatio[i] / maxOfMaxMin;
-      } else {
+      } else if (maxOfMaxMin < 0) {
         valueIncreaseRatio[i] = 2 - valueIncreaseRatio[i] / maxOfMaxMin;
+      } else {
+        valueIncreaseRatio[i] = 2;
       }
     }
 

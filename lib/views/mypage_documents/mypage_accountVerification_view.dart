@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 
@@ -19,17 +20,23 @@ class _MypageAccountVerificationViewState
   final TextEditingController _accNameController = TextEditingController();
   final TextEditingController _authNumController = TextEditingController();
   FocusNode myFocusNode;
+  FocusNode myFocusNode2;
+  FocusNode myFocusNode3;
 
   @override
   void initState() {
     super.initState();
 
     myFocusNode = FocusNode();
+    myFocusNode2 = FocusNode();
+    myFocusNode3 = FocusNode();
   }
 
   @override
   void dispose() {
     myFocusNode.dispose();
+    myFocusNode2.dispose();
+    myFocusNode3.dispose();
 
     super.dispose();
   }
@@ -42,10 +49,9 @@ class _MypageAccountVerificationViewState
           return Scaffold(
               appBar: AppBar(
                 title: Text(
-                  '계좌정보',
+                  '계좌 정보',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                // elevation: 1,
                 elevation: 0,
               ),
               backgroundColor: Colors.white,
@@ -168,7 +174,6 @@ class _MypageAccountVerificationViewState
                 width: deviceWidth,
                 height: 40,
                 child: RaisedButton(
-                  // disabledColor: Color(0xFFB2B7BE),
                   color:
                       model.ableButton2 ? Color(0xFF1EC8CF) : Color(0xFFB2B7BE),
                   shape: RoundedRectangleBorder(
@@ -180,9 +185,6 @@ class _MypageAccountVerificationViewState
                           model.secName != '') {
                         model.accNumber = _accNumberController.text;
                         model.accName = _accNameController.text;
-                        print('secName: ${model.secName}');
-                        print('accNumber: ${model.accNumber}');
-                        print('accName: ${model.accName}');
 
                         model.ableButton2 = false;
 
@@ -199,6 +201,8 @@ class _MypageAccountVerificationViewState
                           // 이제 위에 적은 값들 수정 안되게
                           model.accNameInsertProcess = true;
                           model.accNumberInsertProcess = true;
+
+                          myFocusNode3.requestFocus();
                         } else {
                           model.accVerificationFailMsg = result;
                         }
@@ -316,18 +320,13 @@ class _MypageAccountVerificationViewState
           height: 1,
           color: Color(0xFFE3E3E3),
         ),
-        // SizedBox(
-        //   height: 16,
-        // ),
         Row(
           children: [
             Text(
               '계좌번호',
               style: TextStyle(fontSize: 16, letterSpacing: -1),
             ),
-            // Spacer(),
             Expanded(
-              // width: 200,
               child: TextField(
                 readOnly: model.accNumberInsertProcess,
                 focusNode: myFocusNode,
@@ -362,12 +361,18 @@ class _MypageAccountVerificationViewState
                 ),
               ),
             ),
-            IconButton(
-              icon: Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.transparent,
+            GestureDetector(
+              onTap: () {
+                // 쓸데없는 영역이지만, 사용자가 텍스트필드 오른쪽을 클릭해도 포커스되도록
+                myFocusNode.requestFocus();
+              },
+              child: IconButton(
+                icon: Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Colors.transparent,
+                ),
+                onPressed: null,
               ),
-              onPressed: null,
             )
           ],
         ),
@@ -394,6 +399,7 @@ class _MypageAccountVerificationViewState
               // width: 200,
               child: TextField(
                 readOnly: model.accNameInsertProcess,
+                focusNode: myFocusNode2,
                 textAlign: TextAlign.right,
                 controller: _accNameController,
                 style: TextStyle(
@@ -422,12 +428,18 @@ class _MypageAccountVerificationViewState
                 ),
               ),
             ),
-            IconButton(
-              icon: Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.transparent,
+            GestureDetector(
+              onTap: () {
+                // 쓸데없는 영역이지만, 사용자가 텍스트필드 오른쪽을 클릭해도 포커스되도록
+                myFocusNode2.requestFocus();
+              },
+              child: IconButton(
+                icon: Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Colors.transparent,
+                ),
+                onPressed: null,
               ),
-              onPressed: null,
             )
           ],
         ),
@@ -458,7 +470,10 @@ class _MypageAccountVerificationViewState
                   _authNumController.text = '';
                 },
                 child: TextField(
-                  // focusNode: ,
+                  focusNode: myFocusNode3,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(4),
+                  ],
                   textAlign: TextAlign.center,
                   controller: _authNumController,
                   keyboardType: TextInputType.phone,
@@ -484,7 +499,7 @@ class _MypageAccountVerificationViewState
                       ),
                     ),
                     filled: false,
-                    hintText: "0000",
+                    hintText: "____",
                     hintStyle: TextStyle(
                       fontSize: 36,
                     ),

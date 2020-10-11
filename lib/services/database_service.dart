@@ -470,8 +470,8 @@ class DatabaseService {
 
       await databaseAddressModel
           .ranksSeasonDateCollection()
-          // .orderBy('combo', descending: true)
           .orderBy('todayRank', descending: false)
+          // .orderBy('userName')
           .get()
           .then((querysnapshot) => querysnapshot.docs.forEach((element) {
                 rankList.add(RankModel.fromData(element.data()));
@@ -480,6 +480,30 @@ class DatabaseService {
       return rankList;
     } catch (e) {
       print('rankList load error: ${e.toString()}');
+
+      return null;
+    }
+  }
+
+  // Read: ranks collection 정보 읽어오기. 배치될 때에만 바뀌는 정보이므로 Future로 처리. 시즌 상위 탑5만 불러온다(홈화면 위해)
+  Future<List<RankModel>> getRankListTopFive(
+      DatabaseAddressModel databaseAddressModel) async {
+    try {
+      List<RankModel> rankList = [];
+
+      await databaseAddressModel
+          .ranksSeasonDateCollection()
+          .orderBy('todayRank', descending: false)
+          // .orderBy('userName')
+          .limit(5)
+          .get()
+          .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+                rankList.add(RankModel.fromData(element.data()));
+              }));
+
+      return rankList;
+    } catch (e) {
+      print('rankListTopFive load error: ${e.toString()}');
 
       return null;
     }

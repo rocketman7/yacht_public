@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-
-import '../locator.dart';
 import '../view_models/mypage_main_view_model.dart';
 
 import 'constants/size.dart';
@@ -15,7 +12,6 @@ import 'dart:ui';
 import 'dart:math' as math;
 
 class MypageMainView extends StatelessWidget {
-  final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MypageMainViewModel>.reactive(
@@ -41,7 +37,7 @@ class MypageMainView extends StatelessWidget {
                                 child: ListView(
                                   children: [
                                     mypageMainAccPref(model),
-                                    mypageMainAppPref(model),
+                                    // mypageMainAppPref(model),
                                     mypageMainCSCenter(model),
                                     mypageMainTermsOfUse(model),
                                   ],
@@ -143,15 +139,17 @@ class MypageMainView extends StatelessWidget {
                         ),
                   Row(
                     children: [
-                      Text(
-                        model.user.userName,
-                        style: TextStyle(
-                            fontSize: 48,
-                            fontFamily: 'DmSans',
-                            fontWeight: FontWeight.w900),
-                      ),
                       Expanded(
-                        child: Container(),
+                        child: Text(
+                          model.user.userName,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: model.user.userName.length > 8
+                                  ? 32
+                                  : model.user.userName.length > 6 ? 40 : 48,
+                              fontFamily: 'DmSans',
+                              fontWeight: FontWeight.w900),
+                        ),
                       ),
                     ],
                   ),
@@ -211,8 +209,8 @@ class MypageMainView extends StatelessWidget {
             color: Colors.black,
           ),
           makeMypageMainComponent(model, '회원정보 수정', 'mypage_editprofile'),
-          makeMypageMainComponent(model, 'x내가 받은 상금 현황', null),
-          makeMypageMainComponent(model, 'x내 활동', null),
+          // makeMypageMainComponent(model, 'x내가 받은 상금 현황', null),
+          // makeMypageMainComponent(model, 'x내 활동', null),
           makeMypageMainComponent(model, '계좌 정보', 'mypage_accoutverification'),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,7 +284,7 @@ class MypageMainView extends StatelessWidget {
             height: 2,
             color: Colors.black,
           ),
-          makeMypageMainComponent(model, '1:1 문의내역', 'oneonone'),
+          makeMypageMainComponent(model, '1:1 문의', 'oneonone'),
           makeMypageMainComponent(model, '자주 묻는 질문', 'faq'),
           makeMypageMainComponent(model, '공지사항', 'notice'),
           SizedBox(

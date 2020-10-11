@@ -171,7 +171,9 @@ class RankView extends StatelessWidget {
                                     ),
                                     Spacer(),
                                     Text(
-                                      '${model.returnDigitFormat(model.myRank)}',
+                                      model.myRank == 0
+                                          ? '-'
+                                          : '${model.returnDigitFormat(model.myRank)}',
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontFamily: 'DmSans',
