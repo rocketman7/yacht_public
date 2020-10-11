@@ -200,11 +200,12 @@ class _VoteCommentViewState extends State<VoteCommentView>
                         border: Border.all(color: Colors.black, width: 2)),
                     child: Text(
                       model.seasonInfo.seasonName,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'DmSans',
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        letterSpacing: -1.0,
+                        letterSpacing: 0,
                       ),
                     )),
                 title: Text(model.seasonInfo.seasonName + " 커뮤니티",
@@ -318,16 +319,87 @@ class _VoteCommentViewState extends State<VoteCommentView>
     SubVote subVote,
     int index,
   ) {
+    Color hexToColor(String code) {
+      return Color(int.parse(code, radix: 16) + 0xFF0000000);
+    }
+
     return ListTile(
       onTap: () {
         _navigationService
             .navigateWithArgTo('subjectComment', [vote, index - 1]);
       },
-      leading: Container(
-        height: 60,
-        width: 60,
-        color: Colors.yellow,
-      ),
+      leading: subVote.issueCode.length == 1
+          ? Container(
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 2,
+                  color: Colors.black,
+                ),
+                borderRadius:
+                    BorderRadius.circular(subVote.shape[0] == 'oval' ? 30 : 0),
+                color: hexToColor(
+                  subVote.colorCode[0],
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Center(
+                  child: Text(
+                    subVote.title + "긴테스트테스트트트",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'DmSans',
+                    ),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.clip,
+                    maxLines: 2,
+                  ),
+                ),
+              ),
+            )
+          : Container(
+              height: 60,
+              width: 60,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    width: subVote.shape[0] == 'oval' ? 40 : 35,
+                    height: subVote.shape[0] == 'oval' ? 40 : 35,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 2,
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                            subVote.shape[0] == 'oval' ? 30 : 0),
+                        color: hexToColor(
+                          subVote.colorCode[0],
+                        )),
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: subVote.shape[1] == 'oval' ? 40 : 35,
+                        height: subVote.shape[1] == 'oval' ? 40 : 35,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 2,
+                              color: Colors.black,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                                subVote.shape[1] == 'oval' ? 30 : 0),
+                            color: hexToColor(
+                              subVote.colorCode[1],
+                            )),
+                      )),
+                ],
+              ),
+              // color: Colors.red,
+            ),
       title: Text(subVote.title,
           style: TextStyle(
             fontSize: 18,

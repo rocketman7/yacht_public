@@ -482,7 +482,8 @@ class _HomeViewState extends State<HomeView> {
                       model.vote.subVotes[idx].colorCode[0],
                     ),
                   ),
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(
+                      model.vote.subVotes[idx].shape[0] == 'oval' ? 30 : 0),
                 ),
                 child: Text(
                   model.vote.subVotes[idx].title,
@@ -522,7 +523,8 @@ class _HomeViewState extends State<HomeView> {
                         model.vote.subVotes[idx].colorCode[0],
                       ),
                     ),
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(
+                        model.vote.subVotes[idx].shape[0] == 'oval' ? 30 : 0),
                   ),
                   child: Text(
                     model.vote.subVotes[idx].voteChoices[0],
@@ -569,6 +571,8 @@ class _HomeViewState extends State<HomeView> {
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                        model.vote.subVotes[idx].shape[1] == 'oval' ? 30 : 0),
                     border: Border.all(
                       width: 4.0,
                       color: hexToColor(

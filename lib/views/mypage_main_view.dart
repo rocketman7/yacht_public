@@ -218,13 +218,13 @@ class MypageMainView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
-                onTap: () {
+                onDoubleTap: () {
                   model.logout();
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16, bottom: 16),
                   child: Text(
-                    '로그아웃',
+                    '더블 탭하여 로그아웃',
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                   ),

@@ -166,7 +166,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),
-              maxLines: 2,
+              maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -177,7 +177,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.TOP,
-      toastDuration: Duration(seconds: 2),
+      toastDuration: Duration(seconds: 1, milliseconds: 550),
     );
 
     // Custom Toast Position
@@ -475,6 +475,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                   context,
                                   numSelected,
                                   scaffoldKey,
+                                  diff,
                                 );
                               }),
                         )),
@@ -488,7 +489,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                         onTap: ((numSelected == 0) ||
                                 (model.userVote == null
                                     ? false
-                                    : model.userVote.isVoted == true))
+                                    : (diff.inSeconds == 0 ||
+                                        model.userVote.isVoted)))
                             ? () {}
                             : () {
                                 for (int i = 0; i < selected.length; i++) {
@@ -509,7 +511,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                           ),
                           height: 56,
                           decoration: BoxDecoration(
-                              color: diff.inSeconds == 0
+                              color: (diff.inSeconds == 0 ||
+                                      model.userVote.isVoted)
                                   ? Color(0xFFC1C1C1)
                                   : Colors.black,
                               boxShadow: [
@@ -550,7 +553,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: diff.inSeconds == 0
+                          color: (diff.inSeconds == 0 || model.userVote.isVoted)
                               ? Color(0xFFE41818)
                               : numSelected == 0
                                   ? Color(0xFFFFDE34)
@@ -559,14 +562,17 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                         child: Text(
                             diff.inSeconds == 0
                                 ? "오늘의 예측이 마감되었습니다."
-                                : numSelected == 0
-                                    ? "주제를 선택하여 승점에 도전해보세요!"
-                                    : "선택한 주제 $numSelected개, 승점 $numSelected점에 도전해보세요!",
+                                : model.userVote.isVoted
+                                    ? "이미 오늘 예측에 참여하였습니다."
+                                    : numSelected == 0
+                                        ? "최대 3개의 주제를 선택하여 승점에 도전해보세요!"
+                                        : "선택한 주제 $numSelected개, 승점 $numSelected점에 도전해보세요!",
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'DmSans',
                               fontWeight: FontWeight.w500,
-                              color: diff.inSeconds == 0
+                              color: (diff.inSeconds == 0 ||
+                                      model.userVote.isVoted)
                                   ? Colors.white
                                   : numSelected == 0
                                       ? Colors.black
@@ -592,7 +598,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     int idx,
     BuildContext context,
     int numSelected,
-    scaffoldKey,
+    GlobalKey<ScaffoldState> scaffoldKey,
+    Duration diff,
   ) {
     int numOfChoices = model.vote.subVotes[idx].issueCode.length;
     Color hexToColor(String code) {
@@ -611,7 +618,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
               child: GestureDetector(
                 onTap: () {
                   buildModalBottomSheet(
-                      context, hexToColor, model, idx, numOfChoices);
+                      context, hexToColor, model, idx, numOfChoices, diff);
                 },
                 child: Container(
                   height: 100,
@@ -619,15 +626,34 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                   alignment: Alignment.center,
                   padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
                   decoration: BoxDecoration(
-                    color: selected[idx]
-                        ? hexToColor(
-                            model.vote.subVotes[idx].colorCode[0],
-                          )
-                        : Colors.white,
-                    borderRadius: BorderRadius.circular(50),
+                    color: model.userVote.isVoted
+                        ? model.userVote.voteSelected[idx] == 0
+                            ? Colors.white
+                            : model.userVote.voteSelected[idx] == 1
+                                ? Color(0xFFFF3E3E)
+                                : model.userVote.voteSelected[idx] == 2
+                                    ? Color(0xFF3485FF)
+                                    : Colors.white
+                        : selected[idx]
+                            ? hexToColor(
+                                model.vote.subVotes[idx].colorCode[0],
+                              )
+                            : Colors.white,
+                    borderRadius: BorderRadius.circular(
+                        model.vote.subVotes[idx].shape[0] == 'oval' ? 50 : 0),
                     border: Border.all(
                       width: 4.0,
-                      color: selected[idx] ? Colors.black : Color(0xFFC1C1C1),
+                      color: model.userVote.isVoted
+                          ? model.userVote.voteSelected[idx] == 0
+                              ? Color(0xFFC1C1C1)
+                              : model.userVote.voteSelected[idx] == 1
+                                  ? Colors.black
+                                  : model.userVote.voteSelected[idx] == 2
+                                      ? Colors.black
+                                      : Color(0xFFC1C1C1)
+                          : selected[idx]
+                              ? Colors.black
+                              : Color(0xFFC1C1C1),
                     ),
                     // borderRadius: BorderRadius.all(
                     //     Radius.circular(30)),
@@ -640,7 +666,17 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                     model.vote.subVotes[idx].title,
                     style: TextStyle(
                       // textBaseline: TextBaseline.alphabetic,
-                      color: selected[idx] ? Colors.black : Color(0xFFC1C1C1),
+                      color: model.userVote.isVoted
+                          ? model.userVote.voteSelected[idx] == 0
+                              ? Color(0xFFC1C1C1)
+                              : model.userVote.voteSelected[idx] == 1
+                                  ? Colors.black
+                                  : model.userVote.voteSelected[idx] == 2
+                                      ? Colors.black
+                                      : Color(0xFFC1C1C1)
+                          : selected[idx]
+                              ? Colors.black
+                              : Color(0xFFC1C1C1),
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
                     ),
@@ -664,28 +700,53 @@ class _VoteSelectViewState extends State<VoteSelectView> {
             Transform.scale(
               scale: 1.6,
               child: CircularCheckBox(
-                materialTapTargetSize: MaterialTapTargetSize.padded,
-                visualDensity: VisualDensity(horizontal: 2, vertical: 0),
-                value: selected[idx],
-                hoverColor: Colors.white,
-                activeColor: Color(0xFF1EC8CF),
-                inactiveColor: Color(0xFF1EC8CF),
-                disabledColor: Colors.grey,
-                onChanged: (newValue) => setState(() {
-                  if (model.user.item - numSelected == 0) {
-                    // 선택되면 안됨
-                    if (newValue) {
-                      selected[idx] = selected[idx];
+                  key: UniqueKey(),
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  visualDensity: VisualDensity(horizontal: 2, vertical: 0),
+                  value: selected[idx],
+                  hoverColor: Colors.white,
+                  activeColor: (diff.inSeconds == 0 || model.userVote.isVoted)
+                      ? Color(0xFFC1C1C1)
+                      : Color(0xFF1EC8CF),
+                  inactiveColor: (diff.inSeconds == 0 || model.userVote.isVoted)
+                      ? Color(0xFFC1C1C1)
+                      : Color(0xFF1EC8CF),
+                  // disabledColor: Colors.grey,
+                  onChanged: (newValue) {
+                    (diff.inSeconds == 0)
+                        ? _showToast(
+                            "오늘 예측이 마감되었습니다.\n커뮤니티에서 실시간 대결 상황을\n살펴보세요!")
+                        : (model.userVote.isVoted)
+                            ? _showToast("이미 오늘 예측에 참여하였습니다.")
+                            : setState(() {
+                                print(model.seasonInfo.maxDailyVote -
+                                    numSelected);
+                                if (model.seasonInfo.maxDailyVote -
+                                        numSelected ==
+                                    0) {
+                                  if (newValue) {
+                                    selected[idx] = selected[idx];
+                                    _showToast(
+                                        "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                  } else {
+                                    selected[idx] = newValue;
+                                  }
+                                } else {
+                                  if (model.user.item - numSelected == 0) {
+                                    // 선택되면 안됨
+                                    if (newValue) {
+                                      selected[idx] = selected[idx];
 
-                      _showToast("보유 중인 아이템이 부족합니다.");
-                    } else {
-                      selected[idx] = newValue;
-                    }
-                  } else {
-                    selected[idx] = newValue;
-                  }
-                }),
-              ),
+                                      _showToast("보유 중인 아이템이 부족합니다.");
+                                    } else {
+                                      selected[idx] = newValue;
+                                    }
+                                  } else {
+                                    selected[idx] = newValue;
+                                  }
+                                }
+                              });
+                  }),
             ),
           ],
         ),
@@ -702,7 +763,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
               child: GestureDetector(
                 onTap: () {
                   buildModalBottomSheet(
-                      context, hexToColor, model, idx, numOfChoices);
+                      context, hexToColor, model, idx, numOfChoices, diff);
                 },
                 child: Container(
                   height: 100,
@@ -717,37 +778,61 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               alignment: Alignment.center,
                               padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
                               decoration: BoxDecoration(
-                                color: selected[idx]
-                                    ? hexToColor(
-                                        model.vote.subVotes[idx].colorCode[0],
-                                      )
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(50),
+                                color: model.userVote.isVoted
+                                    ? model.userVote.voteSelected[idx] == 0
+                                        ? Colors.white
+                                        : model.userVote.voteSelected[idx] == 1
+                                            ? hexToColor(model.vote
+                                                .subVotes[idx].colorCode[0])
+                                            : Colors.white
+                                    : selected[idx]
+                                        ? hexToColor(model
+                                            .vote.subVotes[idx].colorCode[0])
+                                        : Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                    model.vote.subVotes[idx].shape[0] == 'oval'
+                                        ? 50
+                                        : 0),
                                 border: Border.all(
                                   width: 4.0,
-                                  color: selected[idx]
-                                      ? Colors.black
-                                      : Color(0xFFC1C1C1),
+                                  color: model.userVote.isVoted
+                                      ? model.userVote.voteSelected[idx] == 0
+                                          ? Color(0xFFC1C1C1)
+                                          : model.userVote.voteSelected[idx] ==
+                                                  1
+                                              ? Colors.black
+                                              : Color(0xFFC1C1C1)
+                                      : selected[idx]
+                                          ? Colors.black
+                                          : Color(0xFFC1C1C1),
                                 ),
                                 // borderRadius: BorderRadius.all(
                                 //     Radius.circular(30)),
                               ),
-                              child:
-                                  Text(model.vote.subVotes[idx].voteChoices[0],
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
-                                      softWrap: false,
-                                      style: TextStyle(
-                                        fontSize: model.vote.subVotes[idx]
-                                                    .voteChoices[0].length >
-                                                5
-                                            ? 22
-                                            : 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: selected[idx]
+                              child: Text(
+                                  model.vote.subVotes[idx].voteChoices[0],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  softWrap: false,
+                                  style: TextStyle(
+                                    fontSize: model.vote.subVotes[idx]
+                                                .voteChoices[0].length >
+                                            5
+                                        ? 22
+                                        : 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: model.userVote.isVoted
+                                        ? model.userVote.voteSelected[idx] == 0
+                                            ? Color(0xFFC1C1C1)
+                                            : model.userVote
+                                                        .voteSelected[idx] ==
+                                                    1
+                                                ? Colors.black
+                                                : Color(0xFFC1C1C1)
+                                        : selected[idx]
                                             ? Colors.black
                                             : Color(0xFFC1C1C1),
-                                      )),
+                                  )),
                             ),
                           ),
                           SizedBox(
@@ -759,36 +844,61 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               alignment: Alignment.center,
                               padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
                               decoration: BoxDecoration(
-                                color: selected[idx]
-                                    ? hexToColor(
-                                        model.vote.subVotes[idx].colorCode[1],
-                                      )
-                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                    model.vote.subVotes[idx].shape[1] == 'oval'
+                                        ? 50
+                                        : 0),
+                                color: model.userVote.isVoted
+                                    ? model.userVote.voteSelected[idx] == 0
+                                        ? Colors.white
+                                        : model.userVote.voteSelected[idx] == 2
+                                            ? hexToColor(model.vote
+                                                .subVotes[idx].colorCode[1])
+                                            : Colors.white
+                                    : selected[idx]
+                                        ? hexToColor(model
+                                            .vote.subVotes[idx].colorCode[1])
+                                        : Colors.white,
                                 border: Border.all(
                                   width: 4.0,
-                                  color: selected[idx]
-                                      ? Colors.black
-                                      : Color(0xFFC1C1C1),
+                                  color: model.userVote.isVoted
+                                      ? model.userVote.voteSelected[idx] == 0
+                                          ? Color(0xFFC1C1C1)
+                                          : model.userVote.voteSelected[idx] ==
+                                                  2
+                                              ? Colors.black
+                                              : Color(0xFFC1C1C1)
+                                      : selected[idx]
+                                          ? Colors.black
+                                          : Color(0xFFC1C1C1),
                                 ),
                                 // borderRadius: BorderRadius.all(
                                 //     Radius.circular(30)),
                               ),
-                              child:
-                                  Text(model.vote.subVotes[idx].voteChoices[1],
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
-                                      softWrap: false,
-                                      style: TextStyle(
-                                        fontSize: model.vote.subVotes[idx]
-                                                    .voteChoices[1].length >
-                                                5
-                                            ? 22
-                                            : 24,
-                                        fontWeight: FontWeight.bold,
-                                        color: selected[idx]
+                              child: Text(
+                                  model.vote.subVotes[idx].voteChoices[1],
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  softWrap: false,
+                                  style: TextStyle(
+                                    fontSize: model.vote.subVotes[idx]
+                                                .voteChoices[1].length >
+                                            5
+                                        ? 22
+                                        : 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: model.userVote.isVoted
+                                        ? model.userVote.voteSelected[idx] == 0
+                                            ? Color(0xFFC1C1C1)
+                                            : model.userVote
+                                                        .voteSelected[idx] ==
+                                                    2
+                                                ? Colors.black
+                                                : Color(0xFFC1C1C1)
+                                        : selected[idx]
                                             ? Colors.black
                                             : Color(0xFFC1C1C1),
-                                      )),
+                                  )),
                             ),
                           ),
                         ],
@@ -842,28 +952,53 @@ class _VoteSelectViewState extends State<VoteSelectView> {
               child: Transform.scale(
                 scale: 1.6,
                 child: CircularCheckBox(
-                  key: UniqueKey(),
-                  materialTapTargetSize: MaterialTapTargetSize.padded,
-                  visualDensity: VisualDensity(horizontal: 1, vertical: 0),
-                  value: selected[idx],
-                  checkColor: Colors.white,
-                  activeColor: Color(0xFF1EC8CF),
-                  inactiveColor: Color(0xFF1EC8CF),
-                  disabledColor: Colors.grey,
-                  onChanged: (newValue) => setState(() {
-                    if (model.user.item - numSelected == 0) {
-                      // 선택되면 안됨
-                      if (newValue) {
-                        selected[idx] = selected[idx];
-                        _showToast("보유 중인 아이템이 부족합니다.");
-                      } else {
-                        selected[idx] = newValue;
-                      }
-                    } else {
-                      selected[idx] = newValue;
-                    }
-                  }),
-                ),
+                    key: UniqueKey(),
+                    materialTapTargetSize: MaterialTapTargetSize.padded,
+                    visualDensity: VisualDensity(horizontal: 1, vertical: 0),
+                    value: selected[idx],
+                    checkColor: Colors.white,
+                    activeColor: (diff.inSeconds == 0 || model.userVote.isVoted)
+                        ? Color(0xFFC1C1C1)
+                        : Color(0xFF1EC8CF),
+                    inactiveColor:
+                        (diff.inSeconds == 0 || model.userVote.isVoted)
+                            ? Color(0xFFC1C1C1)
+                            : Color(0xFF1EC8CF),
+                    disabledColor: Colors.grey,
+                    onChanged: (newValue) {
+                      (diff.inSeconds == 0)
+                          ? _showToast(
+                              "오늘 예측이 마감되었습니다.\n커뮤니티에서 실시간 대결 상황을\n살펴보세요!")
+                          : (model.userVote.isVoted)
+                              ? _showToast("이미 오늘 예측에 참여하였습니다.")
+                              : setState(() {
+                                  print(model.seasonInfo.maxDailyVote -
+                                      numSelected);
+                                  if (model.seasonInfo.maxDailyVote -
+                                          numSelected ==
+                                      0) {
+                                    if (newValue) {
+                                      selected[idx] = selected[idx];
+                                      _showToast(
+                                          "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                    } else {
+                                      selected[idx] = newValue;
+                                    }
+                                  } else {
+                                    if (model.user.item - numSelected == 0) {
+                                      // 선택되면 안됨
+                                      if (newValue) {
+                                        selected[idx] = selected[idx];
+                                        _showToast("보유 중인 아이템이 부족합니다.");
+                                      } else {
+                                        selected[idx] = newValue;
+                                      }
+                                    } else {
+                                      selected[idx] = newValue;
+                                    }
+                                  }
+                                });
+                    }),
               ),
             ),
           ],
@@ -878,6 +1013,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     VoteSelectViewModel model,
     int idx,
     int numOfChoices,
+    Duration diff,
   ) {
     return showModalBottomSheet(
       backgroundColor: Colors.white,
@@ -1055,7 +1191,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
-                  letterSpacing: -2.0,
+                  letterSpacing: -1.0,
                 ),
                 maxLines: 2,
               ),
@@ -1103,70 +1239,114 @@ class _VoteSelectViewState extends State<VoteSelectView> {
               ),
               Row(
                 children: <Widget>[
-                  RaisedButton(
-                    onPressed: () {
-                      setState(() {
-                        selected[idx] = false;
-                      });
-                      Navigator.of(context).pop();
-                    },
-                    color: Color(0xFFE4E4E4),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 14,
-                    ),
-                    child: Text("해제",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'DmSans',
-                          fontWeight: FontWeight.w700,
-                        )),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: RaisedButton(
-                      onPressed: () {
-                        setState(() {
-                          if (model.user.item - numSelected == 0) {
-                            // 선택되면 안됨
-
-                            _showToast("보유 중인 아이템이 부족합니다.");
-                          } else {
-                            selected[idx] = true;
-                            Navigator.of(context).pop();
-                          }
-                        });
-                      },
-                      color: Color(0xFF1EC8CF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 14,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/icons/double_check_icon.svg',
-                            width: 20,
+                  (!selected[idx])
+                      ? Container()
+                      : Expanded(
+                          child: RaisedButton(
+                            onPressed: () {
+                              setState(() {
+                                selected[idx] = false;
+                              });
+                              Navigator.of(context).pop();
+                            },
+                            color: Color(0xFF0F6669),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 14,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                (model.userVote.isVoted || diff.inSeconds == 0)
+                                    ? SizedBox()
+                                    : Icon(
+                                        Icons.cancel_outlined,
+                                        size: 28,
+                                        color: Colors.white,
+                                      ),
+                                SizedBox(width: 8),
+                                Text("해제하기",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: 'DmSans',
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    )),
+                              ],
+                            ),
                           ),
-                          SizedBox(width: 8),
-                          Text("선택하기",
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontFamily: 'DmSans',
-                                fontWeight: FontWeight.w700,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
+                        ),
+                  (selected[idx])
+                      ? Container()
+                      : Expanded(
+                          child: RaisedButton(
+                            onPressed: () {
+                              (model.userVote.isVoted || diff.inSeconds == 0)
+                                  ? {}
+                                  : setState(() {
+                                      if (model.seasonInfo.maxDailyVote -
+                                              numSelected ==
+                                          0) {
+                                        _showToast(
+                                            "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                      } else {
+                                        if (model.user.item - numSelected ==
+                                            0) {
+                                          // 선택되면 안됨
+
+                                          _showToast("보유 중인 아이템이 부족합니다.");
+                                        } else {
+                                          selected[idx] = true;
+                                          Navigator.of(context).pop();
+                                        }
+                                      }
+                                    });
+                            },
+                            color:
+                                (model.userVote.isVoted || diff.inSeconds == 0)
+                                    ? Color(0xFFE4E4E4)
+                                    : Color(0xFF1EC8CF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 14,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                (model.userVote.isVoted || diff.inSeconds == 0)
+                                    ? SizedBox()
+                                    : SvgPicture.asset(
+                                        'assets/icons/double_check_icon.svg',
+                                        width: 20,
+                                      ),
+                                (model.userVote.isVoted || diff.inSeconds == 0)
+                                    ? SizedBox()
+                                    : SizedBox(width: 8),
+                                Text(
+                                    model.userVote.isVoted
+                                        ? "이미 오늘 예측에 참여하였습니다."
+                                        : diff.inSeconds == 0
+                                            ? "오늘 예측이 마감되었습니다."
+                                            : "선택하기",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: (model.userVote.isVoted ||
+                                              diff.inSeconds == 0)
+                                          ? Colors.black
+                                          : Colors.white,
+                                      fontFamily: 'DmSans',
+                                      fontWeight: FontWeight.w700,
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ),
                 ],
               ),
             ],

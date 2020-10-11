@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
 
@@ -22,10 +23,9 @@ class VoteSelectViewModel extends FutureViewModel {
   DatabaseAddressModel address;
   VoteModel vote;
   UserVoteModel userVote;
+  SeasonModel seasonInfo;
   List<SubVote> subVote;
   Timer _everySecond;
-  DateTime _now;
-  bool _isGgookAvailable = true;
 
   List<String> timeLeftArr = ["", "", ""];
 
@@ -40,7 +40,7 @@ class VoteSelectViewModel extends FutureViewModel {
 
     uid = _authService.auth.currentUser.uid;
 
-    _now = getNow();
+    // _now = getNow();
     // getUser();
   }
 
@@ -50,6 +50,7 @@ class VoteSelectViewModel extends FutureViewModel {
     user = await _databaseService.getUser(uid);
     vote = await _databaseService.getVotes(address);
     userVote = await _databaseService.getUserVote(address);
+    seasonInfo = await _databaseService.getSeasonInfo(address);
     print(vote.voteEndDateTime);
     setBusy(false);
     notifyListeners();

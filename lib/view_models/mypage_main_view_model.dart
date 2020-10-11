@@ -36,17 +36,17 @@ class MypageMainViewModel extends FutureViewModel {
 
   // 로그아웃 버튼이 눌렸을 경우..
   Future logout() async {
-    var dialogResult = await _dialogService.showDialog(
-        title: '로그아웃',
-        description: '로그아웃하시겠습니까?',
-        buttonTitle: '네',
-        cancelTitle: '아니오');
-    if (dialogResult.confirmed) {
-      _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
-      _authService.signOut();
+    // var dialogResult = await _dialogService.showDialog(
+    //     title: '로그아웃',
+    //     description: '로그아웃하시겠습니까?',
+    //     buttonTitle: '네',
+    //     cancelTitle: '아니오');
+    // if (dialogResult.confirmed) {
+    _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
+    _authService.signOut();
 
-      _navigationService.popAndNavigateWithArgTo('initial');
-    }
+    //   _navigationService.popAndNavigateWithArgTo('initial');
+    // }
   }
 
   @override
