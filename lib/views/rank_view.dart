@@ -150,7 +150,7 @@ class RankView extends StatelessWidget {
                                     ),
                                     Spacer(),
                                     Text(
-                                      '${model.userVoteStatsModel.currentWinPoint}',
+                                      '${model.myWinPoint}',
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontFamily: 'DmSans',
@@ -170,47 +170,6 @@ class RankView extends StatelessWidget {
                                           fontSize: 20, letterSpacing: -1.0),
                                     ),
                                     Spacer(),
-                                    model.myRankChangeSymbol == '*'
-                                        ? Text(
-                                            '${model.myRankChange}',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                letterSpacing: -0.28,
-                                                fontWeight: FontWeight.bold,
-                                                color: Color(0xFFFFCE20)),
-                                          )
-                                        : (model.myRankChangeSymbol == '+')
-                                            ? Row(
-                                                children: [
-                                                  CustomPaint(
-                                                      size: Size(8, 4),
-                                                      painter: DrawTriangle(
-                                                          isUp: true)),
-                                                  SizedBox(
-                                                    width: 3,
-                                                  ),
-                                                ],
-                                              )
-                                            : (model.myRankChangeSymbol == '-')
-                                                ? Row(
-                                                    children: [
-                                                      CustomPaint(
-                                                          size: Size(8, 4),
-                                                          painter: DrawTriangle(
-                                                              isUp: false)),
-                                                      SizedBox(
-                                                        width: 3,
-                                                      ),
-                                                    ],
-                                                  )
-                                                : Container(
-                                                    width: 8,
-                                                    height: 2,
-                                                    color: Color(0xFFC4C4C4),
-                                                  ),
-                                    SizedBox(
-                                      width: 3,
-                                    ),
                                     Text(
                                       '${model.returnDigitFormat(model.myRank)}',
                                       style: TextStyle(
