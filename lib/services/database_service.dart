@@ -731,7 +731,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: baseDate,
+      date: '20201019',
       category: category,
       season: season,
       isVoting: isVoting,
