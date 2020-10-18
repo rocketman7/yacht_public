@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/view_models/initial_view_model.dart';
@@ -19,6 +20,9 @@ class _InitialViewState extends State<InitialView> {
   final AuthService _authService = locator<AuthService>();
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context,
+        designSize: Size(375, 812), allowFontScaling: true);
+
     return ViewModelBuilder.reactive(
         viewModelBuilder: () => InitialViewModel(),
         builder: (context, model, child) {

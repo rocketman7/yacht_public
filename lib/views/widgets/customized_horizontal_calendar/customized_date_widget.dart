@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'customized_date_helper.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DateWidget extends StatelessWidget {
   final defaultDateFormat = 'd';
@@ -87,8 +88,8 @@ class DateWidget extends StatelessWidget {
       onTap: isDisabled ? null : onTap,
       onLongPress: isDisabled ? null : onLongTap,
       child: Container(
-        width: 48,
-        height: height - 16,
+        width: 48.w,
+        height: height.h - 16.h,
         decoration: isSelected
             ? selectedDecoration
             : isDisabled

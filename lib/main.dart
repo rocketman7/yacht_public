@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/intro_view.dart';
+import 'package:yachtOne/views/track_record_view.dart';
 import 'managers/dialog_manager.dart';
 import 'router.dart';
 // import 'views/animation_test.dart';
@@ -49,9 +51,18 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: Routers.generateRoute,
         home: InitialView(),
-        theme: ThemeData(
-          primaryColor: Colors.white,
-        ),
+        builder: (context, navigator) {
+          var lang = Localizations.localeOf(context).languageCode;
+          print("Language is " + lang);
+
+          return Theme(
+            data: ThemeData(
+              fontFamily: lang == 'en' ? 'DmSans' : 'AppleSD',
+              primaryColor: Colors.white,
+            ),
+            child: navigator,
+          );
+        },
       ),
     );
   }

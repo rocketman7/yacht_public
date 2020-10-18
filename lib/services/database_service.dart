@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
+import 'package:yachtOne/views/constants/holiday.dart';
 
 import '../locator.dart';
 import '../models/date_time_model.dart';
@@ -190,6 +191,32 @@ class DatabaseService {
     }
   }
 
+  Future getAllSeasonUserVote(DatabaseAddressModel address) async {
+    try {
+      print("GETALLSEASON START");
+      List<UserVoteModel> allSeasonUserVoteList = [];
+      UserVoteStatsModel userVoteStats;
+      await address
+          .userVoteSeasonCollection()
+          .orderBy('voteDate', descending: true)
+          .get()
+          .then((colSnapshot) {
+        print(colSnapshot.docs.first);
+        colSnapshot.docs.forEach((result) {
+          result.id == 'stats'
+              ? userVoteStats = UserVoteStatsModel.fromData(result.data())
+              : allSeasonUserVoteList
+                  .add(UserVoteModel.fromData(result.data(), userVoteStats));
+        });
+      });
+      // allSeasonUserVoteList.removeWhere((element) => element == null);
+      return allSeasonUserVoteList;
+    } catch (e) {
+      print("ERROR_getAllUserVote");
+      print(e.toString());
+    }
+  }
+
   // Read: User의 Vote정보 가져오기
   Future getUserVote(DatabaseAddressModel address) async {
     try {
@@ -281,6 +308,58 @@ class DatabaseService {
   Future<String> getAvatar(uid) async {
     var user = await usersCollectionReference.doc(uid).get();
     return user.data()['avatarImage'];
+  }
+
+  Future getAllSeasonVote(DatabaseAddressModel address) async {
+    try {
+      List<VoteModel> voteList = [];
+      List<SubVote> tempSubVoteList;
+      List<String> dates = [];
+      List<DateTime> allSeasonDate = [];
+      String startDateStr;
+      DateTime startDateTime;
+      DateTime temp;
+      startDateStr = await address
+          .votesSeasonCollection()
+          .doc('seasonInfo')
+          .get()
+          .then((value) => value.data()['startDate']);
+
+      startDateTime = strToDate(startDateStr);
+
+      String tempDate = startDateStr;
+      while (strToDate(tempDate)
+          .isBefore(strToDate(address.date).add(Duration(days: 1)))) {
+        tempSubVoteList = [];
+        var voteData =
+            await address.votesSeasonCollection().doc(tempDate).get();
+        await address
+            .votesSeasonCollection()
+            .doc(tempDate)
+            .collection('subVote')
+            .get()
+            .then((querySnapshot) {
+          querySnapshot.docs.forEach((result) {
+            tempSubVoteList.add(SubVote.fromData(result.data()));
+          });
+        });
+        // print("tempDate " + tempDate.toString());
+
+        voteList.insert(
+            0, VoteModel.fromData(voteData.data(), tempSubVoteList));
+        // print(tempSubVoteList[1].toJson());
+        tempDate = dateToStr(nextNthBusinessDay(strToDate(tempDate), 1));
+      }
+
+      // while ( temp.isBefore())
+
+      return voteList;
+      // List<int> voteResult;
+      // print(voteData.data['voteResult']);
+
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   // Read: Vote 정보 Vote Collection으로부터 읽기
@@ -456,10 +535,11 @@ class DatabaseService {
         .collection(issueCode)
         .orderBy('createdAt', descending: true)
         .snapshots()
+        .take(1)
         .map((snapshot) {
       print(snapshot.toString());
       print("SNAP");
-      print(snapshot.docs.toString() + "FIRSTDATA");
+      // print(snapshot.docs.toString() + "FIRSTDATA");
       // PriceModel temp = PriceModel.fromData(snapshot.docs.first.data());
       // print(temp.toString());
       // print(snapshot.docs.first.data()['issueCode']);
@@ -731,7 +811,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: '20201019',
+      date: '20201016',
       category: category,
       season: season,
       isVoting: isVoting,

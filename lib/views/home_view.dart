@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
@@ -73,11 +74,16 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     // final BottomNavigationBar navigationBar = navBarGlobalKey.currentWidget;
     // _authService.auth.signOut();
+    // ScreenUtil.init(context,
+    //     designSize: Size(375, 812), allowFontScaling: false);
     print("homeViewBuild");
     Size size = MediaQuery.of(context).size;
     deviceHeight = size.height;
     deviceWidth = size.width;
     double displayRatio = deviceHeight / deviceWidth;
+
+    var lang = Localizations.localeOf(context).languageCode;
+    print("Language is " + lang);
     return ViewModelBuilder.reactive(
         viewModelBuilder: () => HomeViewModel(),
         // onModelReady: (model) => print("onModelReady" + model.uid),
@@ -170,14 +176,14 @@ class _HomeViewState extends State<HomeView> {
                                     Text(
                                       "현재 상금가치",
                                       style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 20.sp,
                                         letterSpacing: -1.0,
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
                                         _navigationService
-                                            .navigateTo('portfolio');
+                                            .navigateTo('trackRecord');
                                       },
                                       child: Row(
                                         children: <Widget>[
@@ -294,23 +300,33 @@ class _HomeViewState extends State<HomeView> {
                                   children: <Widget>[
                                     Row(
                                       children: [
-                                        Text("오늘의 예측",
-                                            style: TextStyle(
-                                              fontSize: 28,
-                                              letterSpacing: -2.0,
-                                              fontWeight: FontWeight.w800,
-                                            )),
-                                        SizedBox(
-                                          width: 3,
+                                        Text(
+                                          "오늘의 ",
+                                          style: TextStyle(
+                                            fontSize: 24.sp,
+                                            letterSpacing: -2.0,
+                                            fontFamily: 'AppleSDB',
+                                          ),
                                         ),
                                         Text(
-                                            model.vote.subVotes.length
-                                                .toString(),
-                                            style: TextStyle(
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.w800,
-                                              color: Color(0xFF1EC8CF),
-                                            )),
+                                          "예측",
+                                          style: TextStyle(
+                                            fontSize: 24.sp,
+                                            letterSpacing: -2.0,
+                                            fontFamily: 'AppleSDB',
+                                          ),
+                                        ),
+                                        //   SizedBox(
+                                        //     width: 3,
+                                        //   ),
+                                        //   Text(
+                                        //       model.vote.subVotes.length
+                                        //           .toString(),
+                                        //       style: TextStyle(
+                                        //         fontSize: 28,
+                                        //         fontWeight: FontWeight.w800,
+                                        //         color: Color(0xFF1EC8CF),
+                                        //       )),
                                       ],
                                     ),
                                     Text(
@@ -393,7 +409,7 @@ class _HomeViewState extends State<HomeView> {
                                         Text(
                                           "꾸욱",
                                           style: TextStyle(
-                                            fontSize: 20,
+                                            fontSize: 20.sp,
                                             fontWeight: FontWeight.w800,
                                             color: Color(0xFFFFFFFFF),
                                           ),

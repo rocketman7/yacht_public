@@ -57,6 +57,7 @@ dependencies:
   fluttertoast: ^7.1.1
   like_button: ^1.0.3
   vibration: ^1.7.1
+  flutter_screenutil: ^3.1.1
 
 dev_dependencies:
   flutter_test:
@@ -106,6 +107,21 @@ flutter:
           weight: 500
         - asset: assets/fonts/dm_sans/DMSans-Bold.ttf
           weight: 700
+    - family: AppleSDL
+      fonts:
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoL.ttf
+    - family: AppleSDM
+      fonts:
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoM.ttf
+    - family: AppleSDB
+      fonts:
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoB.ttf
+    - family: AppleSDEB
+      fonts:
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoEB.ttf
+    - family: AppleSDH
+      fonts:
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoH.ttf
 
         # - asset: assets/fonts/advent_pro/AdventPro-SemiBold.ttf
   #   - family: Trajan Pro
