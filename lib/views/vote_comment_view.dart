@@ -289,6 +289,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
       labelOrder: [LabelType.date, LabelType.weekday],
       dateTextStyle: TextStyle(
         fontSize: 20.sp,
+        fontFamily: 'DmSans',
         fontWeight: FontWeight.w800,
       ),
       weekDayTextStyle: TextStyle(

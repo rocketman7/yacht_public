@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/portfolio_model.dart';
+import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
@@ -29,6 +32,7 @@ class VoteSelectViewModel extends FutureViewModel {
   UserVoteModel userVote;
   SeasonModel seasonInfo;
   List<SubVote> subVote;
+  PortfolioModel portfolioModel;
   Timer _everySecond;
 
   List<String> timeLeftArr = ["", "", ""];
@@ -39,8 +43,22 @@ class VoteSelectViewModel extends FutureViewModel {
   int tutorialStatus = 2; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
   int tutorialTotalStep = 2; // 튜토리얼 총 단계
 
+  bool isVoting = true;
   DateTime getNow() {
     return DateTime.now();
+  }
+
+  String getPortfolioValue() {
+    int totalValue = 0;
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      totalValue += portfolioModel.subPortfolio[i].sharesNum *
+          portfolioModel.subPortfolio[i].currentPrice;
+    }
+
+    var f = NumberFormat("#,###", "en_US");
+
+    return f.format(totalValue);
   }
 
   VoteSelectViewModel() {
@@ -61,7 +79,8 @@ class VoteSelectViewModel extends FutureViewModel {
     seasonInfo = await _databaseService.getSeasonInfo(address);
     voteSelectTutorial = await _sharedPreferencesService
         .getSharedPreferencesValue(voteSelectTutorialKey, bool);
-    print(vote.voteEndDateTime);
+    portfolioModel = await _databaseService.getPortfolio(address);
+    print("ISVOTING????? " + address.isVoting.toString());
     setBusy(false);
     notifyListeners();
   }
@@ -81,6 +100,36 @@ class VoteSelectViewModel extends FutureViewModel {
 
     notifyListeners();
   }
+
+  void isVoteAvailable() {
+    isVoting = false;
+
+    // notifyListeners();
+  }
+
+  Stream<PriceModel> getRealtimePrice(
+    DatabaseAddressModel address,
+    String issueCode,
+  ) {
+    print("Price Stream returns");
+    return _databaseService.getRealtimeReturn(address, issueCode);
+  }
+
+  // Stream<List<PriceModel>> getMultiRealtimePrice(
+  //   DatabaseAddressModel address,
+  //   List<String> issueCode,
+  // ) {
+  //   print("Price Stream returns");
+  //   Stream<List<PriceModel>> = Stream.multi((stream) {
+  //     stream.onListen();
+  //    })
+
+  //    [ _databaseService.getRealtimeReturn(address, issueCode[0]),
+  //     _databaseService.getRealtimeReturn(address, issueCode[1]),];
+  //   return
+
+  //   ;
+  // }
 
   @override
   Future futureToRun() => getAllModel(uid);

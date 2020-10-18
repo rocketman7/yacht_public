@@ -555,6 +555,44 @@ class DatabaseService {
     });
   }
 
+  // Stream<List<PriceModel>> getMultiRealtimePrice(
+  //   DatabaseAddressModel address,
+  //   List<String> issueCode,
+  // ) {
+  //   List<PriceModel> priceList = [];
+
+  //   for (int i = 0; i < issueCode.length; i++) {
+  //     pricesCollectionReference
+  //         .doc(address.date)
+  //         .collection(issueCode[i])
+  //         .orderBy('createdAt', descending: true)
+  //         .snapshots()
+  //         .take(1)
+  //         .map((snapshot) {
+  //       if (snapshot.docs.isEmpty) {
+  //         priceList.add(PriceModel(issueCode[0], 0, 0));
+  //       } else {
+  //         priceList.add(PriceModel.fromData(snapshot.docs.first.data()));
+  //       }
+  //     });
+  //   }
+
+  //   return priceList;
+
+  //   print("CALLED");
+  //   return address
+  //       .postsSubVoteCollection()
+  //       .orderBy('postDateTime')
+  //       .snapshots()
+  //       .map((snapshot) => snapshot.docs
+  //           .map((document) {
+  //             return VoteCommentModel.fromData(document.id, document.data());
+  //           })
+  //           .toList()
+  //           .reversed
+  //           .toList());
+  // }
+
   // Read: ranks collection 정보 읽어오기. 배치될 때에만 바뀌는 정보이므로 Future로 처리
   Future<List<RankModel>> getRankList(
       DatabaseAddressModel databaseAddressModel) async {
@@ -811,7 +849,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: '20201016',
+      date: baseDate,
       category: category,
       season: season,
       isVoting: isVoting,
