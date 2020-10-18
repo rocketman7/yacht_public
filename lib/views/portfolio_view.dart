@@ -204,6 +204,14 @@ class _PortfolioViewState extends State<PortfolioView>
                                   )
                                 : Container(),
                             SizedBox(height: 32),
+                            GestureDetector(
+                              onTap: () {
+                                var unixTimestamp = DateTime.now();
+
+                                print(unixTimestamp);
+                              },
+                              child: Text('dfswe'),
+                            )
                           ],
                         ),
                       ),

@@ -299,13 +299,18 @@ class RankView extends StatelessWidget {
                                         ),
                                       ),
                                       Spacer(),
-                                      Text(
-                                        '${model.getPortfolioValue()}',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'DmSans',
-                                            letterSpacing: -0.5,
-                                            fontWeight: FontWeight.bold),
+                                      GestureDetector(
+                                        onTap: () {
+                                          model.navigateToPortfolioPage();
+                                        },
+                                        child: Text(
+                                          '${model.getPortfolioValue()}',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: 'DmSans',
+                                              letterSpacing: -0.5,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                       GestureDetector(
                                         onTap: () {

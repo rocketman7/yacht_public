@@ -25,11 +25,6 @@ class DatabaseAddressModel {
   });
 
   // users collection의 userVote subCollection Ref.
-  CollectionReference userVoteCollection() {
-    return _databaseService.usersCollectionReference
-        .doc(uid)
-        .collection('userVote');
-  }
 
 // users collection의 userVote subCollection의 season subCollection Ref.
   CollectionReference userVoteSeasonCollection() {

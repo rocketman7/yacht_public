@@ -1,6 +1,11 @@
 import 'package:intl/intl.dart';
 
 var stringDate = DateFormat("yyyyMMdd");
+
+String dateToStr(DateTime dateTime) {
+  return stringDate.format(dateTime);
+}
+
 DateTime strToDate(String strDate) {
   return DateTime(
     int.parse(strDate.substring(0, 4)),

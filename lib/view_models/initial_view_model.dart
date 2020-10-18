@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
+import 'package:yachtOne/services/push_notification_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
 
 import '../locator.dart';
@@ -12,6 +13,8 @@ class InitialViewModel extends FutureViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
+  final PushNotificationService _pushNotificationService =
+      locator<PushNotificationService>();
 
   bool isTwoFactorAuthed = true;
   var authChange;
@@ -46,5 +49,8 @@ class InitialViewModel extends FutureViewModel {
   }
 
   @override
-  Future futureToRun() => getSharedPreferences();
+  Future futureToRun() async {
+    await _pushNotificationService.initialise();
+    return getSharedPreferences();
+  }
 }

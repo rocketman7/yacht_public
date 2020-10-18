@@ -8,6 +8,7 @@ import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/user_vote_model.dart';
@@ -136,9 +137,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
                         Text(
                           "커뮤니티",
                           style: TextStyle(
-                            fontFamily: 'DmSans',
-                            fontSize: 32,
-                            fontWeight: FontWeight.w800,
+                            fontFamily: 'AppleSDEB',
+                            fontSize: 32.sp,
                             letterSpacing: -2.0,
                           ),
                         ),
@@ -153,7 +153,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                           "총 ${model.vote.voteCount.toString()}개의 예측 주제",
                           style: TextStyle(
                             // fontFamily: 'Akrhip',
-                            fontSize: 20,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.w800,
                             letterSpacing: -1.0,
                           ),
@@ -248,7 +248,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
           color: Color(
             0xFFE0E0E0,
           )),
-      height: 80,
+      height: 80.sp,
       isDateDisabled: (dateTime) {
         // dateTime을 넣고 휴일 여부를 bool로
         return dateTime.isAfter(strToDate(model.address.date));
@@ -260,17 +260,17 @@ class _VoteCommentViewState extends State<VoteCommentView>
             0xFFF8F8F8,
           )),
       disabledDateTextStyle: TextStyle(
-        fontSize: 20,
+        fontSize: 20.sp,
         color: Color(0xFFC2C2C2),
         fontWeight: FontWeight.w800,
       ),
       disabledWeekDayTextStyle: TextStyle(
-        fontSize: 12,
+        fontSize: 12.sp,
         color: Color(0xFFC2C2C2),
       ),
-      dateWidth: 48,
+      dateWidth: 48.w,
       onDateSelected: (dateTime) {
-        String newBaseDate = stringDate.format(dateTime);
+        String newBaseDate = dateToStr(dateTime);
         print(newBaseDate);
         DatabaseAddressModel newAddress;
         newAddress = DatabaseAddressModel(
@@ -288,11 +288,12 @@ class _VoteCommentViewState extends State<VoteCommentView>
       initialSelectedDates: strToDate(model.address.date),
       labelOrder: [LabelType.date, LabelType.weekday],
       dateTextStyle: TextStyle(
-        fontSize: 20,
+        fontSize: 20.sp,
         fontWeight: FontWeight.w800,
       ),
       weekDayTextStyle: TextStyle(
-        fontSize: 12,
+        fontSize: 12.sp,
+        fontFamily: 'DmSans',
       ),
       firstDate: DateTime(
           int.parse(model.seasonInfo.startDate.substring(0, 4)),
@@ -300,13 +301,15 @@ class _VoteCommentViewState extends State<VoteCommentView>
           int.parse(model.seasonInfo.startDate.substring(6))),
       lastDate: nextNthBusinessDay(strToDate(model.address.date), 3),
       selectedDateTextStyle: TextStyle(
-        fontSize: 20,
+        fontSize: 20.sp,
         color: Colors.white,
         fontWeight: FontWeight.w800,
       ),
       selectedWeekDayTextStyle: TextStyle(
-        fontSize: 12,
+        fontSize: 12.sp,
         color: Colors.white,
+        fontFamily: 'DmSans',
+        fontWeight: FontWeight.bold,
       ),
       selectedDecoration: BoxDecoration(
         color: Color(0xFF1EC8CF),

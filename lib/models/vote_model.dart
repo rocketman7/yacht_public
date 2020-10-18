@@ -5,7 +5,7 @@ class VoteModel {
   final dynamic voteStartDateTime;
   final dynamic voteEndDateTime;
   final int voteCount;
-  final List<int> voteResult;
+  final List<int> result;
   final List<SubVote> subVotes;
 
   VoteModel({
@@ -13,7 +13,7 @@ class VoteModel {
     this.voteStartDateTime,
     this.voteEndDateTime,
     this.voteCount,
-    this.voteResult,
+    this.result,
     this.subVotes,
   });
 
@@ -25,8 +25,7 @@ class VoteModel {
         voteStartDateTime = data['voteStartDateTime'],
         voteEndDateTime = data['voteEndDateTime'],
         voteCount = data['voteCount'],
-        voteResult =
-            data['voteResult'] == null ? [] : data['voteResult'].cast<int>(),
+        result = data['result'] == null ? [] : data['result'].cast<int>(),
         subVotes = subVotesList;
 
   // VoteModel -> Json 변환 함수
@@ -36,7 +35,7 @@ class VoteModel {
       'voteStartDateTime': this.voteStartDateTime,
       'voteEndDateTime': this.voteEndDateTime,
       'voteCount': this.voteCount,
-      'voteResult': this.voteResult,
+      'voteResult': this.result,
     };
   }
 }

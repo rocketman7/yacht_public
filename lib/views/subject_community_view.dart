@@ -15,6 +15,7 @@ import 'package:yachtOne/view_models/subject_community_view_model.dart';
 import 'package:yachtOne/views/constants/size.dart';
 import '../locator.dart';
 import 'widgets/avatar_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SubjectCommunityView extends StatefulWidget {
   final subjectCommunityviewObject;
@@ -135,7 +136,141 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                             color: Colors.black,
                             thickness: 2.0,
                           ),
-                          buildSquares(model, idx),
+
+                          StreamBuilder<PriceModel>(
+                              stream: model.getRealtimePrice(model.newAddress,
+                                  model.vote.subVotes[idx].issueCode[0]),
+                              builder: (context, snapshot) {
+                                var formatVotePct = new NumberFormat("##.0%");
+                                var formatPrice = NumberFormat("#,###");
+                                var formatReturnPct = new NumberFormat("0.00%");
+                                if (snapshot.data == null) {
+                                  return Container();
+                                } else {
+                                  PriceModel price0;
+                                  price0 = snapshot.data;
+                                  return StreamBuilder<PriceModel>(
+                                    stream: model.getRealtimePrice(
+                                        model.newAddress,
+                                        model.vote.subVotes[idx].issueCode[1]),
+                                    builder: (context, snapshot1) {
+                                      if (snapshot1.data == null) {
+                                        return Container();
+                                      } else {
+                                        PriceModel price1;
+                                        price1 = snapshot1.data;
+                                        return Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: <Widget>[
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  model.vote.subVotes[idx]
+                                                      .voteChoices[0],
+                                                  style: TextStyle(
+                                                    fontSize: 24.sp,
+                                                    fontFamily: 'AppleSDB',
+                                                  ),
+                                                ),
+                                                price0.pricePctChange < 0
+                                                    ? Text(
+                                                        formatPrice
+                                                                .format(price0
+                                                                    .price)
+                                                                .toString() +
+                                                            " (" +
+                                                            formatReturnPct
+                                                                .format(price0
+                                                                    .pricePctChange)
+                                                                .toString() +
+                                                            ")",
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF3485FF),
+                                                          fontSize: 20.sp,
+                                                          fontFamily:
+                                                              'AppleSDB',
+                                                        ),
+                                                      )
+                                                    : Text(
+                                                        formatPrice
+                                                                .format(price0
+                                                                    .price)
+                                                                .toString() +
+                                                            " (+" +
+                                                            formatReturnPct
+                                                                .format(price0
+                                                                    .pricePctChange)
+                                                                .toString() +
+                                                            ")",
+                                                        style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 20.sp,
+                                                          fontFamily:
+                                                              'AppleSDB',
+                                                        ),
+                                                      ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  model.vote.subVotes[idx]
+                                                      .voteChoices[1],
+                                                  style: TextStyle(
+                                                    fontSize: 24.sp,
+                                                    fontFamily: 'AppleSDB',
+                                                  ),
+                                                ),
+                                                price0.pricePctChange < 0
+                                                    ? Text(
+                                                        formatPrice
+                                                                .format(price1
+                                                                    .price)
+                                                                .toString() +
+                                                            " (" +
+                                                            formatReturnPct
+                                                                .format(price1
+                                                                    .pricePctChange)
+                                                                .toString() +
+                                                            ")",
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF3485FF),
+                                                          fontSize: 20.sp,
+                                                          fontFamily:
+                                                              'AppleSDB',
+                                                        ),
+                                                      )
+                                                    : Text(
+                                                        formatPrice
+                                                                .format(price1
+                                                                    .price)
+                                                                .toString() +
+                                                            " (+" +
+                                                            formatReturnPct
+                                                                .format(price1
+                                                                    .pricePctChange)
+                                                                .toString() +
+                                                            ")",
+                                                        style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontSize: 20.sp,
+                                                          fontFamily:
+                                                              'AppleSDB',
+                                                        ),
+                                                      ),
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                    },
+                                  );
+                                }
+                              }),
+                          // buildSquares(model, idx),
                           SizedBox(height: 8),
                           Expanded(
                             child: buildCommentList(
@@ -316,8 +451,8 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     double vote1Percentage = numVoted1 / (numVoted0 + numVoted1);
 
     // 차트에 표시할 포맷
-    var formatVotePct = new NumberFormat("##.0%");
-    var formatReturnPct = new NumberFormat("0.00%");
+    var formatVotePct = NumberFormat("##.0%");
+    var formatReturnPct = NumberFormat("0.00%");
 
     // length가 1이면 상,하 대결. 2이면 종목 대결
     int length = model.vote.subVotes[idx].issueCode.length;

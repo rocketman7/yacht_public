@@ -4,6 +4,7 @@ import 'services/auth_service.dart';
 import 'services/database_service.dart';
 import 'services/navigation_service.dart';
 import 'services/dialog_service.dart';
+import 'services/push_notification_service.dart';
 import 'services/storage_service.dart';
 import 'services/sharedPreferences_service.dart';
 import 'services/customCacheManager_service.dart';
@@ -24,4 +25,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => CustomCacheManagerService());
   locator.registerLazySingleton<AccountVerificationService>(
       () => AccoutVerificationServiceMydata());
+  locator.registerLazySingleton(() => PushNotificationService());
 }

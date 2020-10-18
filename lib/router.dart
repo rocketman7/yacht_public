@@ -3,6 +3,7 @@ import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/phone_auth_view.dart';
 import 'package:yachtOne/views/season_community_view.dart';
 import 'package:yachtOne/views/subject_community_view.dart';
+import 'package:yachtOne/views/track_record_view.dart';
 import 'managers/dialog_manager.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
@@ -96,6 +97,8 @@ class Routers {
         return MaterialPageRoute(builder: (context) => MypageTempGGookView());
       case 'portfolio':
         return MaterialPageRoute(builder: (context) => PortfolioView());
+      case 'trackRecord':
+        return MaterialPageRoute(builder: (context) => TrackRecordView());
       case 'faq':
         return MaterialPageRoute(builder: (context) => FaqView());
       case 'notice':
