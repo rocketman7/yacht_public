@@ -41,6 +41,11 @@ class RankViewModel extends FutureViewModel {
   // futureToRun으로 호출하는.
   Future getUserAndRankList() async {
     addressModel = await _databaseService.getAddress(uid);
+    // addressModel = DatabaseAddressModel(
+    //     uid: 'D2emDBcwWFNzu7e248FoqUviJOp2',
+    //     date: '20201014',
+    //     category: 'koreaStockStandard',
+    //     season: 'beta001');
     rankModel = await _databaseService.getRankList(addressModel);
     portfolioModel = await _databaseService.getPortfolio(addressModel);
     user = await _databaseService.getUser(uid);
@@ -101,6 +106,7 @@ class RankViewModel extends FutureViewModel {
       totalValue += portfolioModel.subPortfolio[i].sharesNum *
           portfolioModel.subPortfolio[i].currentPrice;
     }
+    // int totalValue = 100000;
 
     var f = NumberFormat("#,###", "en_US");
 
