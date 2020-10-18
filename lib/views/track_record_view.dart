@@ -57,10 +57,10 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         GestureDetector(
                             onTap: () {
@@ -106,34 +106,64 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                     ),
                     Container(
                       padding: EdgeInsets.all(
-                        8,
+                        8.sp,
                       ),
                       height: 137.h,
                       color: Color(0xFF1EC8CF),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          avatarWidget(model.user.avatarImage ?? 'avatar001',
-                              model.user.item),
                           Column(
-                            children: <Widget>[
-                              Text(
-                                "18",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 40.sp,
-                                  fontFamily: 'DmSans',
-                                  fontWeight: FontWeight.w700,
-                                ),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  avatarWidget(
+                                      model.user.avatarImage ?? 'avatar001',
+                                      model.user.item),
+                                  SizedBox(
+                                    width: 8.sp,
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        model.userVote.userVoteStats
+                                            .currentWinPoint
+                                            .toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 40.sp,
+                                          fontFamily: 'DmSans',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      Text(
+                                        "현재 승점",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.sp,
+                                          fontFamily: 'AppleSDM',
+                                        ),
+                                      ),
+                                      // SizedBox(
+                                      //   height: 12.sp,
+                                      // ),
+                                      //
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 8.sp,
                               ),
                               Text(
-                                "현재 승점",
+                                model.user.userName,
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                  fontFamily: 'DmSans',
-                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                  fontSize: 18.sp,
+                                  fontFamily: 'AppleSDB',
                                 ),
                               ),
                             ],
@@ -274,18 +304,22 @@ class _TrackRecordViewState extends State<TrackRecordView> {
 
   Widget buildColumn(TrackRecordViewModel model, int eachVoteNumber) {
     TextStyle tableTextStyle = TextStyle(
-      fontSize: 16.sp,
+      fontSize: 15.sp,
       fontFamily: 'AppleSDB',
     );
     TextStyle tableColumnStyle = TextStyle(
       fontSize: 12.sp,
-      fontFamily: 'AppleSDM',
+      color: Colors.grey,
+      fontFamily: 'AppleSDL',
     );
 
     print(eachVoteNumber);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          height: 8.sp,
+        ),
         Text(
           model.allSeasonVoteList[eachVoteNumber].voteDate.substring(0, 4) +
               "." +
@@ -302,14 +336,15 @@ class _TrackRecordViewState extends State<TrackRecordView> {
         Table(columnWidths: {
           0: FlexColumnWidth(2.0),
           1: FlexColumnWidth(1.0),
-          2: IntrinsicColumnWidth(), // i want this one to take the rest available space
+          2: FlexColumnWidth(
+              1.0), // i want this one to take the rest available space
         }, children: [
           TableRow(
             children: [
               Text(
                 "예측 주제",
                 style: tableColumnStyle,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
               ),
               Text(
                 "나의 투표",
@@ -317,7 +352,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                 textAlign: TextAlign.center,
               ),
               Text(
-                "나의 결과",
+                "결과",
                 style: tableColumnStyle,
                 textAlign: TextAlign.center,
               ),
@@ -325,17 +360,24 @@ class _TrackRecordViewState extends State<TrackRecordView> {
           ),
           TableRow(
             children: [
-              Column(
-                  children: List.generate(
-                      model.allSeasonVoteList[eachVoteNumber].subVotes.length,
-                      (index)
-                          // print(model.allSeasonVoteList[eachVoteNumber].toJson());
-                          =>
-                          Text(
-                            model.allSeasonVoteList[eachVoteNumber]
-                                .subVotes[index].title,
-                            style: tableTextStyle,
-                          ))),
+              Align(
+                // alignment: Alignment.centerLeft,
+                child: Column(
+                    children: List.generate(
+                        model.allSeasonVoteList[eachVoteNumber].subVotes.length,
+                        (index)
+                            // print(model.allSeasonVoteList[eachVoteNumber].toJson());
+                            =>
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                model.allSeasonVoteList[eachVoteNumber]
+                                    .subVotes[index].title,
+                                style: tableTextStyle,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ))),
+              ),
               Column(
                 children: List.generate(
                     model.allSeasonVoteList[eachVoteNumber].subVotes.length,
@@ -350,7 +392,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                         ? model.allSeasonUserVoteList[userVoteIdx]
                                     .voteSelected[index] ==
                                 0
-                            ? "Pass"
+                            ? "-"
                             : model.allSeasonUserVoteList[userVoteIdx]
                                         .voteSelected[index] ==
                                     1
@@ -360,46 +402,40 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                 : model.allSeasonVoteList[eachVoteNumber]
                                     .subVotes[index].voteChoices[1]
                                     .toString()
-                        : "Pass",
+                        : "-",
                     style: tableTextStyle,
+                    overflow: TextOverflow.ellipsis,
                   );
                 }),
               ),
               Column(
-                  children: List.generate(
-                      model.allSeasonVoteList[eachVoteNumber].subVotes.length,
-                      (index) {
-                int userVoteIdx = model.allSeasonUserVoteList.indexWhere(
-                    (element) =>
-                        element.voteDate ==
-                        model.allSeasonVoteList[eachVoteNumber].voteDate);
-                return Text(
-                  (model.allSeasonVoteList[eachVoteNumber].result[index] == 0 ||
-                          model.allSeasonVoteList[eachVoteNumber]
-                                  .result[index] ==
-                              null)
-                      ? "-"
-                      : userVoteIdx != -1
-                          ? model.allSeasonUserVoteList[userVoteIdx]
-                                      .voteSelected[index] ==
-                                  0
-                              ? "-"
-                              : model.allSeasonUserVoteList[userVoteIdx]
-                                          .voteSelected[index] ==
-                                      model.allSeasonVoteList[eachVoteNumber]
-                                          .result[index]
-                                  ? "적중"
-                                  : "미적중"
-                          : "-",
-                  style: tableTextStyle,
-                );
-              }))
+                children: List.generate(
+                    model.allSeasonVoteList[eachVoteNumber].subVotes.length,
+                    (index) {
+                  // int userVoteIdx = model.allSeasonUserVoteList.indexWhere(
+                  //     (element) =>
+                  //         element.voteDate ==
+                  //         model.allSeasonVoteList[eachVoteNumber].voteDate);
+
+                  int answerIdx =
+                      model.allSeasonVoteList[eachVoteNumber].result[index] - 1;
+                  return Text(
+                    answerIdx < 0
+                        ? "무승부"
+                        : model.allSeasonVoteList[eachVoteNumber]
+                            .subVotes[index].voteChoices[answerIdx],
+                    style: tableTextStyle,
+                    overflow: TextOverflow.ellipsis,
+                  );
+                }),
+              )
             ],
           )
         ]),
         SizedBox(
-          height: 8,
-        )
+          height: 8.sp,
+        ),
+        Divider(),
       ],
     );
   }
