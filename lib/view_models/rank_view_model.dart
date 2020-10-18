@@ -1,11 +1,14 @@
 import 'package:stacked/stacked.dart';
 import 'package:intl/intl.dart';
 
+import '../services/stateManager_service.dart';
+import '../services/stateManager_service.dart' as global;
+
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/rank_model.dart';
 import '../models/season_model.dart';
-import '../models/portfolio_model.dart';
+// import '../models/portfolio_model.dart';
 import '../models/database_address_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
@@ -17,12 +20,14 @@ class RankViewModel extends FutureViewModel {
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final StateManagerServiceService _stateManagerServiceService =
+      locator<StateManagerServiceService>();
 
   // 변수 Setting
-  DatabaseAddressModel addressModel;
+  // DatabaseAddressModel addressModel;
   SeasonModel seasonModel;
-  PortfolioModel
-      portfolioModel; //상금 현재가치 불러올려고 굳이 접근해야하는건데 이런건 처음 앱 실행시 한번에 불러오고 저장해두면 안되나?
+  // PortfolioModel
+  //     portfolioModel; //상금 현재가치 불러올려고 굳이 접근해야하는건데 이런건 처음 앱 실행시 한번에 불러오고 저장해두면 안되나?
   List<RankModel> rankModel = [];
   UserModel user;
   String uid;
@@ -40,16 +45,19 @@ class RankViewModel extends FutureViewModel {
   // method
   // futureToRun으로 호출하는.
   Future getUserAndRankList() async {
-    addressModel = await _databaseService.getAddress(uid);
-    // addressModel = DatabaseAddressModel(
-    //     uid: 'D2emDBcwWFNzu7e248FoqUviJOp2',
-    //     date: '20201014',
-    //     category: 'koreaStockStandard',
-    //     season: 'beta001');
-    rankModel = await _databaseService.getRankList(addressModel);
-    portfolioModel = await _databaseService.getPortfolio(addressModel);
+    // 사실은 첫화면인 startup?homeview에 있어야하지만 test를 위해. 즉 어플을 처음 켤 때 mystate가 결정된다.
+    _stateManagerServiceService.initStateManager();
+
+    // 그럼과 동시에 stateManager 에서 관리할 local 모델들을 모두 업데이트해줘야함 <= initState 에 같이 넣자
+    // _stateManagerServiceService.reloadAddressModel();
+    global.localAddressModel = await _databaseService.getAddress(uid);
+    global.localPortfolioModel =
+        await _databaseService.getPortfolio(global.localAddressModel);
+    global.localSeasonModel =
+        await _databaseService.getSeasonInfo(global.localAddressModel);
     user = await _databaseService.getUser(uid);
-    seasonModel = await _databaseService.getSeasonInfo(addressModel);
+    seasonModel = global.localSeasonModel;
+    rankModel = await _databaseService.getRankList(global.localAddressModel);
 
     // 순위변동 구해주자.
     for (int i = 0; i < rankModel.length; i++) {
@@ -86,7 +94,7 @@ class RankViewModel extends FutureViewModel {
 
   // 어드레스모델이 가리키는 전 날짜를 가져와서 xxxx.xx.xx 형식으로 변환
   String getDateFormChange() {
-    DateTime previousdate = strToDate(addressModel.date);
+    DateTime previousdate = strToDate(global.localAddressModel.date);
 
     previousdate = previousBusinessDay(previousdate);
     String previousdateStr = stringDate.format(previousdate);
@@ -102,9 +110,9 @@ class RankViewModel extends FutureViewModel {
   String getPortfolioValue() {
     int totalValue = 0;
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      totalValue += portfolioModel.subPortfolio[i].sharesNum *
-          portfolioModel.subPortfolio[i].currentPrice;
+    for (int i = 0; i < global.localPortfolioModel.subPortfolio.length; i++) {
+      totalValue += global.localPortfolioModel.subPortfolio[i].sharesNum *
+          global.localPortfolioModel.subPortfolio[i].currentPrice;
     }
     // int totalValue = 100000;
 

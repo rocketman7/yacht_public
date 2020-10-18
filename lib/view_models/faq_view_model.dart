@@ -20,6 +20,7 @@ class FaqViewModel extends FutureViewModel {
     faqModel = await _databaseService.getFaq();
 
     for (int i = 0; i < faqModel.length; i++) {
+      // faqModel[i].content.replaceAll('\\n', '\n');
       isSelected.add(false);
     }
     notifyListeners();

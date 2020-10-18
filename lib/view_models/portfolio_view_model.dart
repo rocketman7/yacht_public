@@ -2,27 +2,30 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'dart:math' as math;
 
+import '../services/stateManager_service.dart';
+import '../services/stateManager_service.dart' as global;
+import '../models/stateManeger_model.dart';
+
 import '../locator.dart';
 import '../models/portfolio_model.dart';
 import '../models/database_address_model.dart';
 import '../models/season_model.dart';
-import '../services/auth_service.dart';
-import '../services/database_service.dart';
 import '../services/sharedPreferences_service.dart';
 import '../models/sharedPreferences_const.dart';
 
 class PortfolioViewModel extends FutureViewModel {
   // Services Setting
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>(); //
+  final StateManagerServiceService _stateManagerServiceService =
+      locator<StateManagerServiceService>();
 
   // 변수 Setting
+  // 아래에 stateManagerService이용하여 사용할 모델들 설정
   DatabaseAddressModel addressModel;
   PortfolioModel portfolioModel;
   SeasonModel seasonModel;
-  String uid;
+  // 여기는 이 화면 고유의 모델 설정
 
   // UI용 변수
   List<double> startPercentage = []; // 실제 subPortfolio갯수보다 하나 많아야.
@@ -43,16 +46,38 @@ class PortfolioViewModel extends FutureViewModel {
   int tutorialStatus = 2; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
   int tutorialTotalStep = 2; // 튜토리얼 총 단계
 
-  PortfolioViewModel() {
-    uid = _authService.auth.currentUser.uid;
-  }
-
   // method
   // 포트폴리오 DB로부터 얻어오기 + UI용 변수들 계산
   Future getPortfolio() async {
-    addressModel = await _databaseService.getAddress(uid);
-    portfolioModel = await _databaseService.getPortfolio(addressModel);
-    seasonModel = await _databaseService.getSeasonInfo(addressModel);
+    //=======================stateManagerService이용하여 뷰모델 시작=======================
+    String myState = _stateManagerServiceService.calcState();
+
+    if (_stateManagerServiceService.hasLocalStateChange(myState)) {
+      if (_stateManagerServiceService.hasDBStateChange(myState)) {
+        // update needed. local & db 모두 변했기 때문
+        await _stateManagerServiceService.reloadAddressModel();
+        addressModel = global.localAddressModel;
+
+        await _stateManagerServiceService.reloadPortfolioModel();
+        portfolioModel = global.localPortfolioModel;
+
+        await _stateManagerServiceService.reloadSeasonModel();
+        seasonModel = global.localSeasonModel;
+      } else {
+        // update 필요 X. local은 변했지만 DB가 안변했기 때문에.
+        addressModel = global.localAddressModel;
+        portfolioModel = global.localPortfolioModel;
+        seasonModel = global.localSeasonModel;
+      }
+    } else {
+      // update 필요 X. local조차 안 변했기 때문. 대부분 이 경우
+      addressModel = global.localAddressModel;
+      portfolioModel = global.localPortfolioModel;
+      seasonModel = global.localSeasonModel;
+    }
+    //=======================stateManagerService이용하여 뷰모델 시작=======================
+
+    //튜토리얼을 위한
     portfolioTutorial = await _sharedPreferencesService
         .getSharedPreferencesValue(portfolioTutorialKey, bool);
 

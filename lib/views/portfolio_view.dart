@@ -204,14 +204,6 @@ class _PortfolioViewState extends State<PortfolioView>
                                   )
                                 : Container(),
                             SizedBox(height: 32),
-                            GestureDetector(
-                              onTap: () {
-                                var unixTimestamp = DateTime.now();
-
-                                print(unixTimestamp);
-                              },
-                              child: Text('dfswe'),
-                            )
                           ],
                         ),
                       ),
@@ -256,7 +248,7 @@ List<Widget> makePortfolioArcLineComponents(PortfolioViewModel model,
               portfolioArcRadiusCenter),
       painter: PortfolioArcLine(
           center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-          color: 'B2B7BE',
+          color: '000000',
           standartRadius:
               (portfolioArcRadius - portfolioArcRadiusCenter) / 3 * 2 +
                   portfolioArcRadiusCenter),
@@ -281,7 +273,7 @@ List<Widget> makePortfolioArcLineComponents(PortfolioViewModel model,
     size: Size(portfolioArcRadius, portfolioArcRadius),
     painter: PortfolioArcLine(
         center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-        color: 'B2B7BE',
+        color: '000000',
         standartRadius:
             (portfolioArcRadius - portfolioArcRadiusCenter) / 3 * 2 +
                 portfolioArcRadiusCenter),
@@ -333,7 +325,7 @@ List<Widget> makePortfolioArcComponents(PortfolioViewModel model,
   }
 
   result.add(CustomPaint(
-    size: Size(portfolioArcRadiusCenter, portfolioArcRadiusCenter),
+    size: Size(portfolioArcRadiusCenter - 25, portfolioArcRadiusCenter - 25),
     painter: PortfolioArcChart(
         center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
         color: 'FFFFFF',
@@ -613,7 +605,7 @@ class PortfolioArcLine extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Color(int.parse('FF$color', radix: 16)).withOpacity(0.3)
+      ..color = Color(int.parse('FF$color', radix: 16)).withOpacity(0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 
