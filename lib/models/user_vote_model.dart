@@ -4,7 +4,7 @@ class UserVoteModel {
   final String uid;
   final String voteDate;
   List<int> voteSelected;
-  final List<int> voteResult;
+  final int score;
   final bool voteVictory;
   bool isVoted;
   final UserVoteStatsModel userVoteStats;
@@ -13,7 +13,7 @@ class UserVoteModel {
     this.uid,
     this.voteDate,
     this.voteSelected,
-    this.voteResult,
+    this.score,
     this.voteVictory,
     this.isVoted,
     this.userVoteStats,
@@ -30,7 +30,7 @@ class UserVoteModel {
         voteSelected = data['voteSelected'] == null
             ? null
             : data['voteSelected'].cast<int>(),
-        voteResult = data['voteResult'],
+        score = data['score'],
         voteVictory = data['voteVictory'],
         isVoted = data['isVoted'],
         userVoteStats = userVoteStats;
@@ -41,7 +41,7 @@ class UserVoteModel {
       'uid': this.uid,
       'voteDate': this.voteDate,
       'voteSelected': this.voteSelected,
-      'voteResult': this.voteResult,
+      'score': this.score,
       'voteVictory': this.voteVictory,
       'isVoted': this.isVoted,
     };

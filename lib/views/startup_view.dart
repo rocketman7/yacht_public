@@ -16,6 +16,7 @@ import '../view_models/startup_view_model.dart';
 import '../views/loading_view.dart';
 import 'intro_view.dart';
 import 'vote_select_v2_view.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StartUpView extends StatefulWidget {
   final int startIdx;
@@ -122,68 +123,123 @@ class _StartUpViewState extends State<StartUpView>
                 ),
 
                 // _viewList[_selectedIndex],
-                bottomNavigationBar: SizedBox(
-                  // height: 70,
-                  child: BottomNavigationBar(
-                    key: navBarGlobalKey,
+                bottomNavigationBar: BottomNavigationBar(
+                  key: navBarGlobalKey,
 
-                    type: BottomNavigationBarType.fixed,
-                    onTap: (index) => {
-                      setState(() {
-                        _selectedIndex = index;
-                        _tabController.index = index;
-                        // _viewList.insert(index, _viewList[index]);
-                        // _viewList.removeAt(index);
-                        print(_viewList.toString());
-                      }),
-                      // _navigationService.navigateTo(_viewList[index]),
-                    },
-                    currentIndex: _selectedIndex ?? 0,
-                    selectedItemColor: Color(0xFF1EC8CF),
-                    unselectedItemColor: Color(0xFFAAAAAA),
-                    selectedFontSize: 0,
-                    // iconSize: 25,
-                    unselectedFontSize: 0,
-                    items: [
-                      // BottomNavigationBarItem(
-                      //   icon: GestureDetector(
-                      //     child: SvgPicture.asset('assets/icons/home.svg',
-                      //         color: Color(0xFFAAAAAA)),
-                      //   ),
-                      //   activeIcon: SvgPicture.asset('assets/icons/home.svg',
-                      //       color: Color(0xFF1EC8CF)),
-                      //   label: '',
-                      // ),
-                      BottomNavigationBarItem(
-                        icon: SvgPicture.asset('assets/icons/home.svg',
+                  type: BottomNavigationBarType.fixed,
+                  onTap: (index) => {
+                    setState(() {
+                      _selectedIndex = index;
+                      _tabController.index = index;
+                      // _viewList.insert(index, _viewList[index]);
+                      // _viewList.removeAt(index);
+                      print(_viewList.toString());
+                    }),
+                    // _navigationService.navigateTo(_viewList[index]),
+                  },
+                  currentIndex: _selectedIndex ?? 0,
+                  selectedItemColor: Color(0xFF1EC8CF),
+                  unselectedItemColor: Color(0xFFAAAAAA),
+                  selectedFontSize: 0,
+                  // iconSize: 25,
+                  unselectedFontSize: 0,
+                  items: [
+                    // BottomNavigationBarItem(
+                    //   icon: GestureDetector(
+                    //     child: SvgPicture.asset('assets/icons/home.svg',
+                    //         color: Color(0xFFAAAAAA)),
+                    //   ),
+                    //   activeIcon: SvgPicture.asset('assets/icons/home.svg',
+                    //       color: Color(0xFF1EC8CF)),
+                    //   label: '',
+                    // ),
+                    BottomNavigationBarItem(
+                      icon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        // height: double.infinity,
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/home.svg',
                             color: Color(0xFFAAAAAA)),
-                        activeIcon: SvgPicture.asset('assets/icons/home.svg',
-                            color: Color(0xFF1EC8CF)),
-                        label: '',
                       ),
-                      BottomNavigationBarItem(
-                        icon: SvgPicture.asset('assets/icons/comment.svg',
+                      activeIcon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        // height: double.infinity,
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/home.svg',
+                            color: Color(0xFF1EC8CF)),
+                      ),
+                      label: '',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/comment.svg',
                             color: Color(0xFFAAAAAA)),
-                        activeIcon: SvgPicture.asset('assets/icons/comment.svg',
-                            color: Color(0xFF1EC8CF)),
-                        label: '',
                       ),
-                      BottomNavigationBarItem(
-                        icon: SvgPicture.asset('assets/icons/rank.svg',
+                      activeIcon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/comment.svg',
+                            color: Color(0xFF1EC8CF)),
+                      ),
+                      label: '',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/rank.svg',
                             color: Color(0xFFAAAAAA)),
-                        activeIcon: SvgPicture.asset('assets/icons/rank.svg',
-                            color: Color(0xFF1EC8CF)),
-                        label: '',
                       ),
-                      BottomNavigationBarItem(
-                        icon: SvgPicture.asset('assets/icons/mypage.svg',
+                      activeIcon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/rank.svg',
+                            color: Color(0xFF1EC8CF)),
+                      ),
+                      label: '',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/mypage.svg',
                             color: Color(0xFFAAAAAA)),
-                        activeIcon: SvgPicture.asset('assets/icons/mypage.svg',
-                            color: Color(0xFF1EC8CF)),
-                        label: '',
                       ),
-                    ],
-                  ),
+                      activeIcon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/mypage.svg',
+                            color: Color(0xFF1EC8CF)),
+                      ),
+                      label: '',
+                    ),
+                  ],
                 ),
               );
         // model.stream;

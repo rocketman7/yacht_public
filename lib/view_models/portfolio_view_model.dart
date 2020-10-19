@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/views/constants/holiday.dart';
 import 'dart:math' as math;
 
 import '../locator.dart';
@@ -147,11 +148,13 @@ class PortfolioViewModel extends FutureViewModel {
 
   // 어드레스모델이 가리키는 날짜를 가져와서 xxxx.xx.xx 형식으로 변환
   String getDateFormChange() {
-    return addressModel.date.substring(0, 4) +
+    DateTime baseDate = strToDate(addressModel.date);
+    String previosBusinessDate = dateToStr(previousBusinessDay(baseDate));
+    return previosBusinessDate.substring(0, 4) +
         '.' +
-        addressModel.date.substring(4, 6) +
+        previosBusinessDate.substring(4, 6) +
         '.' +
-        addressModel.date.substring(6, 8);
+        previosBusinessDate.substring(6, 8);
   }
 
   // 어드레스모델이 가리키는 시즌을 가져와서 SEASON# 형식으로 변환
@@ -180,6 +183,23 @@ class PortfolioViewModel extends FutureViewModel {
     var f = NumberFormat("#,###", "en_US");
 
     return f.format(totalValue);
+  }
+
+  double getPortfolioReturn() {
+    int totalValue = 0;
+    int initialValue = 0;
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      totalValue += portfolioModel.subPortfolio[i].sharesNum *
+          portfolioModel.subPortfolio[i].currentPrice;
+      initialValue += portfolioModel.subPortfolio[i].sharesNum *
+          portfolioModel.subPortfolio[i].initialPrice;
+    }
+
+    var returnFormat = NumberFormat("##.##%", "en_US");
+
+    return ((totalValue / initialValue) - 1);
+    // return 0.123125;
   }
 
   // 포트폴리우 구성종목의 초기비중을 리턴

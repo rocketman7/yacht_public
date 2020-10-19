@@ -535,7 +535,7 @@ class DatabaseService {
         .collection(issueCode)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .take(1)
+        // .take(1)
         .map((snapshot) {
       print(snapshot.toString());
       print("SNAP");
@@ -816,6 +816,11 @@ class DatabaseService {
       print("error");
       return null;
     }
+  }
+
+  Future updateUserItem(String uid, int newItem) async {
+    print("NEW ITEM IS" + newItem.toString());
+    await _usersCollectionReference.doc(uid).update({'item': newItem});
   }
 
   // database 및 time정보로 Database Address 모델 만들기

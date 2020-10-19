@@ -39,7 +39,7 @@ exports.scoreVote = functions.https.onRequest(async (req, res) => {
   // const today = "20201005";
   // today의 실제 결과 가져오기 (이전에 넣어야함)
 
-  var today = "20201016";
+  var today = "20201019";
 
   function userVotesSeasonCollection(uid) {
     return usersRef
@@ -166,7 +166,7 @@ exports.scoreVote = functions.https.onRequest(async (req, res) => {
     for (var i = 0; i < resultArr.length; i++) {
       if (userVoteArr[i] !== 0) {
         if (userVoteArr[i] === resultArr[i]) {
-          score += 1;
+          score += 2;
         } else if (resultArr[i] === 0) {
           score += 0;
         } else {
@@ -309,8 +309,8 @@ exports.sortRank = functions.https.onRequest(async (req, res) => {
   const category = openSeasonSnapshot.data().category;
   const season = openSeasonSnapshot.data().season;
 
-  const today = "20201016";
-  const yesterday = "20201015";
+  const today = "20201019";
+  const yesterday = "20201016";
   // todayRankRef
 
   const seasonInfoRef = votesRef

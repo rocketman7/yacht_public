@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 import 'dart:ui';
 import 'dart:math' as math;
 
+import '../locator.dart';
 import 'constants/size.dart';
 import '../view_models/portfolio_view_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PortfolioView extends StatefulWidget {
   @override
@@ -15,6 +19,7 @@ class PortfolioView extends StatefulWidget {
 
 class _PortfolioViewState extends State<PortfolioView>
     with TickerProviderStateMixin {
+  NavigationService _navigationService = locator<NavigationService>();
   AnimationController _chartAnimationController;
   Animation chartAnimation;
 
@@ -46,6 +51,7 @@ class _PortfolioViewState extends State<PortfolioView>
 
   @override
   Widget build(BuildContext context) {
+    var returnFormat = NumberFormat("#0.00 %", "en_US");
     return ViewModelBuilder<PortfolioViewModel>.reactive(
         viewModelBuilder: () => PortfolioViewModel(),
         builder: (context, model, child) {
@@ -81,50 +87,96 @@ class _PortfolioViewState extends State<PortfolioView>
 
             return Scaffold(
                 backgroundColor: Colors.white,
-                appBar: AppBar(
-                  centerTitle: true,
-                  title: Text('상금 포트폴리오 구성',
-                      style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -2.0)),
-                  elevation: 0,
-                ),
                 body: Stack(
                   children: [
                     SafeArea(
                       child: Padding(
-                        padding:
-                            EdgeInsets.only(left: 16.0, right: 16.0, top: 4),
+                        padding: EdgeInsets.only(
+                          left: 16.w,
+                          right: 16.w,
+                          top: 18.h,
+                        ),
                         child: Column(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
-                              children: [
-                                Text(
-                                  '${model.getDateFormChange()}',
-                                  style: TextStyle(
-                                      fontFamily: 'DmSans', fontSize: 14),
-                                ),
-                                Container(
-                                  height: 8,
-                                  width: 1,
-                                  color: Color(0xFFD8D8D8),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(_navigationService
+                                              .navigatorKey.currentContext)
+                                          .pop();
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 18.0),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.arrow_back_ios,
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                                Expanded(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        "상금 포트폴리오 구성",
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          fontFamily: 'AppleSDEB',
+                                          // fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        overflow: TextOverflow.fade,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 SizedBox(
-                                  width: 8,
+                                  width: 52.w,
                                 ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 30.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                // Container(
+                                //   height: 8,
+                                //   width: 1,
+                                //   color: Color(0xFFD8D8D8),
+                                // ),
+                                // SizedBox(
+                                //   width: 8,
+                                // ),
+                                // Text(
+                                //   '${model.seasonModel.seasonName}',
+                                //   style: TextStyle(
+                                //     fontFamily: 'AppleSDM',
+                                //     fontSize: 16.sp,
+                                //   ),
+                                // ),
+
                                 Text(
-                                  '${model.seasonModel.seasonName}',
+                                  '${model.getDateFormChange()} 종가 기준',
                                   style: TextStyle(
-                                      fontFamily: 'DmSans', fontSize: 14),
-                                )
+                                    fontFamily: 'DmSans',
+                                    fontSize: 16.sp,
+                                  ),
+                                ),
                               ],
                             ),
                             Expanded(
                                 child: ListView(
                               children: [
                                 SizedBox(
-                                  height: 40,
+                                  height: 40.h,
                                 ),
                                 Stack(
                                   children: [
@@ -162,23 +214,22 @@ class _PortfolioViewState extends State<PortfolioView>
                                           // '${model.getSeasonUpperCase()}',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'DmSans'),
+                                              fontSize: 14.sp,
+                                              fontFamily: 'AppleSDB'),
                                         )),
                                       ),
                                     ),
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 24,
+                                  height: 40.h,
                                 ),
                                 _itemAnimationController.isCompleted
                                     ? makePortfolioItems(model)
                                     : Container(),
                               ],
                             )),
-                            SizedBox(height: 8),
+                            // SizedBox(height: 18),
                             _itemAnimationController.isCompleted
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -188,30 +239,47 @@ class _PortfolioViewState extends State<PortfolioView>
                                       Text(
                                         '${model.getPortfolioValue()}원',
                                         style: TextStyle(
-                                            fontSize: 28,
+                                          fontSize: 28,
+                                          fontFamily: 'DmSans',
+                                          fontWeight: FontWeight.bold,
+                                          // letterSpacing: -1.0,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 4.sp,
+                                      ),
+                                      Text(
+                                        model.getPortfolioReturn() > 0
+                                            ? '(+${returnFormat.format(model.getPortfolioReturn())})'
+                                            : '(${returnFormat.format(model.getPortfolioReturn())})',
+                                        style: TextStyle(
+                                            fontSize: 20.sp,
                                             fontFamily: 'DmSans',
                                             fontWeight: FontWeight.bold,
-                                            letterSpacing: -1.0),
+                                            color:
+                                                model.getPortfolioReturn() > 0
+                                                    ? Color(0xFFFF3E3E)
+                                                    : Color(0xFF3485FF)),
                                       ),
                                     ],
                                   )
                                 : Container(),
-                            SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             _itemAnimationController.isCompleted
                                 ? Text(
-                                    '시즌상금 가치(전일종가 기준)',
-                                    style: TextStyle(fontSize: 14),
+                                    '시즌상금 가치 (누적 수익률)',
+                                    style: TextStyle(fontSize: 14.sp),
                                   )
                                 : Container(),
-                            SizedBox(height: 32),
-                            GestureDetector(
-                              onTap: () {
-                                var unixTimestamp = DateTime.now();
+                            SizedBox(height: 40.h),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     var unixTimestamp = DateTime.now();
 
-                                print(unixTimestamp);
-                              },
-                              child: Text('dfswe'),
-                            )
+                            //     print(unixTimestamp);
+                            //   },
+                            //   // child: Text('dfswe'),
+                            // )
                           ],
                         ),
                       ),
@@ -292,7 +360,7 @@ List<Widget> makePortfolioArcLineComponents(PortfolioViewModel model,
 
 Widget makePortfolioArc(PortfolioViewModel model) {
   double portfolioArcRadius = deviceWidth - 64;
-  const double portfolioArcRadiusCenter = 112;
+  double portfolioArcRadiusCenter = 80.sp;
 
   return Container(
     width: portfolioArcRadius,
@@ -356,8 +424,8 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
   for (int i = 0; i < model.portfolioModel.subPortfolio.length; i++) {
     if (model.drawingMaxLength[i]) {
       result.add(Container(
-        height: 32,
-        width: (deviceWidth - 32),
+        height: 32.h,
+        width: (deviceWidth - 32.h),
         child: Row(
           children: [
             Container(
@@ -380,7 +448,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
               width: 8,
             ),
             Text(
-              '${model.getInitialRatio(model.orderDrawingItem[i])}',
+              '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}',
               style: TextStyle(
                   fontSize: 18,
                   fontFamily: 'DmSans',
@@ -420,7 +488,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                   width: 8,
                 ),
                 Text(
-                  '${model.getInitialRatio(model.orderDrawingItem[i])}',
+                  '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}',
                   style: TextStyle(
                       fontSize: 18,
                       fontFamily: 'DmSans',
@@ -439,6 +507,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                 height: 32,
                 width: (deviceWidth - 32) / 2 - 10,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       width: 8,
@@ -450,21 +519,27 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                               radix: 16))),
                     ),
                     SizedBox(
-                      width: 8,
+                      width: 8.w,
                     ),
                     Text(
                       '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
-                      style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        height: 1,
+                        fontFamily: 'AppleSDM',
+                      ),
                     ),
                     SizedBox(
                       width: 8,
                     ),
                     Text(
-                      '${model.getInitialRatio(model.orderDrawingItem[i])}',
+                      '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
                       style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'DmSans',
-                          fontWeight: FontWeight.w600,
+                          fontSize: 18.sp,
+                          fontFamily: 'AppleSDM',
+                          height: 1,
+                          textBaseline: TextBaseline.alphabetic,
+                          // fontWeight: FontWeight.w600,
                           color: Color(int.parse(
                               'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
                               radix: 16))),
@@ -488,21 +563,25 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                               radix: 16))),
                     ),
                     SizedBox(
-                      width: 8,
+                      width: 8.w,
                     ),
                     Text(
                       '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].stockName}',
-                      style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontFamily: 'AppleSDM',
+                        height: 1,
+                      ),
                     ),
                     SizedBox(
-                      width: 8,
+                      width: 8.w,
                     ),
                     Text(
-                      '${model.getInitialRatio(model.orderDrawingItem[i + 1])}',
+                      '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].sharesNum} 주',
                       style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'DmSans',
-                          fontWeight: FontWeight.w600,
+                          fontSize: 18.sp,
+                          fontFamily: 'AppleSDM',
+                          height: 1,
                           color: Color(int.parse(
                               'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
                               radix: 16))),
@@ -739,7 +818,7 @@ Widget tutorial(PortfolioViewModel model) {
                             horizontal: 10,
                           ),
                           child: Text(
-                            '이번 시즌 우승상금으로 선택된 포트폴리오에요.',
+                            '이번 시즌 우승상금으로 선택된 포트폴리오예요.',
                             style: TextStyle(fontSize: 14, color: Colors.white),
                           ),
                           decoration: BoxDecoration(

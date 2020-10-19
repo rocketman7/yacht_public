@@ -88,8 +88,8 @@ class DateWidget extends StatelessWidget {
       onTap: isDisabled ? null : onTap,
       onLongPress: isDisabled ? null : onLongTap,
       child: Container(
-        width: 48.w,
-        height: height.h - 16.h,
+        width: width,
+        height: height - 18,
         decoration: isSelected
             ? selectedDecoration
             : isDisabled

@@ -29,6 +29,10 @@ class GgookViewModel extends BaseViewModel {
     print("FUTURE CALLED");
   }
 
+  Future updateUserItem(int newItem) async {
+    await _databaseService.updateUserItem(uid, newItem);
+  }
+
   Future counterUserVote(
     DatabaseAddressModel address,
     List<int> voteSelected,
