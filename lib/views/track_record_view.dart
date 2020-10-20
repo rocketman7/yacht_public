@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/track_record_view_model.dart';
@@ -83,7 +84,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                "나의 지난 예측",
+                                "나의 예측 기록",
                                 style: TextStyle(
                                   fontSize: 20.sp,
                                   fontFamily: 'AppleSDEB',
@@ -105,10 +106,11 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                       height: 18.h,
                     ),
                     Container(
-                      padding: EdgeInsets.all(
-                        8.sp,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8.w,
+                        vertical: 4.h,
                       ),
-                      height: 137.h,
+                      // height: 150.h,
                       color: Color(0xFF1EC8CF),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,22 +136,20 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
-                                      Container(
-                                        height: 40.sp,
-                                        child: Text(
-                                          model.userVote.userVoteStats
-                                              .currentWinPoint
-                                              .toString(),
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 40.sp,
-                                            fontFamily: 'DmSans',
-                                            height: 1,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          softWrap: true,
+                                      Text(
+                                        model.userVote.userVoteStats
+                                            .currentWinPoint
+                                            .toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 40.sp,
+                                          fontFamily: 'DmSans',
+                                          height: 1,
+                                          fontWeight: FontWeight.w700,
                                         ),
+                                        softWrap: true,
                                       ),
+
                                       Text(
                                         "현재 승점",
                                         style: TextStyle(
@@ -173,7 +173,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                 model.user.userName,
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 18.sp,
+                                  fontSize: 22.sp,
                                   fontFamily: 'AppleSDB',
                                 ),
                               ),
@@ -189,10 +189,10 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                 // mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "53%",
+                                    "-",
                                     style: TextStyle(
                                       color: Color(0xFFE96F2B),
-                                      fontSize: 40.sp,
+                                      fontSize: 36.sp,
                                       fontFamily: 'DmSans',
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -212,10 +212,10 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                 // mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "47%",
+                                    "-",
                                     style: TextStyle(
                                       color: Color(0xFFE96F2B),
-                                      fontSize: 25,
+                                      fontSize: 20.sp,
                                       fontFamily: 'DmSans',
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -240,10 +240,10 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                 // mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "53%",
+                                    "-",
                                     style: TextStyle(
                                       color: Color(0xFF3485FF),
-                                      fontSize: 40.sp,
+                                      fontSize: 36.sp,
                                       fontFamily: 'DmSans',
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -263,10 +263,10 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                 // mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "47%",
+                                    "-",
                                     style: TextStyle(
                                       color: Color(0xFF3485FF),
-                                      fontSize: 25,
+                                      fontSize: 20.sp,
                                       fontFamily: 'DmSans',
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -325,24 +325,90 @@ class _TrackRecordViewState extends State<TrackRecordView> {
     );
 
     print(eachVoteNumber);
+    int userVoteIdx = model.allSeasonUserVoteList.indexWhere((element) =>
+        element.voteDate == model.allSeasonVoteList[eachVoteNumber].voteDate);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           height: 8.sp,
         ),
-        Text(
-          model.allSeasonVoteList[eachVoteNumber].voteDate.substring(0, 4) +
-              "." +
-              model.allSeasonVoteList[eachVoteNumber].voteDate.substring(4, 6) +
-              "." +
-              model.allSeasonVoteList[eachVoteNumber].voteDate.substring(6),
-          style: TextStyle(
-            fontSize: 20.sp,
-            fontFamily: 'DmSans',
-            fontWeight: FontWeight.w700,
-            letterSpacing: -1.0,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              model.allSeasonVoteList[eachVoteNumber].voteDate.substring(0, 4) +
+                  "." +
+                  model.allSeasonVoteList[eachVoteNumber].voteDate
+                      .substring(4, 6) +
+                  "." +
+                  model.allSeasonVoteList[eachVoteNumber].voteDate.substring(6),
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontFamily: 'DmSans',
+                fontWeight: FontWeight.w700,
+                letterSpacing: -1.0,
+              ),
+            ),
+            Row(
+              children: [
+                userVoteIdx == -1
+                    ? Container()
+                    : model.allSeasonUserVoteList[userVoteIdx].score == null
+                        ? Container()
+                        : model.allSeasonUserVoteList[userVoteIdx].score == 0
+                            ? Container()
+                            : model.allSeasonUserVoteList[userVoteIdx].score < 0
+                                ? Container(
+                                    height: 13.h,
+                                    width: 13.h,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/arrow_down_icon.svg',
+                                      color: Colors.blue,
+                                    ),
+                                  )
+                                : Container(
+                                    height: 13.h,
+                                    width: 13.h,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/arrow_up_icon.svg',
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                SizedBox(
+                  width: 4.w,
+                ),
+                Text(
+                  userVoteIdx == -1
+                      ? "0"
+                      : model.allSeasonUserVoteList[userVoteIdx].score == null
+                          ? "-"
+                          : model.allSeasonUserVoteList[userVoteIdx].score
+                              .abs()
+                              .toString(),
+                  style: TextStyle(
+                      fontSize: 20.sp,
+                      fontFamily: 'DmSans',
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: -1.0,
+                      color: userVoteIdx == -1
+                          ? Colors.black
+                          : model.allSeasonUserVoteList[userVoteIdx].score ==
+                                  null
+                              ? Colors.black
+                              : model.allSeasonUserVoteList[userVoteIdx]
+                                          .score ==
+                                      0
+                                  ? Colors.black
+                                  : model.allSeasonUserVoteList[userVoteIdx]
+                                              .score <
+                                          0
+                                      ? Colors.blue
+                                      : Colors.red),
+                ),
+              ],
+            )
+          ],
         ),
         Table(columnWidths: {
           0: FlexColumnWidth(2.0),
@@ -429,12 +495,14 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                   //         model.allSeasonVoteList[eachVoteNumber].voteDate);
 
                   int answerIdx =
-                      model.allSeasonVoteList[eachVoteNumber].result[index] - 1;
+                      model.allSeasonVoteList[eachVoteNumber].result[index];
                   return Text(
                     answerIdx < 0
-                        ? "무승부"
-                        : model.allSeasonVoteList[eachVoteNumber]
-                            .subVotes[index].voteChoices[answerIdx],
+                        ? "-"
+                        : answerIdx == 0
+                            ? "무승부"
+                            : model.allSeasonVoteList[eachVoteNumber]
+                                .subVotes[index].voteChoices[answerIdx - 1],
                     style: tableTextStyle,
                     overflow: TextOverflow.ellipsis,
                   );

@@ -136,140 +136,208 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                             color: Colors.black,
                             thickness: 2.0,
                           ),
-
-                          StreamBuilder<PriceModel>(
-                              stream: model.getRealtimePrice(model.newAddress,
-                                  model.vote.subVotes[idx].issueCode[0]),
-                              builder: (context, snapshot) {
-                                var formatVotePct = new NumberFormat("##.0%");
-                                var formatPrice = NumberFormat("#,###");
-                                var formatReturnPct = new NumberFormat("0.00%");
-                                if (snapshot.data == null) {
-                                  return Container();
-                                } else {
-                                  PriceModel price0;
-                                  price0 = snapshot.data;
-                                  return StreamBuilder<PriceModel>(
-                                    stream: model.getRealtimePrice(
-                                        model.newAddress,
-                                        model.vote.subVotes[idx].issueCode[1]),
-                                    builder: (context, snapshot1) {
-                                      if (snapshot1.data == null) {
-                                        return Container();
-                                      } else {
-                                        PriceModel price1;
-                                        price1 = snapshot1.data;
-                                        return Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: <Widget>[
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  model.vote.subVotes[idx]
-                                                      .voteChoices[0],
+                          model.vote.subVotes[idx].issueCode.length == 1
+                              ? StreamBuilder<PriceModel>(
+                                  stream: model.getRealtimePrice(
+                                      model.newAddress,
+                                      model.vote.subVotes[idx].issueCode[0]),
+                                  builder: (context, snapshot0) {
+                                    if (snapshot0.data == null) {
+                                      return Container();
+                                    } else {
+                                      var formatVotePct =
+                                          new NumberFormat("##.0%");
+                                      var formatPrice = NumberFormat("#,###");
+                                      var formatReturnPct =
+                                          new NumberFormat("0.00%");
+                                      PriceModel price0;
+                                      price0 = snapshot0.data;
+                                      return Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: <Widget>[
+                                          Text(
+                                            model.vote.subVotes[idx].title,
+                                            style: TextStyle(
+                                              fontSize: 24.sp,
+                                              fontFamily: 'AppleSDB',
+                                            ),
+                                          ),
+                                          price0.pricePctChange < 0
+                                              ? Text(
+                                                  formatPrice
+                                                          .format(price0.price)
+                                                          .toString() +
+                                                      " (" +
+                                                      formatReturnPct
+                                                          .format(price0
+                                                              .pricePctChange)
+                                                          .toString() +
+                                                      ")",
                                                   style: TextStyle(
-                                                    fontSize: 24.sp,
+                                                    color: Color(0xFF3485FF),
+                                                    fontSize: 20.sp,
+                                                    fontFamily: 'AppleSDB',
+                                                  ),
+                                                )
+                                              : Text(
+                                                  formatPrice
+                                                          .format(price0.price)
+                                                          .toString() +
+                                                      " (+" +
+                                                      formatReturnPct
+                                                          .format(price0
+                                                              .pricePctChange)
+                                                          .toString() +
+                                                      ")",
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 20.sp,
                                                     fontFamily: 'AppleSDB',
                                                   ),
                                                 ),
-                                                price0.pricePctChange < 0
-                                                    ? Text(
-                                                        formatPrice
-                                                                .format(price0
-                                                                    .price)
-                                                                .toString() +
-                                                            " (" +
-                                                            formatReturnPct
-                                                                .format(price0
-                                                                    .pricePctChange)
-                                                                .toString() +
-                                                            ")",
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0xFF3485FF),
-                                                          fontSize: 20.sp,
-                                                          fontFamily:
-                                                              'AppleSDB',
-                                                        ),
-                                                      )
-                                                    : Text(
-                                                        formatPrice
-                                                                .format(price0
-                                                                    .price)
-                                                                .toString() +
-                                                            " (+" +
-                                                            formatReturnPct
-                                                                .format(price0
-                                                                    .pricePctChange)
-                                                                .toString() +
-                                                            ")",
-                                                        style: TextStyle(
-                                                          color: Colors.red,
-                                                          fontSize: 20.sp,
-                                                          fontFamily:
-                                                              'AppleSDB',
-                                                        ),
+                                        ],
+                                      );
+                                    }
+                                  },
+                                )
+                              : StreamBuilder<PriceModel>(
+                                  stream: model.getRealtimePrice(
+                                      model.newAddress,
+                                      model.vote.subVotes[idx].issueCode[0]),
+                                  builder: (context, snapshot) {
+                                    var formatVotePct =
+                                        new NumberFormat("##.0%");
+                                    var formatPrice = NumberFormat("#,###");
+                                    var formatReturnPct =
+                                        new NumberFormat("0.00%");
+                                    if (snapshot.data == null) {
+                                      return Container();
+                                    } else {
+                                      PriceModel price0;
+                                      price0 = snapshot.data;
+                                      return StreamBuilder<PriceModel>(
+                                        stream: model.getRealtimePrice(
+                                            model.newAddress,
+                                            model.vote.subVotes[idx]
+                                                .issueCode[1]),
+                                        builder: (context, snapshot1) {
+                                          if (snapshot1.data == null) {
+                                            return Container();
+                                          } else {
+                                            PriceModel price1;
+                                            price1 = snapshot1.data;
+                                            return Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: <Widget>[
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      model.vote.subVotes[idx]
+                                                          .voteChoices[0],
+                                                      style: TextStyle(
+                                                        fontSize: 24.sp,
+                                                        fontFamily: 'AppleSDB',
                                                       ),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  model.vote.subVotes[idx]
-                                                      .voteChoices[1],
-                                                  style: TextStyle(
-                                                    fontSize: 24.sp,
-                                                    fontFamily: 'AppleSDB',
-                                                  ),
+                                                    ),
+                                                    price0.pricePctChange < 0
+                                                        ? Text(
+                                                            formatPrice
+                                                                    .format(price0
+                                                                        .price)
+                                                                    .toString() +
+                                                                " (" +
+                                                                formatReturnPct
+                                                                    .format(price0
+                                                                        .pricePctChange)
+                                                                    .toString() +
+                                                                ")",
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF3485FF),
+                                                              fontSize: 20.sp,
+                                                              fontFamily:
+                                                                  'AppleSDB',
+                                                            ),
+                                                          )
+                                                        : Text(
+                                                            formatPrice
+                                                                    .format(price0
+                                                                        .price)
+                                                                    .toString() +
+                                                                " (+" +
+                                                                formatReturnPct
+                                                                    .format(price0
+                                                                        .pricePctChange)
+                                                                    .toString() +
+                                                                ")",
+                                                            style: TextStyle(
+                                                              color: Colors.red,
+                                                              fontSize: 20.sp,
+                                                              fontFamily:
+                                                                  'AppleSDB',
+                                                            ),
+                                                          ),
+                                                  ],
                                                 ),
-                                                price0.pricePctChange < 0
-                                                    ? Text(
-                                                        formatPrice
-                                                                .format(price1
-                                                                    .price)
-                                                                .toString() +
-                                                            " (" +
-                                                            formatReturnPct
-                                                                .format(price1
-                                                                    .pricePctChange)
-                                                                .toString() +
-                                                            ")",
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0xFF3485FF),
-                                                          fontSize: 20.sp,
-                                                          fontFamily:
-                                                              'AppleSDB',
-                                                        ),
-                                                      )
-                                                    : Text(
-                                                        formatPrice
-                                                                .format(price1
-                                                                    .price)
-                                                                .toString() +
-                                                            " (+" +
-                                                            formatReturnPct
-                                                                .format(price1
-                                                                    .pricePctChange)
-                                                                .toString() +
-                                                            ")",
-                                                        style: TextStyle(
-                                                          color: Colors.red,
-                                                          fontSize: 20.sp,
-                                                          fontFamily:
-                                                              'AppleSDB',
-                                                        ),
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      model.vote.subVotes[idx]
+                                                          .voteChoices[1],
+                                                      style: TextStyle(
+                                                        fontSize: 24.sp,
+                                                        fontFamily: 'AppleSDB',
                                                       ),
+                                                    ),
+                                                    price1.pricePctChange < 0
+                                                        ? Text(
+                                                            formatPrice
+                                                                    .format(price1
+                                                                        .price)
+                                                                    .toString() +
+                                                                " (" +
+                                                                formatReturnPct
+                                                                    .format(price1
+                                                                        .pricePctChange)
+                                                                    .toString() +
+                                                                ")",
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF3485FF),
+                                                              fontSize: 20.sp,
+                                                              fontFamily:
+                                                                  'AppleSDB',
+                                                            ),
+                                                          )
+                                                        : Text(
+                                                            formatPrice
+                                                                    .format(price1
+                                                                        .price)
+                                                                    .toString() +
+                                                                " (+" +
+                                                                formatReturnPct
+                                                                    .format(price1
+                                                                        .pricePctChange)
+                                                                    .toString() +
+                                                                ")",
+                                                            style: TextStyle(
+                                                              color: Colors.red,
+                                                              fontSize: 20.sp,
+                                                              fontFamily:
+                                                                  'AppleSDB',
+                                                            ),
+                                                          ),
+                                                  ],
+                                                ),
                                               ],
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                    },
-                                  );
-                                }
-                              }),
+                                            );
+                                          }
+                                        },
+                                      );
+                                    }
+                                  }),
                           // buildSquares(model, idx),
                           SizedBox(height: 8),
                           Expanded(

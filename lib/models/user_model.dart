@@ -4,7 +4,7 @@ class UserModel {
   final String email;
   final String phoneNumber;
   final String friendsCode;
-  final int item;
+  int item;
   final String avatarImage;
 
   String accNumber;

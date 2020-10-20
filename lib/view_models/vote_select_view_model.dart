@@ -101,11 +101,11 @@ class VoteSelectViewModel extends FutureViewModel {
     notifyListeners();
   }
 
-  void isVoteAvailable() {
-    isVoting = false;
+  // void isVoteAvailable() {
+  //   isVoting = false;
 
-    // notifyListeners();
-  }
+  //   // notifyListeners();
+  // }
 
   Stream<PriceModel> getRealtimePrice(
     DatabaseAddressModel address,

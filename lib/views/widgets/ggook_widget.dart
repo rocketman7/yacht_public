@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:blobs/blobs.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:yachtOne/models/sub_vote_model.dart';
 
 import '../../locator.dart';
 import '../../models/database_address_model.dart';
@@ -13,6 +14,7 @@ import '../../services/navigation_service.dart';
 import '../../view_models/ggook_view_model.dart';
 import '../../views/constants/size.dart';
 import 'package:vibration/vibration.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget ggookWidget(
   DatabaseAddressModel address,
@@ -35,13 +37,15 @@ Widget ggookWidget(
             Container(
               width: deviceWidth * .8,
               child: Text(
-                vote.subVotes[listSelected[idx]].ggookDescription,
-                // "10월 12일 신성이엔지와 SK하이닉스중 더 많이 상승할 종목을 선택해주세요",
-                style: TextStyle(
-                    fontSize: 32,
+                  '${vote.subVotes[listSelected[idx]].ggookDescription.replaceAll("\\n", "\n")}',
+                  // "10월 12일 신성이엔지와 SK하이닉스중 더 많이 상승할 종목을 선택해주세요",
+                  style: TextStyle(
+                    fontSize: 32.sp,
                     letterSpacing: -0.5,
-                    fontWeight: FontWeight.w700),
-              ),
+                    fontFamily: 'AppleSDEB',
+                  )
+                  // fontWeight: FontWeight.w700),
+                  ),
             ),
             SizedBox(
               height: 8,
@@ -49,13 +53,13 @@ Widget ggookWidget(
             Row(
               children: [
                 Container(
-                  height: 16,
-                  width: 48,
+                  height: 16.h,
+                  width: 48.w,
                   child: Stack(
                     children: [
                       Container(
-                        height: 16,
-                        width: 16,
+                        height: 16.h,
+                        width: 16.w,
                         child: CircleAvatar(
                           maxRadius: 16,
                           backgroundColor: Colors.transparent,
@@ -66,10 +70,10 @@ Widget ggookWidget(
                         ),
                       ),
                       Positioned(
-                        left: 8,
+                        left: 8.w,
                         child: Container(
-                          height: 16,
-                          width: 16,
+                          height: 16.h,
+                          width: 16.w,
                           child: CircleAvatar(
                             maxRadius: 16,
                             backgroundColor: Colors.transparent,
@@ -81,10 +85,10 @@ Widget ggookWidget(
                         ),
                       ),
                       Positioned(
-                        left: 16,
+                        left: 16.w,
                         child: Container(
-                          height: 16,
-                          width: 16,
+                          height: 16.h,
+                          width: 16.w,
                           child: CircleAvatar(
                             maxRadius: 16,
                             backgroundColor: Colors.transparent,
@@ -96,10 +100,10 @@ Widget ggookWidget(
                         ),
                       ),
                       Positioned(
-                        left: 24,
+                        left: 24.w,
                         child: Container(
-                          height: 16,
-                          width: 16,
+                          height: 16.h,
+                          width: 16.w,
                           child: CircleAvatar(
                             maxRadius: 16,
                             backgroundColor: Colors.transparent,
@@ -157,16 +161,22 @@ Widget ggookWidget(
         ),
       )),
       Positioned(
-        right: 20,
-        bottom: 150,
+        right: 20.w,
+        bottom: 180.h,
         child: Container(
-          width: 200,
-          height: 400,
+          // color: Colors.blue,
+          width: 200.w,
+          height: 400.h,
           // color: Colors.green,
           child: Stack(
             children: [
               // Positioned(child: Test5Widget()),
-              TestWidget(),
+              TestWidget(
+                vote,
+                listSelected,
+                idx,
+                0,
+              ),
               Positioned(
                   left: 10,
                   top: 10,
@@ -185,16 +195,16 @@ Widget ggookWidget(
         ),
       ),
       Positioned(
-        left: 20,
-        bottom: 0,
+        left: 20.w,
+        bottom: 0.h,
         child: Container(
           // width: 400,
-          height: 300,
+          height: 300.h,
           // color: Colors.yellow,
           child: Stack(
             children: [
               // Positioned(child: Test5Widget()),
-              TestWidget(),
+              TestWidget(vote, listSelected, idx, 1),
               Positioned(
                   left: 10,
                   top: 10,
@@ -265,11 +275,13 @@ Widget ggookButton(
             listSelected[idx], listSelected[idx] + 1, choice + 1);
 
         userVote.voteSelected = tempList;
-        userVote.isVoted = true;
+        // userVote.isVoted = true;
         print(tempList);
         model.addUserVoteDB(address, userVote);
         // 마지막 선택에서만 counter 콜해야됨
         model.counterUserVote(address, userVote.voteSelected);
+        int newItem = user.item - listSelected.length;
+        model.updateUserItem(newItem);
         _navigationService.navigateWithArgTo('startup', 2);
       }
     },
@@ -398,7 +410,7 @@ class _Test2WidgetState extends State<Test2Widget> {
     final GgookViewModel model = widget.model;
 
     LongPressGestureRecognizer _longPressGesture = LongPressGestureRecognizer(
-      duration: Duration(milliseconds: 1300),
+      duration: Duration(milliseconds: 800),
     );
 
     Color hexToColor(String code) {
@@ -408,7 +420,7 @@ class _Test2WidgetState extends State<Test2Widget> {
     return GestureDetector(
       onTapDown: (details) async {
         if (await Vibration.hasVibrator()) {
-          Vibration.vibrate(pattern: [10, 100, 50, 200, 40, 340, 30, 530]);
+          Vibration.vibrate(duration: 800);
 
           print("tapped");
         }
@@ -464,8 +476,10 @@ class _Test2WidgetState extends State<Test2Widget> {
                   print(tempList);
                   model.addUserVoteDB(address, userVote);
                   // 마지막 선택에서만 counter 콜해야됨
+                  int newItem = user.item - listSelected.length;
+                  model.updateUserItem(newItem);
                   model.counterUserVote(address, userVote.voteSelected);
-                  _navigationService.navigateWithArgTo('startup', 2);
+                  _navigationService.navigateWithArgTo('startup', 1);
                 }
               };
             },
@@ -483,14 +497,15 @@ class _Test2WidgetState extends State<Test2Widget> {
             child: Center(
               child: Text(vote.subVotes[listSelected[idx]].voteChoices[choice],
                   style: TextStyle(
-                    fontSize: 28,
-                    fontFamily: 'DmSans',
-                    fontWeight: FontWeight.w700,
+                    fontSize: 26.sp,
+                    fontFamily: 'AppleSDB',
                   )),
             ),
             styles: BlobStyles(
               color: vote.subVotes[listSelected[idx]].issueCode.length == 1
-                  ? choice == 0 ? Color(0xFFFF3E3E) : Color(0xFF3485FF)
+                  ? choice == 0
+                      ? Color(0xFFFF3E3E)
+                      : Color(0xFF3485FF)
                   : hexToColor(
                       vote.subVotes[listSelected[idx]].colorCode[choice]),
               // color: Color(0xFFFFDE34).withOpacity(.5),
@@ -504,6 +519,17 @@ class _Test2WidgetState extends State<Test2Widget> {
 }
 
 class TestWidget extends StatefulWidget {
+  final VoteModel vote;
+  final List<int> listSelected;
+  final int idx;
+  final int choice;
+  TestWidget(
+    this.vote,
+    this.listSelected,
+    this.idx,
+    this.choice,
+  );
+
   @override
   _TestWidgetState createState() => _TestWidgetState();
 }
@@ -520,6 +546,15 @@ class _TestWidgetState extends State<TestWidget> {
 
   @override
   Widget build(BuildContext context) {
+    VoteModel vote = widget.vote;
+    List<int> listSelected = widget.listSelected;
+    int idx = widget.idx;
+
+    int choice = widget.choice;
+    Color hexToColor(String code) {
+      return Color(int.parse(code, radix: 16) + 0xFF0000000);
+    }
+
     return Blob.animatedFromID(
         size: 200,
         id: [
@@ -530,7 +565,12 @@ class _TestWidgetState extends State<TestWidget> {
           '10-7-88922'
         ],
         styles: BlobStyles(
-          color: Color(0xFF000000),
+          color: vote.subVotes[listSelected[idx]].issueCode.length == 1
+              ? choice == 0
+                  ? Color(0xFFFF3E3E).withOpacity(.5)
+                  : Color(0xFF3485FF).withOpacity(.5)
+              : hexToColor(vote.subVotes[listSelected[idx]].colorCode[choice])
+                  .withOpacity(.5),
         ),
         controller: blobCtrl,
         loop: true,

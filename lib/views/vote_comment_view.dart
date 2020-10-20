@@ -143,18 +143,18 @@ class _VoteCommentViewState extends State<VoteCommentView>
                           ),
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 16.h,
                         ),
                         buildHorizontalCalendar(model, newVote),
                         SizedBox(
-                          height: 36,
+                          height: 24.h,
                         ),
                         Text(
-                          "총 ${model.vote.voteCount.toString()}개의 예측 주제",
+                          "시즌 & 주제별 커뮤니티",
                           style: TextStyle(
-                            // fontFamily: 'Akrhip',
+                            fontFamily: 'AppleSDB',
                             fontSize: 20.sp,
-                            fontWeight: FontWeight.w800,
+                            // fontWeight: FontWeight.w800,
                             letterSpacing: -1.0,
                           ),
                         ),
@@ -210,9 +210,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'DmSans',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 16.sp,
+                        // fontWeight: FontWeight.w700,
                         letterSpacing: 0,
+                        textBaseline: TextBaseline.ideographic,
                       ),
                     )),
                 title: Text(model.seasonInfo.seasonName + " 커뮤니티",
@@ -239,8 +240,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
   Widget buildHorizontalCalendar(VoteCommentViewModel model, VoteModel vote) {
     return HorizontalCalendar(
       padding: EdgeInsets.symmetric(
-        horizontal: 8,
-        vertical: 5,
+        horizontal: 8.w,
+        vertical: 2.h,
       ),
       defaultDecoration: BoxDecoration(
           shape: BoxShape.rectangle,
@@ -248,7 +249,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
           color: Color(
             0xFFE0E0E0,
           )),
-      height: 80.sp,
+      height: 86,
       isDateDisabled: (dateTime) {
         // dateTime을 넣고 휴일 여부를 bool로
         return dateTime.isAfter(strToDate(model.address.date));
@@ -360,9 +361,9 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   child: Text(
                     subVote.title,
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'DmSans',
+                      fontSize: 16.sp,
+                      // fontWeight: FontWeight.w700,
+                      fontFamily: 'AppleSDB',
                     ),
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.clip,
@@ -413,8 +414,9 @@ class _VoteCommentViewState extends State<VoteCommentView>
             ),
       title: Text(subVote.title,
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+            fontSize: 18.sp,
+            // fontWeight: FontWeight.bold,
+            fontFamily: 'AppleSDB',
           )),
       subtitle: Text("rocketman님 외에 50명 이야기중"),
     );

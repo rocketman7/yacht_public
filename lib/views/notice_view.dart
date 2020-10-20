@@ -129,7 +129,7 @@ List<Widget> noticeList(NoticeViewModel model) {
               padding:
                   const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
               child: Text(
-                '${model.noticeModel[i].content}',
+                '${model.noticeModel[i].content.replaceAll("\\n", "\n")}',
                 style: TextStyle(
                     fontSize: 16,
                     letterSpacing: -0.28,

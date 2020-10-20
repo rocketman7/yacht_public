@@ -9,6 +9,7 @@ import 'constants/size.dart';
 import '../models/rank_model.dart';
 import '../view_models/rank_view_model.dart';
 import '../views/widgets/avatar_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RankView extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
@@ -101,10 +102,12 @@ class RankView extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text(
-                                        '현재 상금가치(원)',
+                                        '시즌 상금 가치',
                                         style: TextStyle(
-                                          fontSize: 20,
-                                          letterSpacing: -1.0,
+                                          fontSize: 22.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDB',
+                                          letterSpacing: -0.5,
                                         ),
                                       ),
                                       Spacer(),
@@ -113,12 +116,13 @@ class RankView extends StatelessWidget {
                                           model.navigateToPortfolioPage();
                                         },
                                         child: Text(
-                                          '${model.getPortfolioValue()}',
+                                          '₩ ${model.getPortfolioValue()} ',
                                           style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: 'DmSans',
-                                              letterSpacing: -0.5,
-                                              fontWeight: FontWeight.bold),
+                                            height: 1,
+                                            fontSize: 22.sp,
+                                            fontFamily: 'AppleSDB',
+                                            letterSpacing: -0.5,
+                                          ),
                                         ),
                                       ),
                                       GestureDetector(
@@ -127,7 +131,7 @@ class RankView extends StatelessWidget {
                                         },
                                         child: Icon(
                                           Icons.arrow_forward_ios,
-                                          size: 16,
+                                          size: 16.sp,
                                         ),
                                       )
                                     ],
@@ -138,42 +142,48 @@ class RankView extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text(
-                                        '시즌 목표 승점',
+                                        '현재 / 목표 승점',
                                         style: TextStyle(
-                                            fontSize: 20, letterSpacing: -1.0),
+                                          fontSize: 20.sp,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -1.0,
+                                        ),
                                       ),
                                       Spacer(),
                                       Text(
-                                        '${model.seasonModel.winningPoint}',
+                                        '${model.myWinPoint}   /   ${model.seasonModel.winningPoint}',
                                         style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'DmSans',
-                                            letterSpacing: -1.0,
-                                            fontWeight: FontWeight.bold),
+                                          fontSize: 20.sp,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -1.0,
+                                        ),
                                       )
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '현재 승점',
-                                        style: TextStyle(
-                                            fontSize: 20, letterSpacing: -1.0),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        '${model.myWinPoint}',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'DmSans',
-                                            letterSpacing: -1.0,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
+                                  // SizedBox(
+                                  //   height: 8,
+                                  // ),
+                                  // Row(
+                                  //   children: [
+                                  //     Text(
+                                  //       '현재 승점',
+                                  //       style: TextStyle(
+                                  //         fontSize: 20.sp,
+                                  //         fontFamily: 'AppleSDM',
+                                  //         letterSpacing: -1.0,
+                                  //       ),
+                                  //     ),
+                                  //     Spacer(),
+                                  //     Text(
+                                  //       '${model.myWinPoint}',
+                                  //       style: TextStyle(
+                                  //         fontSize: 20.sp,
+                                  //         fontFamily: 'AppleSDM',
+                                  //         letterSpacing: -1.0,
+                                  //       ),
+                                  //     )
+                                  //   ],
+                                  // ),
                                   SizedBox(
                                     height: 8,
                                   ),
@@ -182,7 +192,10 @@ class RankView extends StatelessWidget {
                                       Text(
                                         '현재 순위',
                                         style: TextStyle(
-                                            fontSize: 20, letterSpacing: -1.0),
+                                          fontSize: 20.sp,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -1.0,
+                                        ),
                                       ),
                                       Spacer(),
                                       Text(
@@ -190,22 +203,22 @@ class RankView extends StatelessWidget {
                                             ? '-'
                                             : '${model.returnDigitFormat(model.myRank)}',
                                         style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'DmSans',
-                                            letterSpacing: -1.0,
-                                            fontWeight: FontWeight.bold),
+                                          fontSize: 20.sp,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -1.0,
+                                        ),
                                       )
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 15,
+                                    height: 16.h,
                                   ),
                                   Container(
                                     height: 1,
                                     color: Color(0xFFDFDFDF),
                                   ),
                                   SizedBox(
-                                    height: 31,
+                                    height: 16.h,
                                   ),
                                   Row(
                                     children: [
