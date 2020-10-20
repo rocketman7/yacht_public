@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/models/stateManeger_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
@@ -664,6 +665,20 @@ class DatabaseService {
     return null;
   }
 
+  // admin -> stateManager 불러오기
+  Future<StateManagerModel> getStateManager() async {
+    try {
+      var stateManageData =
+          await adminCollectionReference.doc('stateManager').get();
+      return StateManagerModel.fromData(stateManageData.data());
+    } catch (e) {
+      print('error at stateManaget get');
+      print(e.toString());
+      return null;
+    }
+  }
+
+  // portfolio db 불러오기
   Future<PortfolioModel> getPortfolio(DatabaseAddressModel addressModel) async {
     try {
       List<SubPortfolio> subPortfolioList = [];

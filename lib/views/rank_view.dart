@@ -24,13 +24,198 @@ class RankView extends StatelessWidget {
                       child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                     )
                   : model.isBusy
-                      ? Container(
-                          height: deviceHeight,
-                          width: deviceWidth,
-                          child: Stack(
+                      ? SafeArea(
+                          child: Padding(
+                          padding:
+                              EdgeInsets.only(left: 16.0, right: 16.0, top: 20),
+                          child: Column(
                             children: [
-                              Positioned(
-                                top: deviceHeight / 2 - 100,
+                              Row(
+                                children: [
+                                  avatarWidget('avatar', 0),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 3,
+                                          horizontal: 8,
+                                        ),
+                                        decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.circular(
+                                              30,
+                                            )),
+                                        child: Text(
+                                          "시즌",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'DmSans',
+                                              fontSize: 12),
+                                        ),
+                                      ),
+                                      Text('-',
+                                          style: TextStyle(
+                                            fontSize: 24,
+                                            letterSpacing: -1.0,
+                                            fontFamily: 'DmSans',
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '현재 상금가치(원)',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      letterSpacing: -1.0,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    '-',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'DmSans',
+                                        letterSpacing: -0.5,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => null,
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 16,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '시즌 목표 승점',
+                                    style: TextStyle(
+                                        fontSize: 20, letterSpacing: -1.0),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    '-',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'DmSans',
+                                        letterSpacing: -1.0,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '현재 승점',
+                                    style: TextStyle(
+                                        fontSize: 20, letterSpacing: -1.0),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    '-',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'DmSans',
+                                        letterSpacing: -1.0,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '현재 순위',
+                                    style: TextStyle(
+                                        fontSize: 20, letterSpacing: -1.0),
+                                  ),
+                                  Spacer(),
+                                  Text(
+                                    '-',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'DmSans',
+                                        letterSpacing: -1.0,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                height: 1,
+                                color: Color(0xFFDFDFDF),
+                              ),
+                              SizedBox(
+                                height: 31,
+                              ),
+                              Row(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '오늘의 랭킹',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            fontSize: 28,
+                                            letterSpacing: -2.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '1A가',
+                                            style: TextStyle(
+                                                fontFamily: 'DmSans',
+                                                fontSize: 14,
+                                                color: Colors.transparent),
+                                          ),
+                                          Container(
+                                            height: 8,
+                                            width: 1,
+                                            color: Colors.transparent,
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 12,
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer()
+                                ],
+                              ),
+                              Spacer(
+                                flex: 1,
+                              ),
+                              Center(
                                 child: Container(
                                   height: 100,
                                   width: deviceWidth,
@@ -41,9 +226,12 @@ class RankView extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              Spacer(
+                                flex: 2,
+                              ),
                             ],
                           ),
-                        )
+                        ))
                       : WillPopScope(
                           onWillPop: () async {
                             _navigatorKey.currentState.maybePop();
@@ -59,6 +247,7 @@ class RankView extends StatelessWidget {
                                     children: [
                                       avatarWidget(model.user.avatarImage,
                                           model.user.item),
+                                      // avatarWidget('avatar008', 10),
                                       SizedBox(
                                         width: 12,
                                       ),
@@ -79,12 +268,14 @@ class RankView extends StatelessWidget {
                                                 )),
                                             child: Text(
                                               "${model.seasonModel.seasonName}",
+                                              // "베타 시즌 1",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontFamily: 'DmSans',
                                                   fontSize: 12),
                                             ),
                                           ),
+                                          // Text('csejun',
                                           Text(model.user.userName,
                                               style: TextStyle(
                                                 fontSize: 24,

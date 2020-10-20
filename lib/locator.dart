@@ -9,6 +9,7 @@ import 'services/storage_service.dart';
 import 'services/sharedPreferences_service.dart';
 import 'services/customCacheManager_service.dart';
 import 'services/accountVerification_service.dart';
+import 'services/stateManager_service.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -26,4 +27,6 @@ void setupLocator() {
   locator.registerLazySingleton<AccountVerificationService>(
       () => AccoutVerificationServiceMydata());
   locator.registerLazySingleton(() => PushNotificationService());
+  locator.registerLazySingleton<StateManagerServiceService>(
+      () => StateManagerServiceServiceFirebase());
 }

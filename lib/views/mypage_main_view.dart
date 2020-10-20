@@ -155,9 +155,7 @@ class MypageMainView extends StatelessWidget {
                           style: TextStyle(
                               fontSize: model.user.userName.length > 8
                                   ? 32
-                                  : model.user.userName.length > 6
-                                      ? 40
-                                      : 48,
+                                  : model.user.userName.length > 6 ? 40 : 48,
                               fontFamily: 'DmSans',
                               fontWeight: FontWeight.w900),
                         ),

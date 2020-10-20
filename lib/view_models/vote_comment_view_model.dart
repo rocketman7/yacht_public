@@ -3,6 +3,10 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
+
+import '../services/stateManager_service.dart';
+import '../services/stateManager_service.dart' as global;
+
 import 'package:yachtOne/views/constants/holiday.dart';
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -20,6 +24,8 @@ class VoteCommentViewModel extends FutureViewModel {
   final AuthService _authService = locator<AuthService>();
   final DialogService _dialogService = locator<DialogService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
+  final StateManagerServiceService _stateManagerService =
+      locator<StateManagerServiceService>();
 
   VoteCommentModel voteFeedModel;
 
@@ -44,12 +50,29 @@ class VoteCommentViewModel extends FutureViewModel {
 
   Future getAllModel(uid) async {
     setBusy(true);
+    //=======================stateManagerService이용하여 뷰모델 시작=======================
+    String myState = _stateManagerService.calcState();
 
-    address = await _databaseService.getAddress(uid);
-    user = await _databaseService.getUser(uid);
-    vote = await _databaseService.getVotes(address);
-    userVote = await _databaseService.getUserVote(address);
-    seasonInfo = await _databaseService.getSeasonInfo(address);
+    if (_stateManagerService.hasLocalStateChange(myState)) {
+      if (await _stateManagerService.hasDBStateChange(myState)) {
+        // update needed. local & db 모두 변했기 때문
+        // 아래처럼 stateManagerService에서 각 모델들을 모두 리로드해주고, 그걸 뷰모델 내 모델변수에 재입력해준다.
+        await _stateManagerService.initStateManager();
+      }
+    }
+    address = global.localAddressModel;
+    user = global.localUserModel;
+    vote = global.localVoteModel;
+    userVote = global.localUserVoteModel;
+    seasonInfo = global.localSeasonModel;
+
+    //=======================stateManagerService이용하여 뷰모델 시작=======================
+
+    // address = await _databaseService.getAddress(uid);
+    // user = await _databaseService.getUser(uid);
+    // vote = await _databaseService.getVotes(address);
+    // userVote = await _databaseService.getUserVote(address);
+    // seasonInfo = await _databaseService.getSeasonInfo(address);
 
     setBusy(false);
   }

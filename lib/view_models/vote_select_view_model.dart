@@ -9,6 +9,9 @@ import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
 
+import '../services/stateManager_service.dart';
+import '../services/stateManager_service.dart' as global;
+
 import '../locator.dart';
 import '../models/user_model.dart';
 import '../models/vote_model.dart';
@@ -23,6 +26,8 @@ class VoteSelectViewModel extends FutureViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>(); //
+  final StateManagerServiceService _stateManagerService =
+      locator<StateManagerServiceService>();
   //Code:
 
   String uid;
@@ -70,17 +75,59 @@ class VoteSelectViewModel extends FutureViewModel {
     // getUser();
   }
 
+  Future startStateManager() async {
+    //stateManager 시작
+    await _stateManagerService.initStateManager();
+  }
+
   Future getAllModel(uid) async {
     setBusy(true);
-    address = await _databaseService.getAddress(uid);
-    user = await _databaseService.getUser(uid);
-    vote = await _databaseService.getVotes(address);
-    userVote = await _databaseService.getUserVote(address);
-    seasonInfo = await _databaseService.getSeasonInfo(address);
+
+    //앱이 최초로 시작하면 여기서 startStateManager를 실행해주고,
+    //아니면 다른 화면과 마찬가지로 stateManager 하 지배를 받음.
+    if (global.appStart) {
+      await startStateManager();
+
+      address = global.localAddressModel;
+      user = global.localUserModel;
+      vote = global.localVoteModel;
+      userVote = global.localUserVoteModel;
+      portfolioModel = global.localPortfolioModel;
+      seasonInfo = global.localSeasonModel;
+    } else {
+      //=======================stateManagerService이용하여 뷰모델 시작=======================
+      String myState = _stateManagerService.calcState();
+
+      if (_stateManagerService.hasLocalStateChange(myState)) {
+        if (await _stateManagerService.hasDBStateChange(myState)) {
+          // update needed. local & db 모두 변했기 때문
+          // 아래처럼 stateManagerService에서 각 모델들을 모두 리로드해주고, 그걸 뷰모델 내 모델변수에 재입력해준다.
+          await _stateManagerService.initStateManager();
+        }
+      }
+      address = global.localAddressModel;
+      user = global.localUserModel;
+      vote = global.localVoteModel;
+      userVote = global.localUserVoteModel;
+      portfolioModel = global.localPortfolioModel;
+      seasonInfo = global.localSeasonModel;
+      //=======================stateManagerService이용하여 뷰모델 시작=======================
+
+    }
+
+    // address = await _databaseService.getAddress(uid);
+    // user = await _databaseService.getUser(uid);
+    // vote = await _databaseService.getVotes(address);
+    // userVote = await _databaseService.getUserVote(address);
+    // portfolioModel = await _databaseService.getPortfolio(address);
+    // seasonInfo = await _databaseService.getSeasonInfo(address);
+
     voteSelectTutorial = await _sharedPreferencesService
         .getSharedPreferencesValue(voteSelectTutorialKey, bool);
-    portfolioModel = await _databaseService.getPortfolio(address);
     print("ISVOTING????? " + address.isVoting.toString());
+
+    String myState = _stateManagerService.calcState();
+
     setBusy(false);
     notifyListeners();
   }
