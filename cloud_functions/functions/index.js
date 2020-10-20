@@ -39,7 +39,7 @@ exports.scoreVote = functions.https.onRequest(async (req, res) => {
   // const today = "20201005";
   // today의 실제 결과 가져오기 (이전에 넣어야함)
 
-  var today = "20201019";
+  var today = "20201020";
 
   function userVotesSeasonCollection(uid) {
     return usersRef
@@ -111,6 +111,8 @@ exports.scoreVote = functions.https.onRequest(async (req, res) => {
         userVotesSeasonCollection(uid)
           .get()
           .then((doc) => {
+
+            
             // console.log(data);
             // isVoted가 true인 것만 골라도 됨
             if (
@@ -309,8 +311,8 @@ exports.sortRank = functions.https.onRequest(async (req, res) => {
   const category = openSeasonSnapshot.data().category;
   const season = openSeasonSnapshot.data().season;
 
-  const today = "20201019";
-  const yesterday = "20201016";
+  const today = "20201020";
+  const yesterday = "20201019";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -493,4 +495,114 @@ exports.sortRank = functions.https.onRequest(async (req, res) => {
   //  ]
 
   res.send(participatedUserSortedCurrentWinPoint);
+});
+
+
+
+exports.tempQuries = functions.https.onRequest(async (req, res) => {
+  const db = admin.firestore();
+
+  // votes -> docu id: date -> voteResult array
+
+  const adminRef = db.collection("admin");
+  const votesRef = db.collection("votes");
+  const usersRef = db.collection("users");
+  const ranksRef = db.collection("ranks");
+
+  const openSeasonSnapshot = await adminRef.doc("openSeason").get();
+  const category = openSeasonSnapshot.data().category;
+
+  const season = openSeasonSnapshot.data().season;
+  const votesSeasonCollection = votesRef.doc(category).collection(season);
+
+  // today -> string으로 변환
+  // var today = Date();
+  var date = dateFormat(today, "yyyymmdd");
+
+  console.log(date);
+  // const today = "20201005";
+  // today의 실제 결과 가져오기 (이전에 넣어야함)
+
+  var today = "20201020";
+
+  function userVotesSeasonCollection(uid) {
+    return usersRef
+      .doc(uid)
+      .collection("userVote")
+      .doc(category)
+      .collection(season)
+      .doc(today);
+  }
+
+  function userVotesSeasonStatsCollection(uid) {
+    return usersRef
+      .doc(uid)
+      .collection("userVote")
+      .doc(category)
+      .collection(season)
+      .doc("stats");
+  }
+
+  const todayRankCollectionRef = ranksRef
+    .doc(category)
+    .collection(season)
+    .doc(today)
+    .collection(today);
+
+  // const prevRankCollectionRef = ranksRef
+  //   .doc(category)
+  //   .collection(season)
+  //   .doc(yeseterday)
+  //   .collection(yeseterday);
+
+  // const dailyVoteSnapshot = votesSeasonCollection.doc(today).get();
+  let todayResult = [];
+  todayResult = await votesSeasonCollection
+    .doc(today)
+    .get()
+    .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
+
+  // user의 vote 선택 가져오기
+  console.log(todayResult);
+  let userCurrentCombo = {};
+  let userVotes = {};
+  let userScores = {};
+
+  let allUsers = {};
+  let allUserUid = [];
+
+  let prevRanks = {};
+  let userPrevWinPoint = {};
+  var userSnapshot = await usersRef.get();
+  
+  userSnapshot.forEach((doc) => {
+    allUsers[doc.id] = doc.data();
+  });
+  // 모든 유저의 uid를 allUsers 리스트에 저장
+  userSnapshot.forEach((doc) => {
+    allUserUid.push(doc.id);
+  });
+
+  // var prevRankSnapshot = await prevRankCollectionRef.get();
+
+  // prevRankSnapshot.forEach((doc) => {
+  //   prevRanks[doc.data().uid] = doc.data().todayRank;
+  // });
+
+  // item 15개 추가
+  async function getEachUserVote(datas) {
+    await Promise.all(
+      datas.map((uid) =>
+        usersRef.doc(uid).update({ item: admin.firestore.FieldValue.increment(15) })
+        
+      )
+    );
+    return 0;
+  }
+  // allUsers 리스트 안의 각 uid를 인자로
+  // 각 uservote의 voteSelected를 userVotes에 넣는 함수
+  await getEachUserVote(allUserUid); 
+ 
+
+  res.send(userScores);
 });
