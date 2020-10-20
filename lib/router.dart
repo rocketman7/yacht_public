@@ -23,6 +23,7 @@ import 'views/mypage_documents/mypage_accountVerification_view.dart';
 import 'views/mypage_documents/mypage_friendsCode_view.dart';
 import 'views/mypage_documents/mypage_editProfile_view.dart';
 import 'views/vote_comment_view.dart';
+import 'views/vote_select_v2_view.dart';
 import 'views/vote_select_view.dart';
 import 'views/portfolio_view.dart';
 import 'views/faq_view.dart';
@@ -48,7 +49,7 @@ class Routers {
             builder: (context) => DialogManager(child: LoginView()));
       case 'voteSelect':
         return MaterialPageRoute(
-            builder: (context) => DialogManager(child: VoteSelectView()));
+            builder: (context) => DialogManager(child: VoteSelectV2View()));
       case 'ggook':
         return MaterialPageRoute(
             builder: (context) =>

@@ -4,7 +4,6 @@ import 'dart:math' as math;
 
 import '../services/stateManager_service.dart';
 import '../services/stateManager_service.dart' as global;
-import '../models/stateManeger_model.dart';
 
 import '../locator.dart';
 import '../models/portfolio_model.dart';
@@ -15,13 +14,13 @@ import '../models/sharedPreferences_const.dart';
 
 class PortfolioViewModel extends FutureViewModel {
   // Services Setting
-  SharedPreferencesService _sharedPreferencesService =
-      locator<SharedPreferencesService>(); //
-  final StateManagerServiceService _stateManagerServiceService =
+  final SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
+  final StateManagerServiceService _stateManagerService =
       locator<StateManagerServiceService>();
 
   // 변수 Setting
-  // 아래에 stateManagerService이용하여 사용할 모델들 설정
+  // 아래에 stateManagerService에 있는 놈들 중 사용할 모델들 설정
   DatabaseAddressModel addressModel;
   PortfolioModel portfolioModel;
   SeasonModel seasonModel;
@@ -50,31 +49,19 @@ class PortfolioViewModel extends FutureViewModel {
   // 포트폴리오 DB로부터 얻어오기 + UI용 변수들 계산
   Future getPortfolio() async {
     //=======================stateManagerService이용하여 뷰모델 시작=======================
-    String myState = _stateManagerServiceService.calcState();
+    String myState = _stateManagerService.calcState();
 
-    if (_stateManagerServiceService.hasLocalStateChange(myState)) {
-      if (_stateManagerServiceService.hasDBStateChange(myState)) {
+    if (_stateManagerService.hasLocalStateChange(myState)) {
+      if (await _stateManagerService.hasDBStateChange(myState)) {
         // update needed. local & db 모두 변했기 때문
-        await _stateManagerServiceService.reloadAddressModel();
-        addressModel = global.localAddressModel;
-
-        await _stateManagerServiceService.reloadPortfolioModel();
-        portfolioModel = global.localPortfolioModel;
-
-        await _stateManagerServiceService.reloadSeasonModel();
-        seasonModel = global.localSeasonModel;
-      } else {
-        // update 필요 X. local은 변했지만 DB가 안변했기 때문에.
-        addressModel = global.localAddressModel;
-        portfolioModel = global.localPortfolioModel;
-        seasonModel = global.localSeasonModel;
+        // 아래처럼 stateManagerService에서 각 모델들을 모두 리로드해주고, 그걸 뷰모델 내 모델변수에 재입력해준다.
+        await _stateManagerService.initStateManager();
       }
-    } else {
-      // update 필요 X. local조차 안 변했기 때문. 대부분 이 경우
-      addressModel = global.localAddressModel;
-      portfolioModel = global.localPortfolioModel;
-      seasonModel = global.localSeasonModel;
     }
+    addressModel = global.localAddressModel;
+    portfolioModel = global.localPortfolioModel;
+    seasonModel = global.localSeasonModel;
+
     //=======================stateManagerService이용하여 뷰모델 시작=======================
 
     //튜토리얼을 위한

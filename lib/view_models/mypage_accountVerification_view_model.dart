@@ -45,6 +45,10 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
 
   Future getModels() async {
     user = await _databaseService.getUser(uid);
+    for (int i = 0; i < accountVerificationService.getBankListLength(); i++) {
+      if (accountVerificationService.getBankList().keys.toList()[i] ==
+          user.secName) selectSecLogo = i;
+    }
   }
 
   Future<String> accOwnerVerificationRequest() async {

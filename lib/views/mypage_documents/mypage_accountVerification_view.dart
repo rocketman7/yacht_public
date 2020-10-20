@@ -562,6 +562,9 @@ class _MypageAccountVerificationViewState
                 '${model.getBankLogoList().values.toList()[model.selectSecLogo]}',
                 width: 20,
                 height: 20),
+            SizedBox(
+              width: 5,
+            ),
             Text(
               '${model.user.secName}',
               style: TextStyle(fontSize: 16),

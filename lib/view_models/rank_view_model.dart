@@ -5,11 +5,11 @@ import '../services/stateManager_service.dart';
 import '../services/stateManager_service.dart' as global;
 
 import '../locator.dart';
+import '../models/database_address_model.dart';
 import '../models/user_model.dart';
 import '../models/rank_model.dart';
 import '../models/season_model.dart';
-// import '../models/portfolio_model.dart';
-import '../models/database_address_model.dart';
+import '../models/portfolio_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../services/navigation_service.dart';
@@ -20,16 +20,18 @@ class RankViewModel extends FutureViewModel {
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final NavigationService _navigationService = locator<NavigationService>();
-  final StateManagerServiceService _stateManagerServiceService =
+  final StateManagerServiceService _stateManagerService =
       locator<StateManagerServiceService>();
 
   // 변수 Setting
-  // DatabaseAddressModel addressModel;
+  // 아래에 stateManagerService에 있는 놈들 중 사용할 모델들 설정
+  DatabaseAddressModel addressModel;
+  PortfolioModel portfolioModel;
   SeasonModel seasonModel;
-  // PortfolioModel
-  //     portfolioModel; //상금 현재가치 불러올려고 굳이 접근해야하는건데 이런건 처음 앱 실행시 한번에 불러오고 저장해두면 안되나?
-  List<RankModel> rankModel = [];
   UserModel user;
+  // 여기는 이 화면 고유의 모델 설정
+  List<RankModel> rankModel = [];
+
   String uid;
   int myRank = 0;
   int myWinPoint = 0;
@@ -45,18 +47,22 @@ class RankViewModel extends FutureViewModel {
   // method
   // futureToRun으로 호출하는.
   Future getUserAndRankList() async {
-    // 사실은 첫화면인 startup?homeview에 있어야하지만 test를 위해. 즉 어플을 처음 켤 때 mystate가 결정된다.
-    _stateManagerServiceService.initStateManager();
+    //=======================stateManagerService이용하여 뷰모델 시작=======================
+    String myState = _stateManagerService.calcState();
 
-    // 그럼과 동시에 stateManager 에서 관리할 local 모델들을 모두 업데이트해줘야함 <= initState 에 같이 넣자
-    // _stateManagerServiceService.reloadAddressModel();
-    global.localAddressModel = await _databaseService.getAddress(uid);
-    global.localPortfolioModel =
-        await _databaseService.getPortfolio(global.localAddressModel);
-    global.localSeasonModel =
-        await _databaseService.getSeasonInfo(global.localAddressModel);
-    user = await _databaseService.getUser(uid);
+    if (_stateManagerService.hasLocalStateChange(myState)) {
+      if (await _stateManagerService.hasDBStateChange(myState)) {
+        // update needed. local & db 모두 변했기 때문
+        // 아래처럼 stateManagerService에서 각 모델들을 모두 리로드해주고, 그걸 뷰모델 내 모델변수에 재입력해준다.
+        print('rank view update');
+        await _stateManagerService.initStateManager();
+      }
+    }
+    addressModel = global.localAddressModel;
+    portfolioModel = global.localPortfolioModel;
     seasonModel = global.localSeasonModel;
+    user = global.localUserModel;
+    //=======================stateManagerService이용하여 뷰모델 시작=======================
     rankModel = await _databaseService.getRankList(global.localAddressModel);
 
     // 순위변동 구해주자.

@@ -15,6 +15,7 @@ import '../locator.dart';
 import '../view_models/startup_view_model.dart';
 import '../views/loading_view.dart';
 import 'intro_view.dart';
+import 'vote_select_v2_view.dart';
 
 class StartUpView extends StatefulWidget {
   final int startIdx;
@@ -60,8 +61,8 @@ class _StartUpViewState extends State<StartUpView>
     super.initState();
 
     _viewList = <Widget>[
-      HomeView(goToTab),
-      VoteSelectView(),
+      // HomeView(goToTab),
+      VoteSelectV2View(),
       VoteCommentView(),
       RankView(),
       MypageMainView(),
@@ -71,7 +72,7 @@ class _StartUpViewState extends State<StartUpView>
 
     _tabController = TabController(
       initialIndex: _startIdx ?? 0,
-      length: 5,
+      length: 4,
       vsync: this,
     );
     if (!isDisposed) {
@@ -144,19 +145,19 @@ class _StartUpViewState extends State<StartUpView>
                     // iconSize: 25,
                     unselectedFontSize: 0,
                     items: [
+                      // BottomNavigationBarItem(
+                      //   icon: GestureDetector(
+                      //     child: SvgPicture.asset('assets/icons/home.svg',
+                      //         color: Color(0xFFAAAAAA)),
+                      //   ),
+                      //   activeIcon: SvgPicture.asset('assets/icons/home.svg',
+                      //       color: Color(0xFF1EC8CF)),
+                      //   label: '',
+                      // ),
                       BottomNavigationBarItem(
-                        icon: GestureDetector(
-                          child: SvgPicture.asset('assets/icons/home.svg',
-                              color: Color(0xFFAAAAAA)),
-                        ),
-                        activeIcon: SvgPicture.asset('assets/icons/home.svg',
-                            color: Color(0xFF1EC8CF)),
-                        label: '',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: SvgPicture.asset('assets/icons/vote.svg',
+                        icon: SvgPicture.asset('assets/icons/home.svg',
                             color: Color(0xFFAAAAAA)),
-                        activeIcon: SvgPicture.asset('assets/icons/vote.svg',
+                        activeIcon: SvgPicture.asset('assets/icons/home.svg',
                             color: Color(0xFF1EC8CF)),
                         label: '',
                       ),

@@ -118,25 +118,36 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  avatarWidget(
-                                      model.user.avatarImage ?? 'avatar001',
-                                      model.user.item),
+                                  Align(
+                                    alignment: Alignment.topCenter,
+                                    child: avatarWidget(
+                                        model.user.avatarImage ?? 'avatar001',
+                                        model.user.item),
+                                  ),
                                   SizedBox(
                                     width: 8.sp,
                                   ),
                                   Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
-                                      Text(
-                                        model.userVote.userVoteStats
-                                            .currentWinPoint
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 40.sp,
-                                          fontFamily: 'DmSans',
-                                          fontWeight: FontWeight.w700,
+                                      Container(
+                                        height: 40.sp,
+                                        child: Text(
+                                          model.userVote.userVoteStats
+                                              .currentWinPoint
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 40.sp,
+                                            fontFamily: 'DmSans',
+                                            height: 1,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                          softWrap: true,
                                         ),
                                       ),
                                       Text(
