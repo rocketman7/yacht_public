@@ -11,7 +11,14 @@ class PushNotificationService {
 
   Future initialise() async {
     if (Platform.isIOS) {
-      _fcm.requestNotificationPermissions(IosNotificationSettings());
+      _fcm.requestNotificationPermissions(
+          IosNotificationSettings(sound: true, badge: true, alert: true));
+      _fcm.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+        print("Settings registered: $settings");
+      });
+
+      // _fcm.requestNotificationPermissions(IosNotificationSettings());
+
     }
     print("PUSH initialised");
     _fcm.configure(
@@ -28,7 +35,7 @@ class PushNotificationService {
       },
     );
 
-    // _fcm.getToken().then((value) => print("TOKEN IS " + value));
+    _fcm.getToken().then((value) => print("TOKEN IS " + value));
   }
 
   void _serializeAndNavigate(Map<String, dynamic> message) {

@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/views/chart_view.dart';
 import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/intro_view.dart';
 import 'package:yachtOne/views/track_record_view.dart';
@@ -50,7 +51,7 @@ class _MyAppState extends State<MyApp> {
         // key: navBarGlobalKey,
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: Routers.generateRoute,
-        home: InitialView(),
+        home: ChartView(),
         builder: (context, navigator) {
           var lang = Localizations.localeOf(context).languageCode;
           print("Language is " + lang);

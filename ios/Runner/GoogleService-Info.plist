@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>962026345665-p0jekgdi7q370e9sl04lq7n1mvic6tom.apps.googleusercontent.com</string>
+	<string>962026345665-nnar9jie8e082agvcgj6qs555cbucrkd.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.962026345665-p0jekgdi7q370e9sl04lq7n1mvic6tom</string>
+	<string>com.googleusercontent.apps.962026345665-nnar9jie8e082agvcgj6qs555cbucrkd</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>962026345665-41cv49gmbit9ep2r14eib42lj3e0g9mv.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.yachtOne</string>
+	<string>com.team-yacht.ggook</string>
 	<key>PROJECT_ID</key>
 	<string>yachtone-8baf9</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,7 +31,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:962026345665:ios:68d9d89d3bbfddc3fa7040</string>
+	<string>1:962026345665:ios:570d5972fd0b8d3efa7040</string>
 	<key>DATABASE_URL</key>
 	<string>https://yachtone-8baf9.firebaseio.com</string>
 </dict>

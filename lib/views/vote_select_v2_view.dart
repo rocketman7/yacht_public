@@ -301,7 +301,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
     // print(numSelected);
     return ViewModelBuilder<VoteSelectViewModel>.reactive(
       viewModelBuilder: () => VoteSelectViewModel(),
-      initialiseSpecialViewModelsOnce: true,
+      // initialiseSpecialViewModelsOnce: true,
       builder: (context, model, child) {
         // selected = selected.sublist(0, model.vote.subVotes.length);
         // print(selected);
@@ -386,27 +386,27 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                 },
                                                 child: Row(
                                                   children: <Widget>[
-                                                    Bubble(
-                                                      shadowColor: Colors.red,
-                                                      margin: BubbleEdges.only(
-                                                          top: 10),
-                                                      nip: BubbleNip.rightTop,
-                                                      nipWidth: 10,
-                                                      color: Color(0xFF56A4FF),
-                                                      child: Text(
-                                                        "목표 승점에 먼저 도달하면,",
-                                                        style: TextStyle(
-                                                          fontSize: 12.sp,
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              'AppleSDM',
-                                                          letterSpacing: -1.0,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 4.w,
-                                                    ),
+                                                    // Bubble(
+                                                    //   shadowColor: Colors.red,
+                                                    //   margin: BubbleEdges.only(
+                                                    //       top: 10),
+                                                    //   nip: BubbleNip.rightTop,
+                                                    //   nipWidth: 10,
+                                                    //   color: Color(0xFF56A4FF),
+                                                    //   child: Text(
+                                                    //     "목표 승점에 먼저 도달하면,",
+                                                    //     style: TextStyle(
+                                                    //       fontSize: 12.sp,
+                                                    //       color: Colors.white,
+                                                    //       fontFamily:
+                                                    //           'AppleSDM',
+                                                    //       letterSpacing: -1.0,
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
+                                                    // SizedBox(
+                                                    //   width: 4.w,
+                                                    // ),
                                                     Text(
                                                         '₩ ${model.getPortfolioValue()}',
                                                         style: TextStyle(
