@@ -138,8 +138,12 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                     children: <Widget>[
                                       Text(
                                         model.userVote.userVoteStats
-                                            .currentWinPoint
-                                            .toString(),
+                                                    .currentWinPoint ==
+                                                null
+                                            ? 0.toString()
+                                            : model.userVote.userVoteStats
+                                                .currentWinPoint
+                                                .toString(),
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 40.sp,

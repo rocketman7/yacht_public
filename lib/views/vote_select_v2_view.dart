@@ -462,9 +462,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                                   .currentWinPoint
                                                                   .toString()) +
                                                           "   /   " +
-                                                          model.seasonInfo
-                                                              .winningPoint
-                                                              .toString(),
+                                                          (model.seasonInfo ==
+                                                                  null
+                                                              ? 0.toString()
+                                                              : model.seasonInfo
+                                                                  .winningPoint
+                                                                  .toString()),
                                                       style: TextStyle(
                                                         fontSize: 26.sp,
                                                         fontFamily: 'AppleSDB',

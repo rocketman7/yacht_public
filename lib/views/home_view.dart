@@ -266,14 +266,20 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                     Text(
                                       (model.userVote.userVoteStats
-                                                      .currentWinPoint ==
-                                                  null
-                                              ? 0.toString()
-                                              : model.userVote.userVoteStats
-                                                  .currentWinPoint
-                                                  .toString()) +
-                                          "   /   " +
-                                          model.seasonInfo.winningPoint
+                                                              .currentWinPoint ==
+                                                          null
+                                                      ? 0.toString()
+                                                      : model
+                                                          .userVote
+                                                          .userVoteStats
+                                                          .currentWinPoint
+                                                          .toString()) +
+                                                  "   /   " +
+                                                  model.seasonInfo
+                                                      .winningPoint ==
+                                              null
+                                          ? '0'
+                                          : model.seasonInfo.winningPoint
                                               .toString(),
                                       style: TextStyle(
                                         fontSize: 20,

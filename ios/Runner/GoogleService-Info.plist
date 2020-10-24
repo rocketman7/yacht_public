@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>962026345665-nnar9jie8e082agvcgj6qs555cbucrkd.apps.googleusercontent.com</string>
+	<string>1042219718966-fng8jhkulikbmp9cqurqkbi39l2n333g.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.962026345665-nnar9jie8e082agvcgj6qs555cbucrkd</string>
+	<string>com.googleusercontent.apps.1042219718966-fng8jhkulikbmp9cqurqkbi39l2n333g</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>962026345665-41cv49gmbit9ep2r14eib42lj3e0g9mv.apps.googleusercontent.com</string>
+	<string>1042219718966-hfli51i38ds82a16na7gmp8694vk4gjv.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBujroSfq5CxqmHwtX_1kgdxgsgpeXy2g4</string>
+	<string>AIzaSyBpkunRiTRyihlKCgjQR06FLHTCAt1TxNA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>962026345665</string>
+	<string>1042219718966</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.team-yacht.ggook</string>
 	<key>PROJECT_ID</key>
-	<string>yachtone-8baf9</string>
+	<string>ggook-5fb08</string>
 	<key>STORAGE_BUCKET</key>
-	<string>yachtone-8baf9.appspot.com</string>
+	<string>ggook-5fb08.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:962026345665:ios:570d5972fd0b8d3efa7040</string>
+	<string>1:1042219718966:ios:e58d75623ef2ae336a7b97</string>
 	<key>DATABASE_URL</key>
-	<string>https://yachtone-8baf9.firebaseio.com</string>
+	<string>https://ggook-5fb08.firebaseio.com</string>
 </dict>
 </plist>

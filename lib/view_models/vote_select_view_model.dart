@@ -85,48 +85,48 @@ class VoteSelectViewModel extends FutureViewModel {
 
     //앱이 최초로 시작하면 여기서 startStateManager를 실행해주고,
     //아니면 다른 화면과 마찬가지로 stateManager 하 지배를 받음.
-    if (global.appStart) {
-      await startStateManager();
+    // if (global.appStart) {
+    //   await startStateManager();
 
-      address = global.localAddressModel;
-      user = global.localUserModel;
-      vote = global.localVoteModel;
-      userVote = global.localUserVoteModel;
-      portfolioModel = global.localPortfolioModel;
-      seasonInfo = global.localSeasonModel;
-    } else {
-      //=======================stateManagerService이용하여 뷰모델 시작=======================
-      String myState = _stateManagerService.calcState();
+    // address = global.localAddressModel;
+    // user = global.localUserModel;
+    // vote = global.localVoteModel;
+    // userVote = global.localUserVoteModel;
+    // portfolioModel = global.localPortfolioModel;
+    // seasonInfo = global.localSeasonModel;
+    // } else {
+    //   //=======================stateManagerService이용하여 뷰모델 시작=======================
+    //   String myState = _stateManagerService.calcState();
 
-      if (_stateManagerService.hasLocalStateChange(myState)) {
-        if (await _stateManagerService.hasDBStateChange(myState)) {
-          // update needed. local & db 모두 변했기 때문
-          // 아래처럼 stateManagerService에서 각 모델들을 모두 리로드해주고, 그걸 뷰모델 내 모델변수에 재입력해준다.
-          await _stateManagerService.initStateManager();
-        }
-      }
-      address = global.localAddressModel;
-      user = global.localUserModel;
-      vote = global.localVoteModel;
-      userVote = global.localUserVoteModel;
-      portfolioModel = global.localPortfolioModel;
-      seasonInfo = global.localSeasonModel;
-      //=======================stateManagerService이용하여 뷰모델 시작=======================
+    //   if (_stateManagerService.hasLocalStateChange(myState)) {
+    //     if (await _stateManagerService.hasDBStateChange(myState)) {
+    //       // update needed. local & db 모두 변했기 때문
+    //       // 아래처럼 stateManagerService에서 각 모델들을 모두 리로드해주고, 그걸 뷰모델 내 모델변수에 재입력해준다.
+    //       await _stateManagerService.initStateManager();
+    //     }
+    //   }
+    //   address = global.localAddressModel;
+    //   user = global.localUserModel;
+    //   vote = global.localVoteModel;
+    //   userVote = global.localUserVoteModel;
+    //   portfolioModel = global.localPortfolioModel;
+    //   seasonInfo = global.localSeasonModel;
+    //   //=======================stateManagerService이용하여 뷰모델 시작=======================
 
-    }
+    // }
 
-    // address = await _databaseService.getAddress(uid);
-    // user = await _databaseService.getUser(uid);
-    // vote = await _databaseService.getVotes(address);
-    // userVote = await _databaseService.getUserVote(address);
-    // portfolioModel = await _databaseService.getPortfolio(address);
-    // seasonInfo = await _databaseService.getSeasonInfo(address);
+    address = await _databaseService.getAddress(uid);
+    user = await _databaseService.getUser(uid);
+    vote = await _databaseService.getVotes(address);
+    userVote = await _databaseService.getUserVote(address);
+    portfolioModel = await _databaseService.getPortfolio(address);
+    seasonInfo = await _databaseService.getSeasonInfo(address);
 
     voteSelectTutorial = await _sharedPreferencesService
         .getSharedPreferencesValue(voteSelectTutorialKey, bool);
     print("ISVOTING????? " + address.isVoting.toString());
 
-    String myState = _stateManagerService.calcState();
+    // String myState = _stateManagerService.calcState();
 
     setBusy(false);
     notifyListeners();
