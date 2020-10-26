@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:yachtOne/services/api/base_auth_api.dart';
+import 'package:yachtOne/services/api/firebase_kakao_auth_api.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 
@@ -13,6 +16,7 @@ class AppTitleView extends StatefulWidget {
 class _AppTitleViewState extends State<AppTitleView> {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -42,7 +46,7 @@ class _AppTitleViewState extends State<AppTitleView> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: deviceHeight * .45,
+                height: deviceHeight * .35,
               ),
               GestureDetector(
                 onTap: () {
@@ -65,11 +69,86 @@ class _AppTitleViewState extends State<AppTitleView> {
                     ),
                   ),
                 ),
-              )
+              ),
+              SizedBox(height: 10),
+              // GestureDetector(
+              //   onTap: () {
+              //     _performSignIn(FirebaseKakaoAuthAPI());
+              //   },
+              //   child: Container(
+              //     height: 48,
+              //     alignment: Alignment.center,
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(
+              //         8,
+              //       ),
+              //       color: Color(0xFFF7F6F7),
+              //     ),
+              //     child: Text(
+              //       "카카오계정으로 꾸욱 시작",
+              //       style: TextStyle(
+              //         fontSize: 16,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 10),
+              // GestureDetector(
+              //   onTap: () {
+              //     FirebaseKakaoAuthAPI().signOut();
+              //   },
+              //   child: Container(
+              //     height: 48,
+              //     alignment: Alignment.center,
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(
+              //         8,
+              //       ),
+              //       color: Color(0xFFF7F6F7),
+              //     ),
+              //     child: Text(
+              //       "카카오계정 로그아웃",
+              //       style: TextStyle(
+              //         fontSize: 16,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
       ),
     ));
   }
+
+  // _performSignIn(BaseAuthAPI api) async {
+  //   bool succeed = false;
+
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+
+  //   try {
+  //     await api.signIn();
+  //     succeed = true;
+  //   } on PlatformException catch (e) {
+  //     print("platform exception: $e");
+  //     final snackBar = SnackBar(content: Text(e.message));
+  //     Scaffold.of(context).showSnackBar(snackBar);
+  //   } catch (e) {
+  //     print("other exceptions: $e");
+  //     final snackBar = SnackBar(content: Text(e));
+  //     Scaffold.of(context).showSnackBar(snackBar);
+  //   }
+
+  //   if (mounted) {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //   }
+
+  //   return succeed;
+  // }
 }

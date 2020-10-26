@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1042219718966-feeiidjc8k5lvb59o30rhplk5ht67frp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team_yacht.ggook",
+            "certificate_hash": "a978e97d99755ea525929d554da3fadd45d15727"
+          }
+        },
+        {
           "client_id": "1042219718966-hfli51i38ds82a16na7gmp8694vk4gjv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -38,6 +46,14 @@
             {
               "client_id": "1042219718966-8r5p13re3j7m77jeof6vhoabh5pqumhg.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1042219718966-fng8jhkulikbmp9cqurqkbi39l2n333g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.team-yacht.ggook",
+                "app_store_id": "1536611320"
+              }
             }
           ]
         }

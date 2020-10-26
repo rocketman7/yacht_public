@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const { user } = require("firebase-functions/lib/providers/auth");
+// const kakao = require("./kakao");
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
 });
@@ -9,13 +10,13 @@ var dateFormat = require("dateformat");
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
-exports.helloWorld = functions.https.onRequest((request, response) => {
+exports.helloWorld = functions.region('asia-northeast3').https.onRequest((request, response) => {
   functions.logger.info("Hello logs!", { structuredData: true });
   response.send("Hello from Firebase!");
 });
 
 // 1) 사용자들 투표 채점, 2) 사용자 콤보 넣고 빼주고, 3) 랭킹 컬렉션에 순서대로 순위 넣어주고
-exports.scoreVote = functions.https.onRequest(async (req, res) => {
+exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (req, res) => {
   const db = admin.firestore();
 
   // votes -> docu id: date -> voteResult array
@@ -39,7 +40,7 @@ exports.scoreVote = functions.https.onRequest(async (req, res) => {
   // const today = "20201005";
   // today의 실제 결과 가져오기 (이전에 넣어야함)
 
-  var today = "20201020";
+  var today = "20201026";
 
   function userVotesSeasonCollection(uid) {
     return usersRef
@@ -294,7 +295,7 @@ exports.scoreVote = functions.https.onRequest(async (req, res) => {
 });
 
 // 3) User 데이터에서 combo sorting하여 rank DB에 넣는 함수
-exports.sortRank = functions.https.onRequest(async (req, res) => {
+exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (req, res) => {
   // 1. users의 combo로 sorting해서
   // 2. combo order로 uid를 정렬
   // 3.정렬된 uid를 rank collection에 넣기
@@ -605,4 +606,22 @@ exports.tempQuries = functions.https.onRequest(async (req, res) => {
  
 
   res.send(userScores);
+});
+
+
+exports.verifyKakaoToken = functions.https.onCall(async (data, context) => {
+  const token = data.token;
+  if (!token) return { error: "There is no token provided." };
+
+  console.log(`Verifying Kakao token: ${token}`);
+
+  return kakao
+    .createFirebaseToken(token)
+    .then(firebaseToken => {
+      console.log(`Returning firebase token to user: ${firebaseToken}`);
+      return { token: firebaseToken };
+    })
+    .catch(e => {
+      return { error: e.message };
+    });
 });
