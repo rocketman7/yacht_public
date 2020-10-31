@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:kakao_flutter_sdk/auth.dart';
+import 'package:kakao_flutter_sdk/auth.dart';
 import 'package:yachtOne/views/chart_view.dart';
 import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/intro_view.dart';
@@ -22,7 +22,7 @@ import 'services/navigation_service.dart';
 
 void main() async {
   setupLocator();
-  // KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
+  KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 

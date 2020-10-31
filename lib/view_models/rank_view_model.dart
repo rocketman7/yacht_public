@@ -48,22 +48,29 @@ class RankViewModel extends FutureViewModel {
   // futureToRun으로 호출하는.
   Future getUserAndRankList() async {
     //=======================stateManagerService이용하여 뷰모델 시작=======================
-    String myState = _stateManagerService.calcState();
+    // String myState = _stateManagerService.calcState();
 
-    if (_stateManagerService.hasLocalStateChange(myState)) {
-      if (await _stateManagerService.hasDBStateChange(myState)) {
-        // update needed. local & db 모두 변했기 때문
-        // 아래처럼 stateManagerService에서 각 모델들을 모두 리로드해주고, 그걸 뷰모델 내 모델변수에 재입력해준다.
-        print('rank view update');
-        await _stateManagerService.initStateManager();
-      }
-    }
-    addressModel = global.localAddressModel;
-    portfolioModel = global.localPortfolioModel;
-    seasonModel = global.localSeasonModel;
-    user = global.localUserModel;
+    // if (_stateManagerService.hasLocalStateChange(myState)) {
+    //   if (await _stateManagerService.hasDBStateChange(myState)) {
+    //     // update needed. local & db 모두 변했기 때문
+    //     // 아래처럼 stateManagerService에서 각 모델들을 모두 리로드해주고, 그걸 뷰모델 내 모델변수에 재입력해준다.
+    //     print('rank view update');
+    //     await _stateManagerService.initStateManager();
+    //   }
+    // }
+    // addressModel = global.localAddressModel;
+    // portfolioModel = global.localPortfolioModel;
+    // seasonModel = global.localSeasonModel;
+    // user = global.localUserModel;
     //=======================stateManagerService이용하여 뷰모델 시작=======================
-    rankModel = await _databaseService.getRankList(global.localAddressModel);
+    // rankModel = await _databaseService.getRankList(global.localAddressModel);
+
+    addressModel = await _databaseService.getAddress(uid);
+    portfolioModel = await _databaseService.getPortfolio(addressModel);
+    seasonModel = await _databaseService.getSeasonInfo(addressModel);
+    user = await _databaseService.getUser(uid);
+
+    rankModel = await _databaseService.getRankList(addressModel);
 
     // 순위변동 구해주자.
     for (int i = 0; i < rankModel.length; i++) {
@@ -100,7 +107,7 @@ class RankViewModel extends FutureViewModel {
 
   // 어드레스모델이 가리키는 전 날짜를 가져와서 xxxx.xx.xx 형식으로 변환
   String getDateFormChange() {
-    DateTime previousdate = strToDate(global.localAddressModel.date);
+    DateTime previousdate = strToDate(addressModel.date);
 
     previousdate = previousBusinessDay(previousdate);
     String previousdateStr = stringDate.format(previousdate);
@@ -116,9 +123,9 @@ class RankViewModel extends FutureViewModel {
   String getPortfolioValue() {
     int totalValue = 0;
 
-    for (int i = 0; i < global.localPortfolioModel.subPortfolio.length; i++) {
-      totalValue += global.localPortfolioModel.subPortfolio[i].sharesNum *
-          global.localPortfolioModel.subPortfolio[i].currentPrice;
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      totalValue += portfolioModel.subPortfolio[i].sharesNum *
+          portfolioModel.subPortfolio[i].currentPrice;
     }
     // int totalValue = 100000;
 

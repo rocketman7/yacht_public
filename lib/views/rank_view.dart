@@ -295,9 +295,9 @@ class RankView extends StatelessWidget {
                                       Text(
                                         '시즌 상금 가치',
                                         style: TextStyle(
-                                          fontSize: 22.sp,
+                                          fontSize: 20.sp,
                                           height: 1,
-                                          fontFamily: 'AppleSDB',
+                                          fontFamily: 'AppleSDM',
                                           letterSpacing: -0.5,
                                         ),
                                       ),
@@ -309,9 +309,9 @@ class RankView extends StatelessWidget {
                                         child: Text(
                                           '₩ ${model.getPortfolioValue()} ',
                                           style: TextStyle(
+                                            fontSize: 20.sp,
                                             height: 1,
-                                            fontSize: 22.sp,
-                                            fontFamily: 'AppleSDB',
+                                            fontFamily: 'AppleSDM',
                                             letterSpacing: -0.5,
                                           ),
                                         ),

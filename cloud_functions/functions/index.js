@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const { user } = require("firebase-functions/lib/providers/auth");
-// const kakao = require("./kakao");
+const kakao = require("./kakao");
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
 });
@@ -609,16 +609,21 @@ exports.tempQuries = functions.https.onRequest(async (req, res) => {
 });
 
 
-exports.verifyKakaoToken = functions.https.onCall(async (data, context) => {
+exports.verifyKakaoToken = functions.region('asia-northeast3').https.onCall(async (data, context) => {
   const token = data.token;
+
+  // const token="ISLIonA68NEOVlp4EUadn-21bnEXcyYgtxHHdQo9dVoAAAF1ayJlvQ"
   if (!token) return { error: "There is no token provided." };
 
   console.log(`Verifying Kakao token: ${token}`);
+
+  
 
   return kakao
     .createFirebaseToken(token)
     .then(firebaseToken => {
       console.log(`Returning firebase token to user: ${firebaseToken}`);
+      // res.send(firebaseToken);
       return { token: firebaseToken };
     })
     .catch(e => {

@@ -2,7 +2,7 @@ const admin = require("firebase-admin");
 const functions = require("firebase-functions");
 const request = require("request-promise");
 
-const kakao_appId = functions.config().kakao.appid;
+const kakao_appId = Number(functions.config().kakao.appid);
 
 // Kakao API request url to retrieve user profile based on access token
 const requestMeUrl = "https://kapi.kakao.com/v2/user/me?secure_resource=true";
@@ -35,7 +35,7 @@ function validateToken(kakaoAccessToken) {
   return request({
     method: "GET",
     headers: { Authorization: "Bearer " + kakaoAccessToken },
-    url: accessTokenInfoUrl
+    url: accessTokenInfoUrl,
   });
 }
 
@@ -54,6 +54,7 @@ function validateToken(kakaoAccessToken) {
 function createIfNotExist(kakaoUserId, email, emailVerified, displayName, photoURL) {
   return getUser(kakaoUserId, email, emailVerified).catch(error => {
     if (error.code === "auth/user-not-found") {
+      
       const params = {
         uid: `kakao:${kakaoUserId}`,
         displayName: displayName
@@ -140,6 +141,8 @@ exports.createFirebaseToken = function(kakaoAccessToken) {
   return validateToken(kakaoAccessToken)
     .then(response => {
       const body = JSON.parse(response);
+      console.log(typeof body.appId);
+      console.log(typeof kakao_appId);
       if (body.appId !== kakao_appId) {
         throw new Error("The given token does not belong to this application.");
       }

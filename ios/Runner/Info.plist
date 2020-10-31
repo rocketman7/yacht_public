@@ -28,9 +28,22 @@
 				<string>com.googleusercontent.apps.1042219718966-fng8jhkulikbmp9cqurqkbi39l2n333g</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kakao3134111f38ca4de5e56473f46942e27a</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>kakaokompassauth</string>
+		<string>kakaolink</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -48,15 +61,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<!-- <key>LSApplicationQueriesSchemes</key> -->
- 	<!-- <array> -->
-	    <!-- <string>kakao3134111f38ca4de5e56473f46942e27a</string> -->
-      <!-- 카카오톡으로 로그인 -->
-		<!-- <string>kakaokompassauth</string> -->
-		<!-- <string>storykompassauth</string> -->
-      <!-- 카카오링크 -->
-    	<!-- <string>kakaolink</string> -->
-  	<!-- </array> -->
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -907,10 +907,10 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: baseDate,
+      date: '20201026',
       category: category,
       season: season,
-      isVoting: isVoting,
+      isVoting: true,
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.date.toString());

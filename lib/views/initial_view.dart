@@ -26,20 +26,22 @@ class _InitialViewState extends State<InitialView> {
     return ViewModelBuilder.reactive(
         viewModelBuilder: () => InitialViewModel(),
         builder: (context, model, child) {
-          return StreamBuilder<User>(
-              stream: model.getAuthChange(),
-              builder: (context, snapshot) {
-                print(model.isTwoFactorAuthed);
-                if (!snapshot.hasData) {
-                  print("nodata");
-                  return Scaffold(
-                    body: AppTitleView(),
-                  );
-                } else {
-                  print(snapshot.data.uid);
-                  return StartUpView(0);
-                }
-              });
+          return (model.isBusy)
+              ? Container()
+              : StreamBuilder<User>(
+                  stream: model.getAuthChange(),
+                  builder: (context, snapshot) {
+                    print(model.isTwoFactorAuthed);
+                    if (!snapshot.hasData) {
+                      print("nodata");
+                      return Scaffold(
+                        body: AppTitleView(),
+                      );
+                    } else {
+                      print(snapshot.data.uid);
+                      return StartUpView(0);
+                    }
+                  });
         });
   }
 }
