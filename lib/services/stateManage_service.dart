@@ -99,7 +99,6 @@ class StateManageServiceFirebase extends StateManageService {
 
   @override
   Future<bool> isNeededUpdate() async {
-    print('isNeededUpdate');
     _stateManageModel = await _databaseService.getStateManage();
 
     if (_myState != _stateManageModel.state) {

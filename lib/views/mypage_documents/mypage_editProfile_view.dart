@@ -109,7 +109,8 @@ class MypageEditProfileView extends StatelessWidget {
                               ),
                               Spacer(),
                               Text(
-                                model.user.phoneNumber.toString(),
+                                // model.user.phoneNumber.toString() ?? "",
+                                "dd",
                                 style: TextStyle(fontSize: 16),
                               ),
                               SizedBox(
@@ -141,7 +142,8 @@ class MypageEditProfileView extends StatelessWidget {
                               ),
                               Spacer(),
                               Text(
-                                model.user.email,
+                                // model.user.email ?? "",
+                                "dd",
                                 style: TextStyle(fontSize: 16),
                               ),
                               SizedBox(
