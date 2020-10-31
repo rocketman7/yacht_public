@@ -56,27 +56,30 @@ class _PortfolioViewState extends State<PortfolioView>
         viewModelBuilder: () => PortfolioViewModel(),
         builder: (context, model, child) {
           if (model.isBusy) {
+            // return Scaffold(
+            //   body: Container(
+            //     height: deviceHeight,
+            //     width: deviceWidth,
+            //     child: Stack(
+            //       children: [
+            //         Positioned(
+            //           top: deviceHeight / 2 - 100,
+            //           child: Container(
+            //             height: 100,
+            //             width: deviceWidth,
+            //             child: FlareActor(
+            //               'assets/images/Loading.flr',
+            //               animation: 'loading',
+            //               fit: BoxFit.contain,
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // );
             return Scaffold(
-              body: Container(
-                height: deviceHeight,
-                width: deviceWidth,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: deviceHeight / 2 - 100,
-                      child: Container(
-                        height: 100,
-                        width: deviceWidth,
-                        child: FlareActor(
-                          'assets/images/Loading.flr',
-                          animation: 'loading',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              body: Container(),
             );
           } else {
             if (!_chartAnimationController.isCompleted)
@@ -97,7 +100,6 @@ class _PortfolioViewState extends State<PortfolioView>
                           top: 18.h,
                         ),
                         child: Column(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -147,22 +149,6 @@ class _PortfolioViewState extends State<PortfolioView>
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                // Container(
-                                //   height: 8,
-                                //   width: 1,
-                                //   color: Color(0xFFD8D8D8),
-                                // ),
-                                // SizedBox(
-                                //   width: 8,
-                                // ),
-                                // Text(
-                                //   '${model.seasonModel.seasonName}',
-                                //   style: TextStyle(
-                                //     fontFamily: 'AppleSDM',
-                                //     fontSize: 16.sp,
-                                //   ),
-                                // ),
-
                                 Text(
                                   '${model.getDateFormChange()} 종가 기준',
                                   style: TextStyle(
@@ -211,7 +197,6 @@ class _PortfolioViewState extends State<PortfolioView>
                                         child: Center(
                                             child: Text(
                                           '${model.seasonModel.seasonName}',
-                                          // '${model.getSeasonUpperCase()}',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: 14.sp,
@@ -229,7 +214,6 @@ class _PortfolioViewState extends State<PortfolioView>
                                     : Container(),
                               ],
                             )),
-                            // SizedBox(height: 18),
                             _itemAnimationController.isCompleted
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -242,7 +226,6 @@ class _PortfolioViewState extends State<PortfolioView>
                                           fontSize: 28,
                                           fontFamily: 'DmSans',
                                           fontWeight: FontWeight.bold,
-                                          // letterSpacing: -1.0,
                                         ),
                                       ),
                                       SizedBox(
@@ -272,14 +255,6 @@ class _PortfolioViewState extends State<PortfolioView>
                                   )
                                 : Container(),
                             SizedBox(height: 40.h),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     var unixTimestamp = DateTime.now();
-
-                            //     print(unixTimestamp);
-                            //   },
-                            //   // child: Text('dfswe'),
-                            // )
                           ],
                         ),
                       ),
@@ -298,7 +273,7 @@ class _PortfolioViewState extends State<PortfolioView>
 
 Widget makePortfolioArcLine(PortfolioViewModel model) {
   double portfolioArcRadius = deviceWidth - 64;
-  const double portfolioArcRadiusCenter = 112;
+  double portfolioArcRadiusCenter = 100.sp;
 
   return Container(
     width: portfolioArcRadius,
@@ -360,7 +335,7 @@ List<Widget> makePortfolioArcLineComponents(PortfolioViewModel model,
 
 Widget makePortfolioArc(PortfolioViewModel model) {
   double portfolioArcRadius = deviceWidth - 64;
-  double portfolioArcRadiusCenter = 80.sp;
+  double portfolioArcRadiusCenter = 100.sp;
 
   return Container(
     width: portfolioArcRadius,
@@ -539,7 +514,6 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                           fontFamily: 'AppleSDM',
                           height: 1,
                           textBaseline: TextBaseline.alphabetic,
-                          // fontWeight: FontWeight.w600,
                           color: Color(int.parse(
                               'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
                               radix: 16))),
@@ -677,7 +651,6 @@ class PortfolioArcChart extends CustomPainter {
 
   @override
   bool shouldRepaint(PortfolioArcChart oldDelegate) {
-    // return oldDelegate.center != center;
     return false;
   }
 }

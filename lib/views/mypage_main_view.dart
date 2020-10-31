@@ -4,6 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import '../locator.dart';
 import '../view_models/mypage_main_view_model.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 import 'constants/size.dart';
 import 'widgets/avatar_widget.dart';
@@ -26,7 +27,28 @@ class MypageMainView extends StatelessWidget {
                     child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                   )
                 : model.isBusy
-                    ? Container()
+                    ? model.isFirstLoading()
+                        ? Container(
+                            height: deviceHeight,
+                            width: deviceWidth,
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  top: deviceHeight / 2 - 100,
+                                  child: Container(
+                                    height: 100,
+                                    width: deviceWidth,
+                                    child: FlareActor(
+                                      'assets/images/Loading.flr',
+                                      animation: 'loading',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container()
                     : WillPopScope(
                         onWillPop: () async {
                           _navigatorKey.currentState.maybePop();
@@ -294,7 +316,7 @@ class MypageMainView extends StatelessWidget {
             color: Colors.black,
           ),
           makeMypageMainComponent(model, '1:1 문의', 'oneonone'),
-          makeMypageMainComponent(model, '자주 묻는 질문', 'faq'),
+          makeMypageMainComponent(model, '자주 묻는 질문(FAQ)', 'faq'),
           makeMypageMainComponent(model, '공지사항', 'notice'),
           SizedBox(
             height: 42,

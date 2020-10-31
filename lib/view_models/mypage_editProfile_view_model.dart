@@ -1,5 +1,7 @@
 import 'package:stacked/stacked.dart';
 
+import '../services/stateManage_service.dart';
+
 import '../models/user_model.dart';
 import '../locator.dart';
 import '../services/navigation_service.dart';
@@ -29,6 +31,7 @@ class MypageEditProfileViewModel extends FutureViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
+  final StateManageService _stateManageService = locator<StateManageService>();
 
   // 변수 Setting
   String uid;
@@ -37,10 +40,14 @@ class MypageEditProfileViewModel extends FutureViewModel {
   String checkedAvatarImage;
   List<String> avatarImages = [];
 
+  // Future<void> setAvatarImage(String avatarImage) async {
   void setAvatarImage(String avatarImage) {
     _databaseService.setAvatarImage(avatarImage, uid);
     _sharedPreferencesService.setSharedPreferencesValue(avatarKey, avatarImage);
     sharedPrefForAvatarImage = avatarImage;
+
+    // await _stateManageService.userModelUpdate();
+    _stateManageService.userModelUpdate();
 
     notifyListeners();
   }
@@ -57,7 +64,11 @@ class MypageEditProfileViewModel extends FutureViewModel {
   }
 
   Future getModels() async {
-    user = await _databaseService.getUser(uid);
+    if (await _stateManageService.isNeededUpdate())
+      await _stateManageService.initStateManage();
+
+    user = _stateManageService.userModel;
+
     sharedPrefForAvatarImage = await _sharedPreferencesService
         .getSharedPreferencesValue(avatarKey, String);
 

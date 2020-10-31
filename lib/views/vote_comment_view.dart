@@ -106,18 +106,28 @@ class _VoteCommentViewState extends State<VoteCommentView>
         builder: (context, model, child) {
           if (model.isBusy) {
             return Scaffold(
-              body: Center(
-                child: Container(
-                  height: 100,
-                  width: deviceWidth,
-                  child: FlareActor(
-                    'assets/images/Loading.flr',
-                    animation: 'loading',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            );
+                body: model.isFirstLoading()
+                    ? Container(
+                        height: deviceHeight,
+                        width: deviceWidth,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top: deviceHeight / 2 - 100,
+                              child: Container(
+                                height: 100,
+                                width: deviceWidth,
+                                child: FlareActor(
+                                  'assets/images/Loading.flr',
+                                  animation: 'loading',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container());
           } else {
             return Scaffold(
               body: WillPopScope(

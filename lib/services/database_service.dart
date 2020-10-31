@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:yachtOne/models/stateManeger_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
@@ -25,6 +24,7 @@ import '../models/rank_model.dart';
 import '../models/database_address_model.dart';
 import '../models/vote_model.dart';
 import '../models/portfolio_model.dart';
+import '../models/stateManage_model.dart';
 
 import 'dart:math';
 
@@ -666,13 +666,13 @@ class DatabaseService {
   }
 
   // admin -> stateManager 불러오기
-  Future<StateManagerModel> getStateManager() async {
+  Future<StateManageModel> getStateManage() async {
     try {
       var stateManageData =
           await adminCollectionReference.doc('stateManager').get();
-      return StateManagerModel.fromData(stateManageData.data());
+      return StateManageModel.fromData(stateManageData.data());
     } catch (e) {
-      print('error at stateManaget get');
+      print('error at stateManage get');
       print(e.toString());
       return null;
     }
@@ -869,6 +869,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
+      // date: baseDate,
       date: '20201019',
       category: category,
       season: season,

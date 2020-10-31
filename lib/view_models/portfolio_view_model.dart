@@ -1,10 +1,11 @@
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/views/constants/holiday.dart';
 import 'dart:math' as math;
 
-import '../services/stateManager_service.dart';
-import '../services/stateManager_service.dart' as global;
+import '../services/stateManage_service.dart';
+import '../services/database_service.dart';
 
 import '../locator.dart';
 import '../models/portfolio_model.dart';
@@ -17,8 +18,9 @@ class PortfolioViewModel extends FutureViewModel {
   // Services Setting
   final SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
-  final StateManagerServiceService _stateManagerService =
-      locator<StateManagerServiceService>();
+  final StateManageService _stateManageService = locator<StateManageService>();
+  final DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthService _authService = locator<AuthService>();
 
   // 변수 Setting
   // 아래에 stateManagerService에 있는 놈들 중 사용할 모델들 설정
@@ -49,19 +51,12 @@ class PortfolioViewModel extends FutureViewModel {
   // method
   // 포트폴리오 DB로부터 얻어오기 + UI용 변수들 계산
   Future getPortfolio() async {
-    //=======================stateManagerService이용하여 뷰모델 시작=======================
-    String myState = _stateManagerService.calcState();
+    if (await _stateManageService.isNeededUpdate())
+      await _stateManageService.initStateManage();
 
-    if (_stateManagerService.hasLocalStateChange(myState)) {
-      if (await _stateManagerService.hasDBStateChange(myState)) {
-        // update needed. local & db 모두 변했기 때문
-        // 아래처럼 stateManagerService에서 각 모델들을 모두 리로드해주고, 그걸 뷰모델 내 모델변수에 재입력해준다.
-        await _stateManagerService.initStateManager();
-      }
-    }
-    addressModel = global.localAddressModel;
-    portfolioModel = global.localPortfolioModel;
-    seasonModel = global.localSeasonModel;
+    addressModel = _stateManageService.addressModel;
+    portfolioModel = _stateManageService.portfolioModel;
+    seasonModel = _stateManageService.seasonModel;
 
     //=======================stateManagerService이용하여 뷰모델 시작=======================
 
@@ -113,9 +108,9 @@ class PortfolioViewModel extends FutureViewModel {
     }
 
     // Arc의 시작점을 설정해주고, 나머지도 초기비중에 맞게 호의 길이만큼 설정해주는 작업
-    final random = math.Random();
-
-    startPercentage.add(random.nextInt(100).toDouble());
+    // final random = math.Random();
+    // startPercentage.add(random.nextInt(100).toDouble());
+    startPercentage.add(6); // 원래 시작점 위 두줄처럼 랜덤으로 정해주는거였는데 그냥 고정하자
 
     for (int i = 1; i < portfolioModel.subPortfolio.length; i++) {
       startPercentage.add(startPercentage[i - 1] + initialValueRatio[i - 1]);

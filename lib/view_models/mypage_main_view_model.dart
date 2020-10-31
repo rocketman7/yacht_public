@@ -1,8 +1,11 @@
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/services/sharedPreferences_service.dart';
 
+import '../services/sharedPreferences_service.dart';
+import '../services/stateManage_service.dart';
 import '../services/dialog_service.dart';
+
 import '../locator.dart';
+
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
@@ -16,6 +19,7 @@ class MypageMainViewModel extends FutureViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
+  final StateManageService _stateManageService = locator<StateManageService>();
 
   // 변수 Setting
   String uid;
@@ -29,11 +33,21 @@ class MypageMainViewModel extends FutureViewModel {
   }
 
   Future getModels() async {
-    user = await _databaseService.getUser(uid);
+    if (_stateManageService.appStart) {
+      await _stateManageService.initStateManage(initUid: uid);
+    } else {
+      if (await _stateManageService.isNeededUpdate())
+        await _stateManageService.initStateManage(initUid: uid);
+    }
+
+    user = _stateManageService.userModel;
   }
 
-  void navigateToMypageToDown(String routeName) {
-    _navigationService.navigateTo(routeName);
+  Future<void> navigateToMypageToDown(String routeName) async {
+    await _navigationService.navigateTo(routeName);
+    // 이렇게 페이지 넘어가는 부분에서 await 걸어주고 후에 후속조치 취해주면 하위페이지에서 변동된 데이터를 적용할 수 있음
+    await getModels();
+    notifyListeners();
   }
 
   // 로그아웃 버튼이 눌렸을 경우..
@@ -49,6 +63,11 @@ class MypageMainViewModel extends FutureViewModel {
 
     _navigationService.popAndNavigateWithArgTo('initial');
     // }
+  }
+
+  // 앱이 처음시작되어 모든 모델들을 불러오기 전에 페이지에 진입하면 로딩뷰를 보여주고, 아니면 로딩뷰를 없앤다.
+  bool isFirstLoading() {
+    return _stateManageService.appStart;
   }
 
   @override
