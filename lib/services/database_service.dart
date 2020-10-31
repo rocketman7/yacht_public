@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/models/chart_model.dart';
+import 'package:yachtOne/models/stateManage_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
@@ -189,6 +191,43 @@ class DatabaseService {
       }
     } catch (e) {
       return e.message;
+    }
+  }
+
+  Future getPriceForChart(String issueCode) async {
+    ChartModel chart;
+
+    try {
+      List<ChartModel> chartList;
+      // chartList = [];
+      var priceData = await _databaseService
+          .collection('temp')
+          .doc('KR')
+          .collection(issueCode)
+          .orderBy('date', descending: false)
+          .get();
+
+      print(priceData.docs.first.data());
+
+      return priceData.docs.map((e) => ChartModel.fromData(e.data())).toList();
+      //     .then((value) {
+      //   List<ChartModel> temp;
+      //   value.docs.forEach((e) {
+      //     // print(e.data());
+      //     chartList.add(ChartModel.fromData(e.data()));
+      //     // print(chartList[0].dateTime);
+      //   });
+      //   return chartList;
+      // });
+
+      // print(chartList.length);
+      // tempPrice.data().map((key, value) {
+      // return ChartModel.fromData(Map<String key, dynamic value> map);
+      // });
+      // print(tempPrice.data()['20200320']['high']);
+
+    } catch (e) {
+      print(e.message);
     }
   }
 
@@ -869,11 +908,10 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: baseDate,
-      date: '20201019',
+      date: '20201026',
       category: category,
       season: season,
-      isVoting: isVoting,
+      isVoting: true,
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.date.toString());

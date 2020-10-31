@@ -384,7 +384,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                               Text(
                                                 "상금 가치",
                                                 style: TextStyle(
-                                                  fontSize: 18.sp,
+                                                  fontSize: 20.sp,
                                                   fontFamily: 'AppleSDB',
                                                   letterSpacing: -1.0,
                                                 ),
@@ -420,7 +420,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                     Text(
                                                         '₩ ${model.getPortfolioValue()}',
                                                         style: TextStyle(
-                                                          fontSize: 26.sp,
+                                                          fontSize: 20.sp,
                                                           fontFamily:
                                                               'AppleSDB',
                                                           letterSpacing: -1.0,
@@ -454,7 +454,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                 Text(
                                                   "현재 / 목표 승점",
                                                   style: TextStyle(
-                                                    fontSize: 18.sp,
+                                                    fontSize: 20.sp,
                                                     fontFamily: 'AppleSDB',
                                                     letterSpacing: -1.0,
                                                   ),
@@ -472,11 +472,14 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                                   .currentWinPoint
                                                                   .toString()) +
                                                           "   /   " +
-                                                          model.seasonInfo
-                                                              .winningPoint
-                                                              .toString(),
+                                                          (model.seasonInfo ==
+                                                                  null
+                                                              ? 0.toString()
+                                                              : model.seasonInfo
+                                                                  .winningPoint
+                                                                  .toString()),
                                                       style: TextStyle(
-                                                        fontSize: 26.sp,
+                                                        fontSize: 20.sp,
                                                         fontFamily: 'AppleSDB',
                                                         letterSpacing: -1.0,
                                                       ),
@@ -509,7 +512,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                 Text(
                                                   "나의 예측 기록",
                                                   style: TextStyle(
-                                                    fontSize: 18.sp,
+                                                    fontSize: 20.sp,
                                                     fontFamily: 'AppleSDB',
                                                     letterSpacing: -1.0,
                                                   ),
@@ -519,7 +522,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                     Text(
                                                       "                    ",
                                                       style: TextStyle(
-                                                        fontSize: 26.sp,
+                                                        fontSize: 20.sp,
                                                         fontFamily: 'AppleSDB',
                                                         letterSpacing: -1.0,
                                                       ),
@@ -547,7 +550,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                           ),
                                         ],
                                       ),
-                                      Divider(),
+                                      Divider(thickness: 1),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,

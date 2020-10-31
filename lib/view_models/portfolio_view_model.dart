@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/auth_service.dart';
+import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/views/constants/holiday.dart';
 import 'dart:math' as math;
 
@@ -43,10 +44,15 @@ class PortfolioViewModel extends FutureViewModel {
   List<int> orderDrawingItem = [];
   List<bool> drawingMaxLength = [];
 
+  String uid;
+
   // 튜토리얼 변수
   bool portfolioTutorial;
   int tutorialStatus = 2; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
   int tutorialTotalStep = 2; // 튜토리얼 총 단계
+  PortfolioViewModel() {
+    uid = _authService.auth.currentUser.uid;
+  }
 
   // method
   // 포트폴리오 DB로부터 얻어오기 + UI용 변수들 계산

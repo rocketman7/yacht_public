@@ -175,11 +175,15 @@ class MypageMainView extends StatelessWidget {
                           model.user.userName,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: model.user.userName.length > 8
-                                  ? 32
-                                  : model.user.userName.length > 6 ? 40 : 48,
-                              fontFamily: 'DmSans',
-                              fontWeight: FontWeight.w900),
+                            fontSize: model.user.userName.length > 8
+                                ? 32
+                                : model.user.userName.length > 6
+                                    ? 40
+                                    : 48,
+                            letterSpacing: -1.0,
+                            fontFamily: 'AppleSDB',
+                            // fontWeight: FontWeight.w900,
+                          ),
                         ),
                       ),
                     ],

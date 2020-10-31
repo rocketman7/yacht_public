@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.yachtOne">
+    package="com.team_yacht.ggook">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -38,6 +38,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                <data android:scheme="kakao3134111f38ca4de5e56473f46942e27a" android:host="oauth"/>
             </intent-filter>
 
             <intent-filter>
@@ -50,5 +51,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="3134111f38ca4de5e56473f46942e27a" />
     </application>
 </manifest>
