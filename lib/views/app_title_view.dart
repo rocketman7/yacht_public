@@ -164,14 +164,14 @@ class _AppTitleViewState extends State<AppTitleView> {
         if (_authService.auth.currentUser != null) {
           print("CurrentUSER" + _authService.auth.currentUser.toString());
           // loggedIn 화면으로 route (HomeView)
-          _sharedPreferencesService.setSharedPreferencesValue(
-              "twoFactor", true);
-          bool isTwoFactorAuthed = await _sharedPreferencesService
-              .getSharedPreferencesValue('twoFactor', bool);
-          print(isTwoFactorAuthed);
-          _navigationService.navigateTo(
-            'startup',
-          );
+          // _sharedPreferencesService.setSharedPreferencesValue(
+          //     "twoFactor", true);
+          // // bool isTwoFactorAuthed = await _sharedPreferencesService
+          // //     .getSharedPreferencesValue('twoFactor', bool);
+          // // print(isTwoFactorAuthed);
+          // _navigationService.navigateTo(
+          //   'startup',
+          // );
         } else {
           print('Login Failure');
         }

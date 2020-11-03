@@ -8,6 +8,11 @@ const kakao_appId = Number(functions.config().kakao.appid);
 const requestMeUrl = "https://kapi.kakao.com/v2/user/me?secure_resource=true";
 const accessTokenInfoUrl = "https://kapi.kakao.com/v1/user/access_token_info";
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
+}
 /**
  * requestMe - Returns user profile from Kakao API
  *
@@ -45,14 +50,18 @@ function validateToken(kakaoAccessToken) {
  * If email is not verified, make the user re-authenticate with other means.
  *
  * @param  {String} kakaoUserId    user id per app
+ * @param  {Number} phoneNumber    user's phone number
  * @param  {String} email          user's email address
  * @param  {Boolean} emailVerified whether this email is verified or not
  * @param  {String} displayName    user
  * @param  {String} photoURL       profile photo url
  * @return {Promise<UserRecord>}   Firebase user record in a promise
  */
-function createIfNotExist(kakaoUserId, email, emailVerified, displayName, photoURL) {
-  return getUser(kakaoUserId, email, emailVerified).catch(error => {
+function createIfNotExist(kakaoUserId, phoneNumber, email, emailVerified, displayName, photoURL) {
+  return getUser(kakaoUserId,  email, emailVerified).catch(error => {
+    const db = admin.firestore();
+    const usersRef = db.collection("users");
+
     if (error.code === "auth/user-not-found") {
       
       const params = {
@@ -66,6 +75,23 @@ function createIfNotExist(kakaoUserId, email, emailVerified, displayName, photoU
         params["photoURL"] = photoURL;
       }
       console.log(`creating a firebase user with email ${email}`);
+      
+      const userDatabaseParmas = {
+        uid: `kakao:${kakaoUserId}`,
+        userName: displayName,
+        email: email,
+        phoneNumber: phoneNumber,
+        friendsCode: null,
+        item: 10,
+        avatarImage: "avatar00".concat(String(getRandomInt(1,10))),
+        account: {
+          accNumber: null,
+          accName: null,
+          secName: null
+        },
+
+      }
+      usersRef.doc(`kakao:${kakaoUserId}`).set(userDatabaseParmas);
       return admin.auth().createUser(params);
     }
     throw error;
@@ -158,15 +184,17 @@ exports.createFirebaseToken = function(kakaoAccessToken) {
       let profileImage = null;
       let email = null;
       let isEmailVerified = null;
+      let phoneNumber = null;
       if (body.properties) {
         nickname = body.properties.nickname;
         profileImage = body.properties.profile_image;
       }
       if (body.kakao_account) {
+        // phoneNumber = body.kakao.phoneNumber;
         email = body.kakao_account.email;
         isEmailVerified = body.kakao_account.is_email_verified;
       }
-      return createIfNotExist(userId, email, isEmailVerified, nickname, profileImage);
+      return createIfNotExist(userId, phoneNumber, email, isEmailVerified, nickname, profileImage);
     })
     .then(userRecord => {
       const userId = userRecord.uid;

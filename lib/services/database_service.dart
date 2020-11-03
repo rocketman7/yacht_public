@@ -88,8 +88,8 @@ class DatabaseService {
       return UserModel.fromData(userData.data());
     } catch (e) {
       print(e.toString());
-      _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
-      AuthService().auth.signOut();
+      // _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
+      // AuthService().auth.signOut();
       print("getUSER ERROR");
       _navigationService.popAndNavigateWithArgTo('initial');
     }

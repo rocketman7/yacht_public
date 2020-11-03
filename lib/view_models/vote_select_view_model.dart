@@ -79,8 +79,9 @@ class VoteSelectViewModel extends FutureViewModel {
   // }
 
   Future getAllModel(uid) async {
+    // _authService.auth.signOut();
     setBusy(true);
-
+    print("getallModel uid" + uid);
     //앱이 최초로 시작하면 여기서 startStateManager를 실행해주고,
     //아니면 다른 화면과 마찬가지로 stateManager 하 지배를 받음.
     if (_stateManageService.appStart) {

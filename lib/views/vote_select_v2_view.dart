@@ -221,7 +221,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
     // _nowToStr = "20200901"; //temp for test
 
     // print(_now.toString() + " and " + _nowToStr);
-    print(_getAllModel);
+    // print(_getAllModel);
     // 오늘의 주제, 선택된 주제 위젯 만들기 위해 initState에 vote 데이터 db에서 불러옴
     // print("Async start");
 
