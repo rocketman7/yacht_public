@@ -61,6 +61,8 @@ dependencies:
   bubble: ^1.1.9+1
   syncfusion_flutter_charts: ^18.3.42
   kakao_flutter_sdk: ^0.5.2
+  countup: ^0.1.3
+  rxdart: ^0.24.1
   # firebase_auth_simplify: ^1.3.0
 
   firebase_admob: ^0.10.2

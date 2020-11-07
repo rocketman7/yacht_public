@@ -32,6 +32,7 @@ abstract class StateManageService {
 
   Future<void> userModelUpdate();
   Future<void> userVoteModelUpdate();
+  setMyState();
 }
 
 class StateManageServiceFirebase extends StateManageService {
@@ -68,6 +69,11 @@ class StateManageServiceFirebase extends StateManageService {
   List<RankModel> get rankModel => _rankModel;
 
   String get myState => _myState;
+
+  setMyState() {
+    _myState = null;
+  }
+
   bool get appStart => _appStart;
 
   // method
@@ -82,6 +88,7 @@ class StateManageServiceFirebase extends StateManageService {
 
   @override
   Future<void> getAllModels() async {
+    uid = _authService.auth.currentUser.uid;
     _stateManageModel = await _databaseService.getStateManage();
 
     // total -> 7개 불러와야
