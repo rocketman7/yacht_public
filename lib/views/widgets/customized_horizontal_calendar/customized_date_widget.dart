@@ -89,7 +89,7 @@ class DateWidget extends StatelessWidget {
       onLongPress: isDisabled ? null : onLongTap,
       child: Container(
         width: width,
-        height: height - 18,
+        height: height * 3.7 / 5,
         decoration: isSelected
             ? selectedDecoration
             : isDisabled
@@ -105,9 +105,14 @@ class DateWidget extends StatelessWidget {
                 width: width * (1 / 3),
                 color: Colors.white,
               ),
+              // Container(
+              //   height: 9,
+              //   color: Colors.red,
+              // ),
               SizedBox(
-                height: 10,
+                height: 12.h,
               ),
+
               ...labelOrder.map((type) {
                 Text text;
                 switch (type) {
@@ -135,7 +140,7 @@ class DateWidget extends StatelessWidget {
                     break;
                 }
                 return text;
-              }).toList(growable: false)
+              }).toList(growable: false),
             ],
           ),
         ),

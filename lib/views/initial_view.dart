@@ -31,7 +31,7 @@ class _InitialViewState extends State<InitialView> {
               : StreamBuilder<User>(
                   stream: model.getAuthChange(),
                   builder: (context, snapshot) {
-                    print(model.isTwoFactorAuthed);
+                    // print(model.isTwoFactorAuthed);
                     if (!snapshot.hasData) {
                       print("nodata");
                       return Scaffold(

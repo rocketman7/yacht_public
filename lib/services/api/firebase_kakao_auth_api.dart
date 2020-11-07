@@ -37,26 +37,29 @@ class FirebaseKakaoAuthAPI implements BaseAuthAPI {
 
       await _updateEmailInfo(firebaseUser);
       var userDatabase = await _databaseService.getUser(currentUser.uid);
-      if (userDatabase == null) {
-        var rng = Random();
-        UserModel _currentUserModel = UserModel(
-          uid: firebaseUser.uid,
-          userName: firebaseUser.displayName,
-          email: firebaseUser.email,
-          phoneNumber: firebaseUser.phoneNumber,
-          friendsCode: null,
-          item: 10,
-          avatarImage: "avatar00" + (rng.nextInt(9) + 1).toString(),
-          accNumber: null,
-          accName: null,
-          secName: null,
-        );
+      print("User Auth = " + currentUser.toString());
+      print("User Database = " + userDatabase.toString());
+      // if (userDatabase == null) {
+      //   print("User Database = " + userDatabase.toString());
+      //   var rng = Random();
+      //   UserModel _currentUserModel = UserModel(
+      //     uid: firebaseUser.uid,
+      //     userName: firebaseUser.displayName,
+      //     email: firebaseUser.email,
+      //     phoneNumber: firebaseUser.phoneNumber,
+      //     friendsCode: null,
+      //     item: 10,
+      //     avatarImage: "avatar00" + (rng.nextInt(9) + 1).toString(),
+      //     accNumber: null,
+      //     accName: null,
+      //     secName: null,
+      //   );
 
-        // await authResult.user.sendEmailVerification();
+      //   // await authResult.user.sendEmailVerification();
 
-        // Database에 User정보 넣기
-        await _databaseService.createUser(_currentUserModel);
-      }
+      //   // Database에 User정보 넣기
+      //   await _databaseService.createUser(_currentUserModel);
+      // }
 
       return authResult;
     } on KakaoAuthException catch (e) {

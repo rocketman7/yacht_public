@@ -1,4 +1,5 @@
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/services/api/firebase_kakao_auth_api.dart';
 
 import '../services/sharedPreferences_service.dart';
 import '../services/stateManage_service.dart';
@@ -58,10 +59,12 @@ class MypageMainViewModel extends FutureViewModel {
     //     buttonTitle: '네',
     //     cancelTitle: '아니오');
     // if (dialogResult.confirmed) {
-    _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
+    // _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
+    _stateManageService.setMyState();
+    FirebaseKakaoAuthAPI().signOut();
     _authService.signOut();
 
-    _navigationService.popAndNavigateWithArgTo('initial');
+    // _navigationService.popAndNavigateWithArgTo('initial');
     // }
   }
 

@@ -30,6 +30,7 @@ import '../views/loading_view.dart';
 import '../views/widgets/navigation_bars_widget.dart';
 import '../views/widgets/vote_card_widget.dart';
 import '../views/widgets/vote_selected_widget.dart';
+import 'chart_view.dart';
 
 class VoteSelectV2View extends StatefulWidget {
   @override
@@ -221,7 +222,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
     // _nowToStr = "20200901"; //temp for test
 
     // print(_now.toString() + " and " + _nowToStr);
-    print(_getAllModel);
+    // print(_getAllModel);
     // 오늘의 주제, 선택된 주제 위젯 만들기 위해 initState에 vote 데이터 db에서 불러옴
     // print("Async start");
 
@@ -341,6 +342,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
           String strDurationSec =
               "${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
           return Scaffold(
+            backgroundColor: Color(0xFF1EC8CF),
             key: scaffoldKey,
             body: WillPopScope(
               onWillPop: () async {
@@ -350,302 +352,395 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
               child: Stack(
                 children: [
                   SafeArea(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        16.w,
-                        16.h,
-                        16.w,
-                        16.h,
-                      ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Column(
-                            children: <Widget>[
-                              Container(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(
+                                16.w,
+                                // 16.h,
+                                0,
+                                16.w,
+                                16.h,
+                              ),
+                              child: Container(
                                 // padding: EdgeInsets.only(bottom: 40),
-                                // color: Colors.green[50],
+                                // color: Color(0xFF1EC8CF),
                                 width: double.infinity,
                                 // height: 180.h,
                                 child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Icon(
+                                        Icons.dehaze_rounded,
+                                        size: 32.sp,
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          // color: Colors.yellow,
+                                          child: Row(
+                                            // crossAxisAlignment:
+                                            //     CrossAxisAlignment.stretch,
                                             children: <Widget>[
-                                              Text(
-                                                "상금 가치",
-                                                style: TextStyle(
-                                                  fontSize: 20.sp,
-                                                  fontFamily: 'AppleSDB',
-                                                  letterSpacing: -1.0,
-                                                ),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  _navigationService
-                                                      .navigateTo('portfolio');
-                                                },
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    // Bubble(
-                                                    //   shadowColor: Colors.red,
-                                                    //   margin: BubbleEdges.only(
-                                                    //       top: 10),
-                                                    //   nip: BubbleNip.rightTop,
-                                                    //   nipWidth: 10,
-                                                    //   color: Color(0xFF56A4FF),
-                                                    //   child: Text(
-                                                    //     "목표 승점에 먼저 도달하면,",
-                                                    //     style: TextStyle(
-                                                    //       fontSize: 12.sp,
-                                                    //       color: Colors.white,
-                                                    //       fontFamily:
-                                                    //           'AppleSDM',
-                                                    //       letterSpacing: -1.0,
-                                                    //     ),
-                                                    //   ),
-                                                    // ),
-                                                    // SizedBox(
-                                                    //   width: 4.w,
-                                                    // ),
+                                              Container(
+                                                // color: Colors.red,
+                                                child: Column(
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/icons/trophy.png',
+                                                      // color: Colors.red,
+                                                      height: 70,
+                                                      width: 70,
+                                                    ),
                                                     Text(
-                                                        '₩ ${model.getPortfolioValue()}',
-                                                        style: TextStyle(
-                                                          fontSize: 20.sp,
+                                                      "시즌 1",
+                                                      style: TextStyle(
                                                           fontFamily:
-                                                              'AppleSDB',
-                                                          letterSpacing: -1.0,
-                                                        )),
-                                                    SizedBox(
-                                                      width: 8.sp,
+                                                              'AppleSDL',
+                                                          fontSize: 16,
+                                                          letterSpacing: -1.5),
                                                     ),
-                                                    Icon(
-                                                      Icons.arrow_forward_ios,
-                                                      size: 16,
-                                                    )
                                                   ],
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 4.sp,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              _navigationService
-                                                  .navigateWithArgTo(
-                                                      'startup', 2);
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Text(
-                                                  "현재 / 목표 승점",
-                                                  style: TextStyle(
-                                                    fontSize: 20.sp,
-                                                    fontFamily: 'AppleSDB',
-                                                    letterSpacing: -1.0,
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      (model.userVote.userVoteStats
-                                                                      .currentWinPoint ==
-                                                                  null
-                                                              ? 0.toString()
-                                                              : model
-                                                                  .userVote
-                                                                  .userVoteStats
-                                                                  .currentWinPoint
-                                                                  .toString()) +
-                                                          "   /   " +
-                                                          (model.seasonInfo ==
-                                                                  null
-                                                              ? 0.toString()
-                                                              : model.seasonInfo
-                                                                  .winningPoint
-                                                                  .toString()),
-                                                      style: TextStyle(
-                                                        fontSize: 20.sp,
-                                                        fontFamily: 'AppleSDB',
-                                                        letterSpacing: -1.0,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 8.sp,
-                                                    ),
-                                                    Icon(
-                                                      Icons.arrow_forward_ios,
-                                                      size: 16.sp,
-                                                    )
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 4.sp,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              _navigationService
-                                                  .navigateTo('trackRecord');
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: <Widget>[
-                                                Text(
-                                                  "나의 예측 기록",
-                                                  style: TextStyle(
-                                                    fontSize: 20.sp,
-                                                    fontFamily: 'AppleSDB',
-                                                    letterSpacing: -1.0,
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "                    ",
-                                                      style: TextStyle(
-                                                        fontSize: 20.sp,
-                                                        fontFamily: 'AppleSDB',
-                                                        letterSpacing: -1.0,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 8.sp,
-                                                    ),
-                                                    // ),
-                                                    // GestureDetector(
-                                                    //     onTap: () {
-                                                    //       _navigationService
-                                                    //           .navigateTo(
-                                                    //               'trackRecord');
-                                                    //     },
-                                                    //     child: Container(
-                                                    //         width: 100)),
-                                                    Icon(
-                                                      Icons.arrow_forward_ios,
-                                                      size: 16.sp,
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(thickness: 1),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          TopContainer(model, checkVoteTime),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "예측마감까지 남은 시간",
-                                                style: TextStyle(
-                                                  // fontFamily: 'Akrhip',
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                  letterSpacing: -1,
                                                 ),
                                               ),
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                    width: 25.w,
-                                                    height: 25.h,
-                                                    padding: EdgeInsets.all(4),
-                                                    // decoration: BoxDecoration(
-                                                    //     borderRadius: BorderRadius.all(
-                                                    //         Radius.circular(100.0)),
-                                                    //     color: Color(0xFF1EC8CF),
-                                                    //     border: Border.all(
-                                                    //         color: Colors.white,
-                                                    //         width: 2)),
-                                                    child: SvgPicture.asset(
-                                                      'assets/icons/dog_foot.svg',
-                                                      color: Color(0xFF1EC8CF),
+                                              SizedBox(
+                                                width: 16,
+                                              ),
+                                              Container(
+                                                // color: Colors.red,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "지금 노릴 수 있는 우승 상금은?",
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              'AppleSDL',
+                                                          fontSize: 16,
+                                                          letterSpacing: -1.5),
                                                     ),
-                                                  ),
-                                                  SizedBox(width: 4.w),
-                                                  Text(
-                                                    (model.user.item -
-                                                            numSelected)
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 20.sp,
-                                                      letterSpacing: -1.0,
-                                                      fontFamily: 'DmSans',
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                    SizedBox(height: 12),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "2,921,300",
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'DmSans',
+                                                            fontSize: 42,
+                                                            height: 1,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "원",
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'AppleSDM',
+                                                            fontSize: 24,
+                                                            height: 1,
+                                                            // fontWeight: FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        Icon(
+                                                          Icons
+                                                              .arrow_forward_ios,
+                                                          // color: Color(0xFFFFF5F5),
+                                                          size: 24.sp,
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               )
                                             ],
-                                          )
-                                        ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 28,
+                                        ),
+                                      ],
+                                    )
+
+                                    // Row(
+                                    //   mainAxisAlignment:
+                                    //       MainAxisAlignment.spaceBetween,
+                                    //   children: <Widget>[
+                                    //     Text(
+                                    //       "상금 가치",
+                                    //       style: TextStyle(
+                                    //         fontSize: 20.sp,
+                                    //         fontFamily: 'AppleSDB',
+                                    //         letterSpacing: -1.0,
+                                    //       ),
+                                    //     ),
+                                    //     GestureDetector(
+                                    //       onTap: () {
+                                    //         _navigationService
+                                    //             .navigateTo('portfolio');
+                                    //       },
+                                    //       child: Row(
+                                    //         children: <Widget>[
+                                    //           // Bubble(
+                                    //           //   shadowColor: Colors.red,
+                                    //           //   margin: BubbleEdges.only(
+                                    //           //       top: 10),
+                                    //           //   nip: BubbleNip.rightTop,
+                                    //           //   nipWidth: 10,
+                                    //           //   color: Color(0xFF56A4FF),
+                                    //           //   child: Text(
+                                    //           //     "목표 승점에 먼저 도달하면,",
+                                    //           //     style: TextStyle(
+                                    //           //       fontSize: 12.sp,
+                                    //           //       color: Colors.white,
+                                    //           //       fontFamily:
+                                    //           //           'AppleSDM',
+                                    //           //       letterSpacing: -1.0,
+                                    //           //     ),
+                                    //           //   ),
+                                    //           // ),
+                                    //           // SizedBox(
+                                    //           //   width: 4.w,
+                                    //           // ),
+                                    //           Text(
+                                    //               '₩ ${model.getPortfolioValue()}',
+                                    //               style: TextStyle(
+                                    //                 fontSize: 20.sp,
+                                    //                 fontFamily: 'AppleSDB',
+                                    //                 letterSpacing: -1.0,
+                                    //               )),
+                                    //           SizedBox(
+                                    //             width: 8.sp,
+                                    //           ),
+                                    //           Icon(
+                                    //             Icons.arrow_forward_ios,
+                                    //             size: 16,
+                                    //           )
+                                    //         ],
+                                    //       ),
+                                    //     )
+                                    //   ],
+                                    // ),
+                                    // SizedBox(
+                                    //   height: 4.sp,
+                                    // ),
+                                    // GestureDetector(
+                                    //   onTap: () {
+                                    //     _navigationService.navigateWithArgTo(
+                                    //         'startup', 2);
+                                    //   },
+                                    //   child: Row(
+                                    //     mainAxisAlignment:
+                                    //         MainAxisAlignment.spaceBetween,
+                                    //     children: <Widget>[
+                                    //       Text(
+                                    //         "현재 / 목표 승점",
+                                    //         style: TextStyle(
+                                    //           fontSize: 20.sp,
+                                    //           fontFamily: 'AppleSDB',
+                                    //           letterSpacing: -1.0,
+                                    //         ),
+                                    //       ),
+                                    //       Row(
+                                    //         children: [
+                                    //           Text(
+                                    //             (model.userVote.userVoteStats
+                                    //                             .currentWinPoint ==
+                                    //                         null
+                                    //                     ? 0.toString()
+                                    //                     : model
+                                    //                         .userVote
+                                    //                         .userVoteStats
+                                    //                         .currentWinPoint
+                                    //                         .toString()) +
+                                    //                 "   /   " +
+                                    //                 (model.seasonInfo == null
+                                    //                     ? 0.toString()
+                                    //                     : model.seasonInfo
+                                    //                         .winningPoint
+                                    //                         .toString()),
+                                    //             style: TextStyle(
+                                    //               fontSize: 20.sp,
+                                    //               fontFamily: 'AppleSDB',
+                                    //               letterSpacing: -1.0,
+                                    //             ),
+                                    //           ),
+                                    //           SizedBox(
+                                    //             width: 8.sp,
+                                    //           ),
+                                    //           Icon(
+                                    //             Icons.arrow_forward_ios,
+                                    //             size: 16.sp,
+                                    //           )
+                                    //         ],
+                                    //       )
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    // SizedBox(
+                                    //   height: 4.sp,
+                                    // ),
+                                    // GestureDetector(
+                                    //   onTap: () {
+                                    //     _navigationService
+                                    //         .navigateTo('trackRecord');
+                                    //   },
+                                    //   child: Row(
+                                    //     mainAxisAlignment:
+                                    //         MainAxisAlignment.spaceBetween,
+                                    //     children: <Widget>[
+                                    //       Text(
+                                    //         "나의 예측 기록",
+                                    //         style: TextStyle(
+                                    //           fontSize: 20.sp,
+                                    //           fontFamily: 'AppleSDB',
+                                    //           letterSpacing: -1.0,
+                                    //         ),
+                                    //       ),
+                                    //       Row(
+                                    //         children: [
+                                    //           Text(
+                                    //             "                    ",
+                                    //             style: TextStyle(
+                                    //               fontSize: 20.sp,
+                                    //               fontFamily: 'AppleSDB',
+                                    //               letterSpacing: -1.0,
+                                    //             ),
+                                    //           ),
+                                    //           SizedBox(
+                                    //             width: 8.sp,
+                                    //           ),
+                                    //           // ),
+                                    //           // GestureDetector(
+                                    //           //     onTap: () {
+                                    //           //       _navigationService
+                                    //           //           .navigateTo(
+                                    //           //               'trackRecord');
+                                    //           //     },
+                                    //           //     child: Container(
+                                    //           //         width: 100)),
+                                    //           Icon(
+                                    //             Icons.arrow_forward_ios,
+                                    //             size: 16.sp,
+                                    //           )
+                                    //         ],
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(
+                                  24.w,
+                                  32.h,
+                                  24.w,
+                                  16.h,
+                                ),
+                                // color: Colors.white,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(40),
+                                      topRight: Radius.circular(40)),
+                                  color: Colors.white,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "11월 14일 예측 주제",
+                                      style: TextStyle(
+                                        fontFamily: 'AppleSDB',
+                                        fontSize: 24,
+                                        height: 1,
+                                        // fontWeight: FontWeight.bold,
                                       ),
-                                    ]),
-                              ),
-                              // Row(
-                              //   mainAxisAlignment: MainAxisAlignment.end,
-                              //   children: [
-                              //     Text(
-                              //       "승점 ",
-                              //       style: TextStyle(
-                              //         fontSize: 16,
-                              //         letterSpacing: -1.0,
-                              //         fontFamily: 'DmSans',
-                              //         fontWeight: FontWeight.bold,
-                              //       ),
-                              //     ),
-                              //     Text(
-                              //       numSelected.toString(),
-                              //       style: TextStyle(
-                              //         fontSize: 16,
-                              //         letterSpacing: -1.0,
-                              //         fontFamily: 'DmSans',
-                              //         fontWeight: FontWeight.bold,
-                              //       ),
-                              //     ),
-                              //     Text(
-                              //       "점 도전",
-                              //       style: TextStyle(
-                              //         fontSize: 16,
-                              //         letterSpacing: -1.0,
-                              //         fontFamily: 'DmSans',
-                              //         fontWeight: FontWeight.bold,
-                              //       ),
-                              //     )
-                              //   ],
-                              // ),
-                              SizedBox(
-                                height: 8.h,
-                              ),
-                              Expanded(
-                                  child: Container(
-                                // color: Colors.black,
+                                    ),
+                                    SizedBox(height: 12),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "예측 마감까지",
+                                          style: TextStyle(
+                                            fontFamily: 'AppleSDM',
+                                            fontSize: 16.sp,
+
+                                            // fontWeight: FontWeight.w500,
+                                            letterSpacing: -1,
+                                          ),
+                                        ),
+                                        Text(
+                                          "남은 예측 기회",
+                                          style: TextStyle(
+                                            fontFamily: 'AppleSDM',
+                                            fontSize: 16.sp,
+
+                                            // fontWeight: FontWeight.w500,
+                                            letterSpacing: -1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TopContainer(model, checkVoteTime),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              width: 32,
+                                              height: 32,
+                                              padding: EdgeInsets.all(4),
+                                              // decoration: BoxDecoration(
+                                              //     borderRadius: BorderRadius.all(
+                                              //         Radius.circular(100.0)),
+                                              //     color: Color(0xFF1EC8CF),
+                                              //     border: Border.all(
+                                              //         color: Colors.white,
+                                              //         width: 2)),
+                                              child: SvgPicture.asset(
+                                                'assets/icons/dog_foot.svg',
+                                                color: Color(0xFF1EC8CF),
+                                              ),
+                                            ),
+                                            SizedBox(width: 4.w),
+                                            Text(
+                                              (model.user.item - numSelected)
+                                                  .toString(),
+                                              style: TextStyle(
+                                                fontSize: 26.sp,
+                                                letterSpacing: -1.0,
+                                                fontFamily: 'DmSans',
+                                                // fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        // height: 300,
+                                        // color: Colors.black,
 // child: SingleChildScrollView(
 //                                 clipBehavior: Clip.antiAliasWithSaveLayer,
 //                                 physics: BouncingScrollPhysics(
@@ -653,87 +748,133 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
 //                                     parent: AlwaysScrollableScrollPhysics()),
 //                                 // physics: (),
 //                                 child: Container(
-                                // height: 550,
-                                child: ListView.builder(
-                                    // physics: NeverScrollableScrollPhysics(),
-                                    itemCount: model.vote.voteCount,
-                                    itemBuilder: (context, index) {
-                                      return buildStack(
-                                        model,
-                                        index,
-                                        context,
-                                        numSelected,
-                                        scaffoldKey,
-                                        diff,
-                                      );
-                                    }),
-                              )),
-                            ],
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: GestureDetector(
-                              onTap: ((numSelected == 0) ||
-                                      (model.userVote == null
-                                          ? false
-                                          : (model.address.isVoting == false)))
-                                  ? () {}
-                                  : () {
-                                      listSelected = [];
-                                      for (int i = 0;
-                                          i < selected.length;
-                                          i++) {
-                                        selected[i] == true
-                                            ? listSelected.add(i)
-                                            : 0;
-                                      }
+                                        // height: 550,
+                                        child: ListView.builder(
+                                            // physics: NeverScrollableScrollPhysics(),
+                                            itemCount: model.vote.voteCount,
+                                            itemBuilder: (context, index) {
+                                              return buildStack(
+                                                model,
+                                                index,
+                                                context,
+                                                numSelected,
+                                                scaffoldKey,
+                                                diff,
+                                              );
+                                            }),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.end,
+                            //   children: [
+                            //     Text(
+                            //       "승점 ",
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //         letterSpacing: -1.0,
+                            //         fontFamily: 'DmSans',
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       numSelected.toString(),
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //         letterSpacing: -1.0,
+                            //         fontFamily: 'DmSans',
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       "점 도전",
+                            //       style: TextStyle(
+                            //         fontSize: 16,
+                            //         letterSpacing: -1.0,
+                            //         fontFamily: 'DmSans',
+                            //         fontWeight: FontWeight.bold,
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
 
-                                      _navigationService
-                                          .navigateWithArgTo('ggook', [
-                                        model.address,
-                                        model.user,
-                                        model.vote,
-                                        listSelected,
-                                        0,
-                                      ]);
-                                    },
+                            // Expanded(
+                            //     child:
+                            // )),
+                          ],
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: ((numSelected == 0) ||
+                                    (model.userVote == null
+                                        ? false
+                                        : (model.address.isVoting == false)))
+                                ? () {}
+                                : () {
+                                    listSelected = [];
+                                    for (int i = 0; i < selected.length; i++) {
+                                      selected[i] == true
+                                          ? listSelected.add(i)
+                                          : 0;
+                                    }
+
+                                    _navigationService
+                                        .navigateWithArgTo('ggook', [
+                                      model.address,
+                                      model.user,
+                                      model.vote,
+                                      listSelected,
+                                      0,
+                                    ]);
+                                  },
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 24.w,
+                                vertical: 10,
+                              ),
                               child: Container(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 32.w,
                                 ),
                                 height: 70.h,
                                 decoration: BoxDecoration(
-                                    // color: (model.address.isVoting == false ||
-                                    //         model.userVote.isVoted)
-                                    //     ? Color(0xFFC1C1C1)
-                                    //     : Colors.black,
-                                    gradient: model.address.isVoting == true
-                                        ? LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            stops: [
-                                              0,
-                                              0.8,
-                                            ],
-                                            colors: [
-                                              Color(0xFF00FF5B),
-                                              Color(0xFF3E4CEE)
-                                            ],
-                                          )
-                                        : LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            // stops: [
-                                            //   0,
-                                            //   0.8,
-                                            // ],
-                                            colors: [
-                                              Colors.grey,
-                                              Colors.grey,
-                                            ],
-                                          ),
+                                    color:
+                                        // (model.address.isVoting == false ||
+                                        //         model.userVote.isVoted)
+                                        // ? Color(0xFFC1C1C1)
+                                        // : Colors.black,
+                                        Color(0xFF1EC8CF),
+                                    // gradient: model.address.isVoting == true
+                                    //     ? LinearGradient(
+                                    //         begin: Alignment.topLeft,
+                                    //         end: Alignment.bottomRight,
+                                    //         stops: [
+                                    //           0,
+                                    //           0.8,
+                                    //         ],
+                                    //         colors: [
+                                    //           Color(0xFF00FF5B),
+                                    //           Color(0xFF3E4CEE)
+                                    //         ],
+                                    //       )
+                                    //     : LinearGradient(
+                                    //         begin: Alignment.topLeft,
+                                    //         end: Alignment.bottomRight,
+                                    //         // stops: [
+                                    //         //   0,
+                                    //         //   0.8,
+                                    //         // ],
+                                    //         colors: [
+                                    //           Colors.grey,
+                                    //           Colors.grey,
+                                    //         ],
+                                    //       ),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black.withOpacity(.1),
@@ -767,43 +908,43 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                               ),
                             ),
                           ),
-                          Positioned(
-                            bottom: 60.h,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8.h,
-                                vertical: 4.w,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4)),
-                                color: (model.address.isVoting == false)
-                                    ? Color(0xFFE41818)
-                                    : numSelected == 0
-                                        ? Color(0xFFFFDE34)
-                                        : Color(0xFFFF5D02),
-                              ),
-                              child: Text(
-                                  model.address.isVoting == false
-                                      ? "오늘의 예측이 마감되었습니다."
-                                      : numSelected == 0
-                                          ? "최대 3개의 주제를 선택하여 승점에 도전해보세요!"
-                                          : "선택한 주제 $numSelected개, 승점 ${numSelected * 2}점에 도전해보세요!",
-                                  style: TextStyle(
-                                    fontSize: numSelected == 0 ? 14.sp : 16.sp,
-                                    fontFamily: 'AppleSDB',
-                                    height: 1.2.h,
-                                    // fontWeight: FontWeight.w500,
-                                    color: (model.address.isVoting == false)
-                                        ? Colors.white
-                                        : numSelected == 0
-                                            ? Colors.black
-                                            : Color(0xFFFFF5F1),
-                                  )),
+                        ),
+                        Positioned(
+                          bottom: 60,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.h,
+                              vertical: 4.w,
                             ),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4)),
+                              color: (model.address.isVoting == false)
+                                  ? Color(0xFFE41818)
+                                  : numSelected == 0
+                                      ? Color(0xFFFFDE34)
+                                      : Color(0xFFFF5D02),
+                            ),
+                            child: Text(
+                                model.address.isVoting == false
+                                    ? "오늘의 예측이 마감되었습니다."
+                                    : numSelected == 0
+                                        ? "최대 3개의 주제를 선택하여 승점에 도전해보세요!"
+                                        : "선택한 주제 $numSelected개, 승점 ${numSelected * 2}점에 도전해보세요!",
+                                style: TextStyle(
+                                  fontSize: numSelected == 0 ? 14.sp : 16.sp,
+                                  fontFamily: 'AppleSDB',
+                                  height: 1.2.h,
+                                  // fontWeight: FontWeight.w500,
+                                  color: (model.address.isVoting == false)
+                                      ? Colors.white
+                                      : numSelected == 0
+                                          ? Colors.black
+                                          : Color(0xFFFFF5F1),
+                                )),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   model.voteSelectTutorial
@@ -840,8 +981,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
 
     TextStyle voteTitle = TextStyle(
       color: Colors.black,
-      fontFamily: 'AppleSDEB',
-      fontSize: 20.sp,
+      fontFamily: 'AppleSDM',
+      fontSize: 24.sp,
+      height: 1,
     );
 
     return Stack(
@@ -853,261 +995,249 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
               padding: EdgeInsets.only(left: 0.0.w),
               child: GestureDetector(
                 onTap: () {
-                  buildModalBottomSheet(
+                  // buildModalBottomSheet(
+                  //     context, hexToColor, model, idx, numOfChoices, diff);
+                  callNewModalBottomSheet(
                       context, hexToColor, model, idx, numOfChoices, diff);
                 },
                 child: Container(
                   color: Colors.white.withOpacity(0),
-                  height: 75.h,
+                  // color: Colors.red,
+                  height: 75,
                   // decoration: BoxDecoration(border: Border.all(width: 0.3)),
-                  child: Row(
-                    // crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      numOfChoices == 1
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  model.vote.subVotes[idx].title,
-                                  style: voteTitle,
-                                ),
-                                model.address.isVoting
-                                    ? Container()
-                                    : StreamBuilder(
-                                        stream: model.getRealtimePrice(
-                                            model.address,
-                                            model.vote.subVotes[idx]
-                                                .issueCode[0]),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.data == null) {
-                                            return Center(child: Container());
-                                          } else {
-                                            PriceModel price0;
-                                            price0 = snapshot.data;
-                                            return price0.pricePctChange < 0
-                                                ? Text(
-                                                    formatPrice
-                                                            .format(
-                                                                price0.price)
-                                                            .toString() +
-                                                        " (" +
-                                                        formatReturnPct
-                                                            .format(price0
-                                                                .pricePctChange)
-                                                            .toString() +
-                                                        ")",
-                                                    style: TextStyle(
-                                                      color: Color(0xFF3485FF),
-                                                      fontSize: 16,
-                                                    ),
-                                                  )
-                                                : Text(
-                                                    formatPrice
-                                                            .format(
-                                                                price0.price)
-                                                            .toString() +
-                                                        " (+" +
-                                                        formatReturnPct
-                                                            .format(price0
-                                                                .pricePctChange)
-                                                            .toString() +
-                                                        ")",
-                                                    style: TextStyle(
-                                                      color: Color(0xFFFF3E3E),
-                                                      fontSize: 16,
-                                                    ),
-                                                  );
-                                          }
-                                        },
-                                      )
-                              ],
-                            )
-                          : Expanded(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 50),
+                    child: Row(
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        numOfChoices == 1
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(
-                                    width: 5.w,
-                                  ),
-                                  Flexible(
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        // mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Text(
-                                            model.vote.subVotes[idx]
-                                                .voteChoices[0],
-                                            style: voteTitle,
-                                          ),
-                                          model.address.isVoting
-                                              ? Container()
-                                              : StreamBuilder(
-                                                  stream:
-                                                      model.getRealtimePrice(
-                                                          model.address,
-                                                          model
-                                                              .vote
-                                                              .subVotes[idx]
-                                                              .issueCode[0]),
-                                                  builder: (context, snapshot) {
-                                                    if (snapshot.data == null) {
-                                                      return Center(
-                                                          child: Container());
-                                                    } else {
-                                                      PriceModel price0;
-                                                      price0 = snapshot.data;
-                                                      return price0
-                                                                  .pricePctChange <
-                                                              0
-                                                          ? Text(
-                                                              formatPrice
-                                                                      .format(price0
-                                                                          .price)
-                                                                      .toString() +
-                                                                  " (" +
-                                                                  formatReturnPct
-                                                                      .format(price0
-                                                                          .pricePctChange)
-                                                                      .toString() +
-                                                                  ")",
-                                                              style: TextStyle(
-                                                                color: Color(
-                                                                    0xFF3485FF),
-                                                                fontSize: 16,
-                                                              ),
-                                                            )
-                                                          : Text(
-                                                              formatPrice
-                                                                      .format(price0
-                                                                          .price)
-                                                                      .toString() +
-                                                                  " (+" +
-                                                                  formatReturnPct
-                                                                      .format(price0
-                                                                          .pricePctChange)
-                                                                      .toString() +
-                                                                  ")",
-                                                              style: TextStyle(
-                                                                color: Color(
-                                                                    0xFFFF3E3E),
-                                                                fontSize: 16,
-                                                              ),
-                                                            );
-                                                    }
-                                                  },
-                                                )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
                                   Text(
-                                    model.address.isVoting
-                                        ? "    vs    "
-                                        : "   vs   ",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'AppleSDEB',
-                                      fontSize: 16.sp,
-                                    ),
+                                    model.vote.subVotes[idx].title,
+                                    style: voteTitle,
                                   ),
-                                  Flexible(
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            model.vote.subVotes[idx]
-                                                .voteChoices[1],
-                                            style: voteTitle,
-                                          ),
-                                          model.address.isVoting
-                                              ? Container()
-                                              : StreamBuilder(
-                                                  stream:
-                                                      model.getRealtimePrice(
-                                                          model.address,
-                                                          model
-                                                              .vote
-                                                              .subVotes[idx]
-                                                              .issueCode[1]),
-                                                  builder:
-                                                      (context, snapshot1) {
-                                                    if (snapshot1.data ==
-                                                        null) {
-                                                      return Center(
-                                                          child: Container());
-                                                    } else {
-                                                      PriceModel price1;
-                                                      price1 = snapshot1.data;
-                                                      return price1
-                                                                  .pricePctChange <
-                                                              0
-                                                          ? Text(
-                                                              formatPrice
-                                                                      .format(price1
-                                                                          .price)
-                                                                      .toString() +
-                                                                  " (" +
-                                                                  formatReturnPct
-                                                                      .format(price1
-                                                                          .pricePctChange)
-                                                                      .toString() +
-                                                                  ")",
-                                                              style: TextStyle(
-                                                                color: Color(
-                                                                    0xFF3485FF),
-                                                                fontSize: 16,
-                                                              ),
-                                                            )
-                                                          : Text(
-                                                              formatPrice
-                                                                      .format(price1
-                                                                          .price)
-                                                                      .toString() +
-                                                                  " (+" +
-                                                                  formatReturnPct
-                                                                      .format(price1
-                                                                          .pricePctChange)
-                                                                      .toString() +
-                                                                  ")",
-                                                              style: TextStyle(
-                                                                color: Color(
-                                                                    0xFFFF3E3E),
-                                                                fontSize: 16,
-                                                              ),
-                                                            );
-                                                    }
-                                                  },
-                                                )
-                                        ],
+                                  model.address.isVoting
+                                      ? Container()
+                                      : StreamBuilder(
+                                          stream: model.getRealtimePrice(
+                                              model.address,
+                                              model.vote.subVotes[idx]
+                                                  .issueCode[0]),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.data == null) {
+                                              return Center(child: Container());
+                                            } else {
+                                              PriceModel price0;
+                                              price0 = snapshot.data;
+                                              return price0.pricePctChange < 0
+                                                  ? Text(
+                                                      formatPrice
+                                                              .format(
+                                                                  price0.price)
+                                                              .toString() +
+                                                          " (" +
+                                                          formatReturnPct
+                                                              .format(price0
+                                                                  .pricePctChange)
+                                                              .toString() +
+                                                          ")",
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xFF3485FF),
+                                                        fontSize: 16,
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                      formatPrice
+                                                              .format(
+                                                                  price0.price)
+                                                              .toString() +
+                                                          " (+" +
+                                                          formatReturnPct
+                                                              .format(price0
+                                                                  .pricePctChange)
+                                                              .toString() +
+                                                          ")",
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xFFFF3E3E),
+                                                        fontSize: 16,
+                                                      ),
+                                                    );
+                                            }
+                                          },
+                                        )
+                                ],
+                              )
+                            : Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      // mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          model.vote.subVotes[idx]
+                                              .voteChoices[0],
+                                          style: voteTitle,
+                                        ),
+                                        model.address.isVoting
+                                            ? Container()
+                                            : StreamBuilder(
+                                                stream: model.getRealtimePrice(
+                                                    model.address,
+                                                    model.vote.subVotes[idx]
+                                                        .issueCode[0]),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.data == null) {
+                                                    return Center(
+                                                        child: Container());
+                                                  } else {
+                                                    PriceModel price0;
+                                                    price0 = snapshot.data;
+                                                    return price0
+                                                                .pricePctChange <
+                                                            0
+                                                        ? Text(
+                                                            formatPrice
+                                                                    .format(price0
+                                                                        .price)
+                                                                    .toString() +
+                                                                " (" +
+                                                                formatReturnPct
+                                                                    .format(price0
+                                                                        .pricePctChange)
+                                                                    .toString() +
+                                                                ")",
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF3485FF),
+                                                              fontSize: 16,
+                                                            ),
+                                                          )
+                                                        : Text(
+                                                            formatPrice
+                                                                    .format(price0
+                                                                        .price)
+                                                                    .toString() +
+                                                                " (+" +
+                                                                formatReturnPct
+                                                                    .format(price0
+                                                                        .pricePctChange)
+                                                                    .toString() +
+                                                                ")",
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFFFF3E3E),
+                                                              fontSize: 16,
+                                                            ),
+                                                          );
+                                                  }
+                                                },
+                                              )
+                                      ],
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "VS",
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontFamily: 'AppleSDM',
+                                        fontSize: 24.sp,
+                                        height: 1,
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 5.w,
-                                  ),
-                                ],
+                                    SizedBox(width: 8),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          model.vote.subVotes[idx]
+                                              .voteChoices[1],
+                                          style: voteTitle,
+                                        ),
+                                        model.address.isVoting
+                                            ? Container()
+                                            : StreamBuilder(
+                                                stream: model.getRealtimePrice(
+                                                    model.address,
+                                                    model.vote.subVotes[idx]
+                                                        .issueCode[1]),
+                                                builder: (context, snapshot1) {
+                                                  if (snapshot1.data == null) {
+                                                    return Center(
+                                                        child: Container());
+                                                  } else {
+                                                    PriceModel price1;
+                                                    price1 = snapshot1.data;
+                                                    return price1
+                                                                .pricePctChange <
+                                                            0
+                                                        ? Text(
+                                                            formatPrice
+                                                                    .format(price1
+                                                                        .price)
+                                                                    .toString() +
+                                                                " (" +
+                                                                formatReturnPct
+                                                                    .format(price1
+                                                                        .pricePctChange)
+                                                                    .toString() +
+                                                                ")",
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF3485FF),
+                                                              fontSize: 16,
+                                                            ),
+                                                          )
+                                                        : Text(
+                                                            formatPrice
+                                                                    .format(price1
+                                                                        .price)
+                                                                    .toString() +
+                                                                " (+" +
+                                                                formatReturnPct
+                                                                    .format(price1
+                                                                        .pricePctChange)
+                                                                    .toString() +
+                                                                ")",
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFFFF3E3E),
+                                                              fontSize: 16,
+                                                            ),
+                                                          );
+                                                  }
+                                                },
+                                              )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 5.w,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
             Divider(
+              thickness: 1.5,
               height: 0.2,
             ),
           ],
@@ -1180,6 +1310,43 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
         ),
       ],
     );
+  }
+
+  Future callNewModalBottomSheet(
+    BuildContext context,
+    Color hexToColor(String code),
+    VoteSelectViewModel model,
+    int idx,
+    int numOfChoices,
+    Duration diff,
+  ) {
+    ScrollController controller;
+    StreamController scrollStreamCtrl = StreamController<double>();
+    return showModalBottomSheet(
+        backgroundColor: Colors.white,
+        context: context,
+        isScrollControlled: true,
+        builder: (
+          context,
+        ) =>
+            StreamBuilder<double>(
+                stream: scrollStreamCtrl.stream,
+                initialData: 0,
+                builder: (context, snapshot) {
+                  double offset = snapshot.data;
+                  if (offset < -10) {
+                    // Navigator.pop(context);
+                  }
+                  print(snapshot.data);
+                  return Container(
+                    height: deviceHeight * .83,
+                    // height: 250 + offset * 1.4,
+                    child: ChartView(
+                      // controller,
+                      scrollStreamCtrl,
+                    ),
+                  );
+                }));
   }
 
   Future buildModalBottomSheet(
