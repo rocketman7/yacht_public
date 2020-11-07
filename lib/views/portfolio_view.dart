@@ -56,30 +56,27 @@ class _PortfolioViewState extends State<PortfolioView>
         viewModelBuilder: () => PortfolioViewModel(),
         builder: (context, model, child) {
           if (model.isBusy) {
-            // return Scaffold(
-            //   body: Container(
-            //     height: deviceHeight,
-            //     width: deviceWidth,
-            //     child: Stack(
-            //       children: [
-            //         Positioned(
-            //           top: deviceHeight / 2 - 100,
-            //           child: Container(
-            //             height: 100,
-            //             width: deviceWidth,
-            //             child: FlareActor(
-            //               'assets/images/Loading.flr',
-            //               animation: 'loading',
-            //               fit: BoxFit.contain,
-            //             ),
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // );
             return Scaffold(
-              body: Container(),
+              body: Container(
+                height: deviceHeight,
+                width: deviceWidth,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: deviceHeight / 2 - 100,
+                      child: Container(
+                        height: 100,
+                        width: deviceWidth,
+                        child: FlareActor(
+                          'assets/images/Loading.flr',
+                          animation: 'loading',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             );
           } else {
             if (!_chartAnimationController.isCompleted)

@@ -106,11 +106,6 @@ class VoteCommentViewModel extends FutureViewModel {
     }
   }
 
-  // 앱이 처음시작되어 모든 모델들을 불러오기 전에 페이지에 진입하면 로딩뷰를 보여주고, 아니면 로딩뷰를 없앤다.
-  bool isFirstLoading() {
-    return _stateManageService.appStart;
-  }
-
   @override
   Future futureToRun() => getAllModel(uid);
 }

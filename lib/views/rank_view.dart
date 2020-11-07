@@ -24,28 +24,26 @@ class RankView extends StatelessWidget {
                       child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
                     )
                   : model.isBusy
-                      ? model.isFirstLoading()
-                          ? Container(
-                              height: deviceHeight,
-                              width: deviceWidth,
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    top: deviceHeight / 2 - 100,
-                                    child: Container(
-                                      height: 100,
-                                      width: deviceWidth,
-                                      child: FlareActor(
-                                        'assets/images/Loading.flr',
-                                        animation: 'loading',
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
+                      ? Container(
+                          height: deviceHeight,
+                          width: deviceWidth,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: deviceHeight / 2 - 100,
+                                child: Container(
+                                  height: 100,
+                                  width: deviceWidth,
+                                  child: FlareActor(
+                                    'assets/images/Loading.flr',
+                                    animation: 'loading',
+                                    fit: BoxFit.contain,
                                   ),
-                                ],
+                                ),
                               ),
-                            )
-                          : Container()
+                            ],
+                          ),
+                        )
                       : WillPopScope(
                           onWillPop: () async {
                             _navigatorKey.currentState.maybePop();
@@ -98,7 +96,7 @@ class RankView extends StatelessWidget {
                                                 fontWeight: FontWeight.bold,
                                               )),
                                         ],
-                                      )
+                                      ),
                                     ],
                                   ),
                                   SizedBox(

@@ -20,11 +20,15 @@ import 'views/startup_view.dart';
 import 'locator.dart';
 import 'services/navigation_service.dart';
 
+import 'services/adManager_service.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+
 void main() async {
   setupLocator();
   KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseAdMob.instance.initialize(appId: AdManager.appId);
 
   runApp(MyApp());
 }

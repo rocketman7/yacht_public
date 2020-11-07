@@ -58,16 +58,12 @@ class MypageMainViewModel extends FutureViewModel {
     //     buttonTitle: '네',
     //     cancelTitle: '아니오');
     // if (dialogResult.confirmed) {
+
     _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
     _authService.signOut();
 
     _navigationService.popAndNavigateWithArgTo('initial');
     // }
-  }
-
-  // 앱이 처음시작되어 모든 모델들을 불러오기 전에 페이지에 진입하면 로딩뷰를 보여주고, 아니면 로딩뷰를 없앤다.
-  bool isFirstLoading() {
-    return _stateManageService.appStart;
   }
 
   @override

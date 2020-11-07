@@ -106,28 +106,26 @@ class _VoteCommentViewState extends State<VoteCommentView>
         builder: (context, model, child) {
           if (model.isBusy) {
             return Scaffold(
-                body: model.isFirstLoading()
-                    ? Container(
-                        height: deviceHeight,
-                        width: deviceWidth,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              top: deviceHeight / 2 - 100,
-                              child: Container(
-                                height: 100,
-                                width: deviceWidth,
-                                child: FlareActor(
-                                  'assets/images/Loading.flr',
-                                  animation: 'loading',
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Container());
+                body: Container(
+              height: deviceHeight,
+              width: deviceWidth,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: deviceHeight / 2 - 100,
+                    child: Container(
+                      height: 100,
+                      width: deviceWidth,
+                      child: FlareActor(
+                        'assets/images/Loading.flr',
+                        animation: 'loading',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ));
           } else {
             return Scaffold(
               body: WillPopScope(
@@ -362,9 +360,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 ),
                 borderRadius: BorderRadius.circular(subVote.shape == null
                     ? 0
-                    : subVote.shape[0] == 'oval'
-                        ? 30
-                        : 0),
+                    : subVote.shape[0] == 'oval' ? 30 : 0),
                 color: hexToColor(
                   subVote.colorCode[0],
                 ),
@@ -394,25 +390,19 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   Container(
                     width: subVote.shape == null
                         ? 35
-                        : subVote.shape[0] == 'oval'
-                            ? 40
-                            : 35,
+                        : subVote.shape[0] == 'oval' ? 40 : 35,
                     height: subVote.shape == null
                         ? 35
-                        : subVote.shape[0] == 'oval'
-                            ? 40
-                            : 35,
+                        : subVote.shape[0] == 'oval' ? 40 : 35,
                     decoration: BoxDecoration(
                         border: Border.all(
                           width: 2,
                           color: Colors.black,
                         ),
-                        borderRadius:
-                            BorderRadius.circular(subVote.shape == null
+                        borderRadius: BorderRadius.circular(
+                            subVote.shape == null
                                 ? 0
-                                : subVote.shape[0] == 'oval'
-                                    ? 30
-                                    : 0),
+                                : subVote.shape[0] == 'oval' ? 30 : 0),
                         color: hexToColor(
                           subVote.colorCode[0],
                         )),
@@ -423,25 +413,19 @@ class _VoteCommentViewState extends State<VoteCommentView>
                       child: Container(
                         width: subVote.shape == null
                             ? 35
-                            : subVote.shape[1] == 'oval'
-                                ? 40
-                                : 35,
+                            : subVote.shape[1] == 'oval' ? 40 : 35,
                         height: subVote.shape == null
                             ? 35
-                            : subVote.shape[1] == 'oval'
-                                ? 40
-                                : 35,
+                            : subVote.shape[1] == 'oval' ? 40 : 35,
                         decoration: BoxDecoration(
                             border: Border.all(
                               width: 2,
                               color: Colors.black,
                             ),
-                            borderRadius:
-                                BorderRadius.circular(subVote.shape == null
+                            borderRadius: BorderRadius.circular(
+                                subVote.shape == null
                                     ? 0
-                                    : subVote.shape[1] == 'oval'
-                                        ? 30
-                                        : 0),
+                                    : subVote.shape[1] == 'oval' ? 30 : 0),
                             color: hexToColor(
                               subVote.colorCode[1],
                             )),

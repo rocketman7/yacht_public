@@ -31,6 +31,9 @@ import '../views/widgets/navigation_bars_widget.dart';
 import '../views/widgets/vote_card_widget.dart';
 import '../views/widgets/vote_selected_widget.dart';
 
+import '../services/adManager_service.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+
 class VoteSelectV2View extends StatefulWidget {
   @override
   _VoteSelectV2ViewState createState() => _VoteSelectV2ViewState();
@@ -309,28 +312,26 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
         // print(uid + 'from FutureViewModel');
         if (model.isBusy) {
           return Scaffold(
-              body: model.isFirstLoading()
-                  ? Container(
-                      height: deviceHeight,
-                      width: deviceWidth,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: deviceHeight / 2 - 100,
-                            child: Container(
-                              height: 100,
-                              width: deviceWidth,
-                              child: FlareActor(
-                                'assets/images/Loading.flr',
-                                animation: 'loading',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : Container());
+              body: Container(
+            height: deviceHeight,
+            width: deviceWidth,
+            child: Stack(
+              children: [
+                Positioned(
+                  top: deviceHeight / 2 - 100,
+                  child: Container(
+                    height: 100,
+                    width: deviceWidth,
+                    child: FlareActor(
+                      'assets/images/Loading.flr',
+                      animation: 'loading',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ));
         } else {
           print("IS VOTING ?? " + isVoting.toString());
           Duration diff = getTimeLeft(model).inSeconds < 0
@@ -569,38 +570,76 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                   letterSpacing: -1,
                                                 ),
                                               ),
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                    width: 25.w,
-                                                    height: 25.h,
-                                                    padding: EdgeInsets.all(4),
-                                                    // decoration: BoxDecoration(
-                                                    //     borderRadius: BorderRadius.all(
-                                                    //         Radius.circular(100.0)),
-                                                    //     color: Color(0xFF1EC8CF),
-                                                    //     border: Border.all(
-                                                    //         color: Colors.white,
-                                                    //         width: 2)),
-                                                    child: SvgPicture.asset(
-                                                      'assets/icons/dog_foot.svg',
-                                                      color: Color(0xFF1EC8CF),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  print(rewardedAdsLoaded);
+                                                  // 일단 리워드광고가 로드되지않은 특수한 상황에서는 아예 클릭이 먹통이 되도록.
+                                                  if (rewardedAdsLoaded)
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          content: Text(
+                                                              '광고를 보고 꾸욱을 획득하시겠어요??'),
+                                                          actions: <Widget>[
+                                                            FlatButton(
+                                                              child: Text('아뇨'),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                            FlatButton(
+                                                              child:
+                                                                  Text('좋아요'),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                RewardedVideoAd
+                                                                    .instance
+                                                                    .show();
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: 25.w,
+                                                      height: 25.h,
+                                                      padding:
+                                                          EdgeInsets.all(4),
+                                                      // decoration: BoxDecoration(
+                                                      //     borderRadius: BorderRadius.all(
+                                                      //         Radius.circular(100.0)),
+                                                      //     color: Color(0xFF1EC8CF),
+                                                      //     border: Border.all(
+                                                      //         color: Colors.white,
+                                                      //         width: 2)),
+                                                      child: SvgPicture.asset(
+                                                        'assets/icons/dog_foot.svg',
+                                                        color:
+                                                            Color(0xFF1EC8CF),
+                                                      ),
                                                     ),
-                                                  ),
-                                                  SizedBox(width: 4.w),
-                                                  Text(
-                                                    (model.user.item -
-                                                            numSelected)
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 20.sp,
-                                                      letterSpacing: -1.0,
-                                                      fontFamily: 'DmSans',
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                    SizedBox(width: 4.w),
+                                                    Text(
+                                                      (model.user.item -
+                                                              numSelected)
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 20.sp,
+                                                        letterSpacing: -1.0,
+                                                        fontFamily: 'DmSans',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               )
                                             ],
                                           )

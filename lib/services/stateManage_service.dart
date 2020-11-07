@@ -73,9 +73,6 @@ class StateManageServiceFirebase extends StateManageService {
   // method
   @override
   Future<void> initStateManage({String initUid}) async {
-    print('initStateManage step: uid');
-    // uid = _authService.currentUser.uid;
-    // uid = 'D2emDBcwWFNzu7e248FoqUviJOp2';
     uid = initUid ?? _authService.currentUser.uid;
     await getAllModels();
     _myState = _stateManageModel.state;
@@ -101,12 +98,7 @@ class StateManageServiceFirebase extends StateManageService {
   Future<bool> isNeededUpdate() async {
     _stateManageModel = await _databaseService.getStateManage();
 
-    if (_myState != _stateManageModel.state) {
-      _appStart = true;
-      return true;
-    } else {
-      return false;
-    }
+    return (_myState != _stateManageModel.state);
   }
 
   @override
