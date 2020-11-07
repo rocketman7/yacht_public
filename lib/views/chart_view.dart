@@ -13,9 +13,16 @@ import 'dart:math';
 import 'package:rxdart/rxdart.dart';
 
 import 'constants/holiday.dart';
+import 'constants/size.dart';
 import 'loading_view.dart';
 
 class ChartView extends StatefulWidget {
+  // final ScrollController controller;
+  final StreamController scrollStreamCtrl;
+  ChartView(
+    // this.controller,
+    this.scrollStreamCtrl,
+  );
   @override
   _ChartViewState createState() => _ChartViewState();
 }
@@ -29,10 +36,23 @@ class _ChartViewState extends State<ChartView> {
   BehaviorSubject behaviorCtrl = BehaviorSubject<double>();
   StreamController priceStreamCtrl = StreamController<double>();
   StreamController dateTimeStreamCtrl = StreamController<DateTime>();
-
+  ScrollController controller;
+  StreamController scrollStreamCtrl = StreamController<double>();
   double _lastValue = 0.0;
   @override
   void initState() {
+    controller = ScrollController(
+      initialScrollOffset: 0,
+    );
+
+    controller.addListener(() {
+      setState(() {
+        // print(controller.offset);
+        scrollStreamCtrl.add(controller.offset);
+      });
+    });
+
+    // print(position);
     super.initState();
   }
 
@@ -46,6 +66,9 @@ class _ChartViewState extends State<ChartView> {
 
   @override
   Widget build(BuildContext context) {
+    // controller = widget.controller;
+    scrollStreamCtrl = widget.scrollStreamCtrl;
+
     var formatPrice = NumberFormat("+#,###; -#,###");
     var stringDate = DateFormat("yyyy.MM.dd EEE");
     var formatReturnPct = new NumberFormat("+0.00%; -0.00%");
@@ -55,10 +78,11 @@ class _ChartViewState extends State<ChartView> {
         priceStreamCtrl,
         behaviorCtrl,
         dateTimeStreamCtrl,
+        scrollStreamCtrl,
       ),
       builder: (context, model, child) {
         if (model.isBusy) {
-          return Scaffold(body: LoadingView());
+          return Scaffold(body: Container());
         } else {
           behaviorCtrl.listen(print);
           closeList = model.chartList.forEach((element) {
@@ -73,6 +97,7 @@ class _ChartViewState extends State<ChartView> {
           return Scaffold(
             body: SafeArea(
               child: SingleChildScrollView(
+                controller: controller,
                 reverse: false,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +136,7 @@ class _ChartViewState extends State<ChartView> {
                               Text(
                                 "VS   LG전자",
                                 style: TextStyle(
-                                  fontSize: 24,
+                                  fontSize: 30,
                                   color: Color(0xFF8A8A8A),
                                   fontFamily: 'AppleSDB',
                                 ),
@@ -132,7 +157,8 @@ class _ChartViewState extends State<ChartView> {
 
                                 // print("PREV " + prevSnapshot.data.toString());
                                 // print("NOW " + snapshot.data.toString());
-                                return Row(
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Countup(
                                       begin: snapshot.data,
@@ -148,57 +174,70 @@ class _ChartViewState extends State<ChartView> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      formatPrice
-                                          .format((snapshot.data -
-                                              dataSourceList.first.close))
-                                          .toString(),
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: (snapshot.data -
-                                                    dataSourceList
-                                                        .first.close) <
-                                                0
-                                            ? Colors.blue
-                                            : (snapshot.data -
+                                    Row(
+                                      children: [
+                                        Text(
+                                          formatPrice
+                                              .format((snapshot.data -
+                                                  dataSourceList.first.close))
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: (snapshot.data -
                                                         dataSourceList
-                                                            .first.close) ==
+                                                            .first.close) <
                                                     0
-                                                ? Colors.black
-                                                : Colors.red,
-                                        fontFamily: 'AppleSDB',
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      "(" +
-                                          formatReturnPct
-                                              .format(((snapshot.data /
-                                                      dataSourceList
-                                                          .first.close) -
-                                                  1))
-                                              .toString() +
-                                          ")",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: (snapshot.data -
-                                                    dataSourceList
-                                                        .first.close) <
-                                                0
-                                            ? Colors.blue
-                                            : (snapshot.data -
+                                                ? Colors.blue
+                                                : (snapshot.data -
+                                                            dataSourceList
+                                                                .first.close) ==
+                                                        0
+                                                    ? Colors.black
+                                                    : Colors.red,
+                                            fontFamily: 'AppleSDB',
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 4,
+                                        ),
+                                        Text(
+                                          "(" +
+                                              formatReturnPct
+                                                  .format(((snapshot.data /
+                                                          dataSourceList
+                                                              .first.close) -
+                                                      1))
+                                                  .toString() +
+                                              ")",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: (snapshot.data -
                                                         dataSourceList
-                                                            .first.close) ==
+                                                            .first.close) <
                                                     0
-                                                ? Colors.black
-                                                : Colors.red,
-                                        fontFamily: 'AppleSDB',
-                                      ),
+                                                ? Colors.blue
+                                                : (snapshot.data -
+                                                            dataSourceList
+                                                                .first.close) ==
+                                                        0
+                                                    ? Colors.black
+                                                    : Colors.red,
+                                            fontFamily: 'AppleSDB',
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          model.isDaysVisible
+                                              ? model.lastDays
+                                              : "",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'AppleSDL',
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 );
@@ -234,7 +273,7 @@ class _ChartViewState extends State<ChartView> {
                       height: 14,
                     ),
                     Container(
-                      height: 200,
+                      height: deviceHeight * 0.23,
                       child: SfCartesianChart(
                         plotAreaBorderWidth: 0,
 
@@ -251,17 +290,23 @@ class _ChartViewState extends State<ChartView> {
                         // Enable tooltip
                         // tooltipBehavior: TooltipBehavior(enable: true),
                         trackballBehavior: TrackballBehavior(
-                            enable: true,
-                            activationMode: ActivationMode.singleTap,
-                            tooltipSettings: InteractiveTooltip(
-                                // Formatting trackball tooltip text
-                                format: '')),
+                          enable: true,
+                          activationMode: ActivationMode.longPress,
+                          tooltipSettings: InteractiveTooltip(
+                              // Formatting trackball tooltip text
+                              format: ''),
+                        ),
 
                         onTrackballPositionChanging: (TrackballArgs args) =>
                             model.trackball(args),
+
                         onChartTouchInteractionUp:
                             (ChartTouchInteractionArgs args) =>
                                 model.whenTrackEnd(args),
+
+                        // onChartTouchInteractionDown:
+                        //     (ChartTouchInteractionArgs args) =>
+                        //         model.whenTrackStart(args),
                         series: <ChartSeries>[
                           FastLineSeries<ChartModel, DateTime>(
                             color: (dataSourceList.last.close -
@@ -358,35 +403,35 @@ class _ChartViewState extends State<ChartView> {
                       children: [
                         FlatButton(
                           onPressed: () {
-                            model.changeDuration(10);
+                            model.changeDuration(10, "");
                           },
-                          child: Text("Live"),
+                          child: Text("2주"),
                           minWidth: 20,
                         ),
                         FlatButton(
                           onPressed: () {
-                            model.changeDuration(20);
+                            model.changeDuration(20, "지난 1개월");
                           },
                           child: Text("1개월"),
                           minWidth: 20,
                         ),
                         FlatButton(
                           onPressed: () {
-                            model.changeDuration(60);
+                            model.changeDuration(60, "지난 3개월");
                           },
                           child: Text("3개월"),
                           minWidth: 20,
                         ),
                         FlatButton(
                           onPressed: () {
-                            model.changeDuration(120);
+                            model.changeDuration(120, "지난 6개월");
                           },
                           child: Text("6개월"),
                           minWidth: 20,
                         ),
                         FlatButton(
                           onPressed: () {
-                            model.changeDuration(200);
+                            model.changeDuration(200, "지난 1년");
                           },
                           child: Text("1년"),
                           minWidth: 20,
@@ -403,43 +448,6 @@ class _ChartViewState extends State<ChartView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "삼성전자는?",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontFamily: 'AppleSDB',
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "크게 반도체, LCD, 휴대폰, 가전 부문으로 사업부가 나뉘었으나 2008년부터 2009년까지 불어닥친 글로벌 경제 위기에 대응해 반도체와 LCD로 대표되는 부품 부문과 TV와 휴대폰, 냉장고로 대표되는 완제품 부문으로 사업부를 통합했다. 분야가 완전히 달랐던 삼성테크윈의 디지털 카메라 부문과 삼성SDI의 플래시 메모리, 낸드플래시도 통합되었고 그 외 삼성전기 LED 사업부도 통합되었다.",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'AppleSDM',
-                            ),
-                            maxLines: model.isSelected ? 100 : 3,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              model.selectDescriptionDetail();
-                            },
-                            child: Text(
-                              model.isSelected ? "간략히" : "더보기",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'AppleSDB',
-                                color: Color(0xFF1EC8CF),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 32,
-                          ),
                           Text(
                             "시세정보",
                             style: TextStyle(
@@ -576,14 +584,14 @@ class _ChartViewState extends State<ChartView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "시가총액",
+                                            "PER",
                                             style: TextStyle(
                                               color: Color(0xFF8A8A8A),
                                               fontSize: 14,
                                             ),
                                           ),
                                           Text(
-                                            "342.6조 원",
+                                            "18.87X",
                                             style: TextStyle(
                                               fontSize: 16,
                                             ),
@@ -594,78 +602,118 @@ class _ChartViewState extends State<ChartView> {
                                   ),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 16),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                              width: 0.5,
-                                              color: Color(0xFF8A8A8A)),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "거래량",
-                                            style: TextStyle(
-                                              color: Color(0xFF8A8A8A),
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          Text(
-                                            "20,424,749",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 16),
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                              width: 0.5,
-                                              color: Color(0xFF8A8A8A)),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "시가총액",
-                                            style: TextStyle(
-                                              color: Color(0xFF8A8A8A),
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          Text(
-                                            "342.6조 원",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
+                              // Row(
+                              //   children: [
+                              //     Expanded(
+                              //       child: Container(
+                              //         padding:
+                              //             EdgeInsets.symmetric(vertical: 16),
+                              //         decoration: BoxDecoration(
+                              //           border: Border(
+                              //             bottom: BorderSide(
+                              //                 width: 0.5,
+                              //                 color: Color(0xFF8A8A8A)),
+                              //           ),
+                              //         ),
+                              //         child: Row(
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.spaceBetween,
+                              //           children: [
+                              //             Text(
+                              //               "거래량",
+                              //               style: TextStyle(
+                              //                 color: Color(0xFF8A8A8A),
+                              //                 fontSize: 14,
+                              //               ),
+                              //             ),
+                              //             Text(
+                              //               "20,424,749",
+                              //               style: TextStyle(
+                              //                 fontSize: 16,
+                              //               ),
+                              //             ),
+                              //           ],
+                              //         ),
+                              //       ),
+                              //     ),
+                              //     SizedBox(
+                              //       width: 20,
+                              //     ),
+                              //     Expanded(
+                              //       child: Container(
+                              //         padding:
+                              //             EdgeInsets.symmetric(vertical: 16),
+                              //         decoration: BoxDecoration(
+                              //           border: Border(
+                              //             bottom: BorderSide(
+                              //                 width: 0.5,
+                              //                 color: Color(0xFF8A8A8A)),
+                              //           ),
+                              //         ),
+                              //         child: Row(
+                              //           mainAxisAlignment:
+                              //               MainAxisAlignment.spaceBetween,
+                              //           children: [
+                              //             Text(
+                              //               "시가총액",
+                              //               style: TextStyle(
+                              //                 color: Color(0xFF8A8A8A),
+                              //                 fontSize: 14,
+                              //               ),
+                              //             ),
+                              //             Text(
+                              //               "342.6조 원",
+                              //               style: TextStyle(
+                              //                 fontSize: 16,
+                              //               ),
+                              //             ),
+                              //           ],
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // )
                             ],
+                          ),
+                          SizedBox(
+                            height: 36,
+                          ),
+                          Text(
+                            "삼성전자는?",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontFamily: 'AppleSDB',
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "크게 반도체, LCD, 휴대폰, 가전 부문으로 사업부가 나뉘었으나 2008년부터 2009년까지 불어닥친 글로벌 경제 위기에 대응해 반도체와 LCD로 대표되는 부품 부문과 TV와 휴대폰, 냉장고로 대표되는 완제품 부문으로 사업부를 통합했다. 분야가 완전히 달랐던 삼성테크윈의 디지털 카메라 부문과 삼성SDI의 플래시 메모리, 낸드플래시도 통합되었고 그 외 삼성전기 LED 사업부도 통합되었다.",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'AppleSDM',
+                            ),
+                            maxLines: model.isSelected ? 100 : 3,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              model.selectDescriptionDetail();
+                            },
+                            child: Text(
+                              model.isSelected ? "간략히" : "더보기",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'AppleSDB',
+                                color: Color(0xFF1EC8CF),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 36,
                           )
                         ],
                       ),

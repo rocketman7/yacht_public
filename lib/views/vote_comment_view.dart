@@ -157,7 +157,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                         ),
                         buildHorizontalCalendar(model, newVote),
                         SizedBox(
-                          height: 24.h,
+                          height: 16.h,
                         ),
                         Text(
                           "시즌 & 주제별 커뮤니티",
@@ -229,9 +229,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 //     )),
                 title: Text("자유 게시판",
                     style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 18.sp,
+                      // fontWeight: FontWeight.bold,
+                      fontFamily: 'AppleSDB',
                     )),
+                subtitle: Text("rocketman님 외에 50명 이야기중"),
                 // subtitle: Text("rocketman님 외에 50명 이야기중"),
               ),
             ],
@@ -249,10 +251,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
   Widget buildHorizontalCalendar(VoteCommentViewModel model, VoteModel vote) {
     return HorizontalCalendar(
-      padding: EdgeInsets.symmetric(
-        horizontal: 8.w,
-        vertical: 2.h,
-      ),
+      padding: EdgeInsets.fromLTRB(0, 6.h, 0, 0),
       defaultDecoration: BoxDecoration(
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(8),
@@ -299,11 +298,14 @@ class _VoteCommentViewState extends State<VoteCommentView>
       initialSelectedDates: strToDate(model.address.date),
       labelOrder: [LabelType.date, LabelType.weekday],
       dateTextStyle: TextStyle(
-        fontSize: 20.sp,
+        fontSize: 24.sp,
         fontFamily: 'DmSans',
+        height: 1,
+        letterSpacing: -1.5,
         fontWeight: FontWeight.w800,
       ),
       weekDayTextStyle: TextStyle(
+        height: 1,
         fontSize: 12.sp,
         fontFamily: 'DmSans',
       ),
@@ -313,15 +315,19 @@ class _VoteCommentViewState extends State<VoteCommentView>
           int.parse(model.seasonInfo.startDate.substring(6))),
       lastDate: nextNthBusinessDay(strToDate(model.address.date), 3),
       selectedDateTextStyle: TextStyle(
-        fontSize: 20.sp,
+        fontFamily: 'DmSans',
+        fontSize: 24.sp,
+        height: 1,
+        letterSpacing: -1.5,
         color: Colors.white,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.bold,
       ),
       selectedWeekDayTextStyle: TextStyle(
+        height: 1,
         fontSize: 12.sp,
         color: Colors.white,
-        fontFamily: 'DmSans',
-        fontWeight: FontWeight.bold,
+        fontFamily: 'AppleSDB',
+        // fontWeight: FontWeight.bold,
       ),
       selectedDecoration: BoxDecoration(
         color: Color(0xFF1EC8CF),

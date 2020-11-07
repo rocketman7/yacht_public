@@ -245,7 +245,7 @@ class _MypageAccountVerificationViewState
         Row(
           children: [
             Text(
-              '은행',
+              '증권사',
               style: TextStyle(fontSize: 16, letterSpacing: -1),
             ),
             Spacer(),
@@ -554,7 +554,7 @@ class _MypageAccountVerificationViewState
         Row(
           children: [
             Text(
-              '은행',
+              '증권사',
               style: TextStyle(fontSize: 16),
             ),
             Spacer(),

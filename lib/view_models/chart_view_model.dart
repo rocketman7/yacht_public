@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -14,19 +15,24 @@ class ChartViewModel extends FutureViewModel {
   final StreamController priceStreamCtrl;
   final BehaviorSubject behaviorCtrl;
   final StreamController dateTimeStreamCtrl;
+  final StreamController scrollStreamCtrl;
+
   AuthService _authService = locator<AuthService>();
   DatabaseService _databaseService = locator<DatabaseService>();
   List<ChartModel> chartList;
   double displayPrice = 0.0;
   DateTime displayDateTime;
   String uid;
+  String lastDays = "지난 1년";
   int subLength = 200;
   bool isSelected = false;
+  bool isDaysVisible = true;
 
   ChartViewModel(
     this.priceStreamCtrl,
     this.behaviorCtrl,
     this.dateTimeStreamCtrl,
+    this.scrollStreamCtrl,
   ) {
     uid = _authService.auth.currentUser.uid;
   }
@@ -36,6 +42,12 @@ class ChartViewModel extends FutureViewModel {
   }
 
   void trackball(TrackballArgs args) {
+    if (isDaysVisible) {
+      isDaysVisible = false;
+      notifyListeners();
+    }
+
+    print("track ball triggered");
     // print(args.chartPointInfo.chartDataPoint.y);
     displayPrice = args.chartPointInfo.chartDataPoint.y;
     displayDateTime = args.chartPointInfo.chartDataPoint.x;
@@ -45,17 +57,29 @@ class ChartViewModel extends FutureViewModel {
     dateTimeStreamCtrl.add(displayDateTime);
   }
 
+  void scrollPosition(ScrollController controller) {
+    double position = controller.offset;
+    print(position);
+    scrollStreamCtrl.add(position);
+  }
+
   void whenTrackEnd(ChartTouchInteractionArgs args) {
-    print("now");
     displayPrice = chartList.last.close;
     displayDateTime = strToDate(chartList.last.date);
     priceStreamCtrl.add(displayPrice);
     dateTimeStreamCtrl.add(displayDateTime);
     // behaviorCtrl.add(displayPrice);
+    isDaysVisible = true;
+    notifyListeners();
   }
 
-  void changeDuration(int duration) {
+  void whenTrackStart(ChartTouchInteractionArgs args) {
+    print("Track start");
+  }
+
+  void changeDuration(int duration, String days) {
     subLength = duration;
+    lastDays = days;
     notifyListeners();
   }
 
