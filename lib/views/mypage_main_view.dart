@@ -60,6 +60,18 @@ class MypageMainView extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        // model.navigateToHome();
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Icon(Icons.transit_enterexit),
+                                    ),
+                                    Spacer(),
+                                  ],
+                                ),
                                 mypageMainTopBar(model),
                                 Expanded(
                                   child: ListView(
@@ -345,8 +357,8 @@ class MypageMainView extends StatelessWidget {
           makeMypageMainComponent(model, '이용약관', 'mypage_termsofuse'),
           makeMypageMainComponent(model, '개인정보취급방침', 'mypage_privacypolicy'),
           makeMypageMainComponent(model, '사업자정보', 'mypage_businessinformation'),
-          // makeMypageMainComponent(model, '', null),
-          // makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
+          makeMypageMainComponent(model, '', null),
+          makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
           SizedBox(
             height: 42,
           )
@@ -550,15 +562,15 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView>
               height: 400,
               child: Stack(
                 children: [
-                  Positioned(child: Test5Widget()),
+                  // Positioned(child: Test5Widget()),
                   TestWidget(),
-                  Test3Widget(),
-                  Positioned(
-                      left: 10,
-                      top: 10,
-                      child: Test2Widget(
-                        blobColor: Color(0xFFFFDE34),
-                      )),
+                  // Test3Widget(),
+                  // Positioned(
+                  //     left: 10,
+                  //     top: 10,
+                  //     child: Test2Widget(
+                  //       blobColor: Color(0xFFFFDE34),
+                  //     )),
                 ],
               ),
             ),
@@ -585,11 +597,11 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView>
           //   ),
           // ),
 
-          Positioned(
-            left: 160,
-            top: 200,
-            child: ScaleBlobAnimation(),
-          )
+          // Positioned(
+          //   left: 160,
+          //   top: 200,
+          //   child: ScaleBlobAnimation(),
+          // )
           // Transform.scale(
           //     scale: animation.value,
           //     child: Positioned(left: 100, top: 100, child: TestWidget())),
@@ -736,25 +748,109 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView>
   }
 }
 
+// class MyBlob extends CustomPainter {
+//   Offset center;
+
+//   MyBlob(
+//       {this.center, });
+
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     Paint paint = Paint()
+//       ..style = PaintingStyle.fill;
+
+//     canvas.drawPath(path, paint);
+//   }
+
+//   @override
+//   bool shouldRepaint(MyBlob oldDelegate) {
+//     return false;
+//   }
+// }
+
 class TestWidget extends StatefulWidget {
   @override
   _TestWidgetState createState() => _TestWidgetState();
 }
 
+// class _TestWidgetState extends State<TestWidget> with TickerProviderStateMixin {
 class _TestWidgetState extends State<TestWidget> {
+  // var stream1 = Stream.periodic(Duration(milliseconds: 1), (x) => (x)).take(10);
+//   var stream2;
+
   BlobController blobCtrl;
+//   Future<Animation> future;
+
+//   AnimationController _animationController;
+//   Animation animation;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   stream2 = Stream.fromFuture(future);
+
+  //   _animationController =
+  //       AnimationController(duration: Duration(seconds: 1500), vsync: this);
+  //   animation =
+  //       Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+
+  //   // stream2 = animation.
+
+  //   // stream2 = animation.value;
+  // }
 
   @override
   void dispose() {
-    // blobCtrl.dispose();
+    blobCtrl.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // return Container(
+    //   height: 100,
+    //   width: 100,
+    //   child: RepaintBoundary(
+    //     child: CustomPaint(
+    //       // child: child,
+    //       painter: MyBlob(),
+    //       painter: BlobPainter(
+    //         blobData: blobData,
+    //         debug: debug,
+    //         styles: styles,
+    //       ),
+    //     ),
+    //   ),
+    // );
+
+    // return StreamBuilder(
+    //   stream: stream1,
+    //   initialData: 0,
+    //   builder: (context, snapshot) {
+    //     print(snapshot.data);
+    //     return Blob.animatedFromID(
+    //         // size: 200 + snapshot.data * 60.0,
+    //         size: 200,
+    //         id: [
+    //           '10-7-848634',
+    //           '10-7-863638',
+    //           '10-7-63404',
+    //           '10-7-424041',
+    //           '10-7-88922'
+    //         ],
+    //         styles: BlobStyles(
+    //           color: Color(0xFF000000),
+    //         ),
+    //         controller: blobCtrl,
+    //         loop: true,
+    //         duration: Duration(milliseconds: 2000));
+    //   },
+    // );
     return Blob.animatedFromID(
-        size: 200,
+        debug: true,
+        size: 100,
         id: [
           '10-7-848634',
           '10-7-863638',
@@ -767,7 +863,7 @@ class _TestWidgetState extends State<TestWidget> {
         ),
         controller: blobCtrl,
         loop: true,
-        duration: Duration(milliseconds: 2000));
+        duration: Duration(milliseconds: 5000));
   }
 }
 

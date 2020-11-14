@@ -1,5 +1,6 @@
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/api/firebase_kakao_auth_api.dart';
+import 'package:yachtOne/views/startup_view.dart';
 
 import '../services/sharedPreferences_service.dart';
 import '../services/stateManage_service.dart';
@@ -11,6 +12,7 @@ import '../models/user_model.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../services/navigation_service.dart';
+import '../views/vote_select_v2_view.dart';
 
 class MypageMainViewModel extends FutureViewModel {
   // Services Setting
@@ -49,6 +51,11 @@ class MypageMainViewModel extends FutureViewModel {
     // 이렇게 페이지 넘어가는 부분에서 await 걸어주고 후에 후속조치 취해주면 하위페이지에서 변동된 데이터를 적용할 수 있음
     await getModels();
     notifyListeners();
+  }
+
+  Future<void> navigateToHome() async {
+    await _navigationService.navigateToHome(StartUpView(0));
+    // await _navigationService.popAndNavigateWithArgTo('startup');
   }
 
   // 로그아웃 버튼이 눌렸을 경우..

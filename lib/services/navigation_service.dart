@@ -22,7 +22,47 @@ class NavigationService {
         .pushNamedAndRemoveUntil(routeName, (Route<dynamic> route) => false);
   }
 
-  // Future<dynamic> popAndNavigateWithArgTo(String routeName, var argument) {
-  //   return navigatorKey.currentState.
-  // }
+  Future<dynamic> navigateToMyPage(var page) {
+    return navigatorKey.currentState.push(_createToMyPageRoute(page));
+  }
+
+  Route _createToMyPageRoute(var page) {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = Offset(1.0, 0.0);
+          var end = Offset.zero;
+          var tween = Tween(begin: begin, end: end);
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+        transitionDuration: Duration(milliseconds: 100),
+        reverseTransitionDuration: Duration(milliseconds: 100));
+  }
+
+  Future<dynamic> navigateToHome(var page) {
+    return navigatorKey.currentState.push(_createToHomeRoute(page));
+  }
+
+  Route _createToHomeRoute(var page) {
+    return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => page,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = Offset(-1.0, 0.0);
+          var end = Offset.zero;
+          var tween = Tween(begin: begin, end: end);
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+        transitionDuration: Duration(milliseconds: 100),
+        reverseTransitionDuration: Duration(milliseconds: 100));
+  }
 }

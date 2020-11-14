@@ -18,7 +18,10 @@ import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/temp_address_constant.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
+import 'package:yachtOne/views/mypage_main_view.dart';
 import 'package:yachtOne/views/temp_not_voting_view.dart';
+
+import '../views/widgets/avatar_widget.dart';
 
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -34,6 +37,8 @@ import 'chart_view.dart';
 
 import '../services/adManager_service.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+
+import 'package:flutter/cupertino.dart';
 
 class VoteSelectV2View extends StatefulWidget {
   @override
@@ -316,6 +321,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
               body: Container(
             height: deviceHeight,
             width: deviceWidth,
+            // key: scaffoldKey,
             child: Stack(
               children: [
                 Positioned(
@@ -345,6 +351,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
           return Scaffold(
             backgroundColor: Color(0xFF1EC8CF),
             key: scaffoldKey,
+            // endDrawer: myPage(model),
             body: WillPopScope(
               onWillPop: () async {
                 _navigatorKey.currentState.maybePop();
@@ -375,11 +382,26 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Icon(
-                                        Icons.dehaze_rounded,
-                                        size: 32.sp,
+                                    GestureDetector(
+                                      onTap: () {
+                                        // print('open drawer');
+                                        // scaffoldKey.currentState
+                                        //     .openEndDrawer();
+                                        // Navigator.of(context)
+                                        //     .push(_createRoute());
+                                        // model.navigateToMypage();
+                                        Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    MypageMainView()));
+                                      },
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Icon(
+                                          Icons.dehaze_rounded,
+                                          size: 32.sp,
+                                        ),
                                       ),
                                     ),
                                     Column(
@@ -708,35 +730,44 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                         GestureDetector(
                                           onTap: () {
                                             print(rewardedAdsLoaded);
-                                            // 일단 리워드광고가 로드되지않은 특수한 상황에서는 아예 클릭이 먹통이 되도록.
-                                            if (rewardedAdsLoaded)
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    content: Text(
-                                                        '광고를 보고 꾸욱을 획득하시겠어요??'),
-                                                    actions: <Widget>[
-                                                      FlatButton(
-                                                        child: Text('아뇨'),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                      ),
-                                                      FlatButton(
-                                                        child: Text('좋아요'),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                          model
-                                                              .showRewardedAds();
-                                                        },
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
+                                            model.loadRewardedAds();
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: Text(
+                                                      '광고를 보고 꾸욱을 획득하시겠어요??'),
+                                                  actions: <Widget>[
+                                                    FlatButton(
+                                                      child: Text('아뇨'),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    rewardedAdsLoaded
+                                                        ? FlatButton(
+                                                            child: Text('좋아요'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              model
+                                                                  .showRewardedAds();
+                                                            },
+                                                          )
+                                                        // 리워드광고가 로드되지않은 상황에서는 좋아요 버튼 비활성화
+                                                        : FlatButton(
+                                                            child: Text(
+                                                              '좋아요',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .grey),
+                                                            ),
+                                                            onPressed: null,
+                                                          ),
+                                                  ],
+                                                );
+                                              },
+                                            );
                                           },
                                           child: Row(
                                             children: [
@@ -1986,6 +2017,336 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
   //     ),
   //   );
   // }
+  // Widget myPage() {
+  //   return Container(
+  //     // width: MediaQuery.of(context).size.width,
+  //     width: deviceWidth,
+  //     // height: MediaQuery.of(context).size.height,
+  //     height: deviceHeight,
+  //     color: Colors.white,
+  //     child: ListView(
+  //       children: [
+  //         GestureDetector(
+  //             onTap: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: Container(height: 100, color: Colors.red)),
+  //         GestureDetector(
+  //           onTap: () {
+  //             _navigationService.navigateTo('mypage_editprofile');
+  //           },
+  //           child: Container(
+  //             height: 100,
+  //             color: Colors.blue,
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
+  Widget myPage(VoteSelectViewModel model) {
+    return Container(
+      color: Colors.white,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
+          child: Column(
+            children: [
+              mypageMainTopBar(model),
+              Expanded(
+                child: ListView(
+                  children: [
+                    mypageMainAccPref(model),
+                    // mypageMainAppPref(model),
+                    mypageMainCSCenter(model),
+                    mypageMainTermsOfUse(model),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget mypageMainTopBar(VoteSelectViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Container(
+        child: Row(
+          children: [
+            Container(
+              // height: 200,
+              width: deviceWidth - 36 - 72,
+              child: Column(
+                children: [
+                  model.user.accNumber == null
+                      ? Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 3,
+                                horizontal: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Color(0xFFFFCA42),
+                                  borderRadius: BorderRadius.circular(
+                                    30,
+                                  )),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 16,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/notification.svg',
+                                      color: Color(0xFFFFFFFF),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 3,
+                                  ),
+                                  Text(
+                                    "증권계좌 미인증회원",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(),
+                            ),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 3,
+                                horizontal: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: Color(0xFF1EC8CF),
+                                  borderRadius: BorderRadius.circular(
+                                    30,
+                                  )),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 16,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/check.svg',
+                                      color: Color(0xFFFFFFFF),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 3,
+                                  ),
+                                  Text(
+                                    "증권계좌 인증회원",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(),
+                            ),
+                          ],
+                        ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          model.user.userName,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: model.user.userName.length > 8
+                                ? 32
+                                : model.user.userName.length > 6 ? 40 : 48,
+                            letterSpacing: -1.0,
+                            fontFamily: 'AppleSDB',
+                            // fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            avatarWidget(model.user.avatarImage, model.user.item)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget makeMypageMainComponent(
+      VoteSelectViewModel model, String title, String navigateTo) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            if (navigateTo != null) model.navigateToMypageToDown(navigateTo);
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16, bottom: 16),
+            child: Text(
+              title,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+            ),
+          ),
+        ),
+        Container(
+          height: 1,
+          color: Color(0xFFE3E3E3),
+        )
+      ],
+    );
+  }
+
+  Widget mypageMainAccPref(VoteSelectViewModel model) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 24,
+          ),
+          Text(
+            '나의 계정설정',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 2,
+            color: Colors.black,
+          ),
+          makeMypageMainComponent(model, '회원정보 수정', 'mypage_editprofile'),
+          // makeMypageMainComponent(model, 'x내가 받은 상금 현황', null),
+          // makeMypageMainComponent(model, 'x내 활동', null),
+          makeMypageMainComponent(model, '계좌 정보', 'mypage_accoutverification'),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onDoubleTap: () {
+                  model.logout();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 16),
+                  child: Text(
+                    '더블 탭하여 로그아웃',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                  ),
+                ),
+              ),
+              Container(
+                height: 1,
+                color: Color(0xFFE3E3E3),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 42,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget mypageMainAppPref(VoteSelectViewModel model) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '앱 사용 설정',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 2,
+            color: Colors.black,
+          ),
+          makeMypageMainComponent(model, '푸쉬알림 설정', 'mypage_pushalarmsetting'),
+          makeMypageMainComponent(model, '친구에게 추천하기', 'mypage_friendscode'),
+          SizedBox(
+            height: 42,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget mypageMainCSCenter(VoteSelectViewModel model) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '고객 센터',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 2,
+            color: Colors.black,
+          ),
+          makeMypageMainComponent(model, '1:1 문의', 'oneonone'),
+          makeMypageMainComponent(model, '자주 묻는 질문(FAQ)', 'faq'),
+          makeMypageMainComponent(model, '공지사항', 'notice'),
+          SizedBox(
+            height: 42,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget mypageMainTermsOfUse(VoteSelectViewModel model) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '약관 및 정보',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 2,
+            color: Colors.black,
+          ),
+          makeMypageMainComponent(model, '이용약관', 'mypage_termsofuse'),
+          makeMypageMainComponent(model, '개인정보취급방침', 'mypage_privacypolicy'),
+          makeMypageMainComponent(model, '사업자정보', 'mypage_businessinformation'),
+          // makeMypageMainComponent(model, '', null),
+          // makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
+          SizedBox(
+            height: 42,
+          )
+        ],
+      ),
+    );
+  }
 }
 
 Widget tutorial(VoteSelectViewModel model) {

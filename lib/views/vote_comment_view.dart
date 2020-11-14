@@ -155,7 +155,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                         ),
                         buildHorizontalCalendar(model, newVote),
                         SizedBox(
-                          height: 16.h,
+                          height: 24.h,
                         ),
                         Text(
                           "시즌 & 주제별 커뮤니티",
@@ -174,9 +174,9 @@ class _VoteCommentViewState extends State<VoteCommentView>
                           color: Colors.black,
                           thickness: 2,
                         ),
-                        // SizedBox(
-                        //   height: 16,
-                        // ),
+                        SizedBox(
+                          height: 16,
+                        ),
                         Flexible(
                           child: Container(
                             // height: 500,
@@ -206,34 +206,33 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 onTap: () {
                   _navigationService.navigateTo('seasonComment');
                 },
-                // leading: Container(
-                //     alignment: Alignment.center,
-                //     width: 60,
-                //     height: 60,
-                //     padding: EdgeInsets.all(4),
-                //     decoration: BoxDecoration(
-                //         color: Color(0xFFFFC7C7),
-                //         border: Border.all(color: Colors.black, width: 2)),
-                //     child: Text(
-                //       model.seasonInfo.seasonName,
-                //       textAlign: TextAlign.center,
-                //       style: TextStyle(
-                //         fontFamily: 'DmSans',
-                //         fontSize: 16.sp,
-                //         // fontWeight: FontWeight.w700,
-                //         letterSpacing: 0,
-                //         textBaseline: TextBaseline.ideographic,
-                //       ),
-                //     )),
-                title: Text("자유 게시판",
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      // fontWeight: FontWeight.bold,
-                      fontFamily: 'AppleSDB',
+                leading: Container(
+                    alignment: Alignment.center,
+                    width: 60,
+                    height: 60,
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        color: Color(0xFFFFC7C7),
+                        border: Border.all(color: Colors.black, width: 2)),
+                    child: Text(
+                      model.seasonInfo.seasonName,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'DmSans',
+                        fontSize: 16.sp,
+                        // fontWeight: FontWeight.w700,
+                        letterSpacing: 0,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
                     )),
-                subtitle: Text("rocketman님 외에 50명 이야기중"),
+                title: Text(model.seasonInfo.seasonName + " 커뮤니티",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    )),
                 // subtitle: Text("rocketman님 외에 50명 이야기중"),
               ),
+              Divider(),
             ],
           );
         } else {
@@ -249,7 +248,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
   Widget buildHorizontalCalendar(VoteCommentViewModel model, VoteModel vote) {
     return HorizontalCalendar(
-      padding: EdgeInsets.fromLTRB(0, 6.h, 0, 0),
+      padding: EdgeInsets.symmetric(
+        horizontal: 8.w,
+        vertical: 2.h,
+      ),
       defaultDecoration: BoxDecoration(
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(8),
@@ -296,14 +298,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
       initialSelectedDates: strToDate(model.address.date),
       labelOrder: [LabelType.date, LabelType.weekday],
       dateTextStyle: TextStyle(
-        fontSize: 24.sp,
+        fontSize: 20.sp,
         fontFamily: 'DmSans',
-        height: 1,
-        letterSpacing: -1.5,
         fontWeight: FontWeight.w800,
       ),
       weekDayTextStyle: TextStyle(
-        height: 1,
         fontSize: 12.sp,
         fontFamily: 'DmSans',
       ),
@@ -313,19 +312,15 @@ class _VoteCommentViewState extends State<VoteCommentView>
           int.parse(model.seasonInfo.startDate.substring(6))),
       lastDate: nextNthBusinessDay(strToDate(model.address.date), 3),
       selectedDateTextStyle: TextStyle(
-        fontFamily: 'DmSans',
-        fontSize: 24.sp,
-        height: 1,
-        letterSpacing: -1.5,
+        fontSize: 20.sp,
         color: Colors.white,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w800,
       ),
       selectedWeekDayTextStyle: TextStyle(
-        height: 1,
         fontSize: 12.sp,
         color: Colors.white,
-        fontFamily: 'AppleSDB',
-        // fontWeight: FontWeight.bold,
+        fontFamily: 'DmSans',
+        fontWeight: FontWeight.bold,
       ),
       selectedDecoration: BoxDecoration(
         color: Color(0xFF1EC8CF),
@@ -340,7 +335,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
     );
   }
 
-  Widget buildEachCommunity(
+  ListTile buildEachCommunity(
     VoteModel vote,
     SubVote subVote,
     int index,
@@ -349,124 +344,103 @@ class _VoteCommentViewState extends State<VoteCommentView>
       return Color(int.parse(code, radix: 16) + 0xFF0000000);
     }
 
-    return Column(
-      children: [
-        Divider(
-          height: 0,
-        ),
-        ListTile(
-          onTap: () {
-            _navigationService
-                .navigateWithArgTo('subjectComment', [vote, index - 1]);
-          },
-          // leading: subVote.issueCode.length == 1
-          //     ? Container(
-          //         height: 60,
-          //         width: 60,
-          //         decoration: BoxDecoration(
-          //           border: Border.all(
-          //             width: 2,
-          //             color: Colors.black,
-          //           ),
-          //           borderRadius: BorderRadius.circular(subVote.shape == null
-          //               ? 0
-          //               : subVote.shape[0] == 'oval'
-          //                   ? 30
-          //                   : 0),
-          //           color: hexToColor(
-          //             subVote.colorCode[0],
-          //           ),
-          //         ),
-          //         child: Padding(
-          //           padding: const EdgeInsets.all(2.0),
-          //           child: Center(
-          //             child: Text(
-          //               subVote.title,
-          //               style: TextStyle(
-          //                 fontSize: 16.sp,
-          //                 // fontWeight: FontWeight.w700,
-          //                 fontFamily: 'AppleSDB',
-          //               ),
-          //               textAlign: TextAlign.center,
-          //               overflow: TextOverflow.clip,
-          //               maxLines: 2,
-          //             ),
-          //           ),
-          //         ),
-          //       )
-          //     : Container(
-          //         height: 60,
-          //         width: 60,
-          //         child: Stack(
-          //           children: <Widget>[
-          //             Container(
-          //               width: subVote.shape == null
-          //                   ? 35
-          //                   : subVote.shape[0] == 'oval'
-          //                       ? 40
-          //                       : 35,
-          //               height: subVote.shape == null
-          //                   ? 35
-          //                   : subVote.shape[0] == 'oval'
-          //                       ? 40
-          //                       : 35,
-          //               decoration: BoxDecoration(
-          //                   border: Border.all(
-          //                     width: 2,
-          //                     color: Colors.black,
-          //                   ),
-          //                   borderRadius:
-          //                       BorderRadius.circular(subVote.shape == null
-          //                           ? 0
-          //                           : subVote.shape[0] == 'oval'
-          //                               ? 30
-          //                               : 0),
-          //                   color: hexToColor(
-          //                     subVote.colorCode[0],
-          //                   )),
-          //             ),
-          //             Positioned(
-          //                 bottom: 0,
-          //                 right: 0,
-          //                 child: Container(
-          //                   width: subVote.shape == null
-          //                       ? 35
-          //                       : subVote.shape[1] == 'oval'
-          //                           ? 40
-          //                           : 35,
-          //                   height: subVote.shape == null
-          //                       ? 35
-          //                       : subVote.shape[1] == 'oval'
-          //                           ? 40
-          //                           : 35,
-          //                   decoration: BoxDecoration(
-          //                       border: Border.all(
-          //                         width: 2,
-          //                         color: Colors.black,
-          //                       ),
-          //                       borderRadius:
-          //                           BorderRadius.circular(subVote.shape == null
-          //                               ? 0
-          //                               : subVote.shape[1] == 'oval'
-          //                                   ? 30
-          //                                   : 0),
-          //                       color: hexToColor(
-          //                         subVote.colorCode[1],
-          //                       )),
-          //                 )),
-          //           ],
-          //         ),
-          //         // color: Colors.red,
-          //       ),
-          title: Text(subVote.title,
-              style: TextStyle(
-                fontSize: 18.sp,
-                // fontWeight: FontWeight.bold,
-                fontFamily: 'AppleSDB',
-              )),
-          subtitle: Text("rocketman님 외에 50명 이야기중"),
-        ),
-      ],
+    return ListTile(
+      onTap: () {
+        _navigationService
+            .navigateWithArgTo('subjectComment', [vote, index - 1]);
+      },
+      leading: subVote.issueCode.length == 1
+          ? Container(
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 2,
+                  color: Colors.black,
+                ),
+                borderRadius: BorderRadius.circular(subVote.shape == null
+                    ? 0
+                    : subVote.shape[0] == 'oval' ? 30 : 0),
+                color: hexToColor(
+                  subVote.colorCode[0],
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Center(
+                  child: Text(
+                    subVote.title,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      // fontWeight: FontWeight.w700,
+                      fontFamily: 'AppleSDB',
+                    ),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.clip,
+                    maxLines: 2,
+                  ),
+                ),
+              ),
+            )
+          : Container(
+              height: 60,
+              width: 60,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    width: subVote.shape == null
+                        ? 35
+                        : subVote.shape[0] == 'oval' ? 40 : 35,
+                    height: subVote.shape == null
+                        ? 35
+                        : subVote.shape[0] == 'oval' ? 40 : 35,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 2,
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                            subVote.shape == null
+                                ? 0
+                                : subVote.shape[0] == 'oval' ? 30 : 0),
+                        color: hexToColor(
+                          subVote.colorCode[0],
+                        )),
+                  ),
+                  Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: subVote.shape == null
+                            ? 35
+                            : subVote.shape[1] == 'oval' ? 40 : 35,
+                        height: subVote.shape == null
+                            ? 35
+                            : subVote.shape[1] == 'oval' ? 40 : 35,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 2,
+                              color: Colors.black,
+                            ),
+                            borderRadius: BorderRadius.circular(
+                                subVote.shape == null
+                                    ? 0
+                                    : subVote.shape[1] == 'oval' ? 30 : 0),
+                            color: hexToColor(
+                              subVote.colorCode[1],
+                            )),
+                      )),
+                ],
+              ),
+              // color: Colors.red,
+            ),
+      title: Text(subVote.title,
+          style: TextStyle(
+            fontSize: 18.sp,
+            // fontWeight: FontWeight.bold,
+            fontFamily: 'AppleSDB',
+          )),
+      subtitle: Text("rocketman님 외에 50명 이야기중"),
     );
   }
 

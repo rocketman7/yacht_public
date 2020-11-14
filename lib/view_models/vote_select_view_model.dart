@@ -9,6 +9,7 @@ import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
 
+import '../services/api/firebase_kakao_auth_api.dart';
 import '../services/stateManage_service.dart';
 
 import '../locator.dart';
@@ -20,10 +21,13 @@ import '../services/navigation_service.dart';
 import '../services/sharedPreferences_service.dart';
 import '../models/sharedPreferences_const.dart';
 
+import '../views/mypage_main_view.dart';
+
 import '../services/adManager_service.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
 class VoteSelectViewModel extends FutureViewModel {
+  final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   SharedPreferencesService _sharedPreferencesService =
@@ -225,6 +229,46 @@ class VoteSelectViewModel extends FutureViewModel {
 
   //   ;
   // }
+
+  Future<void> navigateToMypageToDown(String routeName) async {
+    await _navigationService.navigateTo(routeName);
+    // 이렇게 페이지 넘어가는 부분에서 await 걸어주고 후에 후속조치 취해주면 하위페이지에서 변동된 데이터를 적용할 수 있음
+    await getModels();
+    notifyListeners();
+  }
+
+  Future<void> navigateToMypage() async {
+    await _navigationService.navigateToMyPage(MypageMainView());
+    // await _navigationService.navigateTo('mypage_main');
+  }
+
+  Future getModels() async {
+    if (_stateManageService.appStart) {
+      await _stateManageService.initStateManage(initUid: uid);
+    } else {
+      if (await _stateManageService.isNeededUpdate())
+        await _stateManageService.initStateManage(initUid: uid);
+    }
+
+    user = _stateManageService.userModel;
+  }
+
+  // 로그아웃 버튼이 눌렸을 경우..
+  Future logout() async {
+    // var dialogResult = await _dialogService.showDialog(
+    //     title: '로그아웃',
+    //     description: '로그아웃하시겠습니까?',
+    //     buttonTitle: '네',
+    //     cancelTitle: '아니오');
+    // if (dialogResult.confirmed) {
+    // _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
+    _stateManageService.setMyState();
+    FirebaseKakaoAuthAPI().signOut();
+    _authService.signOut();
+
+    // _navigationService.popAndNavigateWithArgTo('initial');
+    // }
+  }
 
   @override
   Future futureToRun() => getAllModel(uid);

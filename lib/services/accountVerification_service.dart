@@ -18,7 +18,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
   //test token
   // final String _token = 'ed1ff970f8c64e73857026e430dca5484aa2933e';
   //real token
-  final String _token = '98179f2e46aa498bacd828857eab5273ed539e34';
+  final String _token = 'a65548647c7b477786f6b20a9413bbef60014c6f';
 
   //나중에 DB로 옮기는게..?
   final Map<String, String> bankList = {
