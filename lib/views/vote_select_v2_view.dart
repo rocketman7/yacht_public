@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:align_positioned/align_positioned.dart';
-import 'package:circular_check_box/circular_check_box.dart';
+import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -433,41 +433,59 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                           letterSpacing: -1.5),
                                                     ),
                                                     SizedBox(height: 12),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          "2,921,300",
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'DmSans',
-                                                            fontSize: 42,
-                                                            height: 1,
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        _navigationService
+                                                            .navigateTo(
+                                                                'portfolio');
+                                                      },
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            '${model.getPortfolioValue()}',
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'DmSans',
+                                                              fontSize: 42,
+                                                              height: 1,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
                                                           ),
-                                                        ),
-                                                        Text(
-                                                          "원",
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                'AppleSDM',
-                                                            fontSize: 24,
-                                                            height: 1,
-                                                            // fontWeight: FontWeight.bold,
+                                                          Text(
+                                                            "원",
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'AppleSDM',
+                                                              fontSize: 24,
+                                                              height: 1,
+                                                              // fontWeight: FontWeight.bold,
+                                                            ),
                                                           ),
-                                                        ),
-                                                        Icon(
-                                                          Icons
-                                                              .arrow_forward_ios,
-                                                          // color: Color(0xFFFFF5F5),
-                                                          size: 24.sp,
-                                                        ),
-                                                      ],
+                                                          Icon(
+                                                            Icons
+                                                                .arrow_forward_ios,
+                                                            // color: Color(0xFFFFF5F5),
+                                                            size: 24.sp,
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
                                               )
                                             ],
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              _navigationService
+                                                  .navigateTo('trackRecord');
+                                            },
+                                            child: Text("나의 예측 기록"),
                                           ),
                                         ),
                                         SizedBox(
@@ -665,11 +683,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "11월 14일 예측 주제",
+                                      "11월 14일의 예측주제",
                                       style: TextStyle(
-                                        fontFamily: 'AppleSDB',
-                                        fontSize: 24,
+                                        fontFamily: 'AppleSDEB',
+                                        fontSize: 22,
                                         height: 1,
+                                        // letterSpacing: -.28,
                                         // fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -761,7 +780,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                 (model.user.item - numSelected)
                                                     .toString(),
                                                 style: TextStyle(
-                                                  fontSize: 26.sp,
+                                                  fontSize: 26,
                                                   letterSpacing: -1.0,
                                                   fontFamily: 'DmSans',
                                                   // fontWeight: FontWeight.bold,
@@ -877,14 +896,15 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 32.w,
                                 ),
-                                height: 70.h,
+                                height: 60,
                                 decoration: BoxDecoration(
                                     color:
                                         // (model.address.isVoting == false ||
                                         //         model.userVote.isVoted)
                                         // ? Color(0xFFC1C1C1)
                                         // : Colors.black,
-                                        Color(0xFF1EC8CF),
+                                        // Color(0xFF1EC8CF),
+                                        Colors.black,
                                     // gradient: model.address.isVoting == true
                                     //     ? LinearGradient(
                                     //         begin: Alignment.topLeft,
@@ -928,8 +948,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                     Text(
                                       "예측하러 가기",
                                       style: TextStyle(
-                                        fontSize: 24.sp,
+                                        fontSize: 20.sp,
                                         fontFamily: 'AppleSDEB',
+                                        height: 1,
                                         color: Color(0xFFFFF5F5),
                                       ),
                                     ),
@@ -1015,11 +1036,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
     }
 
     TextStyle voteTitle = TextStyle(
-      color: Colors.black,
-      fontFamily: 'AppleSDM',
-      fontSize: 24.sp,
-      height: 1,
-    );
+        color: Colors.black,
+        fontFamily: 'AppleSDEB',
+        fontSize: 28.sp,
+        height: 1,
+        letterSpacing: -.2);
 
     return Stack(
       alignment: Alignment.centerLeft,
@@ -1186,7 +1207,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                       "VS",
                                       style: TextStyle(
                                         color: Colors.grey,
-                                        fontFamily: 'AppleSDM',
+                                        fontFamily: 'AppleSDB',
                                         fontSize: 24.sp,
                                         height: 1,
                                       ),
@@ -1271,10 +1292,6 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                 ),
               ),
             ),
-            Divider(
-              thickness: 1.5,
-              height: 0.2,
-            ),
           ],
         ),
         // Padding(
@@ -1293,55 +1310,51 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
         // Text("AAA"),
         Container(
           // color: Colors.red,
-          child: Transform.scale(
-            scale: 1.2.w,
-            child: CircularCheckBox(
-                key: UniqueKey(),
-                materialTapTargetSize: MaterialTapTargetSize.padded,
-                visualDensity: VisualDensity(
-                  horizontal: VisualDensity.minimumDensity,
-                  vertical: VisualDensity.minimumDensity,
-                ),
-                value: selected[idx],
-                hoverColor: Colors.white,
-                activeColor: (model.address.isVoting == false)
-                    ? Color(0xFFC1C1C1)
-                    : Color(0xFF1EC8CF),
-                inactiveColor: (model.address.isVoting == false)
-                    ? Color(0xFFC1C1C1)
-                    : Color(0xFF1EC8CF),
-                // disabledColor: Colors.grey,
-                onChanged: (newValue) {
-                  (model.address.isVoting == false)
-                      ? _showToast("오늘 예측이 마감되었습니다.\n커뮤니티에서 실시간 대결 상황을\n살펴보세요!")
-                      : setState(() {
-                          print(model.seasonInfo.maxDailyVote - numSelected);
-                          if (model.seasonInfo.maxDailyVote - numSelected ==
-                              0) {
+          child: CustomizedCircularCheckBox(
+              key: UniqueKey(),
+              materialTapTargetSize: MaterialTapTargetSize.padded,
+              visualDensity: VisualDensity(
+                horizontal: VisualDensity.minimumDensity,
+                vertical: VisualDensity.minimumDensity,
+              ),
+              value: selected[idx],
+              hoverColor: Colors.white,
+              activeColor: (model.address.isVoting == false)
+                  ? Color(0xFFC1C1C1)
+                  : Color(0xFF1EC8CF),
+              inactiveColor: (model.address.isVoting == false)
+                  ? Color(0xFFC1C1C1)
+                  : Color(0xFF1EC8CF),
+              // disabledColor: Colors.grey,
+              onChanged: (newValue) {
+                (model.address.isVoting == false)
+                    ? _showToast("오늘 예측이 마감되었습니다.\n커뮤니티에서 실시간 대결 상황을\n살펴보세요!")
+                    : setState(() {
+                        print(model.seasonInfo.maxDailyVote - numSelected);
+                        if (model.seasonInfo.maxDailyVote - numSelected == 0) {
+                          if (newValue) {
+                            selected[idx] = selected[idx];
+                            _showToast(
+                                "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                          } else {
+                            selected[idx] = newValue;
+                          }
+                        } else {
+                          if (model.user.item - numSelected == 0) {
+                            // 선택되면 안됨
                             if (newValue) {
                               selected[idx] = selected[idx];
-                              _showToast(
-                                  "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+
+                              _showToast("보유 중인 아이템이 부족합니다.");
                             } else {
                               selected[idx] = newValue;
                             }
                           } else {
-                            if (model.user.item - numSelected == 0) {
-                              // 선택되면 안됨
-                              if (newValue) {
-                                selected[idx] = selected[idx];
-
-                                _showToast("보유 중인 아이템이 부족합니다.");
-                              } else {
-                                selected[idx] = newValue;
-                              }
-                            } else {
-                              selected[idx] = newValue;
-                            }
+                            selected[idx] = newValue;
                           }
-                        });
-                }),
-          ),
+                        }
+                      });
+              }),
         ),
       ],
     );
@@ -1379,6 +1392,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                     child: ChartView(
                       // controller,
                       scrollStreamCtrl,
+                      selected,
+                      idx,
+                      numSelected,
+                      // _showToast,
                     ),
                   );
                 }));
@@ -2182,8 +2199,8 @@ class _TopContainerState extends State<TopContainer> {
           style: TextStyle(
             fontFamily: 'DmSans',
             color: diff.inHours < 1 ? Color(0xFFE41818) : Colors.black,
-            fontSize: 22.sp,
-            fontWeight: FontWeight.w800,
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
             letterSpacing: -.5,
           ),
           children: <TextSpan>[
@@ -2193,8 +2210,8 @@ class _TopContainerState extends State<TopContainer> {
                   fontFamily: 'DmSans',
                   color:
                       diff.inHours < 1 ? Color(0xFFE41818) : Color(0xFFC1C1C1),
-                  fontSize: 22.sp,
-                  fontWeight: FontWeight.w800,
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
                   letterSpacing: -.5,
                 ))
           ]),

@@ -194,7 +194,10 @@ class DatabaseService {
     }
   }
 
-  Future getPriceForChart(String issueCode) async {
+  Future getPriceForChart(
+    String countryCode,
+    String issueCode,
+  ) async {
     ChartModel chart;
 
     try {
@@ -203,6 +206,14 @@ class DatabaseService {
       var priceData = await _databaseService
           .collection('temp')
           .doc('KR')
+          .collection(issueCode)
+          .orderBy('date', descending: false)
+          .get();
+
+      // 최종 DB location
+      var historicalPriceData = await _databaseService
+          .collection('stocks')
+          .doc(countryCode)
           .collection(issueCode)
           .orderBy('date', descending: false)
           .get();
@@ -249,6 +260,8 @@ class DatabaseService {
                   .add(UserVoteModel.fromData(result.data(), userVoteStats));
         });
       });
+
+      print("USERVOTELIST" + allSeasonUserVoteList[0].voteDate.toString());
       // allSeasonUserVoteList.removeWhere((element) => element == null);
       return allSeasonUserVoteList;
     } catch (e) {
@@ -392,7 +405,7 @@ class DatabaseService {
       }
 
       // while ( temp.isBefore())
-
+      print("VOTELSIT = " + voteList.toString());
       return voteList;
       // List<int> voteResult;
       // print(voteData.data['voteResult']);
@@ -875,6 +888,33 @@ class DatabaseService {
   Future updateUserItem(String uid, int newItem) async {
     print("NEW ITEM IS" + newItem.toString());
     await _usersCollectionReference.doc(uid).update({'item': newItem});
+  }
+
+  Future getStats() async {
+    var data;
+    data = await _databaseService
+        .collection('stocks')
+        .doc('KR')
+        .collection('005930')
+        .get()
+        .then((doc) {
+      doc.docs.forEach((element) {
+        if (element.data().isNotEmpty) {
+          switch (element.id) {
+            case 'description':
+              print("DESCRIPTION " + element.data().toString());
+              break;
+            case 'stats':
+              print("STATS " + element.data().toString());
+              break;
+          }
+          // print(element.data());
+          return element.data();
+        }
+      });
+    });
+
+    return data;
   }
 
   // database 및 time정보로 Database Address 모델 만들기

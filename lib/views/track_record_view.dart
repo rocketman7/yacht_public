@@ -318,9 +318,13 @@ class _TrackRecordViewState extends State<TrackRecordView> {
   }
 
   Widget buildColumn(TrackRecordViewModel model, int eachVoteNumber) {
-    TextStyle tableTextStyle = TextStyle(
+    TextStyle tableSubjectTextStyle = TextStyle(
       fontSize: 15.sp,
-      fontFamily: 'AppleSDB',
+      fontFamily: 'AppleSDL',
+    );
+    TextStyle tableVoteTextStyle = TextStyle(
+      fontSize: 15.sp,
+      fontFamily: 'AppleSDM',
     );
     TextStyle tableColumnStyle = TextStyle(
       fontSize: 12.sp,
@@ -350,7 +354,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
               style: TextStyle(
                 fontSize: 20.sp,
                 fontFamily: 'DmSans',
-                fontWeight: FontWeight.w700,
+                // fontWeight: FontWeight.,
                 letterSpacing: -1.0,
               ),
             ),
@@ -454,7 +458,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                               child: Text(
                                 model.allSeasonVoteList[eachVoteNumber]
                                     .subVotes[index].title,
-                                style: tableTextStyle,
+                                style: tableSubjectTextStyle,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ))),
@@ -484,7 +488,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                     .subVotes[index].voteChoices[1]
                                     .toString()
                         : "-",
-                    style: tableTextStyle,
+                    style: tableVoteTextStyle,
                     overflow: TextOverflow.ellipsis,
                   );
                 }),
@@ -507,7 +511,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                             ? "무승부"
                             : model.allSeasonVoteList[eachVoteNumber]
                                 .subVotes[index].voteChoices[answerIdx - 1],
-                    style: tableTextStyle,
+                    style: tableVoteTextStyle,
                     overflow: TextOverflow.ellipsis,
                   );
                 }),

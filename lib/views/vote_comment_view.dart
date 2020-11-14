@@ -256,7 +256,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
           color: Color(
             0xFFE0E0E0,
           )),
-      height: 86,
+      height: 94,
       isDateDisabled: (dateTime) {
         // dateTime을 넣고 휴일 여부를 bool로
         return dateTime.isAfter(strToDate(model.address.date));
@@ -486,176 +486,176 @@ class _VoteCommentViewState extends State<VoteCommentView>
     );
   }
 
-  Widget commentTabBarView(
-    int subVoteIndex,
-    BuildContext context,
-    DatabaseAddressModel address,
-    VoteModel vote,
-    VoteCommentViewModel viewModel,
-  ) {
-    address.subVote = subVoteIndex.toString();
-    // print("address" + address.date);
+//   Widget commentTabBarView(
+//     int subVoteIndex,
+//     BuildContext context,
+//     DatabaseAddressModel address,
+//     VoteModel vote,
+//     VoteCommentViewModel viewModel,
+//   ) {
+//     address.subVote = subVoteIndex.toString();
+//     // print("address" + address.date);
 
-    // 차트에 표시할 포맷
-    var f = new NumberFormat("##.0%");
+//     // 차트에 표시할 포맷
+//     var f = new NumberFormat("##.0%");
 
-    // 각 투표수 가져오기
-    var numVoted0 = vote.subVotes[subVoteIndex].numVoted0 ?? 0;
-    var numVoted1 = vote.subVotes[subVoteIndex].numVoted1 ?? 0;
+//     // 각 투표수 가져오기
+//     var numVoted0 = vote.subVotes[subVoteIndex].numVoted0 ?? 0;
+//     var numVoted1 = vote.subVotes[subVoteIndex].numVoted1 ?? 0;
 
-    // 투표수 -> 퍼센티지 변환
+//     // 투표수 -> 퍼센티지 변환
 
-    double vote0Percentage =
-        (numVoted0 + numVoted1) == 0 ? 0 : numVoted0 / (numVoted0 + numVoted1);
-    double vote1Percentage =
-        (numVoted0 + numVoted1) == 0 ? 0 : numVoted1 / (numVoted0 + numVoted1);
+//     double vote0Percentage =
+//         (numVoted0 + numVoted1) == 0 ? 0 : numVoted0 / (numVoted0 + numVoted1);
+//     double vote1Percentage =
+//         (numVoted0 + numVoted1) == 0 ? 0 : numVoted1 / (numVoted0 + numVoted1);
 
-    // Bar 차트에 들어갈 데이터 오브젝트
-    var data = [
-      VoteChart(vote.subVotes[subVoteIndex].voteChoices[0], vote0Percentage,
-          Colors.red),
-      VoteChart(vote.subVotes[subVoteIndex].voteChoices[1], vote1Percentage,
-          Colors.blue),
-    ];
+//     // Bar 차트에 들어갈 데이터 오브젝트
+//     var data = [
+//       VoteChart(vote.subVotes[subVoteIndex].voteChoices[0], vote0Percentage,
+//           Colors.red),
+//       VoteChart(vote.subVotes[subVoteIndex].voteChoices[1], vote1Percentage,
+//           Colors.blue),
+//     ];
 
-    // 차트에 들어갈 데이터, 레이블 요소들
-    var series = [
-      charts.Series(
-          domainFn: (VoteChart numVotedData, _) => numVotedData.name,
-          measureFn: (VoteChart numVotedData, _) => numVotedData.votePercentage,
-          colorFn: (VoteChart numVotedData, _) => numVotedData.color,
-          id: 'Now',
-          data: data,
-          labelAccessorFn: (VoteChart numVotedData, _) =>
-              '${(f.format(numVotedData.votePercentage)).toString()}',
-          // insideLabelStyleAccessorFn: (VoteChart numVotedData, _) {
-          //   final color = charts.MaterialPalette.yellow.shadeDefault.darker;
-          //   return new charts.TextStyleSpec(color: color);
-          // },
-          outsideLabelStyleAccessorFn: (VoteChart numVotedData, _) {
-            final color = charts.MaterialPalette.blue.shadeDefault.darker;
-            return new charts.TextStyleSpec(color: color);
-          }),
-    ];
+//     // 차트에 들어갈 데이터, 레이블 요소들
+//     var series = [
+//       charts.Series(
+//           domainFn: (VoteChart numVotedData, _) => numVotedData.name,
+//           measureFn: (VoteChart numVotedData, _) => numVotedData.votePercentage,
+//           colorFn: (VoteChart numVotedData, _) => numVotedData.color,
+//           id: 'Now',
+//           data: data,
+//           labelAccessorFn: (VoteChart numVotedData, _) =>
+//               '${(f.format(numVotedData.votePercentage)).toString()}',
+//           // insideLabelStyleAccessorFn: (VoteChart numVotedData, _) {
+//           //   final color = charts.MaterialPalette.yellow.shadeDefault.darker;
+//           //   return new charts.TextStyleSpec(color: color);
+//           // },
+//           outsideLabelStyleAccessorFn: (VoteChart numVotedData, _) {
+//             final color = charts.MaterialPalette.blue.shadeDefault.darker;
+//             return new charts.TextStyleSpec(color: color);
+//           }),
+//     ];
 
-    // 차트 디스플레이 요소들
-    var chart = charts.BarChart(
-      series,
-      animate: true,
-      animationDuration: Duration(milliseconds: 800),
-      barRendererDecorator: new charts.BarLabelDecorator<String>(),
-      vertical: false,
+//     // 차트 디스플레이 요소들
+//     var chart = charts.BarChart(
+//       series,
+//       animate: true,
+//       animationDuration: Duration(milliseconds: 800),
+//       barRendererDecorator: new charts.BarLabelDecorator<String>(),
+//       vertical: false,
 
-      /// Assign a custom style for the domain axis.
-      ///
-      /// This is an OrdinalAxisSpec to match up with BarChart's default
-      /// ordinal domain axis (use NumericAxisSpec or DateTimeAxisSpec for
-      /// other charts).
-      domainAxis: new charts.OrdinalAxisSpec(
-        showAxisLine: false,
-        renderSpec: new charts.SmallTickRendererSpec(
-          // Tick and Label styling here.
-          labelStyle: new charts.TextStyleSpec(
-              fontSize: 14, // size in Pts.
-              color: charts.MaterialPalette.black),
+//       /// Assign a custom style for the domain axis.
+//       ///
+//       /// This is an OrdinalAxisSpec to match up with BarChart's default
+//       /// ordinal domain axis (use NumericAxisSpec or DateTimeAxisSpec for
+//       /// other charts).
+//       domainAxis: new charts.OrdinalAxisSpec(
+//         showAxisLine: false,
+//         renderSpec: new charts.SmallTickRendererSpec(
+//           // Tick and Label styling here.
+//           labelStyle: new charts.TextStyleSpec(
+//               fontSize: 14, // size in Pts.
+//               color: charts.MaterialPalette.black),
 
-          // Change the line colors to match text color.
-          lineStyle:
-              new charts.LineStyleSpec(color: charts.MaterialPalette.black),
-        ),
-      ),
+//           // Change the line colors to match text color.
+//           lineStyle:
+//               new charts.LineStyleSpec(color: charts.MaterialPalette.black),
+//         ),
+//       ),
 
-      /// Assign a custom style for the measure axis.
-      primaryMeasureAxis: new charts.NumericAxisSpec(
-        showAxisLine: false,
-        renderSpec: new charts.GridlineRendererSpec(
-          // Tick and Label styling here.
-          labelStyle: new charts.TextStyleSpec(
-              fontSize: 14, // size in Pts.
-              color: charts.MaterialPalette.black),
+//       /// Assign a custom style for the measure axis.
+//       primaryMeasureAxis: new charts.NumericAxisSpec(
+//         showAxisLine: false,
+//         renderSpec: new charts.GridlineRendererSpec(
+//           // Tick and Label styling here.
+//           labelStyle: new charts.TextStyleSpec(
+//               fontSize: 14, // size in Pts.
+//               color: charts.MaterialPalette.black),
 
-          // Change the line colors to match text color.
-          lineStyle:
-              new charts.LineStyleSpec(color: charts.MaterialPalette.black),
-        ),
-      ),
-    );
-    return StreamBuilder(
-        //StreamProvider
-        stream: viewModel.getPost(address),
-        //create: _databaseService.getPostList(),
-        builder: (context, snapshotStream) {
-          //builder (context, child) {}
-          List<VoteCommentModel> commentModelList = snapshotStream.data;
+//           // Change the line colors to match text color.
+//           lineStyle:
+//               new charts.LineStyleSpec(color: charts.MaterialPalette.black),
+//         ),
+//       ),
+//     );
+//     return StreamBuilder(
+//         //StreamProvider
+//         stream: viewModel.getPost(address),
+//         //create: _databaseService.getPostList(),
+//         builder: (context, snapshotStream) {
+//           //builder (context, child) {}
+//           List<VoteCommentModel> commentModelList = snapshotStream.data;
 
-          // List commentsList = Provider.of<List<VoteCommentModel>>(context);
-          if (snapshotStream.data == null) {
-            // print(snapshot.data);
-            return LoadingView();
-          } else {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 60.0),
-                  child: Text(
-                    vote.subVotes[subVoteIndex].voteChoices[0],
-                    style: commentTitle(),
-                  ),
-                ),
-                Text(
-                  "vs",
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.black,
-                    fontFamily: 'AdventPro',
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 60.0),
-                  child: Text(
-                    vote.subVotes[subVoteIndex].voteChoices[1],
-                    style: commentTitle(),
-                  ),
-                ),
-                SizedBox(
-                  height: gap_m,
-                ),
-                // space for chart
-                SizedBox(
-                  height: 95.0,
-                  child: chart,
-                ),
-                SizedBox(
-                  height: gap_xxs,
-                ),
-// 피드 섹션
-                Expanded(
-                  child: Container(
-                    // width: 320,
-                    height: 350,
-                    child: ListView.builder(
-                        key: UniqueKey(),
-                        controller: _controller,
-                        // addAutomaticKeepAlives: true,
-                        itemCount: commentModelList.length,
-                        scrollDirection: Axis.vertical,
-                        reverse: true,
-                        itemBuilder: (context, index) {
-                          return commentList(
-                            subVoteIndex,
-                            address,
-                            commentModelList[index],
-                            viewModel,
-                          );
-                        }),
-                  ),
-                ),
-              ],
-            );
-          }
-        });
-  }
+//           // List commentsList = Provider.of<List<VoteCommentModel>>(context);
+//           if (snapshotStream.data == null) {
+//             // print(snapshot.data);
+//             return LoadingView();
+//           } else {
+//             return Column(
+//               mainAxisAlignment: MainAxisAlignment.start,
+//               children: <Widget>[
+//                 Padding(
+//                   padding: EdgeInsets.only(right: 60.0),
+//                   child: Text(
+//                     vote.subVotes[subVoteIndex].voteChoices[0],
+//                     style: commentTitle(),
+//                   ),
+//                 ),
+//                 Text(
+//                   "vs",
+//                   style: TextStyle(
+//                     fontSize: 17,
+//                     color: Colors.black,
+//                     fontFamily: 'AdventPro',
+//                   ),
+//                 ),
+//                 Padding(
+//                   padding: EdgeInsets.only(left: 60.0),
+//                   child: Text(
+//                     vote.subVotes[subVoteIndex].voteChoices[1],
+//                     style: commentTitle(),
+//                   ),
+//                 ),
+//                 SizedBox(
+//                   height: gap_m,
+//                 ),
+//                 // space for chart
+//                 SizedBox(
+//                   height: 95.0,
+//                   child: chart,
+//                 ),
+//                 SizedBox(
+//                   height: gap_xxs,
+//                 ),
+// // 피드 섹션
+//                 Expanded(
+//                   child: Container(
+//                     // width: 320,
+//                     height: 350,
+//                     child: ListView.builder(
+//                         key: UniqueKey(),
+//                         controller: _controller,
+//                         // addAutomaticKeepAlives: true,
+//                         itemCount: commentModelList.length,
+//                         scrollDirection: Axis.vertical,
+//                         reverse: true,
+//                         itemBuilder: (context, index) {
+//                           return commentList(
+//                             subVoteIndex,
+//                             address,
+//                             commentModelList[index],
+//                             viewModel,
+//                           );
+//                         }),
+//                   ),
+//                 ),
+//               ],
+//             );
+//           }
+//         });
+//   }
 
   Widget subVoteList(String text) {
     return Padding(
