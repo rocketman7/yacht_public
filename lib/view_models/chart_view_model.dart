@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:stacked/stacked.dart';
@@ -12,6 +12,8 @@ import 'package:flutter/services.dart';
 import '../locator.dart';
 
 class ChartViewModel extends FutureViewModel {
+  final String countryCode;
+  final String issueCode;
   final StreamController priceStreamCtrl;
   final BehaviorSubject behaviorCtrl;
   final StreamController dateTimeStreamCtrl;
@@ -29,6 +31,8 @@ class ChartViewModel extends FutureViewModel {
   bool isDaysVisible = true;
 
   ChartViewModel(
+    this.countryCode,
+    this.issueCode,
     this.priceStreamCtrl,
     this.behaviorCtrl,
     this.dateTimeStreamCtrl,
@@ -38,7 +42,20 @@ class ChartViewModel extends FutureViewModel {
   }
 
   Future getAllModel(uid) async {
-    chartList = await _databaseService.getPriceForChart('005930');
+    chartList = await _databaseService.getPriceForChart(
+      countryCode,
+      issueCode,
+    );
+
+    var mapData = await _databaseService.getStats();
+
+    // print(mapData.keys);
+    print(mapData['2Q2020']);
+    print(mapData['2Q2020']['estEps']);
+    print(mapData['3Q2020']);
+    mapData.data().values.forEach((e) {
+      print(e);
+    });
   }
 
   void trackball(TrackballArgs args) {

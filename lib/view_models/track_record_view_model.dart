@@ -23,6 +23,7 @@ class TrackRecordViewModel extends FutureViewModel {
 
   TrackRecordViewModel() {
     uid = _authService.auth.currentUser.uid;
+    print(uid);
   }
 
   Future getAllModel(uid) async {
@@ -34,12 +35,12 @@ class TrackRecordViewModel extends FutureViewModel {
         await _databaseService.getAllSeasonUserVote(address);
 
     allSeasonVoteList = await _databaseService.getAllSeasonVote(address);
-    print("ALLSEASON" + allSeasonVoteList.length.toString());
-    print(allSeasonVoteList[0].voteDate.toString());
-    print(allSeasonVoteList[1].voteDate.toString());
-    print(allSeasonVoteList[2].voteDate.toString());
-    print(allSeasonVoteList[3].voteDate.toString());
-    print(allSeasonVoteList[4].voteDate.toString());
+    // print("ALLSEASON" + allSeasonVoteList.length.toString());
+    // print(allSeasonVoteList[0].voteDate.toString());
+    // print(allSeasonVoteList[1].voteDate.toString());
+    // print(allSeasonVoteList[2].voteDate.toString());
+    // print(allSeasonVoteList[3].voteDate.toString());
+    // print(allSeasonVoteList[4].voteDate.toString());
     // print(allSeasonVoteList[5].voteDate.toString());
   }
 

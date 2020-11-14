@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:countup/countup.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -19,9 +20,18 @@ import 'loading_view.dart';
 class ChartView extends StatefulWidget {
   // final ScrollController controller;
   final StreamController scrollStreamCtrl;
+  final List<bool> selected;
+  final int idx;
+  final int numSelected;
+  // final Function showToast;
+
   ChartView(
     // this.controller,
     this.scrollStreamCtrl,
+    this.selected,
+    this.idx,
+    this.numSelected,
+    // this.showToast,
   );
   @override
   _ChartViewState createState() => _ChartViewState();
@@ -38,7 +48,20 @@ class _ChartViewState extends State<ChartView> {
   StreamController dateTimeStreamCtrl = StreamController<DateTime>();
   ScrollController controller;
   StreamController scrollStreamCtrl = StreamController<double>();
+  List<bool> selected;
+  int idx;
+  int numSelected;
+  Function _showToast;
+
   double _lastValue = 0.0;
+
+  // 종목 정보 불러올 때 필요한 변수들
+  String issueCode = "005930";
+  String countryCode = "KR";
+
+  // 종목 대결일 때
+  int numOfIssueCodes = 2;
+
   @override
   void initState() {
     controller = ScrollController(
@@ -68,6 +91,10 @@ class _ChartViewState extends State<ChartView> {
   Widget build(BuildContext context) {
     // controller = widget.controller;
     scrollStreamCtrl = widget.scrollStreamCtrl;
+    selected = widget.selected;
+    idx = widget.idx;
+    numSelected = widget.numSelected;
+    // _showToast = widget.showToast;
 
     var formatPrice = NumberFormat("+#,###; -#,###");
     var stringDate = DateFormat("yyyy.MM.dd EEE");
@@ -75,6 +102,8 @@ class _ChartViewState extends State<ChartView> {
 
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => ChartViewModel(
+        countryCode,
+        issueCode,
         priceStreamCtrl,
         behaviorCtrl,
         dateTimeStreamCtrl,
@@ -95,6 +124,7 @@ class _ChartViewState extends State<ChartView> {
               model.chartList.length - 1);
 
           return Scaffold(
+            backgroundColor: Colors.white,
             body: SafeArea(
               child: SingleChildScrollView(
                 controller: controller,
@@ -103,15 +133,138 @@ class _ChartViewState extends State<ChartView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        // height: 40,
+                        // color: Colors.amber,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.cancel_outlined,
+                                size: 40,
+                              ),
+                            ),
+                            (!selected[idx])
+                                ? Container()
+                                : Expanded(
+                                    child: RaisedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          selected[idx] = false;
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                      color: Color(0xFF0F6669),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 14,
+                                        vertical: 14,
+                                      ),
+                                      child:
+                                          // (model.address.isVoting == false)
+                                          //     ? SizedBox()
+                                          //     :
+
+                                          Text("해제하기",
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: 'DmSans',
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.white,
+                                              )),
+                                    ),
+                                  ),
+                            (selected[idx])
+                                ? Container()
+                                : RaisedButton(
+                                    onPressed: () {
+                                      // (model.address.isVoting == false)
+                                      //     ? {}
+                                      //     : setState(() {
+                                      //         if (model.seasonInfo
+                                      //                     .maxDailyVote -
+                                      //                 numSelected ==
+                                      //             0) {
+                                      //           _showToast(
+                                      //               "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                      //         } else {
+                                      //           if (model.user.item -
+                                      //                   numSelected ==
+                                      //               0) {
+                                      //             // 선택되면 안됨
+
+                                      //             _showToast(
+                                      //                 "보유 중인 아이템이 부족합니다.");
+                                      //           } else {
+                                      //             selected[idx] = true;
+                                      //             Navigator.of(context).pop();
+                                      //           }
+                                      //         }
+                                      //       });
+                                    },
+                                    // color: (model.address.isVoting == false)
+                                    //     ? Color(0xFFE4E4E4)
+                                    //     : Color(0xFF1EC8CF),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      // vertical: 8,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        // (model.address.isVoting == false)
+                                        //     ? SizedBox()
+                                        // :
+                                        SvgPicture.asset(
+                                          'assets/icons/double_check_icon.svg',
+                                          width: 20,
+                                        ),
+                                        // (model.address.isVoting == false)
+                                        //     ? SizedBox()
+                                        // :
+                                        SizedBox(width: 8),
+                                        Text(
+                                            // model.address.isVoting == false
+                                            //     ? "오늘 예측이 마감되었습니다."
+                                            // :
+                                            "선택하기",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color:
+                                                  // (model.address.isVoting ==
+                                                  //         false)
+                                                  //     ? Colors.black
+                                                  // :
+                                                  Colors.white,
+                                              fontFamily: 'AppleSDM',
+                                              height: 1,
+                                              fontWeight: FontWeight.w700,
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 26.0,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            height: 20,
-                          ),
                           Text(
                             "영원한 라이벌 두 기업의\n오늘 수익률 대결은?",
                             style: TextStyle(
@@ -277,7 +430,6 @@ class _ChartViewState extends State<ChartView> {
                       child: SfCartesianChart(
                         plotAreaBorderWidth: 0,
 
-                        margin: EdgeInsets.all(0),
                         // primaryXAxis: CategoryAxis(),
                         // Chart title
                         // title: ChartTitle(
