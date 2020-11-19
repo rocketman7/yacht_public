@@ -7,7 +7,10 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_core/core.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/models/chart_model.dart';
+import 'package:yachtOne/models/stats_model.dart';
+import 'package:yachtOne/models/vote_model.dart';
 import 'package:yachtOne/view_models/chart_view_model.dart';
 import 'package:quiver/iterables.dart' as quiver;
 import 'dart:math';
@@ -23,6 +26,7 @@ class ChartView extends StatefulWidget {
   final List<bool> selected;
   final int idx;
   final int numSelected;
+  VoteModel vote;
   // final Function showToast;
 
   ChartView(
@@ -31,6 +35,7 @@ class ChartView extends StatefulWidget {
     this.selected,
     this.idx,
     this.numSelected,
+    this.vote,
     // this.showToast,
   );
   @override
@@ -40,8 +45,10 @@ class ChartView extends StatefulWidget {
 class _ChartViewState extends State<ChartView> {
   List<double> closeList;
   List<double> closeChartList;
-  List<ChartModel> dataSourceList;
-  int subLength;
+  List<ChartModel> priceDataSourceList;
+  List<StatsModel> statsDataSourceList;
+  int priceSubLength;
+  int statsSubLength;
   double displayPrice = 0.0;
   BehaviorSubject behaviorCtrl = BehaviorSubject<double>();
   StreamController priceStreamCtrl = StreamController<double>();
@@ -51,37 +58,56 @@ class _ChartViewState extends State<ChartView> {
   List<bool> selected;
   int idx;
   int numSelected;
+  String issueCode;
+  int choice = 0;
   Function _showToast;
 
   double _lastValue = 0.0;
 
   // 종목 정보 불러올 때 필요한 변수들
-  String issueCode = "005930";
-  String countryCode = "KR";
 
+  String countryCode = "KR";
+  //  issueCode = '005930';
   // 종목 대결일 때
   int numOfIssueCodes = 2;
 
   @override
   void initState() {
+    // issueCode = widget.vote.subVotes[idx].issueCode[choice];
+    super.initState();
+    print(issueCode);
     controller = ScrollController(
       initialScrollOffset: 0,
     );
-
+    // Duration timestamp = Duration(milliseconds: 400);
     controller.addListener(() {
-      setState(() {
-        // print(controller.offset);
-        scrollStreamCtrl.add(controller.offset);
-      });
+      // setState(() {
+      // print(controller.offset);
+      scrollStreamCtrl.add(controller.offset);
+      if (controller.offset < -170) {
+        print("triggered");
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          print("addPostFramecalled");
+          // controller.removeListener(() {});
+          controller.dispose();
+          print("disposed");
+        });
+      }
+      // });
     });
 
     // print(position);
-    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
     // displayPrice.close();
+    // controller.dispose();
     priceStreamCtrl.close();
     dateTimeStreamCtrl.close();
     super.dispose();
@@ -94,11 +120,19 @@ class _ChartViewState extends State<ChartView> {
     selected = widget.selected;
     idx = widget.idx;
     numSelected = widget.numSelected;
+    issueCode = widget.vote.subVotes[idx].issueCode[0];
+    print("ISSUECODE " + issueCode);
+
     // _showToast = widget.showToast;
 
     var formatPrice = NumberFormat("+#,###; -#,###");
     var stringDate = DateFormat("yyyy.MM.dd EEE");
-    var formatReturnPct = new NumberFormat("+0.00%; -0.00%");
+    var formatReturnPct = new NumberFormat("+0.00%;-0.00%");
+
+    TextStyle newsTitleStyle = TextStyle(
+      fontFamily: 'AppleSDM',
+      fontSize: 18,
+    );
 
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => ChartViewModel(
@@ -114,14 +148,20 @@ class _ChartViewState extends State<ChartView> {
           return Scaffold(body: Container());
         } else {
           behaviorCtrl.listen(print);
-          closeList = model.chartList.forEach((element) {
-            return element.close;
-          });
-          subLength = model.chartList.length;
 
-          dataSourceList = model.chartList.sublist(
-              model.chartList.length - model.subLength,
+          // closeList = model.chartList.forEach((element) {
+          //   return element.close;
+          // });
+
+          // 뷰모델에서 불러온 ChartModel을 차트의 dataSource로
+          priceSubLength = model.chartList.length;
+          priceDataSourceList = model.chartList.sublist(
+              model.chartList.length - model.priceSubLength,
               model.chartList.length - 1);
+
+          // 뷰모델에서 불러온 종목 정보 모델에서 EPS를 dataSource로
+          statsSubLength = model.stockInfoModel.stats.length;
+          statsDataSourceList = model.stockInfoModel.stats;
 
           return Scaffold(
             backgroundColor: Colors.white,
@@ -138,122 +178,28 @@ class _ChartViewState extends State<ChartView> {
                         // height: 40,
                         // color: Colors.amber,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Icon(
-                                Icons.cancel_outlined,
-                                size: 40,
-                              ),
-                            ),
-                            (!selected[idx])
-                                ? Container()
-                                : Expanded(
-                                    child: RaisedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          selected[idx] = false;
-                                        });
-                                        Navigator.of(context).pop();
-                                      },
-                                      color: Color(0xFF0F6669),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 14,
-                                        vertical: 14,
-                                      ),
-                                      child:
-                                          // (model.address.isVoting == false)
-                                          //     ? SizedBox()
-                                          //     :
+                            // Container(
+                            //   width: 50,
+                            //   height: 5,
+                            //   decoration: BoxDecoration(
+                            //     color: Colors.black,
+                            //     borderRadius:
+                            //         BorderRadius.all(Radius.circular(10)),
+                            //   ),
+                            //   // child: SizedBox(),
+                            // )
 
-                                          Text("해제하기",
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontFamily: 'DmSans',
-                                                fontWeight: FontWeight.w700,
-                                                color: Colors.white,
-                                              )),
-                                    ),
-                                  ),
-                            (selected[idx])
-                                ? Container()
-                                : RaisedButton(
-                                    onPressed: () {
-                                      // (model.address.isVoting == false)
-                                      //     ? {}
-                                      //     : setState(() {
-                                      //         if (model.seasonInfo
-                                      //                     .maxDailyVote -
-                                      //                 numSelected ==
-                                      //             0) {
-                                      //           _showToast(
-                                      //               "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
-                                      //         } else {
-                                      //           if (model.user.item -
-                                      //                   numSelected ==
-                                      //               0) {
-                                      //             // 선택되면 안됨
-
-                                      //             _showToast(
-                                      //                 "보유 중인 아이템이 부족합니다.");
-                                      //           } else {
-                                      //             selected[idx] = true;
-                                      //             Navigator.of(context).pop();
-                                      //           }
-                                      //         }
-                                      //       });
-                                    },
-                                    // color: (model.address.isVoting == false)
-                                    //     ? Color(0xFFE4E4E4)
-                                    //     : Color(0xFF1EC8CF),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      // vertical: 8,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        // (model.address.isVoting == false)
-                                        //     ? SizedBox()
-                                        // :
-                                        SvgPicture.asset(
-                                          'assets/icons/double_check_icon.svg',
-                                          width: 20,
-                                        ),
-                                        // (model.address.isVoting == false)
-                                        //     ? SizedBox()
-                                        // :
-                                        SizedBox(width: 8),
-                                        Text(
-                                            // model.address.isVoting == false
-                                            //     ? "오늘 예측이 마감되었습니다."
-                                            // :
-                                            "선택하기",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color:
-                                                  // (model.address.isVoting ==
-                                                  //         false)
-                                                  //     ? Colors.black
-                                                  // :
-                                                  Colors.white,
-                                              fontFamily: 'AppleSDM',
-                                              height: 1,
-                                              fontWeight: FontWeight.w700,
-                                            )),
-                                      ],
-                                    ),
-                                  ),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     Navigator.pop(context);
+                            //   },
+                            //   child: Icon(
+                            //     Icons.cancel_outlined,
+                            //     size: 40,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -265,13 +211,125 @@ class _ChartViewState extends State<ChartView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "영원한 라이벌 두 기업의\n오늘 수익률 대결은?",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'AppleSDM',
-                              color: Colors.grey[800],
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.vote.subVotes[idx].selectDescription
+                                    .replaceAll("\\n", "\n"),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'AppleSDM',
+                                  color: Colors.grey[800],
+                                ),
+                              ),
+                              (!selected[idx])
+                                  ? Container()
+                                  : Expanded(
+                                      child: RaisedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            selected[idx] = false;
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                        color: Color(0xFF0F6669),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                          vertical: 14,
+                                        ),
+                                        child:
+                                            // (model.address.isVoting == false)
+                                            //     ? SizedBox()
+                                            //     :
+
+                                            Text("해제하기",
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: 'DmSans',
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.white,
+                                                )),
+                                      ),
+                                    ),
+                              (selected[idx])
+                                  ? Container()
+                                  : RaisedButton(
+                                      onPressed: () {
+                                        // (model.address.isVoting == false)
+                                        //     ? {}
+                                        //     : setState(() {
+                                        //         if (model.seasonInfo
+                                        //                     .maxDailyVote -
+                                        //                 numSelected ==
+                                        //             0) {
+                                        //           _showToast(
+                                        //               "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                        //         } else {
+                                        //           if (model.user.item -
+                                        //                   numSelected ==
+                                        //               0) {
+                                        //             // 선택되면 안됨
+
+                                        //             _showToast(
+                                        //                 "보유 중인 아이템이 부족합니다.");
+                                        //           } else {
+                                        //             selected[idx] = true;
+                                        //             Navigator.of(context).pop();
+                                        //           }
+                                        //         }
+                                        //       });
+                                      },
+                                      // color: (model.address.isVoting == false)
+                                      //     ? Color(0xFFE4E4E4)
+                                      //     : Color(0xFF1EC8CF),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        // vertical: 8,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          // (model.address.isVoting == false)
+                                          //     ? SizedBox()
+                                          // :
+                                          SvgPicture.asset(
+                                            'assets/icons/double_check_icon.svg',
+                                            width: 20,
+                                          ),
+                                          // (model.address.isVoting == false)
+                                          //     ? SizedBox()
+                                          // :
+                                          SizedBox(width: 8),
+                                          Text(
+                                              // model.address.isVoting == false
+                                              //     ? "오늘 예측이 마감되었습니다."
+                                              // :
+                                              "선택하기",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color:
+                                                    // (model.address.isVoting ==
+                                                    //         false)
+                                                    //     ? Colors.black
+                                                    // :
+                                                    Colors.white,
+                                                fontFamily: 'AppleSDM',
+                                                height: 1,
+                                                fontWeight: FontWeight.w700,
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                            ],
                           ),
                           SizedBox(
                             height: 30,
@@ -280,7 +338,7 @@ class _ChartViewState extends State<ChartView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "삼성전자",
+                                model.stockInfoModel.name,
                                 style: TextStyle(
                                   fontSize: 30,
                                   fontFamily: 'AppleSDB',
@@ -332,17 +390,18 @@ class _ChartViewState extends State<ChartView> {
                                         Text(
                                           formatPrice
                                               .format((snapshot.data -
-                                                  dataSourceList.first.close))
+                                                  priceDataSourceList
+                                                      .first.close))
                                               .toString(),
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: (snapshot.data -
-                                                        dataSourceList
+                                                        priceDataSourceList
                                                             .first.close) <
                                                     0
                                                 ? Colors.blue
                                                 : (snapshot.data -
-                                                            dataSourceList
+                                                            priceDataSourceList
                                                                 .first.close) ==
                                                         0
                                                     ? Colors.black
@@ -357,7 +416,7 @@ class _ChartViewState extends State<ChartView> {
                                           "(" +
                                               formatReturnPct
                                                   .format(((snapshot.data /
-                                                          dataSourceList
+                                                          priceDataSourceList
                                                               .first.close) -
                                                       1))
                                                   .toString() +
@@ -365,12 +424,12 @@ class _ChartViewState extends State<ChartView> {
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: (snapshot.data -
-                                                        dataSourceList
+                                                        priceDataSourceList
                                                             .first.close) <
                                                     0
                                                 ? Colors.blue
                                                 : (snapshot.data -
-                                                            dataSourceList
+                                                            priceDataSourceList
                                                                 .first.close) ==
                                                         0
                                                     ? Colors.black
@@ -426,10 +485,11 @@ class _ChartViewState extends State<ChartView> {
                       height: 14,
                     ),
                     Container(
+                      // color: Colors.red,
                       height: deviceHeight * 0.23,
                       child: SfCartesianChart(
                         plotAreaBorderWidth: 0,
-
+                        margin: EdgeInsets.all(0),
                         // primaryXAxis: CategoryAxis(),
                         // Chart title
                         // title: ChartTitle(
@@ -460,30 +520,38 @@ class _ChartViewState extends State<ChartView> {
                         //     (ChartTouchInteractionArgs args) =>
                         //         model.whenTrackStart(args),
                         series: <ChartSeries>[
-                          FastLineSeries<ChartModel, DateTime>(
-                            color: (dataSourceList.last.close -
-                                        dataSourceList.first.close) >
-                                    0
-                                ? Colors.red
-                                : (dataSourceList.last.close -
-                                            dataSourceList.first.close) ==
-                                        0
-                                    ? Colors.black
-                                    : Colors.blue,
+                          // LIVE 일 때,
+                          model.isDurationSelected[0] == true
+                              ? FastLineSeries<ChartModel, DateTime>(
+                                  dataSource: null,
+                                  xValueMapper: null,
+                                  yValueMapper: null)
+                              : FastLineSeries<ChartModel, DateTime>(
+                                  color: (priceDataSourceList.last.close -
+                                              priceDataSourceList.first.close) >
+                                          0
+                                      ? Colors.red
+                                      : (priceDataSourceList.last.close -
+                                                  priceDataSourceList
+                                                      .first.close) ==
+                                              0
+                                          ? Colors.black
+                                          : Colors.blue,
 
-                            // animationDuration: 10000,
-                            // splineType: SplineType.cardinal,
-                            // cardinalSplineTension: 0.3,
+                                  // animationDuration: 10000,
+                                  // splineType: SplineType.cardinal,
+                                  // cardinalSplineTension: 0.3,
 
-                            enableTooltip: true,
-                            dataSource: dataSourceList,
-                            // <ChartModel>[
+                                  enableTooltip: true,
+                                  dataSource: priceDataSourceList,
+                                  // <ChartModel>[
 
-                            xValueMapper: (ChartModel chart, _) =>
-                                strToDate(chart.date),
-                            yValueMapper: (ChartModel chart, _) => chart.close,
-                            // animationDuration: 1000,
-                          )
+                                  xValueMapper: (ChartModel chart, _) =>
+                                      strToDate(chart.date),
+                                  yValueMapper: (ChartModel chart, _) =>
+                                      chart.close,
+                                  // animationDuration: 1000,
+                                )
                         ],
                         primaryYAxis: NumericAxis(
                           majorGridLines: MajorGridLines(
@@ -491,15 +559,17 @@ class _ChartViewState extends State<ChartView> {
                           ),
                           isVisible: false,
                           minimum: (quiver.min(
-                                List.generate(dataSourceList.length, (index) {
+                                List.generate(priceDataSourceList.length,
+                                    (index) {
                                   // print(model.chartList[index].close);
-                                  return dataSourceList[index].close;
+                                  return priceDataSourceList[index].close;
                                 }),
                               ) *
                               0.97),
                           maximum: (quiver.max(List.generate(
-                                  dataSourceList.length,
-                                  (index) => dataSourceList[index].close)) *
+                                  priceDataSourceList.length,
+                                  (index) =>
+                                      priceDataSourceList[index].close)) *
                               1.03),
                         ),
                         primaryXAxis: DateTimeAxis(
@@ -552,43 +622,97 @@ class _ChartViewState extends State<ChartView> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        FlatButton(
-                          onPressed: () {
-                            model.changeDuration(10, "");
+                      children: List.generate(5, (index) {
+                        return GestureDetector(
+                          onTap: () {
+                            model.changeDuration(index);
                           },
-                          child: Text("2주"),
-                          minWidth: 20,
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            model.changeDuration(20, "지난 1개월");
-                          },
-                          child: Text("1개월"),
-                          minWidth: 20,
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            model.changeDuration(60, "지난 3개월");
-                          },
-                          child: Text("3개월"),
-                          minWidth: 20,
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            model.changeDuration(120, "지난 6개월");
-                          },
-                          child: Text("6개월"),
-                          minWidth: 20,
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            model.changeDuration(200, "지난 1년");
-                          },
-                          child: Text("1년"),
-                          minWidth: 20,
-                        ),
-                      ],
+                          child: Container(
+                            alignment: Alignment.center,
+                            // color: Colors.amber,
+                            width: (deviceWidth - 10) / 5,
+                            height: 40,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                color: model.isDurationSelected[index] == true
+                                    ? (priceDataSourceList.last.close -
+                                                priceDataSourceList
+                                                    .first.close) >
+                                            0
+                                        ? Colors.red
+                                        : (priceDataSourceList.last.close -
+                                                    priceDataSourceList
+                                                        .first.close) ==
+                                                0
+                                            ? Colors.black
+                                            : Colors.blue
+                                    : Colors.white,
+                              ),
+                              alignment: Alignment.center,
+                              width: 50,
+                              height: 30,
+                              child: Text(
+                                model.durationChoiceString[index],
+                                style: TextStyle(
+                                  fontFamily: 'AppleSDM',
+                                  fontSize: 14,
+                                  // height: 1,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  color: model.isDurationSelected[index] == true
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      })
+                      // GestureDetector(
+                      //   // color: Colors.black,
+                      //   onTap: () {
+                      //     model.changeDuration(0);
+                      //   },
+                      //   child: Container(
+                      //     alignment: Alignment.center,
+                      //     color: Colors.blue,
+                      //     width: 60,
+                      //     height: 40,
+                      //     child: Text(
+                      //       "2주",
+                      //       style: TextStyle(
+
+                      //           // color: Colors.white,
+                      //           ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     model.changeDuration(1);
+                      //   },
+                      //   child: Text("1개월"),
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     model.changeDuration(2);
+                      //   },
+                      //   child: Text("3개월"),
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     model.changeDuration(3);
+                      //   },
+                      //   child: Text("6개월"),
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     model.changeDuration(4);
+                      //   },
+                      //   child: Text("1년"),
+                      // ),
+                      ,
                     ),
                     SizedBox(
                       height: 32,
@@ -601,15 +725,182 @@ class _ChartViewState extends State<ChartView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "시세정보",
+                            model.stockInfoModel.descriptionTitle,
                             style: TextStyle(
                               fontSize: 22,
                               fontFamily: 'AppleSDB',
                             ),
                           ),
                           SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            model.stockInfoModel.description,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'AppleSDM',
+                            ),
+                            maxLines: model.isSelected ? 100 : 3,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              model.selectDescriptionDetail();
+                            },
+                            child: Text(
+                              model.isSelected ? "간략히" : "더보기",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'AppleSDB',
+                                color: Color(0xFF1EC8CF),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 32,
+                          ),
+                          Text(
+                            "EPS (주당 순이익)",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontFamily: 'AppleSDB',
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: deviceHeight * 0.23,
+                      child: SfCartesianChart(
+                        plotAreaBorderWidth: 0,
+                        series: <ChartSeries>[
+                          ScatterSeries<StatsModel, String>(
+                            color: Color(0xFf99E99B),
+                            dataSource: statsDataSourceList,
+                            xValueMapper: (StatsModel stats, _) =>
+                                stats.announcedAt.replaceAll("\\n", "\n"),
+                            yValueMapper: (StatsModel stats, _) =>
+                                stats.expectedEps,
+                            markerSettings: MarkerSettings(
+                              width: 20,
+                              height: 20,
+                            ),
+                          ),
+                          ScatterSeries<StatsModel, String>(
+                            color: Color(0xFF00C802),
+                            dataSource: statsDataSourceList,
+                            xValueMapper: (StatsModel stats, _) =>
+                                stats.announcedAt.replaceAll("\\n", "\n"),
+                            yValueMapper: (StatsModel stats, _) =>
+                                stats.actualEps,
+                            markerSettings: MarkerSettings(
+                              width: 20,
+                              height: 20,
+                            ),
+                          ),
+                        ],
+                        primaryXAxis: CategoryAxis(
+                          labelStyle: TextStyle(
+                            fontFamily: 'AppleSDM',
+                            color: Colors.black,
+                          ),
+                          axisLine: AxisLine(
+                            width: 0,
+                          ),
+                          majorTickLines: MajorTickLines(
+                            width: 0,
+                          ),
+                          majorGridLines: MajorGridLines(
+                            width: 0,
+                          ),
+                          // minorGridLines: MinorGridLines(width: 0,),
+                          // isVisible: false,
+                        ),
+                        primaryYAxis: NumericAxis(
+                          labelStyle: TextStyle(
+                            fontFamily: 'AppleSDM',
+                            color: Colors.black,
+                          ),
+                          interval: 1000,
+                          axisLine: AxisLine(
+                            width: 0,
+                          ),
+                          majorTickLines: MajorTickLines(
+                            width: 0,
+                          ),
+                          majorGridLines: MajorGridLines(
+                            width: 0,
+                          ),
+
+                          minimum: 2000, // null값 무시하고 min 구해야 함
+
+                          // minimum: (quiver.min(
+                          //       List.generate(statsDataSourceList.length,
+                          //           (index) {
+                          //         // print(model.chartList[index].close);
+                          //         return min(
+                          //             statsDataSourceList[index].actualEps,
+                          //             statsDataSourceList[index].expectedEps);
+                          //       }),
+                          //     ) *
+                          //     0.80),
+                          // maximum: (quiver.max(
+                          //       List.generate(statsDataSourceList.length,
+                          //           (index) {
+                          //         // print(model.chartList[index].close);
+                          //         return max(
+                          //             statsDataSourceList[index].actualEps,
+                          //             statsDataSourceList[index].expectedEps);
+                          //       }),
+                          //     ) *
+                          //     1.20),
+                          // isVisible: false,
+                        ),
+
+                        // isVisible: false,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 36,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 26.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "기업정보",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontFamily: 'AppleSDB',
+                                  // height: 1,
+                                ),
+                              ),
+                              Text(
+                                "최근 사업보고서 기준",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'AppleSDM',
+                                  // height: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
                             height: 12,
                           ),
+                          // 직전년도 재무정보
                           Column(
                             children: [
                               Row(
@@ -630,14 +921,15 @@ class _ChartViewState extends State<ChartView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "거래량",
+                                            "매출액",
                                             style: TextStyle(
                                               color: Color(0xFF8A8A8A),
                                               fontSize: 14,
                                             ),
                                           ),
                                           Text(
-                                            "20,424,749",
+                                            model.stockInfoModel.revenue
+                                                .toString(),
                                             style: TextStyle(
                                               fontSize: 16,
                                             ),
@@ -665,14 +957,15 @@ class _ChartViewState extends State<ChartView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "시가총액",
+                                            "영업이익",
                                             style: TextStyle(
                                               color: Color(0xFF8A8A8A),
                                               fontSize: 14,
                                             ),
                                           ),
                                           Text(
-                                            "342.6조 원",
+                                            model.stockInfoModel.operatingIncome
+                                                .toString(),
                                             style: TextStyle(
                                               fontSize: 16,
                                             ),
@@ -685,6 +978,42 @@ class _ChartViewState extends State<ChartView> {
                               ),
                               Row(
                                 children: [
+                                  Expanded(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 16),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                              width: 0.5,
+                                              color: Color(0xFF8A8A8A)),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "당기순이익",
+                                            style: TextStyle(
+                                              color: Color(0xFF8A8A8A),
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Text(
+                                            model.stockInfoModel.netIncome
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
                                   Expanded(
                                     child: Container(
                                       padding:
@@ -708,7 +1037,52 @@ class _ChartViewState extends State<ChartView> {
                                             ),
                                           ),
                                           Text(
-                                            "3,198원",
+                                            model.stockInfoModel.latestEps
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 32,
+                          ),
+                          // 각종 기업정보
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 16),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                              width: 0.5,
+                                              color: Color(0xFF8A8A8A)),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "CEO",
+                                            style: TextStyle(
+                                              color: Color(0xFF8A8A8A),
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Text(
+                                            model.stockInfoModel.ceo.toString(),
                                             style: TextStyle(
                                               fontSize: 16,
                                             ),
@@ -736,14 +1110,15 @@ class _ChartViewState extends State<ChartView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "PER",
+                                            "직원수",
                                             style: TextStyle(
                                               color: Color(0xFF8A8A8A),
                                               fontSize: 14,
                                             ),
                                           ),
                                           Text(
-                                            "18.87X",
+                                            model.stockInfoModel.employees
+                                                .toString(),
                                             style: TextStyle(
                                               fontSize: 16,
                                             ),
@@ -754,116 +1129,204 @@ class _ChartViewState extends State<ChartView> {
                                   ),
                                 ],
                               ),
-                              // Row(
-                              //   children: [
-                              //     Expanded(
-                              //       child: Container(
-                              //         padding:
-                              //             EdgeInsets.symmetric(vertical: 16),
-                              //         decoration: BoxDecoration(
-                              //           border: Border(
-                              //             bottom: BorderSide(
-                              //                 width: 0.5,
-                              //                 color: Color(0xFF8A8A8A)),
-                              //           ),
-                              //         ),
-                              //         child: Row(
-                              //           mainAxisAlignment:
-                              //               MainAxisAlignment.spaceBetween,
-                              //           children: [
-                              //             Text(
-                              //               "거래량",
-                              //               style: TextStyle(
-                              //                 color: Color(0xFF8A8A8A),
-                              //                 fontSize: 14,
-                              //               ),
-                              //             ),
-                              //             Text(
-                              //               "20,424,749",
-                              //               style: TextStyle(
-                              //                 fontSize: 16,
-                              //               ),
-                              //             ),
-                              //           ],
-                              //         ),
-                              //       ),
-                              //     ),
-                              //     SizedBox(
-                              //       width: 20,
-                              //     ),
-                              //     Expanded(
-                              //       child: Container(
-                              //         padding:
-                              //             EdgeInsets.symmetric(vertical: 16),
-                              //         decoration: BoxDecoration(
-                              //           border: Border(
-                              //             bottom: BorderSide(
-                              //                 width: 0.5,
-                              //                 color: Color(0xFF8A8A8A)),
-                              //           ),
-                              //         ),
-                              //         child: Row(
-                              //           mainAxisAlignment:
-                              //               MainAxisAlignment.spaceBetween,
-                              //           children: [
-                              //             Text(
-                              //               "시가총액",
-                              //               style: TextStyle(
-                              //                 color: Color(0xFF8A8A8A),
-                              //                 fontSize: 14,
-                              //               ),
-                              //             ),
-                              //             Text(
-                              //               "342.6조 원",
-                              //               style: TextStyle(
-                              //                 fontSize: 16,
-                              //               ),
-                              //             ),
-                              //           ],
-                              //         ),
-                              //       ),
-                              //     ),
-                              //   ],
-                              // )
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 16),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                              width: 0.5,
+                                              color: Color(0xFF8A8A8A)),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "평균 연봉",
+                                            style: TextStyle(
+                                              color: Color(0xFF8A8A8A),
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Text(
+                                            model.stockInfoModel.avrSalary
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 16),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                              width: 0.5,
+                                              color: Color(0xFF8A8A8A)),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "평균 근속년수",
+                                            style: TextStyle(
+                                              color: Color(0xFF8A8A8A),
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Text(
+                                            model.stockInfoModel.avrWorkingYears
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 16),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                              width: 0.5,
+                                              color: Color(0xFF8A8A8A)),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "설립연도",
+                                            style: TextStyle(
+                                              color: Color(0xFF8A8A8A),
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Text(
+                                            model.stockInfoModel.foundedIn
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 16),
+                                      decoration: BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                              width: 0.5,
+                                              color: Color(0xFF8A8A8A)),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "",
+                                            style: TextStyle(
+                                              color: Color(0xFF8A8A8A),
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Text(
+                                            // model.stockInfoModel.avrWorkingYears
+                                            //     .toString()
+                                            "",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                           SizedBox(
                             height: 36,
                           ),
+
                           Text(
-                            "삼성전자는?",
+                            "뉴스",
                             style: TextStyle(
                               fontSize: 22,
                               fontFamily: 'AppleSDB',
+                              // height: 1,
                             ),
                           ),
                           SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            "크게 반도체, LCD, 휴대폰, 가전 부문으로 사업부가 나뉘었으나 2008년부터 2009년까지 불어닥친 글로벌 경제 위기에 대응해 반도체와 LCD로 대표되는 부품 부문과 TV와 휴대폰, 냉장고로 대표되는 완제품 부문으로 사업부를 통합했다. 분야가 완전히 달랐던 삼성테크윈의 디지털 카메라 부문과 삼성SDI의 플래시 메모리, 낸드플래시도 통합되었고 그 외 삼성전기 LED 사업부도 통합되었다.",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'AppleSDM',
-                            ),
-                            maxLines: model.isSelected ? 100 : 3,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              model.selectDescriptionDetail();
-                            },
-                            child: Text(
-                              model.isSelected ? "간략히" : "더보기",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'AppleSDB',
-                                color: Color(0xFF1EC8CF),
-                              ),
-                            ),
-                          ),
+                          Column(
+                              children: List.generate(2, (index) {
+                            return Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    String url =
+                                        model.stockInfoModel.news[index].link;
+                                    if (await canLaunch(url)) {
+                                      await launch(url);
+                                    } else {
+                                      throw 'Could not launch $url';
+                                    }
+                                  },
+                                  child: Text(
+                                    model.stockInfoModel.news[index].title
+                                        .toString(),
+                                    style: newsTitleStyle,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Divider(),
+                              ],
+                            );
+                          })),
+
+                          // Text(dateToStr(model
+                          //         .stockInfoModel.stats[0].uploadedAt
+                          //         .toDate())
+                          //     .toString()),
+                          // Text(DateTime.fromMillisecondsSinceEpoch(
+                          //         model.stockInfoModel.stats[0].uploadedAt)
+                          //     .toString()),
                           SizedBox(
                             height: 36,
                           )

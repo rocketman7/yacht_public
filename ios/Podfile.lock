@@ -436,6 +436,8 @@ PODS:
     - Flutter
     - FMDB (~> 2.7.2)
   - Toast (4.0.0)
+  - url_launcher (0.0.1):
+    - Flutter
   - vibration (1.7.1):
     - Flutter
 
@@ -456,6 +458,7 @@ DEPENDENCIES:
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - vibration (from `.symlinks/plugins/vibration/ios`)
 
 SPEC REPOS:
@@ -523,6 +526,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
   vibration:
     :path: ".symlinks/plugins/vibration/ios"
 
@@ -572,6 +577,7 @@ SPEC CHECKSUMS:
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
   vibration: 4f4ded27b9d0e21e4110ca43978f057412d28c44
 
 PODFILE CHECKSUM: 0661a8b4d2adb53671731a5c90a8e5964fc4bf1f

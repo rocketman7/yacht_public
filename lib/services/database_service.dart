@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:yachtOne/models/chart_model.dart';
+import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/stateManage_model.dart';
+import 'package:yachtOne/models/stats_model.dart';
+import 'package:yachtOne/models/stock_info_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
@@ -198,45 +201,40 @@ class DatabaseService {
     String countryCode,
     String issueCode,
   ) async {
-    ChartModel chart;
+    List<ChartModel> chartList = [];
 
     try {
-      List<ChartModel> chartList;
-      // chartList = [];
-      var priceData = await _databaseService
+      // Historical Price DB에서 모든 docu를 get하고,
+      // chartList에 추가.
+      await _databaseService
           .collection('temp')
           .doc('KR')
           .collection(issueCode)
           .orderBy('date', descending: false)
-          .get();
+          .get()
+          .then((querySnapshot) {
+        print(querySnapshot.docs.first.data());
+        if (querySnapshot.docs != null) {
+          querySnapshot.docs.forEach((doc) {
+            chartList.add(ChartModel.fromData(doc.data()));
+          });
+        }
+      });
+
+      print(chartList);
 
       // 최종 DB location
-      var historicalPriceData = await _databaseService
-          .collection('stocks')
-          .doc(countryCode)
-          .collection(issueCode)
-          .orderBy('date', descending: false)
-          .get();
+      // var historicalPriceData = await _databaseService
+      //     .collection('stocks')
+      //     .doc(countryCode)
+      //     .collection(issueCode)
+      //     .orderBy('date', descending: false)
+      //     .get();
 
-      print(priceData.docs.first.data());
+      // print(priceData.docs.first.data());
 
-      return priceData.docs.map((e) => ChartModel.fromData(e.data())).toList();
-      //     .then((value) {
-      //   List<ChartModel> temp;
-      //   value.docs.forEach((e) {
-      //     // print(e.data());
-      //     chartList.add(ChartModel.fromData(e.data()));
-      //     // print(chartList[0].dateTime);
-      //   });
-      //   return chartList;
-      // });
-
-      // print(chartList.length);
-      // tempPrice.data().map((key, value) {
-      // return ChartModel.fromData(Map<String key, dynamic value> map);
-      // });
-      // print(tempPrice.data()['20200320']['high']);
-
+      // return priceData.docs.map((e) => ChartModel.fromData(e.data())).toList();
+      return chartList;
     } catch (e) {
       print(e.message);
     }
@@ -890,28 +888,58 @@ class DatabaseService {
     await _usersCollectionReference.doc(uid).update({'item': newItem});
   }
 
-  Future getStats() async {
+  Future getStockInfo(String issueCode) async {
+    StockInfoModel stockDescription = StockInfoModel();
+    List<StatsModel> statsList = [];
+    List<NewsModel> newsList = [];
     var data;
     data = await _databaseService
         .collection('stocks')
         .doc('KR')
-        .collection('005930')
+        .collection(issueCode)
         .get()
-        .then((doc) {
-      doc.docs.forEach((element) {
-        if (element.data().isNotEmpty) {
-          switch (element.id) {
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        if (doc.data().isNotEmpty) {
+          switch (doc.id) {
             case 'description':
-              print("DESCRIPTION " + element.data().toString());
+              stockDescription =
+                  stockDescription.addWith(StockInfoModel.fromData(doc.data()));
+              // print(temp.toString());
+              // print("DESCRIPTION " + stockDescription.toString());
+              break;
+            case 'news':
+              // news doc에서 새로 데이터를 가져와서 .news 에 넣기
+              // print(doc.data()['0'].toString());
+              doc.data().values.toList().forEach((element) {
+                newsList.add(NewsModel.fromData(element));
+              });
+
+              stockDescription.news = newsList;
+              // print("NEWS " + stockDescription.toString());
               break;
             case 'stats':
-              print("STATS " + element.data().toString());
+              // stockDescription.stats = StatsModel.fromData(doc.data());
+              // stockDescription.stats.add(StatsModel.fromData(doc.data()));
+              // print(doc.data());
+              doc.data().values.toList().forEach((element) {
+                statsList.add(StatsModel.fromData(element));
+              });
+
+              print(statsList.toString());
+              statsList.sort((b, a) => (b.uploadedAt).compareTo(a.uploadedAt));
+
+              stockDescription.stats = statsList;
+              // stockDescription = stockDescription
+              //     .addWith(StockInfoModel.fromData(element.data()));
+              print("STATS " + stockDescription.toString());
               break;
           }
-          // print(element.data());
-          return element.data();
+          // print(" MODEL" + stockDescription.toString());
+          // return element.data();
         }
       });
+      return stockDescription;
     });
 
     return data;

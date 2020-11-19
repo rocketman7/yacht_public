@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yachtOne/models/chart_model.dart';
+import 'package:yachtOne/models/stock_info_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/views/constants/holiday.dart';
@@ -24,11 +25,20 @@ class ChartViewModel extends FutureViewModel {
   List<ChartModel> chartList;
   double displayPrice = 0.0;
   DateTime displayDateTime;
-  String uid;
-  String lastDays = "지난 1년";
-  int subLength = 200;
   bool isSelected = false;
   bool isDaysVisible = true;
+  String uid;
+  StockInfoModel stockInfoModel;
+
+  // 차트 기간 설정 관련된 변수들
+
+  List<bool> isDurationSelected = [false, false, false, false, true];
+  List<String> durationChoiceString = ["LIVE", "1개월", "3개월", "6개월", "1년"];
+  List<String> durationString = ["LIVE", "지난 1개월", "지난 3개월", "지난 6개월", "지난 1년"];
+  List<int> durationDays = [10, 20, 60, 120, 200];
+  int durationIndex = 4;
+  String lastDays = "지난 1년";
+  int priceSubLength = 200;
 
   ChartViewModel(
     this.countryCode,
@@ -42,20 +52,25 @@ class ChartViewModel extends FutureViewModel {
   }
 
   Future getAllModel(uid) async {
+    print("beforeChart" + DateTime.now().toString());
     chartList = await _databaseService.getPriceForChart(
       countryCode,
       issueCode,
     );
+    print("afterChart" + DateTime.now().toString());
 
-    var mapData = await _databaseService.getStats();
+    stockInfoModel = await _databaseService.getStockInfo(
+      issueCode,
+    );
+    print("afterStockInfo" + DateTime.now().toString());
 
     // print(mapData.keys);
-    print(mapData['2Q2020']);
-    print(mapData['2Q2020']['estEps']);
-    print(mapData['3Q2020']);
-    mapData.data().values.forEach((e) {
-      print(e);
-    });
+    // print(mapData['2Q2020']);
+    // print(mapData['2Q2020']['estEps']);
+    // print(mapData['3Q2020']);
+    // mapData.data().values.forEach((e) {
+    //   print(e);
+    // });
   }
 
   void trackball(TrackballArgs args) {
@@ -94,9 +109,11 @@ class ChartViewModel extends FutureViewModel {
     print("Track start");
   }
 
-  void changeDuration(int duration, String days) {
-    subLength = duration;
-    lastDays = days;
+  void changeDuration(int durationIndex) {
+    priceSubLength = durationDays[durationIndex];
+    lastDays = durationString[durationIndex];
+    isDurationSelected = [false, false, false, false, false];
+    isDurationSelected[durationIndex] = true;
     notifyListeners();
   }
 

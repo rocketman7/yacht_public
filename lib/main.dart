@@ -27,10 +27,13 @@ void main() async {
   setupLocator();
   KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   await FirebaseAdMob.instance.initialize(appId: AdManager.appId);
 
-  runApp(MyApp());
+// portrait 모드 고정
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(MyApp()));
 }
 
 class MyApp extends StatefulWidget {

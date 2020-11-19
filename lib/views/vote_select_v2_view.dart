@@ -54,13 +54,6 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Future<UserModel> _userModelFuture;
-  Future<VoteModel> _getVoteModelFuture;
-
-  Future<List<Object>> _getAllModel;
-  Future<UserModel> _userModel;
-  Future<DatabaseAddressModel> _addressModel;
-  Future<VoteModel> _voteModel;
   String uid;
 
   PreloadPageController _preloadPageController = PreloadPageController();
@@ -1395,14 +1388,16 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
     BuildContext context,
     Color hexToColor(String code),
     VoteSelectViewModel model,
-    int idx,
-    int numOfChoices,
+    int idx, // subvote index
+    int numOfChoices, // issueCode length
     Duration diff,
   ) {
     ScrollController controller;
     StreamController scrollStreamCtrl = StreamController<double>();
     return showModalBottomSheet(
-        backgroundColor: Colors.white,
+        // // barrierColor: Colors.black.withAlpha(1),
+        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.white,
         context: context,
         isScrollControlled: true,
         builder: (
@@ -1413,21 +1408,58 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                 initialData: 0,
                 builder: (context, snapshot) {
                   double offset = snapshot.data;
-                  if (offset < -10) {
-                    // Navigator.pop(context);
+
+                  if (offset < -170) {
+                    WidgetsBinding.instance
+                        .addPostFrameCallback((_) => Navigator.pop(context));
                   }
+
+                  // Do everything you want here...
+
                   print(snapshot.data);
-                  return Container(
-                    height: deviceHeight * .83,
-                    // height: 250 + offset * 1.4,
-                    child: ChartView(
-                      // controller,
-                      scrollStreamCtrl,
-                      selected,
-                      idx,
-                      numSelected,
-                      // _showToast,
-                    ),
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 30,
+                        color: Colors.transparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 55,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                // color: Colors.white70,
+                                color: Color(0xFFEBEBEB),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                              // child: SizedBox(),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: offset < 0
+                            ? (deviceHeight * .83) + offset
+                            : deviceHeight * .83,
+                        // height: 250 + offset * 1.4,
+                        child: ChartView(
+                          // controller,
+                          scrollStreamCtrl,
+                          selected,
+                          idx,
+                          numSelected,
+                          model.vote,
+                          // _showToast,
+                        ),
+                      ),
+                    ],
                   );
                 }));
   }
@@ -2185,7 +2217,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                           style: TextStyle(
                             fontSize: model.user.userName.length > 8
                                 ? 32
-                                : model.user.userName.length > 6 ? 40 : 48,
+                                : model.user.userName.length > 6
+                                    ? 40
+                                    : 48,
                             letterSpacing: -1.0,
                             fontFamily: 'AppleSDB',
                             // fontWeight: FontWeight.w900,
