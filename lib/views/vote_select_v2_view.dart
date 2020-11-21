@@ -87,23 +87,23 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
   //애니메이션은 천천히 생각해보자.
 
   // voteData를 가져와 voteTodayCard에 넣어 위젯 리스트를 만드는 함수
-  void getVoteTodayWidget(VoteModel votesToday) {
-    List<Widget> listItems = [];
-    print("getVOteTodayWIdget making " + votesToday.subVotes[0].id.toString());
-    for (var i = 0; i < votesToday.subVotes.length; i++) {
-      // print(votesFromDB.subVotes.length);
-      listItems.add(VoteCard(i, votesToday));
-    }
-    print("forloop done");
-    if (!isDisposed) {
-      if (this.mounted) {
-        setState(() {
-          print("setstate done");
-          _votesTodayShowing = listItems;
-        });
-      }
-    }
-  }
+  // void getVoteTodayWidget(VoteModel votesToday) {
+  //   List<Widget> listItems = [];
+  //   print("getVOteTodayWIdget making " + votesToday.subVotes[0].id.toString());
+  //   for (var i = 0; i < votesToday.subVotes.length; i++) {
+  //     // print(votesFromDB.subVotes.length);
+  //     listItems.add(VoteCard(i, votesToday));
+  //   }
+  //   print("forloop done");
+  //   if (!isDisposed) {
+  //     if (this.mounted) {
+  //       setState(() {
+  //         print("setstate done");
+  //         _votesTodayShowing = listItems;
+  //       });
+  //     }
+  //   }
+  // }
 
   // void getVoteSelectedWidget(VoteModel votesToday) {
   //   List<Widget> listItems = [];
@@ -963,7 +963,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                     ],
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(
-                                      40,
+                                      10,
                                     ))),
                                 child: Row(
                                   mainAxisAlignment:
@@ -1078,7 +1078,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                   // buildModalBottomSheet(
                   //     context, hexToColor, model, idx, numOfChoices, diff);
                   callNewModalBottomSheet(
-                      context, hexToColor, model, idx, numOfChoices, diff);
+                    context,
+                    hexToColor,
+                    model,
+                    idx,
+                    numOfChoices,
+                    diff,
+                  );
                 },
                 child: Container(
                   color: Colors.white.withOpacity(0),
@@ -1456,6 +1462,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                           idx,
                           numSelected,
                           model.vote,
+                          model.address,
                           // _showToast,
                         ),
                       ),

@@ -54,56 +54,26 @@ class _TrackRecordViewState extends State<TrackRecordView> {
             body: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.only(
-                  top: 18,
+                  top: 20,
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   // crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.of(_navigationService
-                                      .navigatorKey.currentContext)
-                                  .pop();
-                            },
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 18.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.arrow_back_ios,
-                                  ),
-                                ],
-                              ),
-                            )),
-                        Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                "나의 예측 기록",
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  fontFamily: 'AppleSDEB',
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 1,
-                                softWrap: false,
-                                overflow: TextOverflow.fade,
-                              ),
-                            ],
-                          ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        "나의 예측기록",
+                        style: TextStyle(
+                          fontFamily: 'AppleSDEB',
+                          fontSize: 32.sp,
+                          letterSpacing: -2.0,
                         ),
-                        SizedBox(
-                          width: 60.w,
-                        ),
-                      ],
+                      ),
                     ),
                     SizedBox(
-                      height: 18.h,
+                      height: 16.h,
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(

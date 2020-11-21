@@ -15,7 +15,7 @@ class StockInfoModel {
   final int revenue;
   final int operatingIncome;
   final int netIncome;
-  final int latestEps;
+  final num latestEps;
   final String ceo;
   final int employees;
   final int avrSalary;
