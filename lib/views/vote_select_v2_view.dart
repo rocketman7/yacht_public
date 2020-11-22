@@ -227,18 +227,18 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     fToast.init(context);
     print("initState Called");
 
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 3600),
-      vsync: this,
-    );
+    // _controller = AnimationController(
+    //   duration: const Duration(milliseconds: 3600),
+    //   vsync: this,
+    // );
 
-    animation =
-        ColorTween(begin: Colors.blue, end: Colors.red).animate(_controller)
-          ..addListener(() {
-            setState(() {});
-          });
+    // animation =
+    //     ColorTween(begin: Colors.blue, end: Colors.red).animate(_controller)
+    //       ..addListener(() {
+    //         setState(() {});
+    //       });
 
-    _controller.repeat();
+    // _controller.repeat();
 
     // _getAllModel = _viewModel.getAllModel(_viewModel.uid);
     // 현재 시간 한국 시간으로 변경
@@ -403,7 +403,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     //   keepPage: true,
     // );
     // controller.addListener(() {
-    //   double value = controller.offset / 250;
+    //   double value = controller.offset / 250;감
 
     //   setState(() {
     //     leftContainer = value;
@@ -414,6 +414,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   @override
   void dispose() {
     super.dispose();
+    _controller.dispose();
     // dispose는 Navigator pushNamed에는 호출되지 않지만 백 버튼에는 호출됨.
     // 백 버튼에 아래를 호출하지 않으면 dispose 됐는데 setState한다고 오류뜸
   }
@@ -2835,8 +2836,9 @@ class _TopContainerState extends State<TopContainer> {
   VoteSelectViewModel model;
 
   Duration getTimeLeft(VoteSelectViewModel model) {
-    DateTime endTime = model.vote.voteEndDateTime.toDate();
-    return endTime.difference(DateTime.now());
+    // DateTime endTime = model.vote.voteEndDateTime.toDate();
+    DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
+    return temp.difference(DateTime.now());
     // timeLeftArr = diffFinal.split(":");
     // return diffFinal;
   }
@@ -2874,9 +2876,9 @@ class _TopContainerState extends State<TopContainer> {
     String strDurationSec =
         "${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
 
-    // if (diff.inSeconds == 0) {
+    // if (diff.inSeconds == 0 && model.address.isVoting == true) {
     //   _timer.cancel();
-    //   Future.delayed(Duration(seconds: 1));
+    //   model.getAllModel(model.uid);
     //   // widget.checkVoteTime();
     //   // model.isVoteAvailable();
     // }

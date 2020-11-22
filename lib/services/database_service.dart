@@ -209,7 +209,7 @@ class DatabaseService {
       // Historical Price DB에서 모든 docu를 get하고,
       // chartList에 추가.
       await _databaseService
-          .collection('temp')
+          .collection('historicalPrice')
           .doc('KR')
           .collection(issueCode)
           .orderBy('date', descending: false)
@@ -744,7 +744,7 @@ class DatabaseService {
     int rndCombo = 0 + rnd.nextInt(19);
 
     ranksCollectionReference
-        .doc('koreaStockStandard')
+        .doc('KR')
         .collection('season001')
         .doc('20201008')
         .collection('20201008')
@@ -946,17 +946,18 @@ class DatabaseService {
     data = await _databaseService
         .collection("stocks")
         .doc(countryCode)
-        .collection(issueCode == "005930" ? "005930" : "181710")
+        .collection(issueCode)
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         if (doc.data().isNotEmpty) {
           switch (doc.id) {
             case 'description':
+              print(doc.data());
               stockDescription =
                   stockDescription.addWith(StockInfoModel.fromData(doc.data()));
               // print(temp.toString());
-              // print("DESCRIPTION " + stockDescription.toString());
+              print("DESCRIPTION " + stockDescription.toString());
               break;
             case 'news':
               // news doc에서 새로 데이터를 가져와서 .news 에 넣기
@@ -1063,6 +1064,7 @@ class DatabaseService {
 
         // 당일 포험 가장 가까운 영업일 가져오는 함수로 baseDate를 만들고,
         baseDate = DateTimeModel().baseDate(category);
+        print("BASEDATE" + baseDate.toString());
         // 그 baseDate에 해당하는 voteData가 있는지 체크,
         var voteData = await _votesCollectionReference
             .doc(category)
@@ -1090,7 +1092,7 @@ class DatabaseService {
       date: baseDate,
       category: category,
       season: season,
-      isVoting: false, //false면 장 중
+      isVoting: true, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());

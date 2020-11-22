@@ -233,12 +233,12 @@ class _ChartViewState extends State<ChartView> {
               model.chartList.length);
 
           // 뷰모델에서 불러온 종목 정보 모델에서 EPS를 dataSource로
-          if (stockOrIndex == "stocks") {
-            statsSubLength = model.stockInfoModel.stats.length;
-            statsDataSourceList = model.stockInfoModel.stats;
-            print(statsSubLength);
-            // print(statsDataSourceList);
-          }
+          // if (stockOrIndex == "stocks") {
+          //   statsSubLength = model.stockInfoModel.stats.length;
+          //   statsDataSourceList = model.stockInfoModel.stats;
+          //   print(statsSubLength);
+          //   // print(statsDataSourceList);
+          // }
 
           // print(priceDataSourceList.last.close);
 

@@ -80,6 +80,7 @@ class ChartViewModel extends FutureViewModel {
             issueCode,
           );
     // print("Index info model get" + indexInfoModel.toString());
+    print("Stock info model get" + stockInfoModel.toString());
     print("afterStockInfo" + DateTime.now().toString());
     // notifyListeners();
     chartList = await _databaseService.getPriceForChart(

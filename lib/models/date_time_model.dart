@@ -28,7 +28,7 @@ class DateTimeModel {
 // Today의 장 오픈, 클로즈 시간 DateTime 리스트로 반환, 주말이면 다음 월요일로 반환
   List<DateTime> marketOpeningPeriod(String category) {
     switch (category) {
-      case 'koreaStockStandard':
+      case 'KR':
         // 지금 시간이 평일인지 체크하고 평일이면 그대로 반환, 주말이면 가장 가까운 월요일 반환
         DateTime _timeNow = DateTime.now();
         DateTime _nearestWeekDay = closestBusinessDay(_timeNow);
@@ -49,7 +49,7 @@ class DateTimeModel {
   bool isVoteAvailable(String category) {
     List<DateTime> dateTime = marketOpeningPeriod(category);
     switch (category) {
-      case 'koreaStockStandard':
+      case 'KR':
         DateTime _timeNow = DateTime.now();
 
         // 지금이 장중 시간일 때 (08:50 ~ 16:00)
