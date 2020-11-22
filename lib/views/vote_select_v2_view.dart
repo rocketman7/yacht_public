@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:align_positioned/align_positioned.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:package_info/package_info.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -408,7 +409,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   void dispose() {
     // _controller.dispose();
     super.dispose();
+<<<<<<< HEAD
     // _controller.dispose();
+=======
+>>>>>>> csejun
     // dispose는 Navigator pushNamed에는 호출되지 않지만 백 버튼에는 호출됨.
     // 백 버튼에 아래를 호출하지 않으면 dispose 됐는데 setState한다고 오류뜸
   }
@@ -998,47 +1002,40 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                       children: [
                                         TopContainer(model, checkVoteTime),
                                         GestureDetector(
-                                          onTap: () {
-                                            print(rewardedAdsLoaded);
-                                            model.loadRewardedAds();
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  content: Text(
-                                                      '광고를 보고 꾸욱을 획득하시겠어요??'),
-                                                  actions: <Widget>[
-                                                    FlatButton(
-                                                      child: Text('아뇨'),
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                    rewardedAdsLoaded
-                                                        ? FlatButton(
-                                                            child: Text('좋아요'),
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              model
-                                                                  .showRewardedAds();
-                                                            },
-                                                          )
-                                                        // 리워드광고가 로드되지않은 상황에서는 좋아요 버튼 비활성화
-                                                        : FlatButton(
-                                                            child: Text(
-                                                              '좋아요',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .grey),
-                                                            ),
-                                                            onPressed: null,
-                                                          ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
+                                          // onTap: () {
+                                          //   print(rewardedAdsLoaded);
+                                          //   model.loadRewardedAds();
+                                          //   showDialog(
+                                          //     context: context,
+                                          //     builder: (context) {
+                                          //       return AlertDialog(
+                                          //         content: Text(
+                                          //             '광고를 보고 꾸욱을 획득하시겠어요??'),
+                                          //         actions: <Widget>[
+                                          //           FlatButton(
+                                          //             child: Text('아뇨'),
+                                          //             onPressed: () {
+                                          //               Navigator.pop(context);
+                                          //             },
+                                          //           ),
+                                          //           FlatButton(
+                                          //             child: Text('좋아요'),
+                                          //             onPressed:
+                                          //                 rewardedAdsLoaded
+                                          //                     ? () {
+                                          //                         Navigator.pop(
+                                          //                             context);
+                                          //                         model
+                                          //                             .showRewardedAds();
+                                          //                       }
+                                          //                     : null,
+                                          //           )
+                                          //         ],
+                                          //       );
+                                          //     },
+                                          //   );
+                                          // },
+                                          onTap: null,
                                           child: Row(
                                             children: [
                                               Container(
@@ -1310,6 +1307,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                       : model.tutorialStatus != 0
                           ? tutorial(model)
                           : Container(),
+                  // tutorial(model)
                 ],
               ),
             ),
@@ -2722,7 +2720,7 @@ Widget tutorial(VoteSelectViewModel model) {
                             fontFamily: 'DmSans',
                             color: Colors.transparent)),
                     SizedBox(
-                      height: 50,
+                      height: 120,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -2733,7 +2731,7 @@ Widget tutorial(VoteSelectViewModel model) {
                             horizontal: 10,
                           ),
                           child: Text(
-                            '예측하고 싶은 주제를 선택하는 화면이에요. \n작은 원을 눌러 최대 3개의 주제까지 선택가능해요!',
+                            '예측하고 싶은 주제를 선택하는 화면이에요.\n작은 원을 눌러 최대 3개의 주제까지 선택가능해요!\n단, 선택시 주제당 1개의 꾸욱 아이템이 필요해요.',
                             style: TextStyle(fontSize: 14, color: Colors.white),
                           ),
                           decoration: BoxDecoration(
@@ -2780,7 +2778,7 @@ Widget tutorial(VoteSelectViewModel model) {
                             fontFamily: 'DmSans',
                             color: Colors.transparent)),
                     SizedBox(
-                      height: 130,
+                      height: 275,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,

@@ -46,111 +46,102 @@ class MypageMainView extends StatelessWidget {
                           ],
                         ),
                       )
-                    : WillPopScope(
-                        onWillPop: () async {
-                          _navigatorKey.currentState.maybePop();
-                          return false;
-                        },
-                        child: SafeArea(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 16,
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    GestureDetector(
-                                        behavior: HitTestBehavior.opaque,
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Icon(Icons.arrow_back_ios),
-                                            Container(width: 30),
-                                          ],
-                                        )),
-                                    Spacer(),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 16,
-                                ),
-                                mypageMainTopBar(model),
-                                Expanded(
-                                  child: ListView(
-                                    children: [
-                                      mypageMainAccPref(model),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                    : SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Row(
                                         children: [
-                                          GestureDetector(
-                                            behavior: HitTestBehavior.opaque,
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return AlertDialog(
-                                                    content:
-                                                        Text('로그아웃하시겠습니까?'),
-                                                    actions: <Widget>[
-                                                      FlatButton(
-                                                        child: Text('아뇨'),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                      ),
-                                                      FlatButton(
-                                                        child: Text('네'),
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                          model.logout();
-                                                        },
-                                                      )
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 16, bottom: 16),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    '로그아웃',
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                  Spacer(),
-                                                ],
-                                              ),
+                                          Icon(Icons.arrow_back_ios),
+                                          Container(width: 30),
+                                        ],
+                                      )),
+                                  Spacer(),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              mypageMainTopBar(model),
+                              Expanded(
+                                child: ListView(
+                                  children: [
+                                    mypageMainAccPref(model),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GestureDetector(
+                                          behavior: HitTestBehavior.opaque,
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: Text('로그아웃하시겠습니까?'),
+                                                  actions: <Widget>[
+                                                    FlatButton(
+                                                      child: Text('아뇨'),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    FlatButton(
+                                                      child: Text('네'),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                        model.logout();
+                                                      },
+                                                    )
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 16, bottom: 16),
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  '로그아웃',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.normal),
+                                                ),
+                                                Spacer(),
+                                              ],
                                             ),
                                           ),
-                                          Container(
-                                            height: 1,
-                                            color: Color(0xFFE3E3E3),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 42,
-                                      ),
-                                      // mypageMainAppPref(model),
-                                      mypageMainCSCenter(model),
-                                      mypageMainTermsOfUse(model),
-                                    ],
-                                  ),
+                                        ),
+                                        Container(
+                                          height: 1,
+                                          color: Color(0xFFE3E3E3),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 42,
+                                    ),
+                                    // mypageMainAppPref(model),
+                                    mypageMainCSCenter(model),
+                                    mypageMainTermsOfUse(model),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

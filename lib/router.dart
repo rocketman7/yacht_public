@@ -8,6 +8,7 @@ import 'managers/dialog_manager.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/mypage_documents/avatarSelect_view.dart';
+import 'views/nicknameSet_view.dart';
 import 'views/oneOnOne_view.dart';
 import 'views/register_view.dart';
 import 'views/startup_view.dart';
@@ -74,6 +75,9 @@ class Routers {
       case 'initial':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: InitialView()));
+      case 'nickname_set':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(child: NicknameSetView()));
       case 'mypage_termsofuse':
         return MaterialPageRoute(builder: (context) => MypageTermofuse());
       case 'mypage_privacypolicy':
