@@ -409,10 +409,6 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   void dispose() {
     // _controller.dispose();
     super.dispose();
-<<<<<<< HEAD
-    // _controller.dispose();
-=======
->>>>>>> csejun
     // dispose는 Navigator pushNamed에는 호출되지 않지만 백 버튼에는 호출됨.
     // 백 버튼에 아래를 호출하지 않으면 dispose 됐는데 setState한다고 오류뜸
   }
