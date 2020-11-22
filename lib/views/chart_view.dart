@@ -237,7 +237,7 @@ class _ChartViewState extends State<ChartView> {
             statsSubLength = model.stockInfoModel.stats.length;
             statsDataSourceList = model.stockInfoModel.stats;
             print(statsSubLength);
-            print(statsDataSourceList);
+            // print(statsDataSourceList);
           }
 
           // print(priceDataSourceList.last.close);
@@ -931,7 +931,7 @@ class _ChartViewState extends State<ChartView> {
           columnWidths: {
             0: FlexColumnWidth(5.5),
             1: FlexColumnWidth(4.0),
-            2: FlexColumnWidth(1.5),
+            2: FlexColumnWidth(2.0),
           },
           children: [
             TableRow(children: [
@@ -1904,20 +1904,23 @@ class _ChartViewState extends State<ChartView> {
                           (index) => priceDataSourceList[index].close)) *
                       1.03),
         ),
-        primaryXAxis: DateTimeAxis(
-          majorGridLines: MajorGridLines(
-            width: 0,
-          ),
-          isVisible: false,
-          maximum: model.isDurationSelected[0] == true
-              ? DateTime(
-                  liveToday.year, liveToday.month, liveToday.day, 15, 31, 00)
-              : null,
-          minimum: model.isDurationSelected[0] == true
-              ? DateTime(
-                  liveToday.year, liveToday.month, liveToday.day, 08, 50, 00)
-              : null,
-        ),
+        primaryXAxis: model.isDurationSelected[0] == true
+            ? DateTimeAxis(
+                majorGridLines: MajorGridLines(
+                  width: 0,
+                ),
+                isVisible: false,
+                maximum: DateTime(
+                    liveToday.year, liveToday.month, liveToday.day, 15, 31, 00),
+                minimum: DateTime(
+                    liveToday.year, liveToday.month, liveToday.day, 08, 50, 00),
+              )
+            : CategoryAxis(
+                majorGridLines: MajorGridLines(
+                  width: 0,
+                ),
+                isVisible: false),
+
         // 봉 차트
         // series: <CandleSeries<ChartModel, String>>[
         //   CandleSeries<ChartModel, String>(

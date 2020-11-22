@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:align_positioned/align_positioned.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,7 +49,8 @@ class VoteSelectV2View extends StatefulWidget {
   _VoteSelectV2ViewState createState() => _VoteSelectV2ViewState();
 }
 
-class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
+class _VoteSelectV2ViewState extends State<VoteSelectV2View>
+    with SingleTickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
   final VoteSelectViewModel _viewModel = VoteSelectViewModel();
 
@@ -212,9 +217,28 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
   @override
   void initState() {
     super.initState();
+
+    try {
+      versionCheck(context);
+    } catch (e) {
+      print(e);
+    }
     fToast = FToast();
     fToast.init(context);
     print("initState Called");
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 3600),
+      vsync: this,
+    );
+
+    animation =
+        ColorTween(begin: Colors.blue, end: Colors.red).animate(_controller)
+          ..addListener(() {
+            setState(() {});
+          });
+
+    _controller.repeat();
 
     // _getAllModel = _viewModel.getAllModel(_viewModel.uid);
     // 현재 시간 한국 시간으로 변경
@@ -237,6 +261,123 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
     print("initState Done");
   }
 
+  String app_store_url;
+  String play_store_url;
+
+  versionCheck(context) async {
+    //Get Current installed version of app
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    double currentVersion =
+        double.parse(info.version.trim().replaceAll(".", ""));
+    print("CURRENT VERSION IS " + currentVersion.toString());
+    //Get Latest version info from firebase config
+    final RemoteConfig remoteConfig = await RemoteConfig.instance;
+
+    try {
+      // Using default duration to force fetching from remote server.
+      await remoteConfig.fetch(expiration: const Duration(hours: 4));
+      await remoteConfig.activateFetched();
+      remoteConfig.getString('force_update_current_version');
+      double newVersion = double.parse(remoteConfig
+          .getString('force_update_current_version')
+          .trim()
+          .replaceAll(".", ""));
+
+      app_store_url = remoteConfig.getString('app_store_url');
+      play_store_url = remoteConfig.getString('play_store_url');
+
+      print("NEW VERSION IS" + newVersion.toString());
+      print("APP STORE URL " + app_store_url);
+      print("PLAY STORE URL " + play_store_url);
+      if (newVersion > currentVersion) {
+        _showVersionDialog(context);
+      }
+    } on FetchThrottledException catch (exception) {
+      // Fetch throttled.
+      print(exception);
+    } catch (exception) {
+      print('Unable to fetch remote config. Cached or default values will be '
+          'used');
+    }
+  }
+
+  _showVersionDialog(context) async {
+    await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        String title = "새 버전이 출시되었습니다";
+        String message = "꾸욱을 계속 이용하기 위해서 업데이트가 필요합니다. 감사합니다.";
+        String btnLabel = "업데이트하기";
+        String btnLabelCancel = "Later";
+        return WillPopScope(
+          onWillPop: () {},
+          child: Platform.isIOS
+              ? new CupertinoAlertDialog(
+                  title: Text(title),
+                  content: Text(message),
+                  actions: <Widget>[
+                    CupertinoDialogAction(
+                      child: Text(btnLabel),
+                      onPressed: () => _launchURL(app_store_url),
+                    ),
+                    // FlatButton(
+                    //   child: Text(btnLabelCancel),
+                    //   onPressed: () => Navigator.pop(context),
+                    // ),
+                  ],
+                )
+              : new AlertDialog(
+                  title: Text(title),
+                  content: Text(message),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Row(
+                        children: [
+                          Text(btnLabel),
+                          SizedBox(width: 20),
+                        ],
+                      ),
+                      onPressed: () => _launchURL(play_store_url),
+                    ),
+                    // FlatButton(
+                    //   child: Text(btnLabelCancel),
+                    //   onPressed: () => Navigator.pop(context),
+                    // ),
+                  ],
+                ),
+        );
+      },
+    );
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  AnimationController _controller;
+  Animation<Color> animation;
+
+  // final colors = <Tween<Color>>[
+  //   ColorTween(begin: Colors.red, end: Colors.blue),
+
+  // TweenSequenceItem(
+  //   weight: 1.0,
+  //   tween: ColorTween(begin: Colors.blue, end: Colors.green),
+  // ),
+  // TweenSequenceItem(
+  //   weight: 1.0,
+  //   tween: ColorTween(begin: Colors.green, end: Colors.yellow),
+  // ),
+  // TweenSequenceItem(
+  //   weight: 1.0,
+  //   tween: ColorTween(begin: Colors.yellow, end: Colors.red),
+  // ),
+  // ];
   @override
   // initState 다음에 호출되는 함수. MediaQuery를 가져오기 위해 initState에 두지 않고 여기에 둠
   void didChangeDependencies() async {
@@ -342,7 +483,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
           String strDurationSec =
               "${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
           return Scaffold(
-            backgroundColor: Color(0xFF1EC8CF),
+            backgroundColor:
+                model.address.isVoting ? Color(0xFF1EC8CF) : animation.value,
+
             key: scaffoldKey,
             // endDrawer: myPage(model),
             body: WillPopScope(
@@ -362,7 +505,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                               padding: EdgeInsets.fromLTRB(
                                 16.w,
                                 // 16.h,
-                                0,
+                                16.h,
                                 16.w,
                                 16.h,
                               ),
@@ -373,7 +516,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                 // height: 180.h,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     GestureDetector(
                                       onTap: () {
@@ -397,114 +540,229 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                         ),
                                       ),
                                     ),
+                                    // 트로피 있던 화면
+                                    // Column(
+                                    //   children: [
+                                    //     Container(
+                                    //       // color: Colors.yellow,
+                                    //       child: Row(
+                                    //         // crossAxisAlignment:
+                                    //         //     CrossAxisAlignment.stretch,
+                                    //         children: <Widget>[
+                                    //           Container(
+                                    //             // color: Colors.red,
+                                    //             child: Column(
+                                    //               children: [
+                                    //                 Image.asset(
+                                    //                   'assets/icons/trophy.png',
+                                    //                   // color: Colors.red,
+                                    //                   height: 70,
+                                    //                   width: 70,
+                                    //                 ),
+                                    //                 Text(
+                                    //                   "시즌 1",
+                                    //                   style: TextStyle(
+                                    //                       fontFamily:
+                                    //                           'AppleSDL',
+                                    //                       fontSize: 16,
+                                    //                       letterSpacing: -1.5),
+                                    //                 ),
+                                    //               ],
+                                    //             ),
+                                    //           ),
+                                    //           SizedBox(
+                                    //             width: 16,
+                                    //           ),
+                                    //           Container(
+                                    //             // color: Colors.red,
+                                    //             child: Column(
+                                    //               mainAxisAlignment:
+                                    //                   MainAxisAlignment.start,
+                                    //               mainAxisSize:
+                                    //                   MainAxisSize.max,
+                                    //               crossAxisAlignment:
+                                    //                   CrossAxisAlignment.start,
+                                    //               children: [
+                                    //                 Text(
+                                    //                   "지금 노릴 수 있는 우승 상금은?",
+                                    //                   style: TextStyle(
+                                    //                       fontFamily:
+                                    //                           'AppleSDL',
+                                    //                       fontSize: 16,
+                                    //                       letterSpacing: -1.5),
+                                    //                 ),
+                                    //                 SizedBox(height: 12),
+                                    //                 GestureDetector(
+                                    //                   onTap: () {
+                                    //                     _navigationService
+                                    //                         .navigateTo(
+                                    //                             'portfolio');
+                                    //                   },
+                                    //                   child: Row(
+                                    //                     children: [
+                                    //                       Text(
+                                    //                         '${model.getPortfolioValue()}',
+                                    //                         style: TextStyle(
+                                    //                           fontFamily:
+                                    //                               'DmSans',
+                                    //                           fontSize: 42,
+                                    //                           height: 1,
+                                    //                           fontWeight:
+                                    //                               FontWeight
+                                    //                                   .bold,
+                                    //                         ),
+                                    //                       ),
+                                    //                       Text(
+                                    //                         "원",
+                                    //                         style: TextStyle(
+                                    //                           fontFamily:
+                                    //                               'AppleSDM',
+                                    //                           fontSize: 24,
+                                    //                           height: 1,
+                                    //                           // fontWeight: FontWeight.bold,
+                                    //                         ),
+                                    //                       ),
+                                    //                       Icon(
+                                    //                         Icons
+                                    //                             .arrow_forward_ios,
+                                    //                         // color: Color(0xFFFFF5F5),
+                                    //                         size: 24.sp,
+                                    //                       ),
+                                    //                     ],
+                                    //                   ),
+                                    //                 ),
+                                    //               ],
+                                    //             ),
+                                    //           )
+                                    //         ],
+                                    //       ),
+                                    //     ),
+                                    //     Align(
+                                    //       alignment: Alignment.centerRight,
+                                    //       child: GestureDetector(
+                                    //         onTap: () {
+                                    //           _navigationService
+                                    //               .navigateTo('trackRecord');
+                                    //         },
+                                    //         child: Text("나의 예측 기록"),
+                                    //       ),
+                                    //     ),
+                                    //     SizedBox(
+                                    //       height: 28,
+                                    //     ),
+                                    //   ],
+                                    // )
+
+                                    SizedBox(
+                                      height: 12.h,
+                                    ),
+                                    // 새 디자인
                                     Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        Container(
-                                          // color: Colors.yellow,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 8,
+                                                vertical: 4,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: Color(0xFFFFDE34),
+                                              ),
+                                              child: Text(
+                                                model.seasonInfo.seasonName,
+                                                style: TextStyle(
+                                                  fontFamily: 'AppleSDB',
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Text(
+                                              "지금 노릴 수 있는 우승 상금은?",
+                                              style: TextStyle(
+                                                fontFamily: 'AppleSDB',
+                                                fontSize: 18,
+                                                color: model.address.isVoting
+                                                    ? Colors.black
+                                                    : Colors.white,
+                                                letterSpacing: -.5,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 8.h,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _navigationService
+                                                .navigateTo('portfolio');
+                                          },
                                           child: Row(
-                                            // crossAxisAlignment:
-                                            //     CrossAxisAlignment.stretch,
-                                            children: <Widget>[
-                                              Container(
-                                                // color: Colors.red,
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                      'assets/icons/trophy.png',
-                                                      // color: Colors.red,
-                                                      height: 70,
-                                                      width: 70,
-                                                    ),
-                                                    Text(
-                                                      "시즌 1",
-                                                      style: TextStyle(
-                                                          fontFamily:
-                                                              'AppleSDL',
-                                                          fontSize: 16,
-                                                          letterSpacing: -1.5),
-                                                    ),
-                                                  ],
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.arrow_forward_ios,
+                                                color:
+                                                    Colors.black.withOpacity(0),
+                                                size: 30,
+                                              ),
+                                              Text(
+                                                '${model.getPortfolioValue()}',
+                                                style: TextStyle(
+                                                  fontFamily: 'DmSans',
+                                                  fontSize: 42,
+                                                  color: model.address.isVoting
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                  // height: 1,
+                                                  fontWeight: FontWeight.bold,
+                                                  letterSpacing: -1.0,
                                                 ),
                                               ),
-                                              SizedBox(
-                                                width: 16,
-                                              ),
-                                              Container(
-                                                // color: Colors.red,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "지금 노릴 수 있는 우승 상금은?",
-                                                      style: TextStyle(
-                                                          fontFamily:
-                                                              'AppleSDL',
-                                                          fontSize: 16,
-                                                          letterSpacing: -1.5),
-                                                    ),
-                                                    SizedBox(height: 12),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        _navigationService
-                                                            .navigateTo(
-                                                                'portfolio');
-                                                      },
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            '${model.getPortfolioValue()}',
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'DmSans',
-                                                              fontSize: 42,
-                                                              height: 1,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            "원",
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'AppleSDM',
-                                                              fontSize: 24,
-                                                              height: 1,
-                                                              // fontWeight: FontWeight.bold,
-                                                            ),
-                                                          ),
-                                                          Icon(
-                                                            Icons
-                                                                .arrow_forward_ios,
-                                                            // color: Color(0xFFFFF5F5),
-                                                            size: 24.sp,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
+                                              Text(
+                                                "원",
+                                                style: TextStyle(
+                                                  fontFamily: 'AppleSDB',
+                                                  fontSize: 42,
+                                                  color: model.address.isVoting
+                                                      ? Colors.black
+                                                      : Colors.white,
+                                                  // height: 1,
+                                                  // fontWeight: FontWeight.bold,
                                                 ),
-                                              )
+                                              ),
+                                              Icon(
+                                                Icons.arrow_forward_ios,
+                                                color: Colors.black
+                                                    .withOpacity(.7),
+                                                size: 30,
+                                              ),
                                             ],
                                           ),
                                         ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              _navigationService
-                                                  .navigateTo('trackRecord');
-                                            },
-                                            child: Text("나의 예측 기록"),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Text(
+                                          "우승까지 승점 ${(model.seasonInfo.winningPoint - (model.userVote.userVoteStats.currentWinPoint ?? 0)).toString()}점",
+                                          style: TextStyle(
+                                            fontFamily: 'AppleSDB',
+                                            fontSize: 18,
+                                            color: Colors.black.withOpacity(.6),
+                                            letterSpacing: -.5,
                                           ),
                                         ),
                                         SizedBox(
-                                          height: 28,
+                                          height: 28.h,
                                         ),
                                       ],
                                     )
@@ -831,13 +1089,29 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                             // physics: NeverScrollableScrollPhysics(),
                                             itemCount: model.vote.voteCount,
                                             itemBuilder: (context, index) {
-                                              return buildStack(
-                                                model,
-                                                index,
-                                                context,
-                                                numSelected,
-                                                scaffoldKey,
-                                                diff,
+                                              return Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  buildStack(
+                                                    model,
+                                                    index,
+                                                    context,
+                                                    numSelected,
+                                                    scaffoldKey,
+                                                    diff,
+                                                  ),
+                                                  index ==
+                                                          (model.vote
+                                                                  .voteCount -
+                                                              1)
+                                                      ? Container(
+                                                          height: 70,
+                                                        )
+                                                      : Container(),
+                                                ],
                                               );
                                             }),
                                       ),
@@ -928,7 +1202,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                         // ? Color(0xFFC1C1C1)
                                         // : Colors.black,
                                         // Color(0xFF1EC8CF),
-                                        Colors.black,
+                                        model.address.isVoting
+                                            ? Colors.black
+                                            : Colors.grey,
                                     // gradient: model.address.isVoting == true
                                     //     ? LinearGradient(
                                     //         begin: Alignment.topLeft,
@@ -1062,8 +1338,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
     TextStyle voteTitle = TextStyle(
         color: Colors.black,
         fontFamily: 'AppleSDEB',
-        fontSize: 28.sp,
-        height: 1,
+        fontSize: 28,
+        // height: 1,
         letterSpacing: -.2);
 
     return Stack(
@@ -1088,11 +1364,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                 },
                 child: Container(
                   color: Colors.white.withOpacity(0),
-                  // color: Colors.red,
-                  height: 75,
+                  // color: (idx % 2 == 0) ? Colors.amber : Colors.yellow,
+                  height: 70,
                   // decoration: BoxDecoration(border: Border.all(width: 0.3)),
                   child: Padding(
-                    padding: EdgeInsets.only(left: 50),
+                    padding: model.address.isVoting
+                        ? EdgeInsets.only(left: 50)
+                        : EdgeInsets.only(left: 0),
                     child: Row(
                       // crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -1100,6 +1378,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                       children: <Widget>[
                         numOfChoices == 1
                             ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
@@ -1152,6 +1431,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                                                         color:
                                                             Color(0xFFFF3E3E),
                                                         fontSize: 16,
+                                                        height: 1,
                                                       ),
                                                     );
                                             }
@@ -1338,54 +1618,59 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
         //   ),
         // ),
         // Text("AAA"),
-        Container(
-          // color: Colors.red,
-          child: CustomizedCircularCheckBox(
-              key: UniqueKey(),
-              materialTapTargetSize: MaterialTapTargetSize.padded,
-              visualDensity: VisualDensity(
-                horizontal: VisualDensity.minimumDensity,
-                vertical: VisualDensity.minimumDensity,
-              ),
-              value: selected[idx],
-              hoverColor: Colors.white,
-              activeColor: (model.address.isVoting == false)
-                  ? Color(0xFFC1C1C1)
-                  : Color(0xFF1EC8CF),
-              inactiveColor: (model.address.isVoting == false)
-                  ? Color(0xFFC1C1C1)
-                  : Color(0xFF1EC8CF),
-              // disabledColor: Colors.grey,
-              onChanged: (newValue) {
-                (model.address.isVoting == false)
-                    ? _showToast("오늘 예측이 마감되었습니다.\n커뮤니티에서 실시간 대결 상황을\n살펴보세요!")
-                    : setState(() {
-                        print(model.seasonInfo.maxDailyVote - numSelected);
-                        if (model.seasonInfo.maxDailyVote - numSelected == 0) {
-                          if (newValue) {
-                            selected[idx] = selected[idx];
-                            _showToast(
-                                "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
-                          } else {
-                            selected[idx] = newValue;
-                          }
-                        } else {
-                          if (model.user.item - numSelected == 0) {
-                            // 선택되면 안됨
-                            if (newValue) {
-                              selected[idx] = selected[idx];
+        model.address.isVoting
+            ? Container(
+                // color: Colors.red,
+                child: CustomizedCircularCheckBox(
+                    key: UniqueKey(),
+                    materialTapTargetSize: MaterialTapTargetSize.padded,
+                    visualDensity: VisualDensity(
+                      horizontal: VisualDensity.minimumDensity,
+                      vertical: VisualDensity.minimumDensity,
+                    ),
+                    value: selected[idx],
+                    hoverColor: Colors.white,
+                    activeColor: (model.address.isVoting == false)
+                        ? Color(0xFFC1C1C1)
+                        : Color(0xFF1EC8CF),
+                    inactiveColor: (model.address.isVoting == false)
+                        ? Color(0xFFC1C1C1)
+                        : Color(0xFF1EC8CF),
+                    // disabledColor: Colors.grey,
+                    onChanged: (newValue) {
+                      (model.address.isVoting == false)
+                          ? _showToast(
+                              "오늘 예측이 마감되었습니다.\n커뮤니티에서 실시간 대결 상황을\n살펴보세요!")
+                          : setState(() {
+                              print(
+                                  model.seasonInfo.maxDailyVote - numSelected);
+                              if (model.seasonInfo.maxDailyVote - numSelected ==
+                                  0) {
+                                if (newValue) {
+                                  selected[idx] = selected[idx];
+                                  _showToast(
+                                      "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                } else {
+                                  selected[idx] = newValue;
+                                }
+                              } else {
+                                if (model.user.item - numSelected == 0) {
+                                  // 선택되면 안됨
+                                  if (newValue) {
+                                    selected[idx] = selected[idx];
 
-                              _showToast("보유 중인 아이템이 부족합니다.");
-                            } else {
-                              selected[idx] = newValue;
-                            }
-                          } else {
-                            selected[idx] = newValue;
-                          }
-                        }
-                      });
-              }),
-        ),
+                                    _showToast("보유 중인 아이템이 부족합니다.");
+                                  } else {
+                                    selected[idx] = newValue;
+                                  }
+                                } else {
+                                  selected[idx] = newValue;
+                                }
+                              }
+                            });
+                    }),
+              )
+            : Container(),
       ],
     );
   }

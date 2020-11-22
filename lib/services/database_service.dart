@@ -976,13 +976,13 @@ class DatabaseService {
                 statsList.add(StatsModel.fromData(element));
               });
 
-              print(statsList.toString());
+              // print(statsList.toString());
               statsList.sort((b, a) => (b.uploadedAt).compareTo(a.uploadedAt));
 
               stockDescription.stats = statsList;
               // stockDescription = stockDescription
               //     .addWith(StockInfoModel.fromData(element.data()));
-              print("STATS " + stockDescription.toString());
+              // print("STATS " + stockDescription.toString());
               break;
           }
           // print(" MODEL" + stockDescription.toString());
@@ -1024,7 +1024,7 @@ class DatabaseService {
                 listedList.add(ListedStockModel.fromData(element));
               });
 
-              print(listedList.toString());
+              // print(listedList.toString());
               listedList.sort((a, b) => (b.weight).compareTo(a.weight));
 
               indexInfo.topListed = listedList;
@@ -1090,7 +1090,7 @@ class DatabaseService {
       date: baseDate,
       category: category,
       season: season,
-      isVoting: isVoting, //false면 장 중
+      isVoting: false, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());

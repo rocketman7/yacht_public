@@ -68,7 +68,7 @@ class ChartViewModel extends FutureViewModel {
     stockOrIndex,
     issueCode,
   ) async {
-    print("beforeChart" + DateTime.now().toString());
+    print("beforeStockinfo" + DateTime.now().toString());
 
     stockOrIndex == "stocks"
         ? stockInfoModel = await _databaseService.getStockInfo(
@@ -79,7 +79,7 @@ class ChartViewModel extends FutureViewModel {
             countryCode,
             issueCode,
           );
-    print("Index info model get" + indexInfoModel.toString());
+    // print("Index info model get" + indexInfoModel.toString());
     print("afterStockInfo" + DateTime.now().toString());
     // notifyListeners();
     chartList = await _databaseService.getPriceForChart(
@@ -121,7 +121,7 @@ class ChartViewModel extends FutureViewModel {
 
   void scrollPosition(ScrollController controller) {
     double position = controller.offset;
-    print(position);
+    // print(position);
     scrollStreamCtrl.add(position);
   }
 
