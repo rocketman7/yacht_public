@@ -33,6 +33,7 @@ abstract class StateManageService {
   Future<void> userModelUpdate();
   Future<void> userVoteModelUpdate();
   setMyState();
+  setAppStart();
 }
 
 class StateManageServiceFirebase extends StateManageService {
@@ -72,6 +73,10 @@ class StateManageServiceFirebase extends StateManageService {
 
   setMyState() {
     _myState = null;
+  }
+
+  setAppStart() {
+    _appStart = true;
   }
 
   bool get appStart => _appStart;

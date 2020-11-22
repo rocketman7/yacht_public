@@ -1090,7 +1090,7 @@ class DatabaseService {
       date: baseDate,
       category: category,
       season: season,
-      isVoting: false, //false면 장 중
+      isVoting: true, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());

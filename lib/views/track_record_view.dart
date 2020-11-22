@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/track_record_view_model.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import '../locator.dart';
 import 'constants/size.dart';
@@ -143,13 +144,14 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                               SizedBox(
                                 height: 8.sp,
                               ),
-                              Text(
+                              AutoSizeText(
                                 model.user.userName,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 22.sp,
                                   fontFamily: 'AppleSDB',
                                 ),
+                                maxLines: 1,
                               ),
                             ],
                           ),
