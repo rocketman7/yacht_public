@@ -349,7 +349,7 @@ class _AppTitleViewState extends State<AppTitleView> {
                     borderRadius: BorderRadius.circular(
                       8,
                     ),
-                    color: Color(0xFFFEE500),
+                    color: Color(0xFFFFEB04),
                   ),
                   child: _isLoading
                       ? CircularProgressIndicator(

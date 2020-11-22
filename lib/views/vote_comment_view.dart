@@ -197,7 +197,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
   ListView buildListView(VoteCommentViewModel model, VoteModel vote) {
     print(vote.subVotes.length);
     return ListView.builder(
-      itemCount: vote.subVotes.length + 1,
+      itemCount: model.vote.subVotes.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
           return Column(
@@ -231,7 +231,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                       // fontWeight: FontWeight.bold,
                       fontFamily: 'AppleSDB',
                     )),
-                subtitle: Text("rocketman님 외에 50명 이야기중"),
+                // subtitle: Text("50명 이야기중"),
                 // subtitle: Text("rocketman님 외에 50명 이야기중"),
               ),
             ],
@@ -464,7 +464,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 // fontWeight: FontWeight.bold,
                 fontFamily: 'AppleSDB',
               )),
-          subtitle: Text("rocketman님 외에 50명 이야기중"),
+          subtitle: Text((subVote.numVoted0 + subVote.numVoted1) == 0
+              ? "아직 아무도 예측에 참여하지 않았습니다."
+              : (subVote.numVoted0 + subVote.numVoted1).toString() +
+                  "명이 예측에 참여하였습니다."),
         ),
       ],
     );

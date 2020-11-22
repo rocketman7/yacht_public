@@ -77,7 +77,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                   child: Icon(Icons.arrow_back_ios)),
                               Column(
                                 children: <Widget>[
-                                  Text(model.seasonInfo.seasonName + " 커뮤니티",
+                                  Text("자유게시판",
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,

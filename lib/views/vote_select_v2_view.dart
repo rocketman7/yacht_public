@@ -44,6 +44,8 @@ import 'package:firebase_admob/firebase_admob.dart';
 
 import 'package:flutter/cupertino.dart';
 
+import 'constants/holiday.dart';
+
 class VoteSelectV2View extends StatefulWidget {
   @override
   _VoteSelectV2ViewState createState() => _VoteSelectV2ViewState();
@@ -64,14 +66,6 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   PreloadPageController _preloadPageController = PreloadPageController();
   // double leftContainer = 0;
 
-  // Votes for Today 영역 위젯 관리
-  List<Widget> _votesTodayShowing = [];
-  List<Widget> _votesTodayNotShowing = [];
-
-  // Votes Selected 영역 위젯 관리
-  List<Widget> _votesSelectedShowing = [];
-  List<Widget> _votesSelectedNotShowing = [];
-
   // 최종 선택한 주제 index
   List<int> listSelected = [];
   List<String> timeLeftArr = ["", "", ""]; // 시간, 분, 초 array
@@ -86,7 +80,6 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   bool isDisposed = false;
   bool isVoteAvailable;
 
-  List<bool> selected = List<bool>.filled(5, false, growable: true);
   int numSelected = 0;
   bool canSelect = true;
   //애니메이션은 천천히 생각해보자.
@@ -413,9 +406,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
-    _controller.dispose();
+    // _controller.dispose();
     // dispose는 Navigator pushNamed에는 호출되지 않지만 백 버튼에는 호출됨.
     // 백 버튼에 아래를 호출하지 않으면 dispose 됐는데 setState한다고 오류뜸
   }
@@ -435,13 +428,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   //   });
   // }
 
+  var formatKoreanDate = DateFormat('MM' + "월" + " " + "dd" + "일");
+
   @override
   Widget build(BuildContext context) {
-    print("SELECTED " + selected.toString());
     // print("buildCalled");
 
     // print(numSelected);
-    numSelected = selected.where((item) => item == true).length;
     print("numSelected " + numSelected.toString());
     // print(numSelected);
     return ViewModelBuilder<VoteSelectViewModel>.reactive(
@@ -476,6 +469,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
             ),
           ));
         } else {
+          numSelected = model.selected.where((item) => item == true).length;
           print("IS VOTING ?? " + isVoting.toString());
           Duration diff = getTimeLeft(model).inSeconds < 0
               ? Duration(hours: 0, minutes: 0, seconds: 0)
@@ -656,7 +650,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     // )
 
                                     SizedBox(
-                                      height: 12.h,
+                                      height: 4.h,
                                     ),
                                     // 새 디자인
                                     Column(
@@ -688,6 +682,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             ),
                                             Text(
                                               "지금 노릴 수 있는 우승 상금은?",
+                                              // "현재 우승 상금",
                                               style: TextStyle(
                                                 fontFamily: 'AppleSDB',
                                                 fontSize: 18,
@@ -764,7 +759,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           ),
                                         ),
                                         SizedBox(
-                                          height: 28.h,
+                                          height: 12.h,
                                         ),
                                       ],
                                     )
@@ -958,7 +953,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "11월 14일의 예측주제",
+                                      // "11월 14일의 예측주제",
+                                      formatKoreanDate.format(
+                                              strToDate(model.vote.voteDate)) +
+                                          "의 예측 주제",
                                       style: TextStyle(
                                         fontFamily: 'AppleSDEB',
                                         fontSize: 22,
@@ -1110,7 +1108,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                                   .voteCount -
                                                               1)
                                                       ? Container(
-                                                          height: 70,
+                                                          height: 90,
                                                         )
                                                       : Container(),
                                                 ],
@@ -1172,25 +1170,27 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                 ? () {}
                                 : () {
                                     listSelected = [];
-                                    for (int i = 0; i < selected.length; i++) {
-                                      selected[i] == true
+                                    for (int i = 0;
+                                        i < model.selected.length;
+                                        i++) {
+                                      model.selected[i] == true
                                           ? listSelected.add(i)
                                           : 0;
                                     }
-
-                                    _navigationService
-                                        .navigateWithArgTo('ggook', [
-                                      model.address,
-                                      model.user,
-                                      model.vote,
-                                      listSelected,
-                                      0,
-                                    ]);
+                                    // 시즌 시작에 마지막 업데이트에 주석 풀기
+                                    // _navigationService
+                                    //     .navigateWithArgTo('ggook', [
+                                    //   model.address,
+                                    //   model.user,
+                                    //   model.vote,
+                                    //   listSelected,
+                                    //   0,
+                                    // ],);
                                   },
                             child: Padding(
                               padding: EdgeInsets.symmetric(
                                 horizontal: 24.w,
-                                vertical: 10,
+                                vertical: 4,
                               ),
                               child: Container(
                                 padding: EdgeInsets.symmetric(
@@ -1205,7 +1205,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         // : Colors.black,
                                         // Color(0xFF1EC8CF),
                                         model.address.isVoting
-                                            ? Colors.black
+                                            ? Colors.grey
                                             : Colors.grey,
                                     // gradient: model.address.isVoting == true
                                     //     ? LinearGradient(
@@ -1271,8 +1271,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                           bottom: 60,
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: 8.h,
-                              vertical: 4.w,
+                              horizontal: 8,
+                              vertical: 4,
                             ),
                             decoration: BoxDecoration(
                               borderRadius:
@@ -1287,7 +1287,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                 model.address.isVoting == false
                                     ? "오늘의 예측이 마감되었습니다."
                                     : numSelected == 0
-                                        ? "최대 3개의 주제를 선택하여 승점에 도전해보세요!"
+                                        ? "최대 3개의 주제를 선택하여 승점에 도전해보세요!\n12월 4일부터 첫 오픈 베타가 시작됩니다.\n여러분들의 많은 참여 부탁드립니다!"
                                         : "선택한 주제 $numSelected개, 승점 ${numSelected * 2}점에 도전해보세요!",
                                 style: TextStyle(
                                   fontSize: numSelected == 0 ? 14.sp : 16.sp,
@@ -1340,7 +1340,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     TextStyle voteTitle = TextStyle(
         color: Colors.black,
         fontFamily: 'AppleSDEB',
-        fontSize: 28,
+        fontSize: 24.sp,
         // height: 1,
         letterSpacing: -.2);
 
@@ -1371,7 +1371,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                   // decoration: BoxDecoration(border: Border.all(width: 0.3)),
                   child: Padding(
                     padding: model.address.isVoting
-                        ? EdgeInsets.only(left: 50)
+                        ? EdgeInsets.only(left: 40)
                         : EdgeInsets.only(left: 0),
                     child: Row(
                       // crossAxisAlignment: CrossAxisAlignment.center,
@@ -1520,8 +1520,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                       style: TextStyle(
                                         color: Colors.grey,
                                         fontFamily: 'AppleSDB',
-                                        fontSize: 24.sp,
-                                        height: 1,
+                                        fontSize: 18.sp,
+                                        // height: 1,
                                       ),
                                     ),
                                     SizedBox(width: 8),
@@ -1630,7 +1630,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                       horizontal: VisualDensity.minimumDensity,
                       vertical: VisualDensity.minimumDensity,
                     ),
-                    value: selected[idx],
+                    value: model.selected[idx],
                     hoverColor: Colors.white,
                     activeColor: (model.address.isVoting == false)
                         ? Color(0xFFC1C1C1)
@@ -1649,24 +1649,24 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                               if (model.seasonInfo.maxDailyVote - numSelected ==
                                   0) {
                                 if (newValue) {
-                                  selected[idx] = selected[idx];
+                                  model.selected[idx] = model.selected[idx];
                                   _showToast(
                                       "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
                                 } else {
-                                  selected[idx] = newValue;
+                                  model.selected[idx] = newValue;
                                 }
                               } else {
                                 if (model.user.item - numSelected == 0) {
                                   // 선택되면 안됨
                                   if (newValue) {
-                                    selected[idx] = selected[idx];
+                                    model.selected[idx] = model.selected[idx];
 
                                     _showToast("보유 중인 아이템이 부족합니다.");
                                   } else {
-                                    selected[idx] = newValue;
+                                    model.selected[idx] = newValue;
                                   }
                                 } else {
-                                  selected[idx] = newValue;
+                                  model.selected[idx] = newValue;
                                 }
                               }
                             });
@@ -1745,10 +1745,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                         child: ChartView(
                           // controller,
                           scrollStreamCtrl,
-                          selected,
+                          model.selected,
                           idx,
                           numSelected,
                           model.vote,
+                          model.seasonInfo,
                           model.address,
                           // _showToast,
                         ),
@@ -1758,350 +1759,347 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                 }));
   }
 
-  Future buildModalBottomSheet(
-    BuildContext context,
-    Color hexToColor(String code),
-    VoteSelectViewModel model,
-    int idx,
-    int numOfChoices,
-    Duration diff,
-  ) {
-    return showModalBottomSheet(
-      backgroundColor: Colors.white,
-      context: context,
-      isScrollControlled: true,
-      builder: (
-        context,
-      ) =>
-          Padding(
-        padding: const EdgeInsets.fromLTRB(
-          16.0,
-          32,
-          16,
-          32,
-        ),
-        child: Container(
-          color: Colors.white,
-          // height: double.maxFinite,
-          // constraints: BoxConstraints(
-          //   // maxHeight: 400,
-          // ),
-          child: Wrap(
-            direction: Axis.horizontal,
-            alignment: WrapAlignment.start,
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 14),
-                child: Row(
-                  children: [
-                    numOfChoices == 1
-                        ? Container(
-                            constraints: BoxConstraints(
-                              maxHeight: 48,
-                              minWidth: 100,
-                            ),
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                            decoration: BoxDecoration(
-                              color: hexToColor(
-                                model.vote.subVotes[idx].colorCode[0],
-                              ),
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(
-                                width: 4.0,
-                                color: Color(0xFF000000),
-                              ),
-                              // borderRadius: BorderRadius.all(
-                              //     Radius.circular(30)),
-                            ),
-                            // color: Colors.redAccent,
-                            child: Text(
-                              model.vote.subVotes[idx].title,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                textBaseline: TextBaseline.ideographic,
-                                color: Colors.black,
-                                fontSize: 28,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          )
-                        : Row(
-                            children: [
-                              Container(
-                                constraints: BoxConstraints(
-                                  maxHeight: 48,
-                                  // minWidth: 100,
-                                ),
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                decoration: BoxDecoration(
-                                  color: hexToColor(
-                                    model.vote.subVotes[idx].colorCode[0],
-                                  ),
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(
-                                    width: 4.0,
-                                    color: Color(0xFF000000),
-                                  ),
-                                  // borderRadius: BorderRadius.all(
-                                  //     Radius.circular(30)),
-                                ),
-                                // color: Colors.redAccent,
-                                child: Text(
-                                  model.vote.subVotes[idx].voteChoices[0],
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    textBaseline: TextBaseline.ideographic,
-                                    color: Colors.black,
-                                    fontSize: model.vote.subVotes[idx]
-                                                .voteChoices[0].length <
-                                            6
-                                        ? 22
-                                        : 18,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              Stack(
-                                children: [
-                                  Container(
-                                    constraints: BoxConstraints(
-                                      maxHeight: 48,
-                                      // minWidth: 100,
-                                    ),
-                                    alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                                    decoration: BoxDecoration(
-                                      color: hexToColor(
-                                        model.vote.subVotes[idx].colorCode[1],
-                                      ),
-                                      borderRadius: BorderRadius.circular(50),
-                                      border: Border.all(
-                                        width: 4.0,
-                                        color: Color(0xFF000000),
-                                      ),
-                                      // borderRadius: BorderRadius.all(
-                                      //     Radius.circular(30)),
-                                    ),
-                                    // color: Colors.redAccent,
-                                    child: Text(
-                                      model.vote.subVotes[idx].voteChoices[1],
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        textBaseline: TextBaseline.ideographic,
-                                        color: Colors.black,
-                                        fontSize: model.vote.subVotes[idx]
-                                                    .voteChoices[1].length <
-                                                6
-                                            ? 22
-                                            : 18,
-                                        letterSpacing: 0,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                                  AlignPositioned.expand(
-                                    alignment: Alignment.centerLeft,
-                                    dx: -4,
-                                    moveByChildWidth: -0.5,
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.black,
-                                            width: 4.0,
-                                          ),
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            40,
-                                          )),
-                                      child: Text("vs",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          )),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                    Expanded(child: SizedBox()),
-                  ],
-                ),
-              ),
-              // Expanded(child: SizedBox()),
+  // Future buildModalBottomSheet(
+  //   BuildContext context,
+  //   Color hexToColor(String code),
+  //   VoteSelectViewModel model,
+  //   int idx,
+  //   int numOfChoices,
+  //   Duration diff,
+  // ) {
+  //   return showModalBottomSheet(
+  //     backgroundColor: Colors.white,
+  //     context: context,
+  //     isScrollControlled: true,
+  //     builder: (
+  //       context,
+  //     ) =>
+  //         Padding(
+  //       padding: const EdgeInsets.fromLTRB(
+  //         16.0,
+  //         32,
+  //         16,
+  //         32,
+  //       ),
+  //       child: Container(
+  //         color: Colors.white,
+  //         // height: double.maxFinite,
+  //         // constraints: BoxConstraints(
+  //         //   // maxHeight: 400,
+  //         // ),
+  //         child: Wrap(
+  //           direction: Axis.horizontal,
+  //           alignment: WrapAlignment.start,
+  //           // crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: <Widget>[
+  //             Padding(
+  //               padding: const EdgeInsets.fromLTRB(0, 0, 0, 14),
+  //               child: Row(
+  //                 children: [
+  //                   numOfChoices == 1
+  //                       ? Container(
+  //                           constraints: BoxConstraints(
+  //                             maxHeight: 48,
+  //                             minWidth: 100,
+  //                           ),
+  //                           alignment: Alignment.centerLeft,
+  //                           padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+  //                           decoration: BoxDecoration(
+  //                             color: hexToColor(
+  //                               model.vote.subVotes[idx].colorCode[0],
+  //                             ),
+  //                             borderRadius: BorderRadius.circular(50),
+  //                             border: Border.all(
+  //                               width: 4.0,
+  //                               color: Color(0xFF000000),
+  //                             ),
+  //                             // borderRadius: BorderRadius.all(
+  //                             //     Radius.circular(30)),
+  //                           ),
+  //                           // color: Colors.redAccent,
+  //                           child: Text(
+  //                             model.vote.subVotes[idx].title,
+  //                             textAlign: TextAlign.center,
+  //                             style: TextStyle(
+  //                               textBaseline: TextBaseline.ideographic,
+  //                               color: Colors.black,
+  //                               fontSize: 28,
+  //                               fontWeight: FontWeight.w700,
+  //                             ),
+  //                           ),
+  //                         )
+  //                       : Row(
+  //                           children: [
+  //                             Container(
+  //                               constraints: BoxConstraints(
+  //                                 maxHeight: 48,
+  //                                 // minWidth: 100,
+  //                               ),
+  //                               alignment: Alignment.centerLeft,
+  //                               padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+  //                               decoration: BoxDecoration(
+  //                                 color: hexToColor(
+  //                                   model.vote.subVotes[idx].colorCode[0],
+  //                                 ),
+  //                                 borderRadius: BorderRadius.circular(50),
+  //                                 border: Border.all(
+  //                                   width: 4.0,
+  //                                   color: Color(0xFF000000),
+  //                                 ),
+  //                                 // borderRadius: BorderRadius.all(
+  //                                 //     Radius.circular(30)),
+  //                               ),
+  //                               // color: Colors.redAccent,
+  //                               child: Text(
+  //                                 model.vote.subVotes[idx].voteChoices[0],
+  //                                 textAlign: TextAlign.center,
+  //                                 style: TextStyle(
+  //                                   textBaseline: TextBaseline.ideographic,
+  //                                   color: Colors.black,
+  //                                   fontSize: model.vote.subVotes[idx]
+  //                                               .voteChoices[0].length <
+  //                                           6
+  //                                       ? 22
+  //                                       : 18,
+  //                                   fontWeight: FontWeight.w700,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                             SizedBox(width: 8),
+  //                             Stack(
+  //                               children: [
+  //                                 Container(
+  //                                   constraints: BoxConstraints(
+  //                                     maxHeight: 48,
+  //                                     // minWidth: 100,
+  //                                   ),
+  //                                   alignment: Alignment.centerLeft,
+  //                                   padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+  //                                   decoration: BoxDecoration(
+  //                                     color: hexToColor(
+  //                                       model.vote.subVotes[idx].colorCode[1],
+  //                                     ),
+  //                                     borderRadius: BorderRadius.circular(50),
+  //                                     border: Border.all(
+  //                                       width: 4.0,
+  //                                       color: Color(0xFF000000),
+  //                                     ),
+  //                                     // borderRadius: BorderRadius.all(
+  //                                     //     Radius.circular(30)),
+  //                                   ),
+  //                                   // color: Colors.redAccent,
+  //                                   child: Text(
+  //                                     model.vote.subVotes[idx].voteChoices[1],
+  //                                     textAlign: TextAlign.center,
+  //                                     style: TextStyle(
+  //                                       textBaseline: TextBaseline.ideographic,
+  //                                       color: Colors.black,
+  //                                       fontSize: model.vote.subVotes[idx]
+  //                                                   .voteChoices[1].length <
+  //                                               6
+  //                                           ? 22
+  //                                           : 18,
+  //                                       letterSpacing: 0,
+  //                                       fontWeight: FontWeight.w700,
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                                 AlignPositioned.expand(
+  //                                   alignment: Alignment.centerLeft,
+  //                                   dx: -4,
+  //                                   moveByChildWidth: -0.5,
+  //                                   child: Container(
+  //                                     alignment: Alignment.center,
+  //                                     width: 40,
+  //                                     height: 40,
+  //                                     decoration: BoxDecoration(
+  //                                         border: Border.all(
+  //                                           color: Colors.black,
+  //                                           width: 4.0,
+  //                                         ),
+  //                                         color: Colors.white,
+  //                                         borderRadius: BorderRadius.circular(
+  //                                           40,
+  //                                         )),
+  //                                     child: Text("vs",
+  //                                         style: TextStyle(
+  //                                           fontSize: 16,
+  //                                           fontWeight: FontWeight.bold,
+  //                                         )),
+  //                                   ),
+  //                                 )
+  //                               ],
+  //                             ),
+  //                           ],
+  //                         ),
+  //                   Expanded(child: SizedBox()),
+  //                 ],
+  //               ),
+  //             ),
+  //             // Expanded(child: SizedBox()),
 
-              Text(
-                model.vote.subVotes[idx].selectDescription,
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -1.0,
-                ),
-                maxLines: 2,
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-                child: Text(
-                  "현재 ${model.vote.subVotes[idx].numVoted0 + model.vote.subVotes[idx].numVoted1}명이 이 주제를 예측하였습니다",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'DmSans',
-                    color: Color(0xFF1EC8CF),
-                  ),
-                ),
-              ),
+  //             Text(
+  //               model.vote.subVotes[idx].selectDescription,
+  //               style: TextStyle(
+  //                 fontSize: 28,
+  //                 fontWeight: FontWeight.w700,
+  //                 letterSpacing: -1.0,
+  //               ),
+  //               maxLines: 2,
+  //             ),
+  //             Padding(
+  //               padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+  //               child: Text(
+  //                 "현재 ${model.vote.subVotes[idx].numVoted0 + model.vote.subVotes[idx].numVoted1}명이 이 주제를 예측하였습니다",
+  //                 style: TextStyle(
+  //                   fontSize: 14,
+  //                   fontFamily: 'DmSans',
+  //                   color: Color(0xFF1EC8CF),
+  //                 ),
+  //               ),
+  //             ),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-                child: Wrap(
-                  spacing: 6,
-                  runSpacing: -5,
-                  direction: Axis.horizontal,
-                  children: buildChip(hexToColor, model, idx, numOfChoices),
-                  // Container(
-                  //   alignment: Alignment.center,
-                  //   padding: EdgeInsets.fromLTRB(10, 6, 10, 6),
-                  //   decoration: BoxDecoration(
-                  //     color: hexToColor(
-                  //       model.vote.subVotes[idx].colorCode[0],
-                  //     ),
-                  //     borderRadius: BorderRadius.circular(50),
-                  //   ),
-                  //   child: Text(
-                  //     "시총 0.9조",
-                  //     style: TextStyle(
-                  //       fontSize: 16,
-                  //       fontFamily: 'DmSans',
-                  //       fontWeight: FontWeight.w700,
-                  //     ),
-                  //   ),
-                  // ),
-                ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Row(
-                children: <Widget>[
-                  (!selected[idx])
-                      ? Container()
-                      : Expanded(
-                          child: RaisedButton(
-                            onPressed: () {
-                              setState(() {
-                                selected[idx] = false;
-                              });
-                              Navigator.of(context).pop();
-                            },
-                            color: Color(0xFF0F6669),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 14,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                (model.address.isVoting == false)
-                                    ? SizedBox()
-                                    : Icon(
-                                        Icons.cancel_outlined,
-                                        size: 28,
-                                        color: Colors.white,
-                                      ),
-                                SizedBox(width: 8),
-                                Text("해제하기",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: 'DmSans',
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ),
-                  (selected[idx])
-                      ? Container()
-                      : Expanded(
-                          child: RaisedButton(
-                            onPressed: () {
-                              (model.address.isVoting == false)
-                                  ? {}
-                                  : setState(() {
-                                      if (model.seasonInfo.maxDailyVote -
-                                              numSelected ==
-                                          0) {
-                                        _showToast(
-                                            "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
-                                      } else {
-                                        if (model.user.item - numSelected ==
-                                            0) {
-                                          // 선택되면 안됨
+  //             Padding(
+  //               padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+  //               child: Wrap(
+  //                 spacing: 6,
+  //                 runSpacing: -5,
+  //                 direction: Axis.horizontal,
+  //                 children: buildChip(hexToColor, model, idx, numOfChoices),
+  //                 // Container(
+  //                 //   alignment: Alignment.center,
+  //                 //   padding: EdgeInsets.fromLTRB(10, 6, 10, 6),
+  //                 //   decoration: BoxDecoration(
+  //                 //     color: hexToColor(
+  //                 //       model.vote.subVotes[idx].colorCode[0],
+  //                 //     ),
+  //                 //     borderRadius: BorderRadius.circular(50),
+  //                 //   ),
+  //                 //   child: Text(
+  //                 //     "시총 0.9조",
+  //                 //     style: TextStyle(
+  //                 //       fontSize: 16,
+  //                 //       fontFamily: 'DmSans',
+  //                 //       fontWeight: FontWeight.w700,
+  //                 //     ),
+  //                 //   ),
+  //                 // ),
+  //               ),
+  //             ),
+  //             SizedBox(
+  //               height: 12,
+  //             ),
+  //             Row(
+  //               children: <Widget>[
+  //                 (!selected[idx])
+  //                     ? Expanded(
+  //                         child: RaisedButton(
+  //                           onPressed: () {
+  //                             (model.address.isVoting == false)
+  //                                 ? {}
+  //                                 : setState(() {
+  //                                     if (model.seasonInfo.maxDailyVote -
+  //                                             numSelected ==
+  //                                         0) {
+  //                                       _showToast(
+  //                                           "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+  //                                     } else {
+  //                                       if (model.user.item - numSelected ==
+  //                                           0) {
+  //                                         // 선택되면 안됨
 
-                                          _showToast("보유 중인 아이템이 부족합니다.");
-                                        } else {
-                                          selected[idx] = true;
-                                          Navigator.of(context).pop();
-                                        }
-                                      }
-                                    });
-                            },
-                            color: (model.address.isVoting == false)
-                                ? Color(0xFFE4E4E4)
-                                : Color(0xFF1EC8CF),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 14,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                (model.address.isVoting == false)
-                                    ? SizedBox()
-                                    : SvgPicture.asset(
-                                        'assets/icons/double_check_icon.svg',
-                                        width: 20,
-                                      ),
-                                (model.address.isVoting == false)
-                                    ? SizedBox()
-                                    : SizedBox(width: 8),
-                                Text(
-                                    model.address.isVoting == false
-                                        ? "오늘 예측이 마감되었습니다."
-                                        : "선택하기",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: (model.address.isVoting == false)
-                                          ? Colors.black
-                                          : Colors.white,
-                                      fontFamily: 'DmSans',
-                                      fontWeight: FontWeight.w700,
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  //                                         _showToast("보유 중인 아이템이 부족합니다.");
+  //                                       } else {
+  //                                         selected[idx] = true;
+  //                                         Navigator.of(context).pop();
+  //                                       }
+  //                                     }
+  //                                   });
+  //                           },
+  //                           color: (model.address.isVoting == false)
+  //                               ? Color(0xFFE4E4E4)
+  //                               : Color(0xFF1EC8CF),
+  //                           shape: RoundedRectangleBorder(
+  //                             borderRadius: BorderRadius.circular(30),
+  //                           ),
+  //                           padding: EdgeInsets.symmetric(
+  //                             horizontal: 10,
+  //                             vertical: 14,
+  //                           ),
+  //                           child: Row(
+  //                             mainAxisAlignment: MainAxisAlignment.center,
+  //                             children: [
+  //                               (model.address.isVoting == false)
+  //                                   ? SizedBox()
+  //                                   : SvgPicture.asset(
+  //                                       'assets/icons/double_check_icon.svg',
+  //                                       width: 20,
+  //                                     ),
+  //                               (model.address.isVoting == false)
+  //                                   ? SizedBox()
+  //                                   : SizedBox(width: 8),
+  //                               Text(
+  //                                   model.address.isVoting == false
+  //                                       ? "오늘 예측이 마감되었습니다."
+  //                                       : "선택하기",
+  //                                   style: TextStyle(
+  //                                     fontSize: 20,
+  //                                     color: (model.address.isVoting == false)
+  //                                         ? Colors.black
+  //                                         : Colors.white,
+  //                                     fontFamily: 'DmSans',
+  //                                     fontWeight: FontWeight.w700,
+  //                                   )),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       )
+  //                     : Expanded(
+  //                         child: RaisedButton(
+  //                           onPressed: () {
+  //                             setState(() {
+  //                               selected[idx] = false;
+  //                             });
+  //                             Navigator.of(context).pop();
+  //                           },
+  //                           color: Color(0xFF0F6669),
+  //                           shape: RoundedRectangleBorder(
+  //                             borderRadius: BorderRadius.circular(30),
+  //                           ),
+  //                           padding: EdgeInsets.symmetric(
+  //                             horizontal: 14,
+  //                             vertical: 14,
+  //                           ),
+  //                           child: Row(
+  //                             mainAxisAlignment: MainAxisAlignment.center,
+  //                             children: [
+  //                               (model.address.isVoting == false)
+  //                                   ? SizedBox()
+  //                                   : Icon(
+  //                                       Icons.cancel_outlined,
+  //                                       size: 28,
+  //                                       color: Colors.white,
+  //                                     ),
+  //                               SizedBox(width: 8),
+  //                               Text("해제하기",
+  //                                   style: TextStyle(
+  //                                     fontSize: 20,
+  //                                     fontFamily: 'DmSans',
+  //                                     fontWeight: FontWeight.w700,
+  //                                     color: Colors.white,
+  //                                   )),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   List<Widget> buildChip(
     Color hexToColor(String code),
@@ -2837,9 +2835,9 @@ class _TopContainerState extends State<TopContainer> {
   VoteSelectViewModel model;
 
   Duration getTimeLeft(VoteSelectViewModel model) {
-    // DateTime endTime = model.vote.voteEndDateTime.toDate();
-    DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
-    return temp.difference(DateTime.now());
+    DateTime endTime = model.vote.voteEndDateTime.toDate();
+    // DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
+    return endTime.difference(DateTime.now());
     // timeLeftArr = diffFinal.split(":");
     // return diffFinal;
   }

@@ -162,8 +162,10 @@ class _StartUpViewState extends State<StartUpView>
                         ),
                         // height: double.infinity,
                         color: Colors.white.withOpacity(0),
-                        child: SvgPicture.asset('assets/icons/home.svg',
-                            color: Color(0xFFAAAAAA)),
+                        child: SvgPicture.asset(
+                          'assets/icons/bottom_home.svg',
+                          color: Color(0xFFAAAAAA),
+                        ),
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.symmetric(
@@ -172,8 +174,8 @@ class _StartUpViewState extends State<StartUpView>
                         ),
                         // height: double.infinity,
                         color: Colors.white.withOpacity(0),
-                        child: SvgPicture.asset('assets/icons/home.svg',
-                            color: Color(0xFF1EC8CF)),
+                        child: SvgPicture.asset('assets/icons/bottom_home.svg',
+                            color: Colors.black),
                       ),
                       label: '',
                     ),
@@ -184,7 +186,7 @@ class _StartUpViewState extends State<StartUpView>
                           horizontal: 36.w,
                         ),
                         color: Colors.white.withOpacity(0),
-                        child: SvgPicture.asset('assets/icons/comment.svg',
+                        child: SvgPicture.asset('assets/icons/bottom_chat.svg',
                             color: Color(0xFFAAAAAA)),
                       ),
                       activeIcon: Container(
@@ -193,8 +195,8 @@ class _StartUpViewState extends State<StartUpView>
                           horizontal: 36.w,
                         ),
                         color: Colors.white.withOpacity(0),
-                        child: SvgPicture.asset('assets/icons/comment.svg',
-                            color: Color(0xFF1EC8CF)),
+                        child: SvgPicture.asset('assets/icons/bottom_chat.svg',
+                            color: Colors.black),
                       ),
                       label: '',
                     ),

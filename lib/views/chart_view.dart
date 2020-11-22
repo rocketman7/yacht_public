@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/models/chart_model.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/price_model.dart';
+import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
 import 'package:yachtOne/services/database_service.dart';
@@ -31,6 +32,7 @@ class ChartView extends StatefulWidget {
   final int idx;
   final int numSelected;
   final VoteModel vote;
+  final SeasonModel seasonInfo;
   final DatabaseAddressModel address;
   // final Function showToast;
 
@@ -41,6 +43,7 @@ class ChartView extends StatefulWidget {
     this.idx,
     this.numSelected,
     this.vote,
+    this.seasonInfo,
     this.address,
     // this.showToast,
   );
@@ -65,6 +68,7 @@ class _ChartViewState extends State<ChartView> {
   ScrollController controller;
   StreamController scrollStreamCtrl = StreamController<double>();
   List<bool> selected;
+  SeasonModel seasonInfo;
   int idx;
   int numSelected;
   String issueCode;
@@ -190,6 +194,7 @@ class _ChartViewState extends State<ChartView> {
     numSelected = widget.numSelected;
     issueCode = widget.vote.subVotes[idx].issueCode[indexChosen];
     numOfChoices = widget.vote.subVotes[idx].issueCode.length;
+    seasonInfo = widget.seasonInfo;
     address = widget.address;
     stockOrIndex = widget.vote.subVotes[idx].indexOrStocks[indexChosen];
 
@@ -233,12 +238,12 @@ class _ChartViewState extends State<ChartView> {
               model.chartList.length);
 
           // 뷰모델에서 불러온 종목 정보 모델에서 EPS를 dataSource로
-          // if (stockOrIndex == "stocks") {
-          //   statsSubLength = model.stockInfoModel.stats.length;
-          //   statsDataSourceList = model.stockInfoModel.stats;
-          //   print(statsSubLength);
-          //   // print(statsDataSourceList);
-          // }
+          if (stockOrIndex == "stocks") {
+            statsSubLength = model.stockInfoModel.stats.length;
+            statsDataSourceList = model.stockInfoModel.stats;
+            print(statsSubLength);
+            // print(statsDataSourceList);
+          }
 
           // print(priceDataSourceList.last.close);
 
@@ -305,69 +310,34 @@ class _ChartViewState extends State<ChartView> {
                                 ),
                               ),
                               (!selected[idx])
-                                  ? Container()
-                                  : Expanded(
-                                      child: RaisedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            selected[idx] = false;
-                                          });
-                                          Navigator.of(context).pop();
-                                        },
-                                        color: Color(0xFF0F6669),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                        ),
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 14,
-                                          vertical: 14,
-                                        ),
-                                        child:
-                                            // (model.address.isVoting == false)
-                                            //     ? SizedBox()
-                                            //     :
-
-                                            Text("해제하기",
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontFamily: 'DmSans',
-                                                  fontWeight: FontWeight.w700,
-                                                  color: Colors.white,
-                                                )),
-                                      ),
-                                    ),
-                              (selected[idx])
-                                  ? Container()
-                                  : RaisedButton(
+                                  ? RaisedButton(
                                       onPressed: () {
-                                        // (model.address.isVoting == false)
-                                        //     ? {}
-                                        //     : setState(() {
-                                        //         if (model.seasonInfo
-                                        //                     .maxDailyVote -
-                                        //                 numSelected ==
-                                        //             0) {
-                                        //           _showToast(
-                                        //               "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
-                                        //         } else {
-                                        //           if (model.user.item -
-                                        //                   numSelected ==
-                                        //               0) {
-                                        //             // 선택되면 안됨
+                                        (address.isVoting == false)
+                                            ? {}
+                                            : setState(() {
+                                                if (seasonInfo.maxDailyVote -
+                                                        numSelected ==
+                                                    0) {
+                                                  _showToast(
+                                                      "하루 최대 ${seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                                }
+                                                // else if (model.user.item -
+                                                //         numSelected ==
+                                                //     0) {
+                                                //   // 선택되면 안됨
 
-                                        //             _showToast(
-                                        //                 "보유 중인 아이템이 부족합니다.");
-                                        //           } else {
-                                        //             selected[idx] = true;
-                                        //             Navigator.of(context).pop();
-                                        //           }
-                                        //         }
-                                        //       });
+                                                //   _showToast(
+                                                //       "보유 중인 아이템이 부족합니다.");
+                                                // }
+                                                else {
+                                                  selected[idx] = true;
+                                                  Navigator.of(context).pop();
+                                                }
+                                              });
                                       },
-                                      // color: (model.address.isVoting == false)
-                                      //     ? Color(0xFFE4E4E4)
-                                      //     : Color(0xFF1EC8CF),
+                                      color: (address.isVoting == false)
+                                          ? Color(0xFFE4E4E4)
+                                          : Color(0xFF1EC8CF),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),
@@ -408,6 +378,37 @@ class _ChartViewState extends State<ChartView> {
                                                 fontWeight: FontWeight.w700,
                                               )),
                                         ],
+                                      ),
+                                    )
+                                  : Expanded(
+                                      child: RaisedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            selected[idx] = false;
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                        color: Color(0xFF0F6669),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                          vertical: 14,
+                                        ),
+                                        child:
+                                            // (model.address.isVoting == false)
+                                            //     ? SizedBox()
+                                            //     :
+
+                                            Text("해제하기",
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: 'DmSans',
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.white,
+                                                )),
                                       ),
                                     ),
                             ],
@@ -1046,8 +1047,9 @@ class _ChartViewState extends State<ChartView> {
               ),
             ),
             Text(
-              stringDate.format(model.indexInfoModel.updatedAt.toDate()) +
-                  " 기준",
+              // stringDate.format(model.indexInfoModel.updatedAt.toDate()) +
+              //     " 기준"
+              "",
               style: TextStyle(
                 fontSize: 14,
                 fontFamily: 'AppleSDM',
@@ -1084,7 +1086,7 @@ class _ChartViewState extends State<ChartView> {
                           ),
                         ),
                         Text(
-                          stringDateWithDay
+                          stringDate
                               .format(
                                   model.indexInfoModel.indexBaseDate.toDate())
                               .toString(),
@@ -1473,7 +1475,8 @@ class _ChartViewState extends State<ChartView> {
                           ),
                         ),
                         Text(
-                          model.stockInfoModel.employees.toString(),
+                          formatPrice.format(model.stockInfoModel.employees) +
+                              "명",
                           style: TextStyle(
                             fontSize: 16,
                           ),
@@ -1690,7 +1693,9 @@ class _ChartViewState extends State<ChartView> {
                 fontFamily: 'AppleSDM',
                 color: Colors.black,
               ),
-              interval: 1000,
+              // interval: 1000,
+              // minimum: -7000,
+              // maximum: 3000,
               axisLine: AxisLine(
                 width: 0,
               ),
@@ -1701,7 +1706,7 @@ class _ChartViewState extends State<ChartView> {
                 width: 0,
               ),
 
-              minimum: 2000, // null값 무시하고 min 구해야 함
+              // minimum: 2000, // null값 무시하고 min 구해야 함
 
               // minimum: (quiver.min(
               //       List.generate(statsDataSourceList.length,
@@ -1793,7 +1798,7 @@ class _ChartViewState extends State<ChartView> {
         // tooltipBehavior: TooltipBehavior(enable: true),
         trackballBehavior: TrackballBehavior(
           enable: true,
-          activationMode: ActivationMode.longPress,
+          activationMode: ActivationMode.singleTap,
           tooltipSettings: InteractiveTooltip(
               // Formatting trackball tooltip text
               format: ''),

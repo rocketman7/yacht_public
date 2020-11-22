@@ -473,9 +473,17 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                   //     (element) =>
                   //         element.voteDate ==
                   //         model.allSeasonVoteList[eachVoteNumber].voteDate);
+                  // print("RESULT" +
+                  //     model.allSeasonVoteList[eachVoteNumber].result.length
+                  //         .toString());
+                  // // return Text(")"); //
 
                   int answerIdx =
-                      model.allSeasonVoteList[eachVoteNumber].result[index];
+                      model.allSeasonVoteList[eachVoteNumber].result.length == 0
+                          ? -1
+                          : model
+                              .allSeasonVoteList[eachVoteNumber].result[index];
+
                   return Text(
                     answerIdx < 0
                         ? "-"

@@ -149,7 +149,7 @@ class VoteSelectViewModel extends FutureViewModel {
   //   //stateManager 시작
   //   await _stateManagerService.initStateManager();
   // }
-
+  List<bool> selected;
   Future getAllModel(uid) async {
     // _authService.auth.signOut();
     setBusy(true);
@@ -179,7 +179,7 @@ class VoteSelectViewModel extends FutureViewModel {
     voteSelectTutorial = await _sharedPreferencesService
         .getSharedPreferencesValue(voteSelectTutorialKey, bool);
     print("ISVOTING????? " + address.isVoting.toString());
-
+    selected = List<bool>.filled(vote.subVotes.length, false, growable: true);
     setBusy(false);
     notifyListeners();
   }

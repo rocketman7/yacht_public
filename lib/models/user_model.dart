@@ -10,6 +10,8 @@ class UserModel {
   String accNumber;
   String accName;
   String secName;
+
+  final bool isNameUpdated;
   // final List<UserVote> userVotes;
 
   UserModel({
@@ -23,6 +25,7 @@ class UserModel {
     this.accNumber,
     this.accName,
     this.secName,
+    this.isNameUpdated,
     // this.userVotes,
   });
 
@@ -38,7 +41,8 @@ class UserModel {
         avatarImage = data['avatarImage'],
         accNumber = data['account']['accNumber'],
         accName = data['account']['accName'],
-        secName = data['account']['secName'];
+        secName = data['account']['secName'],
+        isNameUpdated = data['isNameUpdated'];
   // UserModel -> Json 변환 함수
   Map<String, dynamic> toJson() {
     return {
@@ -54,6 +58,7 @@ class UserModel {
         'accName': this.accName,
         'secName': this.secName
       },
+      'isNameUpdated': this.isNameUpdated,
     };
   }
 }

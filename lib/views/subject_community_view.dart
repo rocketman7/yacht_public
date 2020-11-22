@@ -718,14 +718,14 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    "총 투표 " +
+                                    "총 예측 " +
                                         numVoteFormat
                                             .format((model.vote.subVotes[idx]
                                                         .numVoted0 ??
-                                                    1) +
+                                                    0) +
                                                 (model.vote.subVotes[idx]
                                                         .numVoted1 ??
-                                                    1))
+                                                    0))
                                             .toString(),
                                     style: TextStyle(
                                       fontFamily: 'AppleSDM',
@@ -1701,21 +1701,27 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     var percenetFormat = NumberFormat("##%");
 
     // 각 투표수 가져오기
-    var numVoted0 = vote.subVotes[idx].numVoted0 ?? 0;
-    var numVoted1 = vote.subVotes[idx].numVoted1 ?? 0;
+    var numVoted0 = model.vote.subVotes[idx].numVoted0 ?? 0;
+    var numVoted1 = model.vote.subVotes[idx].numVoted1 ?? 0;
 
+// print("TOTAL VOTE")
     // 투표수 -> 퍼센티지 변환
 
-    double vote0Percentage =
-        (numVoted0 + numVoted1) == 0 ? 0 : numVoted0 / (numVoted0 + numVoted1);
-    double vote1Percentage =
-        (numVoted0 + numVoted1) == 0 ? 0 : numVoted1 / (numVoted0 + numVoted1);
+    double vote0Percentage = ((numVoted0 + numVoted1) == 0)
+        ? 0
+        : (numVoted0 / (numVoted0 + numVoted1));
+    double vote1Percentage = ((numVoted0 + numVoted1) == 0)
+        ? 0
+        : (numVoted1 / (numVoted0 + numVoted1));
+    print("total VOTE 0" + numVoted0.toString());
+    print("VOTE 0 perc" + vote0Percentage.toString());
 
     // Bar 차트에 들어갈 데이터 오브젝트
     data = [
-      VoteChart(vote.subVotes[idx].voteChoices[0], vote0Percentage, Colors.red),
       VoteChart(
-          vote.subVotes[idx].voteChoices[1], vote1Percentage, Colors.blue),
+          model.vote.subVotes[idx].voteChoices[0], vote0Percentage, Colors.red),
+      VoteChart(model.vote.subVotes[idx].voteChoices[1], vote1Percentage,
+          Colors.blue),
     ];
 
     return Row(
@@ -1748,6 +1754,8 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                 ),
               ),
               primaryYAxis: NumericAxis(
+                maximum: 1.0,
+                minimum: 0.0,
                 minorGridLines: MinorGridLines(
                   width: 0,
                 ),

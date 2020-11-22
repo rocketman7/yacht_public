@@ -977,10 +977,10 @@ class DatabaseService {
                 statsList.add(StatsModel.fromData(element));
               });
 
-              // print(statsList.toString());
               statsList.sort((b, a) => (b.uploadedAt).compareTo(a.uploadedAt));
 
               stockDescription.stats = statsList;
+              print(stockDescription.stats.toString());
               // stockDescription = stockDescription
               //     .addWith(StockInfoModel.fromData(element.data()));
               // print("STATS " + stockDescription.toString());

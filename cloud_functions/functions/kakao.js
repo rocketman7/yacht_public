@@ -89,7 +89,7 @@ function createIfNotExist(kakaoUserId, phoneNumber, email, emailVerified, displa
           accName: null,
           secName: null
         },
-
+        isNameUpdated: false,
       }
       usersRef.doc(`kakao:${kakaoUserId}`).set(userDatabaseParmas);
       return admin.auth().createUser(params);

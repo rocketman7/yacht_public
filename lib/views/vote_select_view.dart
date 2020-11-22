@@ -44,25 +44,12 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Future<UserModel> _userModelFuture;
-  Future<VoteModel> _getVoteModelFuture;
-
   Future<List<Object>> _getAllModel;
-  Future<UserModel> _userModel;
-  Future<DatabaseAddressModel> _addressModel;
-  Future<VoteModel> _voteModel;
+
   String uid;
 
   PreloadPageController _preloadPageController = PreloadPageController();
   // double leftContainer = 0;
-
-  // Votes for Today 영역 위젯 관리
-  List<Widget> _votesTodayShowing = [];
-  List<Widget> _votesTodayNotShowing = [];
-
-  // Votes Selected 영역 위젯 관리
-  List<Widget> _votesSelectedShowing = [];
-  List<Widget> _votesSelectedNotShowing = [];
 
   // 최종 선택한 주제 index
   List<int> listSelected = [];
@@ -84,23 +71,23 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   //애니메이션은 천천히 생각해보자.
 
   // voteData를 가져와 voteTodayCard에 넣어 위젯 리스트를 만드는 함수
-  void getVoteTodayWidget(VoteModel votesToday) {
-    List<Widget> listItems = [];
-    print("getVOteTodayWIdget making " + votesToday.subVotes[0].id.toString());
-    for (var i = 0; i < votesToday.subVotes.length; i++) {
-      // print(votesFromDB.subVotes.length);
-      listItems.add(VoteCard(i, votesToday));
-    }
-    print("forloop done");
-    if (!isDisposed) {
-      if (this.mounted) {
-        setState(() {
-          print("setstate done");
-          _votesTodayShowing = listItems;
-        });
-      }
-    }
-  }
+  // void getVoteTodayWidget(VoteModel votesToday) {
+  //   List<Widget> listItems = [];
+  //   print("getVOteTodayWIdget making " + votesToday.subVotes[0].id.toString());
+  //   for (var i = 0; i < votesToday.subVotes.length; i++) {
+  //     // print(votesFromDB.subVotes.length);
+  //     listItems.add(VoteCard(i, votesToday));
+  //   }
+  //   print("forloop done");
+  //   if (!isDisposed) {
+  //     if (this.mounted) {
+  //       setState(() {
+  //         print("setstate done");
+  //         _votesTodayShowing = listItems;
+  //       });
+  //     }
+  //   }
+  // }
 
   // void getVoteSelectedWidget(VoteModel votesToday) {
   //   List<Widget> listItems = [];
