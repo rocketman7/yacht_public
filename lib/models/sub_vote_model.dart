@@ -22,6 +22,7 @@ class SubVote {
   final int numVoted1;
   final int result;
   final List<dynamic> issueCode;
+  final List<dynamic> indexOrStocks;
   final List<dynamic> colorCode;
   final List<dynamic> shape;
 
@@ -38,6 +39,7 @@ class SubVote {
     this.numVoted1,
     this.result,
     this.issueCode,
+    this.indexOrStocks,
     this.colorCode,
     this.shape,
   });
@@ -55,6 +57,7 @@ class SubVote {
         numVoted0 = data['numVoted0'],
         numVoted1 = data['numVoted1'],
         issueCode = data['issueCode'],
+        indexOrStocks = data['indexOrStocks'],
         result = data['result'],
         colorCode = data['colorCode'],
         shape = data['shape'] ?? null;

@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:yachtOne/models/chart_model.dart';
+import 'package:yachtOne/models/index_info_model.dart';
+import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/stateManage_model.dart';
+import 'package:yachtOne/models/stats_model.dart';
+import 'package:yachtOne/models/stock_info_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
@@ -198,45 +202,42 @@ class DatabaseService {
     String countryCode,
     String issueCode,
   ) async {
-    ChartModel chart;
+    List<ChartModel> chartList = [];
 
     try {
-      List<ChartModel> chartList;
-      // chartList = [];
-      var priceData = await _databaseService
+      print("CHART FOR ISSUECODE " + issueCode.toString());
+      // Historical Price DB에서 모든 docu를 get하고,
+      // chartList에 추가.
+      await _databaseService
           .collection('temp')
           .doc('KR')
           .collection(issueCode)
           .orderBy('date', descending: false)
-          .get();
+          .get()
+          .then((querySnapshot) {
+        print("PRICEFORCHART QUERYSNAP" +
+            querySnapshot.docs.first.data().toString());
+        if (querySnapshot.docs != null) {
+          querySnapshot.docs.forEach((doc) {
+            chartList.add(ChartModel.fromData(doc.data()));
+          });
+        }
+      });
+
+      print(chartList);
 
       // 최종 DB location
-      var historicalPriceData = await _databaseService
-          .collection('stocks')
-          .doc(countryCode)
-          .collection(issueCode)
-          .orderBy('date', descending: false)
-          .get();
+      // var historicalPriceData = await _databaseService
+      //     .collection('stocks')
+      //     .doc(countryCode)
+      //     .collection(issueCode)
+      //     .orderBy('date', descending: false)
+      //     .get();
 
-      print(priceData.docs.first.data());
+      // print(priceData.docs.first.data());
 
-      return priceData.docs.map((e) => ChartModel.fromData(e.data())).toList();
-      //     .then((value) {
-      //   List<ChartModel> temp;
-      //   value.docs.forEach((e) {
-      //     // print(e.data());
-      //     chartList.add(ChartModel.fromData(e.data()));
-      //     // print(chartList[0].dateTime);
-      //   });
-      //   return chartList;
-      // });
-
-      // print(chartList.length);
-      // tempPrice.data().map((key, value) {
-      // return ChartModel.fromData(Map<String key, dynamic value> map);
-      // });
-      // print(tempPrice.data()['20200320']['high']);
-
+      // return priceData.docs.map((e) => ChartModel.fromData(e.data())).toList();
+      return chartList;
     } catch (e) {
       print(e.message);
     }
@@ -598,13 +599,56 @@ class DatabaseService {
       // print(snapshot.docs.first.data()['issueCode']);
       if (snapshot.docs.isEmpty) {
         print("Price Snapshot  null");
-        return PriceModel(issueCode, 0, 0);
+        return PriceModel(issueCode, 0, 0, null);
       } else {
         print("Price Snapshot  exist");
         // return PriceModel(issueCode, 0, 0);
         return PriceModel.fromData(snapshot.docs.first.data());
       }
       // return list;
+    });
+  }
+
+  Stream<List<PriceModel>> getRealtimePriceForChart(
+    String issueCode,
+  ) {
+    // print(issueCode.length);
+
+    // print(issueCode[i] + "in a loop");
+
+    return _databaseService
+        .collection('realtimePrice')
+        .doc('KR')
+        .collection('20201120')
+        .orderBy('createdAt', descending: true)
+        // .where('issueCode', isEqualTo: '005930')
+        .snapshots()
+        .map((snapshot) {
+      print("SNAP");
+      print(snapshot.toString());
+      // print(snapshot.docs.toString() + "FIRSTDATA");
+      // PriceModel temp = PriceModel.fromData(snapshot.docs.first.data());
+      // print(temp.toString());
+      // print(snapshot.docs.first.data()['issueCode']);
+      if (snapshot.docs.isEmpty) {
+        print("Price Snapshot  null");
+        return [PriceModel(issueCode, 0, 0, null)];
+      } else {
+        print("Price Snapshot  exist");
+
+        return snapshot.docs.map((element) {
+          // priceList.add(PriceModel.fromData(element.data()));
+          return PriceModel.fromData(element.data());
+          // print(element.data());
+        }).toList();
+        // print("AFTER STREAM " + priceList.toString());
+        // print("LENGTH IS " + priceList.length.toString());
+        // return priceList;
+        // return PriceModel(issueCode, 0, 0);
+        // return PriceModel.fromData(snapshot.docs.first.data());
+      }
+      // return list;
+      // return priceList;
     });
   }
 
@@ -890,35 +934,115 @@ class DatabaseService {
     await _usersCollectionReference.doc(uid).update({'item': newItem});
   }
 
-  Future getStats() async {
+  // 주식 종목정보 가져오기
+  Future getStockInfo(
+    String countryCode,
+    String issueCode,
+  ) async {
+    StockInfoModel stockDescription = StockInfoModel();
+    List<StatsModel> statsList = [];
+    List<NewsModel> newsList = [];
     var data;
     data = await _databaseService
-        .collection('stocks')
-        .doc('KR')
-        .collection('005930')
+        .collection("stocks")
+        .doc(countryCode)
+        .collection(issueCode == "005930" ? "005930" : "181710")
         .get()
-        .then((doc) {
-      doc.docs.forEach((element) {
-        if (element.data().isNotEmpty) {
-          switch (element.id) {
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        if (doc.data().isNotEmpty) {
+          switch (doc.id) {
             case 'description':
-              print("DESCRIPTION " + element.data().toString());
+              stockDescription =
+                  stockDescription.addWith(StockInfoModel.fromData(doc.data()));
+              // print(temp.toString());
+              // print("DESCRIPTION " + stockDescription.toString());
+              break;
+            case 'news':
+              // news doc에서 새로 데이터를 가져와서 .news 에 넣기
+              // print(doc.data()['0'].toString());
+              doc.data().values.toList().forEach((element) {
+                newsList.add(NewsModel.fromData(element));
+              });
+
+              stockDescription.news = newsList;
+              // print("NEWS " + stockDescription.toString());
               break;
             case 'stats':
-              print("STATS " + element.data().toString());
+              // stockDescription.stats = StatsModel.fromData(doc.data());
+              // stockDescription.stats.add(StatsModel.fromData(doc.data()));
+              // print(doc.data());
+              doc.data().values.toList().forEach((element) {
+                statsList.add(StatsModel.fromData(element));
+              });
+
+              // print(statsList.toString());
+              statsList.sort((b, a) => (b.uploadedAt).compareTo(a.uploadedAt));
+
+              stockDescription.stats = statsList;
+              // stockDescription = stockDescription
+              //     .addWith(StockInfoModel.fromData(element.data()));
+              // print("STATS " + stockDescription.toString());
               break;
           }
-          // print(element.data());
-          return element.data();
+          // print(" MODEL" + stockDescription.toString());
+          // return element.data();
         }
       });
+      return stockDescription;
     });
 
     return data;
   }
 
+  // 인덱스 정보 가져오기
+  Future getIndexInfo(
+    String countryCode,
+    String issueCode,
+  ) async {
+    IndexInfoModel indexInfo = IndexInfoModel();
+    List<ListedStockModel> listedList = [];
+    return await _databaseService
+        .collection("stocks")
+        .doc(countryCode)
+        .collection(issueCode)
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        if (doc.data().isNotEmpty) {
+          switch (doc.id) {
+            case 'description':
+              indexInfo =
+                  indexInfo.addWith(IndexInfoModel.fromData(doc.data()));
+              // print(indexInfo);
+              break;
+            case 'listed':
+              // stockDescription.stats = StatsModel.fromData(doc.data());
+              // stockDescription.stats.add(StatsModel.fromData(doc.data()));
+              // print(doc.data());
+              doc.data().values.toList().forEach((element) {
+                listedList.add(ListedStockModel.fromData(element));
+              });
+
+              // print(listedList.toString());
+              listedList.sort((a, b) => (b.weight).compareTo(a.weight));
+
+              indexInfo.topListed = listedList;
+              // stockDescription = stockDescription
+              //     .addWith(StockInfoModel.fromData(element.data()));
+              break;
+          }
+          // print(" MODEL" + stockDescription.toString());
+          // return element.data();
+        }
+      });
+      return indexInfo;
+    });
+  }
+
   // database 및 time정보로 Database Address 모델 만들기
   Future<DatabaseAddressModel> getAddress(String uid) async {
+    print("AddressGetStart" + DateTime.now().toString());
     DatabaseAddressModel _databaseAddress;
 
     // 임시 데이터
@@ -927,18 +1051,33 @@ class DatabaseService {
     // DateTime end = DateTime(2020, 09, 06, 16, 00, 00);
     // List<DateTime> tempTime = [start, end];
 
-    String category = await DatabaseAddressModel().adminOpenSeason().get().then(
-      (doc) {
+    String category;
+    String season;
+    String baseDate;
+
+    await DatabaseAddressModel().adminOpenSeason().get().then(
+      (doc) async {
         print(doc.data());
-        return doc.data()['category'];
+        category = doc.data()['category'];
+        season = doc.data()['season'];
+
+        // 당일 포험 가장 가까운 영업일 가져오는 함수로 baseDate를 만들고,
+        baseDate = DateTimeModel().baseDate(category);
+        // 그 baseDate에 해당하는 voteData가 있는지 체크,
+        var voteData = await _votesCollectionReference
+            .doc(category)
+            .collection(season)
+            .doc(baseDate)
+            .get();
+        print(voteData);
+        // 없으면 admin collection에 있는 baseDate를 가져옴
+        if (voteData.data() == null) {
+          baseDate = doc.data()['baseDate'];
+        }
       },
     );
 
-    String season = await DatabaseAddressModel().adminOpenSeason().get().then(
-          (doc) => doc.data()['season'],
-        );
-
-    String baseDate = DateTimeModel().baseDate(category);
+    // baseDate = DateTimeModel().baseDate(category);
 
     bool isVoting = DateTimeModel().isVoteAvailable(category);
     // String baseDate = '20200901';
@@ -948,14 +1087,14 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: '20201026',
+      date: baseDate,
       category: category,
       season: season,
-      isVoting: true,
+      isVoting: false, //false면 장 중
     );
 
-    print("TODAY DATA ADDRESS" + _databaseAddress.date.toString());
-
+    print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());
+    print("AddressGetEnd" + DateTime.now().toString());
     return _databaseAddress;
   }
 }

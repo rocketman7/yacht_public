@@ -60,7 +60,6 @@ class RankView extends StatelessWidget {
                                     children: [
                                       avatarWidget(model.userModel.avatarImage,
                                           model.userModel.item),
-                                      // avatarWidget('avatar008', 10),
                                       SizedBox(
                                         width: 12,
                                       ),
@@ -81,14 +80,12 @@ class RankView extends StatelessWidget {
                                                 )),
                                             child: Text(
                                               "${model.seasonModel.seasonName}",
-                                              // "베타 시즌 1",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontFamily: 'DmSans',
                                                   fontSize: 12),
                                             ),
                                           ),
-                                          // Text('csejun',
                                           AutoSizeText(
                                             model.userModel.userName,
                                             style: TextStyle(
@@ -167,30 +164,6 @@ class RankView extends StatelessWidget {
                                       )
                                     ],
                                   ),
-                                  // SizedBox(
-                                  //   height: 8,
-                                  // ),
-                                  // Row(
-                                  //   children: [
-                                  //     Text(
-                                  //       '현재 승점',
-                                  //       style: TextStyle(
-                                  //         fontSize: 20.sp,
-                                  //         fontFamily: 'AppleSDM',
-                                  //         letterSpacing: -1.0,
-                                  //       ),
-                                  //     ),
-                                  //     Spacer(),
-                                  //     Text(
-                                  //       '${model.myWinPoint}',
-                                  //       style: TextStyle(
-                                  //         fontSize: 20.sp,
-                                  //         fontFamily: 'AppleSDM',
-                                  //         letterSpacing: -1.0,
-                                  //       ),
-                                  //     )
-                                  //   ],
-                                  // ),
                                   SizedBox(
                                     height: 8,
                                   ),
@@ -286,12 +259,6 @@ class RankView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  // RaisedButton(
-                                  //   onPressed: () {
-                                  //     model.addRank();
-                                  //   },
-                                  //   child: Text('rank DB 추가'),
-                                  // ),
                                 ],
                               ),
                             ),

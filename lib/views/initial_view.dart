@@ -9,6 +9,7 @@ import 'package:yachtOne/views/loading_view.dart';
 import 'package:yachtOne/views/startup_view.dart';
 
 import '../locator.dart';
+import 'intro_view.dart';
 import 'login_view.dart';
 
 class InitialView extends StatefulWidget {
@@ -32,7 +33,13 @@ class _InitialViewState extends State<InitialView> {
                   stream: model.getAuthChange(),
                   builder: (context, snapshot) {
                     // print(model.isTwoFactorAuthed);
-                    if (!snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      print("CONNECTION STATE" +
+                          snapshot.connectionState.toString());
+                      return Scaffold(
+                        body: IntroView(),
+                      );
+                    } else if (!snapshot.hasData) {
                       print("nodata");
                       return Scaffold(
                         body: AppTitleView(),
