@@ -1,26 +1,23 @@
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/database_service.dart';
-import 'package:yachtOne/views/constants/holiday.dart';
-import 'dart:math' as math;
 
+import '../services/auth_service.dart';
 import '../services/stateManage_service.dart';
-import '../services/database_service.dart';
+import '../services/sharedPreferences_service.dart';
 
 import '../locator.dart';
 import '../models/portfolio_model.dart';
 import '../models/database_address_model.dart';
 import '../models/season_model.dart';
-import '../services/sharedPreferences_service.dart';
 import '../models/sharedPreferences_const.dart';
+import '../models/date_time_model.dart';
+import '../views/constants/holiday.dart';
 
 class PortfolioViewModel extends FutureViewModel {
   // Services Setting
   final SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
   final StateManageService _stateManageService = locator<StateManageService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
   final AuthService _authService = locator<AuthService>();
 
   // 변수 Setting
@@ -161,7 +158,11 @@ class PortfolioViewModel extends FutureViewModel {
 
   // 어드레스모델이 가리키는 날짜를 가져와서 xxxx.xx.xx 형식으로 변환
   String getDateFormChange() {
-    DateTime baseDate = strToDate(addressModel.date);
+    // DateTime baseDate = strToDate(addressModel.date);
+    DateTime baseDate =
+        strToDate(DateTimeModel().baseDate(addressModel.category));
+    // print(DateTimeModel().baseDate(addressModel.category));
+    // print(addressModel.category);
     String previosBusinessDate = dateToStr(previousBusinessDay(baseDate));
     return previosBusinessDate.substring(0, 4) +
         '.' +

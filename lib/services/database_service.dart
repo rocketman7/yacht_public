@@ -934,6 +934,12 @@ class DatabaseService {
     await _usersCollectionReference.doc(uid).update({'item': newItem});
   }
 
+  Future updateUserName(String uid, String newUserName) async {
+    print("NEW USERNAME IS" + newUserName);
+    await _usersCollectionReference.doc(uid).update({'userName': newUserName});
+    await _usersCollectionReference.doc(uid).update({'isNameUpdated': true});
+  }
+
   // 주식 종목정보 가져오기
   Future getStockInfo(
     String countryCode,

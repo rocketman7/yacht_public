@@ -214,32 +214,37 @@ class RankView extends StatelessWidget {
                                                 letterSpacing: -2.0,
                                                 fontWeight: FontWeight.bold),
                                           ),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                '${model.getDateFormChange()}',
-                                                style: TextStyle(
-                                                    fontFamily: 'DmSans',
-                                                    fontSize: 14),
-                                              ),
-                                              Container(
-                                                height: 8,
-                                                width: 1,
-                                                color: Color(0xFFD8D8D8),
-                                              ),
-                                              SizedBox(
-                                                width: 8,
-                                              ),
-                                              Text(
-                                                '${model.getUsersNum()}명 경쟁 중!',
-                                                style: TextStyle(
-                                                    fontFamily: 'DmSans',
-                                                    fontSize: 14),
-                                              )
-                                            ],
-                                          ),
+                                          (model.rankModel.length != 0)
+                                              ? Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      '${model.getDateFormChange()}',
+                                                      style: TextStyle(
+                                                          fontFamily: 'DmSans',
+                                                          fontSize: 14),
+                                                    ),
+                                                    Container(
+                                                      height: 8,
+                                                      width: 1,
+                                                      color: Color(0xFFD8D8D8),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 8,
+                                                    ),
+                                                    Text(
+                                                      '${model.getUsersNum()}명 경쟁 중!',
+                                                      style: TextStyle(
+                                                          fontFamily: 'DmSans',
+                                                          fontSize: 14),
+                                                    )
+                                                  ],
+                                                )
+                                              : Text('시즌 시작 후 랭킹이 표시됩니다!',
+                                                  style: TextStyle(
+                                                      fontFamily: 'DmSans',
+                                                      fontSize: 14)),
                                           SizedBox(
                                             height: 12,
                                           ),

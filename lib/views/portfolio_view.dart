@@ -91,11 +91,6 @@ class _PortfolioViewState extends State<PortfolioView>
                   children: [
                     SafeArea(
                       child: Padding(
-                        // padding: EdgeInsets.only(
-                        //   left: 16.w,
-                        //   right: 16.w,
-                        //   top: 18.h,
-                        // ),
                         padding: EdgeInsets.only(
                           left: 16,
                           right: 16,
@@ -103,48 +98,6 @@ class _PortfolioViewState extends State<PortfolioView>
                         ),
                         child: Column(
                           children: [
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: <Widget>[
-                            //     GestureDetector(
-                            //         onTap: () {
-                            //           Navigator.of(_navigationService
-                            //                   .navigatorKey.currentContext)
-                            //               .pop();
-                            //         },
-                            //         child: Padding(
-                            //           padding: const EdgeInsets.symmetric(
-                            //               horizontal: 18.0),
-                            //           child: Row(
-                            //             children: <Widget>[
-                            //               Icon(
-                            //                 Icons.arrow_back_ios,
-                            //               ),
-                            //             ],
-                            //           ),
-                            //         )),
-                            //     Expanded(
-                            //       child: Column(
-                            //         children: <Widget>[
-                            //           Text(
-                            //             "상금 포트폴리오 구성",
-                            //             style: TextStyle(
-                            //               fontSize: 20.sp,
-                            //               fontFamily: 'AppleSDEB',
-                            //               // fontWeight: FontWeight.bold,
-                            //             ),
-                            //             maxLines: 1,
-                            //             softWrap: false,
-                            //             overflow: TextOverflow.fade,
-                            //           ),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //     SizedBox(
-                            //       width: 52.w,
-                            //     ),
-                            //   ],
-                            // ),
                             Row(
                               children: [
                                 GestureDetector(
@@ -165,8 +118,7 @@ class _PortfolioViewState extends State<PortfolioView>
                                   "상금 포트폴리오 구성",
                                   style: TextStyle(
                                     fontSize: 20.sp,
-                                    fontFamily: 'AppleSDEB',
-                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: 'DmSans',
                                   ),
                                   maxLines: 1,
                                   softWrap: false,
@@ -303,6 +255,7 @@ class _PortfolioViewState extends State<PortfolioView>
                         : model.tutorialStatus != 0
                             ? tutorial(model)
                             : Container(),
+                    // tutorial(model)
                   ],
                 ));
           }
@@ -456,17 +409,22 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
             ),
             Text(
               '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
-              style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+              style: TextStyle(
+                fontSize: 18.sp,
+                height: 1,
+                fontFamily: 'AppleSDM',
+              ),
             ),
             SizedBox(
-              width: 8,
+              width: 8.w,
             ),
             Text(
-              '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}',
+              '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
               style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: 'DmSans',
-                  fontWeight: FontWeight.w600,
+                  fontSize: 18.sp,
+                  fontFamily: 'AppleSDM',
+                  height: 1,
+                  textBaseline: TextBaseline.alphabetic,
                   color: Color(int.parse(
                       'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
                       radix: 16))),
@@ -496,17 +454,22 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                 ),
                 Text(
                   '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
-                  style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    height: 1,
+                    fontFamily: 'AppleSDM',
+                  ),
                 ),
                 SizedBox(
                   width: 8,
                 ),
                 Text(
-                  '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}',
+                  '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
                   style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'DmSans',
-                      fontWeight: FontWeight.w600,
+                      fontSize: 18.sp,
+                      fontFamily: 'AppleSDM',
+                      height: 1,
+                      textBaseline: TextBaseline.alphabetic,
                       color: Color(int.parse(
                           'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
                           radix: 16))),
@@ -544,7 +507,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                       ),
                     ),
                     SizedBox(
-                      width: 8,
+                      width: 8.w,
                     ),
                     Text(
                       '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
@@ -582,19 +545,20 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                       '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].stockName}',
                       style: TextStyle(
                         fontSize: 18.sp,
-                        fontFamily: 'AppleSDM',
                         height: 1,
+                        fontFamily: 'AppleSDM',
                       ),
                     ),
                     SizedBox(
                       width: 8.w,
                     ),
                     Text(
-                      '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].sharesNum} 주',
+                      '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].sharesNum}주',
                       style: TextStyle(
                           fontSize: 18.sp,
                           fontFamily: 'AppleSDM',
                           height: 1,
+                          textBaseline: TextBaseline.alphabetic,
                           color: Color(int.parse(
                               'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
                               radix: 16))),
@@ -771,41 +735,6 @@ Widget tutorial(PortfolioViewModel model) {
       child: (model.tutorialStatus - model.tutorialTotalStep == 0)
           ? Stack(
               children: [
-                // ClipPath(
-                //   clipper: TutorialClipper1(),
-                //   child: Container(
-                //     width: deviceWidth,
-                //     height: deviceHeight,
-                //     decoration: BoxDecoration(
-                //         border: Border.all(width: 1, color: Colors.amber),
-                //         color: Colors.black38),
-                //   ),
-                // ),
-                // Column(
-                //   children: [
-                //     Container(
-                //       width: deviceWidth,
-                //       height: 90,
-                //       decoration: BoxDecoration(
-                //           border: Border.all(width: 1, color: Colors.amber),
-                //           color: Colors.black38),
-                //     ),
-                //     Container(
-                //       width: deviceWidth,
-                //       height: 450,
-                //       decoration: BoxDecoration(
-                //           border: Border.all(width: 1, color: Colors.amber),
-                //           color: Colors.white10),
-                //     ),
-                //     Container(
-                //       width: deviceWidth,
-                //       height: 200,
-                //       decoration: BoxDecoration(
-                //           border: Border.all(width: 1, color: Colors.amber),
-                //           color: Colors.black38),
-                //     )
-                //   ],
-                // ),
                 Container(
                   width: deviceWidth,
                   height: deviceHeight,
@@ -817,10 +746,15 @@ Widget tutorial(PortfolioViewModel model) {
                   children: [
                     Text('1A가',
                         style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 20.h,
                             fontFamily: 'DmSans',
                             color: Colors.transparent)),
-                    SizedBox(height: 44),
+                    Text('1A가',
+                        style: TextStyle(
+                            fontSize: 16.h,
+                            fontFamily: 'DmSans',
+                            color: Colors.transparent)),
+                    SizedBox(height: 70.h),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -856,34 +790,6 @@ Widget tutorial(PortfolioViewModel model) {
             )
           : Stack(
               children: [
-                // ClipPath(
-                //   clipper: TutorialClipper2(),
-                //   child: Container(
-                //     width: deviceWidth,
-                //     height: deviceHeight,
-                //     decoration: BoxDecoration(
-                //         border: Border.all(width: 1, color: Colors.amber),
-                //         color: Colors.black38),
-                //   ),
-                // ),
-                // Column(
-                //   children: [
-                //     Container(
-                //       width: deviceWidth,
-                //       height: deviceHeight - 240,
-                //       decoration: BoxDecoration(
-                //           border: Border.all(width: 1, color: Colors.amber),
-                //           color: Colors.black38),
-                //     ),
-                //     Container(
-                //         width: deviceWidth,
-                //         height: 90,
-                //         decoration: BoxDecoration(
-                //             border: Border.all(width: 1, color: Colors.amber),
-                //             color: Colors.black12))
-                //   ],
-                // ),
-
                 Container(
                   width: deviceWidth,
                   height: deviceHeight,
@@ -896,10 +802,10 @@ Widget tutorial(PortfolioViewModel model) {
                   children: [
                     Text('1A가',
                         style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 20.h,
                             fontFamily: 'DmSans',
                             color: Colors.transparent)),
-                    SizedBox(height: 44),
+                    SizedBox(height: 70.h),
                     Expanded(
                       child: Container(),
                     ),
@@ -950,32 +856,4 @@ Widget tutorial(PortfolioViewModel model) {
             ),
     ),
   );
-}
-
-class TutorialClipper1 extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    return Path()
-      ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
-      ..addRect(Rect.fromLTWH(0, 90, size.width, 100 + deviceWidth - 100))
-      // ..addOval(Rect.fromCircle(
-      //     center: Offset(size.width - 44, size.height - 44), radius: 40))
-      ..fillType = PathFillType.evenOdd;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
-}
-
-class TutorialClipper2 extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    return Path()
-      ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
-      ..addRect(Rect.fromLTWH(0, deviceHeight - 235, size.width, size.height))
-      ..fillType = PathFillType.evenOdd;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 }

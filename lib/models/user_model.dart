@@ -6,6 +6,7 @@ class UserModel {
   final String friendsCode;
   int item;
   final String avatarImage;
+  final bool isNameUpdated;
 
   String accNumber;
   String accName;
@@ -20,6 +21,7 @@ class UserModel {
     this.friendsCode,
     this.item,
     this.avatarImage,
+    this.isNameUpdated,
     this.accNumber,
     this.accName,
     this.secName,
@@ -36,6 +38,7 @@ class UserModel {
         friendsCode = data['friendsCode'],
         item = data['item'],
         avatarImage = data['avatarImage'],
+        isNameUpdated = data['isNameUpdated'],
         accNumber = data['account']['accNumber'],
         accName = data['account']['accName'],
         secName = data['account']['secName'];
@@ -49,6 +52,7 @@ class UserModel {
       'friendsCode': this.friendsCode,
       'item': this.item,
       'avatarImage': this.avatarImage,
+      'isNameUpdated': this.isNameUpdated,
       'account': {
         'accNumber': this.accNumber,
         'accName': this.accName,
