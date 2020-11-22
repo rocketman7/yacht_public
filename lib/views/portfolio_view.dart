@@ -91,53 +91,95 @@ class _PortfolioViewState extends State<PortfolioView>
                   children: [
                     SafeArea(
                       child: Padding(
+                        // padding: EdgeInsets.only(
+                        //   left: 16.w,
+                        //   right: 16.w,
+                        //   top: 18.h,
+                        // ),
                         padding: EdgeInsets.only(
-                          left: 16.w,
-                          right: 16.w,
-                          top: 18.h,
+                          left: 16,
+                          right: 16,
+                          top: 16,
                         ),
                         child: Column(
                           children: [
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: <Widget>[
+                            //     GestureDetector(
+                            //         onTap: () {
+                            //           Navigator.of(_navigationService
+                            //                   .navigatorKey.currentContext)
+                            //               .pop();
+                            //         },
+                            //         child: Padding(
+                            //           padding: const EdgeInsets.symmetric(
+                            //               horizontal: 18.0),
+                            //           child: Row(
+                            //             children: <Widget>[
+                            //               Icon(
+                            //                 Icons.arrow_back_ios,
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         )),
+                            //     Expanded(
+                            //       child: Column(
+                            //         children: <Widget>[
+                            //           Text(
+                            //             "상금 포트폴리오 구성",
+                            //             style: TextStyle(
+                            //               fontSize: 20.sp,
+                            //               fontFamily: 'AppleSDEB',
+                            //               // fontWeight: FontWeight.bold,
+                            //             ),
+                            //             maxLines: 1,
+                            //             softWrap: false,
+                            //             overflow: TextOverflow.fade,
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //     SizedBox(
+                            //       width: 52.w,
+                            //     ),
+                            //   ],
+                            // ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
+                              children: [
                                 GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
                                     onTap: () {
                                       Navigator.of(_navigationService
                                               .navigatorKey.currentContext)
                                           .pop();
                                     },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 18.0),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Icon(
-                                            Icons.arrow_back_ios,
-                                          ),
-                                        ],
-                                      ),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.arrow_back_ios),
+                                        Container(width: 30),
+                                      ],
                                     )),
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        "상금 포트폴리오 구성",
-                                        style: TextStyle(
-                                          fontSize: 20.sp,
-                                          fontFamily: 'AppleSDEB',
-                                          // fontWeight: FontWeight.bold,
-                                        ),
-                                        maxLines: 1,
-                                        softWrap: false,
-                                        overflow: TextOverflow.fade,
-                                      ),
-                                    ],
+                                Spacer(),
+                                Text(
+                                  "상금 포트폴리오 구성",
+                                  style: TextStyle(
+                                    fontSize: 20.sp,
+                                    fontFamily: 'AppleSDEB',
+                                    // fontWeight: FontWeight.bold,
                                   ),
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  overflow: TextOverflow.fade,
                                 ),
-                                SizedBox(
-                                  width: 52.w,
-                                ),
+                                Spacer(),
+                                Row(
+                                  children: [
+                                    Icon(Icons.arrow_back_ios,
+                                        color: Colors.white),
+                                    Container(width: 30),
+                                  ],
+                                )
                               ],
                             ),
                             SizedBox(

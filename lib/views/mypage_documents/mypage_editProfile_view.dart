@@ -99,119 +99,119 @@ class MypageEditProfileView extends StatelessWidget {
                               height: 1,
                               color: Color(0xFFE3E3E3),
                             ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Row(children: [
-                              Text(
-                                '휴대폰 번호',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Spacer(),
-                              Text(
-                                model.user.phoneNumber ?? "",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ]),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Container(
-                              height: 1,
-                              color: Color(0xFFE3E3E3),
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Row(children: [
-                              Text(
-                                '이메일',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Spacer(),
-                              Text(
-                                model.user.email ?? "",
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ]),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Container(
-                              height: 1,
-                              color: Color(0xFFE3E3E3),
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Row(children: [
-                              Text(
-                                '비밀번호',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Spacer(),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ]),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Container(
-                              height: 1,
-                              color: Color(0xFFE3E3E3),
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Row(children: [
-                              Text(
-                                '관심종목 설정',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Spacer(),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ]),
+                            // SizedBox(
+                            //   height: 16,
+                            // ),
+                            // Row(children: [
+                            //   Text(
+                            //     '휴대폰 번호',
+                            //     style: TextStyle(fontSize: 16),
+                            //   ),
+                            //   Spacer(),
+                            //   Text(
+                            //     model.user.phoneNumber ?? "",
+                            //     style: TextStyle(fontSize: 16),
+                            //   ),
+                            //   SizedBox(
+                            //     width: 16,
+                            //   ),
+                            //   GestureDetector(
+                            //     onTap: () {},
+                            //     child: Icon(
+                            //       Icons.arrow_forward_ios,
+                            //       size: 16,
+                            //       color: Colors.grey,
+                            //     ),
+                            //   ),
+                            // ]),
+                            // SizedBox(
+                            //   height: 16,
+                            // ),
+                            // Container(
+                            //   height: 1,
+                            //   color: Color(0xFFE3E3E3),
+                            // ),
+                            // SizedBox(
+                            //   height: 16,
+                            // ),
+                            // Row(children: [
+                            //   Text(
+                            //     '이메일',
+                            //     style: TextStyle(fontSize: 16),
+                            //   ),
+                            //   Spacer(),
+                            //   Text(
+                            //     model.user.email ?? "",
+                            //     style: TextStyle(fontSize: 16),
+                            //   ),
+                            //   SizedBox(
+                            //     width: 16,
+                            //   ),
+                            //   GestureDetector(
+                            //     onTap: () {},
+                            //     child: Icon(
+                            //       Icons.arrow_forward_ios,
+                            //       size: 16,
+                            //       color: Colors.grey,
+                            //     ),
+                            //   ),
+                            // ]),
+                            // SizedBox(
+                            //   height: 16,
+                            // ),
+                            // Container(
+                            //   height: 1,
+                            //   color: Color(0xFFE3E3E3),
+                            // ),
+                            // SizedBox(
+                            //   height: 16,
+                            // ),
+                            // Row(children: [
+                            //   Text(
+                            //     '비밀번호',
+                            //     style: TextStyle(fontSize: 16),
+                            //   ),
+                            //   Spacer(),
+                            //   SizedBox(
+                            //     width: 16,
+                            //   ),
+                            //   GestureDetector(
+                            //     onTap: () {},
+                            //     child: Icon(
+                            //       Icons.arrow_forward_ios,
+                            //       size: 16,
+                            //       color: Colors.grey,
+                            //     ),
+                            //   ),
+                            // ]),
+                            // SizedBox(
+                            //   height: 16,
+                            // ),
+                            // Container(
+                            //   height: 1,
+                            //   color: Color(0xFFE3E3E3),
+                            // ),
+                            // SizedBox(
+                            //   height: 16,
+                            // ),
+                            // Row(children: [
+                            //   Text(
+                            //     '관심종목 설정',
+                            //     style: TextStyle(fontSize: 16),
+                            //   ),
+                            //   Spacer(),
+                            //   SizedBox(
+                            //     width: 16,
+                            //   ),
+                            //   GestureDetector(
+                            //     onTap: () {},
+                            //     child: Icon(
+                            //       Icons.arrow_forward_ios,
+                            //       size: 16,
+                            //       color: Colors.grey,
+                            //     ),
+                            //   ),
+                            // ]),
                           ],
                         ),
                       ),

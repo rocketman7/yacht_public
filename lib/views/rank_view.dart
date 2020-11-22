@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'constants/size.dart';
 import '../models/rank_model.dart';
 import '../view_models/rank_view_model.dart';
 import '../views/widgets/avatar_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RankView extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
@@ -88,13 +89,16 @@ class RankView extends StatelessWidget {
                                             ),
                                           ),
                                           // Text('csejun',
-                                          Text(model.userModel.userName,
-                                              style: TextStyle(
-                                                fontSize: 24,
-                                                letterSpacing: -1.0,
-                                                fontFamily: 'DmSans',
-                                                fontWeight: FontWeight.bold,
-                                              )),
+                                          AutoSizeText(
+                                            model.userModel.userName,
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                              letterSpacing: -1.0,
+                                              fontFamily: 'DmSans',
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            maxLines: 1,
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -119,7 +123,7 @@ class RankView extends StatelessWidget {
                                           model.navigateToPortfolioPage();
                                         },
                                         child: Text(
-                                          '₩ ${model.getPortfolioValue()} ',
+                                          '${model.getPortfolioValue()}원',
                                           style: TextStyle(
                                             fontSize: 20.sp,
                                             height: 1,

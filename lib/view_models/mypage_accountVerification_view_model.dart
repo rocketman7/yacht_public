@@ -5,6 +5,7 @@ import '../locator.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
 import '../services/accountVerification_service.dart';
+import '../services/stateManage_service.dart';
 
 class MypageAccountVerificationViewModel extends FutureViewModel {
   // Services Setting
@@ -12,6 +13,7 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   final AccountVerificationService accountVerificationService =
       locator<AccountVerificationService>();
+  final StateManageService _stateManageService = locator<StateManageService>();
 
   // 변수 Setting
   String uid;
@@ -54,13 +56,13 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   Future<String> accOwnerVerificationRequest() async {
     bankCode = accountVerificationService.getBankList()['$secName'];
 
-    print(bankCode);
+    // print(bankCode);
 
     accOwnerResp = await accountVerificationService.accOwnerVerification(
         accNumber, bankCode, accName);
 
-    print(accOwnerResp[0]);
-    print(accOwnerResp[1]);
+    // print(accOwnerResp[0]);
+    // print(accOwnerResp[1]);
 
     notifyListeners();
 
@@ -76,13 +78,13 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
 
     bankCode = accountVerificationService.getBankList()['$secName'];
 
-    print(bankCode);
+    // print(bankCode);
 
     accOccupyResp = await accountVerificationService.accOccupyVerification(
         accNumber, bankCode, authNum.toString());
 
-    print(accOccupyResp[0]);
-    print(accOccupyResp[1]);
+    // print(accOccupyResp[0]);
+    // print(accOccupyResp[1]);
 
     notifyListeners();
 
@@ -119,6 +121,7 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
       user.accName = accName;
 
       setAccInformation();
+      _stateManageService.userModelUpdate();
       return true;
     } else {
       verificationFailMsg = '인증번호가 틀립니다. 다시 입력해주세요';

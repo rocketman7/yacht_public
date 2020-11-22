@@ -2185,7 +2185,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View> {
                           style: TextStyle(
                             fontSize: model.user.userName.length > 8
                                 ? 32
-                                : model.user.userName.length > 6 ? 40 : 48,
+                                : model.user.userName.length > 6
+                                    ? 40
+                                    : 48,
                             letterSpacing: -1.0,
                             fontFamily: 'AppleSDB',
                             // fontWeight: FontWeight.w900,

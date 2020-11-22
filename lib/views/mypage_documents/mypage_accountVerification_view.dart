@@ -465,8 +465,12 @@ class _MypageAccountVerificationViewState
   Widget authNumProcess(MypageAccountVerificationViewModel model) {
     return Column(
       children: [
+        Text(
+          '인증계좌로 1원을 입금하였습니다.\n입금 확인 후, 입금자명에 쓰인 숫자 네 자를 입력하여주세요!',
+          style: TextStyle(color: Color(0xFFC5C5C7)),
+        ),
         SizedBox(
-          height: 32,
+          height: 8,
         ),
         Row(
           children: [
@@ -489,7 +493,7 @@ class _MypageAccountVerificationViewState
                   controller: _authNumController,
                   keyboardType: TextInputType.phone,
                   style: TextStyle(
-                    fontSize: 36,
+                    fontSize: 30,
                     fontFamily: 'DM Sans',
                     letterSpacing: 3.0,
                   ),
@@ -512,7 +516,7 @@ class _MypageAccountVerificationViewState
                     filled: false,
                     hintText: "____",
                     hintStyle: TextStyle(
-                      fontSize: 36,
+                      fontSize: 30,
                     ),
                   ),
                 ),
@@ -531,6 +535,7 @@ class _MypageAccountVerificationViewState
           onPressed: () {
             model.verificationSuccess =
                 model.accVerification(_authNumController.text);
+            FocusScope.of(context).unfocus();
             model.notifyListeners();
           },
           child: Text(

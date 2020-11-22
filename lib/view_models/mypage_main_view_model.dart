@@ -70,6 +70,8 @@ class MypageMainViewModel extends FutureViewModel {
     _stateManageService.setMyState();
     FirebaseKakaoAuthAPI().signOut();
     _authService.signOut();
+    _navigationService.popAndNavigateWithArgTo('initial');
+    // await _navigationService.navigateToMyPage(MypageMainView());
 
     // _navigationService.popAndNavigateWithArgTo('initial');
     // }

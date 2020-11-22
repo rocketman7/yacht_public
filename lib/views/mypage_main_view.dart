@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import '../locator.dart';
-import '../view_models/mypage_main_view_model.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
+import '../view_models/mypage_main_view_model.dart';
 import 'constants/size.dart';
 import 'widgets/avatar_widget.dart';
 
@@ -63,20 +62,87 @@ class MypageMainView extends StatelessWidget {
                                 Row(
                                   children: [
                                     GestureDetector(
-                                      onTap: () {
-                                        // model.navigateToHome();
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Icon(Icons.transit_enterexit),
-                                    ),
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Icon(Icons.arrow_back_ios),
+                                            Container(width: 30),
+                                          ],
+                                        )),
                                     Spacer(),
                                   ],
+                                ),
+                                SizedBox(
+                                  height: 16,
                                 ),
                                 mypageMainTopBar(model),
                                 Expanded(
                                   child: ListView(
                                     children: [
                                       mypageMainAccPref(model),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          GestureDetector(
+                                            behavior: HitTestBehavior.opaque,
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    content:
+                                                        Text('로그아웃하시겠습니까?'),
+                                                    actions: <Widget>[
+                                                      FlatButton(
+                                                        child: Text('아뇨'),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                      FlatButton(
+                                                        child: Text('네'),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                          model.logout();
+                                                        },
+                                                      )
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 16, bottom: 16),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    '로그아웃',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                  Spacer(),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 1,
+                                            color: Color(0xFFE3E3E3),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 42,
+                                      ),
                                       // mypageMainAppPref(model),
                                       mypageMainCSCenter(model),
                                       mypageMainTermsOfUse(model),
@@ -181,17 +247,27 @@ class MypageMainView extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
+                        // child: Text(
+                        //   model.user.userName,
+                        //   overflow: TextOverflow.ellipsis,
+                        //   style: TextStyle(
+                        //     fontSize: model.user.userName.length > 8
+                        //         ? 32
+                        //         : model.user.userName.length > 6
+                        //             ? 40
+                        //             : 48,
+                        //     letterSpacing: -1.0,
+                        //     fontFamily: 'AppleSDB',
+                        //     // fontWeight: FontWeight.w900,
+                        //   ),
+                        // ),
+                        child: AutoSizeText(
                           model.user.userName,
-                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: model.user.userName.length > 8
-                                ? 32
-                                : model.user.userName.length > 6 ? 40 : 48,
-                            letterSpacing: -1.0,
-                            fontFamily: 'AppleSDB',
-                            // fontWeight: FontWeight.w900,
-                          ),
+                              fontSize: 48,
+                              letterSpacing: -1.0,
+                              fontFamily: 'AppleSDB'),
+                          maxLines: 1,
                         ),
                       ),
                     ],
@@ -218,9 +294,14 @@ class MypageMainView extends StatelessWidget {
           },
           child: Padding(
             padding: const EdgeInsets.only(top: 16, bottom: 16),
-            child: Text(
-              title,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+            child: Row(
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                ),
+                Spacer(),
+              ],
             ),
           ),
         ),
@@ -241,7 +322,7 @@ class MypageMainView extends StatelessWidget {
             height: 24,
           ),
           Text(
-            '나의 계정설정',
+            '나의 계정',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(
@@ -255,31 +336,6 @@ class MypageMainView extends StatelessWidget {
           // makeMypageMainComponent(model, 'x내가 받은 상금 현황', null),
           // makeMypageMainComponent(model, 'x내 활동', null),
           makeMypageMainComponent(model, '계좌 정보', 'mypage_accoutverification'),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onDoubleTap: () {
-                  model.logout();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 16),
-                  child: Text(
-                    '더블 탭하여 로그아웃',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-                  ),
-                ),
-              ),
-              Container(
-                height: 1,
-                color: Color(0xFFE3E3E3),
-              )
-            ],
-          ),
-          SizedBox(
-            height: 42,
-          )
         ],
       ),
     );
@@ -327,9 +383,11 @@ class MypageMainView extends StatelessWidget {
             height: 2,
             color: Colors.black,
           ),
-          makeMypageMainComponent(model, '1:1 문의', 'oneonone'),
-          makeMypageMainComponent(model, '자주 묻는 질문(FAQ)', 'faq'),
+          // makeMypageMainComponent(model, '1:1 문의', 'oneonone'),
           makeMypageMainComponent(model, '공지사항', 'notice'),
+          makeMypageMainComponent(model, '자주 묻는 질문(FAQ)', 'faq'),
+          makeMypageMainComponent(
+              model, 'Contact Us', 'mypage_businessinformation'),
           SizedBox(
             height: 42,
           )
@@ -356,9 +414,9 @@ class MypageMainView extends StatelessWidget {
           ),
           makeMypageMainComponent(model, '이용약관', 'mypage_termsofuse'),
           makeMypageMainComponent(model, '개인정보취급방침', 'mypage_privacypolicy'),
-          makeMypageMainComponent(model, '사업자정보', 'mypage_businessinformation'),
-          makeMypageMainComponent(model, '', null),
-          makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
+          // makeMypageMainComponent(model, '사업자정보', 'mypage_businessinformation'),
+          // makeMypageMainComponent(model, '', null),
+          // makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
           SizedBox(
             height: 42,
           )
