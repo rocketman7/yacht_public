@@ -68,6 +68,7 @@ class MypageMainViewModel extends FutureViewModel {
     // if (dialogResult.confirmed) {
     // _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
     _stateManageService.setMyState();
+    _stateManageService.setAppStart();
     FirebaseKakaoAuthAPI().signOut();
     _authService.signOut();
     _navigationService.popAndNavigateWithArgTo('initial');

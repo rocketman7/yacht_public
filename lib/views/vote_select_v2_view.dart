@@ -413,6 +413,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
     _controller.dispose();
     // dispose는 Navigator pushNamed에는 호출되지 않지만 백 버튼에는 호출됨.
