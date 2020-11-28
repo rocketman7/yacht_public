@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,14 +63,23 @@ class MypagePushAlarmSettingView extends StatelessWidget {
               ],
             ),
             Spacer(),
-            CupertinoSwitch(
-              activeColor: Color(0xFF1EC8CF),
-              value: model.pushAlarm[pushAlarmIndex],
-              onChanged: (bool value) {
-                model.pushAlarm[pushAlarmIndex] = value;
-                model.setSharedPreferencesAll();
-              },
-            )
+            Platform.isIOS
+                ? CupertinoSwitch(
+                    activeColor: Color(0xFF1EC8CF),
+                    value: model.pushAlarm[pushAlarmIndex],
+                    onChanged: (bool value) {
+                      model.pushAlarm[pushAlarmIndex] = value;
+                      model.setSharedPreferencesAll();
+                    },
+                  )
+                : Switch(
+                    activeColor: Color(0xFF1EC8CF),
+                    value: model.pushAlarm[pushAlarmIndex],
+                    onChanged: (bool value) {
+                      model.pushAlarm[pushAlarmIndex] = value;
+                      model.setSharedPreferencesAll();
+                    },
+                  )
           ],
         ),
         SizedBox(
