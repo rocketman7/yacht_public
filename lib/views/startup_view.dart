@@ -207,8 +207,12 @@ class _StartUpViewState extends State<StartUpView>
                           horizontal: 36.w,
                         ),
                         color: Colors.white.withOpacity(0),
-                        child: SvgPicture.asset('assets/icons/rank.svg',
+                        child: SvgPicture.asset('assets/icons/bottom_rank2.svg',
                             color: Color(0xFFAAAAAA)),
+                        // child: Image(
+                        //   image: AssetImage('assets/icons/bottom_rank2.png'),
+                        //   color: Color(0xFFAAAAAA),
+                        // ),
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.symmetric(
@@ -216,8 +220,11 @@ class _StartUpViewState extends State<StartUpView>
                           horizontal: 36.w,
                         ),
                         color: Colors.white.withOpacity(0),
-                        child: SvgPicture.asset('assets/icons/rank.svg',
-                            color: Color(0xFF1EC8CF)),
+                        child: SvgPicture.asset('assets/icons/bottom_rank2.svg',
+                            color: Colors.black),
+                        // child: Image(
+                        //   image: AssetImage('assets/icons/bottom_rank2.png'),
+                        // ),
                       ),
                       label: '',
                     ),
@@ -228,7 +235,8 @@ class _StartUpViewState extends State<StartUpView>
                           horizontal: 36.w,
                         ),
                         color: Colors.white.withOpacity(0),
-                        child: SvgPicture.asset('assets/icons/mypage.svg',
+                        child: SvgPicture.asset(
+                            'assets/icons/bottom_track_record.svg',
                             color: Color(0xFFAAAAAA)),
                       ),
                       activeIcon: Container(
@@ -237,8 +245,9 @@ class _StartUpViewState extends State<StartUpView>
                           horizontal: 36.w,
                         ),
                         color: Colors.white.withOpacity(0),
-                        child: SvgPicture.asset('assets/icons/mypage.svg',
-                            color: Color(0xFF1EC8CF)),
+                        child: SvgPicture.asset(
+                            'assets/icons/bottom_track_record.svg',
+                            color: Colors.black),
                       ),
                       label: '',
                     ),

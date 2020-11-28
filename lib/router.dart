@@ -77,7 +77,8 @@ class Routers {
             builder: (context) => DialogManager(child: InitialView()));
       case 'nickname_set':
         return MaterialPageRoute(
-            builder: (context) => DialogManager(child: NicknameSetView()));
+            builder: (context) =>
+                DialogManager(child: NicknameSetView(routeSettings.arguments)));
       case 'mypage_termsofuse':
         return MaterialPageRoute(builder: (context) => MypageTermofuse());
       case 'mypage_privacypolicy':

@@ -33,16 +33,20 @@ class _InitialViewState extends State<InitialView> {
                   stream: model.getAuthChange(),
                   builder: (context, snapshot) {
                     // print(model.isTwoFactorAuthed);
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      print("CONNECTION STATE" +
-                          snapshot.connectionState.toString());
-                      return Scaffold(
-                        body: IntroView(),
-                      );
-                    } else if (!snapshot.hasData) {
+                    // if (snapshot.connectionState == ConnectionState.none) {
+                    //   print("CONNECTION STATE" +
+                    //       snapshot.connectionState.toString());
+                    //   return Scaffold(
+                    //     body: IntroView(),
+                    //   );
+                    // } else
+                    if (!snapshot.hasData) {
                       print("nodata");
                       return Scaffold(
-                        body: AppTitleView(),
+                        body:
+                            snapshot.connectionState == ConnectionState.waiting
+                                ? IntroView()
+                                : AppTitleView(),
                       );
                     } else {
                       print(snapshot.data.uid);

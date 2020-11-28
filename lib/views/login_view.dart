@@ -60,189 +60,183 @@ class _LoginViewState extends State<LoginView>
     deviceWidth = size.width;
     return ViewModelBuilder<LoginViewModel>.reactive(
       viewModelBuilder: () => LoginViewModel(),
-      builder: (context, model, child) => WillPopScope(
-        onWillPop: () async {
-          _navigatorKey.currentState.maybePop();
-          return false;
-        },
-        child: Scaffold(
-          body: Form(
-            key: _formKey,
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                child: SingleChildScrollView(
-                  reverse: true,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: deviceHeight * .08,
+      builder: (context, model, child) => Scaffold(
+        body: Form(
+          key: _formKey,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: SingleChildScrollView(
+                reverse: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: deviceHeight * .08,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Image(
+                        image: AssetImage('assets/images/ggookLogo.png'),
+                        height: 75,
                       ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Image(
-                          image: AssetImage('assets/images/ggookLogo.png'),
-                          height: 75,
-                        ),
+                    ),
+                    SizedBox(
+                      height: deviceHeight * .02,
+                    ),
+                    Text(
+                      "이메일로 로그인",
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.w800,
                       ),
-                      SizedBox(
-                        height: deviceHeight * .02,
+                    ),
+                    SizedBox(
+                      height: 14,
+                    ),
+                    Text(
+                      "안녕하세요. 꾸욱에 오신 걸 환영합니다.\n이메일 로그인을 진행해주세요.",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                        height: 1.2,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Text(
-                        "이메일로 로그인",
-                        style: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.w800,
-                        ),
+                    ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    TextFormField(
+                      textAlign: TextAlign.left,
+                      // 유저 네임 입력창
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {},
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontFamily: 'DmSans',
+                        // fontWeight: FontWeight.w700,
+                        letterSpacing: -1.0,
                       ),
-                      SizedBox(
-                        height: 14,
-                      ),
-                      Text(
-                        "안녕하세요. 꾸욱에 오신 걸 환영합니다.\n이메일 로그인을 진행해주세요.",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                          height: 1.2,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      TextFormField(
-                        textAlign: TextAlign.left,
-                        // 유저 네임 입력창
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {},
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontFamily: 'DmSans',
-                          // fontWeight: FontWeight.w700,
-                          letterSpacing: -1.0,
-                        ),
-                        // validator: ((value) {
-                        //   if (model.checkUserNameDuplicate(value) == true) {
-                        //     return "이미 존재하는 닉네임입니다";
-                        //   }
-                        //   return null;
-                        // }),
-                        decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Color(0xFFF2F2F2),
-                              width: 1.0,
-                            ),
+                      // validator: ((value) {
+                      //   if (model.checkUserNameDuplicate(value) == true) {
+                      //     return "이미 존재하는 닉네임입니다";
+                      //   }
+                      //   return null;
+                      // }),
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xFFF2F2F2),
+                            width: 1.0,
                           ),
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          alignLabelWithHint: true,
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Color(0xFFF2F2F2),
-                              width: 1.0,
-                            ),
-                          ),
-                          filled: false,
-                          hintText: "이메일을 입력해주세요",
-                          hintStyle: TextStyle(
-                            fontSize: 15,
-                          ),
-                          // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
                         ),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      TextFormField(
-                        onChanged: (text) {
-                          setState(() {
-                            _passwordLength = text.length;
-                            print(_passwordLength);
-                          });
-                        },
-                        textAlign: TextAlign.left,
-                        // 유저 네임 입력창
-                        controller: _passwordController,
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontFamily: 'DmSans',
-                          // fontWeight: FontWeight.w700,
-                          letterSpacing: -1.0,
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        alignLabelWithHint: true,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xFFF2F2F2),
+                            width: 1.0,
+                          ),
                         ),
-                        decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Color(0xFFF2F2F2),
-                              width: 1.0,
-                            ),
-                          ),
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          alignLabelWithHint: true,
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Color(0xFFF2F2F2),
-                              width: 1.0,
-                            ),
-                          ),
-                          filled: false,
-                          hintText: "비밀번호를 입력해주세요",
-                          hintStyle: TextStyle(
-                            fontSize: 15,
-                          ),
-                          // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
+                        filled: false,
+                        hintText: "이메일을 입력해주세요",
+                        hintStyle: TextStyle(
+                          fontSize: 15,
                         ),
+                        // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
                       ),
-                      SizedBox(
-                        height: 10,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    TextFormField(
+                      onChanged: (text) {
+                        setState(() {
+                          _passwordLength = text.length;
+                          print(_passwordLength);
+                        });
+                      },
+                      textAlign: TextAlign.left,
+                      // 유저 네임 입력창
+                      controller: _passwordController,
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontFamily: 'DmSans',
+                        // fontWeight: FontWeight.w700,
+                        letterSpacing: -1.0,
                       ),
-                      FlatButton(
-                        onPressed: () {
-                          model.login(
-                              email: _emailController.text,
-                              password: _passwordController.text);
-                        },
-                        minWidth: double.infinity,
-                        height: 60,
-                        child: model.isBusy
-                            ? CircularProgressIndicator()
-                            : Text(
-                                "로그인",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xFFF2F2F2),
+                            width: 1.0,
+                          ),
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        alignLabelWithHint: true,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xFFF2F2F2),
+                            width: 1.0,
+                          ),
+                        ),
+                        filled: false,
+                        hintText: "비밀번호를 입력해주세요",
+                        hintStyle: TextStyle(
+                          fontSize: 15,
+                        ),
+                        // border 둥글게 하고 inputform 밑줄 및 테두리 없앰
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        model.login(
+                            email: _emailController.text,
+                            password: _passwordController.text);
+                      },
+                      minWidth: double.infinity,
+                      height: 60,
+                      child: model.isBusy
+                          ? CircularProgressIndicator()
+                          : Text(
+                              "로그인",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
                               ),
-                        color: (_passwordLength == 0)
-                            ? Color(0xFFB2B7BE)
-                            : Color(0xFF1EC8CF),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text("꾸욱 계정이 없으신가요?"),
-                          ButtonTheme(
-                            // minWidth: 2,
-                            child: FlatButton(
-                              onPressed: () {
-                                _navigationService.navigateTo('phoneAuth');
-                              },
-                              child: Text("회원가입하기",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color(0xFF1EC8CF),
-                                  )),
                             ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                      color: (_passwordLength == 0)
+                          ? Color(0xFFB2B7BE)
+                          : Color(0xFF1EC8CF),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("꾸욱 계정이 없으신가요?"),
+                        ButtonTheme(
+                          // minWidth: 2,
+                          child: FlatButton(
+                            onPressed: () {
+                              _navigationService.navigateTo('phoneAuth');
+                            },
+                            child: Text("회원가입하기",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF1EC8CF),
+                                )),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ),
             ),

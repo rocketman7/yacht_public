@@ -21,6 +21,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
     // ScreenUtil.init(context,
     //     designSize: Size(375, 812), allowFontScaling: false);
     return ViewModelBuilder<TrackRecordViewModel>.reactive(
@@ -52,234 +53,240 @@ class _TrackRecordViewState extends State<TrackRecordView> {
         } else {
           print("System Util " + 137.h.toString() + "  " + 40.sp.toString());
           return Scaffold(
-            body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 20,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        "나의 예측기록",
-                        style: TextStyle(
-                          fontFamily: 'AppleSDEB',
-                          fontSize: 32.sp,
-                          letterSpacing: -2.0,
+            body: WillPopScope(
+              onWillPop: () async {
+                _navigatorKey.currentState.maybePop();
+                return false;
+              },
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    // crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          "나의 예측기록",
+                          style: TextStyle(
+                            fontFamily: 'AppleSDEB',
+                            fontSize: 32.sp,
+                            letterSpacing: -2.0,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 16.h,
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 8.w,
-                        vertical: 4.h,
+                      SizedBox(
+                        height: 16.h,
                       ),
-                      // height: 150.h,
-                      color: Color(0xFF1EC8CF),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: avatarWidget(
-                                        model.user.avatarImage ?? 'avatar001',
-                                        model.user.item),
-                                  ),
-                                  SizedBox(
-                                    width: 8.sp,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      Text(
-                                        model.userVote.userVoteStats
-                                                    .currentWinPoint ==
-                                                null
-                                            ? 0.toString()
-                                            : model.userVote.userVoteStats
-                                                .currentWinPoint
-                                                .toString(),
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 40.sp,
-                                          fontFamily: 'DmSans',
-                                          height: 1,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                        softWrap: true,
-                                      ),
-
-                                      Text(
-                                        "현재 승점",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14.sp,
-                                          fontFamily: 'AppleSDM',
-                                        ),
-                                      ),
-                                      // SizedBox(
-                                      //   height: 12.sp,
-                                      // ),
-                                      //
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 8.sp,
-                              ),
-                              AutoSizeText(
-                                model.user.userName,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 22.sp,
-                                  fontFamily: 'AppleSDB',
-                                ),
-                                maxLines: 1,
-                              ),
-                            ],
-                          ),
-                          VerticalDivider(
-                            color: Colors.white,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Column(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "-",
-                                    style: TextStyle(
-                                      color: Color(0xFFE96F2B),
-                                      fontSize: 36.sp,
-                                      fontFamily: 'DmSans',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Text(
-                                    "나의 시즌 적중률",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12.sp,
-                                      fontFamily: 'DmSans',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "-",
-                                    style: TextStyle(
-                                      color: Color(0xFFE96F2B),
-                                      fontSize: 20.sp,
-                                      fontFamily: 'DmSans',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Text(
-                                    "나의 누적 적중률",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12.sp,
-                                      fontFamily: 'DmSans',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Column(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "-",
-                                    style: TextStyle(
-                                      color: Color(0xFF3485FF),
-                                      fontSize: 36.sp,
-                                      fontFamily: 'DmSans',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Text(
-                                    "참여자 시즌 적중률",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12.sp,
-                                      fontFamily: 'DmSans',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "-",
-                                    style: TextStyle(
-                                      color: Color(0xFF3485FF),
-                                      fontSize: 20.sp,
-                                      fontFamily: 'DmSans',
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Text(
-                                    "참여자 누적 적중률",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12.sp,
-                                      fontFamily: 'DmSans',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 8.sp),
-                    Flexible(
-                      child: Container(
+                      Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: 16.sp,
+                          horizontal: 8.w,
+                          vertical: 4.h,
                         ),
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: model.allSeasonVoteList.length,
-                            itemBuilder: (context, index) {
-                              print("Length" +
-                                  model.allSeasonVoteList.length.toString());
-                              return buildColumn(model, index);
-                            }),
+                        // height: 150.h,
+                        color: Color(0xFF1EC8CF),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topCenter,
+                                      child: avatarWidget(
+                                          model.user.avatarImage ?? 'avatar001',
+                                          model.user.item),
+                                    ),
+                                    SizedBox(
+                                      width: 8.sp,
+                                    ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(
+                                          model.userVote.userVoteStats
+                                                      .currentWinPoint ==
+                                                  null
+                                              ? 0.toString()
+                                              : model.userVote.userVoteStats
+                                                  .currentWinPoint
+                                                  .toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 40.sp,
+                                            fontFamily: 'DmSans',
+                                            height: 1,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                          softWrap: true,
+                                        ),
+
+                                        Text(
+                                          "현재 승점",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14.sp,
+                                            fontFamily: 'AppleSDM',
+                                          ),
+                                        ),
+                                        // SizedBox(
+                                        //   height: 12.sp,
+                                        // ),
+                                        //
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 8.sp,
+                                ),
+                                AutoSizeText(
+                                  model.user.userName,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 22.sp,
+                                    fontFamily: 'AppleSDB',
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ],
+                            ),
+                            VerticalDivider(
+                              color: Colors.white,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "-",
+                                      style: TextStyle(
+                                        color: Color(0xFFE96F2B),
+                                        fontSize: 36.sp,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Text(
+                                      "나의 시즌 적중률",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "-",
+                                      style: TextStyle(
+                                        color: Color(0xFFE96F2B),
+                                        fontSize: 20.sp,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Text(
+                                      "나의 누적 적중률",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "-",
+                                      style: TextStyle(
+                                        color: Color(0xFF3485FF),
+                                        fontSize: 36.sp,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Text(
+                                      "참여자 시즌 적중률",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  // mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "-",
+                                      style: TextStyle(
+                                        color: Color(0xFF3485FF),
+                                        fontSize: 20.sp,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Text(
+                                      "참여자 누적 적중률",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 8.sp),
+                      Flexible(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.sp,
+                          ),
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: model.allSeasonVoteList.length,
+                              itemBuilder: (context, index) {
+                                print("Length" +
+                                    model.allSeasonVoteList.length.toString());
+                                return buildColumn(model, index);
+                              }),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

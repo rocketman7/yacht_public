@@ -84,6 +84,16 @@ class DatabaseService {
     }
   }
 
+  Future checkIfUserDBExists(String uid) async {
+    try {
+      var userData = await _usersCollectionReference.doc(uid).get();
+      print("CHECK INF USER" + userData.data().toString());
+      return userData.data();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   // Read: User정보 users Collection으로부터 읽기
   Future getUser(String uid) async {
     try {
@@ -880,6 +890,24 @@ class DatabaseService {
       }
 
       return allUserName;
+    } catch (e) {
+      print("error");
+      return null;
+    }
+  }
+
+  Future<bool> isUserNameDuplicated(String userName) async {
+    try {
+      var data;
+      await _usersCollectionReference
+          .where('userName', isEqualTo: userName)
+          .get()
+          .then((value) => value.docs.forEach((element) {
+                data = element.data();
+                // return element.data();
+              }));
+      print(data);
+      return (data != null);
     } catch (e) {
       print("error");
       return null;

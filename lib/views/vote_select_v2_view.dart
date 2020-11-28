@@ -6,6 +6,9 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:yachtOne/models/sharedPreferences_const.dart';
+import 'package:yachtOne/services/amplitude_service.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,6 +30,8 @@ import 'package:yachtOne/views/mypage_main_view.dart';
 import 'package:yachtOne/views/temp_not_voting_view.dart';
 
 import '../views/widgets/avatar_widget.dart';
+import 'package:amplitude_flutter/amplitude.dart';
+import 'package:amplitude_flutter/identify.dart';
 
 import '../locator.dart';
 import '../models/user_model.dart';
@@ -213,7 +218,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     super.initState();
 
     try {
-      versionCheck(context);
+      checkVersionSeasonStatus(context);
     } catch (e) {
       print(e);
     }
@@ -257,8 +262,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
   String app_store_url;
   String play_store_url;
+  bool isSeasonStarted = true;
 
-  versionCheck(context) async {
+  checkVersionSeasonStatus(context) async {
     //Get Current installed version of app
     final PackageInfo info = await PackageInfo.fromPlatform();
     double currentVersion =
@@ -269,7 +275,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
     try {
       // Using default duration to force fetching from remote server.
-      await remoteConfig.fetch(expiration: const Duration(hours: 4));
+      await remoteConfig.fetch(expiration: const Duration(seconds: 0));
       await remoteConfig.activateFetched();
       remoteConfig.getString('force_update_current_version');
       double newVersion = double.parse(remoteConfig
@@ -280,9 +286,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       app_store_url = remoteConfig.getString('app_store_url');
       play_store_url = remoteConfig.getString('play_store_url');
 
+      isSeasonStarted = remoteConfig.getBool('is_season_started');
+
       print("NEW VERSION IS" + newVersion.toString());
       print("APP STORE URL " + app_store_url);
       print("PLAY STORE URL " + play_store_url);
+      print("IS SEASON STARTED " + isSeasonStarted.toString());
       if (newVersion > currentVersion) {
         _showVersionDialog(context);
       }
@@ -427,7 +436,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   //     ]);
   //   });
   // }
-
+  SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
   var formatKoreanDate = DateFormat('MM' + "월" + " " + "dd" + "일");
 
   @override
@@ -998,6 +1008,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                       children: [
                                         TopContainer(model, checkVoteTime),
                                         GestureDetector(
+                                          // 광고 활성화 해야 함
                                           // onTap: () {
                                           //   print(rewardedAdsLoaded);
                                           //   model.loadRewardedAds();
@@ -1052,7 +1063,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                               ),
                                               SizedBox(width: 4.w),
                                               Text(
-                                                (model.user.item - numSelected)
+                                                (model.user.item ??
+                                                        0 - numSelected)
                                                     .toString(),
                                                 style: TextStyle(
                                                   fontSize: 26,
@@ -1171,14 +1183,18 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           : 0;
                                     }
                                     // 시즌 시작에 마지막 업데이트에 주석 풀기
-                                    // _navigationService
-                                    //     .navigateWithArgTo('ggook', [
-                                    //   model.address,
-                                    //   model.user,
-                                    //   model.vote,
-                                    //   listSelected,
-                                    //   0,
-                                    // ],);
+                                    isSeasonStarted
+                                        ? _navigationService.navigateWithArgTo(
+                                            'ggook',
+                                            [
+                                              model.address,
+                                              model.user,
+                                              model.vote,
+                                              listSelected,
+                                              0,
+                                            ],
+                                          )
+                                        : {};
                                   },
                             child: Padding(
                               padding: EdgeInsets.symmetric(
@@ -1197,8 +1213,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         // ? Color(0xFFC1C1C1)
                                         // : Colors.black,
                                         // Color(0xFF1EC8CF),
-                                        model.address.isVoting
-                                            ? Colors.grey
+                                        (model.address.isVoting &&
+                                                isSeasonStarted)
+                                            ? Colors.black
                                             : Colors.grey,
                                     // gradient: model.address.isVoting == true
                                     //     ? LinearGradient(
@@ -1261,11 +1278,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                           ),
                         ),
                         Positioned(
-                          bottom: 60,
+                          bottom: 55,
                           child: Container(
                             padding: EdgeInsets.symmetric(
                               horizontal: 8,
-                              vertical: 4,
+                              vertical: 2,
                             ),
                             decoration: BoxDecoration(
                               borderRadius:
@@ -1280,12 +1297,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                 model.address.isVoting == false
                                     ? "오늘의 예측이 마감되었습니다."
                                     : numSelected == 0
-                                        ? "최대 3개의 주제를 선택하여 승점에 도전해보세요!\n12월 4일부터 첫 오픈 베타가 시작됩니다.\n여러분들의 많은 참여 부탁드립니다!"
+                                        ? "최대 3개의 주제를 선택하여 승점에 도전해보세요!\n12월 11일부터 꾸욱의 첫 시즌이 시작됩니다.\n여러분들의 많은 참여 부탁드립니다!"
                                         : "선택한 주제 $numSelected개, 승점 ${numSelected * 2}점에 도전해보세요!",
                                 style: TextStyle(
                                   fontSize: numSelected == 0 ? 14.sp : 16.sp,
                                   fontFamily: 'AppleSDB',
-                                  height: 1.2.h,
+                                  // height: 1,
                                   // fontWeight: FontWeight.w500,
                                   color: (model.address.isVoting == false)
                                       ? Colors.white
@@ -1650,7 +1667,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                   model.selected[idx] = newValue;
                                 }
                               } else {
-                                if (model.user.item - numSelected == 0) {
+                                if ((model.user.item ?? 0 - numSelected) == 0) {
                                   // 선택되면 안됨
                                   if (newValue) {
                                     model.selected[idx] = model.selected[idx];
@@ -1696,7 +1713,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                 builder: (context, snapshot) {
                   double offset = snapshot.data;
 
-                  if (offset < -170) {
+                  if (offset < -140) {
                     WidgetsBinding.instance
                         .addPostFrameCallback((_) => Navigator.pop(context));
                   }
@@ -1737,16 +1754,17 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                             : deviceHeight * .83,
                         // height: 250 + offset * 1.4,
                         child: ChartView(
-                          // controller,
-                          scrollStreamCtrl,
-                          model.selected,
-                          idx,
-                          numSelected,
-                          model.vote,
-                          model.seasonInfo,
-                          model.address,
-                          // _showToast,
-                        ),
+                            // controller,
+                            scrollStreamCtrl,
+                            model.selected,
+                            idx,
+                            numSelected,
+                            model.vote,
+                            model.seasonInfo,
+                            model.address,
+                            model.selectUpdate
+                            // _showToast,
+                            ),
                       ),
                     ],
                   );
@@ -2517,7 +2535,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                 ],
               ),
             ),
-            avatarWidget(model.user.avatarImage, model.user.item)
+            avatarWidget(model.user.avatarImage, model.user.item ?? 0)
           ],
         ),
       ),
@@ -2732,7 +2750,7 @@ Widget tutorial(VoteSelectViewModel model) {
                           ),
                           decoration: BoxDecoration(
                             color: Color(0xFFE81B1B),
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black38,
@@ -2790,7 +2808,7 @@ Widget tutorial(VoteSelectViewModel model) {
                           ),
                           decoration: BoxDecoration(
                             color: Color(0xFFE81B1B),
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black38,
@@ -2856,6 +2874,45 @@ class _TopContainerState extends State<TopContainer> {
       // print("TIMER");
       setState(() {});
     });
+
+    // final Amplitude analytics =
+    //     Amplitude.getInstance(instanceName: "testGgook");
+
+    // // Initialize SDK
+    // print("before intialized");
+    // analytics.setServerUrl("https://api2.amplitude.com");
+    // analytics.init("2b70b7ef5dca3bc9708968745c935a0c");
+    // print("intialized");
+    // // Enable COPPA privacy guard. This is useful when you choose not to report sensitive user information.
+    // analytics.enableCoppaControl();
+
+    // // Set user Id
+    // print("set user id");
+    // analytics.setUserId("test_user");
+
+    // // Turn on automatic session events
+    // analytics.trackingSessionEvents(true);
+
+    // // Log an event
+    // print("logging");
+    // analytics.logEvent('New log',
+    //     eventProperties: {'friend_num': 10, 'is_heavy_user': true});
+
+    // // Identify
+    // print("identify");
+    // final Identify identify1 = Identify()
+    //   ..set('identify_test',
+    //       'identify sent at ${DateTime.now().millisecondsSinceEpoch}')
+    //   ..add('identify_count', 1);
+    // analytics.identify(identify1);
+
+    // // Set group
+    // print("grouping");
+    // analytics.setGroup('orgId', 15);
+
+    // // Group identify
+    // final Identify identify2 = Identify()..set('identify_count', 1);
+    // analytics.groupIdentify('orgId', '15', identify2);
   }
 
   @override

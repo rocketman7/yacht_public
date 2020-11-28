@@ -10,12 +10,15 @@ import 'package:yachtOne/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:yachtOne/services/database_service.dart';
 import '../../locator.dart';
+import '../sharedPreferences_service.dart';
 import 'base_auth_api.dart';
 import 'dart:convert';
 
 class FirebaseKakaoAuthAPI implements BaseAuthAPI {
-  DatabaseService _databaseService = locator<DatabaseService>();
+  final DatabaseService _databaseService = locator<DatabaseService>();
   FirebaseKakaoAuthAPI();
+  final SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   AuthService _authService = locator<AuthService>();
   static const String providerId = 'kakaocorp.com';
@@ -28,6 +31,8 @@ class FirebaseKakaoAuthAPI implements BaseAuthAPI {
       print(token);
       final String verifiedToken = await _verifyToken(token);
       print(verifiedToken);
+      // await _sharedPreferencesService.setSharedPreferencesValue(
+      //     'twoFactor', true);
       final authResult =
           await _authService.auth.signInWithCustomToken(verifiedToken);
 

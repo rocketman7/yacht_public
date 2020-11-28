@@ -118,7 +118,7 @@ class _PortfolioViewState extends State<PortfolioView>
                                   "상금 포트폴리오 구성",
                                   style: TextStyle(
                                     fontSize: 20.sp,
-                                    fontFamily: 'DmSans',
+                                    fontFamily: 'AppleSDB',
                                   ),
                                   maxLines: 1,
                                   softWrap: false,
@@ -231,9 +231,9 @@ class _PortfolioViewState extends State<PortfolioView>
                                             fontFamily: 'DmSans',
                                             fontWeight: FontWeight.bold,
                                             color:
-                                                model.getPortfolioReturn() > 0
-                                                    ? Color(0xFFFF3E3E)
-                                                    : Color(0xFF3485FF)),
+                                                model.getPortfolioReturn() < 0
+                                                    ? Color(0xFF3485FF)
+                                                    : Color(0xFFFF3E3E)),
                                       ),
                                     ],
                                   )
@@ -769,7 +769,7 @@ Widget tutorial(PortfolioViewModel model) {
                           ),
                           decoration: BoxDecoration(
                             color: Color(0xFFE81B1B),
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black38,
@@ -820,7 +820,7 @@ Widget tutorial(PortfolioViewModel model) {
                       ),
                       decoration: BoxDecoration(
                         color: Color(0xFFE81B1B),
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black38,

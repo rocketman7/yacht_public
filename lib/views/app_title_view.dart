@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +9,7 @@ import 'package:yachtOne/services/api/base_auth_api.dart';
 import 'package:yachtOne/services/api/firebase_kakao_auth_api.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:yachtOne/services/sharedPreferences_service.dart';
 
@@ -23,6 +27,7 @@ class _AppTitleViewState extends State<AppTitleView> {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
   bool _isLoading = false;
+  bool _isAppleLoading = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -32,14 +37,14 @@ class _AppTitleViewState extends State<AppTitleView> {
     double sizedBoxHeight = deviceHeight * .018;
 
     TextStyle titleStyleWhite = TextStyle(
-      fontSize: 28,
+      fontSize: 26.sp,
       fontFamily: 'AppleSDB',
       color: Colors.white,
       // height: 1,
     );
 
     TextStyle titleStyleBlack = TextStyle(
-      fontSize: 28,
+      fontSize: 26.sp,
       fontFamily: 'AppleSDB',
       color: Colors.black,
       // height: 1,
@@ -92,215 +97,228 @@ class _AppTitleViewState extends State<AppTitleView> {
                   //   ],
                   // ),
 
+                  SizedBox(height: 40),
+                  SvgPicture.asset(
+                    'assets/images/logo_ggook_letter.svg',
+                    width: 110,
+                    height: 110,
+                  ),
                   SizedBox(height: 20),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 200,
-                        height: containerHeight,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 4.0,
-                              color: Color(0xFFCD859C),
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              40,
-                            )),
-                      ),
-                      SizedBox(width: 15),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          // width: 50,
-                          height: containerHeight,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 4.0,
-                                color: Color(0xFF427D6A),
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                40,
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: sizedBoxHeight),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 22,
-                        ),
-                        width: 150,
-                        height: containerHeight,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFFD601),
-                          borderRadius: BorderRadius.circular(
-                            40,
-                          ),
-                        ),
-                        child: Text(
-                          "주식예측",
-                          style: titleStyleBlack,
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          // width: 50,
-                          height: containerHeight,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 4.0,
-                                color: Color(0xFFD17F2C),
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                40,
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: sizedBoxHeight),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 22,
-                        ),
-                        width: 230,
-                        height: containerHeight,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF2E57B9),
-                          borderRadius: BorderRadius.circular(
-                            40,
-                          ),
-                        ),
-                        child: Text(
-                          "퀴즈앱",
-                          style: titleStyleWhite,
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          // width: 50,
-                          height: containerHeight,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 4.0,
-                                color: Color(0xFFD17F2C),
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                40,
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: sizedBoxHeight),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 22,
-                          ),
-                          // width: 230,
-                          height: containerHeight,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF1EC8CF),
-                            borderRadius: BorderRadius.circular(
-                              40,
-                            ),
-                          ),
-                          child: Text(
-                            "꾸욱",
-                            style: titleStyleWhite,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Container(
-                          width: containerHeight,
-                          height: containerHeight,
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 4.0,
-                                color: Color(0xFFB063E2),
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                40,
-                              )),
-                          child: SvgPicture.asset(
-                            'assets/icons/dog_foot.svg',
-                          )),
-                    ],
+                  SvgPicture.asset(
+                    'assets/images/logo_description.svg',
+                    width: 110,
+                    // height: 110,
                   ),
 
-                  SizedBox(height: sizedBoxHeight),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 100,
-                        height: containerHeight,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 4.0,
-                              color: Color(0xFFCD859C),
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              40,
-                            )),
-                      ),
-                      SizedBox(width: 8),
-                      Container(
-                        width: containerHeight,
-                        height: containerHeight,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 4.0,
-                              color: Color(0xFF2E57B9),
-                            ),
-                            borderRadius: BorderRadius.circular(
-                              40,
-                            )),
-                        child: SvgPicture.asset(
-                          'assets/icons/dog_foot.svg',
-                          color: Color(0xFF2E57B9),
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          // width: 50,
-                          height: containerHeight,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 4.0,
-                                color: Color(0xFF427D6A),
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                40,
-                              )),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // 기존 로고
+                  // Row(
+                  //   children: <Widget>[
+                  //     Container(
+                  //       width: 200,
+                  //       height: containerHeight,
+                  //       decoration: BoxDecoration(
+                  //           border: Border.all(
+                  //             width: 4.0,
+                  //             color: Color(0xFFCD859C),
+                  //           ),
+                  //           borderRadius: BorderRadius.circular(
+                  //             40,
+                  //           )),
+                  //     ),
+                  //     SizedBox(width: 15),
+                  //     Expanded(
+                  //       flex: 1,
+                  //       child: Container(
+                  //         // width: 50,
+                  //         height: containerHeight,
+                  //         decoration: BoxDecoration(
+                  //             border: Border.all(
+                  //               width: 4.0,
+                  //               color: Color(0xFF427D6A),
+                  //             ),
+                  //             borderRadius: BorderRadius.circular(
+                  //               40,
+                  //             )),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // SizedBox(height: sizedBoxHeight),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Container(
+                  //       alignment: Alignment.centerLeft,
+                  //       padding: EdgeInsets.symmetric(
+                  //         horizontal: 22,
+                  //       ),
+                  //       width: 165,
+                  //       height: containerHeight,
+                  //       decoration: BoxDecoration(
+                  //         color: Color(0xFFFFD601),
+                  //         borderRadius: BorderRadius.circular(
+                  //           40,
+                  //         ),
+                  //       ),
+                  //       child: Text(
+                  //         "주식예측",
+                  //         style: titleStyleBlack,
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 12),
+                  //     Expanded(
+                  //       flex: 1,
+                  //       child: Container(
+                  //         // width: 50,
+                  //         height: containerHeight,
+                  //         decoration: BoxDecoration(
+                  //             border: Border.all(
+                  //               width: 4.0,
+                  //               color: Color(0xFFD17F2C),
+                  //             ),
+                  //             borderRadius: BorderRadius.circular(
+                  //               40,
+                  //             )),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // SizedBox(height: sizedBoxHeight),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Container(
+                  //       alignment: Alignment.centerLeft,
+                  //       padding: EdgeInsets.symmetric(
+                  //         horizontal: 22,
+                  //       ),
+                  //       width: 230,
+                  //       height: containerHeight,
+                  //       decoration: BoxDecoration(
+                  //         color: Color(0xFF2E57B9),
+                  //         borderRadius: BorderRadius.circular(
+                  //           40,
+                  //         ),
+                  //       ),
+                  //       child: Text(
+                  //         "퀴즈앱",
+                  //         style: titleStyleWhite,
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 12),
+                  //     Expanded(
+                  //       flex: 1,
+                  //       child: Container(
+                  //         // width: 50,
+                  //         height: containerHeight,
+                  //         decoration: BoxDecoration(
+                  //             border: Border.all(
+                  //               width: 4.0,
+                  //               color: Color(0xFFD17F2C),
+                  //             ),
+                  //             borderRadius: BorderRadius.circular(
+                  //               40,
+                  //             )),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // SizedBox(height: sizedBoxHeight),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Expanded(
+                  //       child: Container(
+                  //         alignment: Alignment.centerLeft,
+                  //         padding: EdgeInsets.symmetric(
+                  //           horizontal: 22,
+                  //         ),
+                  //         // width: 230,
+                  //         height: containerHeight,
+                  //         decoration: BoxDecoration(
+                  //           color: Color(0xFF1EC8CF),
+                  //           borderRadius: BorderRadius.circular(
+                  //             40,
+                  //           ),
+                  //         ),
+                  //         child: Text(
+                  //           "꾸욱",
+                  //           style: titleStyleWhite,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 12),
+                  //     Container(
+                  //         width: containerHeight,
+                  //         height: containerHeight,
+                  //         padding: EdgeInsets.all(10),
+                  //         decoration: BoxDecoration(
+                  //             border: Border.all(
+                  //               width: 4.0,
+                  //               color: Color(0xFFB063E2),
+                  //             ),
+                  //             borderRadius: BorderRadius.circular(
+                  //               40,
+                  //             )),
+                  //         child: SvgPicture.asset(
+                  //           'assets/icons/dog_foot.svg',
+                  //         )),
+                  //   ],
+                  // ),
+
+                  // SizedBox(height: sizedBoxHeight),
+                  // Row(
+                  //   children: <Widget>[
+                  //     Container(
+                  //       width: 100,
+                  //       height: containerHeight,
+                  //       decoration: BoxDecoration(
+                  //           border: Border.all(
+                  //             width: 4.0,
+                  //             color: Color(0xFFCD859C),
+                  //           ),
+                  //           borderRadius: BorderRadius.circular(
+                  //             40,
+                  //           )),
+                  //     ),
+                  //     SizedBox(width: 8),
+                  //     Container(
+                  //       width: containerHeight,
+                  //       height: containerHeight,
+                  //       padding: EdgeInsets.all(10),
+                  //       decoration: BoxDecoration(
+                  //           border: Border.all(
+                  //             width: 4.0,
+                  //             color: Color(0xFF2E57B9),
+                  //           ),
+                  //           borderRadius: BorderRadius.circular(
+                  //             40,
+                  //           )),
+                  //       child: SvgPicture.asset(
+                  //         'assets/icons/dog_foot.svg',
+                  //         color: Color(0xFF2E57B9),
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 8),
+                  //     Expanded(
+                  //       flex: 1,
+                  //       child: Container(
+                  //         // width: 50,
+                  //         height: containerHeight,
+                  //         decoration: BoxDecoration(
+                  //             border: Border.all(
+                  //               width: 4.0,
+                  //               color: Color(0xFF427D6A),
+                  //             ),
+                  //             borderRadius: BorderRadius.circular(
+                  //               40,
+                  //             )),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
 
               // SizedBox(
-              //   height: deviceHeight * .05,
+              //   height: 40,
               // ),
               // Text(
               //   "주식예측\n퀴즈앱 꾸욱",
@@ -313,75 +331,173 @@ class _AppTitleViewState extends State<AppTitleView> {
               // SizedBox(
               //   height: deviceHeight * .35,
               // ),
-              // GestureDetector(
-              //   onTap: () {
-              //     _navigationService.navigateTo('login');
-              //   },
-              //   child: Container(
-              //     height: 48,
-              //     alignment: Alignment.center,
-              //     width: double.infinity,
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(
-              //         8,
-              //       ),
-              //       color: Color(0xFFF7F6F7),
-              //     ),
-              //     child: Text(
-              //       "이메일로 꾸욱 시작",
-              //       style: TextStyle(
-              //         fontSize: 16,
-              //       ),
-              //     ),
-              //   ),
-              // ),
 
-              SizedBox(height: 10),
-              GestureDetector(
-                onTap: () {
-                  _performSignIn(FirebaseKakaoAuthAPI());
-                },
-                child: Container(
-                  height: 60,
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      8,
-                    ),
-                    color: Color(0xFFFFEB04),
+              // SizedBox(height: 10),
+              Column(
+                children: [
+                  SizedBox(height: 30),
+                  Platform.isIOS
+                      ? (GestureDetector(
+                          onTap: () async {
+                            setState(() {
+                              _isAppleLoading = true;
+                            });
+                            // User user = await _authService.appleSignIn();
+                            _performAppleSignIn();
+                            // if (user != null) {
+                            //   Navigator.pushReplacementNamed(context, '/topics');
+                            // }
+                          },
+                          child: Container(
+                            height: 52,
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                8,
+                              ),
+                              color: Colors.black,
+                            ),
+                            child: _isAppleLoading
+                                ? CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                        ),
+                                        child: Image(
+                                          alignment: Alignment.center,
+                                          image: AssetImage(
+                                              'assets/images/logo_apple_white.png'),
+                                          height: 20,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Apple로 계속하기",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontFamily: 'AppleSDM',
+                                        ),
+                                      ),
+                                      // Text(
+                                      //   "애",
+                                      //   style: TextStyle(
+                                      //     fontSize: 18,
+                                      //     color: Colors.black,
+                                      //     fontFamily: 'AppleSDM',
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
+                          ),
+                        ))
+                      : Container(),
+                  SizedBox(
+                    height: 8,
                   ),
-                  child: _isLoading
-                      ? CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.black),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-                              child: Image(
-                                alignment: Alignment.center,
-                                image:
-                                    AssetImage('assets/icons/kakao_logo.png'),
-                                height: 20,
-                              ),
-                            ),
-                            Text(
-                              "카카오계정으로 꾸욱 시작",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: 'AppleSDM',
-                              ),
-                            ),
-                          ],
+                  GestureDetector(
+                    onTap: () {
+                      _performKakaoSignIn(FirebaseKakaoAuthAPI());
+                    },
+                    child: Container(
+                      height: 52,
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          8,
                         ),
-                ),
+                        color: Color(0xFFFFEB04),
+                      ),
+                      child: _isLoading
+                          ? CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.black),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                  ),
+                                  child: Image(
+                                    alignment: Alignment.center,
+                                    image: AssetImage(
+                                        'assets/icons/kakao_logo.png'),
+                                    height: 22,
+                                  ),
+                                ),
+                                Text(
+                                  "카카오로 꾸욱 시작",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'AppleSDM',
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _navigationService.navigateTo('login');
+                    },
+                    child: Container(
+                      height: 52,
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          8,
+                        ),
+                        color: Color(0xFF5BC2FD),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                            ),
+                            child: Icon(
+                              Icons.email_rounded,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                          Text(
+                            "이메일로 꾸욱 시작",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontFamily: 'AppleSDM',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 60),
+                  // Platform.isIOS
+                  //     ? Text(
+                  //         "Apple Inc.은 '꾸욱' 서비스의 참여자나 스폰서가 아니며,\n어떠한 방법으로도 관여하지 않습니다.",
+                  //         maxLines: 2,
+                  //         style: TextStyle(fontSize: 14),
+                  //       )
+                  //     : Container(),
+                ],
               ),
-              SizedBox(height: 10),
+              // SizedBox(height: 10),
 
               // GestureDetector(
               //   onTap: () async {
@@ -432,7 +548,7 @@ class _AppTitleViewState extends State<AppTitleView> {
     ));
   }
 
-  _performSignIn(BaseAuthAPI api) async {
+  _performKakaoSignIn(BaseAuthAPI api) async {
     bool succeed = false;
 
     setState(() {
@@ -448,14 +564,14 @@ class _AppTitleViewState extends State<AppTitleView> {
         if (_authService.auth.currentUser != null) {
           print("CurrentUSER" + _authService.auth.currentUser.toString());
           // loggedIn 화면으로 route (HomeView)
-          // _sharedPreferencesService.setSharedPreferencesValue(
-          //     "twoFactor", true);
-          // // bool isTwoFactorAuthed = await _sharedPreferencesService
-          // //     .getSharedPreferencesValue('twoFactor', bool);
-          // // print(isTwoFactorAuthed);
-          // _navigationService.navigateTo(
-          //   'startup',
-          // );
+          _sharedPreferencesService.setSharedPreferencesValue(
+              "twoFactor", true);
+          bool isTwoFactorAuthed = await _sharedPreferencesService
+              .getSharedPreferencesValue('twoFactor', bool);
+          print(isTwoFactorAuthed);
+          _navigationService.navigateTo(
+            'startup',
+          );
         } else {
           print('Login Failure');
         }
@@ -489,5 +605,18 @@ class _AppTitleViewState extends State<AppTitleView> {
     // }
 
     return succeed;
+  }
+
+  _performAppleSignIn() async {
+    setState(() {
+      _isAppleLoading = true;
+    });
+
+    await _authService.appleSignIn();
+    if (mounted) {
+      setState(() {
+        _isAppleLoading = false;
+      });
+    }
   }
 }

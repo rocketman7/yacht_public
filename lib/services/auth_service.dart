@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -152,6 +153,7 @@ class AuthService {
         friendsCode: null,
         item: 10,
         avatarImage: "avatar00" + (rng.nextInt(9) + 1).toString(),
+        isNameUpdated: true,
         accNumber: null,
         accName: null,
         secName: null,
@@ -209,7 +211,75 @@ class AuthService {
       }
     }
   }
-  // 구글계정 로그인
+  // 애플 로그인
+
+  // Determine if Apple SignIn is available
+  Future<bool> get appleSignInAvailable => AppleSignIn.isAvailable();
+
+  /// Sign in with Apple
+  Future<User> appleSignIn() async {
+    try {
+      final AuthorizationResult appleResult =
+          await AppleSignIn.performRequests([
+        AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+      ]);
+
+      if (appleResult.error != null) {
+        // handle errors from Apple here
+      }
+
+      final AuthCredential credential = OAuthProvider('apple.com').credential(
+        accessToken:
+            String.fromCharCodes(appleResult.credential.authorizationCode),
+        idToken: String.fromCharCodes(appleResult.credential.identityToken),
+      );
+
+      UserCredential firebaseResult =
+          await _auth.signInWithCredential(credential);
+      User user = firebaseResult.user;
+      print("Firebase User " + user.toString());
+      print("Apple credential" + appleResult.credential.toString());
+      // Optional, Update user data in Firestore
+      // updateUserData(user);
+
+      // User _user = _auth.currentUser;
+      // String phoneNumber = _user.phoneNumber;
+      var rng = Random();
+
+      // print("my Phone Number is " + phoneNumber);
+
+      // check if user exists
+
+      var existingUser = await _databaseService.checkIfUserDBExists(user.uid);
+      // print("EXISTING " + existingUser.uid.toString());
+
+      if (existingUser == null) {
+        // User 정보 UserModel에 넣기
+
+        UserModel _currentUserModel = UserModel(
+          uid: user.uid,
+          userName: appleResult.credential.fullName.familyName ?? "",
+          email: appleResult.credential.email ?? null,
+          phoneNumber: null,
+          friendsCode: null,
+          item: 10,
+          avatarImage: "avatar00" + (rng.nextInt(9) + 1).toString(),
+          isNameUpdated: false,
+          accNumber: null,
+          accName: null,
+          secName: null,
+        );
+
+        await _databaseService.createUser(_currentUserModel);
+      }
+      _sharedPreferencesService.setSharedPreferencesValue("twoFactor", true);
+      _navigationService.navigateTo('initial');
+      return user;
+    } catch (error) {
+      print("ERROR" + error.toString());
+      return null;
+    }
+  }
 
   Stream authState() {
     var user = _auth.authStateChanges();

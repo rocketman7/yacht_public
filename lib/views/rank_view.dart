@@ -47,7 +47,7 @@ class RankView extends StatelessWidget {
                         )
                       : WillPopScope(
                           onWillPop: () async {
-                            _navigatorKey.currentState.maybePop();
+                            // _navigatorKey.currentState.maybePop();
                             return false;
                           },
                           child: SafeArea(

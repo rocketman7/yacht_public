@@ -19,6 +19,7 @@ import 'package:yachtOne/view_models/chart_view_model.dart';
 import 'package:quiver/iterables.dart' as quiver;
 import 'dart:math';
 import 'package:rxdart/rxdart.dart';
+import 'package:yachtOne/view_models/vote_select_view_model.dart';
 
 import '../locator.dart';
 import 'constants/holiday.dart';
@@ -34,6 +35,7 @@ class ChartView extends StatefulWidget {
   final VoteModel vote;
   final SeasonModel seasonInfo;
   final DatabaseAddressModel address;
+  final Function selectUpdate;
   // final Function showToast;
 
   ChartView(
@@ -45,6 +47,7 @@ class ChartView extends StatefulWidget {
     this.vote,
     this.seasonInfo,
     this.address,
+    this.selectUpdate,
     // this.showToast,
   );
   @override
@@ -102,7 +105,7 @@ class _ChartViewState extends State<ChartView> {
       // setState(() {
       // print(controller.offset);
       scrollStreamCtrl.add(controller.offset);
-      if (controller.offset < -170) {
+      if (controller.offset < -140) {
         print("triggered");
         WidgetsBinding.instance.addPostFrameCallback((_) {
           print("addPostFramecalled");
@@ -204,7 +207,7 @@ class _ChartViewState extends State<ChartView> {
 
     TextStyle newsTitleStyle = TextStyle(
       fontFamily: 'AppleSDM',
-      fontSize: 18,
+      fontSize: 16,
     );
 
     return ViewModelBuilder.reactive(
@@ -330,7 +333,12 @@ class _ChartViewState extends State<ChartView> {
                                                 //       "보유 중인 아이템이 부족합니다.");
                                                 // }
                                                 else {
-                                                  selected[idx] = true;
+                                                  // selected[idx] = true;
+                                                  // print(VoteSelectViewModel()
+                                                  //     .selected
+                                                  //     .toString());
+                                                  widget.selectUpdate(
+                                                      idx, true);
                                                   Navigator.of(context).pop();
                                                 }
                                               });
@@ -375,41 +383,38 @@ class _ChartViewState extends State<ChartView> {
                                                     Colors.white,
                                                 fontFamily: 'AppleSDM',
                                                 height: 1,
-                                                fontWeight: FontWeight.w700,
+                                                // fontWeight: FontWeight.w700,
                                               )),
                                         ],
                                       ),
                                     )
-                                  : Expanded(
-                                      child: RaisedButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            selected[idx] = false;
-                                          });
-                                          Navigator.of(context).pop();
-                                        },
-                                        color: Color(0xFF0F6669),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                        ),
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 14,
-                                          vertical: 14,
-                                        ),
-                                        child:
-                                            // (model.address.isVoting == false)
-                                            //     ? SizedBox()
-                                            //     :
-
-                                            Text("해제하기",
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontFamily: 'DmSans',
-                                                  fontWeight: FontWeight.w700,
-                                                  color: Colors.white,
-                                                )),
+                                  : RaisedButton(
+                                      onPressed: () {
+                                        // setState(() {
+                                        //   selected[idx] = false;
+                                        // });
+                                        widget.selectUpdate(idx, false);
+                                        Navigator.of(context).pop();
+                                      },
+                                      color: Color(0xFF0F6669),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30),
                                       ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
+                                      child:
+                                          // (model.address.isVoting == false)
+                                          //     ? SizedBox()
+                                          //     :
+
+                                          Text("해제하기",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: 'AppleSDM',
+                                                // fontWeight: FontWeight.w700,
+                                                color: Colors.white,
+                                              )),
                                     ),
                             ],
                           ),
@@ -860,9 +865,12 @@ class _ChartViewState extends State<ChartView> {
                               ),
                             ),
                           ),
+                          SizedBox(
+                            height: 36,
+                          ),
                           stockOrIndex == "stocks"
-                              ? buildEpsChart()
-                              : Container(),
+                              ? buildStockNewsTable(model, newsTitleStyle)
+                              : buildIndexListedTable(model),
                         ],
                       ),
                     ),
@@ -883,8 +891,8 @@ class _ChartViewState extends State<ChartView> {
                             height: 36,
                           ),
                           stockOrIndex == "stocks"
-                              ? buildStockNewsTable(model, newsTitleStyle)
-                              : buildIndexListedTable(model),
+                              ? buildEpsChart()
+                              : Container(),
                           SizedBox(
                             height: 36,
                           )
@@ -1689,6 +1697,7 @@ class _ChartViewState extends State<ChartView> {
             ),
             primaryYAxis: NumericAxis(
               labelAlignment: LabelAlignment.center,
+              numberFormat: NumberFormat('#,###'),
               labelStyle: TextStyle(
                 fontFamily: 'AppleSDM',
                 color: Colors.black,

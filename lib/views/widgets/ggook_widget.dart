@@ -40,9 +40,9 @@ Widget ggookWidget(
                   '${vote.subVotes[listSelected[idx]].ggookDescription.replaceAll("\\n", "\n")}',
                   // "10월 12일 신성이엔지와 SK하이닉스중 더 많이 상승할 종목을 선택해주세요",
                   style: TextStyle(
-                    fontSize: 32.sp,
+                    fontSize: 26.sp,
                     letterSpacing: -0.5,
-                    fontFamily: 'AppleSDEB',
+                    fontFamily: 'AppleSDB',
                   )
                   // fontWeight: FontWeight.w700),
                   ),
@@ -119,7 +119,7 @@ Widget ggookWidget(
                 ),
                 Text(
                   '${vote.subVotes[idx].numVoted0 ?? 1 + vote.subVotes[idx].numVoted1 ?? 1}명이 이 주제에 참여했습니다.',
-                  style: TextStyle(fontSize: 16, letterSpacing: -0.28),
+                  style: TextStyle(fontSize: 14, letterSpacing: -0.28),
                 )
               ],
             ),
@@ -296,7 +296,10 @@ Widget ggookButton(
     child: Text(
       vote.subVotes[listSelected[idx]].voteChoices[choice],
       style: TextStyle(
-          fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9EA6F1)),
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+        color: Color(0xFF9EA6F1),
+      ),
     ),
   );
 }
@@ -355,7 +358,7 @@ Widget ggookButton2(voteModel, idx, listSelected, userVote, uid, model) {
         child: Text(
           voteModel.subVotes[listSelected[idx]].voteChoices[0],
           style: TextStyle(
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Color(0xFF9EA6F1)),
         ),
@@ -410,7 +413,7 @@ class _Test2WidgetState extends State<Test2Widget> {
     final GgookViewModel model = widget.model;
 
     LongPressGestureRecognizer _longPressGesture = LongPressGestureRecognizer(
-      duration: Duration(milliseconds: 800),
+      duration: Duration(milliseconds: 200),
     );
 
     Color hexToColor(String code) {
@@ -420,7 +423,7 @@ class _Test2WidgetState extends State<Test2Widget> {
     return GestureDetector(
       onTapDown: (details) async {
         if (await Vibration.hasVibrator()) {
-          Vibration.vibrate(duration: 800);
+          Vibration.vibrate(duration: 200);
 
           print("tapped");
         }

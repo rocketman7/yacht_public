@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
@@ -88,24 +91,49 @@ class MypageMainView extends StatelessWidget {
                                             showDialog(
                                               context: context,
                                               builder: (context) {
-                                                return AlertDialog(
-                                                  content: Text('로그아웃하시겠습니까?'),
-                                                  actions: <Widget>[
-                                                    FlatButton(
-                                                      child: Text('아뇨'),
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                    FlatButton(
-                                                      child: Text('네'),
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                        model.logout();
-                                                      },
-                                                    )
-                                                  ],
-                                                );
+                                                return Platform.isIOS
+                                                    ? CupertinoAlertDialog(
+                                                        content:
+                                                            Text('로그아웃하시겠습니까?'),
+                                                        actions: <Widget>[
+                                                          CupertinoDialogAction(
+                                                            child: Text('아뇨'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                          ),
+                                                          CupertinoDialogAction(
+                                                            child: Text('네'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              model.logout();
+                                                            },
+                                                          )
+                                                        ],
+                                                      )
+                                                    : AlertDialog(
+                                                        content:
+                                                            Text('로그아웃하시겠습니까?'),
+                                                        actions: <Widget>[
+                                                          FlatButton(
+                                                            child: Text('아뇨'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                          ),
+                                                          FlatButton(
+                                                            child: Text('네'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              model.logout();
+                                                            },
+                                                          )
+                                                        ],
+                                                      );
                                               },
                                             );
                                           },

@@ -12,8 +12,8 @@
         android:value="2" />
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="yachtOne"
-        android:icon="@mipmap/ic_launcher">
+        android:label="꾸욱"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

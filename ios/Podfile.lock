@@ -212,6 +212,12 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - Amplitude (5.2.1)
+  - amplitude_flutter (0.0.1):
+    - Amplitude (= 5.2.1)
+    - Flutter
+  - apple_sign_in (0.0.1):
+    - Flutter
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
@@ -456,6 +462,8 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
+  - apple_sign_in (from `.symlinks/plugins/apple_sign_in/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - firebase_admob (from `.symlinks/plugins/firebase_admob/ios`)
@@ -479,6 +487,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - abseil
+    - Amplitude
     - BoringSSL-GRPC
     - Firebase
     - FirebaseABTesting
@@ -510,6 +519,10 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
+  amplitude_flutter:
+    :path: ".symlinks/plugins/amplitude_flutter/ios"
+  apple_sign_in:
+    :path: ".symlinks/plugins/apple_sign_in/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
@@ -551,6 +564,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
+  Amplitude: 9774e93d48d9f41f271a4479e06369a30ab31db1
+  amplitude_flutter: 5b9cab3f48db637a37d67b93e5dc49fa9b206686
+  apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 4ca7179a70349b6e3a154311a9108d6be35677cd
   cloud_functions: e710dc17e96ef682dbf9c6aa7d65aebe56f47402

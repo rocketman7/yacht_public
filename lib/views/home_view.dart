@@ -83,7 +83,7 @@ class _HomeViewState extends State<HomeView> {
     double displayRatio = deviceHeight / deviceWidth;
 
     var lang = Localizations.localeOf(context).languageCode;
-    print("Language is " + lang);
+    // print("Language is " + lang);
     return ViewModelBuilder.reactive(
         viewModelBuilder: () => HomeViewModel(),
         // onModelReady: (model) => print("onModelReady" + model.uid),

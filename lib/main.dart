@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -73,7 +72,7 @@ class _MyAppState extends State<MyApp> {
         home: InitialView(),
         builder: (context, navigator) {
           var lang = Localizations.localeOf(context).languageCode;
-          print("Language is " + lang);
+          print("MAINLanguage is " + lang);
 
           return Theme(
             data: ThemeData(

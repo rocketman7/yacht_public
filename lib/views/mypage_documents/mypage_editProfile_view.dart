@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/views/constants/size.dart';
 
+import '../../locator.dart';
 import '../../view_models/mypage_editProfile_view_model.dart';
 import '../widgets/avatar_widget.dart';
 
 class MypageEditProfileView extends StatelessWidget {
+  NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MypageEditProfileViewModel>.reactive(
@@ -76,9 +79,15 @@ class MypageEditProfileView extends StatelessWidget {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Spacer(),
-                              Text(
-                                model.user.userName,
-                                style: TextStyle(fontSize: 16),
+                              GestureDetector(
+                                onTap: () {
+                                  _navigationService.navigateWithArgTo(
+                                      'nickname_set', false);
+                                },
+                                child: Text(
+                                  model.user.userName,
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                               SizedBox(
                                 width: 16,
@@ -88,7 +97,7 @@ class MypageEditProfileView extends StatelessWidget {
                                 child: Icon(
                                   Icons.arrow_forward_ios,
                                   size: 16,
-                                  color: Colors.grey,
+                                  color: Colors.black,
                                 ),
                               ),
                             ]),
