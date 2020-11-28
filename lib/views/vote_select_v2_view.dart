@@ -1008,7 +1008,6 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                       children: [
                                         TopContainer(model, checkVoteTime),
                                         GestureDetector(
-<<<<<<< HEAD
                                           // 광고 활성화 해야 함
                                           // onTap: () {
                                           //   print(rewardedAdsLoaded);
@@ -1044,42 +1043,6 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           //   );
                                           // },
                                           onTap: null,
-=======
-                                          onTap: () {
-                                            // print(rewardedAdsLoaded);
-                                            // model.loadRewardedAds();
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  content: Text(
-                                                      '광고를 보고 꾸욱을 획득하시겠어요??'),
-                                                  actions: <Widget>[
-                                                    FlatButton(
-                                                      child: Text('아뇨'),
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                    ),
-                                                    FlatButton(
-                                                      child: Text('좋아요'),
-                                                      onPressed:
-                                                          rewardedAdsLoaded
-                                                              ? () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  model
-                                                                      .showRewardedAds();
-                                                                }
-                                                              : null,
-                                                    )
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          // onTap: null,
->>>>>>> csejun
                                           child: Row(
                                             children: [
                                               Container(
