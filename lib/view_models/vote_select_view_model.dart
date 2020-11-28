@@ -165,8 +165,6 @@ class VoteSelectViewModel extends FutureViewModel {
   }
 
   Future getAllModel(uid) async {
-    await _amplitudeService.voteViewModelLog(uid);
-
     // signOut();
     // var key = await _sharedPreferencesService.getSharedPreferencesValue(
     //     isNameUpdatedKey, String);
@@ -174,6 +172,8 @@ class VoteSelectViewModel extends FutureViewModel {
 
     // _authService.auth.signOut();
     setBusy(true);
+    // Amplitude에 voteViewModel log 보내기
+    await _amplitudeService.voteViewModelLog(uid);
 
     print("getallModel uid" + uid);
 
