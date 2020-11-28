@@ -84,70 +84,70 @@ class VoteSelectViewModel extends FutureViewModel {
     // getUser();
 
     // 리워드광고 로직을 구현해야 하는 부분.
-    // RewardedVideoAd.instance.listener =
-    //     (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-    //   if (event == RewardedVideoAdEvent.rewarded) {
-    //     //유저가 reward받을 수 있는 조건을 충족하면,
-    //     //아이템을 한 개 늘려주고,
-    //     user.item += 1;
-    //     _databaseService.updateUserItem(uid, user.item);
-    //     //stateManage 업데이트
-    //     _stateManageService.userModelUpdate();
+    RewardedVideoAd.instance.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      if (event == RewardedVideoAdEvent.rewarded) {
+        //유저가 reward받을 수 있는 조건을 충족하면,
+        //아이템을 한 개 늘려주고,
+        user.item += 1;
+        _databaseService.updateUserItem(uid, user.item);
+        //stateManage 업데이트
+        _stateManageService.userModelUpdate();
 
-    //     notifyListeners();
-    //     // print(rewardAmount);
-    //     print('reward ads: rewarded');
-    //   } else if (event == RewardedVideoAdEvent.closed) {
-    //     // 리워드 광고가 닫히면, 새로운 리워드 광고를 로드해줘야함
-    //     rewardedAdsLoaded = false;
-    //     print(rewardedAdsLoaded);
-    //     loadRewardedAds();
+        notifyListeners();
+        // print(rewardAmount);
+        print('reward ads: rewarded');
+      } else if (event == RewardedVideoAdEvent.closed) {
+        // 리워드 광고가 닫히면, 새로운 리워드 광고를 로드해줘야함
+        rewardedAdsLoaded = false;
+        print(rewardedAdsLoaded);
+        loadRewardedAds();
 
-    //     notifyListeners();
-    //     print('reward ads: closed');
-    //   } else if (event == RewardedVideoAdEvent.loaded) {
-    //     // 로딩이 다 되면 로딩됏다고.
-    //     rewardedAdsLoaded = true;
+        notifyListeners();
+        print('reward ads: closed');
+      } else if (event == RewardedVideoAdEvent.loaded) {
+        // 로딩이 다 되면 로딩됏다고.
+        rewardedAdsLoaded = true;
 
-    //     notifyListeners();
-    //     print('reward ads: loaded');
-    //   } else if (event == RewardedVideoAdEvent.failedToLoad) {
-    //     // 로딩에 실패하면..
-    //     rewardedAdsLoaded = false;
-    //     // 다시 로딩 시도
-    //     // loadRewardedAds();
-    //     // x: 이러면 실패시 너무 많은 로딩 요청을 할 수 있음
+        notifyListeners();
+        print('reward ads: loaded');
+      } else if (event == RewardedVideoAdEvent.failedToLoad) {
+        // 로딩에 실패하면..
+        rewardedAdsLoaded = false;
+        // 다시 로딩 시도
+        // loadRewardedAds();
+        // x: 이러면 실패시 너무 많은 로딩 요청을 할 수 있음
 
-    //     notifyListeners();
-    //     print('reward ads: failedToLoad');
-    //   }
-    //   // else if (event == RewardedVideoAdEvent.completed) {
-    //   //   print('reward ads: completed');
-    //   // } else if (event == RewardedVideoAdEvent.started) {
-    //   //   print('reward ads: started');
-    //   // } else if (event == RewardedVideoAdEvent.opened) {
-    //   //   print('reward ads: opened');
-    //   // } else if (event == RewardedVideoAdEvent.leftApplication) {
-    //   //   print('reward ads: leftApplication');
-    //   // }
-    // };
+        notifyListeners();
+        print('reward ads: failedToLoad');
+      }
+      // else if (event == RewardedVideoAdEvent.completed) {
+      //   print('reward ads: completed');
+      // } else if (event == RewardedVideoAdEvent.started) {
+      //   print('reward ads: started');
+      // } else if (event == RewardedVideoAdEvent.opened) {
+      //   print('reward ads: opened');
+      // } else if (event == RewardedVideoAdEvent.leftApplication) {
+      //   print('reward ads: leftApplication');
+      // }
+    };
 
-    // // 여튼 페이지 처음 들어오면 RV광고 로딩 함 해준다.
-    // loadRewardedAds();
+    // 여튼 페이지 처음 들어오면 RV광고 로딩 함 해준다.
+    loadRewardedAds();
   }
 
   // 리워드광고 관련 메쏘드
-  // loadRewardedAds() {
-  //   print('reward ads: start to load');
-  //   RewardedVideoAd.instance.load(
-  //     targetingInfo: MobileAdTargetingInfo(),
-  //     adUnitId: AdManager.rewardedAdUnitId,
-  //   );
-  // }
+  loadRewardedAds() {
+    print('reward ads: start to load');
+    RewardedVideoAd.instance.load(
+      targetingInfo: MobileAdTargetingInfo(),
+      adUnitId: AdManager.rewardedAdUnitId,
+    );
+  }
 
-  // showRewardedAds() {
-  //   RewardedVideoAd.instance.show();
-  // }
+  showRewardedAds() {
+    RewardedVideoAd.instance.show();
+  }
 
   // Future startStateManager() async {
   //   //stateManager 시작

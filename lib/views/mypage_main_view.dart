@@ -135,7 +135,7 @@ class MypageMainView extends StatelessWidget {
                                     SizedBox(
                                       height: 42,
                                     ),
-                                    // mypageMainAppPref(model),
+                                    mypageMainAppPref(model),
                                     mypageMainCSCenter(model),
                                     mypageMainTermsOfUse(model),
                                   ],
