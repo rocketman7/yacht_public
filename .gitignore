@@ -31,6 +31,9 @@
 .pub/
 /build/
 
+# ios build related
+ios/Flutter/
+
 # Web related
 lib/generated_plugin_registrant.dart
 
@@ -42,4 +45,8 @@ app.*.map.json
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
-node_modules
+
+# files for test
+lib/views/animation_test.dart
+lib/views/animation_test2.dart
+lib/views/sliding_card.dart

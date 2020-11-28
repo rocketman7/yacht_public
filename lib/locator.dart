@@ -1,7 +1,16 @@
 import 'package:get_it/get_it.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/database_service.dart';
-import 'package:yachtOne/services/navigation_service.dart';
+import 'package:yachtOne/services/amplitude_service.dart';
+
+import 'services/auth_service.dart';
+import 'services/database_service.dart';
+import 'services/navigation_service.dart';
+import 'services/dialog_service.dart';
+import 'services/push_notification_service.dart';
+import 'services/storage_service.dart';
+import 'services/sharedPreferences_service.dart';
+import 'services/customCacheManager_service.dart';
+import 'services/accountVerification_service.dart';
+import 'services/stateManage_service.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -11,4 +20,15 @@ void setupLocator() {
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => DatabaseService());
   locator.registerLazySingleton(() => NavigationService());
+  locator.registerLazySingleton(() => DialogService());
+  locator.registerLazySingleton<StorageService>(() => StorageServiceFirebase());
+  locator.registerLazySingleton<SharedPreferencesService>(
+      () => SharedPreferencesServiceLocal());
+  locator.registerLazySingleton(() => CustomCacheManagerService());
+  locator.registerLazySingleton<AccountVerificationService>(
+      () => AccoutVerificationServiceMydata());
+  locator.registerLazySingleton(() => PushNotificationService());
+  locator.registerLazySingleton<StateManageService>(
+      () => StateManageServiceFirebase());
+  locator.registerLazySingleton(() => AmplitudeService());
 }

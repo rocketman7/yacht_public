@@ -1,35 +1,261 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/view_models/startup_view_model.dart';
+import 'package:yachtOne/services/navigation_service.dart';
+import 'package:yachtOne/views/home_view.dart';
+import 'package:yachtOne/views/login_view.dart';
+import 'package:yachtOne/views/mypage_main_view.dart';
+import 'package:yachtOne/views/rank_view.dart';
+import 'package:yachtOne/views/track_record_view.dart';
+import 'package:yachtOne/views/vote_comment_view.dart';
+import 'package:yachtOne/views/vote_select_view.dart';
+import 'package:yachtOne/views/widgets/navigation_bars_widget.dart';
+import '../locator.dart';
+import '../view_models/startup_view_model.dart';
+import '../views/loading_view.dart';
+import 'intro_view.dart';
+import 'vote_select_v2_view.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class StartUpView extends StatelessWidget {
+class StartUpView extends StatefulWidget {
+  final int startIdx;
+  const StartUpView(this.startIdx);
+
+  @override
+  _StartUpViewState createState() => _StartUpViewState();
+}
+
+class _StartUpViewState extends State<StartUpView>
+    with SingleTickerProviderStateMixin {
+  NavigationService _navigationService = locator<NavigationService>();
+
+  final GlobalKey navBarGlobalKey = GlobalKey<NavigatorState>();
+  int _startIdx;
+
+  int _selectedIndex;
+  TabController _tabController;
+  bool isDisposed = false;
+  List<Widget> _viewList;
+
+  // HomeView에서 버튼으로 navigate할 수 있도록 callback function을 만든다.
+  void goToTab(int idxFromOtherPages) {
+    print("THIS VOID CALLED");
+    setState(() {
+      _selectedIndex = idxFromOtherPages;
+      _tabController.index = _selectedIndex;
+    });
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
+  void initState() {
+    _startIdx = widget.startIdx ?? 0;
+    _selectedIndex = _startIdx;
+    // TODO: implement initState
+    super.initState();
+
+    _viewList = <Widget>[
+      // HomeView(goToTab),
+      VoteSelectV2View(),
+      VoteCommentView(),
+      RankView(),
+      TrackRecordView(),
+      // MypageView(),
+    ];
+    print("viewLIST DONE");
+
+    _tabController = TabController(
+      initialIndex: _startIdx ?? 0,
+      length: 4,
+      vsync: this,
+    );
+    if (!isDisposed) {
+      setState(() {
+        _selectedIndex = _tabController.index;
+      });
+    }
+
+    print("init");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    isDisposed = true;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print("didC");
+  }
+
   @override
   Widget build(BuildContext context) {
+    // HomeView에서 다른 페이지로 간 뒤에 backbutton으로 다시 홈에 오면 stream trigger가 안됨.
+    print("StartuUpView");
     return ViewModelBuilder<StartUpViewModel>.reactive(
+      // onModelReady: (model) => model.stream,
+      // ViewModel이 세팅되면 아래 함수 call
+      // onModelReady: (model) => model.handleStartUpLogic(),
+      // onModelReady 콜 하고 아래 빌드. handleStartUpLogi이 Future함수 이므로 처리될 동안 LoadingView 빌드
       viewModelBuilder: () => StartUpViewModel(),
-      onModelReady: (model) => model.handleStartUpLogic(),
-      builder: (context, model, child) => Scaffold(
-        backgroundColor: Color(0xFF1A5865),
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(
-                width: 200,
-                height: 100,
-                child: Image.asset('assets/images/sailingYacht.png'),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              CircularProgressIndicator(
-                strokeWidth: 3,
-                valueColor: AlwaysStoppedAnimation(Colors.white),
-              ),
-            ],
-          ),
-        ),
-      ),
+      builder: (context, model, child) {
+        // print(widget.startIdx);
+
+        // print(_selectedIndex);
+        return model.isBusy
+            ? IntroView()
+            : Scaffold(
+                body: TabBarView(
+                  // key:
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: _tabController,
+                  children: _viewList,
+                  // dragStartBehavior: DragStartBehavior.down,
+                ),
+
+                // _viewList[_selectedIndex],
+                bottomNavigationBar: BottomNavigationBar(
+                  key: navBarGlobalKey,
+
+                  type: BottomNavigationBarType.fixed,
+                  onTap: (index) => {
+                    setState(() {
+                      _selectedIndex = index;
+                      _tabController.index = index;
+                      // _viewList.insert(index, _viewList[index]);
+                      // _viewList.removeAt(index);
+                      print(_viewList.toString());
+                    }),
+                    // _navigationService.navigateTo(_viewList[index]),
+                  },
+                  currentIndex: _selectedIndex ?? 0,
+                  selectedItemColor: Color(0xFF1EC8CF),
+                  unselectedItemColor: Color(0xFFAAAAAA),
+                  selectedFontSize: 0,
+                  // iconSize: 25,
+                  unselectedFontSize: 0,
+                  items: [
+                    // BottomNavigationBarItem(
+                    //   icon: GestureDetector(
+                    //     child: SvgPicture.asset('assets/icons/home.svg',
+                    //         color: Color(0xFFAAAAAA)),
+                    //   ),
+                    //   activeIcon: SvgPicture.asset('assets/icons/home.svg',
+                    //       color: Color(0xFF1EC8CF)),
+                    //   label: '',
+                    // ),
+                    BottomNavigationBarItem(
+                      icon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        // height: double.infinity,
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset(
+                          'assets/icons/bottom_home.svg',
+                          color: Color(0xFFAAAAAA),
+                        ),
+                      ),
+                      activeIcon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        // height: double.infinity,
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/bottom_home.svg',
+                            color: Colors.black),
+                      ),
+                      label: '',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/bottom_chat.svg',
+                            color: Color(0xFFAAAAAA)),
+                      ),
+                      activeIcon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/bottom_chat.svg',
+                            color: Colors.black),
+                      ),
+                      label: '',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/bottom_rank2.svg',
+                            color: Color(0xFFAAAAAA)),
+                        // child: Image(
+                        //   image: AssetImage('assets/icons/bottom_rank2.png'),
+                        //   color: Color(0xFFAAAAAA),
+                        // ),
+                      ),
+                      activeIcon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset('assets/icons/bottom_rank2.svg',
+                            color: Colors.black),
+                        // child: Image(
+                        //   image: AssetImage('assets/icons/bottom_rank2.png'),
+                        // ),
+                      ),
+                      label: '',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset(
+                            'assets/icons/bottom_track_record.svg',
+                            color: Color(0xFFAAAAAA)),
+                      ),
+                      activeIcon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 18.h,
+                          horizontal: 36.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset(
+                            'assets/icons/bottom_track_record.svg',
+                            color: Colors.black),
+                      ),
+                      label: '',
+                    ),
+                  ],
+                ),
+              );
+        // model.stream;
+      },
     );
   }
 }

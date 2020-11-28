@@ -1,4 +1,4 @@
-package com.example.yachtOne
+package com.team_yacht.ggook
 
 import io.flutter.embedding.android.FlutterActivity
 
