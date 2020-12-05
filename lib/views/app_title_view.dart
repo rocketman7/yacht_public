@@ -570,7 +570,7 @@ class _AppTitleViewState extends State<AppTitleView> {
               .getSharedPreferencesValue('twoFactor', bool);
           print(isTwoFactorAuthed);
           _navigationService.navigateTo(
-            'startup',
+            'initial',
           );
         } else {
           print('Login Failure');

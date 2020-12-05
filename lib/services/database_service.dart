@@ -1057,6 +1057,26 @@ class DatabaseService {
         .update({'friendsCode': friendsCode});
   }
 
+  Future updateSurvey(String uid, Map<String, List> userSurvey) async {
+    // print(userSurvey);
+    await _usersCollectionReference
+        .doc(uid)
+        .collection('userSurvey')
+        .doc('userSurvey')
+        .update({'userSurvey': userSurvey});
+    // .set({'userSurvey': userSurvey});
+  }
+
+  Future updateBubbleSurvey(
+      String uid, List<Map<String, String>> userBubbleSurvey) async {
+    // print(userSurvey);
+    await _usersCollectionReference
+        .doc(uid)
+        .collection('userSurvey')
+        .doc('userSurvey')
+        .set({'userBubbleSurvey': userBubbleSurvey});
+  }
+
   // 주식 종목정보 가져오기
   Future getStockInfo(
     String countryCode,

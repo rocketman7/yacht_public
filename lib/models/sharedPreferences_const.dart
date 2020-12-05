@@ -13,5 +13,5 @@ const String portfolioTutorialKey = 'portfolioTutorial';
 const String voteSelectTutorialKey = 'voteSelectTutorial';
 const String termsOfUseKey = 'termsOfUse';
 
-// 가입 후 처음인지 상태저장
-const String isNameUpdatedKey = 'nameUpdated';
+// 가입 후 설문을 했는지, 안했는지 저장
+const String didSurveyKey = 'didSurvey';

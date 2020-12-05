@@ -23,6 +23,7 @@ import 'views/mypage_documents/mypage_pushAlarmSetting_view.dart';
 import 'views/mypage_documents/mypage_accountVerification_view.dart';
 import 'views/mypage_documents/mypage_friendsCode_view.dart';
 import 'views/mypage_documents/mypage_editProfile_view.dart';
+import 'views/survey_view.dart';
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_v2_view.dart';
 import 'views/vote_select_view.dart';
@@ -78,7 +79,8 @@ class Routers {
       case 'nickname_set':
         return MaterialPageRoute(
             builder: (context) =>
-                DialogManager(child: NicknameSetView(routeSettings.arguments)));
+                // DialogManager(child: NicknameSetView(routeSettings.arguments)));
+                DialogManager(child: NicknameSetView()));
       case 'mypage_termsofuse':
         return MaterialPageRoute(builder: (context) => MypageTermofuse());
       case 'mypage_privacypolicy':
@@ -115,6 +117,8 @@ class Routers {
         return MaterialPageRoute(builder: (context) => NoticeView());
       case 'oneonone':
         return MaterialPageRoute(builder: (context) => OneOnOneView());
+      case 'survey':
+        return MaterialPageRoute(builder: (context) => SurveyView());
       case 'startup':
         return MaterialPageRoute(
             builder: (context) =>
