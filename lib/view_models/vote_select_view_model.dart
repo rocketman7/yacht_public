@@ -55,6 +55,7 @@ class VoteSelectViewModel extends FutureViewModel {
 
   bool isNameUpdated;
   bool voteSelectTutorial;
+  bool termsOfUse;
   int tutorialStatus = 2; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
   int tutorialTotalStep = 2; // 튜토리얼 총 단계
 
@@ -223,10 +224,12 @@ class VoteSelectViewModel extends FutureViewModel {
 
     voteSelectTutorial = await _sharedPreferencesService
         .getSharedPreferencesValue(voteSelectTutorialKey, bool);
+
     print("ISVOTING????? " + address.isVoting.toString());
     // selected = List<bool>.filled(vote.subVotes.length, false, growable: true);
     selected = List<bool>.filled(vote.subVotes.length, false, growable: true);
     setBusy(false);
+
     notifyListeners();
   }
 

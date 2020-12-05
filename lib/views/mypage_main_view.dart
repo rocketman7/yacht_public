@@ -164,7 +164,7 @@ class MypageMainView extends StatelessWidget {
                                       height: 42,
                                     ),
                                     // mypageMainAppPref(model),
-                                    mypageMainCSCenter(model),
+                                    mypageMainCSCenter(model, context),
                                     mypageMainTermsOfUse(model),
                                   ],
                                 ),
@@ -386,7 +386,7 @@ class MypageMainView extends StatelessWidget {
     );
   }
 
-  Widget mypageMainCSCenter(MypageMainViewModel model) {
+  Widget mypageMainCSCenter(MypageMainViewModel model, BuildContext context) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,6 +407,85 @@ class MypageMainView extends StatelessWidget {
           makeMypageMainComponent(model, '자주 묻는 질문(FAQ)', 'faq'),
           makeMypageMainComponent(
               model, 'Contact Us', 'mypage_businessinformation'),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Platform.isIOS
+                          ? CupertinoAlertDialog(
+                              title: Text('계정을 삭제하시겠습니까?'),
+                              content: Text(
+                                '삭제한 계정과 계정 내 모든 기록은\n복구될 수 없습니다.',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('네'),
+                                  onPressed: () {
+                                    model.deleteAccount(model.uid);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                CupertinoDialogAction(
+                                  child: Text('아뇨'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            )
+                          : AlertDialog(
+                              title: Text('계정을 삭제하시겠습니까?'),
+                              content: Text('삭제한 계정과 계정 내 모든 기록은 복구될 수 없습니다.'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('아뇨'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text('네'),
+                                  onPressed: () {
+                                    model.deleteAccount(model.uid);
+                                    model.logout();
+                                  },
+                                )
+                              ],
+                            );
+                    },
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16, bottom: 16),
+                  child: Row(
+                    children: [
+                      Text(
+                        "계정 삭제하기",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.red[300],
+                        ),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: 1,
+                color: Color(0xFFE3E3E3),
+              )
+            ],
+          ),
           SizedBox(
             height: 42,
           )
@@ -927,7 +1006,7 @@ class _TestWidgetState extends State<TestWidget> {
     // );
     return Blob.animatedFromID(
         debug: true,
-        size: 100,
+        size: 200,
         id: [
           '10-7-848634',
           '10-7-863638',
@@ -940,7 +1019,7 @@ class _TestWidgetState extends State<TestWidget> {
         ),
         controller: blobCtrl,
         loop: true,
-        duration: Duration(milliseconds: 5000));
+        duration: Duration(milliseconds: 500));
   }
 }
 

@@ -69,23 +69,29 @@ class SeasonCommunityViewModel extends FutureViewModel {
     );
   }
 
+  // Future deleteComment(
+  //   DatabaseAddressModel address,
+  //   String postUid,
+  // ) async {
+  //   print("Dialog shown");
+  //   var dialogResult = await _dialogService.showDialog(
+  //       title: "코멘트 삭제",
+  //       description: "해당 코멘트를 정말 삭제하시겠습니까?",
+  //       buttonTitle: "Yes",
+  //       cancelTitle: "No");
+
+  //   if (dialogResult.confirmed) {
+  //     print("user Confirmed");
+  //     await _databaseService.deleteComment(address, postUid);
+  //   } else {
+  //     print("user Not Confirmed");
+  //   }
+  // }
   Future deleteComment(
     DatabaseAddressModel address,
     String postUid,
   ) async {
-    print("Dialog shown");
-    var dialogResult = await _dialogService.showDialog(
-        title: "코멘트 삭제",
-        description: "해당 코멘트를 정말 삭제하시겠습니까?",
-        buttonTitle: "Yes",
-        cancelTitle: "No");
-
-    if (dialogResult.confirmed) {
-      print("user Confirmed");
-      await _databaseService.deleteComment(address, postUid);
-    } else {
-      print("user Not Confirmed");
-    }
+    await _databaseService.deleteSeasonComment(address, postUid);
   }
 
   Future likeComment(
@@ -96,6 +102,19 @@ class SeasonCommunityViewModel extends FutureViewModel {
       voteComment,
       uid,
     );
+  }
+
+  Future addBlockList(
+    UserModel user,
+    VoteCommentModel voteComment,
+  ) async {
+    await _databaseService.addBlockList(user, voteComment.uid);
+  }
+
+  Future reportComment() async {}
+
+  Future getAvatar(String uid) async {
+    return await _databaseService.getAvatar(uid);
   }
 
   Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {

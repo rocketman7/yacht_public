@@ -8,6 +8,7 @@ import 'package:yachtOne/models/chart_model.dart';
 import 'package:yachtOne/models/index_info_model.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/stock_info_model.dart';
+import 'package:yachtOne/services/amplitude_service.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/views/constants/holiday.dart';
@@ -38,10 +39,12 @@ class ChartViewModel extends FutureViewModel {
         ? [false, false, false, false, true]
         : [true, false, false, false, false];
     lastDays = durationString[isDurationSelected.indexOf(true)];
+    uid = _authService.auth.currentUser.uid;
   }
 
-  AuthService _authService = locator<AuthService>();
-  DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthService _authService = locator<AuthService>();
+  final DatabaseService _databaseService = locator<DatabaseService>();
+  final AmplitudeService _amplitudeService = AmplitudeService();
   List<ChartModel> chartList;
   double displayPrice = 0.0;
   DateTime displayDateTime;
@@ -68,6 +71,7 @@ class ChartViewModel extends FutureViewModel {
     stockOrIndex,
     issueCode,
   ) async {
+    await _amplitudeService.viewStockInfo(uid);
     print("beforeStockinfo" + DateTime.now().toString());
 
     stockOrIndex == "stocks"

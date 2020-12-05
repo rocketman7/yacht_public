@@ -108,6 +108,7 @@ class MypageEditProfileView extends StatelessWidget {
                               height: 1,
                               color: Color(0xFFE3E3E3),
                             ),
+
                             // SizedBox(
                             //   height: 16,
                             // ),
