@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:align_positioned/align_positioned.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -222,6 +223,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     } catch (e) {
       print(e);
     }
+    try {
+      checkIfAgreeTerms(context);
+    } catch (e) {
+      print(e);
+    }
+
     fToast = FToast();
     fToast.init(context);
     print("initState Called");
@@ -263,6 +270,76 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   String app_store_url;
   String play_store_url;
   bool isSeasonStarted = true;
+  bool termsOfUse;
+
+  checkIfAgreeTerms(context) async {
+    termsOfUse = await _sharedPreferencesService.getSharedPreferencesValue(
+        termsOfUseKey, bool);
+    if (termsOfUse == false) {
+      _showTermsDialog(context);
+    }
+  }
+
+  _showTermsDialog(context) async {
+    Future<String> _termsOfUseFuture() async {
+      return await rootBundle.loadString('assets/documents/termsOfUse.txt');
+    }
+
+    await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        String title = "서비스를 이용하기 위해\n아래에 대한 동의가 필요합니다.";
+        String message = "꾸욱을 계속 이용하기 위해서 업데이트가 필요합니다. 감사합니다.";
+        String btnLabel = "수락";
+        String btnLabelCancel = "거부";
+        String _termsOfUse;
+        ;
+        return WillPopScope(
+            onWillPop: () {},
+            child: Platform.isIOS
+                ? CupertinoAlertDialog(
+                    title: Text(title),
+                    content: FutureBuilder(
+                        future: _termsOfUseFuture(),
+                        builder: (context, snapshot) {
+                          _termsOfUse = snapshot.data;
+                          if (snapshot.hasData) {
+                            return Container(
+                              height: 400,
+                              width: 180,
+                              child: SingleChildScrollView(
+                                  child: Text(
+                                _termsOfUse,
+                                textAlign: TextAlign.left,
+                              )),
+                            );
+                          } else {
+                            return Container(
+                              height: 200,
+                              width: 100,
+                            );
+                          }
+                        }),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text(btnLabelCancel),
+                        onPressed: () => exit(0),
+                      ),
+                      CupertinoDialogAction(
+                        child: Text(btnLabel),
+                        onPressed: () {
+                          _sharedPreferencesService.setSharedPreferencesValue(
+                              termsOfUseKey, true);
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  )
+                : {});
+      },
+    );
+  }
 
   checkVersionSeasonStatus(context) async {
     //Get Current installed version of app
@@ -490,7 +567,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
               "${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
           return Scaffold(
             backgroundColor:
-                model.address.isVoting ? Color(0xFF1EC8CF) : animation.value,
+                // model.address.isVoting ? Color(0xFF1EC8CF) : animation.value,
+                model.address.isVoting ? Color(0xFF1EC8CF) : Color(0xFFB90FD0),
 
             key: scaffoldKey,
             // endDrawer: myPage(model),
@@ -962,18 +1040,42 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      // "11월 14일의 예측주제",
-                                      formatKoreanDate.format(
-                                              strToDate(model.vote.voteDate)) +
-                                          "의 예측 주제",
-                                      style: TextStyle(
-                                        fontFamily: 'AppleSDEB',
-                                        fontSize: 22,
-                                        height: 1,
-                                        // letterSpacing: -.28,
-                                        // fontWeight: FontWeight.bold,
-                                      ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          // "11월 14일의 예측주제",
+                                          formatKoreanDate.format(strToDate(
+                                                  model.vote.voteDate)) +
+                                              "의 예측 주제",
+                                          style: TextStyle(
+                                            fontFamily: 'AppleSDEB',
+                                            fontSize: 22,
+                                            height: 1,
+                                            // letterSpacing: -.28,
+                                            // fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        model.isVoting
+                                            ? Container()
+                                            : Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 4, vertical: 4),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(5)),
+                                                    color: Color(0xFFFDDE71)),
+                                                child: Text("LIVE",
+                                                    style: TextStyle(
+                                                      fontFamily: 'DmSans',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )),
+                                              ),
+                                      ],
                                     ),
                                     SizedBox(height: 12),
                                     Row(
@@ -1348,6 +1450,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       return Color(int.parse(code, radix: 16) + 0xFF0000000);
     }
 
+    int choice = model.userVote.voteSelected == null
+        ? 0
+        : model.userVote.voteSelected[idx];
+
     TextStyle voteTitle = TextStyle(
         color: Colors.black,
         fontFamily: 'AppleSDEB',
@@ -1399,7 +1505,15 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     style: voteTitle,
                                   ),
                                   model.address.isVoting
-                                      ? Container()
+                                      ? choice == 0
+                                          ? Container()
+                                          : Text(
+                                              model.vote.subVotes[idx]
+                                                  .voteChoices[choice - 1],
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            )
                                       : StreamBuilder(
                                           stream: model.getRealtimePrice(
                                               model.address,
@@ -1470,7 +1584,19 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           style: voteTitle,
                                         ),
                                         model.address.isVoting
-                                            ? Container()
+                                            ? choice == 0
+                                                ? Container()
+                                                : Text(
+                                                    model.vote.subVotes[idx]
+                                                            .voteChoices[
+                                                        choice - 1],
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: choice == 1
+                                                            ? Colors.black
+                                                            : Colors
+                                                                .transparent),
+                                                  )
                                             : StreamBuilder(
                                                 stream: model.getRealtimePrice(
                                                     model.address,
@@ -1526,14 +1652,31 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                       ],
                                     ),
                                     SizedBox(width: 8),
-                                    Text(
-                                      "VS",
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontFamily: 'AppleSDB',
-                                        fontSize: 18.sp,
-                                        // height: 1,
-                                      ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "VS",
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontFamily: 'AppleSDB',
+                                            fontSize: 18.sp,
+                                            // height: 1,
+                                          ),
+                                        ),
+                                        model.address.isVoting
+                                            ? choice == 0
+                                                ? Container()
+                                                : Text(
+                                                    " ",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      height: 1,
+                                                    ),
+                                                  )
+                                            : Container()
+                                      ],
                                     ),
                                     SizedBox(width: 8),
                                     Column(
@@ -1548,7 +1691,19 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           style: voteTitle,
                                         ),
                                         model.address.isVoting
-                                            ? Container()
+                                            ? choice == 0
+                                                ? Container()
+                                                : Text(
+                                                    model.vote.subVotes[idx]
+                                                            .voteChoices[
+                                                        choice - 1],
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: choice == 2
+                                                            ? Colors.black
+                                                            : Colors
+                                                                .transparent),
+                                                  )
                                             : StreamBuilder(
                                                 stream: model.getRealtimePrice(
                                                     model.address,

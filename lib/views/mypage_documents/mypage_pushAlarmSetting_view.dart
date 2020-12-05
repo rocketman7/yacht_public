@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../models/sharedPreferences_const.dart';
 import '../../view_models/mypage_pushAlarmSetting_view_model.dart';
 
 class MypagePushAlarmSettingView extends StatelessWidget {
@@ -64,20 +65,19 @@ class MypagePushAlarmSettingView extends StatelessWidget {
             ),
             Spacer(),
             Platform.isIOS
+                // value를 !인채로 써주어야함. notification service 제대로 쓰기 위해.(sharedpreferences의해 최초값 알림설정하게 해주기 위해)
                 ? CupertinoSwitch(
                     activeColor: Color(0xFF1EC8CF),
-                    value: model.pushAlarm[pushAlarmIndex],
+                    value: !model.pushAlarm[pushAlarmIndex],
                     onChanged: (bool value) {
-                      model.pushAlarm[pushAlarmIndex] = value;
-                      model.setSharedPreferencesAll();
+                      model.setSharedPreference(pushAlarmIndex, !value);
                     },
                   )
                 : Switch(
                     activeColor: Color(0xFF1EC8CF),
-                    value: model.pushAlarm[pushAlarmIndex],
+                    value: !model.pushAlarm[pushAlarmIndex],
                     onChanged: (bool value) {
-                      model.pushAlarm[pushAlarmIndex] = value;
-                      model.setSharedPreferencesAll();
+                      model.setSharedPreference(pushAlarmIndex, !value);
                     },
                   )
           ],

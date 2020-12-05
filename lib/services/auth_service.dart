@@ -294,6 +294,16 @@ class AuthService {
     await _auth.signOut();
   }
 
+  Future deleteAccount() async {
+    try {
+      User user = _auth.currentUser;
+
+      user.delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   // Reset 비밀번호
 
   // Update 유저

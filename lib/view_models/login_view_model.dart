@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 import '../locator.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
@@ -12,6 +13,8 @@ class LoginViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final DialogService _dialogService = locator<DialogService>();
+  final SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   // Future doThings() async {
   //   print("dialog shown");
@@ -32,6 +35,7 @@ class LoginViewModel extends BaseViewModel {
       if (result == true) {
         // print('Login Success');
         // loggedIn 화면으로 route (HomeView)
+        _sharedPreferencesService.setSharedPreferencesValue("twoFactor", true);
         _navigationService.navigateTo(
           'startup',
         );

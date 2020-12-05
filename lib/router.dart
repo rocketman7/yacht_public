@@ -86,9 +86,13 @@ class Routers {
       case 'mypage_businessinformation':
         return MaterialPageRoute(
             builder: (context) => MypageBusinessInformation());
+      // case 'mypage_pushalarmsetting':
+      //   return MaterialPageRoute(
+      //       builder: (context) => MypagePushAlarmSettingView());
       case 'mypage_pushalarmsetting':
         return MaterialPageRoute(
-            builder: (context) => MypagePushAlarmSettingView());
+            builder: (context) =>
+                DialogManager(child: MypagePushAlarmSettingView()));
       case 'mypage_avatarselect':
         return MaterialPageRoute(
             builder: (context) => MypageAvatarSelectView());

@@ -12,6 +12,7 @@ class UserModel {
   String secName;
 
   final bool isNameUpdated;
+  List<dynamic> blockList;
   // final List<UserVote> userVotes;
 
   UserModel({
@@ -26,6 +27,7 @@ class UserModel {
     this.accName,
     this.secName,
     this.isNameUpdated,
+    this.blockList,
     // this.userVotes,
   });
 
@@ -42,7 +44,8 @@ class UserModel {
         accNumber = data['account']['accNumber'],
         accName = data['account']['accName'],
         secName = data['account']['secName'],
-        isNameUpdated = data['isNameUpdated'];
+        isNameUpdated = data['isNameUpdated'],
+        blockList = data['blockList'] ?? [];
   // UserModel -> Json 변환 함수
   Map<String, dynamic> toJson() {
     return {
@@ -59,6 +62,7 @@ class UserModel {
         'secName': this.secName
       },
       'isNameUpdated': this.isNameUpdated,
+      'blockList': this.blockList,
     };
   }
 }

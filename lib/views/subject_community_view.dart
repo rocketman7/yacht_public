@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -1522,7 +1524,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     return StreamBuilder<List<VoteCommentModel>>(
         stream: model.getPost(model.newAddress),
         builder: (context, snapshot) {
-          List<VoteCommentModel> commentList = snapshot.data;
+          List<VoteCommentModel> beforeCommentList = snapshot.data;
 
           if (snapshot.data == null) {
             return Container();
@@ -1540,6 +1542,19 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
               ),
             );
           } else {
+            List<dynamic> blockList = model.user.blockList;
+            List<VoteCommentModel> commentList = [];
+            if (blockList != null) {
+              for (int i = 0; i < beforeCommentList.length; i++) {
+                if (blockList.contains(beforeCommentList[i].uid)) {
+                  print("NOT Contain");
+                } else {
+                  commentList.add(beforeCommentList[i]);
+                }
+              }
+            } else {
+              commentList = beforeCommentList;
+            }
             return Container(
 
                 // height: deviceHeight * .55,
@@ -1552,17 +1567,17 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                     reverse: true,
                     itemBuilder: (context, index) {
                       return buildColumn(
-                        model,
-                        commentList[index],
-                      );
+                          model, commentList[index], commentList, index);
                     }));
           }
         });
   }
 
-  Column buildColumn(
+  Widget buildColumn(
     SubjectCommunityViewModel model,
     VoteCommentModel voteComment,
+    List<VoteCommentModel> commentList,
+    int index,
   ) {
     // String avatarImage = "avatar001";
     // model.getAvatar(voteComment.uid);
@@ -1588,10 +1603,23 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
             children: [
               Row(
                 children: <Widget>[
-                  Container(
-                      height: 40,
-                      width: 40,
-                      child: avatarWidgetWithoutItem(model.user.avatarImage)),
+                  FutureBuilder(
+                      future: model.getAvatar(voteComment.uid),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          String _avatar = snapshot.data;
+                          print("FutureBUilder" + snapshot.data.toString());
+                          return Container(
+                              height: 40,
+                              width: 40,
+                              child: avatarWidgetWithoutItem(_avatar));
+                        } else {
+                          return Container(
+                            height: 40,
+                            width: 40,
+                          );
+                        }
+                      }),
                   SizedBox(
                     width: 8,
                   ),
@@ -1664,6 +1692,143 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                       left: 4,
                     ),
                   ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  voteComment.uid == model.uid
+                      ? GestureDetector(
+                          onTap: () {
+                            print(model.newAddress.postsSubVoteCollection());
+                            print(voteComment.postUid);
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Platform.isIOS
+                                    ? CupertinoAlertDialog(
+                                        content: Text('이 게시글을 삭제하시겠습니까?'),
+                                        actions: <Widget>[
+                                          CupertinoDialogAction(
+                                            child: Text('아뇨'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          CupertinoDialogAction(
+                                            child: Text('네'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              model.deleteComment(
+                                                  model.newAddress,
+                                                  voteComment.postUid);
+                                              // model.logout();
+                                            },
+                                          )
+                                        ],
+                                      )
+                                    : AlertDialog(
+                                        content: Text('이 게시글을 삭제하시겠습니까?'),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: Text('아뇨'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text('네'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+
+                                              model.deleteComment(model.address,
+                                                  voteComment.postUid);
+                                              // model.logout();
+                                              // model.logout();
+                                            },
+                                          )
+                                        ],
+                                      );
+                              },
+                            );
+                          },
+                          child: Icon(
+                            Icons.delete_outline,
+                            color: Colors.grey[500],
+                            size: 18,
+
+                            // Text(
+                            //   "삭제",
+                            //   textAlign: TextAlign.end,
+                            //   style: TextStyle(
+                            //     color: Colors.black,
+                            //     fontSize: 13,
+                            //     fontFamily: 'AdventPro',
+                            //   ),
+                            // ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Platform.isIOS
+                                    ? CupertinoAlertDialog(
+                                        content: Text('이 게시글을 신고/차단하시겠습니까?'),
+                                        actions: <Widget>[
+                                          CupertinoDialogAction(
+                                            child: Text('아뇨'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          CupertinoDialogAction(
+                                            child: Text('네'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              model.addBlockList(
+                                                  model.user, voteComment);
+                                              setState(() {
+                                                commentList.removeAt(index);
+                                              });
+                                              // model.logout();
+                                            },
+                                          )
+                                        ],
+                                      )
+                                    : AlertDialog(
+                                        content: Text('이 게시글을 신고/차단하시겠습니까?'),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            child: Text('아뇨'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text('네'),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              model.addBlockList(
+                                                  model.user, voteComment);
+                                              setState(() {
+                                                commentList.removeAt(index);
+                                              });
+
+                                              // model.logout();
+                                            },
+                                          )
+                                        ],
+                                      );
+                              },
+                            );
+                          },
+                          child: Text(
+                            "신고/차단",
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
                 ],
               ),
             ],

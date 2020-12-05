@@ -630,3 +630,27 @@ exports.verifyKakaoToken = functions.region('asia-northeast3').https.onCall(asyn
       return { error: e.message };
     });
 });
+
+exports.sendFCM2 = functions.region('asia-northeast3').https.onCall((data, context) => {
+  // var token = data["token"];
+  var mytopic = 'timeTopic';
+
+  // var title = data["title"];
+  // var body = data["body"];
+  // var token = 'vsbnEgDWk25uwL9OzLUaG:APA91bGcjJ89HcBg0CNmiJF3n0fiaREJgjPrYpRKZ0dYaPD4yWex9GioJdJqXeTJ6yeei5IEFvV9sLnsc7wZLbRGI_Kt6NAPoV6LfLx4mppnp3WEWpLmeSRk7mtD28OKlvmM2bApTPva';
+  // var title = 'testAlert';
+  // var body = 'testBody';
+
+  var mypayload = {
+    // from: '/topics/timeTopic',
+    collapse_key: 'com.team-yacht.ggook',
+    notification: {
+      // title: title,
+      body: 'testBody'
+    }
+  }
+
+  // var result = admin.messaging().sendToDevice(token, payload);
+  var result = admin.messaging().sendToTopic(mytopic, mypayload);
+  return result;
+})

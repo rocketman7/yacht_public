@@ -42,7 +42,7 @@ class DatabaseService {
   final NavigationService _navigationService = locator<NavigationService>();
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
-
+  // final AuthService _authService = locator<AuthService>();
   DateFormat dateFormat = DateFormat('yyyy-MM-dd_HH:mm:ss:SSS');
 
   CollectionReference get _usersCollectionReference =>
@@ -81,6 +81,15 @@ class DatabaseService {
       await _usersCollectionReference.doc(user.uid).set(user.toJson());
     } catch (e) {
       return e.message;
+    }
+  }
+
+  Future deleteUser() async {
+    try {
+      User user = AuthService().auth.currentUser;
+      await _usersCollectionReference.doc(user.uid).delete();
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -370,8 +379,13 @@ class DatabaseService {
   }
 
   Future<String> getAvatar(uid) async {
-    var user = await usersCollectionReference.doc(uid).get();
-    return user.data()['avatarImage'];
+    String data = await usersCollectionReference
+        .doc(uid)
+        .get()
+        .then((value) => value['avatarImage']);
+    print("GETAVATAR" + data);
+    return data;
+    // return user.data()['avatarImage'];
   }
 
   Future getAllSeasonVote(DatabaseAddressModel address) async {
@@ -544,13 +558,35 @@ class DatabaseService {
     }
   }
 
-  Future deleteComment(
+  Future deleteSeasonComment(
+    DatabaseAddressModel address,
+    String postUid,
+  ) async {
+    try {
+      await address.postsSeasonCollection().doc(postUid).delete();
+    } catch (e) {}
+  }
+
+  Future deleteSubjectComment(
     DatabaseAddressModel address,
     String postUid,
   ) async {
     try {
       await address.postsSubVoteCollection().doc(postUid).delete();
     } catch (e) {}
+  }
+
+  Future addBlockList(
+    UserModel user,
+    String blockUid,
+  ) async {
+    print(user.blockList);
+    user.blockList.add(blockUid);
+    print(user.blockList);
+    await _usersCollectionReference
+        .doc(user.uid)
+        .update({"blockList": user.blockList});
+    ;
   }
 
   Stream<List<VoteCommentModel>> getSubVotePostList(
@@ -914,6 +950,25 @@ class DatabaseService {
     }
   }
 
+  // 프렌즈코드가 다른 유저들이랑 겹치는지 검사해준다.
+  Future<bool> isFriendsCodeDuplicated(String friendsCode) async {
+    try {
+      var data;
+
+      await _usersCollectionReference
+          .where('friendsCode', isEqualTo: friendsCode)
+          .get()
+          .then((value) => value.docs.forEach((element) {
+                data = element.data();
+              }));
+
+      return (data != null);
+    } catch (e) {
+      print('error at isFriendsCodeDuplicated');
+      return null;
+    }
+  }
+
   // Phone Number Duplicate Check
   Future duplicatePhoneNumberCheck(String phoneNumber) async {
     var duplicatePhoneNumber = await _usersCollectionReference
@@ -966,6 +1021,13 @@ class DatabaseService {
     print("NEW USERNAME IS" + newUserName);
     await _usersCollectionReference.doc(uid).update({'userName': newUserName});
     await _usersCollectionReference.doc(uid).update({'isNameUpdated': true});
+  }
+
+  Future updateFriendsCode(String uid, String friendsCode) async {
+    print("friendsCode IS" + friendsCode);
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'friendsCode': friendsCode});
   }
 
   // 주식 종목정보 가져오기
