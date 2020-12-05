@@ -224,7 +224,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       print(e);
     }
     try {
-      checkIfAgreeTerms(context);
+      if (Platform.isIOS) {
+        checkIfAgreeTerms(context);
+      }
     } catch (e) {
       print(e);
     }
@@ -297,46 +299,44 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         ;
         return WillPopScope(
             onWillPop: () {},
-            child: Platform.isIOS
-                ? CupertinoAlertDialog(
-                    title: Text(title),
-                    content: FutureBuilder(
-                        future: _termsOfUseFuture(),
-                        builder: (context, snapshot) {
-                          _termsOfUse = snapshot.data;
-                          if (snapshot.hasData) {
-                            return Container(
-                              height: 400,
-                              width: 180,
-                              child: SingleChildScrollView(
-                                  child: Text(
-                                _termsOfUse,
-                                textAlign: TextAlign.left,
-                              )),
-                            );
-                          } else {
-                            return Container(
-                              height: 200,
-                              width: 100,
-                            );
-                          }
-                        }),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text(btnLabelCancel),
-                        onPressed: () => exit(0),
-                      ),
-                      CupertinoDialogAction(
-                        child: Text(btnLabel),
-                        onPressed: () {
-                          _sharedPreferencesService.setSharedPreferencesValue(
-                              termsOfUseKey, true);
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  )
-                : {});
+            child: CupertinoAlertDialog(
+              title: Text(title),
+              content: FutureBuilder(
+                  future: _termsOfUseFuture(),
+                  builder: (context, snapshot) {
+                    _termsOfUse = snapshot.data;
+                    if (snapshot.hasData) {
+                      return Container(
+                        height: 400,
+                        width: 180,
+                        child: SingleChildScrollView(
+                            child: Text(
+                          _termsOfUse,
+                          textAlign: TextAlign.left,
+                        )),
+                      );
+                    } else {
+                      return Container(
+                        height: 200,
+                        width: 100,
+                      );
+                    }
+                  }),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text(btnLabelCancel),
+                  onPressed: () => exit(0),
+                ),
+                CupertinoDialogAction(
+                  child: Text(btnLabel),
+                  onPressed: () {
+                    _sharedPreferencesService.setSharedPreferencesValue(
+                        termsOfUseKey, true);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ));
       },
     );
   }
@@ -1111,40 +1111,69 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         TopContainer(model, checkVoteTime),
                                         GestureDetector(
                                           // 광고 활성화 해야 함
-                                          // onTap: () {
-                                          //   print(rewardedAdsLoaded);
-                                          //   model.loadRewardedAds();
-                                          //   showDialog(
-                                          //     context: context,
-                                          //     builder: (context) {
-                                          //       return AlertDialog(
-                                          //         content: Text(
-                                          //             '광고를 보고 꾸욱을 획득하시겠어요??'),
-                                          //         actions: <Widget>[
-                                          //           FlatButton(
-                                          //             child: Text('아뇨'),
-                                          //             onPressed: () {
-                                          //               Navigator.pop(context);
-                                          //             },
-                                          //           ),
-                                          //           FlatButton(
-                                          //             child: Text('좋아요'),
-                                          //             onPressed:
-                                          //                 rewardedAdsLoaded
-                                          //                     ? () {
-                                          //                         Navigator.pop(
-                                          //                             context);
-                                          //                         model
-                                          //                             .showRewardedAds();
-                                          //                       }
-                                          //                     : null,
-                                          //           )
-                                          //         ],
-                                          //       );
-                                          //     },
-                                          //   );
-                                          // },
-                                          onTap: null,
+                                          onTap: () {
+                                            print(rewardedAdsLoaded);
+                                            model.loadRewardedAds();
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                if (Platform.isIOS) {
+                                                  return CupertinoAlertDialog(
+                                                    content: Text(
+                                                        '광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
+                                                    actions: <Widget>[
+                                                      CupertinoDialogAction(
+                                                        child: Text('아뇨'),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                      CupertinoDialogAction(
+                                                        child: Text('좋아요'),
+                                                        onPressed:
+                                                            rewardedAdsLoaded
+                                                                ? () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    model
+                                                                        .showRewardedAds();
+                                                                  }
+                                                                : null,
+                                                      )
+                                                    ],
+                                                  );
+                                                } else {
+                                                  return AlertDialog(
+                                                    content: Text(
+                                                        '광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
+                                                    actions: <Widget>[
+                                                      FlatButton(
+                                                        child: Text('아뇨'),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                      FlatButton(
+                                                        child: Text('좋아요'),
+                                                        onPressed:
+                                                            rewardedAdsLoaded
+                                                                ? () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    model
+                                                                        .showRewardedAds();
+                                                                  }
+                                                                : null,
+                                                      )
+                                                    ],
+                                                  );
+                                                }
+                                              },
+                                            );
+                                          },
+                                          // onTap: null,
                                           child: Row(
                                             children: [
                                               Container(
@@ -2865,7 +2894,7 @@ Widget tutorial(VoteSelectViewModel model) {
       model.tutorialStepProgress();
     },
     child: SafeArea(
-      child: (model.tutorialStatus - model.tutorialTotalStep == 0)
+      child: (model.tutorialTotalStep - model.tutorialStatus == 0)
           ? Stack(
               children: [
                 Container(
@@ -2924,64 +2953,116 @@ Widget tutorial(VoteSelectViewModel model) {
                 )
               ],
             )
-          : Stack(
-              children: [
-                Container(
-                  width: deviceWidth,
-                  height: deviceHeight,
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.amber),
-                      color: Colors.black38),
-                ),
-                Column(
+          : (model.tutorialTotalStep - model.tutorialStatus == 1)
+              ? Stack(
                   children: [
-                    Text('1A가',
-                        style: TextStyle(
-                            fontSize: 32,
-                            fontFamily: 'DmSans',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.transparent)),
-                    Text('1A가',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontFamily: 'DmSans',
-                            color: Colors.transparent)),
-                    SizedBox(
-                      height: 275,
+                    Container(
+                      width: deviceWidth,
+                      height: deviceHeight,
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.amber),
+                          color: Colors.black38),
                     ),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: 10,
-                          ),
-                          child: Text(
-                            '종목을 눌러 주제에 대한 간단한 설명을 볼 수 있어요!',
-                            style: TextStyle(fontSize: 14, color: Colors.white),
-                          ),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFE81B1B),
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black38,
-                                spreadRadius: 1,
-                                blurRadius: 1,
-                                offset:
-                                    Offset(1, 1), // changes position of shadow
-                              ),
-                            ],
-                          ),
+                        Text('1A가',
+                            style: TextStyle(
+                                fontSize: 32,
+                                fontFamily: 'DmSans',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.transparent)),
+                        Text('1A가',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'DmSans',
+                                color: Colors.transparent)),
+                        SizedBox(
+                          height: 275,
                         ),
-                        Container(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 10,
+                              ),
+                              child: Text(
+                                '종목을 눌러 주제에 대한 간단한 설명을 볼 수 있어요!',
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFE81B1B),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black38,
+                                    spreadRadius: 1,
+                                    blurRadius: 1,
+                                    offset: Offset(
+                                        1, 1), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(),
+                          ],
+                        ),
                       ],
-                    ),
+                    )
                   ],
                 )
-              ],
-            ),
+              : Stack(
+                  children: [
+                    Container(
+                      width: deviceWidth,
+                      height: deviceHeight,
+                      decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.amber),
+                          color: Colors.black38),
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 16.h,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 5,
+                                horizontal: 10,
+                              ),
+                              child: Text(
+                                '마이페이지에서는 닉네임 등을 변경할 수 있어요!',
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                              ),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFE81B1B),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black38,
+                                    spreadRadius: 1,
+                                    blurRadius: 1,
+                                    offset: Offset(
+                                        1, 1), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(),
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
+                ),
     ),
   );
 }

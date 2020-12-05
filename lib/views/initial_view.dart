@@ -6,11 +6,13 @@ import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/view_models/initial_view_model.dart';
 import 'package:yachtOne/views/app_title_view.dart';
 import 'package:yachtOne/views/loading_view.dart';
+import 'package:yachtOne/views/nicknameSet_view.dart';
 import 'package:yachtOne/views/startup_view.dart';
 
 import '../locator.dart';
 import 'intro_view.dart';
 import 'login_view.dart';
+import 'survey_view.dart';
 
 class InitialView extends StatefulWidget {
   @override
@@ -50,7 +52,11 @@ class _InitialViewState extends State<InitialView> {
                       );
                     } else {
                       print(snapshot.data.uid);
-                      return StartUpView(0);
+                      if (model.didSurvey)
+                        return StartUpView(0);
+                      else
+                        // return NicknameSetView(true);
+                        return SurveyView();
                     }
                   });
         });

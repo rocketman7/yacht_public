@@ -56,8 +56,8 @@ class VoteSelectViewModel extends FutureViewModel {
   bool isNameUpdated;
   bool voteSelectTutorial;
   bool termsOfUse;
-  int tutorialStatus = 2; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
-  int tutorialTotalStep = 2; // 튜토리얼 총 단계
+  int tutorialStatus = 3; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
+  int tutorialTotalStep = 3; // 튜토리얼 총 단계
 
   // 리워드 광고 관련 변수
   // bool rewardedAdsLoaded = false;
@@ -178,27 +178,29 @@ class VoteSelectViewModel extends FutureViewModel {
 
     print("getallModel uid" + uid);
 
-    isNameUpdated = await _sharedPreferencesService.getSharedPreferencesValue(
-        isNameUpdatedKey, bool);
-    if (!isNameUpdated) {
-      print('뉴비일 가능성이 큽니다. DB만 더 확인하고 다른 페이지로');
-      UserModel tempUser = await _databaseService.getUser(uid);
-      if (!tempUser.isNameUpdated) {
-        print('뉴비확실');
-        // return NicknameSetView();
-        _navigationService.navigateWithArgTo('nickname_set', true);
-      } else {
-        //뉴비인줄 알았는데 막상 DB보니까 아니니까 쉐어드프리퍼런스 true로 바꿔줘야함.
-        _sharedPreferencesService.setSharedPreferencesValue(
-            isNameUpdatedKey, true);
-        print('뉴비 아님. 바로 다음 진행');
-      }
-    } else {
-      print('뉴비 아님. 바로 다음 진행');
-      // 테스트용. 쉐어드프리퍼런스 값 다시 초기화해줄 때 주석처리 풀고 핫 리스타트 두번.
-      _sharedPreferencesService.setSharedPreferencesValue(
-          isNameUpdatedKey, true);
-    }
+    // isNameUpdated = await _sharedPreferencesService.getSharedPreferencesValue(
+    //     isNameUpdatedKey, bool);
+    // if (!isNameUpdated) {
+    //   print('뉴비일 가능성이 큽니다. DB만 더 확인하고 다른 페이지로');
+    //   UserModel tempUser = await _databaseService.getUser(uid);
+    //   if (!tempUser.isNameUpdated) {
+    //     print('뉴비확실');
+    //     // return NicknameSetView();
+    //     _navigationService.navigateWithArgTo('nickname_set', true);
+    //   } else {
+    //     //뉴비인줄 알았는데 막상 DB보니까 아니니까 쉐어드프리퍼런스 true로 바꿔줘야함.
+    //     _sharedPreferencesService.setSharedPreferencesValue(
+    //         isNameUpdatedKey, true);
+    //     print('뉴비 아님. 바로 다음 진행');
+    //   }
+    // } else {
+    //   print('뉴비 아님. 바로 다음 진행');
+    //   // 테스트용. 쉐어드프리퍼런스 값 다시 초기화해줄 때 주석처리 풀고 핫 리스타트 두번.
+    //   _sharedPreferencesService.setSharedPreferencesValue(
+    //       isNameUpdatedKey, true);
+    // }
+    // _sharedPreferencesService.setSharedPreferencesValue(
+    //     isNameUpdatedKey, false);
 
     //앱이 최초로 시작하면 여기서 startStateManager를 실행해주고,
     //아니면 다른 화면과 마찬가지로 stateManager 하 지배를 받음.
