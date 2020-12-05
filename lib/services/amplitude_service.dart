@@ -10,8 +10,18 @@ class AmplitudeService {
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
 
-    analytics.logEvent('Vote Select View Future',
-        eventProperties: {'friend_num': 10, 'is_heavy_user': true});
+    analytics.logEvent(
+      'Vote Select View',
+      // eventProperties: {'friend_num': 10, 'is_heavy_user': true}
+    );
+  }
+
+  Future viewStockInfo(String uid) async {
+    analytics.init(apiKey);
+    analytics.setUserId(uid);
+    analytics.trackingSessionEvents(true);
+
+    analytics.logEvent('Stock Info View');
   }
 
   Future initialiseSession() async {

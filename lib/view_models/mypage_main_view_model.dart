@@ -66,7 +66,7 @@ class MypageMainViewModel extends FutureViewModel {
     //     buttonTitle: '네',
     //     cancelTitle: '아니오');
     // if (dialogResult.confirmed) {
-    // _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
+    _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
     _stateManageService.setMyState();
     _stateManageService.setAppStart();
     FirebaseKakaoAuthAPI().signOut();
@@ -76,6 +76,15 @@ class MypageMainViewModel extends FutureViewModel {
 
     // _navigationService.popAndNavigateWithArgTo('initial');
     // }
+  }
+
+  Future deleteAccount(String uid) async {
+    await _databaseService.deleteUser();
+    await _authService.deleteAccount();
+    _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
+    _stateManageService.setMyState();
+    _stateManageService.setAppStart();
+    _navigationService.popAndNavigateWithArgTo('initial');
   }
 
   @override

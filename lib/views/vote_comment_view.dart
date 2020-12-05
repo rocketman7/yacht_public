@@ -779,7 +779,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   ? IconButton(
                       iconSize: 20,
                       onPressed: () {
-                        viewModel.deleteComment(address, voteComment.postUid);
+                        // viewModel.deleteComment(address, voteComment.postUid);
                       },
                       icon: Icon(
                         Icons.delete_outline,

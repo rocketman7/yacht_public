@@ -55,7 +55,7 @@ class NicknameSetViewModel extends BaseViewModel {
           isNameUpdatedKey, true);
       _stateManageService.userModelUpdate();
       setChecking(false);
-      _navigationService.navigateTo('initial');
+      _navigationService.navigateWithArgTo('startup', 0);
       return true;
     }
 

@@ -500,7 +500,7 @@ class _Test2WidgetState extends State<Test2Widget> {
             child: Center(
               child: Text(vote.subVotes[listSelected[idx]].voteChoices[choice],
                   style: TextStyle(
-                    fontSize: 26.sp,
+                    fontSize: 20.sp,
                     fontFamily: 'AppleSDB',
                   )),
             ),
