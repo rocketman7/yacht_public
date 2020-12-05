@@ -3,7 +3,6 @@ const List<String> pushAlarmKey = [
   'pushAlarm1',
   'pushAlarm2',
   'pushAlarm3',
-  'pushAlarm4',
 ];
 
 // avatar의 asset image 주소를 저장

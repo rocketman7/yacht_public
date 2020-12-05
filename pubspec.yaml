@@ -77,6 +77,8 @@ dependencies:
   apple_sign_in: ^0.1.0
   amplitude_flutter: ^2.2.2
 
+  random_string: ^2.1.0
+
 flutter_icons:
   android: "launcher_icon"
   ios: true
