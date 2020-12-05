@@ -5,7 +5,6 @@ class NavigationService {
   // that's what we'll use to access the NavigatorState outside of the build context.
   // We'll create a NavigationService that contains the global key, we'll set that key on initialization
   // and we'll expose a function on the service to navigate given a name. Let's start with the NavigationService.
-
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   // Navagation Service를 설정하여 context가 없는 class에서도 다른 페이지로 route 가능하게 만든다.
@@ -22,6 +21,7 @@ class NavigationService {
         .pushNamedAndRemoveUntil(routeName, (Route<dynamic> route) => false);
   }
 
+  //drawer처럼 오른쪽->왼쪽으로 나오고, 왼쪽->오른쪽으로 들어가는 움직임을 만들어주기 위해 만들어놨던건데. 그냥 쿠퍼티노페이지로 해결
   Future<dynamic> navigateToMyPage(var page) {
     return navigatorKey.currentState.push(_createToMyPageRoute(page));
   }

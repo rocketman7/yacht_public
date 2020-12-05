@@ -5,16 +5,19 @@ import 'package:stacked/stacked.dart';
 import '../../view_models/mypage_friendsCode_view_model.dart';
 
 class MypageFriendsCodeView extends StatelessWidget {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MypageFriendsCodeViewModel>.reactive(
       viewModelBuilder: () => MypageFriendsCodeViewModel(),
       builder: (context, model, child) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             title: Text(
               '친구에게 추천하기',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontFamily: 'AppleSDB'),
             ),
             elevation: 1,
           ),
@@ -37,7 +40,7 @@ class MypageFriendsCodeView extends StatelessWidget {
                               '추천하고\n꾸욱 받아가세요.',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 32, fontWeight: FontWeight.bold),
+                                  fontSize: 32, fontFamily: 'AppleSDB'),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(
@@ -57,13 +60,13 @@ class MypageFriendsCodeView extends StatelessWidget {
                                   children: [
                                     Text(
                                       '나의 추천인 코드',
-                                      style: TextStyle(fontSize: 12),
+                                      style: TextStyle(
+                                          fontSize: 12, fontFamily: 'AppleSDL'),
                                     ),
                                     Text(
                                       '${model.user.friendsCode}',
                                       style: TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold),
+                                          fontSize: 28, fontFamily: 'AppleSDB'),
                                     ),
                                     SizedBox(
                                       height: 8,
@@ -72,11 +75,20 @@ class MypageFriendsCodeView extends StatelessWidget {
                                       onTap: () {
                                         Clipboard.setData(ClipboardData(
                                             text: '${model.user.friendsCode}'));
+                                        scaffoldKey.currentState
+                                            .showSnackBar(SnackBar(
+                                                duration: Duration(seconds: 1),
+                                                content: Text(
+                                                  "나의 추천인 코드가 복사되었습니다.",
+                                                  style: TextStyle(
+                                                      fontFamily: 'AppleSDM'),
+                                                )));
                                       },
                                       child: Text(
                                         '복사하기',
                                         style: TextStyle(
                                           fontSize: 12,
+                                          fontFamily: 'AppleSDL',
                                           decoration: TextDecoration.underline,
                                         ),
                                       ),
@@ -90,10 +102,17 @@ class MypageFriendsCodeView extends StatelessWidget {
                               children: [
                                 Text(
                                   '추천인 코드 입력하기',
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(
+                                      fontSize: 16, fontFamily: 'AppleSDM'),
                                 ),
                                 Spacer(),
-                                Text('>')
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16,
+                                  ),
+                                )
                               ],
                             ),
                             SizedBox(
@@ -109,11 +128,18 @@ class MypageFriendsCodeView extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  '카카오톡 추천 코드 공유하기',
-                                  style: TextStyle(fontSize: 16),
+                                  '카카오톡으로 공유하기',
+                                  style: TextStyle(
+                                      fontSize: 16, fontFamily: 'AppleSDM'),
                                 ),
                                 Spacer(),
-                                Text('>')
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16,
+                                  ),
+                                )
                               ],
                             ),
                             SizedBox(

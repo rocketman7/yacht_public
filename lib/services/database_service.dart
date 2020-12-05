@@ -950,6 +950,25 @@ class DatabaseService {
     }
   }
 
+  // 프렌즈코드가 다른 유저들이랑 겹치는지 검사해준다.
+  Future<bool> isFriendsCodeDuplicated(String friendsCode) async {
+    try {
+      var data;
+
+      await _usersCollectionReference
+          .where('friendsCode', isEqualTo: friendsCode)
+          .get()
+          .then((value) => value.docs.forEach((element) {
+                data = element.data();
+              }));
+
+      return (data != null);
+    } catch (e) {
+      print('error at isFriendsCodeDuplicated');
+      return null;
+    }
+  }
+
   // Phone Number Duplicate Check
   Future duplicatePhoneNumberCheck(String phoneNumber) async {
     var duplicatePhoneNumber = await _usersCollectionReference
@@ -1002,6 +1021,13 @@ class DatabaseService {
     print("NEW USERNAME IS" + newUserName);
     await _usersCollectionReference.doc(uid).update({'userName': newUserName});
     await _usersCollectionReference.doc(uid).update({'isNameUpdated': true});
+  }
+
+  Future updateFriendsCode(String uid, String friendsCode) async {
+    print("friendsCode IS" + friendsCode);
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'friendsCode': friendsCode});
   }
 
   // 주식 종목정보 가져오기
