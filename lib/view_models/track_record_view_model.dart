@@ -4,6 +4,7 @@ import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
+import 'package:yachtOne/services/amplitude_service.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/database_service.dart';
 
@@ -12,6 +13,8 @@ import '../locator.dart';
 class TrackRecordViewModel extends FutureViewModel {
   AuthService _authService = locator<AuthService>();
   DatabaseService _databaseService = locator<DatabaseService>();
+  final AmplitudeService _amplitudeService = AmplitudeService();
+
   String uid;
   DatabaseAddressModel address;
   UserModel user;
@@ -27,6 +30,7 @@ class TrackRecordViewModel extends FutureViewModel {
   }
 
   Future getAllModel(uid) async {
+    await _amplitudeService.logTrackRecordView(uid);
     address = await _databaseService.getAddress(uid);
     user = await _databaseService.getUser(uid);
     userVote = await _databaseService.getUserVote(address);

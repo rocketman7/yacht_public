@@ -28,6 +28,7 @@ final TextEditingController _commentInputController = TextEditingController();
 final ScrollController _commentScrollController = ScrollController();
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 VoteCommentModel voteCommentModel;
+final _scaffoldKey = GlobalKey<ScaffoldState>();
 int _textLength;
 
 class _SeasonCommunityViewState extends State<SeasonCommunityView> {
@@ -861,7 +862,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
               return Container(
                   // height: deviceHeight * .55,
                   child: ListView.builder(
-                      key: UniqueKey(),
+                      key: _scaffoldKey,
                       controller: _commentScrollController,
                       // addAutomaticKeepAlives: true,
                       itemCount: commentList.length,

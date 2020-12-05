@@ -453,6 +453,7 @@ class _Test2WidgetState extends State<Test2Widget> {
                       listSelected[idx], listSelected[idx] + 1, choice + 1);
 
                   userVote.voteSelected = tempList;
+                  userVote.isVoted = true;
                   print("after 1vote" + userVote.voteSelected.toString());
                   model.addUserVoteDB(address, userVote);
 
@@ -462,9 +463,9 @@ class _Test2WidgetState extends State<Test2Widget> {
                     address,
                     user,
                     vote,
+                    userVote,
                     listSelected,
                     idx + 1,
-                    userVote,
                   ]);
                   // 남은 투표 없을 때
                 } else {

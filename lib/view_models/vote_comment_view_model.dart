@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/season_model.dart';
+import 'package:yachtOne/services/amplitude_service.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 
 import '../services/stateManage_service.dart';
@@ -24,6 +25,7 @@ class VoteCommentViewModel extends FutureViewModel {
   final DialogService _dialogService = locator<DialogService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
   final StateManageService _stateManageService = locator<StateManageService>();
+  final AmplitudeService _amplitudeService = AmplitudeService();
 
   VoteCommentModel voteFeedModel;
 
@@ -48,7 +50,7 @@ class VoteCommentViewModel extends FutureViewModel {
 
   Future getAllModel(uid) async {
     setBusy(true);
-
+    await _amplitudeService.logCommunityMain(uid);
     if (_stateManageService.appStart) {
       await _stateManageService.initStateManage(initUid: uid);
     } else {
@@ -71,6 +73,7 @@ class VoteCommentViewModel extends FutureViewModel {
   }
 
   Future getNewVote(address) async {
+    await _amplitudeService.logOtherDaysCommunity(uid);
     newVote = await _databaseService.getVotes(address);
     print("GETNEWVOTE CALLED");
     notifyListeners();

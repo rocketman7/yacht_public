@@ -53,11 +53,9 @@ packages:
   blobs:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "0baad80564d5760d4d89b59660707e5ef0c5885f"
-      url: "https://github.com/lokesh-coder/flutter_blobs.git"
-    source: git
+      name: blobs
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.2.0"
   boolean_selector:
     dependency: transitive

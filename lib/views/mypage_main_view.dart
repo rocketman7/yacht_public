@@ -514,7 +514,7 @@ class MypageMainView extends StatelessWidget {
           makeMypageMainComponent(model, '개인정보취급방침', 'mypage_privacypolicy'),
           // makeMypageMainComponent(model, '사업자정보', 'mypage_businessinformation'),
           // makeMypageMainComponent(model, '', null),
-          // makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
+          makeMypageMainComponent(model, '꾸욱 셀렉션 임시', 'mypage_tempggook'),
           SizedBox(
             height: 42,
           )
@@ -531,8 +531,8 @@ class MypageTempGGookView extends StatefulWidget {
 
 class _MypageTempGGookViewState extends State<MypageTempGGookView>
     with TickerProviderStateMixin {
-  // Animation<double> animation;
-  // // AnimationController animationController;
+  Animation<double> animation;
+  AnimationController animationController;
   // AnimationController _animationController;
   // Animation animation;
 
@@ -543,12 +543,12 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView>
   @override
   void initState() {
     super.initState();
-    // animationController =
-    //     AnimationController(vsync: this, duration: Duration(seconds: 3));
-    // animation = Tween<double>(begin: 1.0, end: 3.0).animate(animationController)
-    //   ..addListener(() {
-    //     setState(() {});
-    //   });
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 3));
+    animation = Tween<double>(begin: 1.0, end: 3.0).animate(animationController)
+      ..addListener(() {
+        setState(() {});
+      });
     // animationController.forward();
     //
     // _animationController =
@@ -703,7 +703,7 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView>
                   child: Text('선택애니메이션'),
                   onTap: () {
                     // print(blobCtrl.change().size);
-                    // animationController.forward();
+                    animationController.forward();
                   },
                 )
               ],
@@ -718,15 +718,15 @@ class _MypageTempGGookViewState extends State<MypageTempGGookView>
               height: 400,
               child: Stack(
                 children: [
-                  // Positioned(child: Test5Widget()),
-                  TestWidget(),
+                  Positioned(child: Test4Widget()),
+                  Test3Widget(),
                   // Test3Widget(),
-                  // Positioned(
-                  //     left: 10,
-                  //     top: 10,
-                  //     child: Test2Widget(
-                  //       blobColor: Color(0xFFFFDE34),
-                  //     )),
+                  Positioned(
+                      left: 15,
+                      top: 15,
+                      child: Test2Widget(
+                        blobColor: Color(0xFFFFDE34),
+                      )),
                 ],
               ),
             ),
@@ -1107,7 +1107,7 @@ class _Test3WidgetState extends State<Test3Widget>
         animation: animation,
         builder: (context, child) {
           return CustomPaint(
-              size: Size(200, 200),
+              size: Size(210, 210),
               painter: PieChart(percentage: animation.value));
         });
   }
@@ -1160,16 +1160,16 @@ class _Test4WidgetState extends State<Test4Widget> {
   @override
   Widget build(BuildContext context) {
     return Blob.animatedFromID(
-        size: 220,
+        size: 210,
         id: [
+          '10-7-848634',
           '10-7-863638',
           '10-7-63404',
           '10-7-424041',
           '10-7-88922',
-          '10-7-848634',
         ],
         styles: BlobStyles(
-          color: Color(0xFFFFFFFF),
+          color: Color(0xFFFFDE34).withOpacity(.7),
         ),
         controller: blobCtrl,
         loop: true,
@@ -1188,7 +1188,7 @@ class _Test5WidgetState extends State<Test5Widget> {
     return Container(
       width: 200,
       height: 200,
-      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
     );
   }
 }

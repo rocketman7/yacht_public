@@ -2,7 +2,7 @@ import 'package:yachtOne/models/user_vote_stats_model.dart';
 
 class UserVoteModel {
   final String uid;
-  final String voteDate;
+  String voteDate;
   List<int> voteSelected;
   final int score;
   final bool voteVictory;

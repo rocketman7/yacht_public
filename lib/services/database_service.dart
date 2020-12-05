@@ -160,6 +160,7 @@ class DatabaseService {
     UserVoteModel userVote,
   ) async {
     try {
+      userVote.voteDate = address.date;
       await address
           .userVoteSeasonCollection()
           .doc(address.date)
@@ -174,6 +175,32 @@ class DatabaseService {
     } catch (e) {
       return e.message;
     }
+  }
+
+  Future initialiseOneVote(
+    DatabaseAddressModel address,
+    UserVoteModel userVote,
+    int resetTarget,
+  ) async {
+    List<int> voteSelected = userVote.voteSelected;
+    bool isVoted = true;
+    int check = 0;
+    print(voteSelected);
+    voteSelected.replaceRange(resetTarget, resetTarget + 1, [0]);
+    voteSelected.forEach((element) {
+      check += element;
+    });
+    if (check == 0) {
+      isVoted = false;
+    }
+    print(voteSelected);
+    print(isVoted);
+    try {
+      await address.userVoteSeasonCollection().doc(address.date).update({
+        "voteSelected": voteSelected,
+        "isVoted": isVoted,
+      });
+    } catch (e) {}
   }
 
   // 계좌인증이 완료된 유저의 계좌정보 넣기, 선택적으로 넣도록 수정?

@@ -1,5 +1,6 @@
 import 'package:stacked/stacked.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/services/amplitude_service.dart';
 
 import '../services/stateManage_service.dart';
 
@@ -20,6 +21,7 @@ class RankViewModel extends FutureViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   final NavigationService _navigationService = locator<NavigationService>();
   final StateManageService _stateManageService = locator<StateManageService>();
+  final AmplitudeService _amplitudeService = AmplitudeService();
 
   // 변수 Setting
   // 아래에 stateManagerService에 있는 놈들 중 사용할 모델들 설정
@@ -45,6 +47,7 @@ class RankViewModel extends FutureViewModel {
   // method
   // futureToRun으로 호출하는.
   Future getUserAndRankList() async {
+    await _amplitudeService.logRankingView(uid);
     if (_stateManageService.appStart) {
       await _stateManageService.initStateManage(initUid: uid);
     } else {

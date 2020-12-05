@@ -5,7 +5,7 @@ class AmplitudeService {
   final Amplitude analytics = Amplitude.getInstance(instanceName: 'testGgook');
   final String apiKey = "2b70b7ef5dca3bc9708968745c935a0c";
 
-  Future voteViewModelLog(String uid) async {
+  Future logVoteSelectView(String uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
@@ -16,12 +16,68 @@ class AmplitudeService {
     );
   }
 
-  Future viewStockInfo(String uid) async {
+  Future logStockInfoView(String uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
 
     analytics.logEvent('Stock Info View');
+  }
+
+  Future logCommunityMain(String uid) async {
+    analytics.init(apiKey);
+    analytics.setUserId(uid);
+    analytics.trackingSessionEvents(true);
+
+    analytics.logEvent('Community Main View');
+  }
+
+  Future logSeasonCommunity(String uid) async {
+    analytics.init(apiKey);
+    analytics.setUserId(uid);
+    analytics.trackingSessionEvents(true);
+
+    analytics.logEvent('Season Community View');
+  }
+
+  Future logSubjectCommunity(String uid) async {
+    analytics.init(apiKey);
+    analytics.setUserId(uid);
+    analytics.trackingSessionEvents(true);
+
+    analytics.logEvent('Season Community View');
+  }
+
+  Future logOtherDaysCommunity(String uid) async {
+    analytics.init(apiKey);
+    analytics.setUserId(uid);
+    analytics.trackingSessionEvents(true);
+
+    analytics.logEvent('Other Day Community Main View');
+  }
+
+  Future logRankingView(String uid) async {
+    analytics.init(apiKey);
+    analytics.setUserId(uid);
+    analytics.trackingSessionEvents(true);
+
+    analytics.logEvent('Ranking View');
+  }
+
+  Future logTrackRecordView(String uid) async {
+    analytics.init(apiKey);
+    analytics.setUserId(uid);
+    analytics.trackingSessionEvents(true);
+
+    analytics.logEvent('Track Record View');
+  }
+
+  Future logMyPageView(String uid) async {
+    analytics.init(apiKey);
+    analytics.setUserId(uid);
+    analytics.trackingSessionEvents(true);
+
+    analytics.logEvent('My Page Main View');
   }
 
   Future initialiseSession() async {

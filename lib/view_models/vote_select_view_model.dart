@@ -62,7 +62,6 @@ class VoteSelectViewModel extends FutureViewModel {
   // 리워드 광고 관련 변수
   // bool rewardedAdsLoaded = false;
 
-  bool isVoting = true;
   DateTime getNow() {
     return DateTime.now();
   }
@@ -118,6 +117,7 @@ class VoteSelectViewModel extends FutureViewModel {
         print('reward ads: loaded');
       } else if (event == RewardedVideoAdEvent.failedToLoad) {
         // 로딩에 실패하면..
+        print(RewardedVideoAdEvent.failedToLoad.toString());
         rewardedAdsLoaded = false;
         // 다시 로딩 시도
         // loadRewardedAds();
@@ -174,7 +174,7 @@ class VoteSelectViewModel extends FutureViewModel {
     // _authService.auth.signOut();
     setBusy(true);
     // Amplitude에 voteViewModel log 보내기
-    await _amplitudeService.voteViewModelLog(uid);
+    await _amplitudeService.logVoteSelectView(uid);
 
     print("getallModel uid" + uid);
 
@@ -226,10 +226,21 @@ class VoteSelectViewModel extends FutureViewModel {
         .getSharedPreferencesValue(voteSelectTutorialKey, bool);
 
     print("ISVOTING????? " + address.isVoting.toString());
+    print(userVote.userVoteStats);
     // selected = List<bool>.filled(vote.subVotes.length, false, growable: true);
     selected = List<bool>.filled(vote.subVotes.length, false, growable: true);
     setBusy(false);
 
+    notifyListeners();
+  }
+
+  Future initialiseOneVote(int resetTarget) async {
+    await _databaseService.initialiseOneVote(
+      address,
+      userVote,
+      resetTarget,
+    );
+    await _stateManageService.userVoteModelUpdate();
     notifyListeners();
   }
 
