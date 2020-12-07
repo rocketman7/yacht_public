@@ -221,7 +221,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     super.initState();
 
     try {
-      checkVersionSeasonStatus(context);
+      callRemoteConfig(context);
     } catch (e) {
       print(e);
     }
@@ -275,6 +275,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   String play_store_url;
   bool isSeasonStarted = true;
   bool termsOfUse;
+  String defaultMainText;
 
   checkIfAgreeTerms(context) async {
     termsOfUse = await _sharedPreferencesService.getSharedPreferencesValue(
@@ -343,12 +344,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     );
   }
 
-  checkVersionSeasonStatus(context) async {
+  callRemoteConfig(context) async {
     //Get Current installed version of app
     final PackageInfo info = await PackageInfo.fromPlatform();
     double currentVersion =
         double.parse(info.version.trim().replaceAll(".", ""));
     print("CURRENT VERSION IS " + currentVersion.toString());
+
     //Get Latest version info from firebase config
     final RemoteConfig remoteConfig = await RemoteConfig.instance;
 
@@ -356,7 +358,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       // Using default duration to force fetching from remote server.
       await remoteConfig.fetch(expiration: const Duration(seconds: 0));
       await remoteConfig.activateFetched();
-      remoteConfig.getString('force_update_current_version');
+      // remoteConfig.getString('force_update_current_version');
       double newVersion = double.parse(remoteConfig
           .getString('force_update_current_version')
           .trim()
@@ -368,10 +370,16 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       // 주석 풀고 업데이트
       // isSeasonStarted = remoteConfig.getBool('is_season_started');
 
+      // 홈 기본 텍스트 불러오기
+
+      // defaultMainText = remoteConfig.getString('default_main_text');
+
       print("NEW VERSION IS" + newVersion.toString());
       print("APP STORE URL " + app_store_url);
       print("PLAY STORE URL " + play_store_url);
       print("IS SEASON STARTED " + isSeasonStarted.toString());
+      // print("Main Text " + defaultMainText.toString());
+
       if (newVersion > currentVersion) {
         _showVersionDialog(context);
       }
@@ -1103,65 +1111,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             // 광고 활성화 해야 함
                                             onTap: () {
                                               print(rewardedAdsLoaded);
-                                              model.loadRewardedAds();
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  if (Platform.isIOS) {
-                                                    return CupertinoAlertDialog(
-                                                      content: Text(
-                                                          '광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
-                                                      actions: <Widget>[
-                                                        CupertinoDialogAction(
-                                                          child: Text('아뇨'),
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                        ),
-                                                        CupertinoDialogAction(
-                                                          child: Text('좋아요'),
-                                                          onPressed:
-                                                              rewardedAdsLoaded
-                                                                  ? () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      model
-                                                                          .showRewardedAds();
-                                                                    }
-                                                                  : null,
-                                                        )
-                                                      ],
-                                                    );
-                                                  } else {
-                                                    return AlertDialog(
-                                                      content: Text(
-                                                          '광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
-                                                      actions: <Widget>[
-                                                        FlatButton(
-                                                          child: Text('아뇨'),
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                        ),
-                                                        FlatButton(
-                                                          child: Text('좋아요'),
-                                                          onPressed:
-                                                              rewardedAdsLoaded
-                                                                  ? () {
-                                                                      Navigator.pop(
-                                                                          context);
-                                                                      model
-                                                                          .showRewardedAds();
-                                                                    }
-                                                                  : null,
-                                                        )
-                                                      ],
-                                                    );
-                                                  }
-                                                },
-                                              );
+
+                                              showAdsDialog(context, model);
                                             },
                                             // onTap: null,
                                             child: Row(
@@ -1184,9 +1135,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                 ),
                                                 SizedBox(width: 4.w),
                                                 Text(
-                                                  (model.user.item ??
-                                                          0 - numSelected)
-                                                      .toString(),
+                                                  (model.user.item == null)
+                                                      ? 0.toString()
+                                                      : (model.user.item -
+                                                              numSelected)
+                                                          .toString(),
                                                   style: TextStyle(
                                                     fontSize: 26,
                                                     letterSpacing: -1.0,
@@ -1241,15 +1194,21 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             ],
                                           ),
                                           model.address.isVoting
-                                              ? Text(
-                                                  "꾸욱 얻으러 가기",
-                                                  style: TextStyle(
-                                                    fontFamily: 'AppleSDM',
-                                                    fontSize: 17.sp,
-                                                    color: Color(0xFF3E3E3E),
-                                                    // fontWeight: FontWeight.w500,
-                                                    letterSpacing: -1,
-                                                    height: 1,
+                                              ? GestureDetector(
+                                                  onTap: () {
+                                                    showAdsDialog(
+                                                        context, model);
+                                                  },
+                                                  child: Text(
+                                                    "꾸욱 얻으러 가기",
+                                                    style: TextStyle(
+                                                      fontFamily: 'AppleSDM',
+                                                      fontSize: 17.sp,
+                                                      color: Color(0xFF3E3E3E),
+                                                      // fontWeight: FontWeight.w500,
+                                                      letterSpacing: -1,
+                                                      height: 1,
+                                                    ),
                                                   ),
                                                 )
                                               : GestureDetector(
@@ -1522,24 +1481,39 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             ? Color(0xFFFFDE34)
                                             : Color(0xFFFF5D02),
                                   ),
-                                  child: Text(
-                                      model.address.isVoting == false
-                                          ? "오늘의 예측이 마감되었습니다."
-                                          : numSelected == 0
-                                              ? "최대 3개의 주제를 선택하여 승점에 도전해보세요!\n12월 11일부터 꾸욱의 첫 시즌이 시작됩니다.\n여러분들의 많은 참여 부탁드립니다!"
-                                              : "선택한 주제 $numSelected개, 승점 ${numSelected * 2}점에 도전해보세요!",
-                                      style: TextStyle(
-                                        fontSize:
-                                            numSelected == 0 ? 14.sp : 16.sp,
-                                        fontFamily: 'AppleSDB',
-                                        // height: 1,
-                                        // fontWeight: FontWeight.w500,
-                                        color: (model.address.isVoting == false)
-                                            ? Colors.white
-                                            : numSelected == 0
-                                                ? Colors.black
-                                                : Color(0xFFFFF5F1),
-                                      )),
+                                  child: FutureBuilder(
+                                      future: model.getDefaultText(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.data == null) {
+                                          return Container();
+                                        } else {
+                                          defaultMainText = snapshot.data;
+                                          return Text(
+                                              model.address.isVoting == false
+                                                  ? "오늘의 예측이 마감되었습니다."
+                                                  : numSelected == 0
+                                                      ? defaultMainText
+                                                              .replaceAll("\\n",
+                                                                  "\n") ??
+                                                          ""
+                                                      : "선택한 주제 $numSelected개, 승점 ${numSelected * 2}점에 도전해보세요!",
+                                              style: TextStyle(
+                                                fontSize: numSelected == 0
+                                                    ? 14.sp
+                                                    : 16.sp,
+                                                fontFamily: 'AppleSDB',
+                                                // height: 1,
+                                                // fontWeight: FontWeight.w500,
+                                                color:
+                                                    (model.address.isVoting ==
+                                                            false)
+                                                        ? Colors.white
+                                                        : numSelected == 0
+                                                            ? Colors.black
+                                                            : Color(0xFFFFF5F1),
+                                              ));
+                                        }
+                                      }),
                                 ),
                               )
                             : Container(),
@@ -1560,6 +1534,58 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
         //  buildScaffold(model, displayRatio, size, userVote,
         //         address, user, vote);
+      },
+    );
+  }
+
+  Future showAdsDialog(BuildContext context, VoteSelectViewModel model) {
+    model.loadRewardedAds();
+    return showDialog(
+      context: context,
+      builder: (context) {
+        if (Platform.isIOS) {
+          return CupertinoAlertDialog(
+            content: Text('광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text('아뇨'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text('좋아요'),
+                onPressed: rewardedAdsLoaded
+                    ? () {
+                        Navigator.pop(context);
+                        model.showRewardedAds();
+                      }
+                    : null,
+              )
+            ],
+          );
+        } else {
+          return AlertDialog(
+            content: Text('광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('아뇨'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('좋아요'),
+                onPressed: rewardedAdsLoaded
+                    ? () {
+                        Navigator.pop(context);
+                        model.showRewardedAds();
+                      }
+                    : null,
+              )
+            ],
+          );
+        }
       },
     );
   }
@@ -1604,28 +1630,28 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
           children: [
             Padding(
               padding: EdgeInsets.only(left: 0.0.w),
-              child: GestureDetector(
-                onTap: () {
-                  // buildModalBottomSheet(
-                  //     context, hexToColor, model, idx, numOfChoices, diff);
-                  callNewModalBottomSheet(
-                    context,
-                    hexToColor,
-                    model,
-                    idx,
-                    numOfChoices,
-                    diff,
-                  );
-                },
-                child: Container(
-                  color: Colors.white.withOpacity(0),
-                  // color: (idx % 2 == 0) ? Colors.amber : Colors.yellow,
-                  height: 70,
-                  // decoration: BoxDecoration(border: Border.all(width: 0.3)),
-                  child: Padding(
-                    padding: model.address.isVoting
-                        ? EdgeInsets.only(left: 40)
-                        : EdgeInsets.only(left: 0),
+              child: Container(
+                color: Colors.white.withOpacity(0),
+                // color: (idx % 2 == 0) ? Colors.amber : Colors.yellow,
+                height: 70,
+                // decoration: BoxDecoration(border: Border.all(width: 0.3)),
+                child: Padding(
+                  padding: model.address.isVoting
+                      ? EdgeInsets.only(left: 40)
+                      : EdgeInsets.only(left: 0),
+                  child: GestureDetector(
+                    onTap: () {
+                      // buildModalBottomSheet(
+                      //     context, hexToColor, model, idx, numOfChoices, diff);
+                      callNewModalBottomSheet(
+                        context,
+                        hexToColor,
+                        model,
+                        idx,
+                        numOfChoices,
+                        diff,
+                      );
+                    },
                     child: Row(
                       // crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -1993,6 +2019,27 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         model.address.isVoting
             ? Container(
                 // color: Colors.red,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    // gradient: LinearGradient(
+                    //   colors: [
+                    //     Color.fromRGBO(255, 143, 158, 1),
+                    //     Color.fromRGBO(255, 188, 143, 1),
+                    //   ],
+                    //   begin: Alignment.centerLeft,
+                    //   end: Alignment.centerRight,
+                    // ),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(25.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(.4),
+                        spreadRadius: 0,
+                        blurRadius: 7,
+                        offset: Offset(3, 3),
+                      )
+                    ]),
                 child: CustomizedCircularCheckBox(
                     key: UniqueKey(),
                     materialTapTargetSize: MaterialTapTargetSize.padded,
@@ -2114,7 +2161,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                   model.selected[idx] = newValue;
                                 }
                               } else {
-                                if ((model.user.item ?? 0 - numSelected) == 0) {
+                                if ((model.user.item == null
+                                        ? 0
+                                        : model.user.item - numSelected) ==
+                                    0) {
                                   // 선택되면 안됨
                                   if (newValue) {
                                     model.selected[idx] = model.selected[idx];
@@ -2203,17 +2253,18 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                             : deviceHeight * .83,
                         // height: 250 + offset * 1.4,
                         child: ChartView(
-                            // controller,
-                            scrollStreamCtrl,
-                            model.selected,
-                            idx,
-                            numSelected,
-                            model.vote,
-                            model.seasonInfo,
-                            model.address,
-                            model.selectUpdate
-                            // _showToast,
-                            ),
+                          // controller,
+                          scrollStreamCtrl,
+                          model.selected,
+                          idx,
+                          numSelected,
+                          model.vote,
+                          model.seasonInfo,
+                          model.address,
+                          model.user,
+                          model.selectUpdate,
+                          _showToast,
+                        ),
                       ),
                     ],
                   );

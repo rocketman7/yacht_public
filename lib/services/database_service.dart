@@ -1044,6 +1044,14 @@ class DatabaseService {
     await _usersCollectionReference.doc(uid).update({'item': newItem});
   }
 
+  Future decreaseUserItem(
+    String uid,
+  ) async {
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'item': FieldValue.increment(-1)});
+  }
+
   Future updateUserName(String uid, String newUserName) async {
     print("NEW USERNAME IS" + newUserName);
     await _usersCollectionReference.doc(uid).update({'userName': newUserName});
@@ -1182,6 +1190,13 @@ class DatabaseService {
       });
       return indexInfo;
     });
+  }
+
+  Future<String> getDefaultText() async {
+    return await _adminCollectionReference
+        .doc('adminPost')
+        .get()
+        .then((value) => value.data()['defaultMainText']);
   }
 
   // database 및 time정보로 Database Address 모델 만들기

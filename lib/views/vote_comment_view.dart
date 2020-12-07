@@ -158,7 +158,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                           height: 16.h,
                         ),
                         Text(
-                          "시즌 & 주제별 커뮤니티",
+                          "자유 게시판 & 주제별 커뮤니티",
                           style: TextStyle(
                             fontFamily: 'AppleSDB',
                             fontSize: 20.sp,

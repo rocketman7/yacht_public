@@ -339,11 +339,17 @@ class _AppTitleViewState extends State<AppTitleView> {
                   Platform.isIOS
                       ? (GestureDetector(
                           onTap: () async {
-                            setState(() {
-                              _isAppleLoading = true;
-                            });
+                            (_isLoading || _isAppleLoading)
+                                ? {}
+                                : _performAppleSignIn();
+
+                            (_isLoading || _isAppleLoading)
+                                ? {}
+                                : setState(() {
+                                    _isAppleLoading = true;
+                                  });
                             // User user = await _authService.appleSignIn();
-                            _performAppleSignIn();
+
                             // if (user != null) {
                             //   Navigator.pushReplacementNamed(context, '/topics');
                             // }
@@ -403,7 +409,9 @@ class _AppTitleViewState extends State<AppTitleView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      _performKakaoSignIn(FirebaseKakaoAuthAPI());
+                      (_isLoading || _isAppleLoading)
+                          ? {}
+                          : _performKakaoSignIn(FirebaseKakaoAuthAPI());
                     },
                     child: Container(
                       height: 52,

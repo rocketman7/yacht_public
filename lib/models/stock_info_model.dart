@@ -26,6 +26,7 @@ class StockInfoModel {
   final List<dynamic> tags;
   dynamic news;
   List<StatsModel> stats;
+  final String credit;
   StockInfoModel({
     this.name,
     this.stocksOrIndex,
@@ -49,6 +50,7 @@ class StockInfoModel {
     this.tags,
     this.news,
     this.stats,
+    this.credit,
   });
 
   StockInfoModel copyWith({
@@ -74,6 +76,7 @@ class StockInfoModel {
     List<dynamic> tags,
     dynamic news,
     List<StatsModel> stats,
+    String credit,
   }) {
     return StockInfoModel(
       name: name ?? this.name,
@@ -98,6 +101,7 @@ class StockInfoModel {
       tags: tags ?? this.tags,
       news: news ?? this.news,
       stats: stats ?? this.stats,
+      credit: credit ?? this.credit,
     );
   }
 
@@ -125,6 +129,7 @@ class StockInfoModel {
       tags: tempModel.tags ?? this.tags,
       news: tempModel.news ?? this.news,
       stats: tempModel.stats ?? this.stats,
+      credit: tempModel.credit ?? this.credit,
     );
   }
 
@@ -152,6 +157,7 @@ class StockInfoModel {
       'tags': tags,
       'news': news,
       'stats': stats,
+      'credit': credit,
     };
   }
 
@@ -183,12 +189,13 @@ class StockInfoModel {
       tags: data['tags'] != null ? List<dynamic>.from(data['tags']) : null,
       news: data['news'] ?? null,
       stats: data['stats'] ?? null,
+      credit: data['credit'] ?? null,
     );
   }
 
   @override
   String toString() {
-    return 'StockInfoModel(name: $name, stocksOrIndex: $stocksOrIndex, issueCode: $issueCode, marketCode: $marketCode, descriptionTitle: $descriptionTitle, description: $description, marketCap: $marketCap, per: $per, revenue: $revenue, operatingIncome: $operatingIncome, netIncome: $netIncome, latestEps: $latestEps, ceo: $ceo, employees: $employees, avrSalary: $avrSalary, avrWorkingYears: $avrWorkingYears, foundedIn: $foundedIn, announcedAt: $announcedAt, uploadedAt: $uploadedAt, tags: $tags, news: $news, stats: $stats)';
+    return 'StockInfoModel(name: $name, stocksOrIndex: $stocksOrIndex, issueCode: $issueCode, marketCode: $marketCode, descriptionTitle: $descriptionTitle, description: $description, marketCap: $marketCap, per: $per, revenue: $revenue, operatingIncome: $operatingIncome, netIncome: $netIncome, latestEps: $latestEps, ceo: $ceo, employees: $employees, avrSalary: $avrSalary, avrWorkingYears: $avrWorkingYears, foundedIn: $foundedIn, announcedAt: $announcedAt, uploadedAt: $uploadedAt, tags: $tags, news: $news, stats: $stats, credit: $credit)';
   }
 
   @override
@@ -218,7 +225,8 @@ class StockInfoModel {
         o.uploadedAt == uploadedAt &&
         listEquals(o.tags, tags) &&
         o.news == news &&
-        listEquals(o.stats, stats);
+        listEquals(o.stats, stats) &&
+        o.credit == credit;
   }
 
   @override
@@ -244,6 +252,7 @@ class StockInfoModel {
         uploadedAt.hashCode ^
         tags.hashCode ^
         news.hashCode ^
-        stats.hashCode;
+        stats.hashCode ^
+        credit.hashCode;
   }
 }

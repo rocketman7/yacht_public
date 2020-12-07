@@ -44,7 +44,7 @@ class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
 
   AnimationController _animationController;
   Animation _expandCircleAnimation;
-
+  // final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   @override
   void initState() {
     super.initState();
@@ -82,9 +82,13 @@ class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
 
     return ViewModelBuilder<GgookViewModel>.reactive(
       viewModelBuilder: () => GgookViewModel(),
-      builder: (context, model, child) => MaterialApp(
-        home: Scaffold(
-          body: ggookWidget(
+      builder: (context, model, child) => WillPopScope(
+        onWillPop: () async {
+          return Future(() => false);
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: GgookWidget(
             _address,
             _user,
             _vote,

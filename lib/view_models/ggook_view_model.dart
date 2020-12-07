@@ -32,8 +32,13 @@ class GgookViewModel extends BaseViewModel {
     print("FUTURE CALLED");
   }
 
-  Future updateUserItem(int newItem) async {
-    await _databaseService.updateUserItem(uid, newItem);
+  // Future updateUserItem(int newItem) async {
+  //   await _databaseService.updateUserItem(uid, newItem);
+  //   await _stateManageService.userModelUpdate();
+  // }
+
+  Future decreaseUserItem() async {
+    await _databaseService.decreaseUserItem(uid);
     await _stateManageService.userModelUpdate();
   }
 

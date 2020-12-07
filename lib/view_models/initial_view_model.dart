@@ -58,8 +58,8 @@ class InitialViewModel extends FutureViewModel {
   @override
   Future futureToRun() async {
     await _pushNotificationService.initialise();
-    _sharedPreferencesService.setSharedPreferencesValue(
-        voteSelectTutorialKey, false);
+    // _sharedPreferencesService.setSharedPreferencesValue(
+    //     voteSelectTutorialKey, false);
     return getSharedPreferences();
   }
 }

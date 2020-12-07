@@ -165,6 +165,10 @@ class VoteSelectViewModel extends FutureViewModel {
     notifyListeners();
   }
 
+  Future getDefaultText() async {
+    return _databaseService.getDefaultText();
+  }
+
   Future getAllModel(uid) async {
     // signOut();
     // var key = await _sharedPreferencesService.getSharedPreferencesValue(
