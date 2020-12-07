@@ -1111,8 +1111,67 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             // 광고 활성화 해야 함
                                             onTap: () {
                                               print(rewardedAdsLoaded);
-
-                                              showAdsDialog(context, model);
+                                              model.loadRewardedAds();
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  if (Platform.isIOS) {
+                                                    return CupertinoAlertDialog(
+                                                      content: Text(
+                                                          '광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.\n\n광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
+                                                      actions: <Widget>[
+                                                        CupertinoDialogAction(
+                                                          child: Text('아뇨'),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                        ),
+                                                        CupertinoDialogAction(
+                                                          child: Text(
+                                                            '좋아요',
+                                                          ),
+                                                          onPressed:
+                                                              rewardedAdsLoaded
+                                                                  ? () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      model
+                                                                          .showRewardedAds();
+                                                                    }
+                                                                  : null,
+                                                        )
+                                                      ],
+                                                    );
+                                                  } else {
+                                                    return AlertDialog(
+                                                      content: Text(
+                                                          '광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
+                                                      actions: <Widget>[
+                                                        FlatButton(
+                                                          child: Text('아뇨'),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                        ),
+                                                        FlatButton(
+                                                          child: Text('좋아요'),
+                                                          onPressed:
+                                                              rewardedAdsLoaded
+                                                                  ? () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                      model
+                                                                          .showRewardedAds();
+                                                                    }
+                                                                  : null,
+                                                        )
+                                                      ],
+                                                    );
+                                                  }
+                                                },
+                                              );
                                             },
                                             // onTap: null,
                                             child: Row(

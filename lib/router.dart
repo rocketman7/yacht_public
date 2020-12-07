@@ -8,6 +8,7 @@ import 'managers/dialog_manager.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/mypage_documents/avatarSelect_view.dart';
+import 'views/mypage_documents/mypage_friendsCodeInsert_view.dart';
 import 'views/nicknameSet_view.dart';
 import 'views/oneOnOne_view.dart';
 import 'views/register_view.dart';
@@ -80,7 +81,7 @@ class Routers {
         return MaterialPageRoute(
             builder: (context) =>
                 // DialogManager(child: NicknameSetView(routeSettings.arguments)));
-                DialogManager(child: NicknameSetView()));
+                DialogManager(child: NicknameSetView(routeSettings.arguments)));
       case 'mypage_termsofuse':
         return MaterialPageRoute(builder: (context) => MypageTermofuse());
       case 'mypage_privacypolicy':
@@ -103,6 +104,9 @@ class Routers {
             builder: (context) => MypageAccountVerificationView());
       case 'mypage_friendscode':
         return MaterialPageRoute(builder: (context) => MypageFriendsCodeView());
+      case 'mypage_friendscodeinsert':
+        return MaterialPageRoute(
+            builder: (context) => MypageFriendsCodeInsertView());
       case 'mypage_editprofile':
         return MaterialPageRoute(builder: (context) => MypageEditProfileView());
       case 'mypage_tempggook':

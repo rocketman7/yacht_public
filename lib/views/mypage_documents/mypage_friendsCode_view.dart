@@ -1,11 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
+import 'package:kakao_flutter_sdk/link.dart';
 
 import '../../view_models/mypage_friendsCode_view_model.dart';
 
 class MypageFriendsCodeView extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  // void shareMyCode() async {
+  //   try {
+  //     var template = _getTemplate();
+  //     var uri = await LinkClient.instance.defaultWithTalk(template);
+  //     await LinkClient.instance.launchKakaoTalk(uri);
+  //   } catch (error) {
+  //     print(error.toString());
+  //   }
+  // }
+  void shareMyCode(String friendsCode) async {
+    try {
+      var uri = await LinkClient.instance
+          .customWithTalk(42121, templateArgs: {'key': friendsCode});
+      await LinkClient.instance.launchKakaoTalk(uri);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  // DefaultTemplate _getTemplate() {
+  //   String title = "꾸욱 - 주식예측 퀴즈앱";
+  //   Uri imageUrl = Uri.parse(
+  //       "http://mud-kage.kakao.co.kr/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png");
+  //   Link link = Link(mobileWebUrl: Uri.parse("https://team-yacht.com"));
+  //   Content content = Content(
+  //     title,
+  //     imageUrl,
+  //     link,
+  //   );
+  //   FeedTemplate template = FeedTemplate(content,
+  //   // buttons: [
+  //   //   Button(
+  //   //       "구글플레이에서 다운 받기",
+  //   //       Link(
+  //   //           webUrl: Uri.parse(
+  //   //               "https://play.google.com/store/apps/details?id=com.team_yacht.ggook"))),
+  //   //   Button(
+  //   //       "앱스토어에서 다운 받기",
+  //   //       Link(
+  //   //           webUrl: Uri.parse(
+  //   //               "https://apps.apple.com/kr/app/%EA%BE%B8%EC%9A%B1-%EC%A3%BC%EC%8B%9D%EC%98%88%EC%B8%A1-%ED%80%B4%EC%A6%88%EC%95%B1/id1536611320"))),
+  //   // ]
+  //   );
+  //   return template;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -98,26 +145,6 @@ class MypageFriendsCodeView extends StatelessWidget {
                               ),
                             ),
                             Spacer(),
-                            Row(
-                              children: [
-                                Text(
-                                  '추천인 코드 입력하기',
-                                  style: TextStyle(
-                                      fontSize: 16, fontFamily: 'AppleSDM'),
-                                ),
-                                Spacer(),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 16,
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 16,
-                            ),
                             Container(
                               height: 1,
                               color: Color(0xFFE3E3E3),
@@ -125,22 +152,38 @@ class MypageFriendsCodeView extends StatelessWidget {
                             SizedBox(
                               height: 16,
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  '카카오톡으로 공유하기',
-                                  style: TextStyle(
-                                      fontSize: 16, fontFamily: 'AppleSDM'),
-                                ),
-                                Spacer(),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Icon(
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () async {
+                                bool installed = await isKakaoTalkInstalled();
+                                // print(installed);
+                                if (installed)
+                                  shareMyCode(model.user.friendsCode);
+                                else {
+                                  scaffoldKey.currentState
+                                      .showSnackBar(SnackBar(
+                                          duration: Duration(seconds: 1),
+                                          content: Text(
+                                            "카카오톡이 설치되어있지 않습니다.",
+                                            style: TextStyle(
+                                                fontFamily: 'AppleSDM'),
+                                          )));
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '카카오톡으로 공유하기',
+                                    style: TextStyle(
+                                        fontSize: 16, fontFamily: 'AppleSDM'),
+                                  ),
+                                  Spacer(),
+                                  Icon(
                                     Icons.arrow_forward_ios,
                                     size: 16,
-                                  ),
-                                )
-                              ],
+                                  )
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 16,

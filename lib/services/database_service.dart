@@ -996,6 +996,24 @@ class DatabaseService {
     }
   }
 
+  // 유저가 입력한 프렌즈코드를 가진 유저를 찾아준다.
+  Future searchByFriendsCode(String friendsCode) async {
+    try {
+      var data;
+      await _usersCollectionReference
+          .where('friendsCode', isEqualTo: friendsCode)
+          .get()
+          .then((value) => value.docs.forEach((element) {
+                data = element.id;
+              }));
+
+      return data;
+    } catch (e) {
+      print('error at searchByFriendsCode');
+      return null;
+    }
+  }
+
   // Phone Number Duplicate Check
   Future duplicatePhoneNumberCheck(String phoneNumber) async {
     var duplicatePhoneNumber = await _usersCollectionReference
@@ -1063,6 +1081,14 @@ class DatabaseService {
     await _usersCollectionReference
         .doc(uid)
         .update({'friendsCode': friendsCode});
+  }
+
+  Future updateInsertedFriendsCode(
+      String uid, String insertedFriendsCode) async {
+    print("insertedFriendsCode IS" + insertedFriendsCode);
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'insertedFriendsCode': insertedFriendsCode});
   }
 
   Future updateSurvey(String uid, Map<String, List> userSurvey) async {
