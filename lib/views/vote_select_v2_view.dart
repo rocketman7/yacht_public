@@ -1110,7 +1110,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                   if (Platform.isIOS) {
                                                     return CupertinoAlertDialog(
                                                       content: Text(
-                                                          '광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
+                                                          '광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.\n\n광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
                                                       actions: <Widget>[
                                                         CupertinoDialogAction(
                                                           child: Text('아뇨'),
@@ -1120,7 +1120,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                           },
                                                         ),
                                                         CupertinoDialogAction(
-                                                          child: Text('좋아요'),
+                                                          child: Text(
+                                                            '좋아요',
+                                                          ),
                                                           onPressed:
                                                               rewardedAdsLoaded
                                                                   ? () {

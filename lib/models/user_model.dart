@@ -4,6 +4,7 @@ class UserModel {
   final String email;
   final String phoneNumber;
   final String friendsCode;
+  final String insertedFriendsCode;
   int item;
   final String avatarImage;
 
@@ -21,6 +22,7 @@ class UserModel {
     this.email,
     this.phoneNumber,
     this.friendsCode,
+    this.insertedFriendsCode,
     this.item,
     this.avatarImage,
     this.accNumber,
@@ -39,6 +41,7 @@ class UserModel {
         email = data['email'],
         phoneNumber = data['phoneNumber'],
         friendsCode = data['friendsCode'],
+        insertedFriendsCode = data['insertedFriendsCode'],
         item = data['item'],
         avatarImage = data['avatarImage'],
         accNumber = data['account']['accNumber'],
@@ -54,6 +57,7 @@ class UserModel {
       'email': this.email,
       'phoneNumber': this.phoneNumber,
       'friendsCode': this.friendsCode,
+      'insertedFriendsCode': this.insertedFriendsCode,
       'item': this.item,
       'avatarImage': this.avatarImage,
       'account': {

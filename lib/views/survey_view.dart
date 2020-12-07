@@ -2,25 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-import '../views/constants/size.dart';
 import '../view_models/survey_view_model.dart';
 
 class SurveyView extends StatelessWidget {
-  // int test = 0;
-
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
     return ViewModelBuilder<SurveyViewModel>.reactive(
       viewModelBuilder: () => SurveyViewModel(),
       builder: (context, model, child) {
         return Scaffold(
-          // appBar: AppBar(
-          //   title: Text(
-          //     '설문설문',
-          //     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          //   ),
-          //   elevation: 1,
-          // ),
           backgroundColor: Colors.white,
           body: model.hasError
               ? Container(
@@ -28,27 +19,33 @@ class SurveyView extends StatelessWidget {
                 )
               : model.isBusy
                   ? Container()
-                  : SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 16, right: 16),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 16,
-                            ),
-                            !(model.didBubbleSurvey)
-                                ? Flexible(
-                                    flex: 1,
-                                    child: bubbleSurvey(model),
-                                  )
-                                : Flexible(
-                                    flex: 1,
-                                    child: model.surveyCurrentStep <=
-                                            model.surveyTotalStep
-                                        ? makeSurvey(model)
-                                        : Container(),
-                                  )
-                          ],
+                  : WillPopScope(
+                      onWillPop: () async {
+                        _navigatorKey.currentState.maybePop();
+                        return false;
+                      },
+                      child: SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 16,
+                              ),
+                              !(model.didBubbleSurvey)
+                                  ? Flexible(
+                                      flex: 1,
+                                      child: bubbleSurvey(model),
+                                    )
+                                  : Flexible(
+                                      flex: 1,
+                                      child: model.surveyCurrentStep <=
+                                              model.surveyTotalStep
+                                          ? makeSurvey(model)
+                                          : Container(),
+                                    )
+                            ],
+                          ),
                         ),
                       ),
                     ),

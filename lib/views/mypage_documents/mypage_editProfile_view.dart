@@ -82,7 +82,7 @@ class MypageEditProfileView extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {
                                   _navigationService.navigateWithArgTo(
-                                      'nickname_set', false);
+                                      'nickname_set', model.user.userName);
                                 },
                                 child: Text(
                                   model.user.userName,
