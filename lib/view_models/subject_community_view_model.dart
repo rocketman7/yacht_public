@@ -1,6 +1,7 @@
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/user_post_model.dart';
+import 'package:yachtOne/services/amplitude_service.dart';
 import '../models/vote_comment_model.dart';
 import '../models/database_address_model.dart';
 import '../models/user_model.dart';
@@ -18,6 +19,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
   final AuthService _authService = locator<AuthService>();
   final DialogService _dialogService = locator<DialogService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
+  final AmplitudeService _amplitudeService = AmplitudeService();
   String uid;
   final int idx;
   final String date;
@@ -38,6 +40,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
 
   Future getAllModel(uid) async {
     // setBusy(true);
+    await _amplitudeService.logSubjectCommunity(uid);
     address = await _databaseService.getAddress(uid);
     newAddress = DatabaseAddressModel(
       uid: uid,

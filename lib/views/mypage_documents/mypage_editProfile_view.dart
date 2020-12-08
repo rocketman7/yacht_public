@@ -58,11 +58,12 @@ class MypageEditProfileView extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(80.0)),
-                                    color: Color(0xFFEFEFEF),
+                                    color: Color(0xFF1EC8CF),
                                   ),
                                   child: Text(
                                     '사진 변경',
                                     style: TextStyle(
+                                        color: Colors.white,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                         letterSpacing: -1),
@@ -73,34 +74,34 @@ class MypageEditProfileView extends StatelessWidget {
                             SizedBox(
                               height: 48,
                             ),
-                            Row(children: [
-                              Text(
-                                '활동 닉네임',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  _navigationService.navigateWithArgTo(
-                                      'nickname_set', false);
-                                },
-                                child: Text(
+                            GestureDetector(
+                              onTap: () {
+                                _navigationService.navigateWithArgTo(
+                                    'nickname_set', model.user.userName);
+                              },
+                              child: Row(children: [
+                                Text(
+                                  '활동 닉네임',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Spacer(),
+                                Text(
                                   model.user.userName,
                                   style: TextStyle(fontSize: 16),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                  color: Colors.black,
+                                SizedBox(
+                                  width: 16,
                                 ),
-                              ),
-                            ]),
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ]),
+                            ),
                             SizedBox(
                               height: 16,
                             ),
@@ -108,6 +109,52 @@ class MypageEditProfileView extends StatelessWidget {
                               height: 1,
                               color: Color(0xFFE3E3E3),
                             ),
+
+                            !model.isEmailAndPhoneAuth
+                                ? Container()
+                                : Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _navigationService.navigateTo(
+                                            'password_change',
+                                          );
+                                        },
+                                        child: Row(children: [
+                                          Text(
+                                            '비밀번호 변경',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          Spacer(),
+                                          Text(
+                                            "                   ",
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          SizedBox(
+                                            width: 16,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 16,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ]),
+                                      ),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      Container(
+                                        height: 1,
+                                        color: Color(0xFFE3E3E3),
+                                      ),
+                                    ],
+                                  ),
 
                             // SizedBox(
                             //   height: 16,
@@ -234,9 +281,10 @@ class MypageEditProfileView extends StatelessWidget {
 
 Future buildModalBottomSheet(
     BuildContext context, MypageEditProfileViewModel model) {
+  final ScrollController scrollController = ScrollController();
+
   return showModalBottomSheet(
     backgroundColor: Color(0xFF1EC8CF),
-    // backgroundColor: Colors.white,
     context: context,
     isScrollControlled: true,
     builder: (context) => StatefulBuilder(builder: (context, setState) {
@@ -251,9 +299,24 @@ Future buildModalBottomSheet(
             height: deviceHeight / 2,
             child: Column(
               children: [
+                Text(
+                  '메리 크리스마스!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
                 Expanded(
-                  child:
-                      ListView(children: makeAvatarItemList(model, setState)),
+                  child: Scrollbar(
+                      // isAlwaysShown: true,
+                      // _scrollController.hasClients ? true : false,
+                      controller: scrollController,
+                      child: ListView(
+                          children: makeAvatarItemList(model, setState))),
+                ),
+                SizedBox(
+                  height: 16,
                 ),
                 GestureDetector(
                   onTap: () {
@@ -265,7 +328,7 @@ Future buildModalBottomSheet(
                     child: Center(
                       child: Text(
                         '선택하기',
-                        style: TextStyle(fontSize: 16.0, color: Colors.white),
+                        style: TextStyle(fontSize: 20.0, color: Colors.white),
                       ),
                     ),
                   ),

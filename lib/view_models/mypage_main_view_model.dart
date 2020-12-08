@@ -1,4 +1,5 @@
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/services/amplitude_service.dart';
 import 'package:yachtOne/services/api/firebase_kakao_auth_api.dart';
 import 'package:yachtOne/views/startup_view.dart';
 
@@ -23,6 +24,7 @@ class MypageMainViewModel extends FutureViewModel {
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
   final StateManageService _stateManageService = locator<StateManageService>();
+  final AmplitudeService _amplitudeService = AmplitudeService();
 
   // 변수 Setting
   String uid;
@@ -36,6 +38,8 @@ class MypageMainViewModel extends FutureViewModel {
   }
 
   Future getModels() async {
+    await _amplitudeService.logMyPageView(uid);
+
     if (_stateManageService.appStart) {
       await _stateManageService.initStateManage(initUid: uid);
     } else {

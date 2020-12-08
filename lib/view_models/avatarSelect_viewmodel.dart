@@ -29,6 +29,15 @@ class MypageAvatarSelectViewModel extends FutureViewModel {
     avatarImageAddress.add('avatarImage/avatar007.png');
     avatarImageAddress.add('avatarImage/avatar008.png');
     avatarImageAddress.add('avatarImage/avatar009.png');
+    avatarImageAddress.add('avatarImage/avatar010.png');
+    avatarImageAddress.add('avatarImage/avatar011.png');
+    avatarImageAddress.add('avatarImage/avatar012.png');
+    avatarImageAddress.add('avatarImage/avatar013.png');
+    avatarImageAddress.add('avatarImage/avatar014.png');
+    avatarImageAddress.add('avatarImage/avatar015.png');
+    avatarImageAddress.add('avatarImage/avatar016.png');
+    avatarImageAddress.add('avatarImage/avatar017.png');
+    avatarImageAddress.add('avatarImage/avatar018.png');
 
     avatarNum = avatarImageAddress.length;
   }

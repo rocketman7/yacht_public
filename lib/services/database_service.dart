@@ -160,6 +160,7 @@ class DatabaseService {
     UserVoteModel userVote,
   ) async {
     try {
+      userVote.voteDate = address.date;
       await address
           .userVoteSeasonCollection()
           .doc(address.date)
@@ -174,6 +175,32 @@ class DatabaseService {
     } catch (e) {
       return e.message;
     }
+  }
+
+  Future initialiseOneVote(
+    DatabaseAddressModel address,
+    UserVoteModel userVote,
+    int resetTarget,
+  ) async {
+    List<int> voteSelected = userVote.voteSelected;
+    bool isVoted = true;
+    int check = 0;
+    print(voteSelected);
+    voteSelected.replaceRange(resetTarget, resetTarget + 1, [0]);
+    voteSelected.forEach((element) {
+      check += element;
+    });
+    if (check == 0) {
+      isVoted = false;
+    }
+    print(voteSelected);
+    print(isVoted);
+    try {
+      await address.userVoteSeasonCollection().doc(address.date).update({
+        "voteSelected": voteSelected,
+        "isVoted": isVoted,
+      });
+    } catch (e) {}
   }
 
   // 계좌인증이 완료된 유저의 계좌정보 넣기, 선택적으로 넣도록 수정?
@@ -397,15 +424,23 @@ class DatabaseService {
       String startDateStr;
       DateTime startDateTime;
       DateTime temp;
+
+      // 시즌 info에서 시즌 시작일 불러오기
       startDateStr = await address
           .votesSeasonCollection()
           .doc('seasonInfo')
           .get()
           .then((value) => value.data()['startDate']);
 
+      //시즌 시작일 string으로
       startDateTime = strToDate(startDateStr);
 
       String tempDate = startDateStr;
+
+      // print("TEMP DATE" + tempDate.toString());
+      // print(address.date);
+      // print(strToDate(tempDate)
+      //     .isBefore(strToDate(address.date).add(Duration(days: 1))));
       while (strToDate(tempDate)
           .isBefore(strToDate(address.date).add(Duration(days: 1)))) {
         tempSubVoteList = [];
@@ -969,6 +1004,24 @@ class DatabaseService {
     }
   }
 
+  // 유저가 입력한 프렌즈코드를 가진 유저를 찾아준다.
+  Future searchByFriendsCode(String friendsCode) async {
+    try {
+      var data;
+      await _usersCollectionReference
+          .where('friendsCode', isEqualTo: friendsCode)
+          .get()
+          .then((value) => value.docs.forEach((element) {
+                data = element.id;
+              }));
+
+      return data;
+    } catch (e) {
+      print('error at searchByFriendsCode');
+      return null;
+    }
+  }
+
   // Phone Number Duplicate Check
   Future duplicatePhoneNumberCheck(String phoneNumber) async {
     var duplicatePhoneNumber = await _usersCollectionReference
@@ -1017,6 +1070,14 @@ class DatabaseService {
     await _usersCollectionReference.doc(uid).update({'item': newItem});
   }
 
+  Future decreaseUserItem(
+    String uid,
+  ) async {
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'item': FieldValue.increment(-1)});
+  }
+
   Future updateUserName(String uid, String newUserName) async {
     print("NEW USERNAME IS" + newUserName);
     await _usersCollectionReference.doc(uid).update({'userName': newUserName});
@@ -1028,6 +1089,34 @@ class DatabaseService {
     await _usersCollectionReference
         .doc(uid)
         .update({'friendsCode': friendsCode});
+  }
+
+  Future updateInsertedFriendsCode(
+      String uid, String insertedFriendsCode) async {
+    print("insertedFriendsCode IS" + insertedFriendsCode);
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'insertedFriendsCode': insertedFriendsCode});
+  }
+
+  Future updateSurvey(String uid, Map<String, List> userSurvey) async {
+    // print(userSurvey);
+    await _usersCollectionReference
+        .doc(uid)
+        .collection('userSurvey')
+        .doc('userSurvey')
+        .update({'userSurvey': userSurvey});
+    // .set({'userSurvey': userSurvey});
+  }
+
+  Future updateBubbleSurvey(
+      String uid, List<Map<String, String>> userBubbleSurvey) async {
+    // print(userSurvey);
+    await _usersCollectionReference
+        .doc(uid)
+        .collection('userSurvey')
+        .doc('userSurvey')
+        .set({'userBubbleSurvey': userBubbleSurvey});
   }
 
   // 주식 종목정보 가져오기
@@ -1137,6 +1226,13 @@ class DatabaseService {
     });
   }
 
+  Future<String> getDefaultText() async {
+    return await _adminCollectionReference
+        .doc('adminPost')
+        .get()
+        .then((value) => value.data()['defaultMainText']);
+  }
+
   // database 및 time정보로 Database Address 모델 만들기
   Future<DatabaseAddressModel> getAddress(String uid) async {
     print("AddressGetStart" + DateTime.now().toString());
@@ -1188,7 +1284,7 @@ class DatabaseService {
       date: baseDate,
       category: category,
       season: season,
-      isVoting: true, //false면 장 중
+      isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());

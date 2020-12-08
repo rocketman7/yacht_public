@@ -71,7 +71,7 @@ class ChartViewModel extends FutureViewModel {
     stockOrIndex,
     issueCode,
   ) async {
-    await _amplitudeService.viewStockInfo(uid);
+    await _amplitudeService.logStockInfoView(uid);
     print("beforeStockinfo" + DateTime.now().toString());
 
     stockOrIndex == "stocks"

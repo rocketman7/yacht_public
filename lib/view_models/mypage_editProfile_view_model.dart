@@ -12,7 +12,6 @@ import '../models/sharedPreferences_const.dart';
 
 // 아바타이미지들 List 나중에 다른곳으로 뺴줘야?
 List<String> globalAvatarImages = [
-  'avatar',
   'avatar001',
   'avatar002',
   'avatar003',
@@ -22,6 +21,15 @@ List<String> globalAvatarImages = [
   'avatar007',
   'avatar008',
   'avatar009',
+  'avatar010',
+  'avatar011',
+  'avatar012',
+  'avatar013',
+  'avatar014',
+  'avatar015',
+  'avatar016',
+  'avatar017',
+  'avatar018',
 ];
 
 class MypageEditProfileViewModel extends FutureViewModel {
@@ -39,6 +47,7 @@ class MypageEditProfileViewModel extends FutureViewModel {
   String sharedPrefForAvatarImage; //DB에서 관리되지만 즉각적반응을 위해 sharedPref도
   String checkedAvatarImage;
   List<String> avatarImages = [];
+  bool isEmailAndPhoneAuth;
 
   // Future<void> setAvatarImage(String avatarImage) async {
   void setAvatarImage(String avatarImage) {
@@ -77,7 +86,11 @@ class MypageEditProfileViewModel extends FutureViewModel {
       sharedPrefForAvatarImage = user.avatarImage ?? avatarImages[0];
     }
 
+    isEmailAndPhoneAuth =
+        _authService.auth.currentUser.providerData.length == 2;
+
     checkedAvatarImage = sharedPrefForAvatarImage;
+    notifyListeners();
   }
 
   @override

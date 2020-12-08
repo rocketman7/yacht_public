@@ -374,6 +374,8 @@ PODS:
     - FirebaseCore (~> 6.10)
     - GTMSessionFetcher/Core (~> 1.1)
   - Flutter (1.0.0)
+  - flutter_chat_bubble (0.0.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -475,6 +477,7 @@ DEPENDENCIES:
   - firebase_remote_config (from `.symlinks/plugins/firebase_remote_config/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
+  - flutter_chat_bubble (from `.symlinks/plugins/flutter_chat_bubble/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - kakao_flutter_sdk (from `.symlinks/plugins/kakao_flutter_sdk/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -545,6 +548,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
+  flutter_chat_bubble:
+    :path: ".symlinks/plugins/flutter_chat_bubble/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   kakao_flutter_sdk:
@@ -593,6 +598,7 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfig: 35a729305f254fb15a2e541d4b36f3a379da7fdc
   FirebaseStorage: 15e0f15ef3c7fec3d1899d68623e47d4447066b4
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_chat_bubble: cad6265ec611ba0f7bede70eabc26fdfce9bf2b0
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   Google-Mobile-Ads-SDK: 8b58584890539de4527c47ef01e4da941a10bc8a

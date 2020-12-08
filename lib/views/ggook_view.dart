@@ -31,10 +31,9 @@ class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
   DatabaseAddressModel _address;
   UserModel _user;
   VoteModel _vote;
+  UserVoteModel _userVote;
   List<int> _listSelected;
   int _idx;
-
-  UserVoteModel _userVote;
 
   // LongPressGestureRecognizer _longPressGestureRecognizer =
   //     LongPressGestureRecognizer(
@@ -45,7 +44,7 @@ class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
 
   AnimationController _animationController;
   Animation _expandCircleAnimation;
-
+  // final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   @override
   void initState() {
     super.initState();
@@ -71,33 +70,25 @@ class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List<int> _selectedIdx = List();
     ggookArgs =
         widget.ggookArgs; // address, user, vote, listSelected, idx(= 0),
     print(ggookArgs);
     _address = ggookArgs[0];
     _user = ggookArgs[1];
     _vote = ggookArgs[2];
-    _listSelected = ggookArgs[3];
-
-    print(_selectedIdx);
-    print(_selectedIdx.length);
-
-    _idx = ggookArgs[4];
-    _userVote = (ggookArgs.length > 5)
-        ? ggookArgs[5]
-        : UserVoteModel(
-            uid: _user.uid,
-            voteDate: _address.date,
-            voteSelected: List<int>.generate(_vote.voteCount, (index) => 0),
-            isVoted: false,
-          );
+    _userVote = ggookArgs[3];
+    _listSelected = ggookArgs[4];
+    _idx = ggookArgs[5];
 
     return ViewModelBuilder<GgookViewModel>.reactive(
       viewModelBuilder: () => GgookViewModel(),
-      builder: (context, model, child) => MaterialApp(
-        home: Scaffold(
-          body: ggookWidget(
+      builder: (context, model, child) => WillPopScope(
+        onWillPop: () async {
+          return Future(() => false);
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: GgookWidget(
             _address,
             _user,
             _vote,

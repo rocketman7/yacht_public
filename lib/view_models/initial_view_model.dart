@@ -5,6 +5,7 @@ import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/services/push_notification_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
+import '../models/sharedPreferences_const.dart';
 
 import '../locator.dart';
 
@@ -17,6 +18,7 @@ class InitialViewModel extends FutureViewModel {
       locator<PushNotificationService>();
 
   bool isTwoFactorAuthed = true;
+  bool didSurvey;
   var authChange;
 
   Stream<User> getAuthChange() {
@@ -44,6 +46,11 @@ class InitialViewModel extends FutureViewModel {
     print(isTwoFactorAuthed);
     isTwoFactorAuthed = await _sharedPreferencesService
         .getSharedPreferencesValue('twoFactor', bool);
+
+    didSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
+        didSurveyKey, bool);
+    // _sharedPreferencesService.setSharedPreferencesValue(didSurveyKey, false);
+    // print('didSurvey(shared preference only) is.. ' + didSurvey.toString());
     print(isTwoFactorAuthed);
     notifyListeners();
   }
@@ -51,6 +58,10 @@ class InitialViewModel extends FutureViewModel {
   @override
   Future futureToRun() async {
     await _pushNotificationService.initialise();
+    // _sharedPreferencesService.setSharedPreferencesValue(
+    //     voteSelectTutorialKey, false);
+    // await _sharedPreferencesService.setSharedPreferencesValue(
+    //     didSurveyKey, false);
     return getSharedPreferences();
   }
 }

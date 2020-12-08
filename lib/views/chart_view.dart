@@ -13,6 +13,7 @@ import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
+import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
 import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/view_models/chart_view_model.dart';
@@ -35,8 +36,9 @@ class ChartView extends StatefulWidget {
   final VoteModel vote;
   final SeasonModel seasonInfo;
   final DatabaseAddressModel address;
+  final UserModel user;
   final Function selectUpdate;
-  // final Function showToast;
+  final Function showToast;
 
   ChartView(
     // this.controller,
@@ -47,8 +49,9 @@ class ChartView extends StatefulWidget {
     this.vote,
     this.seasonInfo,
     this.address,
+    this.user,
     this.selectUpdate,
-    // this.showToast,
+    this.showToast,
   );
   @override
   _ChartViewState createState() => _ChartViewState();
@@ -72,6 +75,7 @@ class _ChartViewState extends State<ChartView> {
   StreamController scrollStreamCtrl = StreamController<double>();
   List<bool> selected;
   SeasonModel seasonInfo;
+  UserModel user;
   int idx;
   int numSelected;
   String issueCode;
@@ -199,11 +203,12 @@ class _ChartViewState extends State<ChartView> {
     numOfChoices = widget.vote.subVotes[idx].issueCode.length;
     seasonInfo = widget.seasonInfo;
     address = widget.address;
+    user = widget.user;
     stockOrIndex = widget.vote.subVotes[idx].indexOrStocks[indexChosen];
 
     print("ISSUECODE " + issueCode);
 
-    // _showToast = widget.showToast;
+    _showToast = widget.showToast;
 
     TextStyle newsTitleStyle = TextStyle(
       fontFamily: 'AppleSDM',
@@ -323,16 +328,15 @@ class _ChartViewState extends State<ChartView> {
                                                     0) {
                                                   _showToast(
                                                       "하루 최대 ${seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
-                                                }
-                                                // else if (model.user.item -
-                                                //         numSelected ==
-                                                //     0) {
-                                                //   // 선택되면 안됨
+                                                } else if ((user.item ==
+                                                        null) ||
+                                                    (user.item - numSelected <=
+                                                        0)) {
+                                                  // 선택되면 안됨
 
-                                                //   _showToast(
-                                                //       "보유 중인 아이템이 부족합니다.");
-                                                // }
-                                                else {
+                                                  _showToast(
+                                                      "보유 중인 아이템이 부족합니다.");
+                                                } else {
                                                   // selected[idx] = true;
                                                   // print(VoteSelectViewModel()
                                                   //     .selected
@@ -1043,7 +1047,7 @@ class _ChartViewState extends State<ChartView> {
     return Column(
       children: [
         Row(
-          crossAxisAlignment: CrossAxisAlignment.baseline,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
@@ -1264,7 +1268,7 @@ class _ChartViewState extends State<ChartView> {
     return Column(
       children: <Widget>[
         Row(
-          crossAxisAlignment: CrossAxisAlignment.baseline,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
@@ -1476,15 +1480,14 @@ class _ChartViewState extends State<ChartView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "직원수",
+                          "설립연도",
                           style: TextStyle(
                             color: Color(0xFF8A8A8A),
                             fontSize: 14,
                           ),
                         ),
                         Text(
-                          formatPrice.format(model.stockInfoModel.employees) +
-                              "명",
+                          model.stockInfoModel.foundedIn.toString(),
                           style: TextStyle(
                             fontSize: 16,
                           ),
@@ -1575,14 +1578,15 @@ class _ChartViewState extends State<ChartView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "설립연도",
+                          "직원수",
                           style: TextStyle(
                             color: Color(0xFF8A8A8A),
                             fontSize: 14,
                           ),
                         ),
                         Text(
-                          model.stockInfoModel.foundedIn.toString(),
+                          formatPrice.format(model.stockInfoModel.employees) +
+                              "명",
                           style: TextStyle(
                             fontSize: 16,
                           ),
@@ -1607,7 +1611,7 @@ class _ChartViewState extends State<ChartView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "",
+                          "신용등급",
                           style: TextStyle(
                             color: Color(0xFF8A8A8A),
                             fontSize: 14,
@@ -1616,7 +1620,7 @@ class _ChartViewState extends State<ChartView> {
                         Text(
                           // model.stockInfoModel.avrWorkingYears
                           //     .toString()
-                          "",
+                          model.stockInfoModel.credit,
                           style: TextStyle(
                             fontSize: 16,
                           ),

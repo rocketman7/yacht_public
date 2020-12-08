@@ -44,12 +44,15 @@ class PushNotificationService {
         print("Settings registered: $settings");
       });
 
+      // print(_fcm.onIosSettingsRegistered);
+
       // 현재 사용자의 푸쉬알림 상태에 따라 구독/구독취소를 해준다.
       // 안전하게 true면 구독취소까지해준다.
       for (int i = 0; i < numOfPushAlarm; i++)
         pushAlarm[i] = await _sharedPreferencesService
             .getSharedPreferencesValue(pushAlarmKey[i], bool);
 
+      print('=============================================================');
       for (int i = 0; i < numOfPushAlarm; i++) {
         if (pushAlarm[i]) {
           print('unsubscribe(${pushAlarmKey[i]}): ${topics[i]}');
@@ -59,6 +62,8 @@ class PushNotificationService {
           _fcm.subscribeToTopic(topics[i]);
         }
       }
+      print(pushAlarm);
+      print('=============================================================');
 
       // _fcm.requestNotificationPermissions(IosNotificationSettings());
 
@@ -68,17 +73,17 @@ class PushNotificationService {
       onMessage: (Map<String, dynamic> message) async {
         // 앱이 실행중일 때
         print("onMessage: $message");
-        _serializeAndNavigate(message);
+        // _serializeAndNavigate(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
         // 앱이 꺼져있을 때
         print("onLaunch: $message");
-        _serializeAndNavigate(message);
+        // _serializeAndNavigate(message);
       },
       onResume: (Map<String, dynamic> message) async {
         // 앱이 실행 중이지만 백그라운드에 있을 때
         print("onResume: $message");
-        _serializeAndNavigate(message);
+        // _serializeAndNavigate(message);
       },
     );
 

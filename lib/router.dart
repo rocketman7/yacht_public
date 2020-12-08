@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yachtOne/views/initial_view.dart';
+import 'package:yachtOne/views/password_change_view.dart';
 import 'package:yachtOne/views/phone_auth_view.dart';
 import 'package:yachtOne/views/season_community_view.dart';
 import 'package:yachtOne/views/subject_community_view.dart';
@@ -8,6 +9,7 @@ import 'managers/dialog_manager.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/mypage_documents/avatarSelect_view.dart';
+import 'views/mypage_documents/mypage_friendsCodeInsert_view.dart';
 import 'views/nicknameSet_view.dart';
 import 'views/oneOnOne_view.dart';
 import 'views/register_view.dart';
@@ -23,6 +25,7 @@ import 'views/mypage_documents/mypage_pushAlarmSetting_view.dart';
 import 'views/mypage_documents/mypage_accountVerification_view.dart';
 import 'views/mypage_documents/mypage_friendsCode_view.dart';
 import 'views/mypage_documents/mypage_editProfile_view.dart';
+import 'views/survey_view.dart';
 import 'views/vote_comment_view.dart';
 import 'views/vote_select_v2_view.dart';
 import 'views/vote_select_view.dart';
@@ -78,7 +81,10 @@ class Routers {
       case 'nickname_set':
         return MaterialPageRoute(
             builder: (context) =>
+                // DialogManager(child: NicknameSetView(routeSettings.arguments)));
                 DialogManager(child: NicknameSetView(routeSettings.arguments)));
+      case 'password_change':
+        return MaterialPageRoute(builder: (context) => PasswordChangeView());
       case 'mypage_termsofuse':
         return MaterialPageRoute(builder: (context) => MypageTermofuse());
       case 'mypage_privacypolicy':
@@ -101,6 +107,9 @@ class Routers {
             builder: (context) => MypageAccountVerificationView());
       case 'mypage_friendscode':
         return MaterialPageRoute(builder: (context) => MypageFriendsCodeView());
+      case 'mypage_friendscodeinsert':
+        return MaterialPageRoute(
+            builder: (context) => MypageFriendsCodeInsertView());
       case 'mypage_editprofile':
         return MaterialPageRoute(builder: (context) => MypageEditProfileView());
       case 'mypage_tempggook':
@@ -115,6 +124,8 @@ class Routers {
         return MaterialPageRoute(builder: (context) => NoticeView());
       case 'oneonone':
         return MaterialPageRoute(builder: (context) => OneOnOneView());
+      case 'survey':
+        return MaterialPageRoute(builder: (context) => SurveyView());
       case 'startup':
         return MaterialPageRoute(
             builder: (context) =>

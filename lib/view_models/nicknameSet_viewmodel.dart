@@ -51,8 +51,7 @@ class NicknameSetViewModel extends BaseViewModel {
       return true;
     } else {
       _databaseService.updateUserName(uid, userName);
-      _sharedPreferencesService.setSharedPreferencesValue(
-          isNameUpdatedKey, true);
+      _sharedPreferencesService.setSharedPreferencesValue(didSurveyKey, true);
       _stateManageService.userModelUpdate();
       setChecking(false);
       _navigationService.navigateWithArgTo('startup', 0);
