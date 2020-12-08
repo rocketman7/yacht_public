@@ -3,8 +3,14 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:blobs/blobs.dart';
+import 'package:bubble/bubble.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_bubble/bubble_type.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_2.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:vibration/vibration.dart';
@@ -616,20 +622,17 @@ class _InnerBlobState extends State<InnerBlob> {
     }
 
     return GestureDetector(
-      onTapDown: (details) async {
-        if (await Vibration.hasVibrator()) {
-          Vibration.vibrate();
-          widget.onTapDown(choice);
-          print(choice);
-          print("tapped");
-        }
+      onTapDown: (details) {
+        Vibration.vibrate();
+
+        widget.onTapDown(choice);
+        print(choice);
+        print("tapped");
       },
-      onTapUp: (details) async {
-        if (await Vibration.hasVibrator()) {
-          Vibration.cancel();
-          widget.onTapUp(choice);
-          print("tapped out");
-        }
+      onTapUp: (details) {
+        Vibration.cancel();
+        widget.onTapUp(choice);
+        print("tapped out");
       },
       child: RawGestureDetector(
         gestures: <Type, GestureRecognizerFactory>{
@@ -695,6 +698,7 @@ class _InnerBlobState extends State<InnerBlob> {
                                     10.0)), //this right here
                             child: Container(
                               height: 300,
+                              width: deviceWidth * .9,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12.0,
@@ -736,6 +740,7 @@ class _InnerBlobState extends State<InnerBlob> {
                                           height: 16,
                                         ),
                                         Container(
+                                          // color: Colors.blue,
                                           height: 80,
                                           child: ListView.builder(
                                             itemCount: vote.voteCount,
@@ -750,7 +755,7 @@ class _InnerBlobState extends State<InnerBlob> {
                                               TextStyle notSelectedTitle =
                                                   TextStyle(
                                                 fontFamily: 'AppleSDM',
-                                                fontSize: 16,
+                                                fontSize: 20,
                                                 color: Colors.grey,
                                                 height: 1,
                                               );
@@ -860,58 +865,119 @@ class _InnerBlobState extends State<InnerBlob> {
                                             },
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 16,
-                                        ),
+
                                         // SizedBox(
                                         //   height: 8,
                                         // ),
-                                        Text(
-                                          "다른 참여자들은 어떤 생각을 하고 있을까요?",
-                                          style: TextStyle(
-                                            fontFamily: 'AppleSDB',
-                                            fontSize: 16,
-                                          ),
-                                        ),
                                       ],
                                     ),
-                                    Row(
+                                    Column(
                                       children: [
-                                        FlatButton(
-                                          minWidth: deviceWidth * .28,
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                            _navigationService
-                                                .navigateWithArgTo(
-                                                    'startup', 0);
-                                          },
-                                          child: Text(
-                                            "홈으로 이동",
-                                            style: TextStyle(
-                                                fontFamily: 'AppleSDM',
-                                                color: Colors.white),
-                                          ),
-                                          color: const Color(0xFF989898),
-                                        ),
-                                        SizedBox(
-                                          width: 8,
-                                        ),
-                                        Expanded(
-                                          child: RaisedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              _navigationService
-                                                  .navigateWithArgTo(
-                                                      'startup', 1);
-                                            },
-                                            child: Text(
-                                              "커뮤니티로 이동",
-                                              style: TextStyle(
-                                                  fontFamily: 'AppleSDM',
-                                                  color: Colors.white),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            SizedBox(
+                                              width: 4,
                                             ),
-                                            color: const Color(0xFF1EC8CF),
-                                          ),
+                                            Expanded(
+                                              flex: 5,
+                                              child: Container(
+                                                // width: deviceWidth * .27,
+                                                child: ChatBubble(
+                                                  clipper: ChatBubbleClipper3(
+                                                      type: BubbleType
+                                                          .receiverBubble),
+                                                  alignment:
+                                                      Alignment.bottomLeft,
+                                                  backGroundColor:
+                                                      Color(0xFFFFF6F6),
+                                                  child: AutoSizeText(
+                                                    "예측을 수정하거나 추가할 수 있어요!",
+                                                    style: TextStyle(
+                                                        fontFamily: 'AppleSDL',
+                                                        fontSize: 14,
+                                                        color:
+                                                            Color(0xFF555555)),
+                                                    maxLines: 2,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 2,
+                                            ),
+                                            Expanded(
+                                              flex: 6,
+                                              child: Container(
+                                                // color: Colors.red,
+                                                // width: deviceWidth * .3,
+                                                child: ChatBubble(
+                                                  clipper: ChatBubbleClipper3(
+                                                      type: BubbleType
+                                                          .sendBubble),
+                                                  alignment:
+                                                      Alignment.bottomRight,
+                                                  // margin:
+                                                  //     EdgeInsets.only(top: 20),
+                                                  backGroundColor:
+                                                      Color(0xFFFFF6F6),
+                                                  child: AutoSizeText(
+                                                      "다른 유저의 예측과\n의견을 볼 수 있어요!",
+                                                      style: TextStyle(
+                                                        fontFamily: 'AppleSDL',
+                                                        fontSize: 14,
+                                                        color:
+                                                            Color(0xFF555555),
+                                                      ),
+                                                      maxLines: 2),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            FlatButton(
+                                              minWidth: deviceWidth * .28,
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                _navigationService
+                                                    .navigateWithArgTo(
+                                                        'startup', 0);
+                                              },
+                                              child: Text(
+                                                "홈으로 이동",
+                                                style: TextStyle(
+                                                    fontFamily: 'AppleSDM',
+                                                    color: Colors.white),
+                                              ),
+                                              color: const Color(0xFF989898),
+                                            ),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Expanded(
+                                              child: RaisedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  _navigationService
+                                                      .navigateWithArgTo(
+                                                          'startup', 1);
+                                                },
+                                                child: Text(
+                                                  "커뮤니티로 이동",
+                                                  style: TextStyle(
+                                                      fontFamily: 'AppleSDM',
+                                                      color: Colors.white),
+                                                ),
+                                                color: const Color(0xFF1EC8CF),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     )
@@ -1120,7 +1186,7 @@ class PieChart0 extends CustomPainter {
 
     paint..color = Color(0xFF91E0FD);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
-        -math.pi / 2, arcAngle, true, paint);
+        -math.pi / 2 - (math.pi / 6), arcAngle, true, paint);
   }
 
   @override
@@ -1221,7 +1287,7 @@ class PieChart1 extends CustomPainter {
 
     paint..color = Color(0xFF91E0FD);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
-        -math.pi / 2, arcAngle, true, paint);
+        -math.pi / 2 - (math.pi / 6), arcAngle, true, paint);
   }
 
   @override

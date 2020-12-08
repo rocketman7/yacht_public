@@ -39,6 +39,7 @@ class MypageEditProfileViewModel extends FutureViewModel {
   String sharedPrefForAvatarImage; //DB에서 관리되지만 즉각적반응을 위해 sharedPref도
   String checkedAvatarImage;
   List<String> avatarImages = [];
+  bool isEmailAndPhoneAuth;
 
   // Future<void> setAvatarImage(String avatarImage) async {
   void setAvatarImage(String avatarImage) {
@@ -77,7 +78,11 @@ class MypageEditProfileViewModel extends FutureViewModel {
       sharedPrefForAvatarImage = user.avatarImage ?? avatarImages[0];
     }
 
+    isEmailAndPhoneAuth =
+        _authService.auth.currentUser.providerData.length == 2;
+
     checkedAvatarImage = sharedPrefForAvatarImage;
+    notifyListeners();
   }
 
   @override

@@ -80,6 +80,14 @@ class AmplitudeService {
     analytics.logEvent('My Page Main View');
   }
 
+  Future logAdsView(String uid) async {
+    analytics.init(apiKey);
+    analytics.setUserId(uid);
+    analytics.trackingSessionEvents(true);
+
+    analytics.logEvent('Ads View');
+  }
+
   Future initialiseSession() async {
     final Amplitude analytics = Amplitude.getInstance(instanceName: "project");
     // Create the instance

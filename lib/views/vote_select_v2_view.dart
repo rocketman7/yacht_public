@@ -197,7 +197,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     fToast.showToast(
       child: toast,
       gravity: ToastGravity.TOP,
-      toastDuration: Duration(seconds: 1, milliseconds: 550),
+      toastDuration: Duration(
+        seconds: 1,
+        milliseconds: 200,
+      ),
     );
 
     // Custom Toast Position
@@ -1605,7 +1608,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                             //     height: 4),
 
                             Text(
-                              "예측에 모두 성공하시면 승점 ${(alreadyVoted + listSelected.length) * 2}점 획득! 🎊\n모두 실패하시면 ${-(alreadyVoted + listSelected.length)}점 😢",
+                              "예측에 모두 성공하면 승점 ${(alreadyVoted + listSelected.length) * 2}점 획득! 🎊\n모두 실패하면 ${-(alreadyVoted + listSelected.length)}점 😢",
                               style: TextStyle(
                                 fontFamily: 'AppleSDM',
                                 fontSize: 16,
@@ -1709,7 +1712,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                         ),
                         SizedBox(height: 12),
                         Text(
-                          "예측에 모두 성공하시면 승점 ${listSelected.length * 2}점 획득! 🎊\n모두 실패하시면 ${-listSelected.length}점 😢",
+                          "예측에 모두 성공하면 승점 ${listSelected.length * 2}점 획득! 🎊\n모두 실패하면 ${-listSelected.length}점 😢",
                           style: TextStyle(
                             fontFamily: 'AppleSDM',
                             fontSize: 16,

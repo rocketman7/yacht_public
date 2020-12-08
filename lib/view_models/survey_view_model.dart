@@ -11,7 +11,7 @@ import '../services/sharedPreferences_service.dart';
 import '../models/sharedPreferences_const.dart';
 
 List<String> surveyTitles = [
-  '주식투자에 대해 어느정도 지식을 가지고 계신가요?',
+  '주식투자에 대해 어느정도의\n지식을 가지고 계신가요?',
   '주식투자 경험이 어떻게 되시나요?',
   '주식투자 경험이 없으신 이유는 무엇인가요?',
   '성별이 어떻게 되시나요?',
@@ -483,7 +483,11 @@ class SurveyViewModel extends FutureViewModel {
 
   // basic서베이 단계 진행할 때마다 호출, & 끝나면,
   Future surveyStepPlus(int answer) async {
-    if (surveyCurrentStep < surveyTotalStep) {
+    if (surveyCurrentStep == 1 && answer != 0) {
+      surveysAnswer['answer'].add(answer);
+      surveysAnswer['answer'].add(-1);
+      surveyCurrentStep += 2;
+    } else if (surveyCurrentStep < surveyTotalStep) {
       surveysAnswer['answer'].add(answer);
       surveyCurrentStep += 1;
     } else {

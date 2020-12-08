@@ -151,6 +151,7 @@ class VoteSelectViewModel extends FutureViewModel {
   }
 
   showRewardedAds() {
+    _amplitudeService.logAdsView(uid);
     RewardedVideoAd.instance.show();
   }
 

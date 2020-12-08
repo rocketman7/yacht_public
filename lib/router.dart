@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yachtOne/views/initial_view.dart';
+import 'package:yachtOne/views/password_change_view.dart';
 import 'package:yachtOne/views/phone_auth_view.dart';
 import 'package:yachtOne/views/season_community_view.dart';
 import 'package:yachtOne/views/subject_community_view.dart';
@@ -82,6 +83,8 @@ class Routers {
             builder: (context) =>
                 // DialogManager(child: NicknameSetView(routeSettings.arguments)));
                 DialogManager(child: NicknameSetView(routeSettings.arguments)));
+      case 'password_change':
+        return MaterialPageRoute(builder: (context) => PasswordChangeView());
       case 'mypage_termsofuse':
         return MaterialPageRoute(builder: (context) => MypageTermofuse());
       case 'mypage_privacypolicy':

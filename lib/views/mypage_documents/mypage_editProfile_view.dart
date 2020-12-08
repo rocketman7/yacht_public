@@ -73,34 +73,34 @@ class MypageEditProfileView extends StatelessWidget {
                             SizedBox(
                               height: 48,
                             ),
-                            Row(children: [
-                              Text(
-                                '활동 닉네임',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  _navigationService.navigateWithArgTo(
-                                      'nickname_set', model.user.userName);
-                                },
-                                child: Text(
+                            GestureDetector(
+                              onTap: () {
+                                _navigationService.navigateWithArgTo(
+                                    'nickname_set', model.user.userName);
+                              },
+                              child: Row(children: [
+                                Text(
+                                  '활동 닉네임',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Spacer(),
+                                Text(
                                   model.user.userName,
                                   style: TextStyle(fontSize: 16),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                  color: Colors.black,
+                                SizedBox(
+                                  width: 16,
                                 ),
-                              ),
-                            ]),
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ]),
+                            ),
                             SizedBox(
                               height: 16,
                             ),
@@ -108,6 +108,52 @@ class MypageEditProfileView extends StatelessWidget {
                               height: 1,
                               color: Color(0xFFE3E3E3),
                             ),
+
+                            !model.isEmailAndPhoneAuth
+                                ? Container()
+                                : Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _navigationService.navigateTo(
+                                            'password_change',
+                                          );
+                                        },
+                                        child: Row(children: [
+                                          Text(
+                                            '비밀번호 변경',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          Spacer(),
+                                          Text(
+                                            "                   ",
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          SizedBox(
+                                            width: 16,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 16,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ]),
+                                      ),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      Container(
+                                        height: 1,
+                                        color: Color(0xFFE3E3E3),
+                                      ),
+                                    ],
+                                  ),
 
                             // SizedBox(
                             //   height: 16,
