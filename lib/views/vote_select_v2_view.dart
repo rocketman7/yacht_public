@@ -371,7 +371,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       play_store_url = remoteConfig.getString('play_store_url');
 
       // 주석 풀고 업데이트
-      // isSeasonStarted = remoteConfig.getBool('is_season_started');
+      isSeasonStarted = remoteConfig.getBool('is_season_started');
 
       // 홈 기본 텍스트 불러오기
 
@@ -634,6 +634,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         alignment: Alignment.centerRight,
                                         child: Icon(
                                           Icons.dehaze_rounded,
+                                          color: model.address.isVoting
+                                              ? Colors.black
+                                              : Color(0xFFDEDEDE),
                                           size: 32.sp,
                                         ),
                                       ),
@@ -841,8 +844,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                               ),
                                               Icon(
                                                 Icons.arrow_forward_ios,
-                                                color: Colors.black
-                                                    .withOpacity(.7),
+                                                color: model.address.isVoting
+                                                    ? Colors.black
+                                                        .withOpacity(.7)
+                                                    : Color(0xFFDEDEDE),
                                                 size: 30,
                                               ),
                                             ],
@@ -856,7 +861,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           style: TextStyle(
                                             fontFamily: 'AppleSDB',
                                             fontSize: 18,
-                                            color: Colors.black.withOpacity(.6),
+                                            color: model.address.isVoting
+                                                ? Colors.black.withOpacity(.6)
+                                                : Color(0xFFDEDEDE),
                                             letterSpacing: -.5,
                                           ),
                                         ),

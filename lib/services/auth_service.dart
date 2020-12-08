@@ -311,10 +311,15 @@ class AuthService {
 
     user.updatePassword(newPassword).then((_) {
       print("Succesfull changed password");
+      // _navigationService.navigateTo('initial');
+      return true;
     }).catchError((error) {
       print("Password can't be changed" + error.toString());
+      return error.message;
     });
   }
+
+  // 비밀번호 리셋
 
   // Update 유저
 }
