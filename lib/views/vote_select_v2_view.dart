@@ -1363,20 +1363,31 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                 : model.userVote.voteSelected =
                                                     model.userVote.voteSelected;
                                           }
-
+                                          print("Has Voted? " +
+                                              model.userVote.isVoted
+                                                  .toString());
                                           isSeasonStarted
-                                              ? _navigationService
-                                                  .navigateWithArgTo(
-                                                  'ggook',
-                                                  [
-                                                    model.address,
-                                                    model.user,
-                                                    model.vote,
-                                                    model.userVote,
-                                                    listSelected,
-                                                    0,
-                                                  ],
-                                                )
+                                              ? model.userVote.isVoted
+                                                  ? showGoToAdditionalGgookDialog(
+                                                      context,
+                                                      model,
+                                                    )
+                                                  : showGoToGgookDialog(
+                                                      context,
+                                                      model,
+                                                    )
+                                              // _navigationService
+                                              //     .navigateWithArgTo(
+                                              //     'ggook',
+                                              //     [
+                                              //       model.address,
+                                              //       model.user,
+                                              //       model.vote,
+                                              //       model.userVote,
+                                              //       listSelected,
+                                              //       0,
+                                              //     ],
+                                              //   )
                                               : {};
                                         },
                                   child: Padding(
@@ -1534,6 +1545,237 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         //         address, user, vote);
       },
     );
+  }
+
+  Future showGoToAdditionalGgookDialog(
+      BuildContext context, VoteSelectViewModel model) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          int alreadyVoted = 0;
+          model.userVote.voteSelected.forEach((element) {
+            if (element != 0) {
+              alreadyVoted++;
+            }
+          });
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)), //this right here
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: 200,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 12,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        // color:
+                        // Colors.blue,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${listSelected.length}개의 주제를 추가로 선택하셨습니다.",
+                                  style: TextStyle(
+                                    fontFamily: 'AppleSDB',
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                Text(
+                                  "(이미 예측한 주제 ${alreadyVoted.toString()}개)",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: 'AppleSDM',
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // SizedBox(
+                            //     height: 4),
+
+                            Text(
+                              "예측에 모두 성공하시면 승점 ${(alreadyVoted + listSelected.length) * 2}점 획득! 🎊\n모두 실패하시면 ${-(alreadyVoted + listSelected.length)}점 😢",
+                              style: TextStyle(
+                                fontFamily: 'AppleSDM',
+                                fontSize: 16,
+                                height: 1,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            // SizedBox(
+                            //     height: 4),
+                            Text(
+                              "예측하러 갈까요?",
+                              style: TextStyle(
+                                fontFamily: 'AppleSDB',
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        FlatButton(
+                          minWidth: deviceWidth * .28,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "돌아가기",
+                            style: TextStyle(
+                                fontFamily: 'AppleSDM', color: Colors.white),
+                          ),
+                          color: const Color(0xFF989898),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: RaisedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              _navigationService.navigateWithArgTo(
+                                'ggook',
+                                [
+                                  model.address,
+                                  model.user,
+                                  model.vote,
+                                  model.userVote,
+                                  listSelected,
+                                  0,
+                                ],
+                              );
+                            },
+                            child: Text(
+                              "예측하러 가기",
+                              style: TextStyle(
+                                  fontFamily: 'AppleSDM', color: Colors.white),
+                            ),
+                            color: const Color(0xFF1EC8CF),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Future showGoToGgookDialog(BuildContext context, VoteSelectViewModel model) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)), //this right here
+            child: Container(
+              height: 200,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 14,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "총 ${listSelected.length}개의 주제를 선택하셨습니다.",
+                          style: TextStyle(
+                            fontFamily: 'AppleSDB',
+                            fontSize: 18,
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          "예측에 모두 성공하시면 승점 ${listSelected.length * 2}점 획득! 🎊\n모두 실패하시면 ${-listSelected.length}점 😢",
+                          style: TextStyle(
+                            fontFamily: 'AppleSDM',
+                            fontSize: 16,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "예측하러 갈까요?",
+                          style: TextStyle(
+                            fontFamily: 'AppleSDB',
+                            fontSize: 16,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        FlatButton(
+                          minWidth: deviceWidth * .28,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "돌아가기",
+                            style: TextStyle(
+                                fontFamily: 'AppleSDM', color: Colors.white),
+                          ),
+                          color: const Color(0xFF989898),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: RaisedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              _navigationService.navigateWithArgTo(
+                                'ggook',
+                                [
+                                  model.address,
+                                  model.user,
+                                  model.vote,
+                                  model.userVote,
+                                  listSelected,
+                                  0,
+                                ],
+                              );
+                            },
+                            child: Text(
+                              "예측하러 가기",
+                              style: TextStyle(
+                                  fontFamily: 'AppleSDM', color: Colors.white),
+                            ),
+                            color: const Color(0xFF1EC8CF),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   Future showAdsDialog(BuildContext context, VoteSelectViewModel model) {
@@ -2163,7 +2405,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                               } else {
                                 if ((model.user.item == null
                                         ? 0
-                                        : model.user.item - numSelected) ==
+                                        : model.user.item - numSelected) <=
                                     0) {
                                   // 선택되면 안됨
                                   if (newValue) {

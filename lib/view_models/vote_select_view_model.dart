@@ -247,6 +247,7 @@ class VoteSelectViewModel extends FutureViewModel {
       resetTarget,
     );
     await _stateManageService.userVoteModelUpdate();
+    userVote = _stateManageService.userVoteModel;
     notifyListeners();
   }
 
