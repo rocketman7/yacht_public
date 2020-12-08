@@ -304,7 +304,17 @@ class AuthService {
     }
   }
 
-  // Reset 비밀번호
+  //  비밀번호 변경
+
+  Future changePassword(String newPassword) async {
+    User user = _auth.currentUser;
+
+    user.updatePassword(newPassword).then((_) {
+      print("Succesfull changed password");
+    }).catchError((error) {
+      print("Password can't be changed" + error.toString());
+    });
+  }
 
   // Update 유저
 }

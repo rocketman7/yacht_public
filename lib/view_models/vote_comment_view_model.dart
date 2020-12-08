@@ -79,9 +79,9 @@ class VoteCommentViewModel extends FutureViewModel {
     notifyListeners();
   }
 
-  Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
-    return _databaseService.getSubVotePostList(address);
-  }
+  // Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
+  //   return _databaseService.getSubVotePostList(address);
+  // }
 
   // Future postComments(
   //   DatabaseAddressModel address,

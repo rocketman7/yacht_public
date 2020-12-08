@@ -60,6 +60,8 @@ class InitialViewModel extends FutureViewModel {
     await _pushNotificationService.initialise();
     // _sharedPreferencesService.setSharedPreferencesValue(
     //     voteSelectTutorialKey, false);
+    // await _sharedPreferencesService.setSharedPreferencesValue(
+    //     didSurveyKey, false);
     return getSharedPreferences();
   }
 }

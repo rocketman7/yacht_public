@@ -330,7 +330,7 @@ class _ChartViewState extends State<ChartView> {
                                                       "하루 최대 ${seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
                                                 } else if ((user.item ==
                                                         null) ||
-                                                    (user.item - numSelected ==
+                                                    (user.item - numSelected <=
                                                         0)) {
                                                   // 선택되면 안됨
 

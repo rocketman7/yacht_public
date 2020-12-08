@@ -151,6 +151,7 @@ class VoteSelectViewModel extends FutureViewModel {
   }
 
   showRewardedAds() {
+    _amplitudeService.logAdsView(uid);
     RewardedVideoAd.instance.show();
   }
 
@@ -247,6 +248,7 @@ class VoteSelectViewModel extends FutureViewModel {
       resetTarget,
     );
     await _stateManageService.userVoteModelUpdate();
+    userVote = _stateManageService.userVoteModel;
     notifyListeners();
   }
 
