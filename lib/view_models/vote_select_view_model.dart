@@ -306,6 +306,8 @@ class VoteSelectViewModel extends FutureViewModel {
   Future<void> navigateToMypage() async {
     await _navigationService.navigateToMyPage(MypageMainView());
     // await _navigationService.navigateTo('mypage_main');
+    await getModels();
+    notifyListeners();
   }
 
   Future getModels() async {

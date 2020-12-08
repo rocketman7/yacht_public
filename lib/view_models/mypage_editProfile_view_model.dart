@@ -12,7 +12,6 @@ import '../models/sharedPreferences_const.dart';
 
 // 아바타이미지들 List 나중에 다른곳으로 뺴줘야?
 List<String> globalAvatarImages = [
-  'avatar',
   'avatar001',
   'avatar002',
   'avatar003',
@@ -22,6 +21,15 @@ List<String> globalAvatarImages = [
   'avatar007',
   'avatar008',
   'avatar009',
+  'avatar010',
+  'avatar011',
+  'avatar012',
+  'avatar013',
+  'avatar014',
+  'avatar015',
+  'avatar016',
+  'avatar017',
+  'avatar018',
 ];
 
 class MypageEditProfileViewModel extends FutureViewModel {

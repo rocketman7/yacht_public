@@ -4,11 +4,13 @@ import '../models/user_model.dart';
 import '../locator.dart';
 import '../services/auth_service.dart';
 import '../services/database_service.dart';
+import '../services/stateManage_service.dart';
 
 class MypageFriendsCodeInsertViewModel extends FutureViewModel {
   // Services Setting
   final AuthService _authService = locator<AuthService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
+  final StateManageService _stateManageService = locator<StateManageService>();
 
   // 변수 Setting
   String uid;
@@ -65,8 +67,11 @@ class MypageFriendsCodeInsertViewModel extends FutureViewModel {
         return true;
       } else {
         UserModel tempUser = await _databaseService.getUser(a.toString());
+        _databaseService.updateUserItem(uid, user.item + 5);
         _databaseService.updateUserItem(a.toString(), tempUser.item + 5);
         _databaseService.updateInsertedFriendsCode(uid, code);
+        await _stateManageService.userModelUpdate();
+
         insertedCode = code;
 
         didInserted = true;

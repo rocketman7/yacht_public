@@ -58,11 +58,12 @@ class MypageEditProfileView extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(80.0)),
-                                    color: Color(0xFFEFEFEF),
+                                    color: Color(0xFF1EC8CF),
                                   ),
                                   child: Text(
                                     '사진 변경',
                                     style: TextStyle(
+                                        color: Colors.white,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                         letterSpacing: -1),
@@ -234,9 +235,10 @@ class MypageEditProfileView extends StatelessWidget {
 
 Future buildModalBottomSheet(
     BuildContext context, MypageEditProfileViewModel model) {
+  final ScrollController scrollController = ScrollController();
+
   return showModalBottomSheet(
     backgroundColor: Color(0xFF1EC8CF),
-    // backgroundColor: Colors.white,
     context: context,
     isScrollControlled: true,
     builder: (context) => StatefulBuilder(builder: (context, setState) {
@@ -251,9 +253,24 @@ Future buildModalBottomSheet(
             height: deviceHeight / 2,
             child: Column(
               children: [
+                Text(
+                  '메리 크리스마스!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16.0, color: Colors.white),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
                 Expanded(
-                  child:
-                      ListView(children: makeAvatarItemList(model, setState)),
+                  child: Scrollbar(
+                      // isAlwaysShown: true,
+                      // _scrollController.hasClients ? true : false,
+                      controller: scrollController,
+                      child: ListView(
+                          children: makeAvatarItemList(model, setState))),
+                ),
+                SizedBox(
+                  height: 16,
                 ),
                 GestureDetector(
                   onTap: () {
@@ -265,7 +282,7 @@ Future buildModalBottomSheet(
                     child: Center(
                       child: Text(
                         '선택하기',
-                        style: TextStyle(fontSize: 16.0, color: Colors.white),
+                        style: TextStyle(fontSize: 20.0, color: Colors.white),
                       ),
                     ),
                   ),

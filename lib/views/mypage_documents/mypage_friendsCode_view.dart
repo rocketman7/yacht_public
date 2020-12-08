@@ -144,6 +144,13 @@ class MypageFriendsCodeView extends StatelessWidget {
                                 )),
                               ),
                             ),
+                            SizedBox(
+                              height: 24,
+                            ),
+                            Text(
+                                '초대받은 친구가 \'꾸욱\'에 가입하면 친구와 나에게 각각 꾸욱 아이템 5개를 드립니다.',
+                                style: TextStyle(
+                                    fontSize: 16, fontFamily: 'AppleSDM')),
                             Spacer(),
                             Container(
                               height: 1,

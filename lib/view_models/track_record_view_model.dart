@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/models/database_address_model.dart';
-import 'package:yachtOne/models/user_model.dart';
-import 'package:yachtOne/models/user_vote_model.dart';
-import 'package:yachtOne/models/vote_model.dart';
-import 'package:yachtOne/services/amplitude_service.dart';
-import 'package:yachtOne/services/auth_service.dart';
-import 'package:yachtOne/services/database_service.dart';
+
+import '../models/rank_model.dart';
+import '../models/database_address_model.dart';
+import '../models/user_model.dart';
+import '../models/user_vote_model.dart';
+import '../models/vote_model.dart';
+import '../services/amplitude_service.dart';
+import '../services/auth_service.dart';
+import '../services/database_service.dart';
+import '../services/stateManage_service.dart';
 
 import '../locator.dart';
 
@@ -14,15 +17,19 @@ class TrackRecordViewModel extends FutureViewModel {
   AuthService _authService = locator<AuthService>();
   DatabaseService _databaseService = locator<DatabaseService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
+  final StateManageService _stateManageService = locator<StateManageService>();
 
   String uid;
   DatabaseAddressModel address;
   UserModel user;
   UserVoteModel userVote;
   VoteModel vote;
+  List<RankModel> rankModel = [];
   List<UserVoteModel> allSeasonUserVoteList = [];
   List<VoteModel> allSeasonVoteList = [];
   // List<Widget> voteRows;
+
+  int myRank = 0;
 
   TrackRecordViewModel() {
     uid = _authService.auth.currentUser.uid;
@@ -31,13 +38,26 @@ class TrackRecordViewModel extends FutureViewModel {
 
   Future getAllModel(uid) async {
     await _amplitudeService.logTrackRecordView(uid);
-    address = await _databaseService.getAddress(uid);
-    user = await _databaseService.getUser(uid);
-    userVote = await _databaseService.getUserVote(address);
-    vote = await _databaseService.getVotes(address);
+
+    if (_stateManageService.appStart) {
+      await _stateManageService.initStateManage(initUid: uid);
+    } else {
+      if (await _stateManageService.isNeededUpdate())
+        await _stateManageService.initStateManage(initUid: uid);
+    }
+
+    address = _stateManageService.addressModel;
+    user = _stateManageService.userModel;
+    vote = _stateManageService.voteModel;
+    userVote = _stateManageService.userVoteModel;
+    for (int i = 0; i < rankModel.length; i++) {
+      if (rankModel[i].uid == uid) {
+        myRank = rankModel[i].todayRank;
+      }
+    }
+
     allSeasonUserVoteList =
         await _databaseService.getAllSeasonUserVote(address);
-
     allSeasonVoteList = await _databaseService.getAllSeasonVote(address);
     // print("ALLSEASON" + allSeasonVoteList.length.toString());
     // print(allSeasonVoteList[0].voteDate.toString());
