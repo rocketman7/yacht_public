@@ -1247,6 +1247,7 @@ class DatabaseService {
     String category;
     String season;
     String baseDate;
+    bool isVoting = true;
 
     await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) async {
@@ -1267,13 +1268,16 @@ class DatabaseService {
         // 없으면 admin collection에 있는 baseDate를 가져옴
         if (voteData.data() == null) {
           baseDate = doc.data()['baseDate'];
+          isVoting = true;
+        } else {
+          isVoting = DateTimeModel().isVoteAvailable(category);
         }
       },
     );
 
     // baseDate = DateTimeModel().baseDate(category);
 
-    bool isVoting = DateTimeModel().isVoteAvailable(category);
+    // bool isVoting = DateTimeModel().isVoteAvailable(category);
     // String baseDate = '20200901';
     // bool isVoteAvailable = DateTimeModel().isVoteAvailable(tempCategory);
 

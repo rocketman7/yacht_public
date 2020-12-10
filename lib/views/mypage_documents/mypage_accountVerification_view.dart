@@ -167,12 +167,14 @@ class _MypageAccountVerificationViewState
                         borderRadius: BorderRadius.circular(10.0))),
               )
             : verificationProcess(model),
+        SizedBox(height: 16),
         model.visibleButton1
             ? Text('은행연계계좌는 계좌 인증이 불가능하며, 계좌 인증 서비스를 제공하지 못하는 증권사가 존재할 수 있습니다.',
-                style: TextStyle(fontSize: 12, color: Color(0xFFC5C5C7)))
+                style: TextStyle(fontSize: 12, color: Color(0xFF5F5E5E)))
             : Container(),
         model.visibleButton1 ? Container() : accNumberInsertProcess(model),
         model.visibleButton1 ? Container() : accNameInsertProcess(model),
+        SizedBox(height: 16),
         model.visibleButton2
             ? Container(
                 width: deviceWidth,
@@ -302,6 +304,7 @@ class _MypageAccountVerificationViewState
             child: GestureDetector(
               onTap: () {
                 model.secName = model.getBankList().keys.toList()[index];
+                print(model.secName);
                 model.visibleBankList = false;
                 model.selectSecLogo = index;
                 myFocusNode.requestFocus();

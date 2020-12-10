@@ -52,10 +52,14 @@ class VoteCommentViewModel extends FutureViewModel {
     setBusy(true);
     await _amplitudeService.logCommunityMain(uid);
     if (_stateManageService.appStart) {
+      print("App is newly started");
       await _stateManageService.initStateManage(initUid: uid);
     } else {
-      if (await _stateManageService.isNeededUpdate())
+      print("Checking state from DB");
+      if (await _stateManageService.isNeededUpdate()) {
+        print("New state");
         await _stateManageService.initStateManage(initUid: uid);
+      }
     }
 
     address = _stateManageService.addressModel;

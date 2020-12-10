@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/models/sharedPreferences_const.dart';
 import 'package:yachtOne/services/amplitude_service.dart';
+import 'package:yachtOne/services/connection_check_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
 import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -67,7 +68,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final ConnectionCheckService _connectionCheckService =
+      locator<ConnectionCheckService>();
   String uid;
 
   PreloadPageController _preloadPageController = PreloadPageController();
@@ -222,7 +224,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   @override
   void initState() {
     super.initState();
-
+    // _connectionCheckService.checkConnection(context);
     try {
       callRemoteConfig(context);
     } catch (e) {
@@ -508,6 +510,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   @override
   void dispose() {
     // _controller.dispose();
+    // _connectionCheckService.listener.cancel();
     super.dispose();
     // dispose는 Navigator pushNamed에는 호출되지 않지만 백 버튼에는 호출됨.
     // 백 버튼에 아래를 호출하지 않으면 dispose 됐는데 setState한다고 오류뜸
