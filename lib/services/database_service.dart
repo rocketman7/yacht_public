@@ -208,6 +208,15 @@ class DatabaseService {
     await _usersCollectionReference.doc(uid).set(user.toJson());
   }
 
+  Future setAccInformations(
+      String accNumber, String accName, String secName, String uid) async {
+    await _usersCollectionReference.doc(uid).update({
+      'account.accNumber': accNumber,
+      'account.accName': accName,
+      'account.secName': secName,
+    });
+  }
+
   // user콜렉션에서 아바타이미지 바꾸기
   Future setAvatarImage(String avatarImage, String uid) async {
     await _usersCollectionReference

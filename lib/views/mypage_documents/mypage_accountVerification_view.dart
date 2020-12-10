@@ -191,6 +191,7 @@ class _MypageAccountVerificationViewState
                         model.accName = _accNameController.text;
 
                         model.ableButton2 = false;
+                        model.ableBankListButton = false;
 
                         model.notifyListeners();
 
@@ -205,10 +206,12 @@ class _MypageAccountVerificationViewState
                           // 이제 위에 적은 값들 수정 안되게
                           model.accNameInsertProcess = true;
                           model.accNumberInsertProcess = true;
+                          // model.ableBankListButton = false;
 
                           myFocusNode3.requestFocus();
                         } else {
                           model.accVerificationFailMsg = result;
+                          model.ableBankListButton = true;
                         }
 
                         model.ableButton2 = true;
@@ -266,23 +269,30 @@ class _MypageAccountVerificationViewState
               '${model.secName}',
               style: TextStyle(fontSize: 16),
             ),
-            !model.visibleBankList
-                ? IconButton(
-                    icon: Icon(Icons.keyboard_arrow_down),
-                    onPressed: () {
-                      model.visibleBankList = true;
-                      model.secName = '';
-                      model.selectSecLogo = 100;
-                      myFocusNode.unfocus();
-                      model.notifyListeners();
-                    })
+            model.ableBankListButton
+                ? (!model.visibleBankList
+                    ? IconButton(
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        onPressed: () {
+                          model.visibleBankList = true;
+                          model.secName = '';
+                          model.selectSecLogo = 100;
+                          myFocusNode.unfocus();
+                          model.notifyListeners();
+                        })
+                    : IconButton(
+                        icon: Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.transparent,
+                        ),
+                        onPressed: null,
+                      ))
                 : IconButton(
                     icon: Icon(
                       Icons.keyboard_arrow_down,
                       color: Colors.transparent,
                     ),
-                    onPressed: null,
-                  ),
+                    onPressed: null),
           ],
         ),
         model.visibleBankList ? bankList(model) : Container()
@@ -536,9 +546,9 @@ class _MypageAccountVerificationViewState
           color: Color(0xFF1EC8CF),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-          onPressed: () {
+          onPressed: () async {
             model.verificationSuccess =
-                model.accVerification(_authNumController.text);
+                await model.accVerification(_authNumController.text);
             FocusScope.of(context).unfocus();
             model.notifyListeners();
           },
