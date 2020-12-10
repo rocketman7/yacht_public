@@ -189,11 +189,16 @@ class _MypageAccountVerificationViewState
                       if (_accNameController.text != '' &&
                           _accNumberController.text != '' &&
                           model.secName != '') {
+                        FocusScope.of(context).unfocus();
                         model.accNumber = _accNumberController.text;
                         model.accName = _accNameController.text;
 
                         model.ableButton2 = false;
+
+                        // 이제 위에 적은 값들 수정 안되게
                         model.ableBankListButton = false;
+                        model.accNameInsertProcess = true;
+                        model.accNumberInsertProcess = true;
 
                         model.notifyListeners();
 
@@ -206,14 +211,16 @@ class _MypageAccountVerificationViewState
                           model.accVerificationFailMsg = '';
 
                           // 이제 위에 적은 값들 수정 안되게
-                          model.accNameInsertProcess = true;
-                          model.accNumberInsertProcess = true;
+                          // model.accNameInsertProcess = true;
+                          // model.accNumberInsertProcess = true;
                           // model.ableBankListButton = false;
 
                           myFocusNode3.requestFocus();
                         } else {
                           model.accVerificationFailMsg = result;
                           model.ableBankListButton = true;
+                          model.accNameInsertProcess = false;
+                          model.accNumberInsertProcess = false;
                         }
 
                         model.ableButton2 = true;
