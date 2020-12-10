@@ -243,6 +243,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
   }
 
   Widget buildColumn(TrackRecordViewModel model, int eachVoteNumber) {
+    // eachVoteNumber = 모든 시즌 보트 리스트의 넘버링
     TextStyle tableSubjectTextStyle = TextStyle(
       fontSize: 15.sp,
       fontFamily: 'AppleSDL',
@@ -400,18 +401,22 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                   return Text(
                     userVoteIdx != -1
                         ? model.allSeasonUserVoteList[userVoteIdx]
-                                    .voteSelected[index] ==
-                                0
+                                    .voteSelected ==
+                                null
                             ? "-"
                             : model.allSeasonUserVoteList[userVoteIdx]
                                         .voteSelected[index] ==
-                                    1
-                                ? model.allSeasonVoteList[eachVoteNumber]
-                                    .subVotes[index].voteChoices[0]
-                                    .toString()
-                                : model.allSeasonVoteList[eachVoteNumber]
-                                    .subVotes[index].voteChoices[1]
-                                    .toString()
+                                    0
+                                ? "-"
+                                : model.allSeasonUserVoteList[userVoteIdx]
+                                            .voteSelected[index] ==
+                                        1
+                                    ? model.allSeasonVoteList[eachVoteNumber]
+                                        .subVotes[index].voteChoices[0]
+                                        .toString()
+                                    : model.allSeasonVoteList[eachVoteNumber]
+                                        .subVotes[index].voteChoices[1]
+                                        .toString()
                         : "-",
                     style: tableVoteTextStyle,
                     overflow: TextOverflow.ellipsis,

@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:blobs/blobs.dart';
 import 'package:bubble/bubble.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
@@ -641,353 +643,61 @@ class _InnerBlobState extends State<InnerBlob> {
             () => _longPressGesture,
             (_longPressGesture) {
               _longPressGesture.onLongPress = () async {
+                bool isVoting = true;
                 print("long tapped");
                 // if (await Vibration.hasVibrator()) {
                 //   Vibration.vibrate();
                 // }
                 if (idx + 1 < listSelected.length) {
-                  List<int> tempList = userVote.voteSelected;
-                  print(tempList);
-                  tempList.fillRange(
-                      listSelected[idx], listSelected[idx] + 1, choice + 1);
+                  isVoting = model.checkIfVotingTime(address.category);
+                  if (isVoting) {
+                    List<int> tempList = userVote.voteSelected;
+                    print(tempList);
+                    tempList.fillRange(
+                        listSelected[idx], listSelected[idx] + 1, choice + 1);
 
-                  userVote.voteSelected = tempList;
-                  userVote.isVoted = true;
-                  print("after 1vote" + userVote.voteSelected.toString());
-                  model.addUserVoteDB(address, userVote);
-                  model.decreaseUserItem();
-                  // model.counterUserVote(address, userVote.voteSelected);
+                    userVote.voteSelected = tempList;
+                    userVote.isVoted = true;
+                    print("after 1vote" + userVote.voteSelected.toString());
+                    model.addUserVoteDB(address, userVote);
+                    model.decreaseUserItem();
+                    // model.counterUserVote(address, userVote.voteSelected);
 
-                  _navigationService.navigateWithArgTo('ggook', [
-                    address,
-                    user,
-                    vote,
-                    userVote,
-                    listSelected,
-                    idx + 1,
-                  ]);
+                    _navigationService.navigateWithArgTo('ggook', [
+                      address,
+                      user,
+                      vote,
+                      userVote,
+                      listSelected,
+                      idx + 1,
+                    ]);
+                  } else {
+                    showVoteNotAvailable(context);
+                  }
                   // 남은 투표 없을 때
                 } else {
+                  isVoting = model.checkIfVotingTime(address.category);
                   // TODO: userVote 모델로 만들어서 넘겨야함.
-                  List<int> tempList = userVote.voteSelected;
-                  print(tempList);
-                  tempList.fillRange(
-                      listSelected[idx], listSelected[idx] + 1, choice + 1);
+                  if (isVoting) {
+                    List<int> tempList = userVote.voteSelected;
+                    print(tempList);
+                    tempList.fillRange(
+                        listSelected[idx], listSelected[idx] + 1, choice + 1);
 
-                  userVote.voteSelected = tempList;
-                  userVote.isVoted = true;
-                  print(tempList);
-                  model.addUserVoteDB(address, userVote);
-                  model.decreaseUserItem();
-                  // 마지막 선택에서만 counter 콜해야됨
-                  // int newItem = user.item - listSelected.length;
-                  // model.updateUserItem(newItem);
-                  model.counterUserVote(address, userVote.voteSelected);
+                    userVote.voteSelected = tempList;
+                    userVote.isVoted = true;
+                    print(tempList);
+                    model.addUserVoteDB(address, userVote);
+                    model.decreaseUserItem();
+                    // 마지막 선택에서만 counter 콜해야됨
+                    // int newItem = user.item - listSelected.length;
+                    // model.updateUserItem(newItem);
+                    model.counterUserVote(address, userVote.voteSelected);
 
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        var formatKoreanDate =
-                            DateFormat('MM' + "월" + " " + "dd" + "일");
-                        return WillPopScope(
-                          onWillPop: () {},
-                          child: Dialog(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    10.0)), //this right here
-                            child: Container(
-                              height: 300,
-                              width: deviceWidth * .9,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12.0,
-                                  vertical: 14,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          formatKoreanDate.format(
-                                                  strToDate(vote.voteDate)) +
-                                              "의 예측 완료!",
-                                          style: TextStyle(
-                                            fontFamily: 'AppleSDB',
-                                            fontSize: 26,
-                                            letterSpacing: -.2,
-                                          ),
-                                        ),
-                                        // SizedBox(
-                                        //   height: 4,
-                                        // ),
-                                        Text(
-                                          "아래와 같이 예측하셨네요 😎",
-                                          style: TextStyle(
-                                              fontFamily: 'AppleSDM',
-                                              fontSize: 16,
-                                              color: Color(0xFF323232)),
-                                        ),
-                                        // SizedBox(height: 12),
-                                        SizedBox(
-                                          height: 16,
-                                        ),
-                                        Container(
-                                          // color: Colors.blue,
-                                          height: 80,
-                                          child: ListView.builder(
-                                            itemCount: vote.voteCount,
-                                            itemBuilder: (context, index) {
-                                              TextStyle selectedTitle =
-                                                  TextStyle(
-                                                fontFamily: 'AppleSDB',
-                                                fontSize: 20,
-                                                color: Colors.black,
-                                                height: 1,
-                                              );
-                                              TextStyle notSelectedTitle =
-                                                  TextStyle(
-                                                fontFamily: 'AppleSDM',
-                                                fontSize: 20,
-                                                color: Colors.grey,
-                                                height: 1,
-                                              );
-                                              TextStyle selectedUp = TextStyle(
-                                                fontFamily: 'AppleSDB',
-                                                fontSize: 18,
-                                                color: Color(0xFFFF3E3E),
-                                                height: 1,
-                                              );
-
-                                              TextStyle selectedDown =
-                                                  TextStyle(
-                                                fontFamily: 'AppleSDB',
-                                                fontSize: 18,
-                                                color: Color(0xFF3485FF),
-                                                height: 1,
-                                              );
-
-                                              int length = vote.subVotes[index]
-                                                  .issueCode.length;
-                                              return Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  length == 1
-                                                      ? Row(
-                                                          children: [
-                                                            Text(
-                                                                vote
-                                                                    .subVotes[
-                                                                        index]
-                                                                    .title,
-                                                                style: tempList[
-                                                                            index] ==
-                                                                        0
-                                                                    ? notSelectedTitle
-                                                                    : selectedTitle),
-                                                            SizedBox(
-                                                              width: 4,
-                                                            ),
-                                                            tempList[index] == 0
-                                                                ? Container()
-                                                                : tempList[index] ==
-                                                                        1
-                                                                    ? Text(
-                                                                        vote.subVotes[index]
-                                                                            .voteChoices[0],
-                                                                        style:
-                                                                            selectedUp,
-                                                                      )
-                                                                    : Text(
-                                                                        vote.subVotes[index]
-                                                                            .voteChoices[1],
-                                                                        style:
-                                                                            selectedDown,
-                                                                      ),
-                                                          ],
-                                                        )
-                                                      : Row(
-                                                          children: [
-                                                            Text(
-                                                              vote
-                                                                  .subVotes[
-                                                                      index]
-                                                                  .voteChoices[0],
-                                                              style: tempList[
-                                                                          index] ==
-                                                                      0
-                                                                  ? notSelectedTitle
-                                                                  : tempList[index] ==
-                                                                          1
-                                                                      ? selectedTitle
-                                                                      : notSelectedTitle,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 4,
-                                                            ),
-                                                            Text(
-                                                              "VS",
-                                                              style:
-                                                                  notSelectedTitle,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 4,
-                                                            ),
-                                                            Text(
-                                                              vote
-                                                                  .subVotes[
-                                                                      index]
-                                                                  .voteChoices[1],
-                                                              style: tempList[
-                                                                          index] ==
-                                                                      0
-                                                                  ? notSelectedTitle
-                                                                  : tempList[index] ==
-                                                                          2
-                                                                      ? selectedTitle
-                                                                      : notSelectedTitle,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          ),
-                                        ),
-
-                                        // SizedBox(
-                                        //   height: 8,
-                                        // ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                            Expanded(
-                                              flex: 5,
-                                              child: Container(
-                                                // width: deviceWidth * .27,
-                                                child: ChatBubble(
-                                                  clipper: ChatBubbleClipper3(
-                                                      type: BubbleType
-                                                          .receiverBubble),
-                                                  alignment:
-                                                      Alignment.bottomLeft,
-                                                  backGroundColor:
-                                                      Color(0xFFFFF6F6),
-                                                  child: AutoSizeText(
-                                                    "예측을 수정하거나 추가할 수 있어요!",
-                                                    style: TextStyle(
-                                                        fontFamily: 'AppleSDL',
-                                                        fontSize: 14,
-                                                        color:
-                                                            Color(0xFF555555)),
-                                                    maxLines: 2,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 2,
-                                            ),
-                                            Expanded(
-                                              flex: 6,
-                                              child: Container(
-                                                // color: Colors.red,
-                                                // width: deviceWidth * .3,
-                                                child: ChatBubble(
-                                                  clipper: ChatBubbleClipper3(
-                                                      type: BubbleType
-                                                          .sendBubble),
-                                                  alignment:
-                                                      Alignment.bottomRight,
-                                                  // margin:
-                                                  //     EdgeInsets.only(top: 20),
-                                                  backGroundColor:
-                                                      Color(0xFFFFF6F6),
-                                                  child: AutoSizeText(
-                                                      "다른 유저의 예측과\n의견을 볼 수 있어요!",
-                                                      style: TextStyle(
-                                                        fontFamily: 'AppleSDL',
-                                                        fontSize: 14,
-                                                        color:
-                                                            Color(0xFF555555),
-                                                      ),
-                                                      maxLines: 2),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            FlatButton(
-                                              minWidth: deviceWidth * .28,
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                _navigationService
-                                                    .navigateWithArgTo(
-                                                        'startup', 0);
-                                              },
-                                              child: Text(
-                                                "홈으로 이동",
-                                                style: TextStyle(
-                                                    fontFamily: 'AppleSDM',
-                                                    color: Colors.white),
-                                              ),
-                                              color: const Color(0xFF989898),
-                                            ),
-                                            SizedBox(
-                                              width: 8,
-                                            ),
-                                            Expanded(
-                                              child: RaisedButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  _navigationService
-                                                      .navigateWithArgTo(
-                                                          'startup', 1);
-                                                },
-                                                child: Text(
-                                                  "커뮤니티로 이동",
-                                                  style: TextStyle(
-                                                      fontFamily: 'AppleSDM',
-                                                      color: Colors.white),
-                                                ),
-                                                color: const Color(0xFF1EC8CF),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      });
+                    showVoteSummary(context, vote, tempList);
+                  } else {
+                    showVoteNotAvailable(context);
+                  }
 
                   // _navigationService.navigateWithArgTo('startup', 1);
                 }
@@ -1036,6 +746,311 @@ class _InnerBlobState extends State<InnerBlob> {
             duration: Duration(milliseconds: 2000)),
       ),
     );
+  }
+
+  Future showVoteSummary(
+      BuildContext context, VoteModel vote, List<int> tempList) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          var formatKoreanDate = DateFormat('MM' + "월" + " " + "dd" + "일");
+          return WillPopScope(
+            onWillPop: () {},
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)), //this right here
+              child: Container(
+                height: 300,
+                width: deviceWidth * .9,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 14,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            formatKoreanDate.format(strToDate(vote.voteDate)) +
+                                "의 예측 완료!",
+                            style: TextStyle(
+                              fontFamily: 'AppleSDB',
+                              fontSize: 26,
+                              letterSpacing: -.2,
+                            ),
+                          ),
+                          // SizedBox(
+                          //   height: 4,
+                          // ),
+                          Text(
+                            "아래와 같이 예측하셨네요 😎",
+                            style: TextStyle(
+                                fontFamily: 'AppleSDM',
+                                fontSize: 16,
+                                color: Color(0xFF323232)),
+                          ),
+                          // SizedBox(height: 12),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          Container(
+                            // color: Colors.blue,
+                            height: 80,
+                            child: ListView.builder(
+                              itemCount: vote.voteCount,
+                              itemBuilder: (context, index) {
+                                TextStyle selectedTitle = TextStyle(
+                                  fontFamily: 'AppleSDB',
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  height: 1,
+                                );
+                                TextStyle notSelectedTitle = TextStyle(
+                                  fontFamily: 'AppleSDM',
+                                  fontSize: 20,
+                                  color: Colors.grey,
+                                  height: 1,
+                                );
+                                TextStyle selectedUp = TextStyle(
+                                  fontFamily: 'AppleSDB',
+                                  fontSize: 18,
+                                  color: Color(0xFFFF3E3E),
+                                  height: 1,
+                                );
+
+                                TextStyle selectedDown = TextStyle(
+                                  fontFamily: 'AppleSDB',
+                                  fontSize: 18,
+                                  color: Color(0xFF3485FF),
+                                  height: 1,
+                                );
+
+                                int length =
+                                    vote.subVotes[index].issueCode.length;
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    length == 1
+                                        ? Row(
+                                            children: [
+                                              Text(vote.subVotes[index].title,
+                                                  style: tempList[index] == 0
+                                                      ? notSelectedTitle
+                                                      : selectedTitle),
+                                              SizedBox(
+                                                width: 4,
+                                              ),
+                                              tempList[index] == 0
+                                                  ? Container()
+                                                  : tempList[index] == 1
+                                                      ? Text(
+                                                          vote.subVotes[index]
+                                                              .voteChoices[0],
+                                                          style: selectedUp,
+                                                        )
+                                                      : Text(
+                                                          vote.subVotes[index]
+                                                              .voteChoices[1],
+                                                          style: selectedDown,
+                                                        ),
+                                            ],
+                                          )
+                                        : Row(
+                                            children: [
+                                              Text(
+                                                vote.subVotes[index]
+                                                    .voteChoices[0],
+                                                style: tempList[index] == 0
+                                                    ? notSelectedTitle
+                                                    : tempList[index] == 1
+                                                        ? selectedTitle
+                                                        : notSelectedTitle,
+                                              ),
+                                              SizedBox(
+                                                width: 4,
+                                              ),
+                                              Text(
+                                                "VS",
+                                                style: notSelectedTitle,
+                                              ),
+                                              SizedBox(
+                                                width: 4,
+                                              ),
+                                              Text(
+                                                vote.subVotes[index]
+                                                    .voteChoices[1],
+                                                style: tempList[index] == 0
+                                                    ? notSelectedTitle
+                                                    : tempList[index] == 2
+                                                        ? selectedTitle
+                                                        : notSelectedTitle,
+                                              ),
+                                            ],
+                                          ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+
+                          // SizedBox(
+                          //   height: 8,
+                          // ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                width: 4,
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: Container(
+                                  // width: deviceWidth * .27,
+                                  child: ChatBubble(
+                                    clipper: ChatBubbleClipper3(
+                                        type: BubbleType.receiverBubble),
+                                    alignment: Alignment.bottomLeft,
+                                    backGroundColor: Color(0xFFFFF6F6),
+                                    child: AutoSizeText(
+                                      "예측을 수정하거나 추가할 수 있어요!",
+                                      style: TextStyle(
+                                          fontFamily: 'AppleSDL',
+                                          fontSize: 14,
+                                          color: Color(0xFF555555)),
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 2,
+                              ),
+                              Expanded(
+                                flex: 6,
+                                child: Container(
+                                  // color: Colors.red,
+                                  // width: deviceWidth * .3,
+                                  child: ChatBubble(
+                                    clipper: ChatBubbleClipper3(
+                                        type: BubbleType.sendBubble),
+                                    alignment: Alignment.bottomRight,
+                                    // margin:
+                                    //     EdgeInsets.only(top: 20),
+                                    backGroundColor: Color(0xFFFFF6F6),
+                                    child:
+                                        AutoSizeText("다른 유저의 예측과\n의견을 볼 수 있어요!",
+                                            style: TextStyle(
+                                              fontFamily: 'AppleSDL',
+                                              fontSize: 14,
+                                              color: Color(0xFF555555),
+                                            ),
+                                            maxLines: 2),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 4,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              FlatButton(
+                                minWidth: deviceWidth * .28,
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  _navigationService.navigateWithArgTo(
+                                      'startup', 0);
+                                },
+                                child: Text(
+                                  "홈으로 이동",
+                                  style: TextStyle(
+                                      fontFamily: 'AppleSDM',
+                                      color: Colors.white),
+                                ),
+                                color: const Color(0xFF989898),
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    _navigationService.navigateWithArgTo(
+                                        'startup', 1);
+                                  },
+                                  child: Text(
+                                    "커뮤니티로 이동",
+                                    style: TextStyle(
+                                        fontFamily: 'AppleSDM',
+                                        color: Colors.white),
+                                  ),
+                                  color: const Color(0xFF1EC8CF),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Future showVoteNotAvailable(BuildContext context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return WillPopScope(
+            onWillPop: () {},
+            child: Platform.isIOS
+                ? CupertinoAlertDialog(
+                    title: Text("예측이 마감되었습니다."),
+                    content: Text("평일 오전 8시 50분부터 오후 4시까지\n예측에 참여할 수 없습니다.."),
+                    actions: [
+                      CupertinoDialogAction(
+                        child: Text("홈으로 돌아가기"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _navigationService.navigateWithArgTo('startup', 0);
+                        },
+                      )
+                    ],
+                  )
+                : AlertDialog(
+                    title: Text("예측이 마감되었습니다."),
+                    content: Text("평일 오전 8시 50분부터 오후 4시까지\n예측에 참여할 수 없습니다.."),
+                    actions: [
+                      FlatButton(
+                        child: Text("홈으로 돌아가기"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _navigationService.navigateWithArgTo('startup', 0);
+                        },
+                      )
+                    ],
+                  ),
+          );
+        });
   }
 }
 

@@ -433,15 +433,23 @@ class DatabaseService {
       String startDateStr;
       DateTime startDateTime;
       DateTime temp;
+
+      // 시즌 info에서 시즌 시작일 불러오기
       startDateStr = await address
           .votesSeasonCollection()
           .doc('seasonInfo')
           .get()
           .then((value) => value.data()['startDate']);
 
+      //시즌 시작일 string으로
       startDateTime = strToDate(startDateStr);
 
       String tempDate = startDateStr;
+
+      // print("TEMP DATE" + tempDate.toString());
+      // print(address.date);
+      // print(strToDate(tempDate)
+      //     .isBefore(strToDate(address.date).add(Duration(days: 1))));
       while (strToDate(tempDate)
           .isBefore(strToDate(address.date).add(Duration(days: 1)))) {
         tempSubVoteList = [];
@@ -1248,6 +1256,7 @@ class DatabaseService {
     String category;
     String season;
     String baseDate;
+    bool isVoting = true;
 
     await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) async {
@@ -1268,13 +1277,16 @@ class DatabaseService {
         // 없으면 admin collection에 있는 baseDate를 가져옴
         if (voteData.data() == null) {
           baseDate = doc.data()['baseDate'];
+          isVoting = true;
+        } else {
+          isVoting = DateTimeModel().isVoteAvailable(category);
         }
       },
     );
 
     // baseDate = DateTimeModel().baseDate(category);
 
-    bool isVoting = DateTimeModel().isVoteAvailable(category);
+    // bool isVoting = DateTimeModel().isVoteAvailable(category);
     // String baseDate = '20200901';
     // bool isVoteAvailable = DateTimeModel().isVoteAvailable(tempCategory);
 
@@ -1285,7 +1297,7 @@ class DatabaseService {
       date: baseDate,
       category: category,
       season: season,
-      isVoting: true, //false면 장 중
+      isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());

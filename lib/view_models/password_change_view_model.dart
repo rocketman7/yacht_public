@@ -46,11 +46,9 @@ class PasswordChangeViewModel extends BaseViewModel {
     print("RESULTD " + result.toString());
     if (result == true) {
       setChecking(false);
-      Navigator.pop(context);
-      _navigationService.navigateTo('initial');
-    } else
-    // if (result == "firebase_auth/requires-recent-login")
-    {
+      // Navigator.pop(context);
+      // _navigationService.navigateTo('initial');
+    } else if (result == "firebase_auth/requires-recent-login") {
       setChecking(false);
       showDialog(
           context: context,
@@ -65,8 +63,10 @@ class PasswordChangeViewModel extends BaseViewModel {
                     content: Text("비밀번호를 변경하기 위해서 다시 로그인한 후 변경해야 합니다."),
                   );
           });
+    } else {
+      Navigator.pop(context);
     }
-
+//
     //
   }
 }

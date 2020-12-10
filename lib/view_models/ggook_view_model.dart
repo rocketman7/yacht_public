@@ -1,5 +1,6 @@
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/date_time_model.dart';
 import 'package:yachtOne/services/stateManage_service.dart';
 
 import '../locator.dart';
@@ -42,6 +43,7 @@ class GgookViewModel extends BaseViewModel {
     await _stateManageService.userModelUpdate();
   }
 
+// subVote DB의 numVoted 업데이트
   Future counterUserVote(
     DatabaseAddressModel address,
     List<int> voteSelected,
@@ -52,5 +54,9 @@ class GgookViewModel extends BaseViewModel {
   Future<DatabaseAddressModel> getAddress() async {
     _address = await _databaseService.getAddress(uid);
     return _address;
+  }
+
+  checkIfVotingTime(String category) {
+    return DateTimeModel().isVoteAvailable(category);
   }
 }

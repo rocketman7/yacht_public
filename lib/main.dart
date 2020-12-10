@@ -19,6 +19,7 @@ import 'router.dart';
 // import 'views/animation_test2.dart';
 // import 'views/register_view.dart';
 // import 'views/sliding_card.dart';
+import 'services/connection_check_service.dart';
 import 'views/startup_view.dart';
 
 import 'locator.dart';
@@ -37,7 +38,7 @@ void main() async {
 
 // portrait 모드 고정
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((value) => runApp(MyApp()));
+      .then((value) => runApp(MaterialApp(home: MyApp())));
 }
 
 class MyApp extends StatefulWidget {
@@ -46,10 +47,24 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final ConnectionCheckService _connectionCheckService =
+      locator<ConnectionCheckService>();
   // final APP_STORE_URL =
   //     'https://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftwareUpdate?id=YOUR-APP-ID&mt=8';
   // final PLAY_STORE_URL =
   //     'https://play.google.com/store/apps/details?id=YOUR-APP-ID';
+
+  @override
+  void initState() {
+    super.initState();
+    _connectionCheckService.checkConnection(context);
+  }
+
+  @override
+  void dispose() {
+    _connectionCheckService.listener.cancel();
+    super.dispose();
+  }
 
   GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
   @override
