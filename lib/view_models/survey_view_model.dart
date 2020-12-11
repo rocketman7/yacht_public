@@ -202,6 +202,10 @@ class SurveyViewModel extends FutureViewModel {
     uid = _authService.auth.currentUser.uid;
   }
 
+  double progress = 0;
+  int steps = 0;
+  int totalSteps = 4 + surveyTitles.length;
+
   // 아는 주식들 서베이 위해, 일정 티어에서 랜덤으로 8개 종목을 픽 (더 이상 모르겠어요 누르거나 최초 실행 시에 트리거됨)
   Future bubbleSurveyRandomPick() async {
     allChoice = false;
@@ -464,7 +468,8 @@ class SurveyViewModel extends FutureViewModel {
 
     print(pointsAtStep);
     print(bubbleSurveysAnswer);
-
+    steps++;
+    progress = steps / totalSteps;
     notifyListeners();
   }
 
@@ -487,10 +492,18 @@ class SurveyViewModel extends FutureViewModel {
       surveysAnswer['answer'].add(answer);
       surveysAnswer['answer'].add(-1);
       surveyCurrentStep += 2;
+
+      steps += 2;
+      progress = steps / totalSteps;
     } else if (surveyCurrentStep < surveyTotalStep) {
       surveysAnswer['answer'].add(answer);
       surveyCurrentStep += 1;
+
+      steps += 1;
+      progress = steps / totalSteps;
     } else {
+      steps += 1;
+      progress = steps / totalSteps;
       //db업데이트 후 종료
       surveysAnswer['answer'].add(answer);
       await _databaseService.updateSurvey(uid, surveysAnswer);

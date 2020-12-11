@@ -95,6 +95,11 @@ class _ChartViewState extends State<ChartView> {
   int indexChosen = 0;
   String countryCode = "KR";
   String stockOrIndex;
+  String colorCode;
+
+  Color hexToColor(String code) {
+    return Color(int.parse(code, radix: 16) + 0xFF0000000);
+  }
 
   @override
   void initState() {
@@ -205,7 +210,7 @@ class _ChartViewState extends State<ChartView> {
     address = widget.address;
     user = widget.user;
     stockOrIndex = widget.vote.subVotes[idx].indexOrStocks[indexChosen];
-
+    colorCode = widget.vote.subVotes[idx].colorCode[indexChosen];
     print("ISSUECODE " + issueCode);
 
     _showToast = widget.showToast;
@@ -1660,7 +1665,7 @@ class _ChartViewState extends State<ChartView> {
             plotAreaBorderWidth: 0,
             series: <ChartSeries>[
               ScatterSeries<StatsModel, String>(
-                color: Color(0xFF99E99B),
+                color: Color(0xFF07A903).withOpacity(.3),
                 dataSource: statsDataSourceList,
                 xValueMapper: (StatsModel stats, _) =>
                     stats.announcedAt.replaceAll("\\n", "\n"),
@@ -1671,7 +1676,9 @@ class _ChartViewState extends State<ChartView> {
                 ),
               ),
               ScatterSeries<StatsModel, String>(
-                color: Color(0xFF00C802),
+                color:
+                    // hexToColor(colorCode),
+                    Color(0xFF07A903),
                 dataSource: statsDataSourceList,
                 xValueMapper: (StatsModel stats, _) =>
                     stats.announcedAt.replaceAll("\\n", "\n"),
@@ -1764,7 +1771,9 @@ class _ChartViewState extends State<ChartView> {
                     width: 16,
                     height: 16,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Color(0xFF99E99B)),
+                      shape: BoxShape.circle,
+                      color: Color(0xFF07A903).withOpacity(.3),
+                    ),
                   ),
                 ],
               ),
@@ -1780,7 +1789,9 @@ class _ChartViewState extends State<ChartView> {
                     width: 16,
                     height: 16,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Color(0xFF00C802)),
+                      shape: BoxShape.circle,
+                      color: Color(0xFF07A903),
+                    ),
                   ),
                 ],
               ),

@@ -67,7 +67,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ConnectionCheckService _connectionCheckService =
       locator<ConnectionCheckService>();
   String uid;
@@ -279,6 +279,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   String app_store_url;
   String play_store_url;
   bool isSeasonStarted = true;
+  bool isUrgentNotice = false;
+  String urgentMessage = "";
   bool termsOfUse;
   String defaultMainText;
 
@@ -372,9 +374,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       app_store_url = remoteConfig.getString('app_store_url');
       play_store_url = remoteConfig.getString('play_store_url');
 
-      // 주석 풀고 업데이트
+      // 주석 풀고 업데이트 //예측하러 가기 활성or비활성화
       isSeasonStarted = remoteConfig.getBool('is_season_started');
 
+      isUrgentNotice = remoteConfig.getBool('is_urgent_notice');
+      urgentMessage = remoteConfig.getString('urgent_message');
       // 홈 기본 텍스트 불러오기
 
       // defaultMainText = remoteConfig.getString('default_main_text');
@@ -383,7 +387,42 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       print("APP STORE URL " + app_store_url);
       print("PLAY STORE URL " + play_store_url);
       print("IS SEASON STARTED " + isSeasonStarted.toString());
+
       // print("Main Text " + defaultMainText.toString());
+
+      if (isUrgentNotice) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              VoteSelectViewModel model;
+              String title = "긴급점검 중입니다.";
+              String content = urgentMessage;
+              String okButton = "닫기";
+              return WillPopScope(
+                onWillPop: () {},
+                child: Platform.isIOS
+                    ? CupertinoAlertDialog(
+                        title: Text(title),
+                        content: Text(content),
+                        actions: <Widget>[
+                            CupertinoDialogAction(
+                              child: Text(okButton),
+                              onPressed: () => exit(0),
+                            ),
+                          ])
+                    : AlertDialog(
+                        title: Text(title),
+                        content: Text(content),
+                        actions: <Widget>[
+                            FlatButton(
+                              child: Text(okButton),
+                              onPressed: () => exit(0),
+                            ),
+                          ]),
+              );
+            });
+      }
 
       if (newVersion > currentVersion) {
         _showVersionDialog(context);
@@ -587,7 +626,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                 // model.address.isVoting ? Color(0xFF1EC8CF) : animation.value,
                 model.address.isVoting ? Color(0xFF1EC8CF) : Color(0xFFB90FD0),
 
-            key: scaffoldKey,
+            key: _scaffoldKey,
             // endDrawer: myPage(model),
             body: WillPopScope(
               onWillPop: () async {
@@ -1290,7 +1329,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                     index,
                                                     context,
                                                     numSelected,
-                                                    scaffoldKey,
+                                                    _scaffoldKey,
                                                     diff,
                                                   ),
                                                   index ==
@@ -1618,7 +1657,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                             //     height: 4),
 
                             Text(
-                              "예측에 모두 성공하면 승점 ${(alreadyVoted + listSelected.length) * 2}점 획득! 🎊\n모두 실패하면 ${-(alreadyVoted + listSelected.length)}점 😢",
+                              "예측에 모두 성공하면 승점 +${(alreadyVoted + listSelected.length) * 2}점 획득! 🎊\n모두 실패하면 ${-(alreadyVoted + listSelected.length)}점 😢",
                               style: TextStyle(
                                 fontFamily: 'AppleSDM',
                                 fontSize: 16,
@@ -1722,7 +1761,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                         ),
                         SizedBox(height: 12),
                         Text(
-                          "예측에 모두 성공하면 승점 ${listSelected.length * 2}점 획득! 🎊\n모두 실패하면 ${-listSelected.length}점 😢",
+                          "예측에 모두 성공하면 승점 +${listSelected.length * 2}점 획득! 🎊\n모두 실패하면 ${-listSelected.length}점 😢",
                           style: TextStyle(
                             fontFamily: 'AppleSDM',
                             fontSize: 16,
@@ -2328,9 +2367,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
                       setChoice != 0
                           ? await showDialog(
-                              context: context,
+                              context: _scaffoldKey.currentContext,
                               barrierDismissible: true,
-                              builder: (_) {
+                              builder: (context) {
                                 String title = "예측을 초기화하시겠습니까?";
                                 String message =
                                     "이미 소모된 꾸욱 아이템은 반환되지 않습니다. 초기화된 종목은 다시 예측이 가능하며,\n이 경우 꾸욱 아이템이 소모됩니다.";
@@ -2363,8 +2402,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                 color: Colors.red,
                                               ),
                                               onPressed: () {
+                                                Navigator.of(context).pop();
                                                 model.initialiseOneVote(idx);
-                                                Navigator.pop(context);
                                               }),
                                         ],
                                       )

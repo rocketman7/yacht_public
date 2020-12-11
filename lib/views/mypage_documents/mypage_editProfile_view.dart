@@ -37,10 +37,17 @@ class MypageEditProfileView extends StatelessWidget {
                             SizedBox(
                               height: 16,
                             ),
-                            Center(
-                                child: avatarWidget(
-                                    model.sharedPrefForAvatarImage,
-                                    model.user.item)),
+                            GestureDetector(
+                              onTap: () {
+                                model.checkedAvatarImage =
+                                    model.sharedPrefForAvatarImage;
+                                buildModalBottomSheet(context, model);
+                              },
+                              child: Center(
+                                  child: avatarWidget(
+                                      model.sharedPrefForAvatarImage,
+                                      model.user.item)),
+                            ),
                             SizedBox(
                               height: 10,
                             ),

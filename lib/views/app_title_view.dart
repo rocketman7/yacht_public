@@ -97,7 +97,7 @@ class _AppTitleViewState extends State<AppTitleView> {
                   //   ],
                   // ),
 
-                  SizedBox(height: 40),
+                  SizedBox(height: Platform.isIOS ? 40 : 90),
                   SvgPicture.asset(
                     'assets/images/logo_ggook_letter.svg',
                     width: 110,
@@ -333,6 +333,11 @@ class _AppTitleViewState extends State<AppTitleView> {
               // ),
 
               // SizedBox(height: 10),
+              // Platform.isIOS
+              //     ? Container(
+              //         height: 40,
+              //       )
+              //     : Container(),
               Column(
                 children: [
                   SizedBox(height: 30),
@@ -403,7 +408,9 @@ class _AppTitleViewState extends State<AppTitleView> {
                                   ),
                           ),
                         ))
-                      : Container(),
+                      : Container(
+                          height: 140,
+                        ),
                   SizedBox(
                     height: 8,
                   ),
