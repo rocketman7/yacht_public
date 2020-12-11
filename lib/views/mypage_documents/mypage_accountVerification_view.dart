@@ -167,12 +167,14 @@ class _MypageAccountVerificationViewState
                         borderRadius: BorderRadius.circular(10.0))),
               )
             : verificationProcess(model),
+        SizedBox(height: 16),
         model.visibleButton1
             ? Text('은행연계계좌는 계좌 인증이 불가능하며, 계좌 인증 서비스를 제공하지 못하는 증권사가 존재할 수 있습니다.',
-                style: TextStyle(fontSize: 12, color: Color(0xFFC5C5C7)))
+                style: TextStyle(fontSize: 12, color: Color(0xFF5F5E5E)))
             : Container(),
         model.visibleButton1 ? Container() : accNumberInsertProcess(model),
         model.visibleButton1 ? Container() : accNameInsertProcess(model),
+        SizedBox(height: 16),
         model.visibleButton2
             ? Container(
                 width: deviceWidth,
@@ -187,10 +189,16 @@ class _MypageAccountVerificationViewState
                       if (_accNameController.text != '' &&
                           _accNumberController.text != '' &&
                           model.secName != '') {
+                        FocusScope.of(context).unfocus();
                         model.accNumber = _accNumberController.text;
                         model.accName = _accNameController.text;
 
                         model.ableButton2 = false;
+
+                        // 이제 위에 적은 값들 수정 안되게
+                        model.ableBankListButton = false;
+                        model.accNameInsertProcess = true;
+                        model.accNumberInsertProcess = true;
 
                         model.notifyListeners();
 
@@ -203,12 +211,16 @@ class _MypageAccountVerificationViewState
                           model.accVerificationFailMsg = '';
 
                           // 이제 위에 적은 값들 수정 안되게
-                          model.accNameInsertProcess = true;
-                          model.accNumberInsertProcess = true;
+                          // model.accNameInsertProcess = true;
+                          // model.accNumberInsertProcess = true;
+                          // model.ableBankListButton = false;
 
                           myFocusNode3.requestFocus();
                         } else {
                           model.accVerificationFailMsg = result;
+                          model.ableBankListButton = true;
+                          model.accNameInsertProcess = false;
+                          model.accNumberInsertProcess = false;
                         }
 
                         model.ableButton2 = true;
@@ -266,23 +278,30 @@ class _MypageAccountVerificationViewState
               '${model.secName}',
               style: TextStyle(fontSize: 16),
             ),
-            !model.visibleBankList
-                ? IconButton(
-                    icon: Icon(Icons.keyboard_arrow_down),
-                    onPressed: () {
-                      model.visibleBankList = true;
-                      model.secName = '';
-                      model.selectSecLogo = 100;
-                      myFocusNode.unfocus();
-                      model.notifyListeners();
-                    })
+            model.ableBankListButton
+                ? (!model.visibleBankList
+                    ? IconButton(
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        onPressed: () {
+                          model.visibleBankList = true;
+                          model.secName = '';
+                          model.selectSecLogo = 100;
+                          myFocusNode.unfocus();
+                          model.notifyListeners();
+                        })
+                    : IconButton(
+                        icon: Icon(
+                          Icons.keyboard_arrow_down,
+                          color: Colors.transparent,
+                        ),
+                        onPressed: null,
+                      ))
                 : IconButton(
                     icon: Icon(
                       Icons.keyboard_arrow_down,
                       color: Colors.transparent,
                     ),
-                    onPressed: null,
-                  ),
+                    onPressed: null),
           ],
         ),
         model.visibleBankList ? bankList(model) : Container()
@@ -302,6 +321,7 @@ class _MypageAccountVerificationViewState
             child: GestureDetector(
               onTap: () {
                 model.secName = model.getBankList().keys.toList()[index];
+                print(model.secName);
                 model.visibleBankList = false;
                 model.selectSecLogo = index;
                 myFocusNode.requestFocus();
@@ -536,9 +556,9 @@ class _MypageAccountVerificationViewState
           color: Color(0xFF1EC8CF),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-          onPressed: () {
+          onPressed: () async {
             model.verificationSuccess =
-                model.accVerification(_authNumController.text);
+                await model.accVerification(_authNumController.text);
             FocusScope.of(context).unfocus();
             model.notifyListeners();
           },

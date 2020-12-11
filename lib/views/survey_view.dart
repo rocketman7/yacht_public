@@ -20,6 +20,7 @@ class SurveyView extends StatelessWidget {
     Color(0xFFFF0101),
     Color(0xFF0702FF),
   ];
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -49,7 +50,30 @@ class SurveyView extends StatelessWidget {
                             // cro: MainAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: deviceHeight * .07,
+                                height: deviceHeight * .05,
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  height: 5,
+                                  width: model.progress > 1
+                                      ? (1 * deviceWidth)
+                                      : (model.progress * deviceWidth),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFF4F4F4F),
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color(0xFFF90061),
+                                          Color(0xFFFFC057)
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(10)),
+                                ),
+                              ),
+                              SizedBox(
+                                height: deviceHeight * .02,
                               ),
                               !(model.didBubbleSurvey)
                                   ? bubbleSurvey(model)
@@ -59,7 +83,7 @@ class SurveyView extends StatelessWidget {
                                               model.surveyTotalStep
                                           ? makeSurvey(model)
                                           : Container(),
-                                    )
+                                    ),
                             ],
                           ),
                         ),
@@ -317,7 +341,7 @@ class SurveyView extends StatelessWidget {
                   child: Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: colorList[Random().nextInt(8)].withOpacity(.95),
+                        color: colorList[Random().nextInt(10)].withOpacity(.95),
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
                       // height: double.infinity,
@@ -329,7 +353,7 @@ class SurveyView extends StatelessWidget {
                               [i],
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 18,
                             color: Colors.white,
                             fontFamily: 'AppleSDM',
                           ),

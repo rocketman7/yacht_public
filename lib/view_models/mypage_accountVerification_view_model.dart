@@ -25,6 +25,7 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   // 증권계좌가 인증되지 않았을 때 인증절차에서 필요한 ui 변수들. 이마저 viewmodel에 담는게 나은것인지?
   bool visibleButton1 = true;
   bool visibleBankList = false;
+  bool ableBankListButton = true;
   bool visibleButton2 = false;
   bool ableButton2 = true;
   bool visibleAuthNumProcess = false;
@@ -56,13 +57,8 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   Future<String> accOwnerVerificationRequest() async {
     bankCode = accountVerificationService.getBankList()['$secName'];
 
-    // print(bankCode);
-
     accOwnerResp = await accountVerificationService.accOwnerVerification(
         accNumber, bankCode, accName);
-
-    // print(accOwnerResp[0]);
-    // print(accOwnerResp[1]);
 
     notifyListeners();
 
@@ -74,17 +70,11 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
 
   Future<String> accOccupyVerificationRequest() async {
     authNum = AccoutVerificationServiceMydata().authTextGenerate();
-    // authNum = 5555;
 
     bankCode = accountVerificationService.getBankList()['$secName'];
 
-    // print(bankCode);
-
     accOccupyResp = await accountVerificationService.accOccupyVerification(
         accNumber, bankCode, authNum.toString());
-
-    // print(accOccupyResp[0]);
-    // print(accOccupyResp[1]);
 
     notifyListeners();
 
@@ -114,14 +104,15 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
     }
   }
 
-  bool accVerification(String authNumInput) {
+  Future<bool> accVerification(String authNumInput) async {
     if (authNumInput == authNum.toString()) {
       user.accNumber = accNumber;
       user.secName = secName;
       user.accName = accName;
 
-      setAccInformation();
-      _stateManageService.userModelUpdate();
+      // setAccInformation();
+      await setAccInformations();
+      await _stateManageService.userModelUpdate();
       return true;
     } else {
       verificationFailMsg = '인증번호가 틀립니다. 다시 입력해주세요';
@@ -129,8 +120,12 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
     }
   }
 
-  Future setAccInformation() async {
-    _databaseService.setAccInformation(user, uid);
+  // Future setAccInformation() async {
+  //   _databaseService.setAccInformation(user, uid);
+  // }
+
+  Future setAccInformations() async {
+    await _databaseService.setAccInformations(accNumber, accName, secName, uid);
   }
 
   int getBankListLength() => accountVerificationService.getBankListLength();

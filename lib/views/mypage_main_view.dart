@@ -294,7 +294,11 @@ class MypageMainView extends StatelessWidget {
                 ],
               ),
             ),
-            avatarWidget(model.user.avatarImage, model.user.item)
+            GestureDetector(
+                onTap: () {
+                  model.navigateToMypageToDown('mypage_editprofile');
+                },
+                child: avatarWidget(model.user.avatarImage, model.user.item))
           ],
         ),
       ),
@@ -366,7 +370,7 @@ class MypageMainView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '앱 사용 설정',
+            '꾸욱 추천하기',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(

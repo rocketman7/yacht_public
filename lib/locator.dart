@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:yachtOne/services/amplitude_service.dart';
 
 import 'services/auth_service.dart';
+import 'services/connection_check_service.dart';
 import 'services/database_service.dart';
 import 'services/navigation_service.dart';
 import 'services/dialog_service.dart';
@@ -31,4 +32,5 @@ void setupLocator() {
   locator.registerLazySingleton<StateManageService>(
       () => StateManageServiceFirebase());
   locator.registerLazySingleton(() => AmplitudeService());
+  locator.registerLazySingleton(() => ConnectionCheckService());
 }

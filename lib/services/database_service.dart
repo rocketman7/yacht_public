@@ -208,6 +208,15 @@ class DatabaseService {
     await _usersCollectionReference.doc(uid).set(user.toJson());
   }
 
+  Future setAccInformations(
+      String accNumber, String accName, String secName, String uid) async {
+    await _usersCollectionReference.doc(uid).update({
+      'account.accNumber': accNumber,
+      'account.accName': accName,
+      'account.secName': secName,
+    });
+  }
+
   // user콜렉션에서 아바타이미지 바꾸기
   Future setAvatarImage(String avatarImage, String uid) async {
     await _usersCollectionReference
@@ -1247,6 +1256,7 @@ class DatabaseService {
     String category;
     String season;
     String baseDate;
+    bool isVoting = true;
 
     await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) async {
@@ -1267,13 +1277,16 @@ class DatabaseService {
         // 없으면 admin collection에 있는 baseDate를 가져옴
         if (voteData.data() == null) {
           baseDate = doc.data()['baseDate'];
+          isVoting = true;
+        } else {
+          isVoting = DateTimeModel().isVoteAvailable(category);
         }
       },
     );
 
     // baseDate = DateTimeModel().baseDate(category);
 
-    bool isVoting = DateTimeModel().isVoteAvailable(category);
+    // bool isVoting = DateTimeModel().isVoteAvailable(category);
     // String baseDate = '20200901';
     // bool isVoteAvailable = DateTimeModel().isVoteAvailable(tempCategory);
 
