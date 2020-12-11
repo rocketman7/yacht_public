@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:yachtOne/models/database_address_model.dart';
@@ -125,8 +126,13 @@ class _VoteCommentViewState extends State<VoteCommentView>
             return Scaffold(
               body: WillPopScope(
                 onWillPop: () async {
-                  _navigatorKey.currentState.maybePop();
-                  return false;
+                  onWillPop(context) async {
+                    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                    return false;
+                  }
+
+                  // _navigatorKey.currentState.maybePop();
+                  return onWillPop(context);
                 },
                 child: SafeArea(
                   child: Padding(
@@ -226,6 +232,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                       // fontWeight: FontWeight.bold,
                       fontFamily: 'AppleSDB',
                     )),
+                subtitle: Text("자유롭게 주식 이야기를 해주세요."),
                 // subtitle: Text("50명 이야기중"),
                 // subtitle: Text("rocketman님 외에 50명 이야기중"),
               ),

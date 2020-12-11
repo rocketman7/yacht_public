@@ -94,7 +94,7 @@ class VoteSelectViewModel extends FutureViewModel {
         //유저가 reward받을 수 있는 조건을 충족하면,
         //아이템을 한 개 늘려주고,
         user.item += 1;
-        _databaseService.updateUserItem(uid, user.item);
+        _databaseService.updateUserItem(uid, 1);
         //stateManage 업데이트
         _stateManageService.userModelUpdate();
 

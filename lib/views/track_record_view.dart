@@ -1,5 +1,6 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
@@ -55,8 +56,13 @@ class _TrackRecordViewState extends State<TrackRecordView> {
           return Scaffold(
             body: WillPopScope(
               onWillPop: () async {
-                _navigatorKey.currentState.maybePop();
-                return false;
+                onWillPop(context) async {
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  return false;
+                }
+
+                // _navigatorKey.currentState.maybePop();
+                return onWillPop(context);
               },
               child: SafeArea(
                 child: Padding(

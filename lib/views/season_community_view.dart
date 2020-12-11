@@ -1008,51 +1008,55 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return Platform.isIOS
-                                        ? CupertinoAlertDialog(
-                                            content: Text('이 게시글을 삭제하시겠습니까?'),
-                                            actions: <Widget>[
-                                              CupertinoDialogAction(
-                                                child: Text('아뇨'),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              CupertinoDialogAction(
-                                                child: Text('네'),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  model.deleteComment(
-                                                      model.address,
-                                                      voteComment.postUid);
-                                                  // model.logout();
-                                                },
-                                              )
-                                            ],
-                                          )
-                                        : AlertDialog(
-                                            content: Text('이 게시글을 삭제하시겠습니까?'),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                child: Text('아뇨'),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              FlatButton(
-                                                child: Text('네'),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
+                                    return MediaQuery(
+                                      data: MediaQuery.of(context)
+                                          .copyWith(textScaleFactor: 1.0),
+                                      child: Platform.isIOS
+                                          ? CupertinoAlertDialog(
+                                              content: Text('이 게시글을 삭제하시겠습니까?'),
+                                              actions: <Widget>[
+                                                CupertinoDialogAction(
+                                                  child: Text('아뇨'),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                CupertinoDialogAction(
+                                                  child: Text('네'),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    model.deleteComment(
+                                                        model.address,
+                                                        voteComment.postUid);
+                                                    // model.logout();
+                                                  },
+                                                )
+                                              ],
+                                            )
+                                          : AlertDialog(
+                                              content: Text('이 게시글을 삭제하시겠습니까?'),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text('아뇨'),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                FlatButton(
+                                                  child: Text('네'),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
 
-                                                  model.deleteComment(
-                                                      model.address,
-                                                      voteComment.postUid);
-                                                  // model.logout();
-                                                  // model.logout();
-                                                },
-                                              )
-                                            ],
-                                          );
+                                                    model.deleteComment(
+                                                        model.address,
+                                                        voteComment.postUid);
+                                                    // model.logout();
+                                                    // model.logout();
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                    );
                                   },
                                 );
                               },
@@ -1077,54 +1081,62 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                 showDialog(
                                   context: context,
                                   builder: (context) {
-                                    return Platform.isIOS
-                                        ? CupertinoAlertDialog(
-                                            content:
-                                                Text('이 게시글을 신고/차단하시겠습니까?'),
-                                            actions: <Widget>[
-                                              CupertinoDialogAction(
-                                                child: Text('아뇨'),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              CupertinoDialogAction(
-                                                child: Text('네'),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  model.addBlockList(
-                                                      model.user, voteComment);
-                                                  setState(() {
-                                                    commentList.removeAt(index);
-                                                  });
-                                                },
-                                              )
-                                            ],
-                                          )
-                                        : AlertDialog(
-                                            content:
-                                                Text('이 게시글을 신고/차단하시겠습니까?'),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                child: Text('아뇨'),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              FlatButton(
-                                                child: Text('네'),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  model.addBlockList(
-                                                      model.user, voteComment);
-                                                  setState(() {
-                                                    commentList.removeAt(index);
-                                                  });
-                                                  // model.logout();
-                                                },
-                                              )
-                                            ],
-                                          );
+                                    return MediaQuery(
+                                      data: MediaQuery.of(context)
+                                          .copyWith(textScaleFactor: 1.0),
+                                      child: Platform.isIOS
+                                          ? CupertinoAlertDialog(
+                                              content:
+                                                  Text('이 게시글을 신고/차단하시겠습니까?'),
+                                              actions: <Widget>[
+                                                CupertinoDialogAction(
+                                                  child: Text('아뇨'),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                CupertinoDialogAction(
+                                                  child: Text('네'),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    model.addBlockList(
+                                                        model.user,
+                                                        voteComment);
+                                                    setState(() {
+                                                      commentList
+                                                          .removeAt(index);
+                                                    });
+                                                  },
+                                                )
+                                              ],
+                                            )
+                                          : AlertDialog(
+                                              content:
+                                                  Text('이 게시글을 신고/차단하시겠습니까?'),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                  child: Text('아뇨'),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                FlatButton(
+                                                  child: Text('네'),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    model.addBlockList(
+                                                        model.user,
+                                                        voteComment);
+                                                    setState(() {
+                                                      commentList
+                                                          .removeAt(index);
+                                                    });
+                                                    // model.logout();
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                    );
                                   },
                                 );
                               },

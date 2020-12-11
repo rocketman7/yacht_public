@@ -39,20 +39,21 @@ class ChartView extends StatefulWidget {
   final UserModel user;
   final Function selectUpdate;
   final Function showToast;
+  final bool isButtonBlocked;
 
   ChartView(
-    // this.controller,
-    this.scrollStreamCtrl,
-    this.selected,
-    this.idx,
-    this.numSelected,
-    this.vote,
-    this.seasonInfo,
-    this.address,
-    this.user,
-    this.selectUpdate,
-    this.showToast,
-  );
+      // this.controller,
+      this.scrollStreamCtrl,
+      this.selected,
+      this.idx,
+      this.numSelected,
+      this.vote,
+      this.seasonInfo,
+      this.address,
+      this.user,
+      this.selectUpdate,
+      this.showToast,
+      this.isButtonBlocked);
   @override
   _ChartViewState createState() => _ChartViewState();
 }
@@ -96,6 +97,7 @@ class _ChartViewState extends State<ChartView> {
   String countryCode = "KR";
   String stockOrIndex;
   String colorCode;
+  bool isButtonBlocked;
 
   Color hexToColor(String code) {
     return Color(int.parse(code, radix: 16) + 0xFF0000000);
@@ -211,6 +213,7 @@ class _ChartViewState extends State<ChartView> {
     user = widget.user;
     stockOrIndex = widget.vote.subVotes[idx].indexOrStocks[indexChosen];
     colorCode = widget.vote.subVotes[idx].colorCode[indexChosen];
+    isButtonBlocked = widget.isButtonBlocked;
     print("ISSUECODE " + issueCode);
 
     _showToast = widget.showToast;
@@ -325,7 +328,8 @@ class _ChartViewState extends State<ChartView> {
                               (!selected[idx])
                                   ? RaisedButton(
                                       onPressed: () {
-                                        (address.isVoting == false)
+                                        (address.isVoting == false ||
+                                                isButtonBlocked)
                                             ? {}
                                             : setState(() {
                                                 if (seasonInfo.maxDailyVote -
@@ -352,7 +356,8 @@ class _ChartViewState extends State<ChartView> {
                                                 }
                                               });
                                       },
-                                      color: (address.isVoting == false)
+                                      color: (address.isVoting == false ||
+                                              isButtonBlocked)
                                           ? Color(0xFFE4E4E4)
                                           : Color(0xFF1EC8CF),
                                       shape: RoundedRectangleBorder(
@@ -1665,7 +1670,7 @@ class _ChartViewState extends State<ChartView> {
             plotAreaBorderWidth: 0,
             series: <ChartSeries>[
               ScatterSeries<StatsModel, String>(
-                color: Color(0xFF07A903).withOpacity(.3),
+                color: Color(0xFFFF5959).withOpacity(.3),
                 dataSource: statsDataSourceList,
                 xValueMapper: (StatsModel stats, _) =>
                     stats.announcedAt.replaceAll("\\n", "\n"),
@@ -1678,7 +1683,7 @@ class _ChartViewState extends State<ChartView> {
               ScatterSeries<StatsModel, String>(
                 color:
                     // hexToColor(colorCode),
-                    Color(0xFF07A903),
+                    Color(0xFFFF5959),
                 dataSource: statsDataSourceList,
                 xValueMapper: (StatsModel stats, _) =>
                     stats.announcedAt.replaceAll("\\n", "\n"),
@@ -1772,7 +1777,7 @@ class _ChartViewState extends State<ChartView> {
                     height: 16,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFF07A903).withOpacity(.3),
+                      color: Color(0xFFFF5959).withOpacity(.3),
                     ),
                   ),
                 ],
@@ -1790,7 +1795,7 @@ class _ChartViewState extends State<ChartView> {
                     height: 16,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFF07A903),
+                      color: Color(0xFFFF5959),
                     ),
                   ),
                 ],

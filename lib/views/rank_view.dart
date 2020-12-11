@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,8 +48,14 @@ class RankView extends StatelessWidget {
                         )
                       : WillPopScope(
                           onWillPop: () async {
-                            _navigatorKey.currentState.maybePop();
-                            return false;
+                            onWillPop(context) async {
+                              SystemChannels.platform
+                                  .invokeMethod('SystemNavigator.pop');
+                              return false;
+                            }
+
+                            // _navigatorKey.currentState.maybePop();
+                            return onWillPop(context);
                           },
                           child: SafeArea(
                             child: Padding(

@@ -1074,9 +1074,11 @@ class DatabaseService {
     }
   }
 
-  Future updateUserItem(String uid, int newItem) async {
-    print("NEW ITEM IS" + newItem.toString());
-    await _usersCollectionReference.doc(uid).update({'item': newItem});
+  Future updateUserItem(String uid, int reward) async {
+    // print("NEW ITEM IS" + newItem.toString());
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'item': FieldValue.increment(reward)});
   }
 
   Future decreaseUserItem(

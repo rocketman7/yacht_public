@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:align_positioned/align_positioned.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
@@ -68,8 +69,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final ConnectionCheckService _connectionCheckService =
-      locator<ConnectionCheckService>();
+
   String uid;
 
   PreloadPageController _preloadPageController = PreloadPageController();
@@ -224,6 +224,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   @override
   void initState() {
     super.initState();
+    // BackButtonInterceptor.add(myInterceptor);
     // _connectionCheckService.checkConnection(context);
     try {
       callRemoteConfig(context);
@@ -307,46 +308,49 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         String btnLabelCancel = "거부";
         String _termsOfUse;
         ;
-        return WillPopScope(
-            onWillPop: () {},
-            child: CupertinoAlertDialog(
-              title: Text(title),
-              content: FutureBuilder(
-                  future: _termsOfUseFuture(),
-                  builder: (context, snapshot) {
-                    _termsOfUse = snapshot.data;
-                    if (snapshot.hasData) {
-                      return Container(
-                        height: 400,
-                        width: 180,
-                        child: SingleChildScrollView(
-                            child: Text(
-                          _termsOfUse,
-                          textAlign: TextAlign.left,
-                        )),
-                      );
-                    } else {
-                      return Container(
-                        height: 200,
-                        width: 100,
-                      );
-                    }
-                  }),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text(btnLabelCancel),
-                  onPressed: () => exit(0),
-                ),
-                CupertinoDialogAction(
-                  child: Text(btnLabel),
-                  onPressed: () {
-                    _sharedPreferencesService.setSharedPreferencesValue(
-                        termsOfUseKey, true);
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ));
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: WillPopScope(
+              onWillPop: () {},
+              child: CupertinoAlertDialog(
+                title: Text(title),
+                content: FutureBuilder(
+                    future: _termsOfUseFuture(),
+                    builder: (context, snapshot) {
+                      _termsOfUse = snapshot.data;
+                      if (snapshot.hasData) {
+                        return Container(
+                          height: 400,
+                          width: 180,
+                          child: SingleChildScrollView(
+                              child: Text(
+                            _termsOfUse,
+                            textAlign: TextAlign.left,
+                          )),
+                        );
+                      } else {
+                        return Container(
+                          height: 200,
+                          width: 100,
+                        );
+                      }
+                    }),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text(btnLabelCancel),
+                    onPressed: () => exit(0),
+                  ),
+                  CupertinoDialogAction(
+                    child: Text(btnLabel),
+                    onPressed: () {
+                      _sharedPreferencesService.setSharedPreferencesValue(
+                          termsOfUseKey, true);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              )),
+        );
       },
     );
   }
@@ -399,27 +403,30 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
               String title = "긴급점검 중입니다.";
               String content = urgentMessage;
               String okButton = "닫기";
-              return WillPopScope(
-                onWillPop: () {},
-                child: Platform.isIOS
-                    ? CupertinoAlertDialog(
-                        title: Text(title),
-                        content: Text(content),
-                        actions: <Widget>[
-                            CupertinoDialogAction(
-                              child: Text(okButton),
-                              onPressed: () => exit(0),
-                            ),
-                          ])
-                    : AlertDialog(
-                        title: Text(title),
-                        content: Text(content),
-                        actions: <Widget>[
-                            FlatButton(
-                              child: Text(okButton),
-                              onPressed: () => exit(0),
-                            ),
-                          ]),
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: WillPopScope(
+                  onWillPop: () {},
+                  child: Platform.isIOS
+                      ? CupertinoAlertDialog(
+                          title: Text(title),
+                          content: Text(content),
+                          actions: <Widget>[
+                              CupertinoDialogAction(
+                                child: Text(okButton),
+                                onPressed: () => exit(0),
+                              ),
+                            ])
+                      : AlertDialog(
+                          title: Text(title),
+                          content: Text(content),
+                          actions: <Widget>[
+                              FlatButton(
+                                child: Text(okButton),
+                                onPressed: () => exit(0),
+                              ),
+                            ]),
+                ),
               );
             });
       }
@@ -445,42 +452,45 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         String message = "꾸욱을 계속 이용하기 위해서 업데이트가 필요합니다. 감사합니다.";
         String btnLabel = "업데이트하기";
         String btnLabelCancel = "Later";
-        return WillPopScope(
-          onWillPop: () {},
-          child: Platform.isIOS
-              ? new CupertinoAlertDialog(
-                  title: Text(title),
-                  content: Text(message),
-                  actions: <Widget>[
-                    CupertinoDialogAction(
-                      child: Text(btnLabel),
-                      onPressed: () => _launchURL(app_store_url),
-                    ),
-                    // FlatButton(
-                    //   child: Text(btnLabelCancel),
-                    //   onPressed: () => Navigator.pop(context),
-                    // ),
-                  ],
-                )
-              : new AlertDialog(
-                  title: Text(title),
-                  content: Text(message),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Row(
-                        children: [
-                          Text(btnLabel),
-                          SizedBox(width: 20),
-                        ],
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: WillPopScope(
+            onWillPop: () {},
+            child: Platform.isIOS
+                ? new CupertinoAlertDialog(
+                    title: Text(title),
+                    content: Text(message),
+                    actions: <Widget>[
+                      CupertinoDialogAction(
+                        child: Text(btnLabel),
+                        onPressed: () => _launchURL(app_store_url),
                       ),
-                      onPressed: () => _launchURL(play_store_url),
-                    ),
-                    // FlatButton(
-                    //   child: Text(btnLabelCancel),
-                    //   onPressed: () => Navigator.pop(context),
-                    // ),
-                  ],
-                ),
+                      // FlatButton(
+                      //   child: Text(btnLabelCancel),
+                      //   onPressed: () => Navigator.pop(context),
+                      // ),
+                    ],
+                  )
+                : new AlertDialog(
+                    title: Text(title),
+                    content: Text(message),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Row(
+                          children: [
+                            Text(btnLabel),
+                            SizedBox(width: 20),
+                          ],
+                        ),
+                        onPressed: () => _launchURL(play_store_url),
+                      ),
+                      // FlatButton(
+                      //   child: Text(btnLabelCancel),
+                      //   onPressed: () => Navigator.pop(context),
+                      // ),
+                    ],
+                  ),
+          ),
         );
       },
     );
@@ -550,6 +560,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   void dispose() {
     // _controller.dispose();
     // _connectionCheckService.listener.cancel();
+    // BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
     // dispose는 Navigator pushNamed에는 호출되지 않지만 백 버튼에는 호출됨.
     // 백 버튼에 아래를 호출하지 않으면 dispose 됐는데 setState한다고 오류뜸
@@ -569,6 +580,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   //     ]);
   //   });
   // }
+
+  // bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+  //   print("BACK BUTTON!");
+  //   // exit(0); // Do some stuff.
+  //   // return true;
+  // }
+
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
   var formatKoreanDate = DateFormat('MM' + "월" + " " + "dd" + "일");
@@ -630,8 +648,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
             // endDrawer: myPage(model),
             body: WillPopScope(
               onWillPop: () async {
-                _navigatorKey.currentState.maybePop();
-                return false;
+                onWillPop(context) async {
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  return false;
+                }
+
+                // _navigatorKey.currentState.maybePop();
+                return onWillPop(context);
               },
               child: Stack(
                 children: [
@@ -1610,120 +1633,124 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
               alreadyVoted++;
             }
           });
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)), //this right here
-            child: Container(
-              constraints: BoxConstraints(
-                maxHeight: 200,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 12,
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)), //this right here
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: 200,
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        // color:
-                        // Colors.blue,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${listSelected.length}개의 주제를 추가로 선택하셨습니다.",
-                                  style: TextStyle(
-                                    fontFamily: 'AppleSDB',
-                                    fontSize: 18,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 12,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          // color:
+                          // Colors.blue,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${listSelected.length}개의 주제를 추가로 선택하셨습니다.",
+                                    style: TextStyle(
+                                      fontFamily: 'AppleSDB',
+                                      fontSize: 18,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "(이미 예측한 주제 ${alreadyVoted.toString()}개)",
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontFamily: 'AppleSDM',
-                                    fontSize: 16,
+                                  Text(
+                                    "(이미 예측한 주제 ${alreadyVoted.toString()}개)",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontFamily: 'AppleSDM',
+                                      fontSize: 16,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            // SizedBox(
-                            //     height: 4),
+                                ],
+                              ),
+                              // SizedBox(
+                              //     height: 4),
 
-                            Text(
-                              "예측에 모두 성공하면 승점 +${(alreadyVoted + listSelected.length) * 2}점 획득! 🎊\n모두 실패하면 ${-(alreadyVoted + listSelected.length)}점 😢",
-                              style: TextStyle(
-                                fontFamily: 'AppleSDM',
-                                fontSize: 16,
-                                height: 1,
+                              Text(
+                                "예측에 모두 성공하면 승점 +${(alreadyVoted + listSelected.length) * 2}점 획득! 🎊\n모두 실패하면 ${-(alreadyVoted + listSelected.length)}점 😢",
+                                style: TextStyle(
+                                  fontFamily: 'AppleSDM',
+                                  fontSize: 16,
+                                  height: 1,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                            // SizedBox(
-                            //     height: 4),
-                            Text(
-                              "예측하러 갈까요?",
-                              style: TextStyle(
-                                fontFamily: 'AppleSDB',
-                                fontSize: 16,
+                              // SizedBox(
+                              //     height: 4),
+                              Text(
+                                "예측하러 갈까요?",
+                                style: TextStyle(
+                                  fontFamily: 'AppleSDB',
+                                  fontSize: 16,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        FlatButton(
-                          minWidth: deviceWidth * .28,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            "돌아가기",
-                            style: TextStyle(
-                                fontFamily: 'AppleSDM', color: Colors.white),
-                          ),
-                          color: const Color(0xFF989898),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: RaisedButton(
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          FlatButton(
+                            minWidth: deviceWidth * .28,
                             onPressed: () {
                               Navigator.pop(context);
-                              _navigationService.navigateWithArgTo(
-                                'ggook',
-                                [
-                                  model.address,
-                                  model.user,
-                                  model.vote,
-                                  model.userVote,
-                                  listSelected,
-                                  0,
-                                ],
-                              );
                             },
                             child: Text(
-                              "예측하러 가기",
+                              "돌아가기",
                               style: TextStyle(
                                   fontFamily: 'AppleSDM', color: Colors.white),
                             ),
-                            color: const Color(0xFF1EC8CF),
+                            color: const Color(0xFF989898),
                           ),
-                        ),
-                      ],
-                    )
-                  ],
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Expanded(
+                            child: RaisedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                _navigationService.navigateWithArgTo(
+                                  'ggook',
+                                  [
+                                    model.address,
+                                    model.user,
+                                    model.vote,
+                                    model.userVote,
+                                    listSelected,
+                                    0,
+                                  ],
+                                );
+                              },
+                              child: Text(
+                                "예측하러 가기",
+                                style: TextStyle(
+                                    fontFamily: 'AppleSDM',
+                                    color: Colors.white),
+                              ),
+                              color: const Color(0xFF1EC8CF),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -1735,94 +1762,98 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     return showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)), //this right here
-            child: Container(
-              height: 200,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 14,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "총 ${listSelected.length}개의 주제를 선택하셨습니다.",
-                          style: TextStyle(
-                            fontFamily: 'AppleSDB',
-                            fontSize: 18,
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        Text(
-                          "예측에 모두 성공하면 승점 +${listSelected.length * 2}점 획득! 🎊\n모두 실패하면 ${-listSelected.length}점 😢",
-                          style: TextStyle(
-                            fontFamily: 'AppleSDM',
-                            fontSize: 16,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          "예측하러 갈까요?",
-                          style: TextStyle(
-                            fontFamily: 'AppleSDB',
-                            fontSize: 16,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        FlatButton(
-                          minWidth: deviceWidth * .28,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(
-                            "돌아가기",
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)), //this right here
+              child: Container(
+                height: 200,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 14,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "총 ${listSelected.length}개의 주제를 선택하셨습니다.",
                             style: TextStyle(
-                                fontFamily: 'AppleSDM', color: Colors.white),
+                              fontFamily: 'AppleSDB',
+                              fontSize: 18,
+                            ),
                           ),
-                          color: const Color(0xFF989898),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: RaisedButton(
+                          SizedBox(height: 12),
+                          Text(
+                            "예측에 모두 성공하면 승점 +${listSelected.length * 2}점 획득! 🎊\n모두 실패하면 ${-listSelected.length}점 😢",
+                            style: TextStyle(
+                              fontFamily: 'AppleSDM',
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            "예측하러 갈까요?",
+                            style: TextStyle(
+                              fontFamily: 'AppleSDB',
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          FlatButton(
+                            minWidth: deviceWidth * .28,
                             onPressed: () {
                               Navigator.pop(context);
-                              _navigationService.navigateWithArgTo(
-                                'ggook',
-                                [
-                                  model.address,
-                                  model.user,
-                                  model.vote,
-                                  model.userVote,
-                                  listSelected,
-                                  0,
-                                ],
-                              );
                             },
                             child: Text(
-                              "예측하러 가기",
+                              "돌아가기",
                               style: TextStyle(
                                   fontFamily: 'AppleSDM', color: Colors.white),
                             ),
-                            color: const Color(0xFF1EC8CF),
+                            color: const Color(0xFF989898),
                           ),
-                        ),
-                      ],
-                    )
-                  ],
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Expanded(
+                            child: RaisedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                _navigationService.navigateWithArgTo(
+                                  'ggook',
+                                  [
+                                    model.address,
+                                    model.user,
+                                    model.vote,
+                                    model.userVote,
+                                    listSelected,
+                                    0,
+                                  ],
+                                );
+                              },
+                              child: Text(
+                                "예측하러 가기",
+                                style: TextStyle(
+                                    fontFamily: 'AppleSDM',
+                                    color: Colors.white),
+                              ),
+                              color: const Color(0xFF1EC8CF),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -1836,48 +1867,54 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       context: context,
       builder: (context) {
         if (Platform.isIOS) {
-          return CupertinoAlertDialog(
-            content: Text(
-                '광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.\n\n광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                child: Text('아뇨'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              CupertinoDialogAction(
-                child: Text('좋아요'),
-                onPressed: rewardedAdsLoaded
-                    ? () {
-                        Navigator.pop(context);
-                        model.showRewardedAds();
-                      }
-                    : null,
-              )
-            ],
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: CupertinoAlertDialog(
+              content: Text(
+                  '광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.\n\n광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  child: Text('아뇨'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                CupertinoDialogAction(
+                  child: Text('좋아요'),
+                  onPressed: rewardedAdsLoaded
+                      ? () {
+                          Navigator.pop(context);
+                          model.showRewardedAds();
+                        }
+                      : null,
+                )
+              ],
+            ),
           );
         } else {
-          return AlertDialog(
-            content: Text(
-                '광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.\n\n광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('아뇨'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              FlatButton(
-                child: Text('좋아요'),
-                onPressed: rewardedAdsLoaded
-                    ? () {
-                        Navigator.pop(context);
-                        model.showRewardedAds();
-                      }
-                    : null,
-              )
-            ],
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: AlertDialog(
+              content: Text(
+                  '광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.\n\n광고를 보고 꾸욱 아이템을 획득하시겠어요?'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('아뇨'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                FlatButton(
+                  child: Text('좋아요'),
+                  onPressed: rewardedAdsLoaded
+                      ? () {
+                          Navigator.pop(context);
+                          model.showRewardedAds();
+                        }
+                      : null,
+                )
+              ],
+            ),
           );
         }
       },
@@ -2375,71 +2412,75 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     "이미 소모된 꾸욱 아이템은 반환되지 않습니다. 초기화된 종목은 다시 예측이 가능하며,\n이 경우 꾸욱 아이템이 소모됩니다.";
                                 String yesLabel = "초기화하기";
                                 String noLabel = "돌아가기";
-                                return Platform.isIOS
-                                    ? CupertinoAlertDialog(
-                                        title: Text(
-                                          title,
-                                          style: TextStyle(
-                                              // fontFamily: 'AppleSDB',
-                                              ),
-                                        ),
-                                        content: Text(
-                                          message,
-                                          style: TextStyle(
-                                            fontFamily: 'AppleSDM',
+                                return MediaQuery(
+                                  data: MediaQuery.of(context)
+                                      .copyWith(textScaleFactor: 1.0),
+                                  child: Platform.isIOS
+                                      ? CupertinoAlertDialog(
+                                          title: Text(
+                                            title,
+                                            style: TextStyle(
+                                                // fontFamily: 'AppleSDB',
+                                                ),
                                           ),
-                                        ),
-                                        actions: <Widget>[
-                                          CupertinoDialogAction(
-                                            child: Text(noLabel),
-                                            textStyle: TextStyle(),
-                                            onPressed: () =>
-                                                Navigator.pop(context),
+                                          content: Text(
+                                            message,
+                                            style: TextStyle(
+                                              fontFamily: 'AppleSDM',
+                                            ),
                                           ),
-                                          CupertinoDialogAction(
-                                              child: Text(yesLabel),
-                                              textStyle: TextStyle(
-                                                color: Colors.red,
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                model.initialiseOneVote(idx);
-                                              }),
-                                        ],
-                                      )
-                                    : AlertDialog(
-                                        title: Text(
-                                          title,
-                                          style: TextStyle(
-                                              // fontFamily: 'AppleSDB',
-                                              ),
-                                        ),
-                                        content: Text(
-                                          message,
-                                          style: TextStyle(
-                                            fontFamily: 'AppleSDM',
-                                          ),
-                                        ),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            child: Text(noLabel),
-                                            // textStyle: TextStyle(),
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                          ),
-                                          FlatButton(
-                                              child: Text(
-                                                yesLabel,
-                                                style: TextStyle(
+                                          actions: <Widget>[
+                                            CupertinoDialogAction(
+                                              child: Text(noLabel),
+                                              textStyle: TextStyle(),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                            CupertinoDialogAction(
+                                                child: Text(yesLabel),
+                                                textStyle: TextStyle(
                                                   color: Colors.red,
                                                 ),
-                                              ),
-                                              onPressed: () {
-                                                model.initialiseOneVote(idx);
-                                                Navigator.pop(context);
-                                              }),
-                                        ],
-                                      );
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  model.initialiseOneVote(idx);
+                                                }),
+                                          ],
+                                        )
+                                      : AlertDialog(
+                                          title: Text(
+                                            title,
+                                            style: TextStyle(
+                                                // fontFamily: 'AppleSDB',
+                                                ),
+                                          ),
+                                          content: Text(
+                                            message,
+                                            style: TextStyle(
+                                              fontFamily: 'AppleSDM',
+                                            ),
+                                          ),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: Text(noLabel),
+                                              // textStyle: TextStyle(),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                            FlatButton(
+                                                child: Text(
+                                                  yesLabel,
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  model.initialiseOneVote(idx);
+                                                  Navigator.pop(context);
+                                                }),
+                                          ],
+                                        ),
+                                );
                               })
                           : setState(() {
                               // print(
@@ -2547,18 +2588,18 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                             : deviceHeight * .83,
                         // height: 250 + offset * 1.4,
                         child: ChartView(
-                          // controller,
-                          scrollStreamCtrl,
-                          model.selected,
-                          idx,
-                          numSelected,
-                          model.vote,
-                          model.seasonInfo,
-                          model.address,
-                          model.user,
-                          model.selectUpdate,
-                          _showToast,
-                        ),
+                            // controller,
+                            scrollStreamCtrl,
+                            model.selected,
+                            idx,
+                            numSelected,
+                            model.vote,
+                            model.seasonInfo,
+                            model.address,
+                            model.user,
+                            model.selectUpdate,
+                            _showToast,
+                            model.userVote.voteSelected[idx] != 0),
                       ),
                     ],
                   );

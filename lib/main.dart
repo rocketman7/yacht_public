@@ -89,12 +89,15 @@ class _MyAppState extends State<MyApp> {
           var lang = Localizations.localeOf(context).languageCode;
           print("MAINLanguage is " + lang);
 
-          return Theme(
-            data: ThemeData(
-              fontFamily: lang == 'en' ? 'DmSans' : 'AppleSD',
-              primaryColor: Colors.white,
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: Theme(
+              data: ThemeData(
+                fontFamily: lang == 'en' ? 'DmSans' : 'AppleSD',
+                primaryColor: Colors.white,
+              ),
+              child: navigator,
             ),
-            child: navigator,
           );
         },
       ),

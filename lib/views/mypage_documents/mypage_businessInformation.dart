@@ -16,7 +16,7 @@ class MypageBusinessInformation extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text(
-                'Contact Us',
+                '문의하기',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               elevation: 1,
