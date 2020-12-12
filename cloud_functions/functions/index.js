@@ -231,7 +231,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
           .get()
           .then((doc) => {
             // console.log(data);
-
+            const increment = firebase.firestore.FieldValue.increment(userScores[uid]);
             userVotesSeasonStatsCollection(uid).update({
               currentWinPoint:
                 (doc.data() === undefined ||
