@@ -340,7 +340,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         targets: targetsIsVoting,
         colorShadow: Colors.purple,
         textSkip: "도움말 종료하기",
-        opacityShadow: 0.8, onFinish: () {
+        opacityShadow: 0.9, onFinish: () {
       print("finish");
       _sharedPreferencesService.setSharedPreferencesValue(
           voteSelectTutorialKey, true);

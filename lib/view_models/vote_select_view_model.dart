@@ -91,7 +91,7 @@ class VoteSelectViewModel extends FutureViewModel {
       if (event == RewardedVideoAdEvent.rewarded) {
         //유저가 reward받을 수 있는 조건을 충족하면,
         //아이템을 한 개 늘려주고,
-        user.item += 1;
+        // user.item += 1;
         _databaseService.updateUserItem(uid, 1);
         //stateManage 업데이트
         _stateManageService.userModelUpdate();
@@ -105,13 +105,13 @@ class VoteSelectViewModel extends FutureViewModel {
         print(rewardedAdsLoaded);
         loadRewardedAds();
 
-        notifyListeners();
+        // notifyListeners();
         print('reward ads: closed');
       } else if (event == RewardedVideoAdEvent.loaded) {
         // 로딩이 다 되면 로딩됏다고.
         rewardedAdsLoaded = true;
 
-        notifyListeners();
+        // notifyListeners();
         print('reward ads: loaded');
       } else if (event == RewardedVideoAdEvent.failedToLoad) {
         // 로딩에 실패하면..
@@ -121,7 +121,7 @@ class VoteSelectViewModel extends FutureViewModel {
         // loadRewardedAds();
         // x: 이러면 실패시 너무 많은 로딩 요청을 할 수 있음
 
-        notifyListeners();
+        // notifyListeners();
         print('reward ads: failedToLoad');
       }
       // else if (event == RewardedVideoAdEvent.completed) {
@@ -141,6 +141,7 @@ class VoteSelectViewModel extends FutureViewModel {
 
   // 리워드광고 관련 메쏘드
   loadRewardedAds() {
+    notifyListeners();
     print('reward ads: start to load');
     RewardedVideoAd.instance.load(
       targetingInfo: MobileAdTargetingInfo(),
