@@ -263,7 +263,7 @@ class _GgookWidgetState extends State<GgookWidget>
                             ),
                           ),
                           Text(
-                            '${vote.subVotes[idx].numVoted0 ?? 1 + vote.subVotes[idx].numVoted1 ?? 1}명이 이 주제에 참여했습니다.',
+                            '${(vote.subVotes[idx].numVoted0 ?? 0) + (vote.subVotes[idx].numVoted1 ?? 0)}명이 이 주제에 참여했습니다.',
                             style: TextStyle(
                               fontFamily: 'AppleSDM',
                               fontSize: 14,

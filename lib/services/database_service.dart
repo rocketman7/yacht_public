@@ -345,6 +345,7 @@ class DatabaseService {
             .userVoteSeasonCollection()
             .doc(address.date)
             .set(tempUserVote.toJson());
+        updateUserItem(address.uid, 1);
 
         // userVoteData =
         //     await address.userVoteSeasonCollection().doc(address.date).get();
@@ -352,7 +353,7 @@ class DatabaseService {
 
       var userVoteStatsData =
           await address.userVoteSeasonStatsCollection().get();
-
+      print("USERSTATS" + userVoteStatsData.data().toString());
       UserVoteStatsModel tempUserVoteStats = UserVoteStatsModel();
       if (userVoteStatsData.data() == null) {
         print("TEMP MODEL" + tempUserVoteStats.toString());
@@ -1296,6 +1297,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
+      // date: '20201215',
       date: baseDate,
       category: category,
       season: season,

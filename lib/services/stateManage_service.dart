@@ -98,8 +98,8 @@ class StateManageServiceFirebase extends StateManageService {
 
     // total -> 7개 불러와야
     _addressModel = await _databaseService.getAddress(uid);
-    _userModel = await _databaseService.getUser(uid);
     _userVoteModel = await _databaseService.getUserVote(_addressModel);
+    _userModel = await _databaseService.getUser(uid);
     _seasonModel = await _databaseService.getSeasonInfo(_addressModel);
     _portfolioModel = await _databaseService.getPortfolio(addressModel);
     _voteModel = await _databaseService.getVotes(_addressModel);

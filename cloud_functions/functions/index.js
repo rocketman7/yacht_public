@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const { user } = require("firebase-functions/lib/providers/auth");
-const kakao = require("./kakao");
+// const kakao = require("./kakao");
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
 });
@@ -40,7 +40,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // const today = "20201005";
   // today의 실제 결과 가져오기 (이전에 넣어야함)
 
-  var today = "20201026";
+  var today = "20201214";
 
   function userVotesSeasonCollection(uid) {
     return usersRef
@@ -73,12 +73,15 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   //   .collection(yeseterday);
 
   // const dailyVoteSnapshot = votesSeasonCollection.doc(today).get();
-  let todayResult = [];
-  todayResult = await votesSeasonCollection
-    .doc(today)
-    .get()
-    .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
 
+  // TODAY RESULT***
+  // let todayResult = [];
+  // todayResult = await votesSeasonCollection
+  //   .doc(today)
+  //   .get()
+  //   .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
+
+  let todayResult = [1,1,1];
   // user의 vote 선택 가져오기
   console.log(todayResult);
   let userCurrentCombo = {};
@@ -219,7 +222,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
     );
   }
 
-  await updateUserScore(userScores);
+  // await updateUserScore(userScores);
 
   async function updateWinPointForTodayVotedUser(datas) {
     await Promise.all(
@@ -228,7 +231,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
           .get()
           .then((doc) => {
             // console.log(data);
-
+            const increment = firebase.firestore.FieldValue.increment(userScores[uid]);
             userVotesSeasonStatsCollection(uid).update({
               currentWinPoint:
                 (doc.data() === undefined ||
@@ -253,7 +256,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
     );
   }
 
-  await updateWinPointForTodayVotedUser(userScores);
+  // await updateWinPointForTodayVotedUser(userScores);
 
   // async function updateCurrentWinPointAtUserVoteStats(
   //   userPrevWinPoint,
