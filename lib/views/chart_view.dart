@@ -207,6 +207,7 @@ class _ChartViewState extends State<ChartView> {
     idx = widget.idx;
     numSelected = widget.numSelected;
     issueCode = widget.vote.subVotes[idx].issueCode[indexChosen];
+    // issueCode = "019170";
     numOfChoices = widget.vote.subVotes[idx].issueCode.length;
     seasonInfo = widget.seasonInfo;
     address = widget.address;
