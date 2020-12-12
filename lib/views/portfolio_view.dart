@@ -1,16 +1,21 @@
+import 'dart:ui';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'dart:ui';
-import 'dart:math' as math;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tutorial_coach_mark/animated_focus_light.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../locator.dart';
 import 'constants/size.dart';
+import '../models/sharedPreferences_const.dart';
+import '../services/sharedPreferences_service.dart';
+import '../services/navigation_service.dart';
 import '../view_models/portfolio_view_model.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PortfolioView extends StatefulWidget {
   @override
@@ -19,6 +24,8 @@ class PortfolioView extends StatefulWidget {
 
 class _PortfolioViewState extends State<PortfolioView>
     with TickerProviderStateMixin {
+  SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
   NavigationService _navigationService = locator<NavigationService>();
   AnimationController _chartAnimationController;
   Animation chartAnimation;
@@ -26,8 +33,112 @@ class _PortfolioViewState extends State<PortfolioView>
   AnimationController _itemAnimationController;
   Animation itemAnimation;
 
+  //튜토리얼 관련된 애들
+  TutorialCoachMark tutorialCoachMark;
+  List<TargetFocus> targets = List();
+
+  GlobalKey tutorialKey1 = GlobalKey();
+  GlobalKey tutorialKey2 = GlobalKey();
+
+  void initTutorialTargets() {
+    // 여기서 튜토리얼 설명, ui 들을 설정
+    targets.add(TargetFocus(
+        identify: 'tutorial target 1',
+        keyTarget: tutorialKey1,
+        contents: [
+          ContentTarget(
+              align: AlignContent.top,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('상금 포트폴리오',
+                        style: TextStyle(
+                            fontFamily: 'AppleSDB',
+                            color: Colors.white,
+                            fontSize: 28.0)),
+                  ],
+                ),
+              )),
+          ContentTarget(
+              align: AlignContent.bottom,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Text(
+                            '이번 시즌 우승 상금으로 선택된 포트폴리오에요. 우승자들이 해당 포트폴리오를 공평하게 나눠가질거에요!',
+                            style: TextStyle(
+                                fontFamily: 'AppleSDM',
+                                color: Colors.white,
+                                fontSize: 18.0))),
+                  ],
+                ),
+              ))
+        ],
+        enableOverlayTab: true,
+        color: Color(0xFF1EC8CF),
+        shape: ShapeLightFocus.Circle,
+        paddingFocus: 0));
+    targets.add(TargetFocus(
+        identify: 'tutorial target 2',
+        keyTarget: tutorialKey2,
+        contents: [
+          ContentTarget(
+              align: AlignContent.top,
+              child: Container(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Text('매일 변하는 상금의 가치, 오늘은 얼마일까요?',
+                            style: TextStyle(
+                                fontFamily: 'AppleSDM',
+                                color: Colors.white,
+                                fontSize: 18.0))),
+                  ],
+                ),
+              ))
+        ],
+        enableOverlayTab: true,
+        color: Colors.red,
+        shape: ShapeLightFocus.RRect,
+        radius: 5,
+        paddingFocus: -5.0));
+  }
+
+  void showTutorial() {
+    tutorialCoachMark = TutorialCoachMark(context,
+        targets: targets,
+        colorShadow: Colors.transparent,
+        textSkip: "도움말 종료하기",
+        opacityShadow: 0.8, onFinish: () {
+      _sharedPreferencesService.setSharedPreferencesValue(
+          portfolioTutorialKey, true);
+    }, onClickSkip: () {
+      _sharedPreferencesService.setSharedPreferencesValue(
+          portfolioTutorialKey, true);
+    })
+      ..show();
+  }
+
+  void _afterLayout(_) {
+    Future.delayed(Duration(milliseconds: 100), () {
+      showTutorial();
+    });
+  }
+
   @override
   void initState() {
+    initTutorialTargets();
+    // WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+
     super.initState();
 
     _chartAnimationController =
@@ -84,179 +195,199 @@ class _PortfolioViewState extends State<PortfolioView>
             if (_chartAnimationController.isCompleted &&
                 !_itemAnimationController.isCompleted)
               _itemAnimationController.forward();
+            if (_chartAnimationController.isCompleted &&
+                _itemAnimationController.isCompleted) {
+              if (!model.portfolioTutorial) {
+                WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+              }
+            }
 
             return Scaffold(
                 backgroundColor: Colors.white,
-                body: Stack(
-                  children: [
-                    SafeArea(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: 16,
-                          right: 16,
-                          top: 16,
-                        ),
-                        child: Column(
+                body: SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      top: 16,
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
                           children: [
-                            Row(
-                              children: [
-                                GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () {
-                                      Navigator.of(_navigationService
-                                              .navigatorKey.currentContext)
-                                          .pop();
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.arrow_back_ios),
-                                        Container(width: 30),
-                                      ],
-                                    )),
-                                Spacer(),
-                                Text(
-                                  "상금 포트폴리오 구성",
-                                  style: TextStyle(
-                                    fontSize: 20.sp,
-                                    fontFamily: 'AppleSDB',
-                                  ),
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  overflow: TextOverflow.fade,
-                                ),
-                                Spacer(),
-                                Row(
+                            GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  Navigator.of(_navigationService
+                                          .navigatorKey.currentContext)
+                                      .pop();
+                                },
+                                child: Row(
                                   children: [
-                                    Icon(Icons.arrow_back_ios,
-                                        color: Colors.white),
+                                    Icon(Icons.arrow_back_ios),
                                     Container(width: 30),
                                   ],
-                                )
-                              ],
+                                )),
+                            Spacer(),
+                            Text(
+                              "상금 포트폴리오 구성",
+                              style: TextStyle(
+                                fontSize: 20.sp,
+                                fontFamily: 'AppleSDB',
+                              ),
+                              maxLines: 1,
+                              softWrap: false,
+                              overflow: TextOverflow.fade,
                             ),
-                            SizedBox(
-                              height: 30.h,
-                            ),
+                            Spacer(),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(
-                                  '${model.getDateFormChange()} 종가 기준',
-                                  style: TextStyle(
-                                    fontFamily: 'DmSans',
-                                    fontSize: 16.sp,
+                                Icon(Icons.arrow_back_ios, color: Colors.white),
+                                Container(width: 30),
+                              ],
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        Row(
+                          // mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: showTutorial,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.black38,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 7.0,
+                                      right: 6.0,
+                                      top: 5.0,
+                                      bottom: 6.0),
+                                  child: Center(
+                                    child: Text('?',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.white,
+                                            fontFamily: 'AppleSDM')),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Spacer(),
+                            Text(
+                              '${model.getDateFormChange()} 종가 기준',
+                              style: TextStyle(
+                                fontFamily: 'DmSans',
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                            child: ListView(
+                          children: [
+                            SizedBox(
+                              height: 40.h,
+                            ),
+                            Stack(
+                              children: [
+                                makePortfolioArc(model),
+                                !_chartAnimationController.isCompleted
+                                    ? AnimatedBuilder(
+                                        animation: chartAnimation,
+                                        builder: (context, child) {
+                                          return CustomPaint(
+                                            size: Size(deviceWidth - 64,
+                                                deviceWidth - 64),
+                                            painter: PortfolioArcChartLoading(
+                                                center: Offset(
+                                                    (deviceWidth - 64) / 2 + 16,
+                                                    (deviceWidth - 64) / 2),
+                                                percentage1:
+                                                    model.startPercentage[0],
+                                                percentage2:
+                                                    model.startPercentage[0] +
+                                                        chartAnimation.value),
+                                          );
+                                        })
+                                    : Container(),
+                                makePortfolioArcLine(model),
+                                Center(
+                                  key: tutorialKey1,
+                                  child: Container(
+                                    width: deviceWidth - 64,
+                                    height: deviceWidth - 64,
+                                    child: Center(
+                                        child: Text(
+                                      '${model.seasonModel.seasonName}',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 14.sp,
+                                          fontFamily: 'AppleSDB'),
+                                    )),
                                   ),
                                 ),
                               ],
                             ),
-                            Expanded(
-                                child: ListView(
-                              children: [
-                                SizedBox(
-                                  height: 40.h,
-                                ),
-                                Stack(
-                                  children: [
-                                    makePortfolioArc(model),
-                                    !_chartAnimationController.isCompleted
-                                        ? AnimatedBuilder(
-                                            animation: chartAnimation,
-                                            builder: (context, child) {
-                                              return CustomPaint(
-                                                size: Size(deviceWidth - 64,
-                                                    deviceWidth - 64),
-                                                painter: PortfolioArcChartLoading(
-                                                    center: Offset(
-                                                        (deviceWidth - 64) / 2 +
-                                                            16,
-                                                        (deviceWidth - 64) / 2),
-                                                    percentage1: model
-                                                        .startPercentage[0],
-                                                    percentage2:
-                                                        model.startPercentage[
-                                                                0] +
-                                                            chartAnimation
-                                                                .value),
-                                              );
-                                            })
-                                        : Container(),
-                                    makePortfolioArcLine(model),
-                                    Center(
-                                      child: Container(
-                                        width: deviceWidth - 64,
-                                        height: deviceWidth - 64,
-                                        child: Center(
-                                            child: Text(
-                                          '${model.seasonModel.seasonName}',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 14.sp,
-                                              fontFamily: 'AppleSDB'),
-                                        )),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 40.h,
-                                ),
-                                _itemAnimationController.isCompleted
-                                    ? makePortfolioItems(model)
-                                    : Container(),
-                              ],
-                            )),
+                            // SizedBox(
+                            //   height: 40.h,
+                            // ),
+                            SizedBox(
+                              height: 24.h,
+                            ),
                             _itemAnimationController.isCompleted
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${model.getPortfolioValue()}원',
-                                        style: TextStyle(
-                                          fontSize: 28,
-                                          fontFamily: 'DmSans',
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 4.sp,
-                                      ),
-                                      Text(
-                                        model.getPortfolioReturn() > 0
-                                            ? '(+${returnFormat.format(model.getPortfolioReturn())})'
-                                            : '(${returnFormat.format(model.getPortfolioReturn())})',
-                                        style: TextStyle(
-                                            fontSize: 20.sp,
-                                            fontFamily: 'DmSans',
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                                model.getPortfolioReturn() < 0
-                                                    ? Color(0xFF3485FF)
-                                                    : Color(0xFFFF3E3E)),
-                                      ),
-                                    ],
-                                  )
+                                ? makePortfolioItems(model)
                                 : Container(),
-                            SizedBox(height: 8.h),
-                            _itemAnimationController.isCompleted
-                                ? Text(
-                                    '시즌상금 가치 (누적 수익률)',
-                                    style: TextStyle(fontSize: 14.sp),
-                                  )
-                                : Container(),
-                            SizedBox(height: 40.h),
                           ],
-                        ),
-                      ),
-                    ),
-                    model.portfolioTutorial
-                        ? Container()
-                        : model.tutorialStatus != 0
-                            ? tutorial(model)
+                        )),
+                        _itemAnimationController.isCompleted
+                            ? Row(
+                                key: tutorialKey2,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${model.getPortfolioValue()}원',
+                                    style: TextStyle(
+                                      fontSize: 28,
+                                      fontFamily: 'DmSans',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 4.sp,
+                                  ),
+                                  Text(
+                                    model.getPortfolioReturn() > 0
+                                        ? '(+${returnFormat.format(model.getPortfolioReturn())})'
+                                        : '(${returnFormat.format(model.getPortfolioReturn())})',
+                                    style: TextStyle(
+                                        fontSize: 20.sp,
+                                        fontFamily: 'DmSans',
+                                        fontWeight: FontWeight.bold,
+                                        color: model.getPortfolioReturn() < 0
+                                            ? Color(0xFF3485FF)
+                                            : Color(0xFFFF3E3E)),
+                                  ),
+                                ],
+                              )
                             : Container(),
-                    // tutorial(model)
-                  ],
+                        SizedBox(height: 8.h),
+                        _itemAnimationController.isCompleted
+                            ? Text(
+                                '시즌상금 가치 (누적 수익률)',
+                                style: TextStyle(fontSize: 14.sp),
+                              )
+                            : Container(),
+                        SizedBox(height: 40.h),
+                      ],
+                    ),
+                  ),
                 ));
           }
         });
@@ -344,28 +475,59 @@ List<Widget> makePortfolioArcComponents(PortfolioViewModel model,
   List<Widget> result = [];
 
   for (int i = 0; i < model.portfolioModel.subPortfolio.length; i++) {
-    result.add(InkWell(
+    result.add(GestureDetector(
       onTap: () {
         print('$i 번째 component tap');
       },
-      child: CustomPaint(
-        size: Size(
-            portfolioArcRadiusCenter +
-                (portfolioArcRadius - portfolioArcRadiusCenter) /
-                    3 *
-                    model.valueIncreaseRatio[i],
-            portfolioArcRadiusCenter +
-                (portfolioArcRadius - portfolioArcRadiusCenter) /
-                    3 *
-                    model.valueIncreaseRatio[i]),
-        painter: PortfolioArcChart(
-            center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-            color: model.portfolioModel.subPortfolio[i].colorCode,
-            percentage1: model.startPercentage[i],
-            percentage2: model.startPercentage[i + 1]),
+      child: Container(
+        // width: deviceWidth,
+        // height: deviceHeight,
+        child: CustomPaint(
+          size: Size(
+              portfolioArcRadiusCenter +
+                  (portfolioArcRadius - portfolioArcRadiusCenter) /
+                      3 *
+                      model.valueIncreaseRatio[i],
+              portfolioArcRadiusCenter +
+                  (portfolioArcRadius - portfolioArcRadiusCenter) /
+                      3 *
+                      model.valueIncreaseRatio[i]),
+          painter: PortfolioArcChart(
+              center:
+                  Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
+              color: model.portfolioModel.subPortfolio[i].colorCode,
+              percentage1: model.startPercentage[i],
+              percentage2: model.startPercentage[i + 1]),
+        ),
       ),
     ));
   }
+
+  // result.add(GestureDetector(
+  //   onTap: () {
+  //     print('0번째 component tap');
+  //   },
+  //   child: Container(
+  //     // width: deviceWidth,
+  //     // height: deviceHeight,
+  //     child: CustomPaint(
+  //       size: Size(
+  //           portfolioArcRadiusCenter +
+  //               (portfolioArcRadius - portfolioArcRadiusCenter) /
+  //                   3 *
+  //                   model.valueIncreaseRatio[0],
+  //           portfolioArcRadiusCenter +
+  //               (portfolioArcRadius - portfolioArcRadiusCenter) /
+  //                   3 *
+  //                   model.valueIncreaseRatio[0]),
+  //       painter: PortfolioArcChart(
+  //           center: Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
+  //           color: model.portfolioModel.subPortfolio[0].colorCode,
+  //           percentage1: model.startPercentage[0],
+  //           percentage2: model.startPercentage[0 + 1]),
+  //     ),
+  //   ),
+  // ));
 
   result.add(CustomPaint(
     size: Size(portfolioArcRadiusCenter - 25, portfolioArcRadiusCenter - 25),
@@ -656,6 +818,17 @@ class PortfolioArcChart extends CustomPainter {
   bool shouldRepaint(PortfolioArcChart oldDelegate) {
     return false;
   }
+
+  @override
+  bool hitTest(Offset position) {
+    // TODO: implement hitTest
+    return super.hitTest(position);
+  }
+
+  // @override
+  // bool hitTest(Offset position) {
+  //   return paint.contains(position);
+  // }
 }
 
 class PortfolioArcLine extends CustomPainter {
@@ -723,137 +896,4 @@ class PortfolioArcChartLoading extends CustomPainter {
   bool shouldRepaint(PortfolioArcChartLoading oldDelegate) {
     return true;
   }
-}
-
-// 튜토리얼
-Widget tutorial(PortfolioViewModel model) {
-  return GestureDetector(
-    onTap: () {
-      model.tutorialStepProgress();
-    },
-    child: SafeArea(
-      child: (model.tutorialStatus - model.tutorialTotalStep == 0)
-          ? Stack(
-              children: [
-                Container(
-                  width: deviceWidth,
-                  height: deviceHeight,
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.amber),
-                      color: Colors.black38),
-                ),
-                Column(
-                  children: [
-                    Text('1A가',
-                        style: TextStyle(
-                            fontSize: 20.h,
-                            fontFamily: 'DmSans',
-                            color: Colors.transparent)),
-                    Text('1A가',
-                        style: TextStyle(
-                            fontSize: 16.h,
-                            fontFamily: 'DmSans',
-                            color: Colors.transparent)),
-                    SizedBox(height: 70.h),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: 10,
-                          ),
-                          child: Text(
-                            '이번 시즌 우승상금으로 선택된 포트폴리오예요.',
-                            style: TextStyle(fontSize: 14, color: Colors.white),
-                          ),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFE81B1B),
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black38,
-                                spreadRadius: 1,
-                                blurRadius: 1,
-                                offset:
-                                    Offset(1, 1), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            )
-          : Stack(
-              children: [
-                Container(
-                  width: deviceWidth,
-                  height: deviceHeight,
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.amber),
-                      color: Colors.black38),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text('1A가',
-                        style: TextStyle(
-                            fontSize: 20.h,
-                            fontFamily: 'DmSans',
-                            color: Colors.transparent)),
-                    SizedBox(height: 70.h),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 10,
-                      ),
-                      child: Text(
-                        '매일 변하는 상금가치, 오늘은 얼마일까요?',
-                        style: TextStyle(fontSize: 14, color: Colors.white),
-                      ),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFE81B1B),
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black38,
-                            spreadRadius: 1,
-                            blurRadius: 1,
-                            offset: Offset(1, 1), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 48),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '1A가',
-                          style: TextStyle(
-                              fontSize: 28,
-                              fontFamily: 'DmSans',
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: -1.0,
-                              color: Colors.transparent),
-                        ),
-                      ],
-                    ),
-                    Text('1A가',
-                        style:
-                            TextStyle(fontSize: 14, color: Colors.transparent)),
-                  ],
-                )
-              ],
-            ),
-    ),
-  );
 }

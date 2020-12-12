@@ -45,8 +45,7 @@ class PortfolioViewModel extends FutureViewModel {
 
   // 튜토리얼 변수
   bool portfolioTutorial;
-  int tutorialStatus = 2; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
-  int tutorialTotalStep = 2; // 튜토리얼 총 단계
+
   PortfolioViewModel() {
     uid = _authService.auth.currentUser.uid;
   }
@@ -230,18 +229,6 @@ class PortfolioViewModel extends FutureViewModel {
     var f = NumberFormat("##", "en_US");
 
     return f.format(getInitialRatioDouble(i) * 100) + '%';
-  }
-
-  // 튜토리얼이 한 단계 진행되었을 때
-  void tutorialStepProgress() {
-    tutorialStatus--;
-
-    if (tutorialStatus == 0) {
-      _sharedPreferencesService.setSharedPreferencesValue(
-          portfolioTutorialKey, true);
-    }
-
-    notifyListeners();
   }
 
   @override

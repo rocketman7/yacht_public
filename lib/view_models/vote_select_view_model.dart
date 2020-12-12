@@ -56,8 +56,6 @@ class VoteSelectViewModel extends FutureViewModel {
   bool isNameUpdated;
   bool voteSelectTutorial;
   bool termsOfUse;
-  int tutorialStatus = 3; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
-  int tutorialTotalStep = 3; // 튜토리얼 총 단계
 
   // 리워드 광고 관련 변수
   // bool rewardedAdsLoaded = false;
@@ -254,18 +252,6 @@ class VoteSelectViewModel extends FutureViewModel {
 
   Future signOut() async {
     await _authService.signOut();
-  }
-
-  // 튜토리얼이 한 단계 진행되었을 때
-  void tutorialStepProgress() {
-    tutorialStatus--;
-
-    if (tutorialStatus == 0) {
-      _sharedPreferencesService.setSharedPreferencesValue(
-          voteSelectTutorialKey, true);
-    }
-
-    notifyListeners();
   }
 
   // void isVoteAvailable() {

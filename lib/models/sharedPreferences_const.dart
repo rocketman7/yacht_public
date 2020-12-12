@@ -9,8 +9,10 @@ const List<String> pushAlarmKey = [
 const String avatarKey = 'avatar';
 
 // 각 화면별 튜토리얼 상태저장
-const String portfolioTutorialKey = 'portfolioTutorial';
-const String voteSelectTutorialKey = 'voteSelectTutorial';
+// const String portfolioTutorialKey = 'portfolioTutorial';
+// const String voteSelectTutorialKey = 'voteSelectTutorial';
+const String portfolioTutorialKey = 'portfolioTutorialUsdingCM';
+const String voteSelectTutorialKey = 'voteSelectTutorialUsingCM';
 const String termsOfUseKey = 'termsOfUse';
 
 // 가입 후 설문을 했는지, 안했는지 저장
