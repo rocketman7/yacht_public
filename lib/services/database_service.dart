@@ -1297,10 +1297,11 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201215',
+      // date: '20201214',
       date: baseDate,
       category: category,
       season: season,
+      // isVoting: false,
       isVoting: isVoting, //false면 장 중
     );
 

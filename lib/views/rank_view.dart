@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,23 @@ import '../views/widgets/avatar_widget.dart';
 
 class RankView extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  DateTime currentBackPressTime;
+  Future<bool> _onWillPop() async {
+    if (currentBackPressTime == null ||
+        DateTime.now().difference(currentBackPressTime) >
+            Duration(seconds: 2)) {
+      currentBackPressTime = DateTime.now();
+      Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
+      return Future.value(false);
+      // return null;
+    } else {
+      print("TURN OFF");
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      return Future.value(true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<RankViewModel>.reactive(
@@ -47,16 +65,7 @@ class RankView extends StatelessWidget {
                           ),
                         )
                       : WillPopScope(
-                          onWillPop: () async {
-                            onWillPop(context) async {
-                              SystemChannels.platform
-                                  .invokeMethod('SystemNavigator.pop');
-                              return false;
-                            }
-
-                            // _navigatorKey.currentState.maybePop();
-                            return onWillPop(context);
-                          },
+                          onWillPop: _onWillPop,
                           child: SafeArea(
                             child: Padding(
                               padding: EdgeInsets.only(

@@ -131,7 +131,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                     Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Text(
-                            '이번 시즌 우승을 위해 남은 승점이 표시돼요!\n경쟁자들을 제치고 가장 먼저 우승에 도달하기 위해 남은 승점은 몇 점일까요?',
+                            '가장 먼저 우승 승점에 도달하는 유저가 우승 상금을 차지합니다!\n경쟁자들을 제치고 우승에 도달하기 위해 남은 승점은 몇 점일까요?\n',
                             style: TextStyle(
                                 fontFamily: 'AppleSDM',
                                 color: Colors.white,
@@ -156,7 +156,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('이번 시즌 우승상금이에요!',
+                    Text('이번 시즌 우승 상금입니다!',
                         style: TextStyle(
                             fontFamily: 'AppleSDB',
                             color: Colors.white,
@@ -164,7 +164,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                     Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Text(
-                            '우승상금은 주식으로 받게되며, 중복우승자가 생길 경우 상금을 나눠갖습니다.\n우승 상금을 클릭하여 이번 시즌 포트폴리오를 확인하세요!',
+                            '꾸욱의 우승 상금은 주식입니다! (중복 우승자가 나오면, 상금 주식을 나눠 갖습니다.)\n우승 상금을 눌러 이번 시즌 상금 포트폴리오를 확인하세요!',
                             style: TextStyle(
                                 fontFamily: 'AppleSDM',
                                 color: Colors.white,
@@ -196,7 +196,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                             fontSize: 28.0)),
                     Padding(
                         padding: const EdgeInsets.only(top: 10.0),
-                        child: Text('종목 이름을 눌러 종목에 대한 자세한 설명을 볼 수 있어요.',
+                        child: Text(
+                            '종목 이름을 누르면 차트와 함께 자세한 설명을 볼 수 있어요.\n매일 바뀌는 꾸욱 예측 주제를 통해 다양한 종목을 알아보세요! ',
                             style: TextStyle(
                                 fontFamily: 'AppleSDM',
                                 color: Colors.white,
@@ -229,7 +230,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                     Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Text(
-                            '예측할 주제를 선택하세요.\n하루 최대 3개의 주제를 선택할 수 있어요.\n(한 주제당 꾸욱 아이템 1개가 소모돼요)',
+                            '오늘 예측할 주제를 선택하세요.\n하루 최대 3개의 주제를 선택할 수 있어요.\n(한 주제당 꾸욱 아이템 1개가 소모됩니다)',
                             style: TextStyle(
                                 fontFamily: 'AppleSDM',
                                 color: Colors.white,
@@ -244,7 +245,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('한 주제당 맞추면 승점 +2점, 틀리면 승점 -1점을 얻게 돼요.',
+                    Text('각 주제마다 예측에 성공하면 승점 +2점,\n실패하면 승점 -1점!',
                         style: TextStyle(
                             fontFamily: 'AppleSDM',
                             color: Colors.white,
@@ -272,15 +273,15 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                     Text('꾸욱 아이템',
                         style: TextStyle(
                             fontFamily: 'AppleSDB',
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 28.0)),
                     Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Text(
-                            '예측에 필요한 꾸욱 아이템이 표시 돼요.\n광고를 보면 하루에 최대 5개의 꾸욱 아이템을 얻을 수 있어요!',
+                            '예측에 필요한 꾸욱 아이템입니다.\n광고를 보면 하루에 최대 5개의 꾸욱 아이템을 얻을 수 있어요!',
                             style: TextStyle(
                                 fontFamily: 'AppleSDM',
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 18.0))),
                   ],
                 ),
@@ -340,14 +341,16 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         targets: targetsIsVoting,
         colorShadow: Colors.purple,
         textSkip: "도움말 종료하기",
-        opacityShadow: 0.9, onFinish: () {
+        opacityShadow: 0.95, onFinish: () {
       print("finish");
       _sharedPreferencesService.setSharedPreferencesValue(
           voteSelectTutorialKey, true);
-    }, onClickSkip: () {
+      renewTutorialKey();
+    }, onClickSkip: () async {
       print("skip");
       _sharedPreferencesService.setSharedPreferencesValue(
           voteSelectTutorialKey, true);
+      renewTutorialKey();
     })
       ..show();
   }
@@ -362,7 +365,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     tutorialCoachMark = TutorialCoachMark(context,
         targets: targetsIsNotVoting,
         textSkip: "도움말 종료하기",
-        opacityShadow: 0.8, onFinish: () {
+        opacityShadow: 0.95, onFinish: () {
       print("finish");
       _sharedPreferencesService.setSharedPreferencesValue(
           voteSelectTutorialKey, true);
@@ -380,6 +383,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     });
   }
 
+  bool tutorialKeyCheck = false;
+  Future<void> renewTutorialKey() async {
+    tutorialKeyCheck = await _sharedPreferencesService
+        .getSharedPreferencesValue(voteSelectTutorialKey, bool);
+  }
   // voteData를 가져와 voteTodayCard에 넣어 위젯 리스트를 만드는 함수
   // void getVoteTodayWidget(VoteModel votesToday) {
   //   List<Widget> listItems = [];
@@ -513,7 +521,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
     initTutorialTargetsIsNotVoting();
     // WidgetsBinding.instance.addPostFrameCallback(_afterLayoutIsNotVoting);
-
+    renewTutorialKey();
     super.initState();
     // BackButtonInterceptor.add(myInterceptor);
     // _connectionCheckService.checkConnection(context);
@@ -881,6 +889,21 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
   var formatKoreanDate = DateFormat('MM' + "월" + " " + "dd" + "일");
+  DateTime currentBackPressTime;
+  Future<bool> _onWillPop() async {
+    if (currentBackPressTime == null ||
+        DateTime.now().difference(currentBackPressTime) >
+            Duration(seconds: 2)) {
+      currentBackPressTime = DateTime.now();
+      Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
+      return Future.value(false);
+      // return null;
+    } else {
+      print("TURN OFF");
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      return Future.value(true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -930,10 +953,15 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
               "${diff.inHours.toString().padLeft(2, '0')}:${diff.inMinutes.remainder(60).toString().padLeft(2, '0')}:";
           String strDurationSec =
               "${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
+          // bool check =  await _sharedPreferencesService
+          // .getSharedPreferencesValue(voteSelectTutorialKey, bool);
           print('model.voteSelectTutorial is ...' +
               model.voteSelectTutorial.toString());
-
-          if (!model.voteSelectTutorial) {
+          // model.renewTutorialKey();
+          // model.notifyListeners();
+          print('model.voteSelectTutorial is ...' +
+              model.voteSelectTutorial.toString());
+          if (!model.voteSelectTutorial && !tutorialKeyCheck) {
             model.address.isVoting
                 ? WidgetsBinding.instance
                     .addPostFrameCallback(_afterLayoutIsVoting)
@@ -948,15 +976,26 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
             key: _scaffoldKey,
             // endDrawer: myPage(model),
             body: WillPopScope(
-              onWillPop: () async {
-                onWillPop(context) async {
-                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                  return false;
-                }
+              onWillPop: _onWillPop,
+              // () async {
+              //   // DateTime now = DateTime.now();
+              //   print("Back tapped");
+              //   onWillPop(context) async {
+              //     if (currentBackPressTime == null ||
+              //         DateTime.now().difference(currentBackPressTime) >
+              //             Duration(seconds: 2)) {
+              //       currentBackPressTime = DateTime.now();
+              //       Fluttertoast.showToast(msg: "뒤로 가기를 한 번 더 누르면 앱이 종료됩니다");
+              //       // return Future.value(false);
+              //     } else {
+              //       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              //       return false;
+              //     }
+              //   }
 
-                // _navigatorKey.currentState.maybePop();
-                return onWillPop(context);
-              },
+              //   // _navigatorKey.currentState.maybePop();
+              //   return onWillPop(context);
+              // },
               child: SafeArea(
                 child: Stack(
                   alignment: Alignment.center,
@@ -998,27 +1037,38 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           //       : Color(0xFFDEDEDE),
                                           //   size: 32.sp,
                                           // ),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.black38,
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 9.0,
-                                                  right: 8.0,
-                                                  top: 8.0,
-                                                  bottom: 8.0),
-                                              child: Center(
-                                                child: Text('?',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            'AppleSDM')),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.black38,
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 9.0,
+                                                          right: 8.0,
+                                                          top: 8.0,
+                                                          bottom: 8.0),
+                                                  child: Center(
+                                                    child: Text('?',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                'AppleSDM')),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                              Container(
+                                                // color: Colors.red,
+                                                width: 20,
+                                                height: 30,
+                                              )
+                                            ],
                                           )),
                                     ),
                                     Spacer(),
@@ -1040,9 +1090,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                       child: Align(
                                         alignment: Alignment.centerRight,
                                         child: Icon(
-                                          Icons.settings_rounded,
+                                          // Icons.settings_rounded,
                                           // key: keyButton1,
-                                          // Icons.dehaze_rounded,
+                                          Icons.dehaze_rounded,
                                           color: model.address.isVoting
                                               ? Colors.black.withOpacity(0.7)
                                               : Color(0xFFDEDEDE),
@@ -2320,24 +2370,23 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(model.vote.subVotes[idx].title,
-                                          style: showMyVote
-                                              ? (model.userVote.voteSelected[
-                                                              idx] ==
-                                                          0 ||
-                                                      model.userVote
-                                                              .voteSelected ==
-                                                          null)
+                                          style: (showMyVote &&
+                                                  model.userVote.voteSelected !=
+                                                      null)
+                                              ? (model.userVote
+                                                          .voteSelected[idx] ==
+                                                      0)
                                                   ? notVotedTitleStyle
                                                   : voteTitleStyle
                                               : voteTitleStyle),
                                       SizedBox(
                                         width: 6,
                                       ),
-                                      showMyVote
+                                      (showMyVote &&
+                                              model.userVote.voteSelected !=
+                                                  null)
                                           ? (model.userVote.voteSelected[idx] ==
-                                                      0 ||
-                                                  model.userVote.voteSelected ==
-                                                      null)
+                                                  0)
                                               ? Container()
                                               : Text(
                                                   model.vote.subVotes[idx]
@@ -2367,8 +2416,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                               model.vote.subVotes[idx]
                                                   .voteChoices[choice - 1],
                                               style: TextStyle(
-                                                fontSize: 14,
-                                              ),
+                                                  fontSize: 14,
+                                                  color: choice == 1
+                                                      ? Color(0xFFFF3E3E)
+                                                      : Colors.blue),
                                             )
                                       : StreamBuilder(
                                           stream: model.getRealtimePrice(
@@ -2438,13 +2489,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         Text(
                                           model.vote.subVotes[idx]
                                               .voteChoices[0],
-                                          style: showMyVote
-                                              ? (model.userVote.voteSelected[
-                                                              idx] ==
-                                                          0 ||
-                                                      model.userVote
-                                                              .voteSelected ==
-                                                          null)
+                                          style: (showMyVote &&
+                                                  model.userVote.voteSelected !=
+                                                      null)
+                                              ? (model.userVote
+                                                          .voteSelected[idx] ==
+                                                      0)
                                                   ? notVotedTitleStyle
                                                   : model.userVote.voteSelected[
                                                               idx] ==
@@ -2463,7 +2513,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                     style: TextStyle(
                                                         fontSize: 14,
                                                         color: choice == 1
-                                                            ? Colors.black
+                                                            ? Color(0xFFFF3E3E)
                                                             : Colors
                                                                 .transparent),
                                                   )
@@ -2558,13 +2608,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         Text(
                                           model.vote.subVotes[idx]
                                               .voteChoices[1],
-                                          style: showMyVote
-                                              ? (model.userVote.voteSelected[
-                                                              idx] ==
-                                                          0 ||
-                                                      model.userVote
-                                                              .voteSelected ==
-                                                          null)
+                                          style: (showMyVote &&
+                                                  model.userVote.voteSelected !=
+                                                      null)
+                                              ? (model.userVote
+                                                          .voteSelected[idx] ==
+                                                      0)
                                                   ? notVotedTitleStyle
                                                   : model.userVote.voteSelected[
                                                               idx] ==
@@ -2583,7 +2632,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                     style: TextStyle(
                                                         fontSize: 14,
                                                         color: choice == 2
-                                                            ? Colors.black
+                                                            ? Color(0xFFFF3E3E)
                                                             : Colors
                                                                 .transparent),
                                                   )

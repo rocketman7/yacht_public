@@ -207,8 +207,8 @@ class _ChartViewState extends State<ChartView> {
     idx = widget.idx;
     numSelected = widget.numSelected;
     issueCode = widget.vote.subVotes[idx].issueCode[indexChosen];
-    // issueCode = "019170";
     numOfChoices = widget.vote.subVotes[idx].issueCode.length;
+    print("numOfChoices " + numOfChoices.toString());
     seasonInfo = widget.seasonInfo;
     address = widget.address;
     user = widget.user;
@@ -716,6 +716,8 @@ class _ChartViewState extends State<ChartView> {
                                   liveToday = realtimePriceDataSourceList
                                       .first.createdAt
                                       .toDate();
+                                  print(
+                                      "LIVE TODAY IS " + liveToday.toString());
                                   priceStreamCtrl.add(
                                       realtimePriceDataSourceList.first.price);
                                   dateTimeStreamCtrl.add(
@@ -1673,8 +1675,9 @@ class _ChartViewState extends State<ChartView> {
               ScatterSeries<StatsModel, String>(
                 color: Color(0xFFFF5959).withOpacity(.3),
                 dataSource: statsDataSourceList,
-                xValueMapper: (StatsModel stats, _) =>
-                    stats.announcedAt.replaceAll("\\n", "\n"),
+                xValueMapper: (StatsModel stats, _) => stats.announcedAt == null
+                    ? null
+                    : stats.announcedAt.replaceAll("\\n", "\n"),
                 yValueMapper: (StatsModel stats, _) => stats.expectedEps,
                 markerSettings: MarkerSettings(
                   width: 16,
@@ -1946,7 +1949,7 @@ class _ChartViewState extends State<ChartView> {
                 ),
                 isVisible: false,
                 maximum: DateTime(
-                    liveToday.year, liveToday.month, liveToday.day, 15, 31, 00),
+                    liveToday.year, liveToday.month, liveToday.day, 15, 35, 00),
                 minimum: DateTime(
                     liveToday.year, liveToday.month, liveToday.day, 08, 50, 00),
               )

@@ -105,7 +105,7 @@ class VoteSelectViewModel extends FutureViewModel {
         print(rewardedAdsLoaded);
         loadRewardedAds();
 
-        // notifyListeners();
+        notifyListeners();
         print('reward ads: closed');
       } else if (event == RewardedVideoAdEvent.loaded) {
         // 로딩이 다 되면 로딩됏다고.
@@ -238,6 +238,13 @@ class VoteSelectViewModel extends FutureViewModel {
     setBusy(false);
 
     notifyListeners();
+  }
+
+  Future<void> renewTutorialKey() async {
+    voteSelectTutorial = await _sharedPreferencesService
+        .getSharedPreferencesValue(voteSelectTutorialKey, bool);
+    print("renew triggered");
+    // notifyListeners();
   }
 
   Future initialiseOneVote(int resetTarget) async {

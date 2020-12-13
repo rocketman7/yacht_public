@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/track_record_view_model.dart';
@@ -19,6 +20,21 @@ class TrackRecordView extends StatefulWidget {
 
 class _TrackRecordViewState extends State<TrackRecordView> {
   final NavigationService _navigationService = locator<NavigationService>();
+  DateTime currentBackPressTime;
+  Future<bool> _onWillPop() async {
+    if (currentBackPressTime == null ||
+        DateTime.now().difference(currentBackPressTime) >
+            Duration(seconds: 2)) {
+      currentBackPressTime = DateTime.now();
+      Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
+      return Future.value(false);
+      // return null;
+    } else {
+      print("TURN OFF");
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      return Future.value(true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,15 +71,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
           print("System Util " + 137.h.toString() + "  " + 40.sp.toString());
           return Scaffold(
             body: WillPopScope(
-              onWillPop: () async {
-                onWillPop(context) async {
-                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                  return false;
-                }
-
-                // _navigatorKey.currentState.maybePop();
-                return onWillPop(context);
-              },
+              onWillPop: _onWillPop,
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.only(

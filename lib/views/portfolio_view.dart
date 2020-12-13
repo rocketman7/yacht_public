@@ -56,7 +56,7 @@ class _PortfolioViewState extends State<PortfolioView>
                     Text('상금 포트폴리오',
                         style: TextStyle(
                             fontFamily: 'AppleSDB',
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 28.0)),
                   ],
                 ),
@@ -71,10 +71,10 @@ class _PortfolioViewState extends State<PortfolioView>
                     Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Text(
-                            '이번 시즌 우승 상금으로 선택된 포트폴리오에요. 우승자들이 해당 포트폴리오를 공평하게 나눠가질거에요!',
+                            '이번 시즌 우승 상금을 구성하는 주식 포트폴리오입니다. 우승자가 되어 상금 주식의 주주가 되어보세요!',
                             style: TextStyle(
                                 fontFamily: 'AppleSDM',
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 18.0))),
                   ],
                 ),
@@ -95,16 +95,22 @@ class _PortfolioViewState extends State<PortfolioView>
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text('오늘 우승 상금의 가치는?',
+                        style: TextStyle(
+                            fontFamily: 'AppleSDB',
+                            color: Colors.white,
+                            fontSize: 28.0)),
                     Padding(
                         padding: const EdgeInsets.only(top: 10.0),
-                        child: Text('매일 변하는 상금의 가치, 오늘은 얼마일까요?',
+                        child: Text(
+                            '매일 변하는 상금의 가치, 오늘은 얼마일까요?\n시즌 시작 이후의 상금 수익률도 함께 확인할 수 있어요!',
                             style: TextStyle(
                                 fontFamily: 'AppleSDM',
                                 color: Colors.white,
                                 fontSize: 18.0))),
                   ],
                 ),
-              ))
+              )),
         ],
         enableOverlayTab: true,
         color: Colors.red,
@@ -118,7 +124,7 @@ class _PortfolioViewState extends State<PortfolioView>
         targets: targets,
         colorShadow: Colors.transparent,
         textSkip: "도움말 종료하기",
-        opacityShadow: 0.8, onFinish: () {
+        opacityShadow: 0.95, onFinish: () {
       _sharedPreferencesService.setSharedPreferencesValue(
           portfolioTutorialKey, true);
     }, onClickSkip: () {
@@ -256,26 +262,35 @@ class _PortfolioViewState extends State<PortfolioView>
                           children: [
                             GestureDetector(
                               onTap: showTutorial,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.black38,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 7.0,
-                                      right: 6.0,
-                                      top: 5.0,
-                                      bottom: 6.0),
-                                  child: Center(
-                                    child: Text('?',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            fontFamily: 'AppleSDM')),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black38,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 9.0,
+                                          right: 8.0,
+                                          top: 8.0,
+                                          bottom: 8.0),
+                                      child: Center(
+                                        child: Text('?',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                                fontFamily: 'AppleSDM')),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  Container(
+                                    width: 20,
+                                    height: 30,
+                                    // color: Colors.red,
+                                  ),
+                                ],
                               ),
                             ),
                             Spacer(),
