@@ -87,7 +87,7 @@ class _ChartViewState extends State<ChartView> {
 
   // 실시간 가격 데이터 리스트
   List<PriceModel> realtimePriceDataSourceList;
-  Stream<List<PriceModel>> tempStream;
+  Stream<List<PriceModel>> liveStream;
   DatabaseService _databaseService = locator<DatabaseService>();
   DateTime liveToday;
   // 종목 정보 불러올 때 필요한 변수들
@@ -105,9 +105,9 @@ class _ChartViewState extends State<ChartView> {
 
   @override
   void initState() {
-    // issueCode = widget.vote.subVotes[idx].issueCode[choice];
     super.initState();
-    print(issueCode);
+    // issueCode = widget.vote.subVotes[idx].issueCode[indexChosen];
+    // print("INIT" + issueCode);
     controller = ScrollController(
       initialScrollOffset: 0,
     );
@@ -132,8 +132,9 @@ class _ChartViewState extends State<ChartView> {
     //그러면 데이터를 받아오면서 setState가 됨 -> 차트 애니메이션이 끊기게 됨.
     // 이를 방지하고자 initState에 stream을 설정해주고 아래 Live를 위한 StreamBuilder에서
     // 이 스트림을 불러옴. 이러면 스트림을 다시 콜하지 않음.
-    // tempStream = _databaseService.getRealtimePriceForChart(issueCode);
-    // print(position);
+    // liveStream =
+    //     _databaseService.getRealtimePriceForChart(widget.address, issueCode);
+    print("WIDGET ADDRESS" + widget.address.date.toString());
   }
 
   @override
@@ -511,6 +512,7 @@ class _ChartViewState extends State<ChartView> {
 
                                 // print("PREV " + prevSnapshot.data.toString());
                                 // print("NOW " + snapshot.data.toString());
+
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -689,8 +691,13 @@ class _ChartViewState extends State<ChartView> {
                               }),
                           StreamBuilder<DateTime>(
                               stream: dateTimeStreamCtrl.stream,
-                              initialData: strToDate(model.chartList.last.date),
+                              initialData: model.isDurationSelected[0] == true
+                                  ? strToDate(address.date)
+                                  : strToDate(model.chartList.last.date),
                               builder: (context, snapshot) {
+                                print("IS DURATION");
+                                print(model.isDurationSelected);
+                                print(address.date);
                                 return Text(stringDateWithDay
                                     .format(snapshot.data)
                                     .toString());
@@ -703,9 +710,11 @@ class _ChartViewState extends State<ChartView> {
                     ),
                     model.isDurationSelected[0] == true
                         ? StreamBuilder<List<PriceModel>>(
-                            stream: tempStream,
+                            stream: model.getRealtimePriceForChart(
+                                address, issueCode),
                             builder: (context, realtimeSnapshot) {
                               if (!realtimeSnapshot.hasData) {
+                                print("NO DATA");
                                 return Container(
                                   height: deviceHeight * 0.23,
                                 );
@@ -713,6 +722,9 @@ class _ChartViewState extends State<ChartView> {
                                 realtimePriceDataSourceList =
                                     realtimeSnapshot.data;
                                 if (address.isVoting == false) {
+                                  print("FIRST LIST" +
+                                      realtimePriceDataSourceList.first
+                                          .toString());
                                   liveToday = realtimePriceDataSourceList
                                       .first.createdAt
                                       .toDate();
@@ -1949,7 +1961,7 @@ class _ChartViewState extends State<ChartView> {
                 ),
                 isVisible: false,
                 maximum: DateTime(
-                    liveToday.year, liveToday.month, liveToday.day, 15, 35, 00),
+                    liveToday.year, liveToday.month, liveToday.day, 15, 40, 00),
                 minimum: DateTime(
                     liveToday.year, liveToday.month, liveToday.day, 08, 50, 00),
               )

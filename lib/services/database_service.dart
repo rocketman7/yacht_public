@@ -679,6 +679,7 @@ class DatabaseService {
         .doc(address.date)
         .collection(issueCode)
         .orderBy('createdAt', descending: true)
+        .limit(10)
         .snapshots()
         // .take(1)
         .map((snapshot) {
@@ -701,18 +702,19 @@ class DatabaseService {
   }
 
   Stream<List<PriceModel>> getRealtimePriceForChart(
+    DatabaseAddressModel address,
     String issueCode,
   ) {
-    // print(issueCode.length);
+    print("STREAM FROM " + issueCode.toString());
 
     // print(issueCode[i] + "in a loop");
 
     return _databaseService
         .collection('realtimePrice')
         .doc('KR')
-        .collection('20201120')
+        .collection(address.date)
+        .where('issueCode', isEqualTo: issueCode)
         .orderBy('createdAt', descending: true)
-        // .where('issueCode', isEqualTo: '005930')
         .snapshots()
         .map((snapshot) {
       print("SNAP");
@@ -729,8 +731,8 @@ class DatabaseService {
 
         return snapshot.docs.map((element) {
           // priceList.add(PriceModel.fromData(element.data()));
+          print(element.data());
           return PriceModel.fromData(element.data());
-          // print(element.data());
         }).toList();
         // print("AFTER STREAM " + priceList.toString());
         // print("LENGTH IS " + priceList.length.toString());
@@ -1298,7 +1300,9 @@ class DatabaseService {
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
       // date: '20201214',
+      // date: "20201024",
       date: baseDate,
+      // category: "koreaStockStandard",
       category: category,
       season: season,
       // isVoting: false,

@@ -75,13 +75,13 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // const dailyVoteSnapshot = votesSeasonCollection.doc(today).get();
 
   // TODAY RESULT***
-  // let todayResult = [];
-  // todayResult = await votesSeasonCollection
-  //   .doc(today)
-  //   .get()
-  //   .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
+  let todayResult = [];
+  todayResult = await votesSeasonCollection
+    .doc(today)
+    .get()
+    .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
 
-  let todayResult = [1,1,1];
+  // let todayResult = [1,1,1];
   // user의 vote 선택 가져오기
   console.log(todayResult);
   let userCurrentCombo = {};
@@ -221,7 +221,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
       })
     );
   }
-
+  // 주석 풀 곳 
   // await updateUserScore(userScores);
 
   async function updateWinPointForTodayVotedUser(datas) {
@@ -256,6 +256,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
     );
   }
 
+    // 주석 풀 곳 
   // await updateWinPointForTodayVotedUser(userScores);
 
   // async function updateCurrentWinPointAtUserVoteStats(
@@ -448,8 +449,12 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
       })
     );
   }
+  // 주석 풀 곳 
+  // await updateTodayRank(participatedUserSortedCurrentWinPoint, prevRankDocs);
 
-  await updateTodayRank(participatedUserSortedCurrentWinPoint, prevRankDocs);
+
+
+
   // console.log(userDocs[0].combo.toString());
 
   // collection id가 될 날짜 지정
@@ -503,113 +508,113 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
 
 
 
-exports.tempQuries = functions.https.onRequest(async (req, res) => {
-  const db = admin.firestore();
+// exports.tempQuries = functions.https.onRequest(async (req, res) => {
+//   const db = admin.firestore();
 
-  // votes -> docu id: date -> voteResult array
+//   // votes -> docu id: date -> voteResult array
 
-  const adminRef = db.collection("admin");
-  const votesRef = db.collection("votes");
-  const usersRef = db.collection("users");
-  const ranksRef = db.collection("ranks");
+//   const adminRef = db.collection("admin");
+//   const votesRef = db.collection("votes");
+//   const usersRef = db.collection("users");
+//   const ranksRef = db.collection("ranks");
 
-  const openSeasonSnapshot = await adminRef.doc("openSeason").get();
-  const category = openSeasonSnapshot.data().category;
+//   const openSeasonSnapshot = await adminRef.doc("openSeason").get();
+//   const category = openSeasonSnapshot.data().category;
 
-  const season = openSeasonSnapshot.data().season;
-  const votesSeasonCollection = votesRef.doc(category).collection(season);
+//   const season = openSeasonSnapshot.data().season;
+//   const votesSeasonCollection = votesRef.doc(category).collection(season);
 
-  // today -> string으로 변환
-  // var today = Date();
-  var date = dateFormat(today, "yyyymmdd");
+//   // today -> string으로 변환
+//   // var today = Date();
+//   var date = dateFormat(today, "yyyymmdd");
 
-  console.log(date);
-  // const today = "20201005";
-  // today의 실제 결과 가져오기 (이전에 넣어야함)
+//   console.log(date);
+//   // const today = "20201005";
+//   // today의 실제 결과 가져오기 (이전에 넣어야함)
 
-  var today = "20201020";
+//   var today = "20201020";
 
-  function userVotesSeasonCollection(uid) {
-    return usersRef
-      .doc(uid)
-      .collection("userVote")
-      .doc(category)
-      .collection(season)
-      .doc(today);
-  }
+//   function userVotesSeasonCollection(uid) {
+//     return usersRef
+//       .doc(uid)
+//       .collection("userVote")
+//       .doc(category)
+//       .collection(season)
+//       .doc(today);
+//   }
 
-  function userVotesSeasonStatsCollection(uid) {
-    return usersRef
-      .doc(uid)
-      .collection("userVote")
-      .doc(category)
-      .collection(season)
-      .doc("stats");
-  }
+//   function userVotesSeasonStatsCollection(uid) {
+//     return usersRef
+//       .doc(uid)
+//       .collection("userVote")
+//       .doc(category)
+//       .collection(season)
+//       .doc("stats");
+//   }
 
-  const todayRankCollectionRef = ranksRef
-    .doc(category)
-    .collection(season)
-    .doc(today)
-    .collection(today);
+//   const todayRankCollectionRef = ranksRef
+//     .doc(category)
+//     .collection(season)
+//     .doc(today)
+//     .collection(today);
 
-  // const prevRankCollectionRef = ranksRef
-  //   .doc(category)
-  //   .collection(season)
-  //   .doc(yeseterday)
-  //   .collection(yeseterday);
+//   // const prevRankCollectionRef = ranksRef
+//   //   .doc(category)
+//   //   .collection(season)
+//   //   .doc(yeseterday)
+//   //   .collection(yeseterday);
 
-  // const dailyVoteSnapshot = votesSeasonCollection.doc(today).get();
-  let todayResult = [];
-  todayResult = await votesSeasonCollection
-    .doc(today)
-    .get()
-    .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
+//   // const dailyVoteSnapshot = votesSeasonCollection.doc(today).get();
+//   let todayResult = [];
+//   todayResult = await votesSeasonCollection
+//     .doc(today)
+//     .get()
+//     .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
 
-  // user의 vote 선택 가져오기
-  console.log(todayResult);
-  let userCurrentCombo = {};
-  let userVotes = {};
-  let userScores = {};
+//   // user의 vote 선택 가져오기
+//   console.log(todayResult);
+//   let userCurrentCombo = {};
+//   let userVotes = {};
+//   let userScores = {};
 
-  let allUsers = {};
-  let allUserUid = [];
+//   let allUsers = {};
+//   let allUserUid = [];
 
-  let prevRanks = {};
-  let userPrevWinPoint = {};
-  var userSnapshot = await usersRef.get();
+//   let prevRanks = {};
+//   let userPrevWinPoint = {};
+//   var userSnapshot = await usersRef.get();
   
-  userSnapshot.forEach((doc) => {
-    allUsers[doc.id] = doc.data();
-  });
-  // 모든 유저의 uid를 allUsers 리스트에 저장
-  userSnapshot.forEach((doc) => {
-    allUserUid.push(doc.id);
-  });
+//   userSnapshot.forEach((doc) => {
+//     allUsers[doc.id] = doc.data();
+//   });
+//   // 모든 유저의 uid를 allUsers 리스트에 저장
+//   userSnapshot.forEach((doc) => {
+//     allUserUid.push(doc.id);
+//   });
 
-  // var prevRankSnapshot = await prevRankCollectionRef.get();
+//   // var prevRankSnapshot = await prevRankCollectionRef.get();
 
-  // prevRankSnapshot.forEach((doc) => {
-  //   prevRanks[doc.data().uid] = doc.data().todayRank;
-  // });
+//   // prevRankSnapshot.forEach((doc) => {
+//   //   prevRanks[doc.data().uid] = doc.data().todayRank;
+//   // });
 
-  // item 15개 추가
-  async function getEachUserVote(datas) {
-    await Promise.all(
-      datas.map((uid) =>
-        usersRef.doc(uid).update({ item: admin.firestore.FieldValue.increment(15) })
+//   // item 15개 추가
+//   async function getEachUserVote(datas) {
+//     await Promise.all(
+//       datas.map((uid) =>
+//         usersRef.doc(uid).update({ item: admin.firestore.FieldValue.increment(15) })
         
-      )
-    );
-    return 0;
-  }
-  // allUsers 리스트 안의 각 uid를 인자로
-  // 각 uservote의 voteSelected를 userVotes에 넣는 함수
-  await getEachUserVote(allUserUid); 
+//       )
+//     );
+//     return 0;
+//   }
+//   // allUsers 리스트 안의 각 uid를 인자로
+//   // 각 uservote의 voteSelected를 userVotes에 넣는 함수
+//   await getEachUserVote(allUserUid); 
  
 
-  res.send(userScores);
-});
+//   res.send(userScores);
+// });
 
 
 exports.verifyKakaoToken = functions.region('asia-northeast3').https.onCall(async (data, context) => {

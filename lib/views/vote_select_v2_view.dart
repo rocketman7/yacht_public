@@ -369,10 +369,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       print("finish");
       _sharedPreferencesService.setSharedPreferencesValue(
           voteSelectTutorialKey, true);
+      renewTutorialKey();
     }, onClickSkip: () {
       print("skip");
       _sharedPreferencesService.setSharedPreferencesValue(
           voteSelectTutorialKey, true);
+      renewTutorialKey();
     })
       ..show();
   }
