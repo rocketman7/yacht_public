@@ -95,7 +95,7 @@ class VoteSelectViewModel extends FutureViewModel {
         _databaseService.updateUserItem(uid, 1);
         //stateManage 업데이트
         _stateManageService.userModelUpdate();
-
+        user = _stateManageService.userModel;
         notifyListeners();
         // print(rewardAmount);
         print('reward ads: rewarded');
@@ -103,6 +103,7 @@ class VoteSelectViewModel extends FutureViewModel {
         // 리워드 광고가 닫히면, 새로운 리워드 광고를 로드해줘야함
         rewardedAdsLoaded = false;
         print(rewardedAdsLoaded);
+        // _stateManageService.userModelUpdate();
         loadRewardedAds();
 
         notifyListeners();

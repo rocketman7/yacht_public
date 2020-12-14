@@ -257,6 +257,7 @@ class DatabaseService {
     String countryCode,
     String issueCode,
   ) async {
+    print("GET CHART START");
     List<ChartModel> chartList = [];
 
     try {
@@ -1134,7 +1135,7 @@ class DatabaseService {
   }
 
   // 주식 종목정보 가져오기
-  Future getStockInfo(
+  Future<StockInfoModel> getStockInfo(
     String countryCode,
     String issueCode,
   ) async {
@@ -1171,11 +1172,13 @@ class DatabaseService {
             case 'stats':
               // stockDescription.stats = StatsModel.fromData(doc.data());
               // stockDescription.stats.add(StatsModel.fromData(doc.data()));
-              // print(doc.data());
+              print("STATSSSS");
+              print(doc.data());
               doc.data().values.toList().forEach((element) {
+                print("ELEMENT" + element.toString());
                 statsList.add(StatsModel.fromData(element));
               });
-
+              print("LIST STATS" + statsList.toString());
               statsList.sort((b, a) => (b.uploadedAt).compareTo(a.uploadedAt));
 
               stockDescription.stats = statsList;
@@ -1185,7 +1188,7 @@ class DatabaseService {
               // print("STATS " + stockDescription.toString());
               break;
           }
-          // print(" MODEL" + stockDescription.toString());
+          print(" MODEL" + stockDescription.stats.toString());
           // return element.data();
         }
       });
@@ -1299,7 +1302,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201214',
+      // date: '20201216',
       // date: "20201024",
       date: baseDate,
       // category: "koreaStockStandard",

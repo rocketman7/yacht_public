@@ -88,6 +88,8 @@ class RankViewModel extends FutureViewModel {
         myRankChange = rankChange[i];
 
         myWinPoint = rankModel[i].currentWinPoint;
+
+        print("MY RANK" + myRank.toString());
       }
     }
 

@@ -200,8 +200,8 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                       Text(
                                         model.myRank == 0
                                             ? "-"
-                                            : model.userVote.userVoteStats
-                                                .currentWinPoint
+                                            : model
+                                                .returnDigitFormat(model.myRank)
                                                 .toString(),
                                         style: TextStyle(
                                           color: Colors.white,
@@ -213,7 +213,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                         softWrap: true,
                                       ),
                                       Text(
-                                        "현재 랭킹",
+                                        "현재 순위",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 14.sp,

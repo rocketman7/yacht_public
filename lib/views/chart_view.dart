@@ -163,7 +163,7 @@ class _ChartViewState extends State<ChartView> {
   var formatPrice = NumberFormat("#,###");
   var formatIndex = NumberFormat("#,###.00");
   var formatPriceUpDown = NumberFormat("+#,###; -#,###");
-  var formatIndexUpDown = NumberFormat("+#,###.00; -#,###.00");
+  var formatIndexUpDown = NumberFormat("+#,##0.00; -#,##0.00");
   var formatPercent = NumberFormat("##.0%");
   var stringDateWithDay = DateFormat("yyyy.MM.dd EEE");
   var stringDate = DateFormat("yyyy.MM.dd");
@@ -180,17 +180,17 @@ class _ChartViewState extends State<ChartView> {
       num mod = bigNum.abs() % 1000000000000;
 
       return (isNegative ? "-" : "") +
-          formatPrice.format((bigNum.abs() / 1000000000000).round()) +
+          formatPrice.format((bigNum.abs() / 1000000000000).floor()) +
           "조 " +
-          formatPrice.format((mod / 100000000).round()) +
+          formatPrice.format((mod / 100000000).floor()) +
           "억";
     } else if (bigNum.abs() >= 100000000) {
       return (isNegative ? "-" : "") +
-          formatPrice.format((bigNum.abs() / 100000000).round()) +
+          formatPrice.format((bigNum.abs() / 100000000).floor()) +
           "억";
     } else if (bigNum.abs() >= 10000) {
       return (isNegative ? "-" : "") +
-          formatPrice.format((bigNum.abs() / 10000).round()) +
+          formatPrice.format((bigNum.abs() / 10000).floor()) +
           "만";
     } else {
       return (isNegative ? "-" : "") + formatPrice.format(bigNum.abs());

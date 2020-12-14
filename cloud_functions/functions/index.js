@@ -81,7 +81,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
     .get()
     .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
 
-  // let todayResult = [1,1,1];
+  // let todayResult = [2,1,1];
   // user의 vote 선택 가져오기
   console.log(todayResult);
   let userCurrentCombo = {};
@@ -125,7 +125,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
               doc.data().voteSelected !== null &&
               doc.data().voteSelected !== undefined
             ) {
-              console.log(doc.data());
+              // console.log(doc.data());
               userVotes[uid] = doc.data().voteSelected;
             }
             return userVotes;
@@ -181,7 +181,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
       } else {
         score += 0;
       }
-      console.log("%d번 째 문제 현재 점수 %d", i, score);
+      // console.log("%d번 째 문제 현재 점수 %d", i, score);
     }
 
     return score;
@@ -189,8 +189,8 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
 
   // userScores Object에 uid:score 로 매핑
   Object.keys(userVotes).forEach((data) => {
-    console.log(data);
-    console.log(userVotes[data]);
+    // console.log(data);
+    // console.log(userVotes[data]);
     userScores[data] = scoreUserVotes(userVotes[data], todayResult);
   });
 
@@ -215,7 +215,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
         // console.log(uid);
 
         console.log(uid + " 's today score will be" + datas[uid]);
-
+        // userVotesSeasonCollection(uid).update({ score: 0 });
         userVotesSeasonCollection(uid).update({ score: datas[uid] });
         return 0;
       })
@@ -224,6 +224,9 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // 주석 풀 곳 
   // await updateUserScore(userScores);
 
+  // winPointHistory 넣기 테스트
+  // await userVotesSeasonStatsCollection('kakao:1513684681').update({[`winPointHistory.${today}`] : 9});
+
   async function updateWinPointForTodayVotedUser(datas) {
     await Promise.all(
       Object.keys(datas).map((uid) =>
@@ -231,23 +234,26 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
           .get()
           .then((doc) => {
             // console.log(data);
-            const increment = firebase.firestore.FieldValue.increment(userScores[uid]);
+            // const increment = firebase.firestore.FieldValue.increment(userScores[uid]);
             userVotesSeasonStatsCollection(uid).update({
+              // currentWinPoint:0,
               currentWinPoint:
-                (doc.data() === undefined ||
+                ((doc.data() === undefined ||
                 doc.data() === null ||
                 doc.data().currentWinPoint === null ||
-                doc.data().currentWinPoint === undefined
+                doc.data().currentWinPoint === undefined)
                   ? 0 + userScores[uid]
                   : doc.data().currentWinPoint + userScores[uid]) < 0
                   ? 0
-                  : doc.data() === undefined ||
+                  : (doc.data() === undefined ||
                     doc.data() === null ||
                     doc.data().currentWinPoint === null ||
-                    doc.data().currentWinPoint === undefined
+                    doc.data().currentWinPoint === undefined)
                   ? 0 + userScores[uid]
                   : doc.data().currentWinPoint + userScores[uid],
               updatedAt: today,
+              // [`winPointHistory.${today}`] : 0,
+              [`winPointHistory.${today}`] : userScores[uid],
             });
 
             return 0;
@@ -313,11 +319,11 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const votesRef = db.collection("votes");
 
   const openSeasonSnapshot = await adminRef.doc("openSeason").get();
-  const category = openSeasonSnapshot.data().category;
-  const season = openSeasonSnapshot.data().season;
+  const category = "KR";
+  const season = "beta001";
 
-  const today = "20201020";
-  const yesterday = "20201019";
+  const today = "20201214";
+  const yesterday = "20201211";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -330,7 +336,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
     .then((doc) => doc.data().startDate);
 
   function dateRankCollectionRef(date) {
-    return ranksRef.doc(category).collection(season).doc(date).collection(date);
+    return ranksRef.doc("KR").collection("beta001").doc("20201214").collection("20201214");
   }
 
   function userVotesSeasonStatsCollection(uid) {
@@ -358,9 +364,14 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
         userVotesSeasonStatsCollection(uid)
           .get()
           .then((statsData) => {
+            console.log(statsData.data())
             if (
               statsData.data().currentWinPoint !== null &&
               statsData.data().currentWinPoint !== undefined
+              // statsData.data() !== null &&
+              // statsData.data() !== undefined &&
+              // statsData !== null &&
+              // statsData !== undefined
             ) {
               console.log(statsData.data());
 
@@ -421,12 +432,12 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   console.log("seasonStart at");
   console.log(seasonStartDate);
   let prevRankDocs = {};
-  if (today !== seasonStartDate) {
-    var prevRankDocSnapshot = await dateRankCollectionRef(yesterday).get();
-    prevRankDocSnapshot.forEach((doc) => {
-      prevRankDocs[doc.data().uid] = doc.data().todayRank;
-    });
-  }
+  // if (today !== seasonStartDate) {
+  //   var prevRankDocSnapshot = await dateRankCollectionRef(yesterday).get();
+  //   prevRankDocSnapshot.forEach((doc) => {
+  //     prevRankDocs[doc.data().uid] = doc.data().todayRank;
+  //   });
+  // }
 
   console.log(prevRankDocs);
 

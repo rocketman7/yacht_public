@@ -223,7 +223,7 @@ class RankView extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '오늘의 랭킹',
+                                            '오늘의 순위',
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 fontSize: 28,
@@ -257,7 +257,7 @@ class RankView extends StatelessWidget {
                                                     )
                                                   ],
                                                 )
-                                              : Text('시즌 시작 후 랭킹이 표시됩니다!',
+                                              : Text('시즌 시작 후 순위가 표시됩니다!',
                                                   style: TextStyle(
                                                       fontFamily: 'DmSans',
                                                       fontSize: 14)),

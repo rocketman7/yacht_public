@@ -1685,7 +1685,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
-                                                    horizontal: 6, vertical: 4),
+                                                    horizontal: 10,
+                                                    vertical: 6),
                                                 decoration: BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.all(
@@ -2304,6 +2305,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   ) {
     var formatReturnPct = NumberFormat("0.00%");
     var formatPrice = NumberFormat("#,###");
+    var formatIndex = NumberFormat("#,###.00");
+    var formatPriceUpDown = NumberFormat("+#,###; -#,###");
+    var formatIndexUpDown = NumberFormat("+#,###.00; -#,###.00");
     int numOfChoices = model.vote.subVotes[idx].issueCode.length;
     Color hexToColor(String code) {
       return Color(int.parse(code, radix: 16) + 0xFF0000000);
@@ -2321,7 +2325,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         letterSpacing: -.2);
 
     TextStyle notVotedTitleStyle = TextStyle(
-        color: Colors.grey,
+        color: Color(0xFFCCCCCC),
         fontFamily: 'AppleSDEB',
         fontSize: 24.sp,
         // height: 1,
@@ -2429,6 +2433,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                               model.vote.subVotes[idx]
                                                   .issueCode[0]),
                                           builder: (context, snapshot) {
+                                            bool isIndex = model
+                                                    .vote
+                                                    .subVotes[idx]
+                                                    .indexOrStocks[0] ==
+                                                "index";
                                             if (snapshot.data == null) {
                                               return Center(child: Container());
                                             } else {
@@ -2436,16 +2445,27 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                               price0 = snapshot.data;
                                               return price0.pricePctChange < 0
                                                   ? Text(
-                                                      formatPrice
-                                                              .format(
-                                                                  price0.price)
-                                                              .toString() +
-                                                          " (" +
-                                                          formatReturnPct
-                                                              .format(price0
-                                                                  .pricePctChange)
-                                                              .toString() +
-                                                          ")",
+                                                      isIndex
+                                                          ? (formatIndex
+                                                                  .format(price0
+                                                                      .price)
+                                                                  .toString()) +
+                                                              " (" +
+                                                              formatReturnPct
+                                                                  .format(price0
+                                                                      .pricePctChange)
+                                                                  .toString() +
+                                                              ")"
+                                                          : (formatPrice
+                                                                  .format(price0
+                                                                      .price)
+                                                                  .toString()) +
+                                                              " (" +
+                                                              formatReturnPct
+                                                                  .format(price0
+                                                                      .pricePctChange)
+                                                                  .toString() +
+                                                              ")",
                                                       style: TextStyle(
                                                         color:
                                                             Color(0xFF3485FF),
@@ -2974,7 +2994,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                             model.user,
                             model.selectUpdate,
                             _showToast,
-                            model.userVote.voteSelected[idx] != 0),
+                            model.userVote.voteSelected == null
+                                ? false
+                                : model.userVote.voteSelected[idx] == null
+                                    ? false
+                                    : model.userVote.voteSelected[idx] != 0),
                       ),
                     ],
                   );
