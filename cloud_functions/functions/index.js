@@ -322,8 +322,8 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const category = "KR";
   const season = "beta001";
 
-  const today = "20201214";
-  const yesterday = "20201211";
+  // const today = "20201214";
+  // const yesterday = "20201211";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -366,13 +366,14 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
           .then((statsData) => {
             console.log(statsData.data())
             if (
+              statsData.data() !== undefined &&
+              statsData.data() !== null &&
               statsData.data().currentWinPoint !== null &&
-              statsData.data().currentWinPoint !== undefined
-              // statsData.data() !== null &&
-              // statsData.data() !== undefined &&
+              statsData.data().currentWinPoint !== undefined 
               // statsData !== null &&
               // statsData !== undefined
-            ) {
+            )   
+            {
               console.log(statsData.data());
 
               var temp = {};
