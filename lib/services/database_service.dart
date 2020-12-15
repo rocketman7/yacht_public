@@ -443,12 +443,12 @@ class DatabaseService {
           .get()
           .then((value) => value.data()['startDate']);
 
-      //시즌 시작일 string으로
+      //시즌 시작일 datetime으로
       startDateTime = strToDate(startDateStr);
 
       String tempDate = startDateStr;
 
-      // print("TEMP DATE" + tempDate.toString());
+      print("TEMP DATE" + tempDate.toString());
       // print(address.date);
       // print(strToDate(tempDate)
       //     .isBefore(strToDate(address.date).add(Duration(days: 1))));
@@ -472,7 +472,9 @@ class DatabaseService {
         voteList.insert(
             0, VoteModel.fromData(voteData.data(), tempSubVoteList));
         // print(tempSubVoteList[1].toJson());
+        print("TEMPDATE BEFORE" + tempDate.toString());
         tempDate = dateToStr(nextNthBusinessDay(strToDate(tempDate), 1));
+        print("TEMPDATE AFTER" + tempDate.toString());
       }
 
       // while ( temp.isBefore())
@@ -1302,14 +1304,14 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201218',
+      date: '20201215',
       // date: "20201024",
-      date: baseDate,
+      // date: baseDate,
       // category: "koreaStockStandard",
       category: category,
       season: season,
-      // isVoting: false,
-      isVoting: isVoting, //false면 장 중
+      isVoting: false,
+      // isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());

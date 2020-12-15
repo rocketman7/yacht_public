@@ -17,7 +17,11 @@ import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
 import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
+import 'package:yachtOne/services/timezone_service.dart';
 import 'package:yachtOne/view_models/chart_view_model.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 import 'package:quiver/iterables.dart' as quiver;
 import 'dart:math';
 import 'package:rxdart/rxdart.dart';
@@ -62,6 +66,7 @@ class ChartView extends StatefulWidget {
 class _ChartViewState extends State<ChartView> {
   // DateTime temp = DateTime.now().add(duration);
   final _navigationService = locator<NavigationService>();
+  final TimezoneService _timezoneService = locator<TimezoneService>();
   DatabaseAddressModel address;
   List<double> closeList;
   List<double> closeChartList;
@@ -1842,6 +1847,11 @@ class _ChartViewState extends State<ChartView> {
   }
 
   Container buildContainerForChart(model) {
+    DateTime seoulChartStart = tz.TZDateTime(_timezoneService.seoul,
+        liveToday.year, liveToday.month, liveToday.day, 08, 50, 00);
+    DateTime seoulChartEnd = tz.TZDateTime(_timezoneService.seoul,
+        liveToday.year, liveToday.month, liveToday.day, 15, 40, 00);
+
     return Container(
       // color: Colors.red,
       height: deviceHeight * 0.23,
@@ -1978,10 +1988,10 @@ class _ChartViewState extends State<ChartView> {
                   width: 0,
                 ),
                 isVisible: false,
-                maximum: DateTime(
-                    liveToday.year, liveToday.month, liveToday.day, 15, 40, 00),
-                minimum: DateTime(
-                    liveToday.year, liveToday.month, liveToday.day, 08, 50, 00),
+                minimum:
+                    tz.TZDateTime.from(seoulChartStart, _timezoneService.seoul),
+                maximum:
+                    tz.TZDateTime.from(seoulChartEnd, _timezoneService.seoul),
               )
             : CategoryAxis(
                 majorGridLines: MajorGridLines(
