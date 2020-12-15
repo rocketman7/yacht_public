@@ -33,8 +33,7 @@ DateTime closestBusinessDay(DateTime dateTime) {
   // DateTime _now = DateTime.now();
   // dateTime = DateTime.now();
   // dateTime = _timezoneService.koreaTime(dateTime);
-  print("DOUBLE KOREA TIME" + dateTime.toString());
-  print("TRIPLE KOREA TIME" + _timezoneService.koreaTime(dateTime).toString());
+
   String dateTimeStr = stringDate.format(dateTime);
   if (dateTime.weekday == 6 ||
       dateTime.weekday == 7 ||

@@ -158,8 +158,10 @@ class PortfolioViewModel extends FutureViewModel {
   // 어드레스모델이 가리키는 날짜를 가져와서 xxxx.xx.xx 형식으로 변환
   String getDateFormChange() {
     // DateTime baseDate = strToDate(addressModel.date);
-    DateTime baseDate =
-        strToDate(DateTimeModel().baseDate(addressModel.category));
+    // DateTime baseDate =
+    //     strToDate(DateTimeModel().baseDate(addressModel.category));
+    DateTime baseDate = strToDate(addressModel.date);
+    print("Portfolio basedate" + baseDate.toString());
     // print(DateTimeModel().baseDate(addressModel.category));
     // print(addressModel.category);
     String previosBusinessDate = dateToStr(previousBusinessDay(baseDate));

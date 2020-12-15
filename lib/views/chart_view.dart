@@ -1847,11 +1847,6 @@ class _ChartViewState extends State<ChartView> {
   }
 
   Container buildContainerForChart(model) {
-    DateTime seoulChartStart = tz.TZDateTime(_timezoneService.seoul,
-        liveToday.year, liveToday.month, liveToday.day, 08, 50, 00);
-    DateTime seoulChartEnd = tz.TZDateTime(_timezoneService.seoul,
-        liveToday.year, liveToday.month, liveToday.day, 15, 40, 00);
-
     return Container(
       // color: Colors.red,
       height: deviceHeight * 0.23,
@@ -1988,10 +1983,14 @@ class _ChartViewState extends State<ChartView> {
                   width: 0,
                 ),
                 isVisible: false,
-                minimum:
-                    tz.TZDateTime.from(seoulChartStart, _timezoneService.seoul),
-                maximum:
-                    tz.TZDateTime.from(seoulChartEnd, _timezoneService.seoul),
+                minimum: tz.TZDateTime.from(
+                    tz.TZDateTime(_timezoneService.seoul, liveToday.year,
+                        liveToday.month, liveToday.day, 08, 50, 00),
+                    _timezoneService.seoul),
+                maximum: tz.TZDateTime.from(
+                    tz.TZDateTime(_timezoneService.seoul, liveToday.year,
+                        liveToday.month, liveToday.day, 15, 40, 00),
+                    _timezoneService.seoul),
               )
             : CategoryAxis(
                 majorGridLines: MajorGridLines(

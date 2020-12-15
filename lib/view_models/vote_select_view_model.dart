@@ -105,7 +105,7 @@ class VoteSelectViewModel extends FutureViewModel {
         print(rewardedAdsLoaded);
         // _stateManageService.userModelUpdate();
         loadRewardedAds();
-
+        user = _stateManageService.userModel;
         notifyListeners();
         print('reward ads: closed');
       } else if (event == RewardedVideoAdEvent.loaded) {
