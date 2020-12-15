@@ -1308,8 +1308,8 @@ class DatabaseService {
       // category: "koreaStockStandard",
       category: category,
       season: season,
-      isVoting: false,
-      // isVoting: isVoting, //false면 장 중
+      // isVoting: false,
+      isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());

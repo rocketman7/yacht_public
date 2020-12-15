@@ -3959,10 +3959,13 @@ class _TopContainerState extends State<TopContainer> {
 
   Duration getTimeLeft(VoteSelectViewModel model) {
     DateTime today = strToDate(model.address.date);
+    DateTime seoulMarketEnd = tz.TZDateTime(
+        _timezoneService.seoul, today.year, today.month, today.day, 15, 30, 0);
+    DateTime marketEnd =
+        tz.TZDateTime.from(seoulMarketEnd, _timezoneService.seoul);
     DateTime endTime = model.address.isVoting
         ? model.vote.voteEndDateTime.toDate()
-        : _timezoneService
-            .koreaTime(DateTime(today.year, today.month, today.day, 15, 30, 0));
+        : marketEnd;
     // DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
     return endTime.difference(_timezoneService.koreaTime(DateTime.now()));
     // timeLeftArr = diffFinal.split(":");

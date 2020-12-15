@@ -9,8 +9,10 @@ class TimezoneService {
     tz.initializeTimeZones();
   }
 
+  var seoul = tz.getLocation('Asia/Seoul');
+
   DateTime koreaTime(DateTime local) {
-    var seoul = tz.getLocation('Asia/Seoul');
+    // var seoul = tz.getLocation('Asia/Seoul');
     return tz.TZDateTime.now(seoul);
   }
 
