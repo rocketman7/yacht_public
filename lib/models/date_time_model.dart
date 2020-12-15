@@ -1,20 +1,28 @@
 import 'package:intl/intl.dart';
 import 'package:yachtOne/models/temp_address_constant.dart';
+import 'package:yachtOne/services/timezone_service.dart';
 import 'package:yachtOne/views/constants/holiday.dart';
 
+import '../locator.dart';
+
 class DateTimeModel {
+  final TimezoneService _timezoneService = locator<TimezoneService>();
   // HOUR24_MINUTE_SECOND
   String hms(DateTime dateTime) {
+    dateTime = _timezoneService.koreaTime(dateTime);
     return DateFormat.Hms().format(dateTime);
   }
 
   // yyyyMMdd
   String yyyyMMdd(DateTime dateTime) {
+    dateTime = _timezoneService.koreaTime(dateTime);
     return DateFormat("yyyyMMdd").format(dateTime);
   }
 
 // 오늘 날짜가 평일이면 오늘 반환, 주말이면 다음 월요일 반환
   DateTime weekDay(DateTime dateTime) {
+    dateTime = _timezoneService.koreaTime(dateTime);
+
     if (dateTime.weekday >= 1 && dateTime.weekday <= 5) {
       return (dateTime);
     } else if (dateTime.weekday == 6) {
@@ -30,7 +38,8 @@ class DateTimeModel {
     switch (category) {
       case 'KR':
         // 지금 시간이 평일인지 체크하고 평일이면 그대로 반환, 주말이면 가장 가까운 월요일 반환
-        DateTime _timeNow = DateTime.now();
+        DateTime _now = DateTime.now();
+        DateTime _timeNow = _timezoneService.koreaTime(_now);
         DateTime _nearestWeekDay = closestBusinessDay(_timeNow);
         DateTime _marketStart = DateTime(_nearestWeekDay.year,
             _nearestWeekDay.month, _nearestWeekDay.day, 08, 50, 00);
@@ -47,13 +56,20 @@ class DateTimeModel {
 
 // 투표 가능시간인지 가능이면 true, 불가능(장중)이면 false
   bool isVoteAvailable(String category) {
+    DateTime _now = DateTime.now();
+    DateTime koreaNow = _timezoneService.koreaTime(_now);
+
+    print("ISVOTEAVAILABLE" + koreaNow.toString());
+
     List<DateTime> dateTime = marketOpeningPeriod(category);
+    print("MARKET OPEN" + dateTime.toString());
     switch (category) {
       case 'KR':
-        DateTime _timeNow = DateTime.now();
-
+        // DateTime _timeNow = DateTime.now();
+        print("KR_TIMENOW" + koreaNow.toString());
         // 지금이 장중 시간일 때 (08:50 ~ 16:00)
-        if (_timeNow.isAfter(dateTime[0]) && _timeNow.isBefore(dateTime[1])) {
+        if (koreaNow.isAfter(dateTime[0]) && koreaNow.isBefore(dateTime[1])) {
+          print("IS IN THE MARKET");
           return false; //투표 불가능
         } else {
           return true; //투표 가능
@@ -68,7 +84,8 @@ class DateTimeModel {
   String baseDate(String category) {
     List<DateTime> dateTime = marketOpeningPeriod(category);
     bool votingNow = isVoteAvailable(category);
-    DateTime _timeNow = DateTime.now();
+    DateTime _now = DateTime.now();
+    DateTime _timeNow = _timezoneService.koreaTime(_now);
 
     //투표 불가능할 때 (=장중일 때)
     if (!votingNow) {

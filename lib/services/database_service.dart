@@ -1302,7 +1302,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201216',
+      // date: '20201218',
       // date: "20201024",
       date: baseDate,
       // category: "koreaStockStandard",
@@ -1314,6 +1314,7 @@ class DatabaseService {
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());
     print("AddressGetEnd" + DateTime.now().toString());
+    print("RETURNED ADDRESS" + _databaseAddress.date.toString());
     return _databaseAddress;
   }
 }

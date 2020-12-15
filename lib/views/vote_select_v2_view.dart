@@ -34,6 +34,8 @@ import 'package:yachtOne/models/user_vote_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 import 'package:yachtOne/views/mypage_main_view.dart';
 import 'package:yachtOne/views/temp_not_voting_view.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import '../views/widgets/avatar_widget.dart';
 import 'package:amplitude_flutter/amplitude.dart';
@@ -4035,7 +4037,7 @@ class _TopContainerState extends State<TopContainer> {
         "${diff.inHours.toString().padLeft(2, '0')}:${diff.inMinutes.remainder(60).toString().padLeft(2, '0')}:";
     String strDurationSec =
         "${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
-
+    var seoul = tz.getLocation('Asia/Seoul');
     // if (diff.inSeconds == 0 && model.address.isVoting == true) {
     //   _timer.cancel();
     //   model.getAllModel(model.uid);
