@@ -364,6 +364,7 @@ class MypageMainView extends StatelessWidget {
           // makeMypageMainComponent(model, 'x내가 받은 상금 현황', null),
           // makeMypageMainComponent(model, 'x내 활동', null),
           makeMypageMainComponent(model, '계좌 정보', 'mypage_accoutverification'),
+          makeMypageMainComponent(model, '푸시 알림 설정', 'mypage_pushalarmsetting'),
         ],
       ),
     );
@@ -375,7 +376,7 @@ class MypageMainView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '알림 설정',
+            '꾸욱 추천하기',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(
@@ -385,15 +386,9 @@ class MypageMainView extends StatelessWidget {
             height: 2,
             color: Colors.black,
           ),
-          makeMypageMainComponent(model, '푸시 알림 설정', 'mypage_pushalarmsetting'),
-          Platform.isAndroid
-              ? makeMypageMainComponent(
-                  model, '친구에게 추천하기', 'mypage_friendscode')
-              : Container(),
-          Platform.isAndroid
-              ? makeMypageMainComponent(
-                  model, '친구의 추천코드 입력하기', 'mypage_friendscodeinsert')
-              : Container(),
+          makeMypageMainComponent(model, '친구에게 추천하기', 'mypage_friendscode'),
+          makeMypageMainComponent(
+              model, '친구의 추천코드 입력하기', 'mypage_friendscodeinsert'),
           SizedBox(
             height: 42,
           )

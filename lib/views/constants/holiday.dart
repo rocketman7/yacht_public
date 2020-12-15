@@ -1,4 +1,6 @@
 import 'package:intl/intl.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 var stringDate = DateFormat("yyyyMMdd");
 
@@ -21,6 +23,7 @@ bool checkHoliday(DateTime dateTime) {
 
 DateTime closestBusinessDay(DateTime dateTime) {
   // holiday랑 주말 거르고 다음 영업일 return
+  dateTime = tz.TZDateTime.from(dateTime, tz.getLocation('Asia/Seoul'));
   String dateTimeStr = stringDate.format(dateTime);
   if (dateTime.weekday == 6 ||
       dateTime.weekday == 7 ||
