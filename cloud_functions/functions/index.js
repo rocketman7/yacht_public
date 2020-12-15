@@ -34,13 +34,13 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
 
   // today -> string으로 변환
   // var today = Date();
-  var date = dateFormat(today, "yyyymmdd");
+  var today = dateFormat(Date(), "yyyymmdd");
 
-  console.log(date);
+  console.log(today);
   // const today = "20201005";
   // today의 실제 결과 가져오기 (이전에 넣어야함)
 
-  var today = "20201214";
+  // var today = "20201214";
 
   function userVotesSeasonCollection(uid) {
     return usersRef
@@ -75,13 +75,15 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // const dailyVoteSnapshot = votesSeasonCollection.doc(today).get();
 
   // TODAY RESULT***
-  let todayResult = [];
-  todayResult = await votesSeasonCollection
-    .doc(today)
-    .get()
-    .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
+  // let todayResult = [];
+  // todayResult = await votesSeasonCollection
+  //   .doc(today)
+  //   .get()
+  //   .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
 
-  // let todayResult = [2,1,1];
+
+    // 임의로 result 넣기
+  let todayResult = [2,2,2];
   // user의 vote 선택 가져오기
   console.log(todayResult);
   let userCurrentCombo = {};
@@ -107,6 +109,36 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // prevRankSnapshot.forEach((doc) => {
   //   prevRanks[doc.data().uid] = doc.data().todayRank;
   // });
+  function compareArray(arr1, arr2) {
+ 
+    // 결과값
+    var rst = false;
+ 
+    // 길이가 다르면 다른 배열이라고 판단
+    if (arr1.length !== arr2.length) {
+        return rst;
+    }
+ 
+    // arr1 배열의 크기만큼 반복
+    arr1.forEach((item) => {
+ 
+        // arr1 배열 아이템이, arr2 배열에 있는지 확인
+        // 있으면, arr2에 item이 존재하는 index 리턴
+        // 없으면, -1 리턴
+        var i = arr2.indexOf(item);
+ 
+        // 존재하면, splice함수를 이용해서 arr2 배열에서 item 삭제
+        if (i > -1) arr2.splice(i, 1);
+    });
+ 
+    // compare2의 길이가 0이면 동일하다고 판단.
+    rst = arr2.length === 0;
+ 
+    return rst;
+}
+
+
+
 
   // uid 로 각 유저 오늘의 투표 voteSelected 리스트 return
   async function getEachUserVote(datas) {
@@ -122,8 +154,9 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
             if (
               doc.data() !== undefined &&
               doc.data() !== null &&
+              doc.data().voteSelected !== undefined &&
               doc.data().voteSelected !== null &&
-              doc.data().voteSelected !== undefined
+              !compareArray(doc.data().voteSelected, [0,0,0]) 
             ) {
               // console.log(doc.data());
               userVotes[uid] = doc.data().voteSelected;
@@ -136,7 +169,8 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   }
   // allUsers 리스트 안의 각 uid를 인자로
   // 각 uservote의 voteSelected를 userVotes에 넣는 함수
-  await getEachUserVote(allUserUid);
+await getEachUserVote(allUserUid);
+  console.log(userVotes.length);
 
   // userCurrentCombo array로부터 userVote sub-col의 사용자 선택 가져와서 dictionary로 만들기
   // async function getEachUserVotesAndMakeDict(datas) {
@@ -319,11 +353,11 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const votesRef = db.collection("votes");
 
   const openSeasonSnapshot = await adminRef.doc("openSeason").get();
-  const category = "KR";
-  const season = "beta001";
+  const category = openSeasonSnapshot.data().category;
+  const season = openSeasonSnapshot.data().season;
 
-  // const today = "20201214";
-  // const yesterday = "20201211";
+  // const today = "20201215";
+  // const yesterday = "20201214";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -336,7 +370,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
     .then((doc) => doc.data().startDate);
 
   function dateRankCollectionRef(date) {
-    return ranksRef.doc("KR").collection("beta001").doc("20201214").collection("20201214");
+    return ranksRef.doc("KR").collection("beta001").doc(today).collection(today);
   }
 
   function userVotesSeasonStatsCollection(uid) {
@@ -368,8 +402,8 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
             if (
               statsData.data() !== undefined &&
               statsData.data() !== null &&
-              statsData.data().currentWinPoint !== null &&
-              statsData.data().currentWinPoint !== undefined 
+              statsData.data().currentWinPoint !== undefined &&
+              statsData.data().currentWinPoint !== null 
               // statsData !== null &&
               // statsData !== undefined
             )   

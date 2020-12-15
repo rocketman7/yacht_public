@@ -67,7 +67,7 @@ class MypageFriendsCodeInsertViewModel extends FutureViewModel {
         return true;
       } else {
         UserModel tempUser = await _databaseService.getUser(a.toString());
-        _databaseService.updateUserItem(uid, 5);
+        // _databaseService.updateUserItem(uid, 5);
         _databaseService.updateUserItem(a.toString(), 5);
         _databaseService.updateInsertedFriendsCode(uid, code);
         await _stateManageService.userModelUpdate();

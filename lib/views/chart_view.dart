@@ -16,6 +16,7 @@ import 'package:yachtOne/models/stats_model.dart';
 import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
 import 'package:yachtOne/services/database_service.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/chart_view_model.dart';
 import 'package:quiver/iterables.dart' as quiver;
 import 'dart:math';
@@ -60,7 +61,7 @@ class ChartView extends StatefulWidget {
 
 class _ChartViewState extends State<ChartView> {
   // DateTime temp = DateTime.now().add(duration);
-
+  final _navigationService = locator<NavigationService>();
   DatabaseAddressModel address;
   List<double> closeList;
   List<double> closeChartList;
@@ -330,43 +331,54 @@ class _ChartViewState extends State<ChartView> {
                               (!selected[idx])
                                   ? RaisedButton(
                                       onPressed: () {
-                                        (address.isVoting == false ||
-                                                isButtonBlocked)
-                                            ? {}
-                                            : setState(() {
-                                                if (seasonInfo.maxDailyVote -
-                                                        numSelected ==
-                                                    0) {
-                                                  _showToast(
-                                                      "하루 최대 ${seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
-                                                } else if ((user.item ==
-                                                        null) ||
-                                                    (user.item - numSelected <=
-                                                        0)) {
-                                                  // 선택되면 안됨
+                                        address.isVoting == false
+                                            ? {
+                                                _navigationService
+                                                    .navigateWithArgTo(
+                                                        'subjectComment',
+                                                        [widget.vote, idx])
+                                              }
+                                            : isButtonBlocked
+                                                ? {}
+                                                : setState(() {
+                                                    if (seasonInfo
+                                                                .maxDailyVote -
+                                                            numSelected ==
+                                                        0) {
+                                                      _showToast(
+                                                          "하루 최대 ${seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                                    } else if ((user.item ==
+                                                            null) ||
+                                                        (user.item -
+                                                                numSelected <=
+                                                            0)) {
+                                                      // 선택되면 안됨
 
-                                                  _showToast(
-                                                      "보유 중인 아이템이 부족합니다.");
-                                                } else {
-                                                  // selected[idx] = true;
-                                                  // print(VoteSelectViewModel()
-                                                  //     .selected
-                                                  //     .toString());
-                                                  widget.selectUpdate(
-                                                      idx, true);
-                                                  Navigator.of(context).pop();
-                                                }
-                                              });
+                                                      _showToast(
+                                                          "보유 중인 아이템이 부족합니다.");
+                                                    } else {
+                                                      // selected[idx] = true;
+                                                      // print(VoteSelectViewModel()
+                                                      //     .selected
+                                                      //     .toString());
+                                                      widget.selectUpdate(
+                                                          idx, true);
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }
+                                                  });
                                       },
-                                      color: (address.isVoting == false ||
-                                              isButtonBlocked)
-                                          ? Color(0xFFE4E4E4)
-                                          : Color(0xFF1EC8CF),
+                                      color: address.isVoting == false
+                                          ? Color(0xFF1EC8CF)
+                                          : isButtonBlocked
+                                              ? Color(0xFFE4E4E4)
+                                              : Color(0xFF1EC8CF),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),
                                       padding: EdgeInsets.symmetric(
-                                        horizontal: 20,
+                                        horizontal:
+                                            address.isVoting == false ? 25 : 20,
                                         // vertical: 8,
                                       ),
                                       child: Row(
@@ -376,19 +388,25 @@ class _ChartViewState extends State<ChartView> {
                                           // (model.address.isVoting == false)
                                           //     ? SizedBox()
                                           // :
-                                          SvgPicture.asset(
-                                            'assets/icons/double_check_icon.svg',
-                                            width: 20,
-                                          ),
+                                          address.isVoting == false
+                                              ? Container()
+                                              : SvgPicture.asset(
+                                                  'assets/icons/double_check_icon.svg',
+                                                  width: 20,
+                                                ),
                                           // (model.address.isVoting == false)
                                           //     ? SizedBox()
                                           // :
-                                          SizedBox(width: 8),
+                                          address.isVoting == false
+                                              ? Container()
+                                              : SizedBox(width: 8),
                                           Text(
                                               // model.address.isVoting == false
                                               //     ? "오늘 예측이 마감되었습니다."
                                               // :
-                                              "선택하기",
+                                              address.isVoting == false
+                                                  ? "커뮤니티"
+                                                  : "선택하기",
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 color:
