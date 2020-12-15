@@ -13,6 +13,7 @@ import 'package:yachtOne/models/sharedPreferences_const.dart';
 import 'package:yachtOne/services/amplitude_service.dart';
 import 'package:yachtOne/services/connection_check_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
+import 'package:yachtOne/services/timezone_service.dart';
 import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -69,7 +70,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     with SingleTickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
   final VoteSelectViewModel _viewModel = VoteSelectViewModel();
-
+  final TimezoneService _timezoneService = locator<TimezoneService>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -3952,6 +3953,7 @@ class TopContainer extends StatefulWidget {
 }
 
 class _TopContainerState extends State<TopContainer> {
+  final TimezoneService _timezoneService = locator<TimezoneService>();
   Timer _timer;
   VoteSelectViewModel model;
 
@@ -3959,9 +3961,10 @@ class _TopContainerState extends State<TopContainer> {
     DateTime today = strToDate(model.address.date);
     DateTime endTime = model.address.isVoting
         ? model.vote.voteEndDateTime.toDate()
-        : DateTime(today.year, today.month, today.day, 15, 30, 0);
+        : _timezoneService
+            .koreaTime(DateTime(today.year, today.month, today.day, 15, 30, 0));
     // DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
-    return endTime.difference(DateTime.now());
+    return endTime.difference(_timezoneService.koreaTime(DateTime.now()));
     // timeLeftArr = diffFinal.split(":");
     // return diffFinal;
   }
