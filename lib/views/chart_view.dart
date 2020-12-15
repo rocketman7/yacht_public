@@ -377,7 +377,8 @@ class _ChartViewState extends State<ChartView> {
                                         borderRadius: BorderRadius.circular(30),
                                       ),
                                       padding: EdgeInsets.symmetric(
-                                        horizontal: 20,
+                                        horizontal:
+                                            address.isVoting == false ? 25 : 20,
                                         // vertical: 8,
                                       ),
                                       child: Row(
