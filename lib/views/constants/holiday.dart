@@ -35,6 +35,7 @@ DateTime closestBusinessDay(DateTime dateTime) {
   // dateTime = _timezoneService.koreaTime(dateTime);
 
   String dateTimeStr = stringDate.format(dateTime);
+  print("BUSINESSDAYCHECK" + dateTime.weekday.toString());
   if (dateTime.weekday == 6 ||
       dateTime.weekday == 7 ||
       holidayListKr.contains(dateTimeStr)) {

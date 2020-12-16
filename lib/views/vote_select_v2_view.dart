@@ -3961,8 +3961,8 @@ class _TopContainerState extends State<TopContainer> {
     DateTime today = strToDate(model.address.date);
     DateTime seoulMarketEnd = tz.TZDateTime(
         _timezoneService.seoul, today.year, today.month, today.day, 15, 30, 0);
-    DateTime marketEnd =
-        tz.TZDateTime.from(seoulMarketEnd, _timezoneService.seoul);
+    DateTime marketEnd = seoulMarketEnd;
+    // tz.TZDateTime.from(seoulMarketEnd, _timezoneService.seoul);
     DateTime endTime = model.address.isVoting
         ? model.vote.voteEndDateTime.toDate()
         : marketEnd;

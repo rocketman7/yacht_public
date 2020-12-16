@@ -2,6 +2,8 @@ import 'package:intl/intl.dart';
 import 'package:yachtOne/models/temp_address_constant.dart';
 import 'package:yachtOne/services/timezone_service.dart';
 import 'package:yachtOne/views/constants/holiday.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 import '../locator.dart';
 
@@ -41,10 +43,22 @@ class DateTimeModel {
         DateTime _now = DateTime.now();
         DateTime _timeNow = _timezoneService.koreaTime(_now);
         DateTime _nearestWeekDay = closestBusinessDay(_timeNow);
-        DateTime _marketStart = DateTime(_nearestWeekDay.year,
-            _nearestWeekDay.month, _nearestWeekDay.day, 08, 50, 00);
-        DateTime _marketEnd = DateTime(_nearestWeekDay.year,
-            _nearestWeekDay.month, _nearestWeekDay.day, 16, 00, 00);
+        DateTime _marketStart = tz.TZDateTime(
+            _timezoneService.seoul,
+            _nearestWeekDay.year,
+            _nearestWeekDay.month,
+            _nearestWeekDay.day,
+            08,
+            50,
+            00);
+        DateTime _marketEnd = tz.TZDateTime(
+            _timezoneService.seoul,
+            _nearestWeekDay.year,
+            _nearestWeekDay.month,
+            _nearestWeekDay.day,
+            16,
+            00,
+            00);
 
         return [_marketStart, _marketEnd];
 
