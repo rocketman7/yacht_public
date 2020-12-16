@@ -224,6 +224,7 @@ class VoteSelectViewModel extends FutureViewModel {
     }
 
     address = _stateManageService.addressModel;
+
     user = _stateManageService.userModel;
     vote = _stateManageService.voteModel;
     userVote = _stateManageService.userVoteModel;
