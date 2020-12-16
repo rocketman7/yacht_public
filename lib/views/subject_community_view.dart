@@ -791,7 +791,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                         ),
                                         // minLines: 1,
                                         maxLines: null,
-                                        maxLength: 80,
+                                        maxLength: 100,
 
                                         // maxLengthEnforced: true,
                                         decoration: InputDecoration(
@@ -1629,11 +1629,14 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                     children: <Widget>[
                       Row(
                         children: [
-                          Text(voteComment.userName,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              )),
+                          Text(
+                            voteComment.userName,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                           SizedBox(
                             width: 8,
                           ),
@@ -1856,7 +1859,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                 // fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
-              maxLines: 3,
+              maxLines: 4,
               overflow: TextOverflow.ellipsis,
             )),
         SizedBox(

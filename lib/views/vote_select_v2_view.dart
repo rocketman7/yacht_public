@@ -2499,16 +2499,27 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                       ),
                                                     )
                                                   : Text(
-                                                      formatPrice
-                                                              .format(
-                                                                  price0.price)
-                                                              .toString() +
-                                                          " (+" +
-                                                          formatReturnPct
-                                                              .format(price0
-                                                                  .pricePctChange)
-                                                              .toString() +
-                                                          ")",
+                                                      isIndex
+                                                          ? formatIndex
+                                                                  .format(price0
+                                                                      .price)
+                                                                  .toString() +
+                                                              " (+" +
+                                                              formatReturnPct
+                                                                  .format(price0
+                                                                      .pricePctChange)
+                                                                  .toString() +
+                                                              ")"
+                                                          : formatPrice
+                                                                  .format(price0
+                                                                      .price)
+                                                                  .toString() +
+                                                              " (+" +
+                                                              formatReturnPct
+                                                                  .format(price0
+                                                                      .pricePctChange)
+                                                                  .toString() +
+                                                              ")",
                                                       style: TextStyle(
                                                         color:
                                                             Color(0xFFFF3E3E),

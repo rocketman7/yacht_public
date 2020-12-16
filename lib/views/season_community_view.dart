@@ -151,7 +151,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                       ),
                                       // minLines: 1,
                                       maxLines: null,
-                                      maxLength: 80,
+                                      maxLength: 100,
                                       // maxLengthEnforced: true,
                                       decoration: InputDecoration(
                                           isDense: true,
@@ -940,7 +940,8 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                          )),
+                          ),
+                          overflow: TextOverflow.ellipsis),
                       Text(
                           voteComment.postDateTime == null
                               ? ' '
@@ -1167,7 +1168,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                 // fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
-              maxLines: 3,
+              maxLines: 4,
               overflow: TextOverflow.ellipsis,
             )),
         SizedBox(

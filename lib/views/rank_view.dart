@@ -382,11 +382,14 @@ class RankView extends StatelessWidget {
             SizedBox(
               width: 18,
             ),
-            Text('${ranksModel.userName}',
-                style: TextStyle(
-                  fontSize: 20,
-                  letterSpacing: -0.28,
-                )),
+            Text(
+              '${ranksModel.userName}',
+              style: TextStyle(
+                fontSize: 20,
+                letterSpacing: -0.28,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
             ranksModel.uid == model.uid
                 ? Row(
                     children: [
