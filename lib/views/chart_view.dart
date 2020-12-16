@@ -745,12 +745,9 @@ class _ChartViewState extends State<ChartView> {
                                 realtimePriceDataSourceList =
                                     realtimeSnapshot.data;
                                 if (address.isVoting == false) {
-                                  print("FIRST LIST" +
-                                      realtimePriceDataSourceList.first
-                                          .toString());
-                                  liveToday = realtimePriceDataSourceList
-                                      .first.createdAt
-                                      .toDate();
+                                  print("FIRST LIST" + address.date);
+
+                                  liveToday = strToDate(address.date);
                                   print(
                                       "LIVE TODAY IS " + liveToday.toString());
                                   priceStreamCtrl.add(
@@ -1847,6 +1844,14 @@ class _ChartViewState extends State<ChartView> {
   }
 
   Container buildContainerForChart(model) {
+    print(
+      "CHART TIME" +
+          tz.TZDateTime.from(
+                  tz.TZDateTime(_timezoneService.seoul, liveToday.year,
+                      liveToday.month, liveToday.day, 08, 50, 00),
+                  _timezoneService.seoul)
+              .toString(),
+    );
     return Container(
       // color: Colors.red,
       height: deviceHeight * 0.23,
