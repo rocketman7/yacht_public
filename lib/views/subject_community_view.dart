@@ -852,8 +852,8 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                                   .voteSelected[
                                                               model.idx] -
                                                           1],
-                                              postDateTime: Timestamp.fromDate(
-                                                  DateTime.now()),
+                                              postDateTime:
+                                                  Timestamp.fromDate(model.now),
 
                                               // postDateTime: DateTime.now(),
                                             );
@@ -1586,7 +1586,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     bool isPostLiked = voteComment.likedBy.contains(model.uid);
     print(voteComment.likedBy);
     Duration timeElapsed =
-        DateTime.now().difference(voteComment.postDateTime.toDate());
+        model.now.difference(voteComment.postDateTime.toDate());
 
     return Column(
       children: <Widget>[

@@ -83,6 +83,7 @@ dependencies:
 
   tutorial_coach_mark: ^0.5.2
   timezone: ^0.5.9
+  ntp: ^1.0.7
   # double_back_to_close_app: ^1.2.0
 
 flutter_icons:

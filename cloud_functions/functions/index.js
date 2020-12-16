@@ -75,7 +75,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // const dailyVoteSnapshot = votesSeasonCollection.doc(today).get();
 
   // TODAY RESULT***
-  // let todayResult = [];
+  let todayResult = [];
   todayResult = await votesSeasonCollection
     .doc(today)
     .get()
@@ -83,7 +83,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
 
 
     // 임의로 result 넣기
-  // let todayResult = [2,2,2];
+  // let todayResult = [1,1,1];
   // user의 vote 선택 가져오기
   console.log(todayResult);
   let userCurrentCombo = {};
@@ -256,7 +256,7 @@ await getEachUserVote(allUserUid);
     );
   }
   // 주석 풀 곳 
-  await updateUserScore(userScores);
+  // await updateUserScore(userScores);
 
   // winPointHistory 넣기 테스트
   // await userVotesSeasonStatsCollection('kakao:1513684681').update({[`winPointHistory.${today}`] : 9});
@@ -297,7 +297,7 @@ await getEachUserVote(allUserUid);
   }
 
     // 주석 풀 곳 
-  await updateWinPointForTodayVotedUser(userScores);
+  // await updateWinPointForTodayVotedUser(userScores);
 
   // async function updateCurrentWinPointAtUserVoteStats(
   //   userPrevWinPoint,
@@ -356,8 +356,8 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const category = openSeasonSnapshot.data().category;
   const season = openSeasonSnapshot.data().season;
 
-  // const today = "20201215";
-  // const yesterday = "20201214";
+  // const today = "20201216";
+  // const yesterday = "20201215";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -549,7 +549,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   //                 combo: 21 }
   //  ]
 
-  res.send(prevRankDocs);
+  res.send(participatedUserSortedCurrentWinPoint);
 });
 
 

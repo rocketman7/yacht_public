@@ -1,3 +1,4 @@
+import 'package:ntp/ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/user_post_model.dart';
@@ -30,7 +31,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
   UserVoteModel userVote;
   DatabaseAddressModel newAddress;
   String avatarImage;
-
+  DateTime now;
   SubjectCommunityViewModel(this.date, this.idx) {
     uid = _authService.auth.currentUser.uid;
   }
@@ -54,6 +55,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
     user = await _databaseService.getUser(uid);
     vote = await _databaseService.getVotes(newAddress);
     userVote = await _databaseService.getUserVote(newAddress);
+    now = await NTP.now();
     // setBusy(false);
     notifyListeners();
   }

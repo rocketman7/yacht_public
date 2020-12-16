@@ -13,7 +13,8 @@ class TimezoneService {
 
   DateTime koreaTime(DateTime local) {
     // var seoul = tz.getLocation('Asia/Seoul');
-    return tz.TZDateTime.now(seoul);
+    var timezoneApplied = tz.TZDateTime.from(local, seoul);
+    return timezoneApplied;
   }
 
   // Future setup() {

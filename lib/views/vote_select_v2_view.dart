@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:align_positioned/align_positioned.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/services.dart';
+import 'package:ntp/ntp.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:tutorial_coach_mark/custom_target_position.dart';
@@ -14,6 +16,7 @@ import 'package:yachtOne/services/amplitude_service.dart';
 import 'package:yachtOne/services/connection_check_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
 import 'package:yachtOne/services/timezone_service.dart';
+import 'package:yachtOne/view_models/top_container_view_model.dart';
 import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -423,12 +426,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   //   });
   // }
 
-  Duration getTimeLeft(VoteSelectViewModel model) {
-    DateTime endTime = model.vote.voteEndDateTime.toDate();
-    return endTime.difference(DateTime.now());
-    // timeLeftArr = diffFinal.split(":");
-    // return diffFinal;
-  }
+  // Future<Duration> getTimeLeft(VoteSelectViewModel model) async {
+  //   DateTime endTime = model.vote.voteEndDateTime.toDate();
+  //   _now = await NTP.now();
+  //   return endTime.difference(_now);
+  //   // timeLeftArr = diffFinal.split(":");
+  //   // return diffFinal;
+  // }
 
   bool isVoting = true;
   void checkVoteTime() {
@@ -951,13 +955,14 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         } else {
           numSelected = model.selected.where((item) => item == true).length;
           print("IS VOTING ?? " + isVoting.toString());
-          Duration diff = getTimeLeft(model).inSeconds < 0
-              ? Duration(hours: 0, minutes: 0, seconds: 0)
-              : getTimeLeft(model);
-          String strDurationHM =
-              "${diff.inHours.toString().padLeft(2, '0')}:${diff.inMinutes.remainder(60).toString().padLeft(2, '0')}:";
-          String strDurationSec =
-              "${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
+
+          // Duration diff = getTimeLeft(model).inSeconds < 0
+          //     ? Duration(hours: 0, minutes: 0, seconds: 0)
+          //     : getTimeLeft(model);
+          // String strDurationHM =
+          //     "${diff.inHours.toString().padLeft(2, '0')}:${diff.inMinutes.remainder(60).toString().padLeft(2, '0')}:";
+          // String strDurationSec =
+          //     "${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
           // bool check =  await _sharedPreferencesService
           // .getSharedPreferencesValue(voteSelectTutorialKey, bool);
           print('model.voteSelectTutorial is ...' +
@@ -1746,7 +1751,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                 context,
                                                 numSelected,
                                                 _scaffoldKey,
-                                                diff,
+                                                // diff,
                                               ),
                                               index ==
                                                       (model.vote.voteCount - 1)
@@ -2038,35 +2043,53 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  AutoSizeText(
                                     "${listSelected.length}개의 주제를 추가로 선택하셨습니다.",
                                     style: TextStyle(
                                       fontFamily: 'AppleSDB',
                                       fontSize: 18,
                                     ),
+                                    maxLines: 1,
                                   ),
-                                  Text(
+                                  AutoSizeText(
                                     "(이미 예측한 주제 ${alreadyVoted.toString()}개)",
                                     style: TextStyle(
                                       color: Colors.grey,
                                       fontFamily: 'AppleSDM',
                                       fontSize: 16,
                                     ),
+                                    maxLines: 1,
                                   ),
                                 ],
                               ),
                               // SizedBox(
                               //     height: 4),
 
-                              Text(
-                                "예측에 모두 성공하면 승점 +${(alreadyVoted + listSelected.length) * 2}점 획득! 🎊\n모두 실패하면 ${-(alreadyVoted + listSelected.length)}점 😢",
-                                style: TextStyle(
-                                  fontFamily: 'AppleSDM',
-                                  fontSize: 16,
-                                  height: 1,
-                                ),
-                                textAlign: TextAlign.center,
+                              Column(
+                                children: [
+                                  AutoSizeText(
+                                    "예측에 모두 성공하면 승점 +${(alreadyVoted + listSelected.length) * 2}점 획득! 🎊",
+                                    style: TextStyle(
+                                      fontFamily: 'AppleSDM',
+                                      fontSize: 16,
+                                      height: 1,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                  ),
+                                  AutoSizeText(
+                                    "모두 실패하면 ${-(alreadyVoted + listSelected.length)}점 😢",
+                                    style: TextStyle(
+                                      fontFamily: 'AppleSDM',
+                                      fontSize: 16,
+                                      height: 1,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                  ),
+                                ],
                               ),
+
                               // SizedBox(
                               //     height: 4),
                               Text(
@@ -2304,7 +2327,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     BuildContext context,
     int numSelected,
     GlobalKey<ScaffoldState> scaffoldKey,
-    Duration diff,
+    // Duration diff,
   ) {
     var formatReturnPct = NumberFormat("0.00%");
     var formatPrice = NumberFormat("#,###");
@@ -2360,7 +2383,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                         model,
                         idx,
                         numOfChoices,
-                        diff,
+                        // diff,
                       );
                     },
                     child: Row(
@@ -2926,7 +2949,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     VoteSelectViewModel model,
     int idx, // subvote index
     int numOfChoices, // issueCode length
-    Duration diff,
+    // Duration diff,
   ) {
     ScrollController controller;
     StreamController scrollStreamCtrl = StreamController<double>();
@@ -3942,10 +3965,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 }
 
 class TopContainer extends StatefulWidget {
-  final VoteSelectViewModel model;
+  final VoteSelectViewModel voteSelectViewModel;
   final Function checkVoteTime;
   TopContainer(
-    this.model,
+    this.voteSelectViewModel,
     this.checkVoteTime,
   );
   @override
@@ -3955,22 +3978,9 @@ class TopContainer extends StatefulWidget {
 class _TopContainerState extends State<TopContainer> {
   final TimezoneService _timezoneService = locator<TimezoneService>();
   Timer _timer;
-  VoteSelectViewModel model;
-
-  Duration getTimeLeft(VoteSelectViewModel model) {
-    DateTime today = strToDate(model.address.date);
-    DateTime seoulMarketEnd = tz.TZDateTime(
-        _timezoneService.seoul, today.year, today.month, today.day, 15, 30, 0);
-    DateTime marketEnd = seoulMarketEnd;
-    // tz.TZDateTime.from(seoulMarketEnd, _timezoneService.seoul);
-    DateTime endTime = model.address.isVoting
-        ? model.vote.voteEndDateTime.toDate()
-        : marketEnd;
-    // DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
-    return endTime.difference(_timezoneService.koreaTime(DateTime.now()));
-    // timeLeftArr = diffFinal.split(":");
-    // return diffFinal;
-  }
+  VoteSelectViewModel voteSelectViewModel;
+  DateTime nowFromNetwork;
+  TopContainerViewModel model = TopContainerViewModel();
 
   @override
   void dispose() {
@@ -3987,91 +3997,104 @@ class _TopContainerState extends State<TopContainer> {
   @override
   void initState() {
     super.initState();
+    // Future getTimeFromNetwork() async {
+    //   nowFromNetwork = await NTP.now();
+    // }
+
     // defines a timer
-    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-      // print("TIMER");
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) async {
+      await model.renewTime();
+      // await model.renewTime();
+      nowFromNetwork = model.nowFromNetwork;
+      // // getTimeFromNetwork();
+      // // print("TIMER");
+      // print("MODEL TIME" + model.nowFromNetwork.toString());
       setState(() {});
     });
-
-    // final Amplitude analytics =
-    //     Amplitude.getInstance(instanceName: "testGgook");
-
-    // // Initialize SDK
-    // print("before intialized");
-    // analytics.setServerUrl("https://api2.amplitude.com");
-    // analytics.init("2b70b7ef5dca3bc9708968745c935a0c");
-    // print("intialized");
-    // // Enable COPPA privacy guard. This is useful when you choose not to report sensitive user information.
-    // analytics.enableCoppaControl();
-
-    // // Set user Id
-    // print("set user id");
-    // analytics.setUserId("test_user");
-
-    // // Turn on automatic session events
-    // analytics.trackingSessionEvents(true);
-
-    // // Log an event
-    // print("logging");
-    // analytics.logEvent('New log',
-    //     eventProperties: {'friend_num': 10, 'is_heavy_user': true});
-
-    // // Identify
-    // print("identify");
-    // final Identify identify1 = Identify()
-    //   ..set('identify_test',
-    //       'identify sent at ${DateTime.now().millisecondsSinceEpoch}')
-    //   ..add('identify_count', 1);
-    // analytics.identify(identify1);
-
-    // // Set group
-    // print("grouping");
-    // analytics.setGroup('orgId', 15);
-
-    // // Group identify
-    // final Identify identify2 = Identify()..set('identify_count', 1);
-    // analytics.groupIdentify('orgId', '15', identify2);
   }
 
   @override
   Widget build(BuildContext context) {
-    model = widget.model;
-    Duration diff = getTimeLeft(model).inSeconds < 0
-        ? Duration(hours: 0, minutes: 0, seconds: 0)
-        : getTimeLeft(model);
-    String strDurationHM =
-        "${diff.inHours.toString().padLeft(2, '0')}:${diff.inMinutes.remainder(60).toString().padLeft(2, '0')}:";
-    String strDurationSec =
-        "${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
-    var seoul = tz.getLocation('Asia/Seoul');
     // if (diff.inSeconds == 0 && model.address.isVoting == true) {
     //   _timer.cancel();
     //   model.getAllModel(model.uid);
     //   // widget.checkVoteTime();
     //   // model.isVoteAvailable();
     // }
-    return RichText(
-      text: TextSpan(
-          text: strDurationHM.toString(),
-          style: TextStyle(
-            fontFamily: 'DmSans',
-            color: diff.inHours < 1 ? Color(0xFFE41818) : Color(0xFF3E3E3E),
-            fontSize: 17.sp,
-            fontWeight: FontWeight.bold,
-            letterSpacing: -.5,
-          ),
-          children: <TextSpan>[
-            TextSpan(
-                text: strDurationSec.toString(),
-                style: TextStyle(
-                  fontFamily: 'DmSans',
-                  color:
-                      diff.inHours < 1 ? Color(0xFFE41818) : Color(0xFFC1C1C1),
-                  fontSize: 17.sp,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -.5,
-                ))
-          ]),
-    );
+    voteSelectViewModel = widget.voteSelectViewModel;
+    return ViewModelBuilder<TopContainerViewModel>.reactive(
+        viewModelBuilder: () => TopContainerViewModel(),
+        builder: (context, model, child) {
+          if (model.isBusy) {
+            return Container(
+              width: 10,
+              height: 4,
+            );
+          } else {
+            nowFromNetwork = nowFromNetwork;
+            // print("AT MODEL DONE" + nowFromNetwork.toString());
+            // model.renewTime();
+            // _timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+            //   // model.renewTime();
+
+            //   print("TIMER");
+            //   setState(() {});
+            // });
+            Duration getTimeLeft(VoteSelectViewModel voteSelectViewModel) {
+              DateTime today = strToDate(voteSelectViewModel.address.date);
+              DateTime seoulMarketEnd = tz.TZDateTime(_timezoneService.seoul,
+                  today.year, today.month, today.day, 15, 30, 0);
+              DateTime marketEnd = seoulMarketEnd;
+              // tz.TZDateTime.from(seoulMarketEnd, _timezoneService.seoul);
+              DateTime endTime = voteSelectViewModel.address.isVoting
+                  ? voteSelectViewModel.vote.voteEndDateTime.toDate()
+                  : marketEnd;
+
+              // DateTime nowFromNetwork = model.now;
+              // model.renewTimeFromNetwork();
+              // DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
+              return endTime.difference(_timezoneService
+                  .koreaTime(nowFromNetwork ?? model.nowFromNetwork));
+              // timeLeftArr = diffFinal.split(":");
+              // return diffFinal;
+            }
+
+            Duration diff = getTimeLeft(voteSelectViewModel).inSeconds < 0
+                ? Duration(hours: 0, minutes: 0, seconds: 0)
+                : getTimeLeft(voteSelectViewModel);
+            String strDurationHM =
+                "${diff.inHours.toString().padLeft(2, '0')}:${diff.inMinutes.remainder(60).toString().padLeft(2, '0')}:";
+            String strDurationSec =
+                "${(diff.inSeconds.remainder(60).toString().padLeft(2, '0'))}";
+            var seoul = tz.getLocation('Asia/Seoul');
+
+            return RichText(
+              text: TextSpan(
+                  text: strDurationHM.toString(),
+                  style: TextStyle(
+                    fontFamily: 'DmSans',
+                    color: diff.inHours < 1
+                        ? Color(0xFFE41818)
+                        : Color(0xFF3E3E3E),
+                    fontSize: 17.sp,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: -.5,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: strDurationSec.toString(),
+                        style: TextStyle(
+                          fontFamily: 'DmSans',
+                          color: diff.inHours < 1
+                              ? Color(0xFFE41818)
+                              : Color(0xFFC1C1C1),
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: -.5,
+                        ))
+                  ]),
+            );
+          }
+        });
   }
 }
