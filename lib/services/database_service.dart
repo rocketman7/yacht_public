@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:ntp/ntp.dart';
+import 'api/customized_ntp.dart';
 import 'package:yachtOne/models/chart_model.dart';
 import 'package:yachtOne/models/index_info_model.dart';
 import 'package:yachtOne/models/news_model.dart';
@@ -1269,7 +1269,7 @@ class DatabaseService {
     String baseDate;
     bool isVoting = true;
     DateTime now;
-    now = await NTP.now();
+    now = await CustomizedNTP.now();
 
     await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) async {
@@ -1307,10 +1307,9 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201218',
+      // date: '20201221',
       // date: "20201024",
       date: baseDate,
-      // category: "koreaStockStandard",
       category: category,
       season: season,
       // isVoting: false,

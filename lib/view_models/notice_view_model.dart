@@ -1,4 +1,3 @@
-import 'package:ntp/ntp.dart';
 import 'package:stacked/stacked.dart';
 
 import '../locator.dart';

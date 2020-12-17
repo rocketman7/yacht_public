@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:stacked/stacked.dart';
-import 'package:ntp/ntp.dart';
+import '../services/api/customized_ntp.dart';
 
 class TopContainerViewModel extends FutureViewModel {
   DateTime nowFromNetwork;
@@ -9,14 +9,14 @@ class TopContainerViewModel extends FutureViewModel {
   // TopContainerViewModel() {}
 
   Future getModel() async {
-    nowFromNetwork = await NTP.now();
+    nowFromNetwork = await CustomizedNTP.now();
     notifyListeners();
     // renewTime();
   }
 
   Future renewTime() async {
     // print("TIMER");
-    nowFromNetwork = await NTP.now();
+    nowFromNetwork = await CustomizedNTP.now();
   }
 
   // Future renewTime() async {

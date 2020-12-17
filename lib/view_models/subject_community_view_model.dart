@@ -1,4 +1,3 @@
-import 'package:ntp/ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/user_post_model.dart';
@@ -12,6 +11,7 @@ import '../services/navigation_service.dart';
 import '../services/auth_service.dart';
 import '../services/dialog_service.dart';
 import '../services/database_service.dart';
+import '../services/api/customized_ntp.dart';
 
 import '../locator.dart';
 
@@ -61,7 +61,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
   }
 
   Future getNowFromNetwork() async {
-    now = await NTP.now();
+    now = await CustomizedNTP.now();
     // notifyListeners();
   }
 

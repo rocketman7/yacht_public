@@ -1,4 +1,4 @@
-import 'package:ntp/ntp.dart';
+import '../services/api/customized_ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/date_time_model.dart';
@@ -58,7 +58,7 @@ class GgookViewModel extends BaseViewModel {
   }
 
   Future checkIfVotingTime(String category) async {
-    DateTime now = await NTP.now();
+    DateTime now = await CustomizedNTP.now();
     return DateTimeModel().isVoteAvailable(category, now);
   }
 }

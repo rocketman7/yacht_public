@@ -6,7 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/services.dart';
-import 'package:ntp/ntp.dart';
+
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:tutorial_coach_mark/custom_target_position.dart';

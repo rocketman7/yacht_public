@@ -1,4 +1,4 @@
-import 'package:ntp/ntp.dart';
+import '../services/api/customized_ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/season_model.dart';
@@ -54,7 +54,7 @@ class SeasonCommunityViewModel extends FutureViewModel {
   }
 
   Future getNowFromNetwork() async {
-    now = await NTP.now();
+    now = await CustomizedNTP.now();
     notifyListeners();
   }
 

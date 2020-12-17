@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:intl/intl.dart';
-import 'package:ntp/ntp.dart';
+import '../services/api/customized_ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/portfolio_model.dart';
