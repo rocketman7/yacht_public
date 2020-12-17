@@ -75,15 +75,15 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // const dailyVoteSnapshot = votesSeasonCollection.doc(today).get();
 
   // TODAY RESULT***
-  // let todayResult = [];
-  // todayResult = await votesSeasonCollection
-  //   .doc(today)
-  //   .get()
-  //   .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
+  let todayResult = [];
+  todayResult = await votesSeasonCollection
+    .doc(today)
+    .get()
+    .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
 
 
     // 임의로 result 넣기
-  let todayResult = [2,2,2];
+  // let todayResult = [2,2,2];
   // user의 vote 선택 가져오기
   console.log(todayResult);
   let userCurrentCombo = {};
@@ -356,8 +356,8 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const category = openSeasonSnapshot.data().category;
   const season = openSeasonSnapshot.data().season;
 
-  // const today = "20201215";
-  // const yesterday = "20201214";
+  // const today = "20201217";
+  // const yesterday = "20201216";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -370,7 +370,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
     .then((doc) => doc.data().startDate);
 
   function dateRankCollectionRef(date) {
-    return ranksRef.doc("KR").collection("beta001").doc(today).collection(today);
+    return ranksRef.doc("KR").collection("beta001").doc(date).collection(date);
   }
 
   function userVotesSeasonStatsCollection(uid) {
@@ -462,17 +462,17 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
     }
   }
 
-  console.log(participatedUserSortedCurrentWinPoint.length);
-  console.log(participatedUserSortedCurrentWinPoint);
-  console.log("seasonStart at");
+  // console.log(participatedUserSortedCurrentWinPoint.length);
+  // console.log(participatedUserSortedCurrentWinPoint);
+  // console.log("seasonStart at");
   console.log(seasonStartDate);
   let prevRankDocs = {};
-  // if (today !== seasonStartDate) {
-  //   var prevRankDocSnapshot = await dateRankCollectionRef(yesterday).get();
-  //   prevRankDocSnapshot.forEach((doc) => {
-  //     prevRankDocs[doc.data().uid] = doc.data().todayRank;
-  //   });
-  // }
+  if (today !== seasonStartDate) {
+    var prevRankDocSnapshot = await dateRankCollectionRef(yesterday).get();
+    prevRankDocSnapshot.forEach((doc) => {
+      prevRankDocs[doc.data().uid] = doc.data().todayRank;
+    });
+  }
 
   console.log(prevRankDocs);
 
@@ -489,7 +489,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
             yesterdays[data.uid] === null
               ? null
               : yesterdays[data.uid];
-          console.log(data);
+          // console.log(yesterdays[data.uid]);
           dateRankCollectionRef(today).add(data);
         }
       })

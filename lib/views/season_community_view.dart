@@ -151,7 +151,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                       ),
                                       // minLines: 1,
                                       maxLines: null,
-                                      maxLength: 80,
+                                      maxLength: 100,
                                       // maxLengthEnforced: true,
                                       decoration: InputDecoration(
                                           isDense: true,
@@ -205,7 +205,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                             //                     model.idx] -
                                             //                 1],
                                             postDateTime: Timestamp.fromDate(
-                                                DateTime.now()),
+                                                model.now ?? DateTime.now()),
 
                                             // postDateTime: DateTime.now(),
                                           );
@@ -887,9 +887,12 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
     List<VoteCommentModel> commentList,
     int index,
   ) {
+    DateTime now;
+
+    now = model.now ?? DateTime.now();
+
     bool isPostLiked = voteComment.likedBy.contains(model.uid);
-    Duration timeElapsed =
-        DateTime.now().difference(voteComment.postDateTime.toDate());
+    Duration timeElapsed = now.difference(voteComment.postDateTime.toDate());
 
     print(voteComment.likedBy.contains(model.uid));
     print(voteComment.likedBy.toString());
@@ -940,7 +943,8 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                          )),
+                          ),
+                          overflow: TextOverflow.ellipsis),
                       Text(
                           voteComment.postDateTime == null
                               ? ' '
@@ -1167,7 +1171,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                 // fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
-              maxLines: 3,
+              maxLines: 4,
               overflow: TextOverflow.ellipsis,
             )),
         SizedBox(

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'api/customized_ntp.dart';
 import 'package:yachtOne/models/chart_model.dart';
 import 'package:yachtOne/models/index_info_model.dart';
 import 'package:yachtOne/models/news_model.dart';
@@ -443,12 +444,12 @@ class DatabaseService {
           .get()
           .then((value) => value.data()['startDate']);
 
-      //시즌 시작일 string으로
+      //시즌 시작일 datetime으로
       startDateTime = strToDate(startDateStr);
 
       String tempDate = startDateStr;
 
-      // print("TEMP DATE" + tempDate.toString());
+      print("TEMP DATE" + tempDate.toString());
       // print(address.date);
       // print(strToDate(tempDate)
       //     .isBefore(strToDate(address.date).add(Duration(days: 1))));
@@ -472,7 +473,9 @@ class DatabaseService {
         voteList.insert(
             0, VoteModel.fromData(voteData.data(), tempSubVoteList));
         // print(tempSubVoteList[1].toJson());
+        print("TEMPDATE BEFORE" + tempDate.toString());
         tempDate = dateToStr(nextNthBusinessDay(strToDate(tempDate), 1));
+        print("TEMPDATE AFTER" + tempDate.toString());
       }
 
       // while ( temp.isBefore())
@@ -1265,6 +1268,8 @@ class DatabaseService {
     String season;
     String baseDate;
     bool isVoting = true;
+    DateTime now;
+    now = await CustomizedNTP.now();
 
     await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) async {
@@ -1273,7 +1278,7 @@ class DatabaseService {
         season = doc.data()['season'];
 
         // 당일 포험 가장 가까운 영업일 가져오는 함수로 baseDate를 만들고,
-        baseDate = DateTimeModel().baseDate(category);
+        baseDate = await DateTimeModel().baseDate(category, now);
         print("BASEDATE" + baseDate.toString());
         // 그 baseDate에 해당하는 voteData가 있는지 체크,
         var voteData = await _votesCollectionReference
@@ -1287,7 +1292,7 @@ class DatabaseService {
           baseDate = doc.data()['baseDate'];
           isVoting = true;
         } else {
-          isVoting = DateTimeModel().isVoteAvailable(category);
+          isVoting = DateTimeModel().isVoteAvailable(category, now);
         }
       },
     );
@@ -1302,10 +1307,9 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201216',
+      // date: '20201221',
       // date: "20201024",
       date: baseDate,
-      // category: "koreaStockStandard",
       category: category,
       season: season,
       // isVoting: false,
@@ -1314,6 +1318,7 @@ class DatabaseService {
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());
     print("AddressGetEnd" + DateTime.now().toString());
+    print("RETURNED ADDRESS" + _databaseAddress.date.toString());
     return _databaseAddress;
   }
 }

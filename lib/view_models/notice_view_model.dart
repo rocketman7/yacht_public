@@ -38,6 +38,7 @@ class NoticeViewModel extends FutureViewModel {
     }
 
     DateTime now = DateTime.now();
+    // DateTime now = await NTP.now();
 
     // New 인지 판단해준다.
     for (int i = 0; i < noticeModel.length; i++) {

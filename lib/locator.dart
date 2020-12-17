@@ -12,6 +12,7 @@ import 'services/sharedPreferences_service.dart';
 import 'services/customCacheManager_service.dart';
 import 'services/accountVerification_service.dart';
 import 'services/stateManage_service.dart';
+import 'services/timezone_service.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -33,4 +34,5 @@ void setupLocator() {
       () => StateManageServiceFirebase());
   locator.registerLazySingleton(() => AmplitudeService());
   locator.registerLazySingleton(() => ConnectionCheckService());
+  locator.registerLazySingleton(() => TimezoneService());
 }

@@ -97,7 +97,9 @@ class StateManageServiceFirebase extends StateManageService {
     _stateManageModel = await _databaseService.getStateManage();
 
     // total -> 7개 불러와야
+    print("ADDRESS GET START" + DateTime.now().toString());
     _addressModel = await _databaseService.getAddress(uid);
+    print("ADDRESS GET DONE" + DateTime.now().toString());
     _userVoteModel = await _databaseService.getUserVote(_addressModel);
     _userModel = await _databaseService.getUser(uid);
     _seasonModel = await _databaseService.getSeasonInfo(_addressModel);

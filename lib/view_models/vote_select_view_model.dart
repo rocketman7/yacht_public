@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:intl/intl.dart';
+import '../services/api/customized_ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/portfolio_model.dart';
@@ -48,6 +49,7 @@ class VoteSelectViewModel extends FutureViewModel {
   List<SubVote> subVote;
   PortfolioModel portfolioModel;
   Timer _everySecond;
+  DateTime now;
 
   List<String> timeLeftArr = ["", "", ""];
 
@@ -60,9 +62,9 @@ class VoteSelectViewModel extends FutureViewModel {
   // 리워드 광고 관련 변수
   // bool rewardedAdsLoaded = false;
 
-  DateTime getNow() {
-    return DateTime.now();
-  }
+  // DateTime getNow() {
+  //   return DateTime.now();
+  // }
 
   String getPortfolioValue() {
     int totalValue = 0;
@@ -105,7 +107,7 @@ class VoteSelectViewModel extends FutureViewModel {
         print(rewardedAdsLoaded);
         // _stateManageService.userModelUpdate();
         loadRewardedAds();
-
+        user = _stateManageService.userModel;
         notifyListeners();
         print('reward ads: closed');
       } else if (event == RewardedVideoAdEvent.loaded) {
@@ -139,6 +141,11 @@ class VoteSelectViewModel extends FutureViewModel {
     // 여튼 페이지 처음 들어오면 RV광고 로딩 함 해준다.
     loadRewardedAds();
   }
+
+  // renewTimeFromNetwork() async {
+  //   now = await NTP.now();
+  //   notifyListeners();
+  // }
 
   // 리워드광고 관련 메쏘드
   loadRewardedAds() {
@@ -217,11 +224,13 @@ class VoteSelectViewModel extends FutureViewModel {
     }
 
     address = _stateManageService.addressModel;
+
     user = _stateManageService.userModel;
     vote = _stateManageService.voteModel;
     userVote = _stateManageService.userVoteModel;
     portfolioModel = _stateManageService.portfolioModel;
     seasonInfo = _stateManageService.seasonModel;
+    // now = await NTP.now();
     // address = await _databaseService.getAddress(uid);
     // user = await _databaseService.getUser(uid);
     // vote = await _databaseService.getVotes(address);
@@ -241,12 +250,12 @@ class VoteSelectViewModel extends FutureViewModel {
     notifyListeners();
   }
 
-  Future<void> renewTutorialKey() async {
-    voteSelectTutorial = await _sharedPreferencesService
-        .getSharedPreferencesValue(voteSelectTutorialKey, bool);
-    print("renew triggered");
-    // notifyListeners();
-  }
+  // Future<void> renewTutorialKey() async {
+  //   voteSelectTutorial = await _sharedPreferencesService
+  //       .getSharedPreferencesValue(voteSelectTutorialKey, bool);
+  //   print("renew triggered");
+  //   // notifyListeners();
+  // }
 
   Future initialiseOneVote(int resetTarget) async {
     await _databaseService.initialiseOneVote(

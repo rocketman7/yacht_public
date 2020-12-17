@@ -649,7 +649,7 @@ class _InnerBlobState extends State<InnerBlob> {
                 //   Vibration.vibrate();
                 // }
                 if (idx + 1 < listSelected.length) {
-                  isVoting = model.checkIfVotingTime(address.category);
+                  isVoting = await model.checkIfVotingTime(address.category);
                   if (isVoting) {
                     List<int> tempList = userVote.voteSelected;
                     print(tempList);
@@ -676,7 +676,7 @@ class _InnerBlobState extends State<InnerBlob> {
                   }
                   // 남은 투표 없을 때
                 } else {
-                  isVoting = model.checkIfVotingTime(address.category);
+                  isVoting = await model.checkIfVotingTime(address.category);
                   // TODO: userVote 모델로 만들어서 넘겨야함.
                   if (isVoting) {
                     List<int> tempList = userVote.voteSelected;

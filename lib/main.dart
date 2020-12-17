@@ -32,14 +32,6 @@ import 'package:firebase_admob/firebase_admob.dart';
 
 void main() async {
   tz.initializeTimeZones();
-  String koreaTimeZone = 'Asia/Seoul';
-  // print(tz.timeZoneDatabase.locations);
-  var localTime = DateTime.now();
-  var koreaTime =
-      tz.TZDateTime.from(DateTime.now(), tz.getLocation(koreaTimeZone));
-  print('Local' + localTime.toString());
-
-  print('Korea' + koreaTime.toString());
   setupLocator();
   KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
   WidgetsFlutterBinding.ensureInitialized();

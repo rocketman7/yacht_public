@@ -19,9 +19,9 @@ class AdManager {
       // 아래 testId로 먼저.
       // return "ca-app-pub-3940256099942544/5224354917";
     } else if (Platform.isIOS) {
-      // return "ca-app-pub-3726614606720353/5596399897";
+      return "ca-app-pub-3726614606720353/5596399897";
       // 아래 testId로 먼저.
-      return "ca-app-pub-3940256099942544/1712485313";
+      // return "ca-app-pub-3940256099942544/1712485313";
     } else {
       throw new UnsupportedError("Unsupported platform");
     }
