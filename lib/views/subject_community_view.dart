@@ -65,6 +65,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => SubjectCommunityViewModel(vote.voteDate, idx),
       builder: (context, model, child) {
+        model.getNowFromNetwork();
         // print("BUILDING" + model.idx.toString());
         return model.isBusy
             ? Scaffold(
@@ -852,8 +853,8 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                                   .voteSelected[
                                                               model.idx] -
                                                           1],
-                                              postDateTime:
-                                                  Timestamp.fromDate(model.now),
+                                              postDateTime: Timestamp.fromDate(
+                                                  model.now ?? DateTime.now()),
 
                                               // postDateTime: DateTime.now(),
                                             );
@@ -1581,12 +1582,14 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
   ) {
     // String avatarImage = "avatar001";
     // model.getAvatar(voteComment.uid);
+    DateTime now;
+
+    now = model.now ?? DateTime.now();
 
     // print(model.avatarImage);
     bool isPostLiked = voteComment.likedBy.contains(model.uid);
     print(voteComment.likedBy);
-    Duration timeElapsed =
-        model.now.difference(voteComment.postDateTime.toDate());
+    Duration timeElapsed = now.difference(voteComment.postDateTime.toDate());
 
     return Column(
       children: <Widget>[

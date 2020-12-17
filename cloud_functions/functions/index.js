@@ -83,7 +83,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
 
 
     // 임의로 result 넣기
-  // let todayResult = [1,1,1];
+  // let todayResult = [2,2,2];
   // user의 vote 선택 가져오기
   console.log(todayResult);
   let userCurrentCombo = {};
@@ -356,8 +356,8 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const category = openSeasonSnapshot.data().category;
   const season = openSeasonSnapshot.data().season;
 
-  // const today = "20201216";
-  // const yesterday = "20201215";
+  // const today = "20201217";
+  // const yesterday = "20201216";
   // todayRankRef
 
   const seasonInfoRef = votesRef

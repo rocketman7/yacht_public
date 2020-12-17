@@ -98,8 +98,8 @@ class DateTimeModel {
   }
 
 // 기준일자 8자리 String으로 반환하는 함수
-  Future<String> baseDate(String category) async {
-    DateTime now = await NTP.now();
+  Future<String> baseDate(String category, DateTime now) async {
+    // DateTime now = await NTP.now();
     DateTime _timeNow = _timezoneService.koreaTime(now);
     List<DateTime> dateTime = marketOpeningPeriod(category, now);
     bool votingNow = isVoteAvailable(category, now);

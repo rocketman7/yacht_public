@@ -49,8 +49,13 @@ class SeasonCommunityViewModel extends FutureViewModel {
     seasonInfo = await _databaseService.getSeasonInfo(address);
     userVote = await _databaseService.getUserVote(address);
     // setBusy(false);
-    now = await NTP.now();
+    // now = await NTP.now();
     // notifyListeners();
+  }
+
+  Future getNowFromNetwork() async {
+    now = await NTP.now();
+    notifyListeners();
   }
 
   Future postComments(

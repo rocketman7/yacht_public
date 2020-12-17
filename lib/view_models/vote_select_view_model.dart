@@ -142,10 +142,10 @@ class VoteSelectViewModel extends FutureViewModel {
     loadRewardedAds();
   }
 
-  renewTimeFromNetwork() async {
-    now = await NTP.now();
-    notifyListeners();
-  }
+  // renewTimeFromNetwork() async {
+  //   now = await NTP.now();
+  //   notifyListeners();
+  // }
 
   // 리워드광고 관련 메쏘드
   loadRewardedAds() {

@@ -1268,16 +1268,17 @@ class DatabaseService {
     String season;
     String baseDate;
     bool isVoting = true;
+    DateTime now;
+    now = await NTP.now();
 
     await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) async {
-        DateTime now = await NTP.now();
         print(doc.data());
         category = doc.data()['category'];
         season = doc.data()['season'];
 
         // 당일 포험 가장 가까운 영업일 가져오는 함수로 baseDate를 만들고,
-        baseDate = await DateTimeModel().baseDate(category);
+        baseDate = await DateTimeModel().baseDate(category, now);
         print("BASEDATE" + baseDate.toString());
         // 그 baseDate에 해당하는 voteData가 있는지 체크,
         var voteData = await _votesCollectionReference
@@ -1306,7 +1307,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201217',
+      // date: '20201218',
       // date: "20201024",
       date: baseDate,
       // category: "koreaStockStandard",

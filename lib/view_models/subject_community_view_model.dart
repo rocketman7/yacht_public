@@ -55,9 +55,14 @@ class SubjectCommunityViewModel extends FutureViewModel {
     user = await _databaseService.getUser(uid);
     vote = await _databaseService.getVotes(newAddress);
     userVote = await _databaseService.getUserVote(newAddress);
-    now = await NTP.now();
+
     // setBusy(false);
-    notifyListeners();
+    // notifyListeners();
+  }
+
+  Future getNowFromNetwork() async {
+    now = await NTP.now();
+    // notifyListeners();
   }
 
   Future postComments(

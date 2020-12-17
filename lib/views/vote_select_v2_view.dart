@@ -4038,7 +4038,7 @@ class _TopContainerState extends State<TopContainer> {
         builder: (context, model, child) {
           if (model.isBusy) {
             return Container(
-              width: 10,
+              width: 5,
               height: 4,
             );
           } else {
