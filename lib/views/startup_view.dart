@@ -207,8 +207,11 @@ class _StartUpViewState extends State<StartUpView>
                           horizontal: 36.w,
                         ),
                         color: Colors.white.withOpacity(0),
-                        child: SvgPicture.asset('assets/icons/bottom_rank2.svg',
-                            color: Color(0xFFAAAAAA)),
+                        child: SvgPicture.asset(
+                          'assets/icons/bottom_rank2.svg',
+                          color: Color(0xFFAAAAAA),
+                          // height: 40,
+                        ),
                         // child: Image(
                         //   image: AssetImage('assets/icons/bottom_rank2.png'),
                         //   color: Color(0xFFAAAAAA),

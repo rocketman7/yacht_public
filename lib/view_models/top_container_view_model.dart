@@ -9,15 +9,15 @@ class TopContainerViewModel extends FutureViewModel {
   // TopContainerViewModel() {}
 
   Future getModel() async {
-    nowFromNetwork = await CustomizedNTP.now();
-    notifyListeners();
+    // nowFromNetwork = await CustomizedNTP.now();
+    // notifyListeners();
     // renewTime();
   }
 
-  Future renewTime() async {
-    // print("TIMER");
-    nowFromNetwork = await CustomizedNTP.now();
-  }
+  // Future renewTime() async {
+  //   // print("TIMER");
+  //   nowFromNetwork = await CustomizedNTP.now();
+  // }
 
   // Future renewTime() async {
   //   timer = Timer.periodic(Duration(seconds: 1), (Timer t) async {

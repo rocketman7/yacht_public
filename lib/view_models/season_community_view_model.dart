@@ -53,10 +53,10 @@ class SeasonCommunityViewModel extends FutureViewModel {
     // notifyListeners();
   }
 
-  Future getNowFromNetwork() async {
-    now = await CustomizedNTP.now();
-    notifyListeners();
-  }
+  // Future getNowFromNetwork() async {
+  //   now = await CustomizedNTP.now();
+  //   notifyListeners();
+  // }
 
   Future postComments(
     DatabaseAddressModel address,

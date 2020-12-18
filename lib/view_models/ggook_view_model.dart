@@ -58,7 +58,8 @@ class GgookViewModel extends BaseViewModel {
   }
 
   Future checkIfVotingTime(String category) async {
-    DateTime now = await CustomizedNTP.now();
+    // DateTime now = await CustomizedNTP.now();
+    DateTime now = DateTime.now();
     return DateTimeModel().isVoteAvailable(category, now);
   }
 }

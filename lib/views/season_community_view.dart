@@ -205,7 +205,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                             //                     model.idx] -
                                             //                 1],
                                             postDateTime: Timestamp.fromDate(
-                                                model.now ?? DateTime.now()),
+                                                DateTime.now()),
 
                                             // postDateTime: DateTime.now(),
                                           );
@@ -889,7 +889,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
   ) {
     DateTime now;
 
-    now = model.now ?? DateTime.now();
+    now = DateTime.now();
 
     bool isPostLiked = voteComment.likedBy.contains(model.uid);
     Duration timeElapsed = now.difference(voteComment.postDateTime.toDate());

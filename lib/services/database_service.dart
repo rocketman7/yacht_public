@@ -1269,8 +1269,8 @@ class DatabaseService {
     String baseDate;
     bool isVoting = true;
     DateTime now;
-    now = await CustomizedNTP.now();
-
+    // now = await CustomizedNTP.now();
+    now = DateTime.now();
     await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) async {
         print(doc.data());
@@ -1313,6 +1313,7 @@ class DatabaseService {
       category: category,
       season: season,
       // isVoting: false,
+      // isVoting: true,
       isVoting: isVoting, //false면 장 중
     );
 

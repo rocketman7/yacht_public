@@ -4014,9 +4014,9 @@ class _TopContainerState extends State<TopContainer> {
 
     // defines a timer
     _timer = Timer.periodic(Duration(seconds: 1), (Timer t) async {
-      await model.renewTime();
       // await model.renewTime();
-      nowFromNetwork = model.nowFromNetwork;
+      // // await model.renewTime();
+      // nowFromNetwork = model.nowFromNetwork;
       // // getTimeFromNetwork();
       // // print("TIMER");
       // print("MODEL TIME" + model.nowFromNetwork.toString());
@@ -4042,7 +4042,7 @@ class _TopContainerState extends State<TopContainer> {
               height: 4,
             );
           } else {
-            nowFromNetwork = nowFromNetwork;
+            // nowFromNetwork = nowFromNetwork;
             // print("AT MODEL DONE" + nowFromNetwork.toString());
             // model.renewTime();
             // _timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
@@ -4064,8 +4064,8 @@ class _TopContainerState extends State<TopContainer> {
               // DateTime nowFromNetwork = model.now;
               // model.renewTimeFromNetwork();
               // DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
-              return endTime.difference(_timezoneService
-                  .koreaTime(nowFromNetwork ?? model.nowFromNetwork));
+              return endTime
+                  .difference(_timezoneService.koreaTime(DateTime.now()));
               // timeLeftArr = diffFinal.split(":");
               // return diffFinal;
             }

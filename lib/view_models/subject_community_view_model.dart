@@ -51,7 +51,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
       isVoting: address.isVoting,
     );
     newAddress.subVote = idx.toString();
-    print(address);
+    // print(address);
     user = await _databaseService.getUser(uid);
     vote = await _databaseService.getVotes(newAddress);
     userVote = await _databaseService.getUserVote(newAddress);
@@ -60,10 +60,10 @@ class SubjectCommunityViewModel extends FutureViewModel {
     // notifyListeners();
   }
 
-  Future getNowFromNetwork() async {
-    now = await CustomizedNTP.now();
-    // notifyListeners();
-  }
+  // Future getNowFromNetwork() async {
+  //   now = await CustomizedNTP.now();
+  //   // notifyListeners();
+  // }
 
   Future postComments(
     DatabaseAddressModel address,
