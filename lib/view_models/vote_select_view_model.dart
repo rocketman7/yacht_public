@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:intl/intl.dart';
+import '../services/api/customized_ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/portfolio_model.dart';
@@ -48,6 +49,7 @@ class VoteSelectViewModel extends FutureViewModel {
   List<SubVote> subVote;
   PortfolioModel portfolioModel;
   Timer _everySecond;
+  DateTime now;
 
   List<String> timeLeftArr = ["", "", ""];
 
@@ -56,15 +58,13 @@ class VoteSelectViewModel extends FutureViewModel {
   bool isNameUpdated;
   bool voteSelectTutorial;
   bool termsOfUse;
-  int tutorialStatus = 3; // 튜토리얼 내 단계만큼.. (나중에 쉐어드 프리퍼런스로 해야할 듯)
-  int tutorialTotalStep = 3; // 튜토리얼 총 단계
 
   // 리워드 광고 관련 변수
   // bool rewardedAdsLoaded = false;
 
-  DateTime getNow() {
-    return DateTime.now();
-  }
+  // DateTime getNow() {
+  //   return DateTime.now();
+  // }
 
   String getPortfolioValue() {
     int totalValue = 0;
@@ -93,11 +93,11 @@ class VoteSelectViewModel extends FutureViewModel {
       if (event == RewardedVideoAdEvent.rewarded) {
         //유저가 reward받을 수 있는 조건을 충족하면,
         //아이템을 한 개 늘려주고,
-        user.item += 1;
-        _databaseService.updateUserItem(uid, user.item);
+        // user.item += 1;
+        _databaseService.updateUserItem(uid, 1);
         //stateManage 업데이트
         _stateManageService.userModelUpdate();
-
+        user = _stateManageService.userModel;
         notifyListeners();
         // print(rewardAmount);
         print('reward ads: rewarded');
@@ -105,15 +105,16 @@ class VoteSelectViewModel extends FutureViewModel {
         // 리워드 광고가 닫히면, 새로운 리워드 광고를 로드해줘야함
         rewardedAdsLoaded = false;
         print(rewardedAdsLoaded);
+        // _stateManageService.userModelUpdate();
         loadRewardedAds();
-
+        user = _stateManageService.userModel;
         notifyListeners();
         print('reward ads: closed');
       } else if (event == RewardedVideoAdEvent.loaded) {
         // 로딩이 다 되면 로딩됏다고.
         rewardedAdsLoaded = true;
 
-        notifyListeners();
+        // notifyListeners();
         print('reward ads: loaded');
       } else if (event == RewardedVideoAdEvent.failedToLoad) {
         // 로딩에 실패하면..
@@ -123,7 +124,7 @@ class VoteSelectViewModel extends FutureViewModel {
         // loadRewardedAds();
         // x: 이러면 실패시 너무 많은 로딩 요청을 할 수 있음
 
-        notifyListeners();
+        // notifyListeners();
         print('reward ads: failedToLoad');
       }
       // else if (event == RewardedVideoAdEvent.completed) {
@@ -141,8 +142,14 @@ class VoteSelectViewModel extends FutureViewModel {
     loadRewardedAds();
   }
 
+  // renewTimeFromNetwork() async {
+  //   now = await NTP.now();
+  //   notifyListeners();
+  // }
+
   // 리워드광고 관련 메쏘드
   loadRewardedAds() {
+    notifyListeners();
     print('reward ads: start to load');
     RewardedVideoAd.instance.load(
       targetingInfo: MobileAdTargetingInfo(),
@@ -217,11 +224,13 @@ class VoteSelectViewModel extends FutureViewModel {
     }
 
     address = _stateManageService.addressModel;
+
     user = _stateManageService.userModel;
     vote = _stateManageService.voteModel;
     userVote = _stateManageService.userVoteModel;
     portfolioModel = _stateManageService.portfolioModel;
     seasonInfo = _stateManageService.seasonModel;
+    // now = await NTP.now();
     // address = await _databaseService.getAddress(uid);
     // user = await _databaseService.getUser(uid);
     // vote = await _databaseService.getVotes(address);
@@ -241,6 +250,13 @@ class VoteSelectViewModel extends FutureViewModel {
     notifyListeners();
   }
 
+  // Future<void> renewTutorialKey() async {
+  //   voteSelectTutorial = await _sharedPreferencesService
+  //       .getSharedPreferencesValue(voteSelectTutorialKey, bool);
+  //   print("renew triggered");
+  //   // notifyListeners();
+  // }
+
   Future initialiseOneVote(int resetTarget) async {
     await _databaseService.initialiseOneVote(
       address,
@@ -254,18 +270,6 @@ class VoteSelectViewModel extends FutureViewModel {
 
   Future signOut() async {
     await _authService.signOut();
-  }
-
-  // 튜토리얼이 한 단계 진행되었을 때
-  void tutorialStepProgress() {
-    tutorialStatus--;
-
-    if (tutorialStatus == 0) {
-      _sharedPreferencesService.setSharedPreferencesValue(
-          voteSelectTutorialKey, true);
-    }
-
-    notifyListeners();
   }
 
   // void isVoteAvailable() {

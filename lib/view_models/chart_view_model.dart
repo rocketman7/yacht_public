@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yachtOne/models/chart_model.dart';
+import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/index_info_model.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/stock_info_model.dart';
@@ -46,6 +47,7 @@ class ChartViewModel extends FutureViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
   List<ChartModel> chartList;
+  List<PriceModel> liveList;
   double displayPrice = 0.0;
   DateTime displayDateTime;
   bool isSelected = false;
@@ -91,6 +93,11 @@ class ChartViewModel extends FutureViewModel {
       countryCode,
       issueCode,
     );
+
+    // liveList = await _databaseService.getRealtimePriceForChart(
+    //   countryCode,
+    //   issueCode,
+    // );
     whenTrackEnd();
     // notifyListeners();
     print("afterChart" + DateTime.now().toString());
@@ -104,8 +111,13 @@ class ChartViewModel extends FutureViewModel {
     // });
   }
 
-  Stream<List<PriceModel>> getRealtimePriceForChart(issueCode) {
-    return _databaseService.getRealtimePriceForChart(issueCode);
+  Stream<List<PriceModel>> getRealtimePriceForChart(
+      DatabaseAddressModel address, String issueCode) {
+    print("ADDRESS");
+    print(address.date.toString());
+    print("ISSUE CODE ");
+    print(issueCode);
+    return _databaseService.getRealtimePriceForChart(address, issueCode);
   }
 
   void trackball(TrackballArgs args) {

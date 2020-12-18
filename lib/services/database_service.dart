@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'api/customized_ntp.dart';
 import 'package:yachtOne/models/chart_model.dart';
 import 'package:yachtOne/models/index_info_model.dart';
 import 'package:yachtOne/models/news_model.dart';
@@ -257,6 +258,7 @@ class DatabaseService {
     String countryCode,
     String issueCode,
   ) async {
+    print("GET CHART START");
     List<ChartModel> chartList = [];
 
     try {
@@ -345,6 +347,7 @@ class DatabaseService {
             .userVoteSeasonCollection()
             .doc(address.date)
             .set(tempUserVote.toJson());
+        updateUserItem(address.uid, 1);
 
         // userVoteData =
         //     await address.userVoteSeasonCollection().doc(address.date).get();
@@ -352,7 +355,7 @@ class DatabaseService {
 
       var userVoteStatsData =
           await address.userVoteSeasonStatsCollection().get();
-
+      print("USERSTATS" + userVoteStatsData.data().toString());
       UserVoteStatsModel tempUserVoteStats = UserVoteStatsModel();
       if (userVoteStatsData.data() == null) {
         print("TEMP MODEL" + tempUserVoteStats.toString());
@@ -441,12 +444,12 @@ class DatabaseService {
           .get()
           .then((value) => value.data()['startDate']);
 
-      //시즌 시작일 string으로
+      //시즌 시작일 datetime으로
       startDateTime = strToDate(startDateStr);
 
       String tempDate = startDateStr;
 
-      // print("TEMP DATE" + tempDate.toString());
+      print("TEMP DATE" + tempDate.toString());
       // print(address.date);
       // print(strToDate(tempDate)
       //     .isBefore(strToDate(address.date).add(Duration(days: 1))));
@@ -470,7 +473,9 @@ class DatabaseService {
         voteList.insert(
             0, VoteModel.fromData(voteData.data(), tempSubVoteList));
         // print(tempSubVoteList[1].toJson());
+        print("TEMPDATE BEFORE" + tempDate.toString());
         tempDate = dateToStr(nextNthBusinessDay(strToDate(tempDate), 1));
+        print("TEMPDATE AFTER" + tempDate.toString());
       }
 
       // while ( temp.isBefore())
@@ -678,6 +683,7 @@ class DatabaseService {
         .doc(address.date)
         .collection(issueCode)
         .orderBy('createdAt', descending: true)
+        .limit(10)
         .snapshots()
         // .take(1)
         .map((snapshot) {
@@ -700,18 +706,19 @@ class DatabaseService {
   }
 
   Stream<List<PriceModel>> getRealtimePriceForChart(
+    DatabaseAddressModel address,
     String issueCode,
   ) {
-    // print(issueCode.length);
+    print("STREAM FROM " + issueCode.toString());
 
     // print(issueCode[i] + "in a loop");
 
     return _databaseService
         .collection('realtimePrice')
         .doc('KR')
-        .collection('20201120')
+        .collection(address.date)
+        .where('issueCode', isEqualTo: issueCode)
         .orderBy('createdAt', descending: true)
-        // .where('issueCode', isEqualTo: '005930')
         .snapshots()
         .map((snapshot) {
       print("SNAP");
@@ -728,8 +735,8 @@ class DatabaseService {
 
         return snapshot.docs.map((element) {
           // priceList.add(PriceModel.fromData(element.data()));
+          print(element.data());
           return PriceModel.fromData(element.data());
-          // print(element.data());
         }).toList();
         // print("AFTER STREAM " + priceList.toString());
         // print("LENGTH IS " + priceList.length.toString());
@@ -1074,9 +1081,11 @@ class DatabaseService {
     }
   }
 
-  Future updateUserItem(String uid, int newItem) async {
-    print("NEW ITEM IS" + newItem.toString());
-    await _usersCollectionReference.doc(uid).update({'item': newItem});
+  Future updateUserItem(String uid, int reward) async {
+    // print("NEW ITEM IS" + newItem.toString());
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'item': FieldValue.increment(reward)});
   }
 
   Future decreaseUserItem(
@@ -1129,7 +1138,7 @@ class DatabaseService {
   }
 
   // 주식 종목정보 가져오기
-  Future getStockInfo(
+  Future<StockInfoModel> getStockInfo(
     String countryCode,
     String issueCode,
   ) async {
@@ -1166,11 +1175,13 @@ class DatabaseService {
             case 'stats':
               // stockDescription.stats = StatsModel.fromData(doc.data());
               // stockDescription.stats.add(StatsModel.fromData(doc.data()));
-              // print(doc.data());
+              print("STATSSSS");
+              print(doc.data());
               doc.data().values.toList().forEach((element) {
+                print("ELEMENT" + element.toString());
                 statsList.add(StatsModel.fromData(element));
               });
-
+              print("LIST STATS" + statsList.toString());
               statsList.sort((b, a) => (b.uploadedAt).compareTo(a.uploadedAt));
 
               stockDescription.stats = statsList;
@@ -1180,7 +1191,7 @@ class DatabaseService {
               // print("STATS " + stockDescription.toString());
               break;
           }
-          // print(" MODEL" + stockDescription.toString());
+          print(" MODEL" + stockDescription.stats.toString());
           // return element.data();
         }
       });
@@ -1257,7 +1268,9 @@ class DatabaseService {
     String season;
     String baseDate;
     bool isVoting = true;
-
+    DateTime now;
+    // now = await CustomizedNTP.now();
+    now = DateTime.now();
     await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) async {
         print(doc.data());
@@ -1265,7 +1278,7 @@ class DatabaseService {
         season = doc.data()['season'];
 
         // 당일 포험 가장 가까운 영업일 가져오는 함수로 baseDate를 만들고,
-        baseDate = DateTimeModel().baseDate(category);
+        baseDate = await DateTimeModel().baseDate(category, now);
         print("BASEDATE" + baseDate.toString());
         // 그 baseDate에 해당하는 voteData가 있는지 체크,
         var voteData = await _votesCollectionReference
@@ -1279,7 +1292,7 @@ class DatabaseService {
           baseDate = doc.data()['baseDate'];
           isVoting = true;
         } else {
-          isVoting = DateTimeModel().isVoteAvailable(category);
+          isVoting = DateTimeModel().isVoteAvailable(category, now);
         }
       },
     );
@@ -1294,14 +1307,19 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
+      // date: '20201221',
+      // date: "20201024",
       date: baseDate,
       category: category,
       season: season,
+      // isVoting: false,
+      // isVoting: true,
       isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());
     print("AddressGetEnd" + DateTime.now().toString());
+    print("RETURNED ADDRESS" + _databaseAddress.date.toString());
     return _databaseAddress;
   }
 }

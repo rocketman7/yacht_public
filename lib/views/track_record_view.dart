@@ -1,7 +1,9 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/track_record_view_model.dart';
@@ -18,6 +20,21 @@ class TrackRecordView extends StatefulWidget {
 
 class _TrackRecordViewState extends State<TrackRecordView> {
   final NavigationService _navigationService = locator<NavigationService>();
+  DateTime currentBackPressTime;
+  Future<bool> _onWillPop() async {
+    if (currentBackPressTime == null ||
+        DateTime.now().difference(currentBackPressTime) >
+            Duration(seconds: 2)) {
+      currentBackPressTime = DateTime.now();
+      Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
+      return Future.value(false);
+      // return null;
+    } else {
+      print("TURN OFF");
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      return Future.value(true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +71,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
           print("System Util " + 137.h.toString() + "  " + 40.sp.toString());
           return Scaffold(
             body: WillPopScope(
-              onWillPop: () async {
-                _navigatorKey.currentState.maybePop();
-                return false;
-              },
+              onWillPop: _onWillPop,
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.only(
@@ -186,8 +200,8 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                       Text(
                                         model.myRank == 0
                                             ? "-"
-                                            : model.userVote.userVoteStats
-                                                .currentWinPoint
+                                            : model
+                                                .returnDigitFormat(model.myRank)
                                                 .toString(),
                                         style: TextStyle(
                                           color: Colors.white,
@@ -199,7 +213,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                         softWrap: true,
                                       ),
                                       Text(
-                                        "현재 랭킹",
+                                        "현재 순위",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 14.sp,

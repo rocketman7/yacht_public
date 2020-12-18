@@ -91,49 +91,54 @@ class MypageMainView extends StatelessWidget {
                                             showDialog(
                                               context: context,
                                               builder: (context) {
-                                                return Platform.isIOS
-                                                    ? CupertinoAlertDialog(
-                                                        content:
-                                                            Text('로그아웃하시겠습니까?'),
-                                                        actions: <Widget>[
-                                                          CupertinoDialogAction(
-                                                            child: Text('아뇨'),
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                          ),
-                                                          CupertinoDialogAction(
-                                                            child: Text('네'),
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              model.logout();
-                                                            },
-                                                          )
-                                                        ],
-                                                      )
-                                                    : AlertDialog(
-                                                        content:
-                                                            Text('로그아웃하시겠습니까?'),
-                                                        actions: <Widget>[
-                                                          FlatButton(
-                                                            child: Text('아뇨'),
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                          ),
-                                                          FlatButton(
-                                                            child: Text('네'),
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              model.logout();
-                                                            },
-                                                          )
-                                                        ],
-                                                      );
+                                                return MediaQuery(
+                                                  data: MediaQuery.of(context)
+                                                      .copyWith(
+                                                          textScaleFactor: 1.0),
+                                                  child: Platform.isIOS
+                                                      ? CupertinoAlertDialog(
+                                                          content: Text(
+                                                              '로그아웃하시겠습니까?'),
+                                                          actions: <Widget>[
+                                                            CupertinoDialogAction(
+                                                              child: Text('아뇨'),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                            CupertinoDialogAction(
+                                                              child: Text('네'),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                model.logout();
+                                                              },
+                                                            )
+                                                          ],
+                                                        )
+                                                      : AlertDialog(
+                                                          content: Text(
+                                                              '로그아웃하시겠습니까?'),
+                                                          actions: <Widget>[
+                                                            FlatButton(
+                                                              child: Text('아뇨'),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                            ),
+                                                            FlatButton(
+                                                              child: Text('네'),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                model.logout();
+                                                              },
+                                                            )
+                                                          ],
+                                                        ),
+                                                );
                                               },
                                             );
                                           },
@@ -359,6 +364,7 @@ class MypageMainView extends StatelessWidget {
           // makeMypageMainComponent(model, 'x내가 받은 상금 현황', null),
           // makeMypageMainComponent(model, 'x내 활동', null),
           makeMypageMainComponent(model, '계좌 정보', 'mypage_accoutverification'),
+          makeMypageMainComponent(model, '푸시 알림 설정', 'mypage_pushalarmsetting'),
         ],
       ),
     );
@@ -380,7 +386,6 @@ class MypageMainView extends StatelessWidget {
             height: 2,
             color: Colors.black,
           ),
-          // makeMypageMainComponent(model, '푸쉬알림 설정', 'mypage_pushalarmsetting'),
           makeMypageMainComponent(model, '친구에게 추천하기', 'mypage_friendscode'),
           makeMypageMainComponent(
               model, '친구의 추천코드 입력하기', 'mypage_friendscodeinsert'),
@@ -411,8 +416,7 @@ class MypageMainView extends StatelessWidget {
           // makeMypageMainComponent(model, '1:1 문의', 'oneonone'),
           makeMypageMainComponent(model, '공지사항', 'notice'),
           makeMypageMainComponent(model, '자주 묻는 질문(FAQ)', 'faq'),
-          makeMypageMainComponent(
-              model, 'Contact Us', 'mypage_businessinformation'),
+          makeMypageMainComponent(model, '문의하기', 'mypage_businessinformation'),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -422,50 +426,55 @@ class MypageMainView extends StatelessWidget {
                   await showDialog(
                     context: context,
                     builder: (context) {
-                      return Platform.isIOS
-                          ? CupertinoAlertDialog(
-                              title: Text('계정을 삭제하시겠습니까?'),
-                              content: Text(
-                                '삭제한 계정과 계정 내 모든 기록은\n복구될 수 없습니다.',
-                                style: TextStyle(
-                                  color: Colors.red,
+                      return MediaQuery(
+                        data: MediaQuery.of(context)
+                            .copyWith(textScaleFactor: 1.0),
+                        child: Platform.isIOS
+                            ? CupertinoAlertDialog(
+                                title: Text('계정을 삭제하시겠습니까?'),
+                                content: Text(
+                                  '삭제한 계정과 계정 내 모든 기록은\n복구될 수 없습니다.',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
                                 ),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('네'),
+                                    onPressed: () {
+                                      model.deleteAccount(model.uid);
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  CupertinoDialogAction(
+                                    child: Text('아뇨'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              )
+                            : AlertDialog(
+                                title: Text('계정을 삭제하시겠습니까?'),
+                                content:
+                                    Text('삭제한 계정과 계정 내 모든 기록은 복구될 수 없습니다.'),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('아뇨'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text('네'),
+                                    onPressed: () {
+                                      model.deleteAccount(model.uid);
+                                      model.logout();
+                                    },
+                                  )
+                                ],
                               ),
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text('네'),
-                                  onPressed: () {
-                                    model.deleteAccount(model.uid);
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                CupertinoDialogAction(
-                                  child: Text('아뇨'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            )
-                          : AlertDialog(
-                              title: Text('계정을 삭제하시겠습니까?'),
-                              content: Text('삭제한 계정과 계정 내 모든 기록은 복구될 수 없습니다.'),
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text('아뇨'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                FlatButton(
-                                  child: Text('네'),
-                                  onPressed: () {
-                                    model.deleteAccount(model.uid);
-                                    model.logout();
-                                  },
-                                )
-                              ],
-                            );
+                      );
                     },
                   );
                 },

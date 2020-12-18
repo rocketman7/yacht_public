@@ -7,12 +7,18 @@ class UserVoteStatsModel {
   final int currentWinPoint;
   final int maxWinPoint;
   final List<bool> participation;
+  final Map<String, dynamic> winPointHistory;
+  final int numOfPrediction;
+  final int numOfWin;
 
   UserVoteStatsModel({
     this.firstVote,
     this.currentWinPoint,
     this.maxWinPoint,
     this.participation,
+    this.winPointHistory,
+    this.numOfPrediction,
+    this.numOfWin,
   });
 
   UserVoteStatsModel copyWith({
@@ -20,12 +26,17 @@ class UserVoteStatsModel {
     int currentWinPoint,
     int maxWinningPoint,
     List<bool> participation,
+    Map<dynamic, int> winPointHistory,
+    int numOfPrediction,
+    int numOfWin,
   }) {
     return UserVoteStatsModel(
       firstVote: firstVote ?? this.firstVote,
       currentWinPoint: currentWinPoint ?? this.currentWinPoint,
       maxWinPoint: maxWinningPoint ?? this.maxWinPoint,
       participation: participation ?? this.participation,
+      winPointHistory: winPointHistory ?? this.winPointHistory,
+      numOfPrediction: numOfPrediction ?? this.numOfPrediction,
     );
   }
 
@@ -37,7 +48,10 @@ class UserVoteStatsModel {
         maxWinPoint = data['maxWinningPoint'],
         participation = data['participation'] == null
             ? null
-            : List<bool>.from(data['participation']);
+            : List<bool>.from(data['participation']),
+        winPointHistory = data['winPointHistory'],
+        numOfPrediction = data['numOfPrediction'],
+        numOfWin = data['numOfWin'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -45,6 +59,9 @@ class UserVoteStatsModel {
       'currentWinPoint': this.currentWinPoint,
       'maxWinningPoint': this.maxWinPoint,
       'participation': this.participation,
+      'winPointHistory': this.winPointHistory,
+      'numOfPrediction': this.numOfPrediction,
+      'numOfWin': this.numOfWin,
     };
   }
 }

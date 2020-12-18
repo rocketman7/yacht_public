@@ -16,7 +16,12 @@ import 'package:yachtOne/models/stats_model.dart';
 import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/vote_model.dart';
 import 'package:yachtOne/services/database_service.dart';
+import 'package:yachtOne/services/navigation_service.dart';
+import 'package:yachtOne/services/timezone_service.dart';
 import 'package:yachtOne/view_models/chart_view_model.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 import 'package:quiver/iterables.dart' as quiver;
 import 'dart:math';
 import 'package:rxdart/rxdart.dart';
@@ -39,27 +44,29 @@ class ChartView extends StatefulWidget {
   final UserModel user;
   final Function selectUpdate;
   final Function showToast;
+  final bool isButtonBlocked;
 
   ChartView(
-    // this.controller,
-    this.scrollStreamCtrl,
-    this.selected,
-    this.idx,
-    this.numSelected,
-    this.vote,
-    this.seasonInfo,
-    this.address,
-    this.user,
-    this.selectUpdate,
-    this.showToast,
-  );
+      // this.controller,
+      this.scrollStreamCtrl,
+      this.selected,
+      this.idx,
+      this.numSelected,
+      this.vote,
+      this.seasonInfo,
+      this.address,
+      this.user,
+      this.selectUpdate,
+      this.showToast,
+      this.isButtonBlocked);
   @override
   _ChartViewState createState() => _ChartViewState();
 }
 
 class _ChartViewState extends State<ChartView> {
   // DateTime temp = DateTime.now().add(duration);
-
+  final _navigationService = locator<NavigationService>();
+  final TimezoneService _timezoneService = locator<TimezoneService>();
   DatabaseAddressModel address;
   List<double> closeList;
   List<double> closeChartList;
@@ -86,7 +93,7 @@ class _ChartViewState extends State<ChartView> {
 
   // 실시간 가격 데이터 리스트
   List<PriceModel> realtimePriceDataSourceList;
-  Stream<List<PriceModel>> tempStream;
+  Stream<List<PriceModel>> liveStream;
   DatabaseService _databaseService = locator<DatabaseService>();
   DateTime liveToday;
   // 종목 정보 불러올 때 필요한 변수들
@@ -96,6 +103,7 @@ class _ChartViewState extends State<ChartView> {
   String countryCode = "KR";
   String stockOrIndex;
   String colorCode;
+  bool isButtonBlocked;
 
   Color hexToColor(String code) {
     return Color(int.parse(code, radix: 16) + 0xFF0000000);
@@ -103,9 +111,9 @@ class _ChartViewState extends State<ChartView> {
 
   @override
   void initState() {
-    // issueCode = widget.vote.subVotes[idx].issueCode[choice];
     super.initState();
-    print(issueCode);
+    // issueCode = widget.vote.subVotes[idx].issueCode[indexChosen];
+    // print("INIT" + issueCode);
     controller = ScrollController(
       initialScrollOffset: 0,
     );
@@ -130,8 +138,9 @@ class _ChartViewState extends State<ChartView> {
     //그러면 데이터를 받아오면서 setState가 됨 -> 차트 애니메이션이 끊기게 됨.
     // 이를 방지하고자 initState에 stream을 설정해주고 아래 Live를 위한 StreamBuilder에서
     // 이 스트림을 불러옴. 이러면 스트림을 다시 콜하지 않음.
-    // tempStream = _databaseService.getRealtimePriceForChart(issueCode);
-    // print(position);
+    // liveStream =
+    //     _databaseService.getRealtimePriceForChart(widget.address, issueCode);
+    print("WIDGET ADDRESS" + widget.address.date.toString());
   }
 
   @override
@@ -160,7 +169,7 @@ class _ChartViewState extends State<ChartView> {
   var formatPrice = NumberFormat("#,###");
   var formatIndex = NumberFormat("#,###.00");
   var formatPriceUpDown = NumberFormat("+#,###; -#,###");
-  var formatIndexUpDown = NumberFormat("+#,###.00; -#,###.00");
+  var formatIndexUpDown = NumberFormat("+#,##0.00; -#,##0.00");
   var formatPercent = NumberFormat("##.0%");
   var stringDateWithDay = DateFormat("yyyy.MM.dd EEE");
   var stringDate = DateFormat("yyyy.MM.dd");
@@ -177,17 +186,17 @@ class _ChartViewState extends State<ChartView> {
       num mod = bigNum.abs() % 1000000000000;
 
       return (isNegative ? "-" : "") +
-          formatPrice.format((bigNum.abs() / 1000000000000).round()) +
+          formatPrice.format((bigNum.abs() / 1000000000000).floor()) +
           "조 " +
-          formatPrice.format((mod / 100000000).round()) +
+          formatPrice.format((mod / 100000000).floor()) +
           "억";
     } else if (bigNum.abs() >= 100000000) {
       return (isNegative ? "-" : "") +
-          formatPrice.format((bigNum.abs() / 100000000).round()) +
+          formatPrice.format((bigNum.abs() / 100000000).floor()) +
           "억";
     } else if (bigNum.abs() >= 10000) {
       return (isNegative ? "-" : "") +
-          formatPrice.format((bigNum.abs() / 10000).round()) +
+          formatPrice.format((bigNum.abs() / 10000).floor()) +
           "만";
     } else {
       return (isNegative ? "-" : "") + formatPrice.format(bigNum.abs());
@@ -206,11 +215,13 @@ class _ChartViewState extends State<ChartView> {
     numSelected = widget.numSelected;
     issueCode = widget.vote.subVotes[idx].issueCode[indexChosen];
     numOfChoices = widget.vote.subVotes[idx].issueCode.length;
+    print("numOfChoices " + numOfChoices.toString());
     seasonInfo = widget.seasonInfo;
     address = widget.address;
     user = widget.user;
     stockOrIndex = widget.vote.subVotes[idx].indexOrStocks[indexChosen];
     colorCode = widget.vote.subVotes[idx].colorCode[indexChosen];
+    isButtonBlocked = widget.isButtonBlocked;
     print("ISSUECODE " + issueCode);
 
     _showToast = widget.showToast;
@@ -325,41 +336,54 @@ class _ChartViewState extends State<ChartView> {
                               (!selected[idx])
                                   ? RaisedButton(
                                       onPressed: () {
-                                        (address.isVoting == false)
-                                            ? {}
-                                            : setState(() {
-                                                if (seasonInfo.maxDailyVote -
-                                                        numSelected ==
-                                                    0) {
-                                                  _showToast(
-                                                      "하루 최대 ${seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
-                                                } else if ((user.item ==
-                                                        null) ||
-                                                    (user.item - numSelected <=
-                                                        0)) {
-                                                  // 선택되면 안됨
+                                        address.isVoting == false
+                                            ? {
+                                                _navigationService
+                                                    .navigateWithArgTo(
+                                                        'subjectComment',
+                                                        [widget.vote, idx])
+                                              }
+                                            : isButtonBlocked
+                                                ? {}
+                                                : setState(() {
+                                                    if (seasonInfo
+                                                                .maxDailyVote -
+                                                            numSelected ==
+                                                        0) {
+                                                      _showToast(
+                                                          "하루 최대 ${seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                                    } else if ((user.item ==
+                                                            null) ||
+                                                        (user.item -
+                                                                numSelected <=
+                                                            0)) {
+                                                      // 선택되면 안됨
 
-                                                  _showToast(
-                                                      "보유 중인 아이템이 부족합니다.");
-                                                } else {
-                                                  // selected[idx] = true;
-                                                  // print(VoteSelectViewModel()
-                                                  //     .selected
-                                                  //     .toString());
-                                                  widget.selectUpdate(
-                                                      idx, true);
-                                                  Navigator.of(context).pop();
-                                                }
-                                              });
+                                                      _showToast(
+                                                          "보유 중인 아이템이 부족합니다.");
+                                                    } else {
+                                                      // selected[idx] = true;
+                                                      // print(VoteSelectViewModel()
+                                                      //     .selected
+                                                      //     .toString());
+                                                      widget.selectUpdate(
+                                                          idx, true);
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }
+                                                  });
                                       },
-                                      color: (address.isVoting == false)
-                                          ? Color(0xFFE4E4E4)
-                                          : Color(0xFF1EC8CF),
+                                      color: address.isVoting == false
+                                          ? Color(0xFF1EC8CF)
+                                          : isButtonBlocked
+                                              ? Color(0xFFE4E4E4)
+                                              : Color(0xFF1EC8CF),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),
                                       padding: EdgeInsets.symmetric(
-                                        horizontal: 20,
+                                        horizontal:
+                                            address.isVoting == false ? 25 : 20,
                                         // vertical: 8,
                                       ),
                                       child: Row(
@@ -369,19 +393,25 @@ class _ChartViewState extends State<ChartView> {
                                           // (model.address.isVoting == false)
                                           //     ? SizedBox()
                                           // :
-                                          SvgPicture.asset(
-                                            'assets/icons/double_check_icon.svg',
-                                            width: 20,
-                                          ),
+                                          address.isVoting == false
+                                              ? Container()
+                                              : SvgPicture.asset(
+                                                  'assets/icons/double_check_icon.svg',
+                                                  width: 20,
+                                                ),
                                           // (model.address.isVoting == false)
                                           //     ? SizedBox()
                                           // :
-                                          SizedBox(width: 8),
+                                          address.isVoting == false
+                                              ? Container()
+                                              : SizedBox(width: 8),
                                           Text(
                                               // model.address.isVoting == false
                                               //     ? "오늘 예측이 마감되었습니다."
                                               // :
-                                              "선택하기",
+                                              address.isVoting == false
+                                                  ? "커뮤니티"
+                                                  : "선택하기",
                                               style: TextStyle(
                                                 fontSize: 16,
                                                 color:
@@ -505,6 +535,7 @@ class _ChartViewState extends State<ChartView> {
 
                                 // print("PREV " + prevSnapshot.data.toString());
                                 // print("NOW " + snapshot.data.toString());
+
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -683,8 +714,13 @@ class _ChartViewState extends State<ChartView> {
                               }),
                           StreamBuilder<DateTime>(
                               stream: dateTimeStreamCtrl.stream,
-                              initialData: strToDate(model.chartList.last.date),
+                              initialData: model.isDurationSelected[0] == true
+                                  ? strToDate(address.date)
+                                  : strToDate(model.chartList.last.date),
                               builder: (context, snapshot) {
+                                print("IS DURATION");
+                                print(model.isDurationSelected);
+                                print(address.date);
                                 return Text(stringDateWithDay
                                     .format(snapshot.data)
                                     .toString());
@@ -697,9 +733,11 @@ class _ChartViewState extends State<ChartView> {
                     ),
                     model.isDurationSelected[0] == true
                         ? StreamBuilder<List<PriceModel>>(
-                            stream: tempStream,
+                            stream: model.getRealtimePriceForChart(
+                                address, issueCode),
                             builder: (context, realtimeSnapshot) {
                               if (!realtimeSnapshot.hasData) {
+                                print("NO DATA");
                                 return Container(
                                   height: deviceHeight * 0.23,
                                 );
@@ -707,9 +745,11 @@ class _ChartViewState extends State<ChartView> {
                                 realtimePriceDataSourceList =
                                     realtimeSnapshot.data;
                                 if (address.isVoting == false) {
-                                  liveToday = realtimePriceDataSourceList
-                                      .first.createdAt
-                                      .toDate();
+                                  print("FIRST LIST" + address.date);
+
+                                  liveToday = strToDate(address.date);
+                                  print(
+                                      "LIVE TODAY IS " + liveToday.toString());
                                   priceStreamCtrl.add(
                                       realtimePriceDataSourceList.first.price);
                                   dateTimeStreamCtrl.add(
@@ -1665,10 +1705,11 @@ class _ChartViewState extends State<ChartView> {
             plotAreaBorderWidth: 0,
             series: <ChartSeries>[
               ScatterSeries<StatsModel, String>(
-                color: Color(0xFF07A903).withOpacity(.3),
+                color: Color(0xFFFF5959).withOpacity(.3),
                 dataSource: statsDataSourceList,
-                xValueMapper: (StatsModel stats, _) =>
-                    stats.announcedAt.replaceAll("\\n", "\n"),
+                xValueMapper: (StatsModel stats, _) => stats.announcedAt == null
+                    ? null
+                    : stats.announcedAt.replaceAll("\\n", "\n"),
                 yValueMapper: (StatsModel stats, _) => stats.expectedEps,
                 markerSettings: MarkerSettings(
                   width: 16,
@@ -1678,7 +1719,7 @@ class _ChartViewState extends State<ChartView> {
               ScatterSeries<StatsModel, String>(
                 color:
                     // hexToColor(colorCode),
-                    Color(0xFF07A903),
+                    Color(0xFFFF5959),
                 dataSource: statsDataSourceList,
                 xValueMapper: (StatsModel stats, _) =>
                     stats.announcedAt.replaceAll("\\n", "\n"),
@@ -1772,7 +1813,7 @@ class _ChartViewState extends State<ChartView> {
                     height: 16,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFF07A903).withOpacity(.3),
+                      color: Color(0xFFFF5959).withOpacity(.3),
                     ),
                   ),
                 ],
@@ -1790,7 +1831,7 @@ class _ChartViewState extends State<ChartView> {
                     height: 16,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFF07A903),
+                      color: Color(0xFFFF5959),
                     ),
                   ),
                 ],
@@ -1803,6 +1844,14 @@ class _ChartViewState extends State<ChartView> {
   }
 
   Container buildContainerForChart(model) {
+    // print(
+    //   "CHART TIME" +
+    //       tz.TZDateTime.from(
+    //               tz.TZDateTime(_timezoneService.seoul, liveToday.year,
+    //                   liveToday.month, liveToday.day, 08, 50, 00),
+    //               _timezoneService.seoul)
+    //           .toString(),
+    // );
     return Container(
       // color: Colors.red,
       height: deviceHeight * 0.23,
@@ -1939,10 +1988,14 @@ class _ChartViewState extends State<ChartView> {
                   width: 0,
                 ),
                 isVisible: false,
-                maximum: DateTime(
-                    liveToday.year, liveToday.month, liveToday.day, 15, 31, 00),
-                minimum: DateTime(
-                    liveToday.year, liveToday.month, liveToday.day, 08, 50, 00),
+                minimum: tz.TZDateTime.from(
+                    tz.TZDateTime(_timezoneService.seoul, liveToday.year,
+                        liveToday.month, liveToday.day, 08, 50, 00),
+                    _timezoneService.seoul),
+                maximum: tz.TZDateTime.from(
+                    tz.TZDateTime(_timezoneService.seoul, liveToday.year,
+                        liveToday.month, liveToday.day, 15, 40, 00),
+                    _timezoneService.seoul),
               )
             : CategoryAxis(
                 majorGridLines: MajorGridLines(

@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +16,23 @@ import '../views/widgets/avatar_widget.dart';
 
 class RankView extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  DateTime currentBackPressTime;
+  Future<bool> _onWillPop() async {
+    if (currentBackPressTime == null ||
+        DateTime.now().difference(currentBackPressTime) >
+            Duration(seconds: 2)) {
+      currentBackPressTime = DateTime.now();
+      Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
+      return Future.value(false);
+      // return null;
+    } else {
+      print("TURN OFF");
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      return Future.value(true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<RankViewModel>.reactive(
@@ -46,10 +65,7 @@ class RankView extends StatelessWidget {
                           ),
                         )
                       : WillPopScope(
-                          onWillPop: () async {
-                            _navigatorKey.currentState.maybePop();
-                            return false;
-                          },
+                          onWillPop: _onWillPop,
                           child: SafeArea(
                             child: Padding(
                               padding: EdgeInsets.only(
@@ -207,7 +223,7 @@ class RankView extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '오늘의 랭킹',
+                                            '오늘의 순위',
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 fontSize: 28,
@@ -241,7 +257,7 @@ class RankView extends StatelessWidget {
                                                     )
                                                   ],
                                                 )
-                                              : Text('시즌 시작 후 랭킹이 표시됩니다!',
+                                              : Text('시즌 시작 후 순위가 표시됩니다!',
                                                   style: TextStyle(
                                                       fontFamily: 'DmSans',
                                                       fontSize: 14)),
@@ -366,11 +382,14 @@ class RankView extends StatelessWidget {
             SizedBox(
               width: 18,
             ),
-            Text('${ranksModel.userName}',
-                style: TextStyle(
-                  fontSize: 20,
-                  letterSpacing: -0.28,
-                )),
+            Text(
+              '${ranksModel.userName}',
+              style: TextStyle(
+                fontSize: 20,
+                letterSpacing: -0.28,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
             ranksModel.uid == model.uid
                 ? Row(
                     children: [

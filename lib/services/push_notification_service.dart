@@ -24,7 +24,7 @@ class PushNotificationService {
     false,
     false
   ]; //***중요:false 면 알림이 오는것이고, true면 알림 거부하는 것임
-  List<String> topics = ['voteTopic', 'timeTopic', 'resultTopic'];
+  List<String> topics = ['vote', 'time', 'result'];
   List<String> pushAlarmTitles = [
     '투표 관련 알림',
     '장 관련 알림',
@@ -45,30 +45,54 @@ class PushNotificationService {
       });
 
       // print(_fcm.onIosSettingsRegistered);
+      // _fcm.subscribeToTopic('test');
 
       // 현재 사용자의 푸쉬알림 상태에 따라 구독/구독취소를 해준다.
       // 안전하게 true면 구독취소까지해준다.
-      for (int i = 0; i < numOfPushAlarm; i++)
-        pushAlarm[i] = await _sharedPreferencesService
-            .getSharedPreferencesValue(pushAlarmKey[i], bool);
+      // for (int i = 0; i < numOfPushAlarm; i++)
+      //   pushAlarm[i] = await _sharedPreferencesService
+      //       .getSharedPreferencesValue(pushAlarmKey[i], bool);
 
-      print('=============================================================');
-      for (int i = 0; i < numOfPushAlarm; i++) {
-        if (pushAlarm[i]) {
-          print('unsubscribe(${pushAlarmKey[i]}): ${topics[i]}');
-          _fcm.unsubscribeFromTopic(topics[i]);
-        } else {
-          print('subscribe(${pushAlarmKey[i]}): ${topics[i]}');
-          _fcm.subscribeToTopic(topics[i]);
-        }
-      }
-      print(pushAlarm);
-      print('=============================================================');
+      // print('=============================================================');
+      // for (int i = 0; i < numOfPushAlarm; i++) {
+      //   if (pushAlarm[i]) {
+      //     print('unsubscribe(${pushAlarmKey[i]}): ${topics[i]}');
+      //     _fcm.unsubscribeFromTopic(topics[i]);
+      //   } else {
+      //     print('subscribe(${pushAlarmKey[i]}): ${topics[i]}');
+      //     _fcm.subscribeToTopic(topics[i]);
+      //   }
+      // }
+      // print(pushAlarm);
+      // print('=============================================================');
 
       // _fcm.requestNotificationPermissions(IosNotificationSettings());
 
     }
+
+    // _fcm.subscribeToTopic('test');
+
     print("PUSH initialised");
+
+    // 현재 사용자의 푸쉬알림 상태에 따라 구독/구독취소를 해준다.
+    // 안전하게 true면 구독취소까지해준다.
+    for (int i = 0; i < numOfPushAlarm; i++)
+      pushAlarm[i] = await _sharedPreferencesService.getSharedPreferencesValue(
+          pushAlarmKey[i], bool);
+
+    print('=============================================================');
+    for (int i = 0; i < numOfPushAlarm; i++) {
+      if (pushAlarm[i]) {
+        print('unsubscribe(${pushAlarmKey[i]}): ${topics[i]}');
+        _fcm.unsubscribeFromTopic(topics[i]);
+      } else {
+        print('subscribe(${pushAlarmKey[i]}): ${topics[i]}');
+        _fcm.subscribeToTopic(topics[i]);
+      }
+    }
+    print(pushAlarm);
+    print('=============================================================');
+
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         // 앱이 실행중일 때

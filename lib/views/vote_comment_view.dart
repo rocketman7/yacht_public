@@ -1,7 +1,9 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
@@ -83,6 +85,22 @@ class _VoteCommentViewState extends State<VoteCommentView>
     // isDisposed = true;
   }
 
+  DateTime currentBackPressTime;
+  Future<bool> _onWillPop() async {
+    if (currentBackPressTime == null ||
+        DateTime.now().difference(currentBackPressTime) >
+            Duration(seconds: 2)) {
+      currentBackPressTime = DateTime.now();
+      Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
+      return Future.value(false);
+      // return null;
+    } else {
+      print("TURN OFF");
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      return Future.value(true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
@@ -124,10 +142,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
           } else {
             return Scaffold(
               body: WillPopScope(
-                onWillPop: () async {
-                  _navigatorKey.currentState.maybePop();
-                  return false;
-                },
+                onWillPop: _onWillPop,
                 child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -226,6 +241,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                       // fontWeight: FontWeight.bold,
                       fontFamily: 'AppleSDB',
                     )),
+                subtitle: Text("자유롭게 주식 이야기를 해주세요."),
                 // subtitle: Text("50명 이야기중"),
                 // subtitle: Text("rocketman님 외에 50명 이야기중"),
               ),

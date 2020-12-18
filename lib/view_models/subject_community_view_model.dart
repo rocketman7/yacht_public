@@ -11,6 +11,7 @@ import '../services/navigation_service.dart';
 import '../services/auth_service.dart';
 import '../services/dialog_service.dart';
 import '../services/database_service.dart';
+import '../services/api/customized_ntp.dart';
 
 import '../locator.dart';
 
@@ -30,7 +31,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
   UserVoteModel userVote;
   DatabaseAddressModel newAddress;
   String avatarImage;
-
+  DateTime now;
   SubjectCommunityViewModel(this.date, this.idx) {
     uid = _authService.auth.currentUser.uid;
   }
@@ -50,13 +51,19 @@ class SubjectCommunityViewModel extends FutureViewModel {
       isVoting: address.isVoting,
     );
     newAddress.subVote = idx.toString();
-    print(address);
+    // print(address);
     user = await _databaseService.getUser(uid);
     vote = await _databaseService.getVotes(newAddress);
     userVote = await _databaseService.getUserVote(newAddress);
+
     // setBusy(false);
-    notifyListeners();
+    // notifyListeners();
   }
+
+  // Future getNowFromNetwork() async {
+  //   now = await CustomizedNTP.now();
+  //   // notifyListeners();
+  // }
 
   Future postComments(
     DatabaseAddressModel address,

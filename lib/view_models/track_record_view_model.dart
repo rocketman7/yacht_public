@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
 import '../models/rank_model.dart';
@@ -50,6 +51,7 @@ class TrackRecordViewModel extends FutureViewModel {
     user = _stateManageService.userModel;
     vote = _stateManageService.voteModel;
     userVote = _stateManageService.userVoteModel;
+    rankModel = _stateManageService.rankModel;
     for (int i = 0; i < rankModel.length; i++) {
       if (rankModel[i].uid == uid) {
         myRank = rankModel[i].todayRank;
@@ -66,6 +68,12 @@ class TrackRecordViewModel extends FutureViewModel {
     // print(allSeasonVoteList[3].voteDate.toString());
     // print(allSeasonVoteList[4].voteDate.toString());
     // print(allSeasonVoteList[5].voteDate.toString());
+  }
+
+  String returnDigitFormat(int value) {
+    var f = NumberFormat("#,###", "en_US");
+
+    return f.format(value);
   }
 
   @override

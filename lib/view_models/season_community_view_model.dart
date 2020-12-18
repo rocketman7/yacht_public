@@ -1,3 +1,4 @@
+import '../services/api/customized_ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/season_model.dart';
@@ -29,7 +30,7 @@ class SeasonCommunityViewModel extends FutureViewModel {
   UserVoteModel userVote;
   DatabaseAddressModel newAddress;
   SeasonModel seasonInfo;
-
+  DateTime now;
   SeasonCommunityViewModel() {
     uid = _authService.auth.currentUser.uid;
   }
@@ -48,8 +49,14 @@ class SeasonCommunityViewModel extends FutureViewModel {
     seasonInfo = await _databaseService.getSeasonInfo(address);
     userVote = await _databaseService.getUserVote(address);
     // setBusy(false);
+    // now = await NTP.now();
     // notifyListeners();
   }
+
+  // Future getNowFromNetwork() async {
+  //   now = await CustomizedNTP.now();
+  //   notifyListeners();
+  // }
 
   Future postComments(
     DatabaseAddressModel address,

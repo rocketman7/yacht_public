@@ -64,12 +64,12 @@ class VoteCommentViewModel extends FutureViewModel {
 
     address = _stateManageService.addressModel;
     user = _stateManageService.userModel;
-    vote = _stateManageService.voteModel;
+    // vote = _stateManageService.voteModel;
     userVote = _stateManageService.userVoteModel;
     seasonInfo = _stateManageService.seasonModel;
     // address = await _databaseService.getAddress(uid);
     // user = await _databaseService.getUser(uid);
-    // vote = await _databaseService.getVotes(address);
+    vote = await _databaseService.getVotes(address); //예측 참여 수 즉각 업뎃하기 위해
     // userVote = await _databaseService.getUserVote(address);
     // seasonInfo = await _databaseService.getSeasonInfo(address);
 

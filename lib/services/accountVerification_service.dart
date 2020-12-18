@@ -91,7 +91,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
       'BANKCODE': bankCode,
       'CUSTNM': custName,
     };
-
+    print("BODY" + body.toString());
     resp = await http.post(
         // 'https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOwner',
         'https://api.mydatahub.co.kr/scrap/common/settlebank/accountOwner',
@@ -109,6 +109,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
     print('$respBody');
 
     if (resp.statusCode == 200) {
+      print(respBody);
       if (respBody['errCode'] == '0000') if (respBody['data']['OUTSTATCD'] ==
           '0021')
         return [true, 'success'];

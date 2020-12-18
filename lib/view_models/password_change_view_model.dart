@@ -53,15 +53,18 @@ class PasswordChangeViewModel extends BaseViewModel {
       showDialog(
           context: context,
           builder: (BuildContext context) {
-            return Platform.isIOS
-                ? CupertinoAlertDialog(
-                    title: Text("재 로그인이 필요합니다"),
-                    content: Text("비밀번호를 변경하기 위해서 다시 로그인한 후 변경해야 합니다."),
-                  )
-                : AlertDialog(
-                    title: Text("재 로그인이 필요합니다"),
-                    content: Text("비밀번호를 변경하기 위해서 다시 로그인한 후 변경해야 합니다."),
-                  );
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: Platform.isIOS
+                  ? CupertinoAlertDialog(
+                      title: Text("재 로그인이 필요합니다"),
+                      content: Text("비밀번호를 변경하기 위해서 다시 로그인한 후 변경해야 합니다."),
+                    )
+                  : AlertDialog(
+                      title: Text("재 로그인이 필요합니다"),
+                      content: Text("비밀번호를 변경하기 위해서 다시 로그인한 후 변경해야 합니다."),
+                    ),
+            );
           });
     } else {
       Navigator.pop(context);
