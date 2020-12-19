@@ -146,12 +146,18 @@ class MypageRewardViewModel extends FutureViewModel {
     return temp;
   }
 
+  // 출고하기버튼을 눌렀을 떄
   Future<void> actDelivery(int index) async {
     await _databaseService.updateUserRewardDeliveryStatus(
         uid, userRewardModels[index].id, 0);
     await getModels();
 
     notifyListeners();
+
+    // 원천징수해야하는지 여부에 따라,, 다음 안내를?
+    print('원천징수 여부: ' + userRewardModels[index].isTax.toString());
+
+    // 출고신청한 것 우리가 알 수 있게끔 여기에 조치를 취해놓으면 좋을 듯
   }
 
   @override
