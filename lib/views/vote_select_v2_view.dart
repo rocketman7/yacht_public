@@ -596,6 +596,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   String urgentMessage = "";
   bool termsOfUse;
   String defaultMainText;
+  bool isShowWinners = false;
 
   checkIfAgreeTerms(context) async {
     termsOfUse = await _sharedPreferencesService.getSharedPreferencesValue(
@@ -695,6 +696,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
       isUrgentNotice = remoteConfig.getBool('is_urgent_notice');
       urgentMessage = remoteConfig.getString('urgent_message');
+
+      isShowWinners = remoteConfig.getBool('show_winners');
       // 홈 기본 텍스트 불러오기
 
       // defaultMainText = remoteConfig.getString('default_main_text');
@@ -716,146 +719,149 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       _confettiController =
           ConfettiController(duration: const Duration(milliseconds: 1200));
 
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (BuildContext context) {
-            _confettiController.play();
-            Future.delayed(Duration(milliseconds: 400))
-                .then((value) => _confettiController.stop());
-            return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: Dialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Container(
-                      height: 330,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0, vertical: 24),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Column(
-                              children: [
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: ConfettiWidget(
-                                    confettiController: _confettiController,
-                                    blastDirectionality: BlastDirectionality
-                                        .explosive, // don't specify a direction, blast randomly
-                                    emissionFrequency: 1,
-                                    minimumSize: const Size(10, 10),
-                                    maximumSize: const Size(30, 30),
-                                    numberOfParticles: 12,
-                                    gravity: .08,
-                                    shouldLoop:
-                                        true, // start again as soon as the animation is finished
-                                    colors: const [
-                                      Colors.green,
-                                      Colors.blue,
-                                      Colors.pink,
-                                      Colors.orange,
-                                      Colors.purple
-                                    ], // manually specify the colors to be used
-                                  ),
-                                ),
-                                Text(
-                                  "꾸욱 시즌 1 우승자 탄생!",
-                                  style: TextStyle(
-                                      fontSize: 24, fontFamily: 'AppleSDEB'),
-                                ),
-                                SizedBox(height: 8),
-                                AutoSizeText(
-                                  "꾸욱 첫 시즌에 참여해주신 여러분, 진심으로 감사합니다.\n치열했던 시즌 1의 최종 우승자와\n깜짝 특별상을 확인해보세요!",
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontFamily: 'AppleSDM',
-                                  ),
-                                  maxLines: 4,
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: 16),
-                                RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                      text: "12월 22일 오후 4시",
-                                      style: TextStyle(
-                                        fontFamily: 'AppleSDM',
-                                        color: Colors.red,
-                                        fontSize: 17,
-                                        //  fontFamily: 'AppleSDM',
-                                        // fontWeight: FontWeight.bold,
-                                        // letterSpacing: -.5,
-                                      ),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: "부터 더욱 커진 상금 주식과 함께",
-                                            style: TextStyle(
-                                              fontFamily: 'AppleSDM',
-                                              color: Colors.black,
-                                              fontSize: 17,
-                                              //  fontFamily: 'AppleSDM',
-                                              // fontWeight: FontWeight.bold,
-                                              // letterSpacing: -.5,
-                                            )),
-                                        TextSpan(
-                                          text: " 시즌 2",
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              fontFamily: 'AppleSDM',
-                                              color: Colors.deepPurple),
-                                        ),
-                                        TextSpan(
-                                            text: "를 시작합니다!",
-                                            style: TextStyle(
-                                              fontFamily: 'AppleSDM',
-                                              color: Colors.black,
-                                              fontSize: 17,
-                                              //  fontFamily: 'AppleSDM',
-                                              // fontWeight: FontWeight.bold,
-                                              // letterSpacing: -.5,
-                                            )),
-                                      ]),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 16),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                                _navigationService.navigateTo('winner');
-                              },
-                              child: Container(
-                                  width: double.infinity,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 15),
-                                  decoration: BoxDecoration(
-                                      color: Color(0xFFF43177),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Center(
-                                    child: Text(
-                                      "시즌 1 결과 보러가기",
-                                      style: TextStyle(
-                                        fontFamily: 'AppleSDB',
-                                        height: 1,
-                                        color: Colors.white,
-                                        letterSpacing: -1.0,
-                                        fontSize: 18,
-                                        //  fontFamily: 'AppleSDM',
-                                        // fontWeight: FontWeight.bold,
-                                        // letterSpacing: -.5,
-                                      ),
+      if (isShowWinners) {
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (BuildContext context) {
+              _confettiController.play();
+              Future.delayed(Duration(milliseconds: 400))
+                  .then((value) => _confettiController.stop());
+              return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                  child: Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Container(
+                        height: 330,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0, vertical: 24),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: ConfettiWidget(
+                                      confettiController: _confettiController,
+                                      blastDirectionality: BlastDirectionality
+                                          .explosive, // don't specify a direction, blast randomly
+                                      emissionFrequency: 1,
+                                      minimumSize: const Size(10, 10),
+                                      maximumSize: const Size(30, 30),
+                                      numberOfParticles: 12,
+                                      gravity: .08,
+                                      shouldLoop:
+                                          true, // start again as soon as the animation is finished
+                                      colors: const [
+                                        Colors.green,
+                                        Colors.blue,
+                                        Colors.pink,
+                                        Colors.orange,
+                                        Colors.purple
+                                      ], // manually specify the colors to be used
                                     ),
-                                  )),
-                            )
-                          ],
-                        ),
-                      )),
-                ));
-          });
+                                  ),
+                                  Text(
+                                    "꾸욱 시즌 1 우승자 탄생!",
+                                    style: TextStyle(
+                                        fontSize: 24, fontFamily: 'AppleSDEB'),
+                                  ),
+                                  SizedBox(height: 8),
+                                  AutoSizeText(
+                                    "꾸욱 첫 시즌에 참여해주신 여러분,\n진심으로 감사합니다.\n치열했던 시즌 1의 최종 우승자와\n깜짝 특별상을 확인해보세요!",
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontFamily: 'AppleSDM',
+                                    ),
+                                    maxLines: 4,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(height: 16),
+                                  RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                        text: "12월 22일 오후 4시",
+                                        style: TextStyle(
+                                          fontFamily: 'AppleSDM',
+                                          color: Colors.red,
+                                          fontSize: 17,
+                                          //  fontFamily: 'AppleSDM',
+                                          // fontWeight: FontWeight.bold,
+                                          // letterSpacing: -.5,
+                                        ),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: "부터 더욱 커진 상금 주식과 함께",
+                                              style: TextStyle(
+                                                fontFamily: 'AppleSDM',
+                                                color: Colors.black,
+                                                fontSize: 17,
+                                                //  fontFamily: 'AppleSDM',
+                                                // fontWeight: FontWeight.bold,
+                                                // letterSpacing: -.5,
+                                              )),
+                                          TextSpan(
+                                            text: " 시즌 2",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontFamily: 'AppleSDM',
+                                                color: Colors.deepPurple),
+                                          ),
+                                          TextSpan(
+                                              text: "를 시작합니다!",
+                                              style: TextStyle(
+                                                fontFamily: 'AppleSDM',
+                                                color: Colors.black,
+                                                fontSize: 17,
+                                                //  fontFamily: 'AppleSDM',
+                                                // fontWeight: FontWeight.bold,
+                                                // letterSpacing: -.5,
+                                              )),
+                                        ]),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  _navigationService.navigateTo('winner');
+                                },
+                                child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 15),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFFF43177),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Center(
+                                      child: Text(
+                                        "시즌 1 결과 보러가기",
+                                        style: TextStyle(
+                                          fontFamily: 'AppleSDB',
+                                          height: 1,
+                                          color: Colors.white,
+                                          letterSpacing: -1.0,
+                                          fontSize: 18,
+                                          //  fontFamily: 'AppleSDM',
+                                          // fontWeight: FontWeight.bold,
+                                          // letterSpacing: -.5,
+                                        ),
+                                      ),
+                                    )),
+                              )
+                            ],
+                          ),
+                        )),
+                  ));
+            });
+      }
     } on FetchThrottledException catch (exception) {
       // Fetch throttled.
       print(exception);
@@ -1489,8 +1495,22 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         letterSpacing: -.5,
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: 12.h,
+                                    GestureDetector(
+                                      onTap: () {
+                                        _navigationService.navigateTo('winner');
+                                      },
+                                      child: model.seasonInfo.seasonName ==
+                                              "시즌 2"
+                                          ? Container(
+                                              // height: 20,
+                                              child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Text("지난 시즌 결과",
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontFamily: 'AppleSDM')),
+                                            ))
+                                          : Container(),
                                     ),
                                   ],
                                 )

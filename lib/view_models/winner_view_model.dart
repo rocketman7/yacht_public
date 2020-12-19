@@ -25,9 +25,11 @@ class WinnerViewModel extends FutureViewModel {
 
   // 변수 Setting
   // 아래에 stateManagerService에 있는 놈들 중 사용할 모델들 설정
-  DatabaseAddressModel addressModel;
+  DatabaseAddressModel lastSeasonAddressModel;
   PortfolioModel portfolioModel;
+  PortfolioModel newPortfolioModel;
   SeasonModel seasonModel;
+  SeasonModel newSeasonModel;
   UserModel userModel;
   // 여기는 이 화면 고유의 모델 설정
   List<RankModel> rankModel = [];
@@ -41,25 +43,35 @@ class WinnerViewModel extends FutureViewModel {
   List<String> rankChange = [];
   List<String> rankChangeSymbol = [];
 
+  Map<String, String> specialAwardsMap;
+  List<String> specialAwards = [];
+  List<String> specialAwardsUserName = [];
+
+  WinnerViewModel() {
+    uid = _authService.auth.currentUser.uid;
+  }
+
   Future getUserAndRankList() async {
     await _amplitudeService.logRankingView(uid);
-    if (_stateManageService.appStart) {
-      await _stateManageService.initStateManage(initUid: uid);
-    } else {
-      if (await _stateManageService.isNeededUpdate())
-        await _stateManageService.initStateManage(initUid: uid);
-    }
+    // if (_stateManageService.appStart) {
+    //   await _stateManageService.initStateManage(initUid: uid);
+    // } else {
+    //   if (await _stateManageService.isNeededUpdate())
+    //     await _stateManageService.initStateManage(initUid: uid);
+    // }
 
-    addressModel = _stateManageService.addressModel;
-    portfolioModel = _stateManageService.portfolioModel;
-    seasonModel = _stateManageService.seasonModel;
-    userModel = _stateManageService.userModel;
-    rankModel = _stateManageService.rankModel;
-
+    lastSeasonAddressModel = await _databaseService.getOldSeasonAddress(uid);
+    portfolioModel =
+        await _databaseService.getPortfolio(lastSeasonAddressModel);
+    seasonModel = await _databaseService.getSeasonInfo(lastSeasonAddressModel);
+    userModel = await _databaseService.getUser(uid);
+    rankModel = await _databaseService.getRankList(lastSeasonAddressModel);
+    newPortfolioModel = _stateManageService.portfolioModel;
+    newSeasonModel = _stateManageService.seasonModel;
     // 순위변동 구해주자.
     for (int i = 0; i < rankModel.length; i++) {
       // - 10 없애야 함
-      if (rankModel[i].currentWinPoint >= seasonModel.winningPoint - 6) {
+      if (rankModel[i].currentWinPoint >= seasonModel.winningPoint) {
         winners.add(rankModel[i]);
       }
       if (rankModel[i].prevRank != null) {
@@ -78,19 +90,58 @@ class WinnerViewModel extends FutureViewModel {
         rankChangeSymbol.add('*');
       }
     }
+
+    // 나의 현재순위 구해주자
+    for (int i = 0; i < rankModel.length; i++) {
+      if (rankModel[i].uid == uid) {
+        myRank = rankModel[i].todayRank;
+        myRankChangeSymbol = rankChangeSymbol[i];
+        myRankChange = rankChange[i];
+
+        myWinPoint = rankModel[i].currentWinPoint;
+
+        print("MY RANK" + myRank.toString());
+      }
+    }
     notifyListeners();
+  }
+
+  Future<Map<String, dynamic>> getSpecialAwardsMap(
+      lastSeasonAddressModel) async {
+    specialAwardsMap =
+        await _databaseService.getSpecialAwards(lastSeasonAddressModel);
+    print(specialAwardsMap);
+    return specialAwardsMap;
+  }
+
+  Future<String> getSpecialAwardsDescription(lastSeasonAddressModel) async {
+    String description = await _databaseService
+        .getSpecialAwardsDescription(lastSeasonAddressModel);
+    // print(specialAwardsMap);
+    return description;
+  }
+
+  String getLastSeasonPortfolioValue() {
+    int totalValue = 0;
+
+    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+      totalValue += portfolioModel.subPortfolio[i].sharesNum *
+          portfolioModel.subPortfolio[i].currentPrice;
+    }
+    // int totalValue = 100000;
+
+    var f = NumberFormat("#,###", "en_US");
+
+    return f.format(totalValue);
   }
 
   // 전일종가 기준 포트폴리오 총 가치를 계산하여 ###,###,### 형태로 반환
   String getPortfolioValue() {
     int totalValue = 0;
 
-    for (int i = 0;
-        i < _stateManageService.portfolioModel.subPortfolio.length;
-        i++) {
-      totalValue +=
-          _stateManageService.portfolioModel.subPortfolio[i].sharesNum *
-              _stateManageService.portfolioModel.subPortfolio[i].currentPrice;
+    for (int i = 0; i < newPortfolioModel.subPortfolio.length; i++) {
+      totalValue += newPortfolioModel.subPortfolio[i].sharesNum *
+          newPortfolioModel.subPortfolio[i].currentPrice;
     }
     // int totalValue = 100000;
 
@@ -113,16 +164,11 @@ class WinnerViewModel extends FutureViewModel {
     return f.format(value);
   }
 
-  String getDateFormChange() {
-    DateTime previousdate = strToDate(_stateManageService.addressModel.date);
-
-    previousdate = previousBusinessDay(previousdate);
-    String previousdateStr = stringDate.format(previousdate);
-
-    return previousdateStr.substring(0, 4) +
+  String getDateFormChange(String date) {
+    return date.substring(0, 4) +
         '.' +
-        previousdateStr.substring(4, 6) +
+        date.substring(4, 6) +
         '.' +
-        previousdateStr.substring(6, 8);
+        date.substring(6, 8);
   }
 }

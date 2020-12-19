@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -9,14 +10,18 @@ import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/winner_view_model.dart';
 
+import '../locator.dart';
 import 'constants/size.dart';
 import '../models/rank_model.dart';
 import '../views/widgets/avatar_widget.dart';
+import 'last_season_rank_view.dart';
 
 class WinnerView extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  final NavigationService _navigationService = locator<NavigationService>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +29,13 @@ class WinnerView extends StatelessWidget {
         viewModelBuilder: () => WinnerViewModel(),
         builder: (context, model, child) {
           return Scaffold(
-              body: model.hasError
-                  ? Container(
-                      child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
-                    )
-                  : model.isBusy
+              body:
+                  //  model.hasError
+                  //     ? Container(
+                  //         child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
+                  //       )
+                  //     :
+                  model.isBusy
                       ? Container(
                           height: deviceHeight,
                           width: deviceWidth,
@@ -50,175 +57,110 @@ class WinnerView extends StatelessWidget {
                           ),
                         )
                       : SafeArea(
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                left: 16.0, right: 16.0, top: 20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    GestureDetector(
-                                      behavior: HitTestBehavior.opaque,
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Icon(Icons.arrow_back_ios),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      "",
-                                      style: TextStyle(
-                                        fontSize: 20.sp,
-                                        fontFamily: 'AppleSDB',
+                          child: SingleChildScrollView(
+                            // reverse: true,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 16.0, right: 16.0, top: 20),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Icon(Icons.arrow_back_ios),
                                       ),
-                                    ),
-                                    Spacer(),
-                                    Container(
-                                      // color: Colors.red,
-                                      width: 30,
-                                      // height: 30,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Column(
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/images/winner_resize.svg',
-                                      height: 80,
-                                      // width: 80,
-                                      // color: Colors.white,
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 4,
-                                        horizontal: 8,
-                                      ),
-                                      decoration: BoxDecoration(
-                                          color: Colors.black,
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          )),
-                                      child: Text(
-                                        "시즌 1",
+                                      Spacer(),
+                                      Text(
+                                        "",
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            height: 1,
+                                          fontSize: 20.sp,
+                                          fontFamily: 'AppleSDB',
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Container(
+                                        // color: Colors.red,
+                                        width: 30,
+                                        // height: 30,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Column(
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/images/winner_resize.svg',
+                                        height: 80,
+                                        // width: 80,
+                                        // color: Colors.white,
+                                      ),
+                                      SizedBox(height: 6),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 4,
+                                              horizontal: 8,
+                                            ),
+                                            decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  20,
+                                                )),
+                                            child: Text(
+                                              model.seasonModel.seasonName,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  height: 1,
+                                                  letterSpacing: -1.0,
+                                                  fontFamily: 'AppleSDM',
+                                                  fontSize: 14),
+                                            ),
+                                          ),
+
+                                          // Text(
+                                          //   '${model.getPortfolioValue()}원',
+                                          //   style: TextStyle(
+                                          //       // color: Colors.white,
+                                          //       // height: 1,
+                                          //       letterSpacing: -1.0,
+                                          //       fontFamily: 'AppleSDB',
+                                          //       fontSize: 28),
+                                          // ),
+                                        ],
+                                      ),
+                                      Text(
+                                        '상금 주식 ${model.getPortfolioValue()}원',
+                                        style: TextStyle(
+                                            // color: Colors.white,
+                                            // height: 1,
                                             letterSpacing: -1.0,
-                                            fontFamily: 'AppleSDM',
-                                            fontSize: 16),
+                                            fontFamily: 'AppleSDB',
+                                            fontSize: 30),
                                       ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 16,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '시즌 시작일',
-                                      style: TextStyle(
-                                        fontSize: 20.sp,
-                                        height: 1,
-                                        fontFamily: 'AppleSDM',
-                                        letterSpacing: -0.5,
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      "2020.12.11",
-                                      style: TextStyle(
-                                        fontSize: 20.sp,
-                                        height: 1,
-                                        fontFamily: 'AppleSDM',
-                                        letterSpacing: -0.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '목표 승점',
-                                      style: TextStyle(
-                                        fontSize: 20.sp,
-                                        height: 1,
-                                        fontFamily: 'AppleSDM',
-                                        letterSpacing: -1.0,
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      '${model.seasonModel.winningPoint}점',
-                                      style: TextStyle(
-                                        fontSize: 20.sp,
-                                        height: 1,
-                                        fontFamily: 'AppleSDM',
-                                        letterSpacing: -1.0,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '참여자',
-                                      style: TextStyle(
-                                        fontSize: 20.sp,
-                                        height: 1,
-                                        fontFamily: 'AppleSDM',
-                                        letterSpacing: -0.5,
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    Text(
-                                      '${model.getUsersNum()}명',
-                                      style: TextStyle(
-                                        fontSize: 20.sp,
-                                        height: 1,
-                                        fontFamily: 'AppleSDM',
-                                        letterSpacing: -0.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      '시즌 최종 상금',
-                                      style: TextStyle(
-                                        fontSize: 20.sp,
-                                        height: 1,
-                                        fontFamily: 'AppleSDM',
-                                        letterSpacing: -0.5,
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    GestureDetector(
-                                      onTap: () {
-                                        // model.navigateToPortfolioPage();
-                                      },
-                                      child: Text(
-                                        '${model.getPortfolioValue()}원',
+                                    ],
+                                  ),
+
+                                  SizedBox(
+                                    height: 14,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '시즌 시작일',
                                         style: TextStyle(
                                           fontSize: 20.sp,
                                           height: 1,
@@ -226,107 +168,409 @@ class WinnerView extends StatelessWidget {
                                           letterSpacing: -0.5,
                                         ),
                                       ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        // model.navigateToPortfolioPage();
-                                      },
-                                      child: Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 16.sp,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 16.h,
-                                ),
-                                Container(
-                                  height: 1,
-                                  color: Color(0xFFDFDFDF),
-                                ),
-                                SizedBox(
-                                  height: 16.h,
-                                ),
-                                Center(
-                                  child: Text(
-                                    '시즌 1 우승자',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        letterSpacing: -1.0,
-                                        fontFamily: 'AppleSDEB'),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 16.h,
-                                ),
-                                // Winners List
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: model.winners.length,
-                                    itemBuilder: (context, index) =>
-                                        buildWinnersListView(
-                                      model,
-                                      model.rankModel[index],
-                                      index,
-                                    ),
-                                  ),
-                                ),
-                                Divider(),
-                                Center(
-                                  child: Text(
-                                    '시즌 1 특별상',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        letterSpacing: -1.0,
-                                        fontFamily: 'AppleSDEB'),
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '커뮤니티 하트상',
-                                      style: TextStyle(
-                                        fontFamily: 'AppleSDB',
-                                        fontSize: 20,
-                                        letterSpacing: -0.28,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Container(
-                                      height: 36,
-                                      width: 36,
-                                      child: CircleAvatar(
-                                        maxRadius: 36,
-                                        backgroundColor: Colors.transparent,
-                                        backgroundImage: AssetImage(
-                                            'assets/images/avatar004.png'),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 18,
-                                    ),
-                                    Text('LemonAde',
+                                      Spacer(),
+                                      Text(
+                                        model.getDateFormChange(
+                                          model.seasonModel.startDate,
+                                        ),
                                         style: TextStyle(
-                                            fontSize: 24,
-                                            letterSpacing: -2.0,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: SizedBox(
+                                          fontSize: 20.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -0.5,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '우승 승점',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -1.0,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        '${model.seasonModel.winningPoint}점',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -1.0,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '참여자',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -0.5,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        '${model.getUsersNum()}명',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -0.5,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+
+                                  GestureDetector(
+                                    // behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      // _navigationService
+                                      //     .navigateWithArgTo('lastSeasonRank', [
+                                      //   model.seasonModel,
+                                      //   model.userModel,
+                                      //   model.rankModel,
+                                      // ]);
+
+                                      _navigationService.navigateWithArgTo(
+                                        'lastSeasonRank',
+                                        model,
+                                      );
+                                    },
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                        // color: Colors.red,
+                                        height: 30,
+                                        child: Text(
+                                          model.seasonModel.seasonName
+                                                  .toString() +
+                                              " 전체 순위 보러 가기",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: 'AppleSDM'),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  // Row(
+                                  //   children: [
+                                  //     Text(
+                                  //       '최종 상금 주식',
+                                  //       style: TextStyle(
+                                  //         fontSize: 20.sp,
+                                  //         height: 1,
+                                  //         fontFamily: 'AppleSDM',
+                                  //         letterSpacing: -0.5,
+                                  //       ),
+                                  //     ),
+                                  //     Spacer(),
+                                  //     GestureDetector(
+                                  //       onTap: () {
+                                  //         // model.navigateToPortfolioPage();
+                                  //       },
+                                  //       child: Text(
+                                  //         '${model.getPortfolioValue()}원',
+                                  //         style: TextStyle(
+                                  //           fontSize: 20.sp,
+                                  //           height: 1,
+                                  //           fontFamily: 'AppleSDM',
+                                  //           letterSpacing: -0.5,
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //     // GestureDetector(
+                                  //     //   onTap: () {
+                                  //     //     // model.navigateToPortfolioPage();
+                                  //     //   },
+                                  //     //   child: Icon(
+                                  //     //     Icons.arrow_forward_ios,
+                                  //     //     size: 16.sp,
+                                  //     //   ),
+                                  //     // )
+                                  //   ],
+                                  // ),
+
+                                  // SizedBox(
+                                  //   height: 16.h,
+                                  // ),
+
+                                  // Divider(),
+                                  SizedBox(height: 4),
+                                  Center(
+                                    child: Text(
+                                      '${model.seasonModel.seasonName} 우승자',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: Color(0xFFBD0E0E),
+                                          fontSize: 28,
+                                          letterSpacing: -1.0,
+                                          fontFamily: 'AppleSDEB'),
+                                    ),
+                                  ),
+                                  SizedBox(height: 12),
+                                  Column(
+                                    children: List.generate(
+                                        model.winners.length,
+                                        (index) => buildWinnersListView(
+                                              model,
+                                              model.rankModel[index],
+                                              index,
+                                            )),
+                                  ),
+
+                                  SizedBox(
                                     height: 16.h,
                                   ),
-                                ),
+                                  // // Divider(),
+                                  // SizedBox(
+                                  //   height: 16.h,
+                                  // ),
 
-                                // Winners List
+                                  Center(
+                                    child: Text(
+                                      '특별상',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: Color(0xFF218C59),
+                                          fontSize: 28,
+                                          letterSpacing: -1.0,
+                                          fontFamily: 'AppleSDEB'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  FutureBuilder(
+                                      future: model.getSpecialAwardsMap(
+                                          model.lastSeasonAddressModel),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return Container();
+                                        } else {
+                                          print(snapshot.data);
+                                          Map<String, String> specialAwardMap;
+                                          specialAwardMap = snapshot.data;
+                                          List specialAwards = [];
+                                          List<String> specialAwardsUserNames =
+                                              [];
+                                          specialAwardMap.forEach((key, value) {
+                                            specialAwards.add(key);
+                                            specialAwardsUserNames.add(value);
+                                          });
+                                          var randomInt = Random();
+                                          return Column(
+                                              children: List.generate(
+                                            specialAwards.length,
+                                            (index) => Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  specialAwards[index],
+                                                  style: TextStyle(
+                                                    fontFamily: 'AppleSDB',
+                                                    fontSize: 20,
+                                                    letterSpacing: -0.28,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                        specialAwardsUserNames[
+                                                            index],
+                                                        style: TextStyle(
+                                                            fontSize: 24,
+                                                            letterSpacing: -2.0,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    Image(
+                                                      image: AssetImage(
+                                                        'assets/images/christmas_winner00${randomInt.nextInt(10)}.png',
+                                                      ),
+                                                      height: 24,
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                              ],
+                                            ),
+                                          ));
+                                        }
+                                      }),
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  FutureBuilder<String>(
+                                      future: model.getSpecialAwardsDescription(
+                                          model.lastSeasonAddressModel),
+                                      builder: (context, snapshot) {
+                                        return snapshot.hasData
+                                            ? Container(
+                                                child: Center(
+                                                  child: Text(
+                                                    snapshot.data.toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontFamily: 'AppleSDM'),
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 2,
+                                                  ),
+                                                ),
+                                              )
+                                            : Container();
+                                      }),
+                                  SizedBox(
+                                    height: 16.h,
+                                  ),
+                                  Divider(
+                                    thickness: 1.4,
+                                  ),
+                                  SizedBox(
+                                    height: 16.h,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      '다음 시즌 안내',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontSize: 28,
+                                          letterSpacing: -1.0,
+                                          fontFamily: 'AppleSDEB'),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 16.h,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${model.newSeasonModel.seasonName} 시작일',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -0.5,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        model.getDateFormChange(
+                                            model.newSeasonModel.startDate),
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -0.5,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '목표 승점',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -1.0,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        '${model.newSeasonModel.winningPoint}점',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -1.0,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '상금 주식',
+                                        style: TextStyle(
+                                          fontSize: 20.sp,
+                                          height: 1,
+                                          fontFamily: 'AppleSDM',
+                                          letterSpacing: -0.5,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _navigationService
+                                              .navigateTo('portfolio');
+                                        },
+                                        child: Text(
+                                          '${model.getPortfolioValue()}원',
+                                          style: TextStyle(
+                                            fontSize: 20.sp,
+                                            height: 1,
+                                            fontFamily: 'AppleSDM',
+                                            letterSpacing: -0.5,
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _navigationService
+                                              .navigateTo('portfolio');
+                                        },
+                                        child: Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 16.sp,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 30),
 
-                                Spacer(),
-                              ],
+                                  // Winners List
+                                ],
+                              ),
                             ),
                           ),
                         ));
@@ -335,10 +579,10 @@ class WinnerView extends StatelessWidget {
 
   buildWinnersListView(WinnerViewModel model, RankModel ranksModel, int index) {
     // 나중에 몇만명 이렇게 늘어나면 고쳐야할듯?
-    const double rankNumWidth = 48;
 
+    var randomInteger = Random();
     return Padding(
-        padding: EdgeInsets.only(top: 10, bottom: 10),
+        padding: EdgeInsets.symmetric(vertical: 6),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -356,75 +600,24 @@ class WinnerView extends StatelessWidget {
             // SizedBox(
             //   width: 18,
             // ),
-            Text(
+            AutoSizeText(
               '${ranksModel.userName}',
               style: TextStyle(
-                fontSize: 40,
+                fontSize: 36,
                 height: 1,
                 fontFamily: 'AppleSDB',
                 letterSpacing: -0.28,
               ),
               overflow: TextOverflow.ellipsis,
             ),
-            ranksModel.uid == model.uid
-                ? Row(
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 3,
-                          horizontal: 8,
-                        ),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(
-                              30,
-                            )),
-                        child: Text(
-                          "본인",
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                      ),
-                    ],
-                  )
-                : Container(),
+            SizedBox(width: 6),
+            Image(
+              image: AssetImage(
+                'assets/images/christmas_winner00${randomInteger.nextInt(10)}.png',
+              ),
+              height: 40,
+            )
           ],
         ));
-  }
-}
-
-class DrawTriangle extends CustomPainter {
-  bool isUp;
-  Paint _paint;
-
-  DrawTriangle({this.isUp}) {
-    _paint = Paint()
-      ..color = isUp ? Color(0xFFFF402B) : Color(0xFF2B40FF)
-      ..style = PaintingStyle.fill;
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    var path = Path();
-    if (isUp) {
-      path.moveTo(size.width / 2, 0);
-      path.lineTo(0, size.height);
-      path.lineTo(size.width, size.height);
-      path.close();
-    } else {
-      path.moveTo(size.width / 2, size.height);
-      path.lineTo(0, 0);
-      path.lineTo(size.width, 0);
-      path.close();
-    }
-
-    canvas.drawPath(path, _paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
   }
 }

@@ -1325,6 +1325,60 @@ class DatabaseService {
         .then((value) => value.data()['defaultMainText']);
   }
 
+  Future<DatabaseAddressModel> getOldSeasonAddress(String uid) async {
+    DatabaseAddressModel _databaseAddress;
+
+    String category;
+    String season;
+    String baseDate;
+    bool isVoting = true;
+
+    await DatabaseAddressModel().adminClosedSeason().get().then((doc) {
+      print(doc.data());
+      category = doc.data()['category'];
+      season = doc.data()['season'];
+      baseDate = doc.data()['baseDate'];
+    });
+
+    _databaseAddress = DatabaseAddressModel(
+      uid: uid,
+      date: baseDate,
+      category: category,
+      season: season,
+      isVoting: isVoting, //false면 장 중
+    );
+
+    return _databaseAddress;
+  }
+
+  Future getSpecialAwards(DatabaseAddressModel lastSeasonAddressModel) async {
+    Map<String, String> specialAwardsMap = {};
+    List specialAwardsName;
+    List specialAwardsUserName;
+    await DatabaseAddressModel().adminClosedSeason().get().then((doc) {
+      // doc.data();
+      specialAwardsName = doc.data()['specialAwardsName'];
+      specialAwardsUserName = doc.data()['specialAwardsUserName'];
+    });
+
+    for (int i = 0; i < specialAwardsName.length; i++) {
+      specialAwardsMap[specialAwardsName[i]] = specialAwardsUserName[i];
+    }
+
+    return specialAwardsMap;
+  }
+
+  Future getSpecialAwardsDescription(
+      DatabaseAddressModel lastSeasonAddressModel) async {
+    String description;
+    await DatabaseAddressModel().adminClosedSeason().get().then((doc) {
+      // doc.data();
+      description = doc.data()['specialDescription'];
+    });
+
+    return description;
+  }
+
   // database 및 time정보로 Database Address 모델 만들기
   Future<DatabaseAddressModel> getAddress(String uid) async {
     print("AddressGetStart" + DateTime.now().toString());
