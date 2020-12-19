@@ -11,6 +11,7 @@ import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/mypage_documents/avatarSelect_view.dart';
 import 'views/mypage_documents/mypage_friendsCodeInsert_view.dart';
+import 'views/mypage_documents/mypage_reward_view.dart';
 import 'views/nicknameSet_view.dart';
 import 'views/oneOnOne_view.dart';
 import 'views/register_view.dart';
@@ -103,6 +104,9 @@ class Routers {
         return MaterialPageRoute(
             builder: (context) =>
                 DialogManager(child: MypagePushAlarmSettingView()));
+      case 'mypage_reward':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(child: MypageRewardView()));
       case 'mypage_avatarselect':
         return MaterialPageRoute(
             builder: (context) => MypageAvatarSelectView());

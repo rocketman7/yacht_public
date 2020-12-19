@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/models/user_reward_model.dart';
 import 'api/customized_ntp.dart';
 import 'package:yachtOne/models/chart_model.dart';
 import 'package:yachtOne/models/index_info_model.dart';
@@ -58,6 +59,8 @@ class DatabaseService {
       _databaseService.collection('admin');
   CollectionReference get _pricesCollectionReference =>
       _databaseService.collection('prices');
+  CollectionReference get _hitsPricesCollectionReference =>
+      _databaseService.collection('historicalPrice');
 
   CollectionReference get usersCollectionReference => _usersCollectionReference;
   CollectionReference get votesCollectionReference => _votesCollectionReference;
@@ -66,6 +69,8 @@ class DatabaseService {
   CollectionReference get adminCollectionReference => _adminCollectionReference;
   CollectionReference get pricesCollectionReference =>
       _pricesCollectionReference;
+  CollectionReference get hitsPricesCollectionReference =>
+      _hitsPricesCollectionReference;
   //  collection references
   // final CollectionReference _usersCollectionReference =
   //     _databaseService.collection('users');
@@ -891,6 +896,73 @@ class DatabaseService {
       print(e.toString());
       return null;
     }
+  }
+
+  // userReward db 불러오기
+  Future<List<UserRewardModel>> getUserRewardList(String uid) async {
+    try {
+      List<UserRewardModel> userRewardList = [];
+      List<RewardModel> rewardList;
+
+      await _usersCollectionReference
+          .doc(uid)
+          .collection('userReward')
+          .orderBy('awardDate', descending: true)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((element) {
+          rewardList = [];
+          for (var a in element['awards'])
+            rewardList.add(RewardModel.fromData(a));
+
+          userRewardList.add(
+              UserRewardModel.fromData(element.id, element.data(), rewardList));
+
+          // print(element.id);
+        });
+      });
+
+      return userRewardList;
+    } catch (e) {
+      print("error at userReward get");
+      print(e.toString());
+      return null;
+    }
+  }
+
+  // userReward용 가격 불러오기 (from historicalPrice collection)
+  Future<double> getHistoricalPriceForUserReward(String issueCode) {
+    try {
+      return _hitsPricesCollectionReference
+          // 아래 코드는 카테고리가 모든 상금들에 대해 'KR'로 고정되어 있다고 가정한 코드임.
+          // 만약 카테고리가 추가된다면, userReward -> docs -> awards 의 필드값에 카테고리도 각각 추가되어야함.
+          // .doc(category)
+          .doc('KR')
+          .collection(issueCode)
+          .orderBy('date', descending: true)
+          .limit(1)
+          .get()
+          .then((querySnapshot) {
+        print('==========================');
+        print(querySnapshot.docs.first.data()['close'].toDouble());
+        print('=========================');
+        return querySnapshot.docs.first.data()['close'].toDouble();
+      });
+    } catch (e) {
+      print("error at historicalPriceForUserReward get");
+      print(e.toString());
+      return null;
+    }
+  }
+
+  //
+  Future updateUserRewardDeliveryStatus(
+      String uid, String id, int status) async {
+    await _usersCollectionReference
+        .doc(uid)
+        .collection('userReward')
+        .doc(id)
+        .update({'deliveryStatus': status});
   }
 
   // Read: Faq List 불러오자
