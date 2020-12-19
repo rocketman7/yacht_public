@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ import 'package:yachtOne/services/connection_check_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
 import 'package:yachtOne/services/timezone_service.dart';
 import 'package:yachtOne/view_models/top_container_view_model.dart';
+import 'package:yachtOne/views/winner_view.dart';
 import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,6 +63,7 @@ import '../services/adManager_service.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:confetti/confetti.dart';
 
 import 'constants/holiday.dart';
 
@@ -81,7 +84,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
   String uid;
 
-  PreloadPageController _preloadPageController = PreloadPageController();
+  // PreloadPageController _preloadPageController = PreloadPageController();
+  ConfettiController _confettiController;
   // double leftContainer = 0;
 
   // 최종 선택한 주제 index
@@ -92,7 +96,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
   DateTime _now;
   var stringDate = DateFormat("yyyyMMdd");
-  var stringDateWithDash = DateFormat("yyyy-MM-dd");
+  var stringDateWithDash = DateFormat("yyy기y-MM-dd");
   String _nowToStr;
 
   bool isDisposed = false;
@@ -703,45 +707,155 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       // print("Main Text " + defaultMainText.toString());
 
       if (isUrgentNotice) {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              VoteSelectViewModel model;
-              String title = "긴급점검 중입니다.";
-              String content = urgentMessage;
-              String okButton = "닫기";
-              return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: WillPopScope(
-                  onWillPop: () {},
-                  child: Platform.isIOS
-                      ? CupertinoAlertDialog(
-                          title: Text(title),
-                          content: Text(content),
-                          actions: <Widget>[
-                              CupertinoDialogAction(
-                                child: Text(okButton),
-                                onPressed: () => exit(0),
-                              ),
-                            ])
-                      : AlertDialog(
-                          title: Text(title),
-                          content: Text(content),
-                          actions: <Widget>[
-                              FlatButton(
-                                child: Text(okButton),
-                                onPressed: () => exit(0),
-                              ),
-                            ]),
-                ),
-              );
-            });
+        _showUrgentDialog(context);
       }
 
       if (newVersion > currentVersion) {
         _showVersionDialog(context);
       }
+      _confettiController =
+          ConfettiController(duration: const Duration(milliseconds: 1200));
+
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            _confettiController.play();
+            Future.delayed(Duration(milliseconds: 400))
+                .then((value) => _confettiController.stop());
+            return MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Container(
+                      height: 330,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 24),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: ConfettiWidget(
+                                    confettiController: _confettiController,
+                                    blastDirectionality: BlastDirectionality
+                                        .explosive, // don't specify a direction, blast randomly
+                                    emissionFrequency: 1,
+                                    minimumSize: const Size(10, 10),
+                                    maximumSize: const Size(30, 30),
+                                    numberOfParticles: 12,
+                                    gravity: .08,
+                                    shouldLoop:
+                                        true, // start again as soon as the animation is finished
+                                    colors: const [
+                                      Colors.green,
+                                      Colors.blue,
+                                      Colors.pink,
+                                      Colors.orange,
+                                      Colors.purple
+                                    ], // manually specify the colors to be used
+                                  ),
+                                ),
+                                Text(
+                                  "꾸욱 시즌 1 우승자 탄생!",
+                                  style: TextStyle(
+                                      fontSize: 24, fontFamily: 'AppleSDEB'),
+                                ),
+                                SizedBox(height: 8),
+                                AutoSizeText(
+                                  "꾸욱 첫 시즌에 참여해주신 여러분, 진심으로 감사합니다.\n치열했던 시즌 1의 최종 우승자와\n깜짝 특별상을 확인해보세요!",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontFamily: 'AppleSDM',
+                                  ),
+                                  maxLines: 4,
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: 16),
+                                RichText(
+                                  textAlign: TextAlign.center,
+                                  text: TextSpan(
+                                      text: "12월 22일 오후 4시",
+                                      style: TextStyle(
+                                        fontFamily: 'AppleSDM',
+                                        color: Colors.red,
+                                        fontSize: 17,
+                                        //  fontFamily: 'AppleSDM',
+                                        // fontWeight: FontWeight.bold,
+                                        // letterSpacing: -.5,
+                                      ),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: "부터 더욱 커진 상금 주식과 함께",
+                                            style: TextStyle(
+                                              fontFamily: 'AppleSDM',
+                                              color: Colors.black,
+                                              fontSize: 17,
+                                              //  fontFamily: 'AppleSDM',
+                                              // fontWeight: FontWeight.bold,
+                                              // letterSpacing: -.5,
+                                            )),
+                                        TextSpan(
+                                          text: " 시즌 2",
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: 'AppleSDM',
+                                              color: Colors.deepPurple),
+                                        ),
+                                        TextSpan(
+                                            text: "를 시작합니다!",
+                                            style: TextStyle(
+                                              fontFamily: 'AppleSDM',
+                                              color: Colors.black,
+                                              fontSize: 17,
+                                              //  fontFamily: 'AppleSDM',
+                                              // fontWeight: FontWeight.bold,
+                                              // letterSpacing: -.5,
+                                            )),
+                                      ]),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 16),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pop(context);
+                                _navigationService.navigateTo('winner');
+                              },
+                              child: Container(
+                                  width: double.infinity,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 15),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFFF43177),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Center(
+                                    child: Text(
+                                      "시즌 1 결과 보러가기",
+                                      style: TextStyle(
+                                        fontFamily: 'AppleSDB',
+                                        height: 1,
+                                        color: Colors.white,
+                                        letterSpacing: -1.0,
+                                        fontSize: 18,
+                                        //  fontFamily: 'AppleSDM',
+                                        // fontWeight: FontWeight.bold,
+                                        // letterSpacing: -.5,
+                                      ),
+                                    ),
+                                  )),
+                            )
+                          ],
+                        ),
+                      )),
+                ));
+          });
     } on FetchThrottledException catch (exception) {
       // Fetch throttled.
       print(exception);
@@ -749,6 +863,43 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       print('Unable to fetch remote config. Cached or default values will be '
           'used');
     }
+  }
+
+  Future _showUrgentDialog(context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          VoteSelectViewModel model;
+          String title = "긴급점검 중입니다.";
+          String content = urgentMessage;
+          String okButton = "닫기";
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: WillPopScope(
+              onWillPop: () {},
+              child: Platform.isIOS
+                  ? CupertinoAlertDialog(
+                      title: Text(title),
+                      content: Text(content),
+                      actions: <Widget>[
+                          CupertinoDialogAction(
+                            child: Text(okButton),
+                            onPressed: () => exit(0),
+                          ),
+                        ])
+                  : AlertDialog(
+                      title: Text(title),
+                      content: Text(content),
+                      actions: <Widget>[
+                          FlatButton(
+                            child: Text(okButton),
+                            onPressed: () => exit(0),
+                          ),
+                        ]),
+            ),
+          );
+        });
   }
 
   _showVersionDialog(context) async {
@@ -866,6 +1017,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
   @override
   void dispose() {
+    _confettiController.dispose();
     // _controller.dispose();
     // _connectionCheckService.listener.cancel();
     // BackButtonInterceptor.remove(myInterceptor);

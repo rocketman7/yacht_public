@@ -347,7 +347,7 @@ class DatabaseService {
             .userVoteSeasonCollection()
             .doc(address.date)
             .set(tempUserVote.toJson());
-        updateUserItem(address.uid, 1);
+        // updateUserItem(address.uid, 1);
 
         // userVoteData =
         //     await address.userVoteSeasonCollection().doc(address.date).get();

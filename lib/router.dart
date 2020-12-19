@@ -5,6 +5,7 @@ import 'package:yachtOne/views/phone_auth_view.dart';
 import 'package:yachtOne/views/season_community_view.dart';
 import 'package:yachtOne/views/subject_community_view.dart';
 import 'package:yachtOne/views/track_record_view.dart';
+import 'package:yachtOne/views/winner_view.dart';
 import 'managers/dialog_manager.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
@@ -71,6 +72,9 @@ class Routers {
       case 'rank':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: RankView()));
+      case 'winner':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(child: WinnerView()));
 
       case 'mypage_main':
         return MaterialPageRoute(
