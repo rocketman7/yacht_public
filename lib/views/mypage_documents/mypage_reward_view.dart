@@ -299,7 +299,7 @@ class MypageRewardView extends StatelessWidget {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: CupertinoAlertDialog(
-              content: Text('이미 출고를 신청하셨습니다!\n출고에는 최대 1영업일이 소요될 수 있습니다.',
+              content: Text('이미 출고를 신청하셨습니다!\n출고에는 최대 2영업일이 소요될 수 있습니다.',
                   style: TextStyle(fontSize: 16, fontFamily: 'AppleSDM')),
               actions: <Widget>[
                 CupertinoDialogAction(
@@ -315,7 +315,7 @@ class MypageRewardView extends StatelessWidget {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: AlertDialog(
-              content: Text('이미 출고를 신청하셨습니다!\n출고에는 최대 1영업일이 소요될 수 있습니다.',
+              content: Text('이미 출고를 신청하셨습니다!\n출고에는 최대 2영업일이 소요될 수 있습니다.',
                   style: TextStyle(fontSize: 16, fontFamily: 'AppleSDM')),
               actions: <Widget>[
                 FlatButton(
