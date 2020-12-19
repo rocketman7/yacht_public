@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'package:yachtOne/views/constants/size.dart';
 
+import '../../services/navigation_service.dart';
+import '../../views/constants/size.dart';
 import '../../locator.dart';
 import '../../view_models/mypage_editProfile_view_model.dart';
 import '../widgets/avatar_widget.dart';
 
 class MypageEditProfileView extends StatelessWidget {
-  NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MypageEditProfileViewModel>.reactive(
