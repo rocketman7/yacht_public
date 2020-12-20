@@ -597,6 +597,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   bool termsOfUse;
   String defaultMainText;
   bool isShowWinners = false;
+  String newSeasonStart;
 
   checkIfAgreeTerms(context) async {
     termsOfUse = await _sharedPreferencesService.getSharedPreferencesValue(
@@ -691,6 +692,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       app_store_url = remoteConfig.getString('app_store_url');
       play_store_url = remoteConfig.getString('play_store_url');
 
+      newSeasonStart = remoteConfig.getString('new_season_start');
       // 주석 풀고 업데이트 //예측하러 가기 활성or비활성화
       isSeasonStarted = remoteConfig.getBool('is_season_started');
 
@@ -798,7 +800,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                               RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(
-                                    text: "12월 22일 오후 4시",
+                                    text: newSeasonStart == null
+                                        ? "시즌 1 종료일 다음날" + " 오후 4시"
+                                        : newSeasonStart + "오후 4시",
                                     style: TextStyle(
                                       fontFamily: 'AppleSDM',
                                       color: Colors.red,
