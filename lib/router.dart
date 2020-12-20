@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yachtOne/views/initial_view.dart';
+import 'package:yachtOne/views/last_season_portfolio_view.dart';
 import 'package:yachtOne/views/last_season_rank_view.dart';
 import 'package:yachtOne/views/password_change_view.dart';
 import 'package:yachtOne/views/phone_auth_view.dart';
@@ -78,6 +79,10 @@ class Routers {
         return MaterialPageRoute(
             builder: (context) => DialogManager(
                 child: LastSeasonRankView(routeSettings.arguments)));
+      case 'lastSeasonPortfolio':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(
+                child: LastSeasonPortfolioView(routeSettings.arguments)));
       case 'winner':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: WinnerView()));

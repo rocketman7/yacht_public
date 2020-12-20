@@ -29,8 +29,8 @@ class MypageRewardView extends StatelessWidget {
                   ? Container()
                   : SafeArea(
                       child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 8, right: 8, top: 8),
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, top: 16, bottom: 16),
                         child: Column(
                           children: [
                             Row(
@@ -56,7 +56,7 @@ class MypageRewardView extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 8,
+                                  width: 20,
                                 ),
                                 GestureDetector(
                                   onTap: model.initTab ? model.moveTab : null,
@@ -185,6 +185,7 @@ class MypageRewardView extends StatelessWidget {
                 future: model.getHistoricalPrices(index),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
+                    print(snapshot.data);
                     return Column(
                       children: makeUserRewardListBeforeDeliveryItemForEach(
                           model, index, snapshot.data),
@@ -214,6 +215,8 @@ class MypageRewardView extends StatelessWidget {
       for (int i = 0;
           i < model.userRewardModels[index].listOfAward.length;
           i++) {
+        print("STOCKNAME" +
+            model.userRewardModels[index].listOfAward[i].stockName.toString());
         result.add(Column(
           children: [
             SizedBox(
@@ -230,7 +233,7 @@ class MypageRewardView extends StatelessWidget {
                         style: TextStyle(fontSize: 20, fontFamily: 'AppleSDM')),
                     Text(
                         '${model.userRewardModels[index].listOfAward[i].sharesNum}주',
-                        style: TextStyle(fontSize: 12, fontFamily: 'AppleSDM')),
+                        style: TextStyle(fontSize: 18, fontFamily: 'AppleSDM')),
                   ],
                 ),
                 Spacer(),
@@ -437,6 +440,7 @@ class MypageRewardView extends StatelessWidget {
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: AlertDialog(
               content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('다음과 같이 출고신청하시겠습니까?\n\n',
                       style: TextStyle(fontSize: 16, fontFamily: 'AppleSDM')),
@@ -584,7 +588,7 @@ class MypageRewardView extends StatelessWidget {
                       style: TextStyle(fontSize: 20, fontFamily: 'AppleSDM')),
                   Text(
                       '${model.userRewardModels[index].listOfAward[i].sharesNum}주',
-                      style: TextStyle(fontSize: 12, fontFamily: 'AppleSDM')),
+                      style: TextStyle(fontSize: 18, fontFamily: 'AppleSDM')),
                 ],
               ),
               Spacer(),

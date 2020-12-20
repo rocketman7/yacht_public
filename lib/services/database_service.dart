@@ -793,6 +793,31 @@ class DatabaseService {
   // }
 
   // Read: ranks collection 정보 읽어오기. 배치될 때에만 바뀌는 정보이므로 Future로 처리
+  Future<List<RankModel>> getOldSeasonRankList(
+      DatabaseAddressModel databaseAddressModel) async {
+    try {
+      List<RankModel> rankList = [];
+
+      await _ranksCollectionReference
+          .doc(databaseAddressModel.category)
+          .collection(databaseAddressModel.season)
+          .doc(databaseAddressModel.date)
+          .collection(databaseAddressModel.date)
+          .orderBy('todayRank', descending: false)
+          // .orderBy('userName')
+          .get()
+          .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+                rankList.add(RankModel.fromData(element.data()));
+              }));
+
+      return rankList;
+    } catch (e) {
+      print('rankList load error: ${e.toString()}');
+
+      return null;
+    }
+  }
+
   Future<List<RankModel>> getRankList(
       DatabaseAddressModel databaseAddressModel) async {
     try {
@@ -1433,7 +1458,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201221',
+      // date: '20201217',
       // date: "20201024",
       date: baseDate,
       category: category,

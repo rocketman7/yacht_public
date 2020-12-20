@@ -413,7 +413,7 @@ class MypageMainView extends StatelessWidget {
             height: 2,
             color: Colors.black,
           ),
-          makeMypageMainComponent(model, '1:1 문의', 'oneonone'),
+          // makeMypageMainComponent(model, '1:1 문의', 'oneonone'),
           makeMypageMainComponent(model, '공지사항', 'notice'),
           makeMypageMainComponent(model, '자주 묻는 질문(FAQ)', 'faq'),
           makeMypageMainComponent(model, '문의하기', 'mypage_businessinformation'),

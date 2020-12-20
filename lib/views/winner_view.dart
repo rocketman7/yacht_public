@@ -142,14 +142,30 @@ class WinnerView extends StatelessWidget {
                                           // ),
                                         ],
                                       ),
-                                      Text(
-                                        '상금 주식 ${model.getPortfolioValue()}원',
-                                        style: TextStyle(
-                                            // color: Colors.white,
-                                            // height: 1,
-                                            letterSpacing: -1.0,
-                                            fontFamily: 'AppleSDB',
-                                            fontSize: 30),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _navigationService.navigateWithArgTo(
+                                              'lastSeasonPortfolio', model);
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '상금 주식 ${model.getLastSeasonPortfolioValue()}원',
+                                              style: TextStyle(
+                                                  // color: Colors.white,
+                                                  // height: 1,
+                                                  letterSpacing: -1.0,
+                                                  fontFamily: 'AppleSDB',
+                                                  fontSize: 30),
+                                            ),
+                                            Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 30,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -452,6 +468,14 @@ class WinnerView extends StatelessWidget {
                                               )
                                             : Container();
                                       }),
+                                  SizedBox(
+                                    height: 8.h,
+                                  ),
+                                  Text(
+                                    "상금주식 확인 및 출금신청은 홈 화면 우측 상단 마이페이지 -> 내가 받은 상금 현황에서 가능합니다",
+                                    style: TextStyle(
+                                        fontSize: 16, fontFamily: 'AppleSDM'),
+                                  ),
                                   SizedBox(
                                     height: 16.h,
                                   ),

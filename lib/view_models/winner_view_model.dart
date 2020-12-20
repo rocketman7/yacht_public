@@ -52,7 +52,6 @@ class WinnerViewModel extends FutureViewModel {
   }
 
   Future getUserAndRankList() async {
-    await _amplitudeService.logRankingView(uid);
     // if (_stateManageService.appStart) {
     //   await _stateManageService.initStateManage(initUid: uid);
     // } else {
@@ -60,12 +59,16 @@ class WinnerViewModel extends FutureViewModel {
     //     await _stateManageService.initStateManage(initUid: uid);
     // }
 
+    // 지난 시즌 어드레스 모델과 그에 맞는 모델들을 새로 불러와야 함
     lastSeasonAddressModel = await _databaseService.getOldSeasonAddress(uid);
     portfolioModel =
         await _databaseService.getPortfolio(lastSeasonAddressModel);
     seasonModel = await _databaseService.getSeasonInfo(lastSeasonAddressModel);
     userModel = await _databaseService.getUser(uid);
-    rankModel = await _databaseService.getRankList(lastSeasonAddressModel);
+    rankModel =
+        await _databaseService.getOldSeasonRankList(lastSeasonAddressModel);
+
+    // 처음에 로딩 했으므로 state 매니지에 있는 모델들은 새 시즌 모델
     newPortfolioModel = _stateManageService.portfolioModel;
     newSeasonModel = _stateManageService.seasonModel;
     // 순위변동 구해주자.

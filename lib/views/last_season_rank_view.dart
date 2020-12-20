@@ -110,7 +110,7 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
               Row(
                 children: [
                   Text(
-                    '나의 승점',
+                    '나의 최종 승점',
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'AppleSDM',
@@ -134,7 +134,7 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
               Row(
                 children: [
                   Text(
-                    '시즌 순위',
+                    '나의 최종 순위',
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'AppleSDM',

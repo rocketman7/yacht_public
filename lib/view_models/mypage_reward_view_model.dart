@@ -36,6 +36,7 @@ class MypageRewardViewModel extends FutureViewModel {
     userRewardModels = await _databaseService.getUserRewardList(uid);
 
     for (UserRewardModel userRewardModel in userRewardModels) {
+      // print(userRewardModel.listOfAward[0].stockName);
       if (userRewardModel.deliveryStatus == 1 ||
           userRewardModel.deliveryStatus == 0) {
         userRewardBeforeDeliveryCnt++;
