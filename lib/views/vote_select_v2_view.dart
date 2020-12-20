@@ -710,7 +710,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       print("IS SEASON STARTED " + isSeasonStarted.toString());
 
       // print("Main Text " + defaultMainText.toString());
-
+      // if (true) {
       if (isUrgentNotice) {
         _showUrgentDialog(context);
       }
