@@ -1458,10 +1458,11 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201217',
+      // date: '20201223',
       // date: "20201024",
       date: baseDate,
       category: category,
+      // season: "season002",
       season: season,
       // isVoting: false,
       // isVoting: true,
@@ -1472,5 +1473,16 @@ class DatabaseService {
     print("AddressGetEnd" + DateTime.now().toString());
     print("RETURNED ADDRESS" + _databaseAddress.date.toString());
     return _databaseAddress;
+  }
+
+  Stream<int> getNameCheckResult(uid) {
+    return _databaseService
+        .collection('checkName')
+        .doc(uid)
+        .snapshots()
+        .map((snapshot) {
+      print("GETNAME STREAM" + snapshot.data()['return'].toString());
+      return snapshot.data()['return'];
+    });
   }
 }

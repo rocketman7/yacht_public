@@ -30,6 +30,12 @@ class MypageRewardViewModel extends FutureViewModel {
   MypageRewardViewModel() {
     uid = _authService.auth.currentUser.uid;
   }
+
+  Stream<int> getNameCheckResult(uid) {
+    var result = _databaseService.getNameCheckResult(uid);
+    return result;
+  }
+
   // for futureToRun
   Future getModels() async {
     userModel = await _databaseService.getUser(uid);
