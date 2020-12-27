@@ -26,6 +26,9 @@ class MypageRewardViewModel extends FutureViewModel {
   ///ui va
   bool initTab = true;
 
+  // 주민등록번호 체크 주소
+  String checkNameUrl;
+
   ///me
   MypageRewardViewModel() {
     uid = _authService.auth.currentUser.uid;
@@ -50,6 +53,8 @@ class MypageRewardViewModel extends FutureViewModel {
         userRewardAfterDeliveryCnt++;
       }
     }
+
+    checkNameUrl = await _databaseService.checkNameUrl();
   }
 
   // 보유 중인 주식 / 출고 완료한 주식 간 탭 전환할 때

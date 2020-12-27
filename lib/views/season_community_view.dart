@@ -15,6 +15,7 @@ import 'package:yachtOne/models/vote_model.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/season_community_view_model.dart';
 import 'package:yachtOne/views/constants/size.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../locator.dart';
 import 'widgets/avatar_widget.dart';
@@ -59,7 +60,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
             : Scaffold(
                 body: SafeArea(
                 child: Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
+                    padding: EdgeInsets.fromLTRB(18.sp, 18.sp, 18.sp, 6.sp),
                     child: Form(
                       key: _formKey,
                       child: Column(
@@ -116,22 +117,22 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Container(
-                                  height: 40,
-                                  width: 40,
+                                  height: 40.sp,
+                                  width: 40.sp,
                                   child: avatarWidgetWithoutItem(
                                     model.user.avatarImage,
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 8,
+                                  width: 8.sp,
                                 ),
                                 Stack(children: <Widget>[
                                   Container(
                                     // height: 40,
                                     constraints: BoxConstraints(
-                                      minHeight: 40,
+                                      minHeight: 42,
                                     ),
-                                    width: deviceWidth * .75,
+                                    width: (deviceWidth * .75),
                                     child: TextFormField(
                                       // scrollController: _commentScrollController,
                                       // scrollPhysics: ScrollPhysics(),
@@ -175,13 +176,13 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                           ),
                                           hintText: '이번 시즌 관한 이야기를 나눠보세요',
                                           hintStyle: TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 14.sp,
                                             color: Color(0xFF828282),
                                           )),
                                     ),
                                   ),
                                   Positioned(
-                                    bottom: 0,
+                                    // bottom: 0,
                                     top: 0,
                                     right: 0,
                                     child: GestureDetector(
@@ -941,7 +942,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                     children: <Widget>[
                       Text(voteComment.userName,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                           ),
                           overflow: TextOverflow.ellipsis),
@@ -958,7 +959,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                           : timeElapsed.inDays.toString() +
                                               "일 전",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF999999),
                           )),
@@ -973,7 +974,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       LikeButton(
-                        size: 20,
+                        size: 20.sp,
                         isLiked: isPostLiked,
                         bubblesSize: 80,
                         countPostion: CountPostion.right,
@@ -992,7 +993,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                             count,
                             style: TextStyle(
                               // fontFamily: 'DmSans',
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontFeatures: [FontFeature.tabularFigures()],
                             ),
                           );
@@ -1067,7 +1068,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                               child: Icon(
                                 Icons.delete_outline,
                                 color: Colors.grey[500],
-                                size: 18,
+                                size: 18.sp,
 
                                 // Text(
                                 //   "삭제",
@@ -1147,8 +1148,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                               child: Text(
                                 "신고/차단",
                                 style: TextStyle(
-                                  color: Colors.grey,
-                                ),
+                                    color: Colors.grey, fontSize: 14.sp),
                               ),
                             ),
                     ],
@@ -1167,7 +1167,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
               voteComment.postText,
               textAlign: TextAlign.left,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 // fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),

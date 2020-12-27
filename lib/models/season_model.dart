@@ -8,6 +8,7 @@ class SeasonModel {
   final int wrongPoint;
   final int initialAwardValue;
   final int winningPoint;
+  final String endDate;
 
   SeasonModel(
       this.seasonName,
@@ -16,7 +17,8 @@ class SeasonModel {
       this.correctPoint,
       this.wrongPoint,
       this.initialAwardValue,
-      this.winningPoint);
+      this.winningPoint,
+      this.endDate);
 
   Map<String, dynamic> toJson() {
     return {
@@ -26,26 +28,20 @@ class SeasonModel {
       'correctPoint': correctPoint,
       'wrongPoint': wrongPoint,
       'initialAwardValue': initialAwardValue,
-      'winningPoint': winningPoint
+      'winningPoint': winningPoint,
+      'endDate': endDate,
     };
   }
 
-  factory SeasonModel.fromData(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return SeasonModel(
-      map['seasonName'],
-      map['startDate'],
-      map['maxDailyVote'],
-      map['correctPoint'],
-      map['wrongPoint'],
-      map['initialAwardValue'],
-      map['winningPoint'],
-    );
-  }
-
-  factory SeasonModel.fromJson(String source) =>
-      SeasonModel.fromData(json.decode(source));
+  SeasonModel.fromData(Map<String, dynamic> map)
+      : seasonName = map['seasonName'] ?? null,
+        startDate = map['startDate'] ?? null,
+        maxDailyVote = map['maxDailyVote'] ?? null,
+        correctPoint = map['correctPoint'] ?? null,
+        wrongPoint = map['wrongPoint'] ?? null,
+        initialAwardValue = map['initialAwardValue'] ?? null,
+        winningPoint = map['winningPoint'] ?? null,
+        endDate = map['endDate'] ?? null;
 
   @override
   bool operator ==(Object o) {
@@ -58,7 +54,8 @@ class SeasonModel {
         o.correctPoint == correctPoint &&
         o.wrongPoint == wrongPoint &&
         o.initialAwardValue == initialAwardValue &&
-        o.winningPoint == winningPoint;
+        o.winningPoint == winningPoint &&
+        o.endDate == endDate;
   }
 
   @override
@@ -69,6 +66,7 @@ class SeasonModel {
         correctPoint.hashCode ^
         wrongPoint.hashCode ^
         initialAwardValue.hashCode ^
-        winningPoint.hashCode;
+        winningPoint.hashCode ^
+        endDate.hashCode;
   }
 }

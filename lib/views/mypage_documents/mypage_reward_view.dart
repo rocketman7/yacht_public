@@ -2,14 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
 import 'package:stacked/stacked.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 
 import '../../locator.dart';
 import '../../view_models/mypage_reward_view_model.dart';
-// import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class MypageRewardView extends StatelessWidget {
   final NavigationService _navigationService = locator<NavigationService>();
@@ -183,8 +182,7 @@ class MypageRewardView extends StatelessWidget {
                                             "주민등록번호 인증이 왜 필요한가요?\n\n상금으로 지급되는 주식은 사용자에게 기타소득이 됩니다. 1회의 기타소득 가치가 5만원이 넘을 경우, 기타소득 지급자인 주식회사 팀요트는 원천징수 의무자로서 기타소득 지급명세서 제출을 위해 사용자의 주민등록번호를 수집할 수 있습니다 (관련 법령 하단 참조). \n당사는 수집한 주민등록번호를 오직 기타소득 원천징수 지급명세서 작성 용도로만 활용한 후 즉시 폐기합니다.\n\n*관련 법령\n1) 소득세법 제145조(기타소득에 대한 원천징수 시기와 방법 및 원천징수영수증의 발급) ① 원천징수의무자가 기타소득을 지급할 때에는 그 기타소득금액에 원천징수세율을 적용하여 계산한 소득세를 원천징수한다. \n2) 제164조(지급명세서의 제출) ① 제2조에 따라 소득세 납세의무가 있는 개인에게 다음 각 호의 어느 하나에 해당하는 소득을 국내에서 지급하는 자는 대통령령으로 정하는 바에 따라 지급명세서를 그 지급일이 속하는 과세기간의 다음 연도 2월 말일까지 원천징수 관할 세무서장, 지방국세청장 또는 국세청장에게 제출하여야 한다.";
                                         String goCheckName = "인증하러 가기";
                                         String checkNameUrl =
-                                            "http://59.9.229.147:8070/nc.jsp?uid=" +
-                                                model.uid;
+                                            model.checkNameUrl + model.uid;
                                         return MediaQuery(
                                           data: MediaQuery.of(context)
                                               .copyWith(textScaleFactor: 1.0),
@@ -203,13 +201,7 @@ class MypageRewardView extends StatelessWidget {
                                                 child: Text(goCheckName),
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
-                                                  // InAppBrowser(
-                                                  //   initialUrl:
-                                                  //       'https://flutter.io',
-                                                  //   javascriptMode:
-                                                  //       JavascriptMode
-                                                  //           .unrestricted,
-                                                  // );
+
                                                   _launchURL(checkNameUrl);
                                                   // _navigationService
                                                   //     .navigateTo('portfolio');
