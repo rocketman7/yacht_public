@@ -305,6 +305,40 @@ class DatabaseService {
     }
   }
 
+  Future<List<SeasonModel>> getAllSeasonInfoList() async {
+    try {
+      List<SeasonModel> seasonModelList = [];
+      var krVoteSnap =
+          await _databaseService.collection('votes').doc('KR').get();
+      List<dynamic> seasonList = krVoteSnap.data()['subCollectionIds'];
+      print(seasonList);
+
+      for (var doc in seasonList) {
+        await _databaseService
+            .collection('votes')
+            .doc('KR')
+            .collection(doc)
+            .doc('seasonInfo')
+            .get()
+            .then((value) {
+          var temp = SeasonModel.fromData(value.data());
+          seasonModelList.add(temp);
+        });
+      }
+
+      // return seasonModelList;
+
+      // return seasonModelList;
+
+      print("LENGTH second" + seasonModelList.length.toString());
+
+      return seasonModelList;
+    } catch (e) {
+      print("ERROR CAUGHT" + e.toString());
+      return e.message;
+    }
+  }
+
   Future getAllSeasonUserVote(DatabaseAddressModel address) async {
     try {
       print("GETALLSEASON START");
@@ -1458,10 +1492,11 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201222',
+      // date: '20201228',
       // date: "20201024",
       date: baseDate,
       category: category,
+      // season: "beta001",
       season: season,
       // isVoting: false,
       // isVoting: true,
@@ -1472,5 +1507,24 @@ class DatabaseService {
     print("AddressGetEnd" + DateTime.now().toString());
     print("RETURNED ADDRESS" + _databaseAddress.date.toString());
     return _databaseAddress;
+  }
+
+  Stream<int> getNameCheckResult(uid) {
+    return _databaseService
+        .collection('checkName')
+        .doc(uid)
+        .snapshots()
+        .map((snapshot) {
+      print("GETNAME STREAM" + snapshot.data()['return'].toString());
+      return snapshot.data()['return'];
+    });
+  }
+
+  Future<String> checkNameUrl() {
+    return _databaseService
+        .collection('admin')
+        .doc('adminPost')
+        .get()
+        .then((value) => value.data()['checkNameUrl']);
   }
 }
