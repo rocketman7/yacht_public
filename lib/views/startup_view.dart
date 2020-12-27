@@ -8,6 +8,7 @@ import 'package:yachtOne/views/home_view.dart';
 import 'package:yachtOne/views/login_view.dart';
 import 'package:yachtOne/views/mypage_main_view.dart';
 import 'package:yachtOne/views/rank_view.dart';
+import 'package:yachtOne/views/stock_list_view.dart';
 import 'package:yachtOne/views/track_record_view.dart';
 import 'package:yachtOne/views/vote_comment_view.dart';
 import 'package:yachtOne/views/vote_select_view.dart';
@@ -68,7 +69,7 @@ class _StartUpViewState extends State<StartUpView>
       VoteCommentView(),
       RankView(),
       TrackRecordView(),
-      // MypageView(),
+      // StockListView(),
     ];
     print("viewLIST DONE");
 
@@ -254,6 +255,29 @@ class _StartUpViewState extends State<StartUpView>
                       ),
                       label: '',
                     ),
+                    // BottomNavigationBarItem(
+                    //   icon: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 12.h,
+                    //       horizontal: 24.w,
+                    //     ),
+                    //     color: Colors.white.withOpacity(0),
+                    //     child: SvgPicture.asset(
+                    //         'assets/icons/bottom_track_record.svg',
+                    //         color: Color(0xFFAAAAAA)),
+                    //   ),
+                    //   activeIcon: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 12.h,
+                    //       horizontal: 24.w,
+                    //     ),
+                    //     color: Colors.white.withOpacity(0),
+                    //     child: SvgPicture.asset(
+                    //         'assets/icons/bottom_track_record.svg',
+                    //         color: Colors.black),
+                    //   ),
+                    //   label: '',
+                    // ),
                   ],
                 ),
               );

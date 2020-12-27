@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/models/all_stock_list_model.dart';
 import 'package:yachtOne/models/user_reward_model.dart';
 import 'api/customized_ntp.dart';
 import 'package:yachtOne/models/chart_model.dart';
@@ -923,6 +924,32 @@ class DatabaseService {
     }
   }
 
+  // allStockList(Stock->KR의 섭콜렉션) db 불러오기
+  Future<AllStockListModel> getAllStockList() async {
+    try {
+      List<SubStockList> subStockList = [];
+
+      await _databaseService
+          .collection('stocks')
+          //KR하드코딩
+          .doc('KR')
+          .collection('allStockList')
+          .orderBy('name', descending: false)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((element) {
+          subStockList.add(SubStockList.fromData(element.data()));
+        });
+      });
+
+      return AllStockListModel.fromData(subStockList);
+    } catch (e) {
+      print("error at allStockList get");
+      print(e.toString());
+      return null;
+    }
+  }
+
   // userReward db 불러오기
   Future<List<UserRewardModel>> getUserRewardList(String uid) async {
     try {
@@ -1183,6 +1210,13 @@ class DatabaseService {
     await _usersCollectionReference
         .doc(uid)
         .update({'item': FieldValue.increment(reward)});
+  }
+
+  Future updateUserRewardedCnt(String uid, int reward) async {
+    // print("NEW ITEM IS" + newItem.toString());
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'rewardedCnt': FieldValue.increment(reward)});
   }
 
   Future decreaseUserItem(

@@ -6,6 +6,7 @@ class UserModel {
   final String friendsCode;
   final String insertedFriendsCode;
   int item;
+  int rewardedCnt;
   final String avatarImage;
 
   String accNumber;
@@ -24,6 +25,7 @@ class UserModel {
     this.friendsCode,
     this.insertedFriendsCode,
     this.item,
+    this.rewardedCnt,
     this.avatarImage,
     this.accNumber,
     this.accName,
@@ -43,6 +45,7 @@ class UserModel {
         friendsCode = data['friendsCode'],
         insertedFriendsCode = data['insertedFriendsCode'],
         item = data['item'],
+        rewardedCnt = data['rewardedCnt'] ?? 0,
         avatarImage = data['avatarImage'],
         accNumber = data['account']['accNumber'],
         accName = data['account']['accName'],
@@ -59,6 +62,7 @@ class UserModel {
       'friendsCode': this.friendsCode,
       'insertedFriendsCode': this.insertedFriendsCode,
       'item': this.item,
+      'rewardedCnt': this.rewardedCnt,
       'avatarImage': this.avatarImage,
       'account': {
         'accNumber': this.accNumber,

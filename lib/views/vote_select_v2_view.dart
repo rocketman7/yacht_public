@@ -1775,7 +1775,14 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         key: tutorialKey5,
                                         // 광고 활성화 해야 함
                                         onTap: () {
-                                          showAdsDialog(context, model);
+                                          model.user.rewardedCnt < 5
+                                              ? rewardedAdsLoaded
+                                                  ? showAdsDialog(
+                                                      context, model)
+                                                  : showAdsNotLoadDialog(
+                                                      context)
+                                              : showAdsFullRewardedDialog(
+                                                  context);
                                         },
                                         // onTap: null,
                                         child: Row(
@@ -1857,7 +1864,14 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                       model.address.isVoting
                                           ? GestureDetector(
                                               onTap: () {
-                                                showAdsDialog(context, model);
+                                                model.user.rewardedCnt < 5
+                                                    ? rewardedAdsLoaded
+                                                        ? showAdsDialog(
+                                                            context, model)
+                                                        : showAdsNotLoadDialog(
+                                                            context)
+                                                    : showAdsFullRewardedDialog(
+                                                        context);
                                               },
                                               child: Text(
                                                 "꾸욱 얻으러 가기",
@@ -2448,7 +2462,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   }
 
   Future showAdsDialog(BuildContext context, VoteSelectViewModel model) {
-    model.loadRewardedAds();
+    // model.loadRewardedAds();
     return showDialog(
       context: context,
       builder: (context) {
@@ -2456,8 +2470,24 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: CupertinoAlertDialog(
-              content: Text(
-                  '광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.\n\n광고를 보고 꾸욱 아이템을 획득하시겠어요?\n(광고소리가 재생될 수 있습니다.)'),
+              content: Column(
+                children: [
+                  Text('광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.'),
+                  Row(
+                    children: [
+                      Spacer(),
+                      Text('오늘 얻은 꾸욱 아이템: '),
+                      Text(
+                        '${model.user.rewardedCnt}',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      Text('/5'),
+                      Spacer(),
+                    ],
+                  ),
+                  Text('\n광고를 보고 꾸욱 아이템을 획득하시겠어요?\n(광고소리가 재생될 수 있습니다.)'),
+                ],
+              ),
               actions: <Widget>[
                 CupertinoDialogAction(
                   child: Text('아뇨'),
@@ -2481,8 +2511,24 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: AlertDialog(
-              content: Text(
-                  '광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.\n\n광고를 보고 꾸욱 아이템을 획득하시겠어요?\n(광고소리가 재생될 수 있습니다.)'),
+              content: Column(
+                children: [
+                  Text('광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.'),
+                  Row(
+                    children: [
+                      Spacer(),
+                      Text('오늘 얻은 꾸욱 아이템: '),
+                      Text(
+                        '${model.user.rewardedCnt}',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      Text('/5'),
+                      Spacer(),
+                    ],
+                  ),
+                  Text('\n광고를 보고 꾸욱 아이템을 획득하시겠어요?\n(광고소리가 재생될 수 있습니다.)'),
+                ],
+              ),
               actions: <Widget>[
                 FlatButton(
                   child: Text('아뇨'),
@@ -2499,6 +2545,88 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                         }
                       : null,
                 )
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Future showAdsNotLoadDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        if (Platform.isIOS) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: CupertinoAlertDialog(
+              content: Text(
+                  '아직 광고가 로드되지 않았습니다.\n잠시 후 다시 시도해주세요!\n불편을 드려 대단히 죄송합니다.'),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  child: Text('확인'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        } else {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: AlertDialog(
+              content: Text(
+                  '아직 광고가 로드되지 않았습니다.\n잠시 후 다시 시도해주세요!\n불편을 드려 대단히 죄송합니다.'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('확인'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Future showAdsFullRewardedDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        if (Platform.isIOS) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: CupertinoAlertDialog(
+              content:
+                  Text('오늘 시청할 수 있는 5개의 광고를\n모두 보셨어요!\n광고는 00:00에 재로드됩니다.'),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                  child: Text('확인'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        } else {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: AlertDialog(
+              content:
+                  Text('오늘 시청할 수 있는 5개의 광고를\n모두 보셨어요!\n광고는 00:00에 재로드됩니다.'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('확인'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ],
             ),
           );

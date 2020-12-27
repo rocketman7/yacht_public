@@ -361,7 +361,7 @@ class MypageMainView extends StatelessWidget {
             color: Colors.black,
           ),
           makeMypageMainComponent(model, '회원정보 수정', 'mypage_editprofile'),
-          // makeMypageMainComponent(model, 'x내 활동', null),
+          // makeMypageMainComponent(model, '내 활동', null),
           makeMypageMainComponent(model, '계좌 정보', 'mypage_accoutverification'),
           makeMypageMainComponent(model, '내가 받은 상금 현황', 'mypage_reward'),
           makeMypageMainComponent(model, '푸시 알림 설정', 'mypage_pushalarmsetting'),

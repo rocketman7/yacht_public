@@ -59,6 +59,13 @@ class VoteSelectViewModel extends FutureViewModel {
   bool voteSelectTutorial;
   bool termsOfUse;
 
+  int testVariableForAds = 0;
+  void testMethodForAds() {
+    testVariableForAds += 1;
+
+    notifyListeners();
+  }
+
   // 리워드 광고 관련 변수
   // bool rewardedAdsLoaded = false;
 
@@ -93,8 +100,9 @@ class VoteSelectViewModel extends FutureViewModel {
       if (event == RewardedVideoAdEvent.rewarded) {
         //유저가 reward받을 수 있는 조건을 충족하면,
         //아이템을 한 개 늘려주고,
-        // user.item += 1;
         _databaseService.updateUserItem(uid, 1);
+        //'오늘'의 보상 카운팅을 1개 늘려주고
+        _databaseService.updateUserRewardedCnt(uid, 1);
         //stateManage 업데이트
         _stateManageService.userModelUpdate();
         user = _stateManageService.userModel;
