@@ -107,9 +107,10 @@ class RankView extends StatelessWidget {
                                             style: TextStyle(
                                               fontSize: 24,
                                               letterSpacing: -1.0,
-                                              fontFamily: 'DmSans',
-                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'AppleSDB',
+                                              // fontWeight: FontWeight.bold,
                                             ),
+                                            overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                           ),
                                         ],
@@ -226,7 +227,7 @@ class RankView extends StatelessWidget {
                                             '오늘의 순위',
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
-                                                fontSize: 28,
+                                                fontSize: 28.sp,
                                                 letterSpacing: -2.0,
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -295,7 +296,7 @@ class RankView extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.only(top: 10, bottom: 10),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Column(
               children: [
@@ -370,8 +371,8 @@ class RankView extends StatelessWidget {
               width: 10,
             ),
             Container(
-              height: 36,
-              width: 36,
+              height: 36.sp,
+              width: 36.sp,
               child: CircleAvatar(
                 maxRadius: 36,
                 backgroundColor: Colors.transparent,
@@ -380,46 +381,67 @@ class RankView extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 18,
+              width: 18.sp,
             ),
-            Text(
-              '${ranksModel.userName}',
-              style: TextStyle(
-                fontSize: 20,
-                letterSpacing: -0.28,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-            ranksModel.uid == model.uid
-                ? Row(
+            Flexible(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: Text(
+                      ranksModel.userName,
+                      style: TextStyle(
+                        fontSize: 20,
+                        letterSpacing: -0.28,
+                      ),
+                      maxLines: 1,
+                      // minFontSize: 10,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  // Spacer(),
+                  Row(
+                    // mainAxisSize: MainAxisSize.max,
                     children: [
+                      ranksModel.uid == model.uid
+                          ? Row(
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 3,
+                                    horizontal: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(
+                                        30,
+                                      )),
+                                  child: Text(
+                                    "본인",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
                       SizedBox(
-                        width: 10,
+                        width: 8,
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 3,
-                          horizontal: 8,
-                        ),
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(
-                              30,
-                            )),
-                        child: Text(
-                          "본인",
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                      ),
+                      Text('${ranksModel.currentWinPoint}',
+                          style: TextStyle(
+                              fontSize: 24,
+                              letterSpacing: -2.0,
+                              fontWeight: FontWeight.bold)),
                     ],
                   )
-                : Container(),
-            Spacer(),
-            Text('${ranksModel.currentWinPoint}',
-                style: TextStyle(
-                    fontSize: 24,
-                    letterSpacing: -2.0,
-                    fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
           ],
         ));
   }

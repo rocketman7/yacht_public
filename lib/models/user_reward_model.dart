@@ -2,7 +2,7 @@ class UserRewardModel {
   final String id; // 리워드콜렉션의 하위 다큐먼트 아이디.
   final String rewardTitle; // 받은 상금의 타이틀 ex) '시즌1 우승', '시즌2 베스트댓글'
   final String awardDate; // 상금 받은 시점 ex) '20201221';
-  final bool isTax; // 원천징수해야하는지;
+  bool isTax; // 원천징수해야하는지;
   final int deliveryStatus; // 상금의 출고 상태를 표현, 1 = 아직 출고 전, 0 = 출고 중, -1 = 출고됨
   final List<RewardModel> listOfAward; // 상금포트폴리오의 리스트
 

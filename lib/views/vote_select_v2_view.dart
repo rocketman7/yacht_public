@@ -694,7 +694,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
       newSeasonStart = remoteConfig.getString('new_season_start');
       // 주석 풀고 업데이트 //예측하러 가기 활성or비활성화
-      isSeasonStarted = remoteConfig.getBool('is_season_started');
+      // isSeasonStarted = remoteConfig.getBool('is_season_started');
 
       isUrgentNotice = remoteConfig.getBool('is_urgent_notice');
       urgentMessage = remoteConfig.getString('urgent_message');
@@ -710,7 +710,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       print("IS SEASON STARTED " + isSeasonStarted.toString());
 
       // print("Main Text " + defaultMainText.toString());
-
+      // if (true) {
       if (isUrgentNotice) {
         _showUrgentDialog(context);
       }
@@ -1466,7 +1466,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             '${model.getPortfolioValue()}',
                                             style: TextStyle(
                                               fontFamily: 'DmSans',
-                                              fontSize: 42,
+                                              fontSize: 42.sp,
                                               color: model.address.isVoting
                                                   ? Colors.black
                                                   : Colors.white,
@@ -1479,7 +1479,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             "원",
                                             style: TextStyle(
                                               fontFamily: 'AppleSDB',
-                                              fontSize: 42,
+                                              fontSize: 42.sp,
                                               color: model.address.isVoting
                                                   ? Colors.black
                                                   : Colors.white,
@@ -2381,30 +2381,33 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          AutoSizeText(
                             "총 ${listSelected.length}개의 주제를 선택하셨습니다.",
                             style: TextStyle(
                               fontFamily: 'AppleSDB',
-                              fontSize: 18,
+                              fontSize: 18.sp,
                             ),
+                            maxLines: 1,
                           ),
                           SizedBox(height: 12),
-                          Text(
+                          AutoSizeText(
                             "예측에 모두 성공하면 승점 +${listSelected.length * 2}점 획득! 🎊\n모두 실패하면 ${-listSelected.length}점 😢",
                             style: TextStyle(
                               fontFamily: 'AppleSDM',
-                              fontSize: 16,
+                              fontSize: 16.sp,
                             ),
                             textAlign: TextAlign.center,
+                            maxLines: 2,
                           ),
                           SizedBox(height: 8),
-                          Text(
+                          AutoSizeText(
                             "예측하러 갈까요?",
                             style: TextStyle(
                               fontFamily: 'AppleSDB',
                               fontSize: 16,
                             ),
                             textAlign: TextAlign.center,
+                            maxLines: 1,
                           ),
                         ],
                       ),

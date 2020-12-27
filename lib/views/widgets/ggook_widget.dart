@@ -173,17 +173,18 @@ class _GgookWidgetState extends State<GgookWidget>
                       SizedBox(
                         height: (availableHeight / 2) * .15,
                       ),
-                      Text(
-                          '${vote.subVotes[listSelected[idx]].ggookDescription.replaceAll("\\n", "\n")}',
-                          // "10월 12일 신성이엔지와 SK하이닉스중 더 많이 상승할 종목을 선택해주세요",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30,
-                            letterSpacing: -0.5,
-                            fontFamily: 'AppleSDM',
-                          )
-                          // fontWeight: FontWeight.w700),
-                          ),
+                      AutoSizeText(
+                        '${vote.subVotes[listSelected[idx]].ggookDescription.replaceAll("\\n", "\n")}',
+                        // "10월 12일 신성이엔지와 SK하이닉스중 더 많이 상승할 종목을 선택해주세요",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30.sp,
+                          letterSpacing: -0.5,
+                          fontFamily: 'AppleSDM',
+                        ),
+                        maxLines: 3,
+                        // fontWeight: FontWeight.w700),
+                      ),
                       SizedBox(
                         height: 8,
                       ),
@@ -779,7 +780,7 @@ class _InnerBlobState extends State<InnerBlob> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            AutoSizeText(
                               formatKoreanDate
                                       .format(strToDate(vote.voteDate)) +
                                   "의 예측 완료!",
@@ -788,6 +789,7 @@ class _InnerBlobState extends State<InnerBlob> {
                                 fontSize: 26,
                                 letterSpacing: -.2,
                               ),
+                              maxLines: 1,
                             ),
                             // SizedBox(
                             //   height: 4,
@@ -844,7 +846,8 @@ class _InnerBlobState extends State<InnerBlob> {
                                       length == 1
                                           ? Row(
                                               children: [
-                                                Text(vote.subVotes[index].title,
+                                                AutoSizeText(
+                                                    vote.subVotes[index].title,
                                                     style: tempList[index] == 0
                                                         ? notSelectedTitle
                                                         : selectedTitle),
@@ -854,12 +857,12 @@ class _InnerBlobState extends State<InnerBlob> {
                                                 tempList[index] == 0
                                                     ? Container()
                                                     : tempList[index] == 1
-                                                        ? Text(
+                                                        ? AutoSizeText(
                                                             vote.subVotes[index]
                                                                 .voteChoices[0],
                                                             style: selectedUp,
                                                           )
-                                                        : Text(
+                                                        : AutoSizeText(
                                                             vote.subVotes[index]
                                                                 .voteChoices[1],
                                                             style: selectedDown,
@@ -868,7 +871,7 @@ class _InnerBlobState extends State<InnerBlob> {
                                             )
                                           : Row(
                                               children: [
-                                                Text(
+                                                AutoSizeText(
                                                   vote.subVotes[index]
                                                       .voteChoices[0],
                                                   style: tempList[index] == 0
@@ -880,14 +883,14 @@ class _InnerBlobState extends State<InnerBlob> {
                                                 SizedBox(
                                                   width: 4,
                                                 ),
-                                                Text(
+                                                AutoSizeText(
                                                   "VS",
                                                   style: notSelectedTitle,
                                                 ),
                                                 SizedBox(
                                                   width: 4,
                                                 ),
-                                                Text(
+                                                AutoSizeText(
                                                   vote.subVotes[index]
                                                       .voteChoices[1],
                                                   style: tempList[index] == 0
@@ -936,6 +939,7 @@ class _InnerBlobState extends State<InnerBlob> {
                                             fontSize: 14,
                                             color: Color(0xFF555555)),
                                         maxLines: 2,
+                                        minFontSize: 10,
                                       ),
                                     ),
                                   ),
@@ -956,13 +960,15 @@ class _InnerBlobState extends State<InnerBlob> {
                                       //     EdgeInsets.only(top: 20),
                                       backGroundColor: Color(0xFFFFF6F6),
                                       child: AutoSizeText(
-                                          "다른 유저의 예측과\n의견을 볼 수 있어요!",
-                                          style: TextStyle(
-                                            fontFamily: 'AppleSDL',
-                                            fontSize: 14,
-                                            color: Color(0xFF555555),
-                                          ),
-                                          maxLines: 2),
+                                        "다른 유저의 예측과\n의견을 볼 수 있어요!",
+                                        style: TextStyle(
+                                          fontFamily: 'AppleSDL',
+                                          fontSize: 14,
+                                          color: Color(0xFF555555),
+                                        ),
+                                        maxLines: 2,
+                                        minFontSize: 10,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -980,11 +986,12 @@ class _InnerBlobState extends State<InnerBlob> {
                                     _navigationService.navigateWithArgTo(
                                         'startup', 0);
                                   },
-                                  child: Text(
+                                  child: AutoSizeText(
                                     "홈으로 이동",
                                     style: TextStyle(
                                         fontFamily: 'AppleSDM',
                                         color: Colors.white),
+                                    maxLines: 1,
                                   ),
                                   color: const Color(0xFF989898),
                                 ),
@@ -998,11 +1005,12 @@ class _InnerBlobState extends State<InnerBlob> {
                                       _navigationService.navigateWithArgTo(
                                           'startup', 1);
                                     },
-                                    child: Text(
+                                    child: AutoSizeText(
                                       "커뮤니티로 이동",
                                       style: TextStyle(
                                           fontFamily: 'AppleSDM',
                                           color: Colors.white),
+                                      maxLines: 1,
                                     ),
                                     color: const Color(0xFF1EC8CF),
                                   ),
