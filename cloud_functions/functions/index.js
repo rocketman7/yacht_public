@@ -60,11 +60,11 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
       .doc("stats");
   }
 
-  const todayRankCollectionRef = ranksRef
-    .doc(category)
-    .collection(season)
-    .doc(today)
-    .collection(today);
+  // const todayRankCollectionRef = ranksRef
+  //   .doc(category)
+  //   .collection(season)
+  //   .doc(today)
+  //   .collection(today);
 
   // const prevRankCollectionRef = ranksRef
   //   .doc(category)
@@ -256,7 +256,7 @@ await getEachUserVote(allUserUid);
     );
   }
   // 주석 풀 곳 
-  // await updateUserScore(userScores);
+  await updateUserScore(userScores);
 
   // winPointHistory 넣기 테스트
   // await userVotesSeasonStatsCollection('kakao:1513684681').update({[`winPointHistory.${today}`] : 9});
@@ -356,8 +356,8 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const category = openSeasonSnapshot.data().category;
   const season = openSeasonSnapshot.data().season;
 
-  const today = "20201224";
-  const yesterday = "20201223";
+  const today = "20201230";
+  const yesterday = "20201229";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -398,7 +398,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
         userVotesSeasonStatsCollection(uid)
           .get()
           .then((statsData) => {
-            console.log(statsData.data())
+            // console.log(statsData.data())
             if (
               statsData.data() !== undefined &&
               statsData.data() !== null &&
@@ -408,7 +408,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
               // statsData !== undefined
             )   
             {
-              console.log(statsData.data());
+              // console.log(statsData.data());
 
               var temp = {};
               temp["uid"] = uid;
@@ -437,8 +437,8 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   });
 
   // console.log(typeof userDocs);
-  console.log(participatedUserSortedCurrentWinPoint.length);
-  console.log(participatedUserSortedCurrentWinPoint);
+  // console.log(participatedUserSortedCurrentWinPoint.length);
+  // console.log(participatedUserSortedCurrentWinPoint);
 
   for (i = 0; i < participatedUserSortedCurrentWinPoint.length; i++) {
     participatedUserSortedCurrentWinPoint[i]["avatarImage"] =
@@ -474,7 +474,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
     });
   }
 
-  console.log(prevRankDocs);
+  // console.log(prevRankDocs);
 
   async function updateTodayRank(datas, yesterdays) {
     await Promise.all(
