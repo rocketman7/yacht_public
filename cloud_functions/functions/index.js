@@ -256,7 +256,7 @@ await getEachUserVote(allUserUid);
     );
   }
   // 주석 풀 곳 
-  await updateUserScore(userScores);
+  // await updateUserScore(userScores);
 
   // winPointHistory 넣기 테스트
   // await userVotesSeasonStatsCollection('kakao:1513684681').update({[`winPointHistory.${today}`] : 9});
@@ -356,8 +356,8 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const category = openSeasonSnapshot.data().category;
   const season = openSeasonSnapshot.data().season;
 
-  const today = "20201230";
-  const yesterday = "20201229";
+  // const today = "20201230";
+  // const yesterday = "20201229";
   // todayRankRef
 
   const seasonInfoRef = votesRef

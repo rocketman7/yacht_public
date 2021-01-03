@@ -322,7 +322,7 @@ class DatabaseService {
             .doc('seasonInfo')
             .get()
             .then((value) {
-          var temp = SeasonModel.fromData(value.data());
+          var temp = SeasonModel.fromData(value.data(), doc);
           seasonModelList.add(temp);
         });
       }
@@ -450,7 +450,7 @@ class DatabaseService {
       var seasonInfoData =
           await address.votesSeasonCollection().doc('seasonInfo').get();
 
-      return SeasonModel.fromData(seasonInfoData.data());
+      return SeasonModel.fromData(seasonInfoData.data(), address.season);
     } catch (e) {
       print(e.toString());
       return null;

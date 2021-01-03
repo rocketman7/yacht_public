@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class SeasonModel {
+  final String seasonId;
   final String seasonName;
   final String startDate;
   final int maxDailyVote;
@@ -11,6 +12,7 @@ class SeasonModel {
   final String endDate;
 
   SeasonModel(
+      this.seasonId,
       this.seasonName,
       this.startDate,
       this.maxDailyVote,
@@ -22,6 +24,7 @@ class SeasonModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'seasonId': seasonId,
       'seasonName': seasonName,
       'startDate': startDate,
       'maxDailyVote': maxDailyVote,
@@ -33,8 +36,9 @@ class SeasonModel {
     };
   }
 
-  SeasonModel.fromData(Map<String, dynamic> map)
-      : seasonName = map['seasonName'] ?? null,
+  SeasonModel.fromData(Map<String, dynamic> map, String seasonId)
+      : seasonId = seasonId ?? null,
+        seasonName = map['seasonName'] ?? null,
         startDate = map['startDate'] ?? null,
         maxDailyVote = map['maxDailyVote'] ?? null,
         correctPoint = map['correctPoint'] ?? null,
@@ -48,6 +52,7 @@ class SeasonModel {
     if (identical(this, o)) return true;
 
     return o is SeasonModel &&
+        o.seasonId == seasonId &&
         o.seasonName == seasonName &&
         o.startDate == startDate &&
         o.maxDailyVote == maxDailyVote &&
@@ -60,7 +65,8 @@ class SeasonModel {
 
   @override
   int get hashCode {
-    return seasonName.hashCode ^
+    return seasonId.hashCode ^
+        seasonName.hashCode ^
         startDate.hashCode ^
         maxDailyVote.hashCode ^
         correctPoint.hashCode ^
