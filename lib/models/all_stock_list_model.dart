@@ -1,12 +1,14 @@
 class SubStockList {
   final String issueCode;
   final String name;
+  final String alternativeName;
 
-  SubStockList({this.issueCode, this.name});
+  SubStockList({this.issueCode, this.name, this.alternativeName});
 
   SubStockList.fromData(Map<String, dynamic> data)
       : issueCode = data['issueCode'],
-        name = data['name'];
+        name = data['name'],
+        alternativeName = data['alternativeName'] ?? data['name'];
 }
 
 class AllStockListModel {

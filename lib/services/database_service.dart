@@ -1302,6 +1302,21 @@ class DatabaseService {
         .set({'userBubbleSurvey': userBubbleSurvey});
   }
 
+  Future test() async {
+    List<Map<String, dynamic>> a = [
+      {"issueCode": "000080", "name": "하이트진로"},
+      {"issueCode": "000120", "name": "CJ대한통운"},
+    ];
+
+    for (i = 0; i < a.length; i++) {
+      await databaseService
+          .collection("stocks")
+          .doc("KR")
+          .collection("allStockList")
+          .add(a[i]);
+    }
+  }
+
   // 주식 종목정보 가져오기
   Future<StockInfoModel> getStockInfo(
     String countryCode,

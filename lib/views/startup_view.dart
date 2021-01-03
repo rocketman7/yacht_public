@@ -69,13 +69,13 @@ class _StartUpViewState extends State<StartUpView>
       VoteCommentView(),
       RankView(),
       TrackRecordView(),
-      // StockListView(),
+      StockListView(),
     ];
     print("viewLIST DONE");
 
     _tabController = TabController(
       initialIndex: _startIdx ?? 0,
-      length: 4,
+      length: 5,
       vsync: this,
     );
     if (!isDisposed) {
@@ -155,11 +155,111 @@ class _StartUpViewState extends State<StartUpView>
                     //       color: Color(0xFF1EC8CF)),
                     //   label: '',
                     // ),
+                    // BottomNavigationBarItem(
+                    //   icon: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 18.h,
+                    //       horizontal: 36.w,
+                    //     ),
+                    //     // height: double.infinity,
+                    //     color: Colors.white.withOpacity(0),
+                    //     child: SvgPicture.asset(
+                    //       'assets/icons/bottom_home.svg',
+                    //       color: Color(0xFFAAAAAA),
+                    //     ),
+                    //   ),
+                    //   activeIcon: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 18.h,
+                    //       horizontal: 36.w,
+                    //     ),
+                    //     // height: double.infinity,
+                    //     color: Colors.white.withOpacity(0),
+                    //     child: SvgPicture.asset('assets/icons/bottom_home.svg',
+                    //         color: Colors.black),
+                    //   ),
+                    //   label: '',
+                    // ),
+                    // BottomNavigationBarItem(
+                    //   icon: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 18.h,
+                    //       horizontal: 36.w,
+                    //     ),
+                    //     color: Colors.white.withOpacity(0),
+                    //     child: SvgPicture.asset('assets/icons/bottom_chat.svg',
+                    //         color: Color(0xFFAAAAAA)),
+                    //   ),
+                    //   activeIcon: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 18.h,
+                    //       horizontal: 36.w,
+                    //     ),
+                    //     color: Colors.white.withOpacity(0),
+                    //     child: SvgPicture.asset('assets/icons/bottom_chat.svg',
+                    //         color: Colors.black),
+                    //   ),
+                    //   label: '',
+                    // ),
+                    // BottomNavigationBarItem(
+                    //   icon: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 18.h,
+                    //       horizontal: 36.w,
+                    //     ),
+                    //     color: Colors.white.withOpacity(0),
+                    //     child: SvgPicture.asset(
+                    //       'assets/icons/bottom_rank2.svg',
+                    //       color: Color(0xFFAAAAAA),
+                    //       // height: 40,
+                    //     ),
+                    //     // child: Image(
+                    //     //   image: AssetImage('assets/icons/bottom_rank2.png'),
+                    //     //   color: Color(0xFFAAAAAA),
+                    //     // ),
+                    //   ),
+                    //   activeIcon: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 18.h,
+                    //       horizontal: 36.w,
+                    //     ),
+                    //     color: Colors.white.withOpacity(0),
+                    //     child: SvgPicture.asset('assets/icons/bottom_rank2.svg',
+                    //         color: Colors.black),
+                    //     // child: Image(
+                    //     //   image: AssetImage('assets/icons/bottom_rank2.png'),
+                    //     // ),
+                    //   ),
+                    //   label: '',
+                    // ),
+                    // BottomNavigationBarItem(
+                    //   icon: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 18.h,
+                    //       horizontal: 36.w,
+                    //     ),
+                    //     color: Colors.white.withOpacity(0),
+                    //     child: SvgPicture.asset(
+                    //         'assets/icons/bottom_track_record.svg',
+                    //         color: Color(0xFFAAAAAA)),
+                    //   ),
+                    //   activeIcon: Container(
+                    //     padding: EdgeInsets.symmetric(
+                    //       vertical: 18.h,
+                    //       horizontal: 36.w,
+                    //     ),
+                    //     color: Colors.white.withOpacity(0),
+                    //     child: SvgPicture.asset(
+                    //         'assets/icons/bottom_track_record.svg',
+                    //         color: Colors.black),
+                    //   ),
+                    //   label: '',
+                    // ),
                     BottomNavigationBarItem(
                       icon: Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 18.h,
-                          horizontal: 36.w,
+                          vertical: 12.h,
+                          horizontal: 24.w,
                         ),
                         // height: double.infinity,
                         color: Colors.white.withOpacity(0),
@@ -170,8 +270,8 @@ class _StartUpViewState extends State<StartUpView>
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 18.h,
-                          horizontal: 36.w,
+                          vertical: 12.h,
+                          horizontal: 24.w,
                         ),
                         // height: double.infinity,
                         color: Colors.white.withOpacity(0),
@@ -183,8 +283,8 @@ class _StartUpViewState extends State<StartUpView>
                     BottomNavigationBarItem(
                       icon: Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 18.h,
-                          horizontal: 36.w,
+                          vertical: 12.h,
+                          horizontal: 24.w,
                         ),
                         color: Colors.white.withOpacity(0),
                         child: SvgPicture.asset('assets/icons/bottom_chat.svg',
@@ -192,8 +292,8 @@ class _StartUpViewState extends State<StartUpView>
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 18.h,
-                          horizontal: 36.w,
+                          vertical: 12.h,
+                          horizontal: 24.w,
                         ),
                         color: Colors.white.withOpacity(0),
                         child: SvgPicture.asset('assets/icons/bottom_chat.svg',
@@ -204,8 +304,8 @@ class _StartUpViewState extends State<StartUpView>
                     BottomNavigationBarItem(
                       icon: Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 18.h,
-                          horizontal: 36.w,
+                          vertical: 12.h,
+                          horizontal: 24.w,
                         ),
                         color: Colors.white.withOpacity(0),
                         child: SvgPicture.asset(
@@ -220,8 +320,8 @@ class _StartUpViewState extends State<StartUpView>
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 18.h,
-                          horizontal: 36.w,
+                          vertical: 12.h,
+                          horizontal: 24.w,
                         ),
                         color: Colors.white.withOpacity(0),
                         child: SvgPicture.asset('assets/icons/bottom_rank2.svg',
@@ -235,8 +335,8 @@ class _StartUpViewState extends State<StartUpView>
                     BottomNavigationBarItem(
                       icon: Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 18.h,
-                          horizontal: 36.w,
+                          vertical: 12.h,
+                          horizontal: 24.w,
                         ),
                         color: Colors.white.withOpacity(0),
                         child: SvgPicture.asset(
@@ -245,8 +345,8 @@ class _StartUpViewState extends State<StartUpView>
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.symmetric(
-                          vertical: 18.h,
-                          horizontal: 36.w,
+                          vertical: 12.h,
+                          horizontal: 24.w,
                         ),
                         color: Colors.white.withOpacity(0),
                         child: SvgPicture.asset(
@@ -255,29 +355,29 @@ class _StartUpViewState extends State<StartUpView>
                       ),
                       label: '',
                     ),
-                    // BottomNavigationBarItem(
-                    //   icon: Container(
-                    //     padding: EdgeInsets.symmetric(
-                    //       vertical: 12.h,
-                    //       horizontal: 24.w,
-                    //     ),
-                    //     color: Colors.white.withOpacity(0),
-                    //     child: SvgPicture.asset(
-                    //         'assets/icons/bottom_track_record.svg',
-                    //         color: Color(0xFFAAAAAA)),
-                    //   ),
-                    //   activeIcon: Container(
-                    //     padding: EdgeInsets.symmetric(
-                    //       vertical: 12.h,
-                    //       horizontal: 24.w,
-                    //     ),
-                    //     color: Colors.white.withOpacity(0),
-                    //     child: SvgPicture.asset(
-                    //         'assets/icons/bottom_track_record.svg',
-                    //         color: Colors.black),
-                    //   ),
-                    //   label: '',
-                    // ),
+                    BottomNavigationBarItem(
+                      icon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 12.h,
+                          horizontal: 24.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset(
+                            'assets/icons/bottom_track_record.svg',
+                            color: Color(0xFFAAAAAA)),
+                      ),
+                      activeIcon: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 12.h,
+                          horizontal: 24.w,
+                        ),
+                        color: Colors.white.withOpacity(0),
+                        child: SvgPicture.asset(
+                            'assets/icons/bottom_track_record.svg',
+                            color: Colors.black),
+                      ),
+                      label: '',
+                    ),
                   ],
                 ),
               );
