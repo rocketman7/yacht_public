@@ -30,6 +30,9 @@ List<String> globalAvatarImages = [
   'avatar016',
   'avatar017',
   'avatar018',
+  'avatar019',
+  'avatar020',
+  'avatar021',
 ];
 
 class MypageEditProfileViewModel extends FutureViewModel {

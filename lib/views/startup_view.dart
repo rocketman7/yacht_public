@@ -68,8 +68,8 @@ class _StartUpViewState extends State<StartUpView>
       VoteSelectV2View(),
       VoteCommentView(),
       RankView(),
-      TrackRecordView(),
       StockListView(),
+      TrackRecordView(),
     ];
     print("viewLIST DONE");
 
@@ -332,6 +332,7 @@ class _StartUpViewState extends State<StartUpView>
                       ),
                       label: '',
                     ),
+
                     BottomNavigationBarItem(
                       icon: Container(
                         padding: EdgeInsets.symmetric(
@@ -340,8 +341,10 @@ class _StartUpViewState extends State<StartUpView>
                         ),
                         color: Colors.white.withOpacity(0),
                         child: SvgPicture.asset(
-                            'assets/icons/bottom_track_record.svg',
-                            color: Color(0xFFAAAAAA)),
+                          'assets/icons/bottom_finder.svg',
+                          color: Color(0xFFAAAAAA),
+                          // height: 22.h,
+                        ),
                       ),
                       activeIcon: Container(
                         padding: EdgeInsets.symmetric(
@@ -350,8 +353,10 @@ class _StartUpViewState extends State<StartUpView>
                         ),
                         color: Colors.white.withOpacity(0),
                         child: SvgPicture.asset(
-                            'assets/icons/bottom_track_record.svg',
-                            color: Colors.black),
+                          'assets/icons/bottom_finder.svg',
+                          color: Colors.black,
+                          // height: 22.h,
+                        ),
                       ),
                       label: '',
                     ),
@@ -373,8 +378,9 @@ class _StartUpViewState extends State<StartUpView>
                         ),
                         color: Colors.white.withOpacity(0),
                         child: SvgPicture.asset(
-                            'assets/icons/bottom_track_record.svg',
-                            color: Colors.black),
+                          'assets/icons/bottom_track_record.svg',
+                          color: Colors.black,
+                        ),
                       ),
                       label: '',
                     ),

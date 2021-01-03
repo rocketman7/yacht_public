@@ -307,7 +307,7 @@ Future buildModalBottomSheet(
             child: Column(
               children: [
                 Text(
-                  '메리 크리스마스!',
+                  '2021년 시작!',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16.0, color: Colors.white),
                 ),
@@ -371,7 +371,7 @@ Widget avatarItems(
                             model.checkedAvatarImage)
                         ? Color(0xFFFFFFFF).withOpacity(0.5)
                         : Color(0xFF1EC8CF),
-                    width: 2)),
+                    width: 4)),
           ),
           Container(
             height: 60,

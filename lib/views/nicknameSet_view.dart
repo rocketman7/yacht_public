@@ -106,8 +106,7 @@ class _NicknameSetViewState extends State<NicknameSetView> {
                                   if (_formKey.currentState.validate() &&
                                       (_nickLength > 0)) {
                                     model.checkUserNameDuplicateAndSet(
-                                      _userNameController.text,
-                                    );
+                                        _userNameController.text, context);
                                   }
                                 },
                                 minWidth: double.infinity,
