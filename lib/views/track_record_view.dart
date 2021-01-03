@@ -106,28 +106,26 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                     if (!snapshot.hasData) {
                                       return Container(color: Colors.blue);
                                     } else {
-                                      List<SeasonModel> seasonList =
-                                          snapshot.data;
+                                      List<String> seasonList = snapshot.data;
                                       return Container(
                                         height: 40,
                                         // width: 90,
                                         // color: Colors.blue,
                                         child: DropdownButton<String>(
                                           value: model.showingSeasonName,
-                                          icon: Icon(Icons.arrow_downward),
+                                          icon: Icon(Icons.arrow_drop_down),
                                           iconSize: 24,
-                                          elevation: 16,
-                                          style: TextStyle(
-                                              color: Colors.deepPurple),
-                                          // underline: Container(
-                                          //   height: 2,
-                                          //   color: Colors.deepPurpleAccent,
-                                          // ),
+                                          elevation: 8,
+                                          style: TextStyle(color: Colors.black),
+                                          underline: Container(
+                                              // height: 2,
+                                              // color: Colors.deepPurpleAccent,
+                                              ),
                                           onChanged: (String newValue) {
-                                            model.renewAddress();
+                                            model.renewAddress(newValue);
                                             // showingSeasonName = newValue;
                                           },
-                                          items: model.seasonNameList
+                                          items: seasonList
                                               .map<DropdownMenuItem<String>>(
                                                   (String value) {
                                             return DropdownMenuItem<String>(
@@ -285,14 +283,17 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                           padding: EdgeInsets.symmetric(
                             horizontal: 16.sp,
                           ),
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: model.allSeasonVoteList.length,
-                              itemBuilder: (context, index) {
-                                print("Length" +
-                                    model.allSeasonVoteList.length.toString());
-                                return buildColumn(model, index);
-                              }),
+                          child: model.isChangingSeason
+                              ? Center(child: CircularProgressIndicator())
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: model.allSeasonVoteList.length,
+                                  itemBuilder: (context, index) {
+                                    print("Length" +
+                                        model.allSeasonVoteList.length
+                                            .toString());
+                                    return buildColumn(model, index);
+                                  }),
                         ),
                       ),
                     ],

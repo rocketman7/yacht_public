@@ -75,6 +75,10 @@ class ChartViewModel extends FutureViewModel {
   ) async {
     await _amplitudeService.logStockInfoView(uid);
     print("beforeStockinfo" + DateTime.now().toString());
+    chartList = await _databaseService.getPriceForChart(
+      countryCode,
+      issueCode,
+    );
 
     stockOrIndex == "stocks"
         ? stockInfoModel = await _databaseService.getStockInfo(
@@ -89,10 +93,6 @@ class ChartViewModel extends FutureViewModel {
     print("Stock info model get" + stockInfoModel.toString());
     print("afterStockInfo" + DateTime.now().toString());
     // notifyListeners();
-    chartList = await _databaseService.getPriceForChart(
-      countryCode,
-      issueCode,
-    );
 
     // liveList = await _databaseService.getRealtimePriceForChart(
     //   countryCode,

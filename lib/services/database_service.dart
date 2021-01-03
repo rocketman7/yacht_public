@@ -322,7 +322,7 @@ class DatabaseService {
             .doc('seasonInfo')
             .get()
             .then((value) {
-          var temp = SeasonModel.fromData(value.data());
+          var temp = SeasonModel.fromData(value.data(), doc);
           seasonModelList.add(temp);
         });
       }
@@ -450,7 +450,7 @@ class DatabaseService {
       var seasonInfoData =
           await address.votesSeasonCollection().doc('seasonInfo').get();
 
-      return SeasonModel.fromData(seasonInfoData.data());
+      return SeasonModel.fromData(seasonInfoData.data(), address.season);
     } catch (e) {
       print(e.toString());
       return null;
@@ -1541,15 +1541,15 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201228',
+      date: '20210104',
       // date: "20201024",
-      date: baseDate,
+      // date: baseDate,
       category: category,
       // season: "beta001",
       season: season,
       // isVoting: false,
-      // isVoting: true,
-      isVoting: isVoting, //false면 장 중
+      isVoting: true,
+      // isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());
