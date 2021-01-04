@@ -307,6 +307,7 @@ class _RegisterViewState extends State<RegisterView> {
                               email: _emailController.text,
                               password: _passwordController.text,
                               credential: credential,
+                              context: context,
                             );
                           }
                         },

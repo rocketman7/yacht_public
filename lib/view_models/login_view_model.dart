@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
@@ -12,7 +15,7 @@ class LoginViewModel extends BaseViewModel {
   final AuthService _authService = locator<AuthService>();
   final NavigationService _navigationService = locator<NavigationService>();
   final DatabaseService _databaseService = locator<DatabaseService>();
-  final DialogService _dialogService = locator<DialogService>();
+  // final DialogService _dialogService = locator<DialogService>();
   final SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
@@ -24,7 +27,10 @@ class LoginViewModel extends BaseViewModel {
   // }
 
   // 로그인 function. View로부터 전달받은 계정정보를 input으로 authService의 로그인 함수를 호출.
-  Future login({@required String email, @required String password}) async {
+  Future login(
+      {@required String email,
+      @required String password,
+      BuildContext context}) async {
     setBusy(true);
     var result =
         await _authService.loginWithEmail(email: email, password: password);
@@ -44,11 +50,42 @@ class LoginViewModel extends BaseViewModel {
       }
     } else {
       setBusy(false);
-      var dialogResult = await _dialogService.showDialog(
-        title: '로그인 오류',
-        description: result.toString(),
-      );
-      print(result.toString());
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: Platform.isIOS
+                  ? CupertinoAlertDialog(
+                      title: Text("로그인 오류"),
+                      content: Text(result.toString()),
+                      actions: <Widget>[
+                        CupertinoDialogAction(
+                          child: Text('확인'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    )
+                  : AlertDialog(
+                      title: Text("로그인 오류"),
+                      content: Text(
+                        result.toString(),
+                      ),
+                      actions: <Widget>[
+                          FlatButton(
+                            child: Text("확인"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ]),
+            );
+          });
+      // var dialogResult = await _dialogService.showDialog(
+      //   title: '로그인 오류',
+      //   description: result.toString(),
+      // );
+      // print(result.toString());
     }
   }
 }

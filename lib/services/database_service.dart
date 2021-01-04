@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/models/all_stock_list_model.dart';
+import 'package:yachtOne/models/user_reward_model.dart';
 import 'api/customized_ntp.dart';
 import 'package:yachtOne/models/chart_model.dart';
 import 'package:yachtOne/models/index_info_model.dart';
@@ -58,6 +60,8 @@ class DatabaseService {
       _databaseService.collection('admin');
   CollectionReference get _pricesCollectionReference =>
       _databaseService.collection('prices');
+  CollectionReference get _hitsPricesCollectionReference =>
+      _databaseService.collection('historicalPrice');
 
   CollectionReference get usersCollectionReference => _usersCollectionReference;
   CollectionReference get votesCollectionReference => _votesCollectionReference;
@@ -66,6 +70,8 @@ class DatabaseService {
   CollectionReference get adminCollectionReference => _adminCollectionReference;
   CollectionReference get pricesCollectionReference =>
       _pricesCollectionReference;
+  CollectionReference get hitsPricesCollectionReference =>
+      _hitsPricesCollectionReference;
   //  collection references
   // final CollectionReference _usersCollectionReference =
   //     _databaseService.collection('users');
@@ -300,6 +306,40 @@ class DatabaseService {
     }
   }
 
+  Future<List<SeasonModel>> getAllSeasonInfoList() async {
+    try {
+      List<SeasonModel> seasonModelList = [];
+      var krVoteSnap =
+          await _databaseService.collection('votes').doc('KR').get();
+      List<dynamic> seasonList = krVoteSnap.data()['subCollectionIds'];
+      print(seasonList);
+
+      for (var doc in seasonList) {
+        await _databaseService
+            .collection('votes')
+            .doc('KR')
+            .collection(doc)
+            .doc('seasonInfo')
+            .get()
+            .then((value) {
+          var temp = SeasonModel.fromData(value.data(), doc);
+          seasonModelList.add(temp);
+        });
+      }
+
+      // return seasonModelList;
+
+      // return seasonModelList;
+
+      print("LENGTH second" + seasonModelList.length.toString());
+
+      return seasonModelList;
+    } catch (e) {
+      print("ERROR CAUGHT" + e.toString());
+      return e.message;
+    }
+  }
+
   Future getAllSeasonUserVote(DatabaseAddressModel address) async {
     try {
       print("GETALLSEASON START");
@@ -347,7 +387,7 @@ class DatabaseService {
             .userVoteSeasonCollection()
             .doc(address.date)
             .set(tempUserVote.toJson());
-        updateUserItem(address.uid, 1);
+        // updateUserItem(address.uid, 1);
 
         // userVoteData =
         //     await address.userVoteSeasonCollection().doc(address.date).get();
@@ -410,7 +450,7 @@ class DatabaseService {
       var seasonInfoData =
           await address.votesSeasonCollection().doc('seasonInfo').get();
 
-      return SeasonModel.fromData(seasonInfoData.data());
+      return SeasonModel.fromData(seasonInfoData.data(), address.season);
     } catch (e) {
       print(e.toString());
       return null;
@@ -788,6 +828,31 @@ class DatabaseService {
   // }
 
   // Read: ranks collection 정보 읽어오기. 배치될 때에만 바뀌는 정보이므로 Future로 처리
+  Future<List<RankModel>> getOldSeasonRankList(
+      DatabaseAddressModel databaseAddressModel) async {
+    try {
+      List<RankModel> rankList = [];
+
+      await _ranksCollectionReference
+          .doc(databaseAddressModel.category)
+          .collection(databaseAddressModel.season)
+          .doc(databaseAddressModel.date)
+          .collection(databaseAddressModel.date)
+          .orderBy('todayRank', descending: false)
+          // .orderBy('userName')
+          .get()
+          .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+                rankList.add(RankModel.fromData(element.data()));
+              }));
+
+      return rankList;
+    } catch (e) {
+      print('rankList load error: ${e.toString()}');
+
+      return null;
+    }
+  }
+
   Future<List<RankModel>> getRankList(
       DatabaseAddressModel databaseAddressModel) async {
     try {
@@ -891,6 +956,99 @@ class DatabaseService {
       print(e.toString());
       return null;
     }
+  }
+
+  // allStockList(Stock->KR의 섭콜렉션) db 불러오기
+  Future<AllStockListModel> getAllStockList() async {
+    try {
+      List<SubStockList> subStockList = [];
+
+      await _databaseService
+          .collection('stocks')
+          //KR하드코딩
+          .doc('KR')
+          .collection('allStockList')
+          .orderBy('name', descending: false)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((element) {
+          subStockList.add(SubStockList.fromData(element.data()));
+        });
+      });
+
+      return AllStockListModel.fromData(subStockList);
+    } catch (e) {
+      print("error at allStockList get");
+      print(e.toString());
+      return null;
+    }
+  }
+
+  // userReward db 불러오기
+  Future<List<UserRewardModel>> getUserRewardList(String uid) async {
+    try {
+      List<UserRewardModel> userRewardList = [];
+      List<RewardModel> rewardList;
+
+      await _usersCollectionReference
+          .doc(uid)
+          .collection('userReward')
+          .orderBy('awardDate', descending: true)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((element) {
+          rewardList = [];
+          for (var a in element['awards'])
+            rewardList.add(RewardModel.fromData(a));
+
+          userRewardList.add(
+              UserRewardModel.fromData(element.id, element.data(), rewardList));
+
+          // print(element.id);
+        });
+      });
+
+      return userRewardList;
+    } catch (e) {
+      print("error at userReward get");
+      print(e.toString());
+      return null;
+    }
+  }
+
+  // userReward용 가격 불러오기 (from historicalPrice collection)
+  Future<double> getHistoricalPriceForUserReward(String issueCode) {
+    try {
+      return _hitsPricesCollectionReference
+          // 아래 코드는 카테고리가 모든 상금들에 대해 'KR'로 고정되어 있다고 가정한 코드임.
+          // 만약 카테고리가 추가된다면, userReward -> docs -> awards 의 필드값에 카테고리도 각각 추가되어야함.
+          // .doc(category)
+          .doc('KR')
+          .collection(issueCode)
+          .orderBy('date', descending: true)
+          .limit(1)
+          .get()
+          .then((querySnapshot) {
+        print('==========================');
+        print(querySnapshot.docs.first.data()['close'].toDouble());
+        print('=========================');
+        return querySnapshot.docs.first.data()['close'].toDouble();
+      });
+    } catch (e) {
+      print("error at historicalPriceForUserReward get");
+      print(e.toString());
+      return null;
+    }
+  }
+
+  //
+  Future updateUserRewardDeliveryStatus(
+      String uid, String id, int status) async {
+    await _usersCollectionReference
+        .doc(uid)
+        .collection('userReward')
+        .doc(id)
+        .update({'deliveryStatus': status});
   }
 
   // Read: Faq List 불러오자
@@ -1088,6 +1246,13 @@ class DatabaseService {
         .update({'item': FieldValue.increment(reward)});
   }
 
+  Future updateUserRewardedCnt(String uid, int reward) async {
+    // print("NEW ITEM IS" + newItem.toString());
+    await _usersCollectionReference
+        .doc(uid)
+        .update({'rewardedCnt': FieldValue.increment(reward)});
+  }
+
   Future decreaseUserItem(
     String uid,
   ) async {
@@ -1135,6 +1300,21 @@ class DatabaseService {
         .collection('userSurvey')
         .doc('userSurvey')
         .set({'userBubbleSurvey': userBubbleSurvey});
+  }
+
+  Future test() async {
+    List<Map<String, dynamic>> a = [
+      {"issueCode": "000080", "name": "하이트진로"},
+      {"issueCode": "000120", "name": "CJ대한통운"},
+    ];
+
+    for (i = 0; i < a.length; i++) {
+      await databaseService
+          .collection("stocks")
+          .doc("KR")
+          .collection("allStockList")
+          .add(a[i]);
+    }
   }
 
   // 주식 종목정보 가져오기
@@ -1253,6 +1433,60 @@ class DatabaseService {
         .then((value) => value.data()['defaultMainText']);
   }
 
+  Future<DatabaseAddressModel> getOldSeasonAddress(String uid) async {
+    DatabaseAddressModel _databaseAddress;
+
+    String category;
+    String season;
+    String baseDate;
+    bool isVoting = true;
+
+    await DatabaseAddressModel().adminClosedSeason().get().then((doc) {
+      print(doc.data());
+      category = doc.data()['category'];
+      season = doc.data()['season'];
+      baseDate = doc.data()['baseDate'];
+    });
+
+    _databaseAddress = DatabaseAddressModel(
+      uid: uid,
+      date: baseDate,
+      category: category,
+      season: season,
+      isVoting: isVoting, //false면 장 중
+    );
+
+    return _databaseAddress;
+  }
+
+  Future getSpecialAwards(DatabaseAddressModel lastSeasonAddressModel) async {
+    Map<String, String> specialAwardsMap = {};
+    List specialAwardsName;
+    List specialAwardsUserName;
+    await DatabaseAddressModel().adminClosedSeason().get().then((doc) {
+      // doc.data();
+      specialAwardsName = doc.data()['specialAwardsName'];
+      specialAwardsUserName = doc.data()['specialAwardsUserName'];
+    });
+
+    for (int i = 0; i < specialAwardsName.length; i++) {
+      specialAwardsMap[specialAwardsName[i]] = specialAwardsUserName[i];
+    }
+
+    return specialAwardsMap;
+  }
+
+  Future getSpecialAwardsDescription(
+      DatabaseAddressModel lastSeasonAddressModel) async {
+    String description;
+    await DatabaseAddressModel().adminClosedSeason().get().then((doc) {
+      // doc.data();
+      description = doc.data()['specialDescription'];
+    });
+
+    return description;
+  }
+
   // database 및 time정보로 Database Address 모델 만들기
   Future<DatabaseAddressModel> getAddress(String uid) async {
     print("AddressGetStart" + DateTime.now().toString());
@@ -1307,10 +1541,11 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20201221',
+      // date: '20210105',
       // date: "20201024",
       date: baseDate,
       category: category,
+      // season: "beta001",
       season: season,
       // isVoting: false,
       // isVoting: true,
@@ -1321,5 +1556,24 @@ class DatabaseService {
     print("AddressGetEnd" + DateTime.now().toString());
     print("RETURNED ADDRESS" + _databaseAddress.date.toString());
     return _databaseAddress;
+  }
+
+  Stream<int> getNameCheckResult(uid) {
+    return _databaseService
+        .collection('checkName')
+        .doc(uid)
+        .snapshots()
+        .map((snapshot) {
+      print("GETNAME STREAM" + snapshot.data()['return'].toString());
+      return snapshot.data()['return'];
+    });
+  }
+
+  Future<String> checkNameUrl() {
+    return _databaseService
+        .collection('admin')
+        .doc('adminPost')
+        .get()
+        .then((value) => value.data()['checkNameUrl']);
   }
 }

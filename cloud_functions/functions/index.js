@@ -60,11 +60,11 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
       .doc("stats");
   }
 
-  const todayRankCollectionRef = ranksRef
-    .doc(category)
-    .collection(season)
-    .doc(today)
-    .collection(today);
+  // const todayRankCollectionRef = ranksRef
+  //   .doc(category)
+  //   .collection(season)
+  //   .doc(today)
+  //   .collection(today);
 
   // const prevRankCollectionRef = ranksRef
   //   .doc(category)
@@ -83,7 +83,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
 
 
     // 임의로 result 넣기
-  // let todayResult = [1,1,1];
+  // let todayResult = [1,2,2];
   // user의 vote 선택 가져오기
   console.log(todayResult);
   let userCurrentCombo = {};
@@ -356,8 +356,8 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const category = openSeasonSnapshot.data().category;
   const season = openSeasonSnapshot.data().season;
 
-  const today = "20201218";
-  const yesterday = "20201217";
+  // const today = "20210104";
+  // const yesterday = "20201230";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -370,7 +370,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
     .then((doc) => doc.data().startDate);
 
   function dateRankCollectionRef(date) {
-    return ranksRef.doc("KR").collection("beta001").doc(date).collection(date);
+    return ranksRef.doc("KR").collection(season).doc(date).collection(date);
   }
 
   function userVotesSeasonStatsCollection(uid) {
@@ -398,7 +398,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
         userVotesSeasonStatsCollection(uid)
           .get()
           .then((statsData) => {
-            console.log(statsData.data())
+            // console.log(statsData.data())
             if (
               statsData.data() !== undefined &&
               statsData.data() !== null &&
@@ -408,7 +408,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
               // statsData !== undefined
             )   
             {
-              console.log(statsData.data());
+              // console.log(statsData.data());
 
               var temp = {};
               temp["uid"] = uid;
@@ -437,8 +437,8 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   });
 
   // console.log(typeof userDocs);
-  console.log(participatedUserSortedCurrentWinPoint.length);
-  console.log(participatedUserSortedCurrentWinPoint);
+  // console.log(participatedUserSortedCurrentWinPoint.length);
+  // console.log(participatedUserSortedCurrentWinPoint);
 
   for (i = 0; i < participatedUserSortedCurrentWinPoint.length; i++) {
     participatedUserSortedCurrentWinPoint[i]["avatarImage"] =
@@ -474,7 +474,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
     });
   }
 
-  console.log(prevRankDocs);
+  // console.log(prevRankDocs);
 
   async function updateTodayRank(datas, yesterdays) {
     await Promise.all(

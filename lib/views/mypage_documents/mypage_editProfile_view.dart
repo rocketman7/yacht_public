@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/services/navigation_service.dart';
-import 'package:yachtOne/views/constants/size.dart';
 
+import '../../services/navigation_service.dart';
+import '../../views/constants/size.dart';
 import '../../locator.dart';
 import '../../view_models/mypage_editProfile_view_model.dart';
 import '../widgets/avatar_widget.dart';
 
 class MypageEditProfileView extends StatelessWidget {
-  NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MypageEditProfileViewModel>.reactive(
@@ -307,7 +307,7 @@ Future buildModalBottomSheet(
             child: Column(
               children: [
                 Text(
-                  '메리 크리스마스!',
+                  '2021년 시작!',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16.0, color: Colors.white),
                 ),
@@ -371,7 +371,7 @@ Widget avatarItems(
                             model.checkedAvatarImage)
                         ? Color(0xFFFFFFFF).withOpacity(0.5)
                         : Color(0xFF1EC8CF),
-                    width: 2)),
+                    width: 4)),
           ),
           Container(
             height: 60,

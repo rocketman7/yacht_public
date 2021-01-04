@@ -83,6 +83,7 @@ class _MyAppState extends State<MyApp> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         // showPerformanceOverlay: true,
         // key: navBarGlobalKey,
         navigatorKey: locator<NavigationService>().navigatorKey,

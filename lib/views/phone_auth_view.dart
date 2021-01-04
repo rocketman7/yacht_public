@@ -236,7 +236,7 @@ class _PhoneAuthViewState extends State<PhoneAuthView> {
                         onPressed: () async {
                           (_smsCodeLength == 6)
                               ? model.matchCode(
-                                  _verifyNumberController.text.trim())
+                                  _verifyNumberController.text.trim(), context)
                               : 0;
                         },
                         minWidth: double.infinity,

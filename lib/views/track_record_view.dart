@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/track_record_view_model.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -69,6 +70,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
           );
         } else {
           print("System Util " + 137.h.toString() + "  " + 40.sp.toString());
+
           return Scaffold(
             body: WillPopScope(
               onWillPop: _onWillPop,
@@ -84,13 +86,59 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          "나의 예측기록",
-                          style: TextStyle(
-                            fontFamily: 'AppleSDEB',
-                            fontSize: 32.sp,
-                            letterSpacing: -2.0,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "나의 예측기록",
+                              style: TextStyle(
+                                fontFamily: 'AppleSDEB',
+                                fontSize: 32.sp,
+                                letterSpacing: -2.0,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: FutureBuilder(
+                                  future: model.getAllSeasonList(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Container(color: Colors.blue);
+                                    } else {
+                                      List<String> seasonList = snapshot.data;
+                                      return Container(
+                                        height: 40,
+                                        // width: 90,
+                                        // color: Colors.blue,
+                                        child: DropdownButton<String>(
+                                          value: model.showingSeasonName,
+                                          icon: Icon(Icons.arrow_drop_down),
+                                          iconSize: 24,
+                                          elevation: 8,
+                                          style: TextStyle(color: Colors.black),
+                                          underline: Container(
+                                              // height: 2,
+                                              // color: Colors.deepPurpleAccent,
+                                              ),
+                                          onChanged: (String newValue) {
+                                            model.renewAddress(newValue);
+                                            // showingSeasonName = newValue;
+                                          },
+                                          items: seasonList
+                                              .map<DropdownMenuItem<String>>(
+                                                  (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      );
+                                    }
+                                  }),
+                            )
+                          ],
                         ),
                       ),
                       SizedBox(
@@ -235,14 +283,17 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                           padding: EdgeInsets.symmetric(
                             horizontal: 16.sp,
                           ),
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: model.allSeasonVoteList.length,
-                              itemBuilder: (context, index) {
-                                print("Length" +
-                                    model.allSeasonVoteList.length.toString());
-                                return buildColumn(model, index);
-                              }),
+                          child: model.isChangingSeason
+                              ? Center(child: CircularProgressIndicator())
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: model.allSeasonVoteList.length,
+                                  itemBuilder: (context, index) {
+                                    print("Length" +
+                                        model.allSeasonVoteList.length
+                                            .toString());
+                                    return buildColumn(model, index);
+                                  }),
                         ),
                       ),
                     ],

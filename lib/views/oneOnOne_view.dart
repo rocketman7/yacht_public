@@ -108,8 +108,7 @@ class OneOnOneView extends StatelessWidget {
                                               SizedBox(
                                                 height: 20,
                                               ),
-                                              Text(
-                                                  '문의 작성 기능은 아직 구현 전이니까 나의 문의 탭부터 확인 고고')
+                                              Text('')
                                             ],
                                           ),
                                         )

@@ -198,7 +198,8 @@ class _LoginViewState extends State<LoginView>
                       onPressed: () {
                         model.login(
                             email: _emailController.text,
-                            password: _passwordController.text);
+                            password: _passwordController.text,
+                            context: context);
                       },
                       minWidth: double.infinity,
                       height: 60,

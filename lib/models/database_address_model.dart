@@ -119,4 +119,8 @@ class DatabaseAddressModel {
   DocumentReference adminOpenSeason() {
     return _databaseService.adminCollectionReference.doc('openSeason');
   }
+
+  DocumentReference adminClosedSeason() {
+    return _databaseService.adminCollectionReference.doc('closedSeason');
+  }
 }

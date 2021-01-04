@@ -85,11 +85,11 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                 backgroundColor: Colors.white,
                 body: SafeArea(
                   child: Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        18,
-                        18,
-                        18,
-                        0,
+                      padding: EdgeInsets.fromLTRB(
+                        18.sp,
+                        18.sp,
+                        18.sp,
+                        6.sp,
                       ),
                       child: Form(
                         key: _formKey,
@@ -751,14 +751,14 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Container(
-                                    height: 40,
-                                    width: 40,
+                                    height: 40.sp,
+                                    width: 40.sp,
                                     child: avatarWidgetWithoutItem(
                                       model.user.avatarImage,
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 8,
+                                    width: 8.sp,
                                   ),
                                   Stack(children: <Widget>[
                                     Container(
@@ -817,7 +817,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                             ),
                                             hintText: '주제에 관한 의견을 말해주세요',
                                             hintStyle: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 14.sp,
                                               color: Color(0xFF828282),
                                             )),
                                       ),
@@ -828,8 +828,6 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                       right: 0,
                                       child: GestureDetector(
                                         onTap: () {
-                                          print(model.idx);
-                                          print(model.userVote.voteSelected);
                                           if (_formKey.currentState
                                               .validate()) {
                                             voteCommentModel = VoteCommentModel(
@@ -858,8 +856,6 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
 
                                               // postDateTime: DateTime.now(),
                                             );
-                                            print("TAP");
-                                            print(voteCommentModel.uid);
 
                                             FocusScope.of(context).unfocus();
                                             model.postComments(
@@ -1635,7 +1631,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                           Text(
                             voteComment.userName,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -1659,7 +1655,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                           : timeElapsed.inDays.toString() +
                                               "일 전",
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF999999),
                           )),
@@ -1670,7 +1666,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
               Row(
                 children: <Widget>[
                   LikeButton(
-                    size: 20,
+                    size: 20.sp,
                     isLiked: isPostLiked,
                     bubblesSize: 80,
                     countPostion: CountPostion.right,
@@ -1689,7 +1685,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                         count,
                         style: TextStyle(
                           // fontFamily: 'DmSans',
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontFeatures: [FontFeature.tabularFigures()],
                         ),
                       );
@@ -1841,6 +1837,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                             "신고/차단",
                             style: TextStyle(
                               color: Colors.grey,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ),
@@ -1858,7 +1855,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
               voteComment.postText,
               textAlign: TextAlign.left,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 // fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),

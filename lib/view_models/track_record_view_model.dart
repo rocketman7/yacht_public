@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/models/season_model.dart';
 
 import '../models/rank_model.dart';
 import '../models/database_address_model.dart';
@@ -22,12 +23,19 @@ class TrackRecordViewModel extends FutureViewModel {
 
   String uid;
   DatabaseAddressModel address;
+  DatabaseAddressModel newAddress;
   UserModel user;
   UserVoteModel userVote;
   VoteModel vote;
+  SeasonModel seasonModel;
+  SeasonModel newSeasonModel;
+  String showingSeasonName;
   List<RankModel> rankModel = [];
   List<UserVoteModel> allSeasonUserVoteList = [];
   List<VoteModel> allSeasonVoteList = [];
+  List<String> seasonNameList = [];
+  List<SeasonModel> seasonModelList = [];
+  bool isChangingSeason = false;
   // List<Widget> voteRows;
 
   int myRank = 0;
@@ -52,6 +60,8 @@ class TrackRecordViewModel extends FutureViewModel {
     vote = _stateManageService.voteModel;
     userVote = _stateManageService.userVoteModel;
     rankModel = _stateManageService.rankModel;
+    seasonModel = _stateManageService.seasonModel;
+    showingSeasonName = seasonModel.seasonName;
     for (int i = 0; i < rankModel.length; i++) {
       if (rankModel[i].uid == uid) {
         myRank = rankModel[i].todayRank;
@@ -68,6 +78,59 @@ class TrackRecordViewModel extends FutureViewModel {
     // print(allSeasonVoteList[3].voteDate.toString());
     // print(allSeasonVoteList[4].voteDate.toString());
     // print(allSeasonVoteList[5].voteDate.toString());
+  }
+
+  Future getAllSeasonList() async {
+    List<String> seasonNameList = [];
+
+    seasonModelList = await _databaseService.getAllSeasonInfoList();
+    print("SEASONLIST" + seasonModelList[0].toString());
+    seasonModelList.forEach((element) {
+      seasonNameList.add(element.seasonName);
+    });
+    print("SEASON NAME LIST" + seasonNameList.toString());
+    // seasonNameList = ['시즌 2', '시즌 1'];
+    // seasonNameList.sort();
+    return seasonNameList;
+  }
+
+  Future renewAddress(String seasonName) async {
+    String newEndDate;
+    String newSeason;
+
+    for (var i = 0; i < seasonModelList.length; i++) {
+      if (seasonModelList[i].seasonName == seasonName) {
+        newEndDate = seasonModelList[i].endDate ?? address.date;
+        newSeason = seasonModelList[i].seasonId;
+        print(newEndDate);
+        print(newSeason);
+      }
+    }
+    isChangingSeason = true;
+    notifyListeners();
+    // setBusy(true);
+    newAddress = DatabaseAddressModel(
+      uid: uid,
+      date: newEndDate,
+      category: address.category,
+      season: newSeason,
+      // isVoting: address.isVoting,
+    );
+
+    userVote = await _databaseService.getUserVote(newAddress);
+    allSeasonUserVoteList =
+        await _databaseService.getAllSeasonUserVote(newAddress);
+    allSeasonVoteList = await _databaseService.getAllSeasonVote(newAddress);
+    newSeasonModel = await _databaseService.getSeasonInfo(newAddress);
+    showingSeasonName = newSeasonModel.seasonName;
+    rankModel = await _databaseService.getRankList(newAddress);
+    for (int i = 0; i < rankModel.length; i++) {
+      if (rankModel[i].uid == uid) {
+        myRank = rankModel[i].todayRank;
+      }
+    }
+    isChangingSeason = false;
+    notifyListeners();
   }
 
   String returnDigitFormat(int value) {
