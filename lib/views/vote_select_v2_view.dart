@@ -2515,6 +2515,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: AlertDialog(
               content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('광고 시청을 통해 하루 최대 5개의 꾸욱 아이템을 얻을 수 있어요.'),
                   Row(
