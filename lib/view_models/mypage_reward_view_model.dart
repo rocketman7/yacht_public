@@ -34,7 +34,7 @@ class MypageRewardViewModel extends FutureViewModel {
     uid = _authService.auth.currentUser.uid;
   }
 
-  Stream<int> getNameCheckResult(uid) {
+  Stream<String> getNameCheckResult(uid) {
     var result = _databaseService.getNameCheckResult(uid);
     return result;
   }

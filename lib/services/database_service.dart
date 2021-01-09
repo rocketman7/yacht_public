@@ -1541,7 +1541,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20210105',
+      // date: '20210111',
       // date: "20201024",
       date: baseDate,
       category: category,
@@ -1558,13 +1558,13 @@ class DatabaseService {
     return _databaseAddress;
   }
 
-  Stream<int> getNameCheckResult(uid) {
+  Stream<String> getNameCheckResult(uid) {
     return _databaseService
         .collection('checkName')
         .doc(uid)
         .snapshots()
         .map((snapshot) {
-      print("GETNAME STREAM" + snapshot.data()['return'].toString());
+      // print("GETNAME STREAM" + snapshot.data()['return'].toString());
       return snapshot.data()['return'];
     });
   }

@@ -255,7 +255,7 @@ class MypageRewardView extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              StreamBuilder<int>(
+              StreamBuilder<String>(
                   stream: model.getNameCheckResult(model.uid),
                   builder: (context, snapshot) {
                     print("reward index" + index.toString());
@@ -264,7 +264,7 @@ class MypageRewardView extends StatelessWidget {
                       return Container();
                     } else {
                       print("GETNAME SNAPSHOT" + snapshot.data.toString());
-                      if (snapshot.data == 0) {
+                      if (snapshot.data == "1") {
                         model.userRewardModels[index].isTax = false;
                         model.notifyListeners();
                       }
