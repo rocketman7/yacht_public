@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
         // key: navBarGlobalKey,
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: Routers.generateRoute,
-        home: InitialView(),
+        home: LunchtimeEventView(),
         builder: (context, navigator) {
           var lang = Localizations.localeOf(context).languageCode;
           print("MAINLanguage is " + lang);

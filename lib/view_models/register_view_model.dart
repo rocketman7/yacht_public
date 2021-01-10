@@ -67,7 +67,7 @@ class RegisterViewModel extends BaseViewModel {
       //   title: '회원가입 오류',
       //   description: "중복 닉네임이 있습니다",
       // );
-      return true;
+      // return true;
     } else {
       var result = await _authService.registerWithEmail(
         userName: userName,

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:yachtOne/models/all_stock_list_model.dart';
+import 'package:yachtOne/models/lunchtime_vote_model.dart';
 import 'package:yachtOne/models/user_reward_model.dart';
+import 'package:yachtOne/views/lunchtime_event_view.dart';
 import 'api/customized_ntp.dart';
 import 'package:yachtOne/models/chart_model.dart';
 import 'package:yachtOne/models/index_info_model.dart';
@@ -1547,9 +1549,9 @@ class DatabaseService {
       category: category,
       // season: "beta001",
       season: season,
-      // isVoting: false,
+      isVoting: false,
       // isVoting: true,
-      isVoting: isVoting, //false면 장 중
+      // isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());
@@ -1569,11 +1571,32 @@ class DatabaseService {
     });
   }
 
-  Future<String> checkNameUrl() {
+  Future<String> checkNameUrl() async {
     return _databaseService
         .collection('admin')
         .doc('adminPost')
         .get()
         .then((value) => value.data()['checkNameUrl']);
+  }
+
+  Future getLunchtimeVote() async {
+    // print("GetLunchModel");
+    List<LunchtimeVoteModel> lunchtimeVoteList = [];
+    await _databaseService
+        .collection('votes')
+        .doc('KR')
+        .collection('lunchEvent')
+        .doc('20210113')
+        .collection('subVote')
+        .get()
+        .then((value) {
+      print(value.docs[0].id);
+      return value.docs.forEach((e) {
+        // print(e);
+        // print(e.data());
+        lunchtimeVoteList.add(LunchtimeVoteModel.fromMap(e.data()));
+      });
+    });
+    return lunchtimeVoteList;
   }
 }

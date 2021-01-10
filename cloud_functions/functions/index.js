@@ -35,7 +35,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // today -> string으로 변환
   // var today = Date();
   var today = dateFormat(Date(), "yyyymmdd");
-
+  // var today = '20210108';
   console.log(today);
   // const today = "20201005";
   // today의 실제 결과 가져오기 (이전에 넣어야함)
@@ -267,9 +267,11 @@ await getEachUserVote(allUserUid);
         userVotesSeasonStatsCollection(uid)
           .get()
           .then((doc) => {
+
             // console.log(data);
             // const increment = firebase.firestore.FieldValue.increment(userScores[uid]);
             userVotesSeasonStatsCollection(uid).update({
+              
               // currentWinPoint:0,
               currentWinPoint:
                 ((doc.data() === undefined ||
@@ -289,7 +291,7 @@ await getEachUserVote(allUserUid);
               // [`winPointHistory.${today}`] : 0,
               [`winPointHistory.${today}`] : userScores[uid],
             });
-
+           
             return 0;
           })
       )
@@ -356,9 +358,9 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const category = openSeasonSnapshot.data().category;
   const season = openSeasonSnapshot.data().season;
 
-  // const today = "20210105";
+  // const today = "20210108";
   var today = dateFormat(Date(), "yyyymmdd");
-  // const yesterday = "20210107";
+  // const yesterday = "20210108";
   // todayRankRef
 
   const seasonInfoRef = votesRef
