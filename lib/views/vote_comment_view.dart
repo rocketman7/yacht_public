@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/notice_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
@@ -57,6 +58,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
   @override
   void initState() {
     super.initState();
+
     // 주제 선택하는 좌우 스크롤 메뉴의 컨트롤러
 
     // _tabController = TabController(length: 3, vsync: this);
@@ -144,12 +146,12 @@ class _VoteCommentViewState extends State<VoteCommentView>
               body: WillPopScope(
                 onWillPop: _onWillPop,
                 child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+                        child: Text(
                           "커뮤니티",
                           style: TextStyle(
                             fontFamily: 'AppleSDEB',
@@ -157,14 +159,20 @@ class _VoteCommentViewState extends State<VoteCommentView>
                             letterSpacing: -2.0,
                           ),
                         ),
-                        SizedBox(
-                          height: 16.h,
-                        ),
-                        buildHorizontalCalendar(model, newVote),
-                        SizedBox(
-                          height: 16.h,
-                        ),
-                        Text(
+                      ),
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                        child: buildHorizontalCalendar(model, newVote),
+                      ),
+                      SizedBox(
+                        height: 16.h,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                        child: Text(
                           "자유 게시판 & 주제별 커뮤니티",
                           style: TextStyle(
                             fontFamily: 'AppleSDB',
@@ -173,26 +181,86 @@ class _VoteCommentViewState extends State<VoteCommentView>
                             letterSpacing: -1.0,
                           ),
                         ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Divider(
-                          height: 0,
-                          color: Colors.black,
-                          thickness: 2,
-                        ),
-                        // SizedBox(
-                        //   height: 16,
-                        // ),
-                        Flexible(
-                          child: Container(
-                            // height: 500,
+                      ),
+                      // SizedBox(
+                      //   height: 8,
+                      // ),
+                      // Padding(
+                      //   padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      //   child: Divider(
+                      //     height: 0,
+                      //     color: Colors.black,
+                      //     thickness: 2,
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 2,
+                      // ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      Stack(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: 40.h,
+                            color: Color(0xFF1EC8CF),
+                          ),
+                          Container(
+                            width: double.infinity,
+                            height: 40.h,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 16.w,
+                                ),
+                                GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    _navigationService.navigateTo('notice');
+                                  },
+                                  child: Text('공지사항',
+                                      style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        color: Colors.white,
+                                        fontFamily: 'AppleSDM',
+                                        fontSize: 14.sp,
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 8.w,
+                                ),
+                                Expanded(
+                                  child: FutureBuilder(
+                                    future: model.getNotice(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        print(snapshot.data);
+                                        print(snapshot.data[0].title);
+                                        return NoticeBar(snapshot.data);
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Flexible(
+                        child: Container(
+                          // height: 500,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                             child: buildListView(
                                 model, model.newVote ?? model.vote),
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -895,4 +963,110 @@ class _VoteCommentViewState extends State<VoteCommentView>
   //     ],
   //   );
   // }
+}
+
+// 공지사항용 bar. 애니메이션 + 퓨처빌더쓰기위해서 나눠줌
+class NoticeBar extends StatefulWidget {
+  final List<NoticeModel> noticeModel;
+
+  NoticeBar(this.noticeModel);
+
+  @override
+  _NoticeBarState createState() => _NoticeBarState();
+}
+
+class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
+  final NavigationService _navigationService = locator<NavigationService>();
+  //공지사항용
+  List<NoticeModel> noticeModel;
+  // List<String> temp;
+
+  AnimationController _noticeAnimationController;
+  Animation _noticeOpacity;
+  int noticeIdx;
+
+  @override
+  void initState() {
+    super.initState();
+    noticeModel = widget.noticeModel;
+    // temp = ['a', 'b', 'c'];
+    noticeIdx = 0;
+
+    //페이드 애니메이션의 속도는 아래에서 조정
+    _noticeAnimationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+
+    _noticeAnimationController.forward();
+
+    _noticeOpacity =
+        Tween(begin: 0.0, end: 1.0).animate(_noticeAnimationController);
+
+    _noticeAnimationController.addListener(() {
+      if (_noticeAnimationController.status == AnimationStatus.completed) {
+        // print('animation completed');
+
+        //애니메이션 후 멈춰있는 속도는 아래에서 조정
+        Future.delayed(Duration(milliseconds: 2000), () {
+          _noticeAnimationController.reverse();
+        });
+      }
+
+      if (_noticeAnimationController.status == AnimationStatus.dismissed) {
+        // print('animation dismissed');
+        setState(() {
+          // if (noticeIdx < temp.length - 1) {
+          if (noticeIdx < noticeModel.length - 1) {
+            noticeIdx++;
+          } else {
+            noticeIdx = 0;
+          }
+        });
+        _noticeAnimationController.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _noticeAnimationController.dispose();
+
+    super.dispose();
+  }
+
+  //notice_view_model 의 메쏘드랑 일치하여야 함.
+  void selectNotice(int index) {
+    if (noticeModel[index].textOrNavigateTo == 'text') {
+      _navigationService.navigateWithArgTo(
+          'notice_text_based', noticeModel[index]);
+    } else {
+      _navigationService
+          .navigateTo(noticeModel[index].textOrNavigateTo.toString());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        selectNotice(noticeIdx);
+      },
+      child: Container(
+        // width: double.infinity,
+        // height: 40.h,
+        child: FadeTransition(
+            opacity: _noticeOpacity,
+            // child: Text(temp[noticeIdx],
+            child: Text(noticeModel[noticeIdx].title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'AppleSDM',
+                  fontSize: 16.sp,
+                  letterSpacing: -2.0,
+                ))),
+      ),
+    );
+  }
 }

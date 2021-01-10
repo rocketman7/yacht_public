@@ -61,6 +61,13 @@ class RankViewModel extends FutureViewModel {
     userModel = _stateManageService.userModel;
     rankModel = _stateManageService.rankModel;
 
+    // 혹시 우승자들 있으면 랭크모델 수정해서.. 1등으로 바꿔주기
+    for (int i = 0; i < rankModel.length; i++) {
+      if (rankModel[i].currentWinPoint >= seasonModel.winningPoint) {
+        rankModel[i].todayRank = 1;
+      }
+    }
+
     // 순위변동 구해주자.
     for (int i = 0; i < rankModel.length; i++) {
       if (rankModel[i].prevRank != null) {
