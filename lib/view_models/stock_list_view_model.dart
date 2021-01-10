@@ -20,20 +20,31 @@ class StockListViewModel extends FutureViewModel {
 
   ///me
   StockListViewModel() {
+    // filter.addListener(() {
+    //   filter.addListener(() {
+    //     if (filter.text.isEmpty) {
+    //       searchingName = "";
+    //       searchingAllStockListModel =
+    //           searchStocksInAllStockList(searchingName);
+    //       notifyListeners();
+    //     } else {
+    //       searchingName = filter.text;
+    //       searchingAllStockListModel =
+    //           searchStocksInAllStockList(searchingName);
+    //       notifyListeners();
+    //     }
+    //   });
+    // });
     filter.addListener(() {
-      filter.addListener(() {
-        if (filter.text.isEmpty) {
-          searchingName = "";
-          searchingAllStockListModel =
-              searchStocksInAllStockList(searchingName);
-          notifyListeners();
-        } else {
-          searchingName = filter.text;
-          searchingAllStockListModel =
-              searchStocksInAllStockList(searchingName);
-          notifyListeners();
-        }
-      });
+      if (filter.text.isEmpty) {
+        searchingName = "";
+        searchingAllStockListModel = searchStocksInAllStockList(searchingName);
+        notifyListeners();
+      } else {
+        searchingName = filter.text;
+        searchingAllStockListModel = searchStocksInAllStockList(searchingName);
+        notifyListeners();
+      }
     });
   }
 

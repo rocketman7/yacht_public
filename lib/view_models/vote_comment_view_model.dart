@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
+import 'package:yachtOne/models/notice_model.dart';
 import 'package:yachtOne/models/season_model.dart';
 import 'package:yachtOne/services/amplitude_service.dart';
 import 'package:yachtOne/services/dialog_service.dart';
@@ -40,6 +41,9 @@ class VoteCommentViewModel extends FutureViewModel {
 
   VoteModel newVote;
 //   UserVoteModel newUserVote;
+
+  // 공지사항용
+  List<NoticeModel> noticeModel = [];
 
   VoteCommentViewModel() {
     // _authService.signOut();
@@ -112,6 +116,31 @@ class VoteCommentViewModel extends FutureViewModel {
   //     print("user Not Confirmed");
   //   }
   // }
+
+  // 공지사항용: 퓨쳐
+  Future<List<NoticeModel>> getNotice() async {
+    // 공지사항용
+    noticeModel = await _databaseService.getNotice();
+
+    // noticeModel.add(NoticeModel(
+    //   category: '시즌',
+    //   textOrNavigateTo: 'winner',
+    //   title: '시즌1 우승자가 탄생하였습니다!',
+    //   navigateArgu: [],
+    //   content: '',
+    // ));
+
+    // noticeModel.add(NoticeModel(
+    //   category: '시즌',
+    //   textOrNavigateTo: 'text',
+    //   title:
+    //       '시즌1 우승자가 탄생하였습니다!시즌1 우승자가 탄생하였습니다!시즌1 우승자가 탄생하였습니다!시즌1 우승자가 탄생하였습니다!시즌1 우승자가 탄생하였습니다!시즌1 우승자가 탄생하였습니다!',
+    //   navigateArgu: [],
+    //   content: '그렇습니다',
+    // ));
+
+    return noticeModel;
+  }
 
   @override
   Future futureToRun() => getAllModel(uid);

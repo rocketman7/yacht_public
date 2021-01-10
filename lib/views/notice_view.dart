@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../view_models/notice_view_model.dart';
 
@@ -13,7 +14,11 @@ class NoticeView extends StatelessWidget {
               appBar: AppBar(
                 title: Text(
                   '공지사항',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontFamily: 'AppleSDEB',
+                    fontSize: 20.sp,
+                    letterSpacing: -2.0,
+                  ),
                 ),
                 elevation: 1,
               ),
@@ -42,7 +47,7 @@ List<Widget> noticeList(NoticeViewModel model) {
     result.add(GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        model.selectNoticeDetail(i);
+        model.selectNotice(i);
       },
       child: Padding(
         padding: EdgeInsets.only(top: 12, bottom: 12, left: 16, right: 16),
@@ -66,9 +71,8 @@ List<Widget> noticeList(NoticeViewModel model) {
                           : "${model.noticeModel[i].category}",
                       style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'DmSans',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                          fontFamily: 'AppleSDEM',
+                          fontSize: 12.sp,
                           letterSpacing: -0.28),
                     ),
                   ),
@@ -80,23 +84,23 @@ List<Widget> noticeList(NoticeViewModel model) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${model.noticeModel[i].title}',
-                          maxLines: model.isSelected[i] ? 100 : 1,
-                          overflow: model.isSelected[i]
-                              ? TextOverflow.visible
-                              : TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'DmSans',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: -0.28)),
+                      Text(
+                        '${model.noticeModel[i].title}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'AppleSDEM',
+                          fontSize: 16.sp,
+                          letterSpacing: -0.28,
+                        ),
+                      ),
                       Text(
                         '${model.noticeDateTimeStr[i]}',
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             letterSpacing: -0.28,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: 'AppleSDEM',
                             color: Color(0xFF787878)),
                       ),
                     ],
@@ -106,9 +110,7 @@ List<Widget> noticeList(NoticeViewModel model) {
                   width: 16,
                 ),
                 Icon(
-                  model.isSelected[i]
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
+                  Icons.keyboard_arrow_right,
                   size: 20,
                 )
               ],
@@ -121,23 +123,6 @@ List<Widget> noticeList(NoticeViewModel model) {
       height: 1,
       color: Color(0xFFF2F2F2),
     ));
-
-    model.isSelected[i]
-        ? result.add(Container(
-            color: Color(0xFFFAFAFA),
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
-              child: Text(
-                '${model.noticeModel[i].content.replaceAll("\\n", "\n")}',
-                style: TextStyle(
-                    fontSize: 16,
-                    letterSpacing: -0.28,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-          ))
-        : result.add(Container());
   }
 
   return result;

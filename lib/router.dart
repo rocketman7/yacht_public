@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/last_season_portfolio_view.dart';
 import 'package:yachtOne/views/last_season_rank_view.dart';
+import 'package:yachtOne/views/notice_textbased_view.dart';
 import 'package:yachtOne/views/password_change_view.dart';
 import 'package:yachtOne/views/phone_auth_view.dart';
 import 'package:yachtOne/views/season_community_view.dart';
@@ -140,6 +141,9 @@ class Routers {
         return MaterialPageRoute(builder: (context) => FaqView());
       case 'notice':
         return MaterialPageRoute(builder: (context) => NoticeView());
+      case 'notice_text_based':
+        return MaterialPageRoute(
+            builder: (context) => NoticeTextBasedView(routeSettings.arguments));
       case 'oneonone':
         return MaterialPageRoute(builder: (context) => OneOnOneView());
       case 'survey':

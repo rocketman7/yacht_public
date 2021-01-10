@@ -4,7 +4,7 @@ class RankModel {
   final int currentWinPoint;
   final String avatarImage;
   final int prevRank;
-  final int todayRank;
+  int todayRank;
 
   RankModel({
     this.uid,
