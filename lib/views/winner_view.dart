@@ -20,13 +20,17 @@ import '../views/widgets/avatar_widget.dart';
 import 'last_season_rank_view.dart';
 
 class WinnerView extends StatelessWidget {
+  final dynamic oldSeasonInfo;
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   final NavigationService _navigationService = locator<NavigationService>();
 
+  WinnerView(this.oldSeasonInfo);
+
   @override
   Widget build(BuildContext context) {
+    print("ARGS" + this.oldSeasonInfo.toString());
     return ViewModelBuilder<WinnerViewModel>.reactive(
-        viewModelBuilder: () => WinnerViewModel(),
+        viewModelBuilder: () => WinnerViewModel(oldSeasonInfo),
         builder: (context, model, child) {
           return Scaffold(
               body:
@@ -272,14 +276,24 @@ class WinnerView extends StatelessWidget {
                                     child: Align(
                                       alignment: Alignment.centerRight,
                                       child: Container(
-                                        // color: Colors.red,
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 6),
+                                        // alignment: Alignment.center,
+                                        // width: double.,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blueGrey,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20))),
                                         height: 30,
                                         child: Text(
                                           model.seasonModel.seasonName
                                                   .toString() +
                                               " 전체 순위 보러 가기",
+                                          // textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: 16,
+                                              height: 1,
+                                              color: Colors.white,
                                               fontFamily: 'AppleSDM'),
                                         ),
                                       ),
@@ -328,7 +342,7 @@ class WinnerView extends StatelessWidget {
                                   // ),
 
                                   // Divider(),
-                                  SizedBox(height: 4),
+                                  SizedBox(height: 16),
                                   Center(
                                     child: Text(
                                       '${model.seasonModel.seasonName} 우승자',
@@ -427,15 +441,15 @@ class WinnerView extends StatelessWidget {
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold)),
-                                                    SizedBox(
-                                                      width: 4,
-                                                    ),
-                                                    Image(
-                                                      image: AssetImage(
-                                                        'assets/images/christmas_winner00${randomInt.nextInt(10)}.png',
-                                                      ),
-                                                      height: 24,
-                                                    ),
+                                                    // SizedBox(
+                                                    //   width: 4,
+                                                    // ),
+                                                    // Image(
+                                                    //   image: AssetImage(
+                                                    //     'assets/images/christmas_winner00${randomInt.nextInt(10)}.png',
+                                                    //   ),
+                                                    //   height: 24,
+                                                    // ),
                                                   ],
                                                 ),
                                                 SizedBox(
@@ -634,13 +648,13 @@ class WinnerView extends StatelessWidget {
               ),
               overflow: TextOverflow.ellipsis,
             ),
-            SizedBox(width: 6),
-            Image(
-              image: AssetImage(
-                'assets/images/christmas_winner00${randomInteger.nextInt(10)}.png',
-              ),
-              height: 40,
-            )
+            // SizedBox(width: 6),
+            // Image(
+            //   image: AssetImage(
+            //     'assets/images/christmas_winner00${randomInteger.nextInt(10)}.png',
+            //   ),
+            //   height: 40,
+            // )
           ],
         ));
   }

@@ -587,7 +587,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
             Text(
               '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
               style: TextStyle(
-                fontSize: 18.sp,
+                fontSize: 17.sp,
                 height: 1,
                 fontFamily: 'AppleSDM',
               ),
@@ -598,7 +598,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
             Text(
               '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
               style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: 17.sp,
                   fontFamily: 'AppleSDM',
                   height: 1,
                   textBaseline: TextBaseline.alphabetic,
@@ -632,7 +632,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                 Text(
                   '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: 17.sp,
                     height: 1,
                     fontFamily: 'AppleSDM',
                   ),
@@ -643,7 +643,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                 Text(
                   '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
                   style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 17.sp,
                       fontFamily: 'AppleSDM',
                       height: 1,
                       textBaseline: TextBaseline.alphabetic,
@@ -678,7 +678,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                     Text(
                       '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 17.sp,
                         height: 1,
                         fontFamily: 'AppleSDM',
                       ),
@@ -689,7 +689,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                     Text(
                       '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
                       style: TextStyle(
-                          fontSize: 18.sp,
+                          fontSize: 17.sp,
                           fontFamily: 'AppleSDM',
                           height: 1,
                           textBaseline: TextBaseline.alphabetic,
@@ -721,7 +721,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                     Text(
                       '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].stockName}',
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 17.sp,
                         height: 1,
                         fontFamily: 'AppleSDM',
                       ),
@@ -732,7 +732,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                     Text(
                       '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].sharesNum}주',
                       style: TextStyle(
-                          fontSize: 18.sp,
+                          fontSize: 17.sp,
                           fontFamily: 'AppleSDM',
                           height: 1,
                           textBaseline: TextBaseline.alphabetic,

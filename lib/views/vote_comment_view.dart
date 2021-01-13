@@ -1006,7 +1006,7 @@ class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
         // print('animation completed');
 
         //애니메이션 후 멈춰있는 속도는 아래에서 조정
-        Future.delayed(Duration(milliseconds: 2000), () {
+        Future.delayed(Duration(milliseconds: 3000), () {
           _noticeAnimationController.reverse();
         });
       }
@@ -1039,8 +1039,9 @@ class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
       _navigationService.navigateWithArgTo(
           'notice_text_based', noticeModel[index]);
     } else {
-      _navigationService
-          .navigateTo(noticeModel[index].textOrNavigateTo.toString());
+      _navigationService.navigateWithArgTo(
+          noticeModel[index].textOrNavigateTo.toString(),
+          noticeModel[index].navigateArgu);
     }
   }
 

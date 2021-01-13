@@ -86,7 +86,8 @@ class Routers {
                 child: LastSeasonPortfolioView(routeSettings.arguments)));
       case 'winner':
         return MaterialPageRoute(
-            builder: (context) => DialogManager(child: WinnerView()));
+            builder: (context) =>
+                DialogManager(child: WinnerView(routeSettings.arguments)));
 
       case 'mypage_main':
         return MaterialPageRoute(

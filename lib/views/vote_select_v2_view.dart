@@ -597,7 +597,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   bool termsOfUse;
   String defaultMainText;
   bool isShowWinners = false;
-  String newSeasonStart;
+  String dialogOldSeason;
+  String dialogNewSeason;
+  String dialogNewSeasonStart;
 
   checkIfAgreeTerms(context) async {
     termsOfUse = await _sharedPreferencesService.getSharedPreferencesValue(
@@ -692,7 +694,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       app_store_url = remoteConfig.getString('app_store_url');
       play_store_url = remoteConfig.getString('play_store_url');
 
-      newSeasonStart = remoteConfig.getString('new_season_start');
+      dialogOldSeason = remoteConfig.getString('old_season_name');
+      dialogNewSeason = remoteConfig.getString('new_season_name');
+      dialogNewSeasonStart = remoteConfig.getString('new_season_start');
       // 주석 풀고 업데이트 //예측하러 가기 활성or비활성화
       // isSeasonStarted = remoteConfig.getBool('is_season_started');
 
@@ -782,13 +786,15 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                 ),
                               ),
                               Text(
-                                "꾸욱 시즌 1 우승자 탄생!",
+                                "꾸욱 " + dialogOldSeason + " 우승자 탄생!",
                                 style: TextStyle(
                                     fontSize: 24, fontFamily: 'AppleSDEB'),
                               ),
                               SizedBox(height: 8),
                               AutoSizeText(
-                                "꾸욱 첫 시즌에 참여해주신 여러분,\n진심으로 감사합니다.\n치열했던 시즌 1의 최종 우승자와\n깜짝 특별상을 확인해보세요!",
+                                "이번 시즌 꾸욱에 참여해주신 여러분,\n진심으로 감사합니다.\n치열했던 " +
+                                    dialogOldSeason +
+                                    "의 최종 우승자와\n깜짝 특별상을 확인해보세요!",
                                 style: TextStyle(
                                   fontSize: 17,
                                   fontFamily: 'AppleSDM',
@@ -800,9 +806,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                               RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(
-                                    text: newSeasonStart == null
-                                        ? "시즌 1 종료일 다음날" + " 오후 4시"
-                                        : newSeasonStart + "오후 4시",
+                                    text: dialogNewSeasonStart == null
+                                        ? dialogOldSeason +
+                                            " 종료일 다음날" +
+                                            " 오후 4시"
+                                        : dialogNewSeasonStart + "오후 4시",
                                     style: TextStyle(
                                       fontFamily: 'AppleSDM',
                                       color: Colors.red,
@@ -813,7 +821,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     ),
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: "부터 더욱 커진 상금 주식과 함께",
+                                          text: "부터",
                                           style: TextStyle(
                                             fontFamily: 'AppleSDM',
                                             color: Colors.black,
@@ -822,13 +830,17 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             // fontWeight: FontWeight.bold,
                                             // letterSpacing: -.5,
                                           )),
-                                      TextSpan(
-                                        text: " 시즌 2",
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontFamily: 'AppleSDM',
-                                            color: Colors.deepPurple),
-                                      ),
+                                    ]),
+                              ),
+                              RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                    text: " " + dialogNewSeason,
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontFamily: 'AppleSDM',
+                                        color: Colors.deepPurple),
+                                    children: <TextSpan>[
                                       TextSpan(
                                           text: "를 시작합니다!",
                                           style: TextStyle(
@@ -840,7 +852,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             // letterSpacing: -.5,
                                           )),
                                     ]),
-                              ),
+                              )
                             ],
                           ),
                           SizedBox(height: 16),
@@ -867,7 +879,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Center(
                                   child: Text(
-                                    "시즌 1 결과 보러가기",
+                                    dialogOldSeason + " 결과 보러가기",
                                     style: TextStyle(
                                       fontFamily: 'AppleSDB',
                                       height: 1,
@@ -1512,20 +1524,18 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         letterSpacing: -.5,
                                       ),
                                     ),
-                                    model.seasonInfo.seasonName == "시즌 2"
-                                        ? GestureDetector(
-                                            onTap: () {
-                                              _navigationService
-                                                  .navigateTo('winner');
-                                            },
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Text("지난 시즌 결과",
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontFamily: 'AppleSDM')),
-                                            ))
-                                        : Container(),
+                                    GestureDetector(
+                                        onTap: () {
+                                          _navigationService
+                                              .navigateTo('winner');
+                                        },
+                                        child: Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Text("지난 시즌 결과",
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontFamily: 'AppleSDM')),
+                                        ))
                                   ],
                                 )
 

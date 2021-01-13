@@ -1085,6 +1085,7 @@ class DatabaseService {
           .orderBy('noticeDateTime', descending: true)
           .get()
           .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+                print(element.data()['navigateArgu']);
                 noticeList.add(NoticeModel.fromData(element.data()));
               }));
 
@@ -1465,7 +1466,12 @@ class DatabaseService {
     Map<String, String> specialAwardsMap = {};
     List specialAwardsName;
     List specialAwardsUserName;
-    await DatabaseAddressModel().adminClosedSeason().get().then((doc) {
+    await DatabaseAddressModel()
+        .adminClosedSeason()
+        .collection(lastSeasonAddressModel.category)
+        .doc(lastSeasonAddressModel.season)
+        .get()
+        .then((doc) {
       // doc.data();
       specialAwardsName = doc.data()['specialAwardsName'];
       specialAwardsUserName = doc.data()['specialAwardsUserName'];
@@ -1481,7 +1487,12 @@ class DatabaseService {
   Future getSpecialAwardsDescription(
       DatabaseAddressModel lastSeasonAddressModel) async {
     String description;
-    await DatabaseAddressModel().adminClosedSeason().get().then((doc) {
+    await DatabaseAddressModel()
+        .adminClosedSeason()
+        .collection(lastSeasonAddressModel.category)
+        .doc(lastSeasonAddressModel.season)
+        .get()
+        .then((doc) {
       // doc.data();
       description = doc.data()['specialDescription'];
     });
@@ -1543,15 +1554,15 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20210111',
+      // date: '20210113',
       // date: "20201024",
       date: baseDate,
       category: category,
-      // season: "beta001",
+      // season: "season002",
       season: season,
-      isVoting: false,
+      // isVoting: false,
       // isVoting: true,
-      // isVoting: isVoting, //false면 장 중
+      isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());
@@ -1579,24 +1590,35 @@ class DatabaseService {
         .then((value) => value.data()['checkNameUrl']);
   }
 
-  Future getLunchtimeVote() async {
+  Future getLunchtimeVote(DatabaseAddressModel address) async {
     // print("GetLunchModel");
-    List<LunchtimeVoteModel> lunchtimeVoteList = [];
+    List<LunchtimeSubVoteModel> lunchtimeVoteList = [];
+
+    var voteData = await _databaseService
+        .collection('votes')
+        .doc('KR')
+        .collection(address.season)
+        // .doc(address.date)
+        .doc('20210113')
+        .get();
+
     await _databaseService
         .collection('votes')
         .doc('KR')
-        .collection('lunchEvent')
+        .collection(address.season)
+        // .doc(address.date)
         .doc('20210113')
         .collection('subVote')
         .get()
         .then((value) {
       print(value.docs[0].id);
-      return value.docs.forEach((e) {
+      value.docs.forEach((e) {
         // print(e);
         // print(e.data());
-        lunchtimeVoteList.add(LunchtimeVoteModel.fromMap(e.data()));
+        lunchtimeVoteList.add(LunchtimeSubVoteModel.fromMap(e.data()));
       });
     });
-    return lunchtimeVoteList;
+    return LunchtimeVoteModel.fromData(voteData.data(), lunchtimeVoteList);
+    // return lunchtimeVoteList;
   }
 }

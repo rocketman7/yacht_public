@@ -11,7 +11,7 @@ class DatabaseAddressModel {
   final String uid;
   final String date;
   final String category;
-  final String season;
+  String season;
   final bool isVoting;
   String subVote;
 

@@ -15,6 +15,8 @@ import 'package:yachtOne/views/constants/holiday.dart';
 import '../locator.dart';
 
 class WinnerViewModel extends FutureViewModel {
+  final dynamic oldSeasonInfo;
+
   @override
   Future futureToRun() => getUserAndRankList();
   final AuthService _authService = locator<AuthService>();
@@ -47,8 +49,9 @@ class WinnerViewModel extends FutureViewModel {
   List<String> specialAwards = [];
   List<String> specialAwardsUserName = [];
 
-  WinnerViewModel() {
+  WinnerViewModel(this.oldSeasonInfo) {
     uid = _authService.auth.currentUser.uid;
+    print("OLDSEASON " + oldSeasonInfo.toString());
   }
 
   Future getUserAndRankList() async {
@@ -60,7 +63,17 @@ class WinnerViewModel extends FutureViewModel {
     // }
 
     // 지난 시즌 어드레스 모델과 그에 맞는 모델들을 새로 불러와야 함
-    lastSeasonAddressModel = await _databaseService.getOldSeasonAddress(uid);
+    oldSeasonInfo == null
+        ? lastSeasonAddressModel =
+            await _databaseService.getOldSeasonAddress(uid)
+        : lastSeasonAddressModel = DatabaseAddressModel(
+            uid: uid,
+            category: oldSeasonInfo[0],
+            season: oldSeasonInfo[1],
+            date: oldSeasonInfo[2],
+            isVoting: true, //false면 장 중
+          );
+
     portfolioModel =
         await _databaseService.getPortfolio(lastSeasonAddressModel);
     seasonModel = await _databaseService.getSeasonInfo(lastSeasonAddressModel);

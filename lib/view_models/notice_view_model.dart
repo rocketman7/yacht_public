@@ -55,8 +55,9 @@ class NoticeViewModel extends FutureViewModel {
           'notice_text_based', noticeModel[index]);
     } else {
       // print('${noticeModel[index].navigateArgu}');
-      _navigationService
-          .navigateTo(noticeModel[index].textOrNavigateTo.toString());
+      _navigationService.navigateWithArgTo(
+          noticeModel[index].textOrNavigateTo.toString(),
+          noticeModel[index].navigateArgu);
     }
   }
 

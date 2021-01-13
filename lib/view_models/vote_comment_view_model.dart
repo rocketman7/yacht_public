@@ -121,7 +121,7 @@ class VoteCommentViewModel extends FutureViewModel {
   Future<List<NoticeModel>> getNotice() async {
     // 공지사항용
     noticeModel = await _databaseService.getNotice();
-
+    // print("ARG" + noticeModel[0].navigateArgu[1].toString());
     // noticeModel.add(NoticeModel(
     //   category: '시즌',
     //   textOrNavigateTo: 'winner',
