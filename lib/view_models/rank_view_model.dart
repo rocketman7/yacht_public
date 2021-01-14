@@ -62,6 +62,7 @@ class RankViewModel extends FutureViewModel {
     rankModel = _stateManageService.rankModel;
 
     // 혹시 우승자들 있으면 랭크모델 수정해서.. 1등으로 바꿔주기
+    // 어차피 스테이트매니지 랭크모델은 안바꾸면서 매번 페이지 들어올때마다만 바꿔주는거니까 무리없음
     for (int i = 0; i < rankModel.length; i++) {
       if (rankModel[i].currentWinPoint >= seasonModel.winningPoint) {
         rankModel[i].todayRank = 1;
