@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _connectionCheckService.checkConnection(context);
+    // _connectionCheckService.checkConnection(context);
   }
 
   @override

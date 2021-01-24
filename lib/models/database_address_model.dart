@@ -9,7 +9,7 @@ DatabaseService _databaseService = locator<DatabaseService>();
 
 class DatabaseAddressModel {
   final String uid;
-  final String date;
+  String date;
   final String category;
   String season;
   final bool isVoting;

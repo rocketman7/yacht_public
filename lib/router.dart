@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/last_season_portfolio_view.dart';
 import 'package:yachtOne/views/last_season_rank_view.dart';
+import 'package:yachtOne/views/lunchtime_event_view.dart';
 import 'package:yachtOne/views/notice_textbased_view.dart';
 import 'package:yachtOne/views/password_change_view.dart';
 import 'package:yachtOne/views/phone_auth_view.dart';
@@ -88,7 +89,10 @@ class Routers {
         return MaterialPageRoute(
             builder: (context) =>
                 DialogManager(child: WinnerView(routeSettings.arguments)));
-
+      case 'lunchtime':
+        return MaterialPageRoute(
+            builder: (context) => DialogManager(
+                child: LunchtimeEventView(routeSettings.arguments)));
       case 'mypage_main':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: MypageMainView()));

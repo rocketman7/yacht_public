@@ -24,6 +24,7 @@ class CustomizedLiteRollingSwitch extends StatefulWidget {
   @required
   final bool value;
   @required
+  final bool isEnabled;
   final Function(bool) onChanged;
   final String textOff;
   final String textOn;
@@ -39,6 +40,7 @@ class CustomizedLiteRollingSwitch extends StatefulWidget {
 
   CustomizedLiteRollingSwitch(
       {this.value = false,
+      this.isEnabled,
       this.textOff = "Off",
       this.textOn = "On",
       this.textSize = 14.0,
@@ -97,15 +99,15 @@ class _CustomizedLiteRollingSwitchState
 
     return GestureDetector(
       onDoubleTap: () {
-        _action();
+        widget.isEnabled ? _action() : {};
         if (widget.onDoubleTap != null) widget.onDoubleTap();
       },
       onTap: () {
-        _action();
+        widget.isEnabled ? _action() : {};
         if (widget.onTap != null) widget.onTap();
       },
       onPanEnd: (details) {
-        _action();
+        widget.isEnabled ? _action() : {};
         if (widget.onSwipe != null) widget.onSwipe();
         //widget.onSwipe();
       },

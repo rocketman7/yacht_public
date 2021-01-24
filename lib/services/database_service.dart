@@ -1500,6 +1500,16 @@ class DatabaseService {
     return description;
   }
 
+  Stream<String> getLunchEvent() {
+    return _databaseService
+        .collection('admin')
+        .doc('lunchEvent')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.data()['baseDate'];
+    });
+  }
+
   // database 및 time정보로 Database Address 모델 만들기
   Future<DatabaseAddressModel> getAddress(String uid) async {
     print("AddressGetStart" + DateTime.now().toString());
@@ -1554,7 +1564,7 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20210118',
+      // date: '20210125',
       // date: "20201024",
       date: baseDate,
       category: category,
@@ -1599,7 +1609,7 @@ class DatabaseService {
         .doc('KR')
         .collection(address.season)
         // .doc(address.date)
-        .doc('20210113')
+        .doc(address.date)
         .get();
 
     await _databaseService
@@ -1607,7 +1617,7 @@ class DatabaseService {
         .doc('KR')
         .collection(address.season)
         // .doc(address.date)
-        .doc('20210113')
+        .doc(address.date)
         .collection('subVote')
         .get()
         .then((value) {

@@ -1512,6 +1512,25 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     SizedBox(
                                       height: 8,
                                     ),
+
+                                    // GestureDetector(
+                                    //   onTap: () {
+                                    //     _navigationService
+                                    //         .navigateTo('lunchtime');
+                                    //   },
+                                    //   child: Container(
+                                    //     height: 40.h,
+
+                                    //     child: Text(
+                                    //       "점심시간 이벤트",
+                                    //       style: TextStyle(
+                                    //           color: Colors.yellowAccent,
+                                    //           fontSize: 30,
+                                    //           fontFamily: 'AppleSDB'),
+                                    //     ),
+                                    //     // color: Colors.yellowAccent,
+                                    //   ),
+                                    // ),
                                     Text(
                                       "우승까지 승점 ${(model.seasonInfo.winningPoint - (model.userVote.userVoteStats.currentWinPoint ?? 0)).toString()}점",
                                       key: tutorialKey1,
@@ -1524,18 +1543,30 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         letterSpacing: -.5,
                                       ),
                                     ),
-                                    GestureDetector(
-                                        onTap: () {
-                                          _navigationService
-                                              .navigateTo('winner');
-                                        },
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Text("지난 시즌 결과",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontFamily: 'AppleSDM')),
-                                        ))
+                                    StreamBuilder(
+                                        stream: model.getLunchEvent(),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return Container();
+                                          } else {
+                                            return GestureDetector(
+                                                onTap: () {
+                                                  _navigationService
+                                                      .navigateWithArgTo(
+                                                          'lunchtime',
+                                                          snapshot.data);
+                                                },
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: Text("점심 시간 이벤트",
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontFamily:
+                                                              'AppleSDM')),
+                                                ));
+                                          }
+                                        })
                                   ],
                                 )
 

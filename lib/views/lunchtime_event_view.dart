@@ -7,10 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
+
 import 'package:timezone/timezone.dart' as tz;
+import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
 import 'package:yachtOne/services/timezone_service.dart';
+import 'package:yachtOne/views/chart_forall_view.dart';
 
 import '../locator.dart';
 import 'constants/holiday.dart';
@@ -22,13 +24,16 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/view_models/lunchtime_event_view_model.dart';
 
 class LunchtimeEventView extends StatefulWidget {
+  final String lunchEventBaseDate;
+
+  LunchtimeEventView(this.lunchEventBaseDate);
   @override
   _LunchtimeEventViewState createState() => _LunchtimeEventViewState();
 }
 
 class _LunchtimeEventViewState extends State<LunchtimeEventView> {
   UserVoteModel userVote;
-
+  String lunchEventBaseDate;
   @override
   Widget build(BuildContext context) {
     var formatPrice = NumberFormat("#,###");
@@ -39,8 +44,11 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
     //나중에 아래 Screen Util initial 주석처리
     ScreenUtil.init(context,
         designSize: Size(375, 812), allowFontScaling: true);
+
+    TextStyle _contentStyle = TextStyle(fontFamily: 'AppleSDB', fontSize: 18);
     return ViewModelBuilder.reactive(
-        viewModelBuilder: () => LunchtimeEventViewModel(),
+        viewModelBuilder: () =>
+            LunchtimeEventViewModel(widget.lunchEventBaseDate),
         builder: (context, model, child) {
           if (model.isBusy) {
             return Stack(
@@ -82,8 +90,10 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
               ],
             );
           } else {
-            List<int> prediction = List.generate(
-                model.lunchtimeVoteModel.subVotes.length, (index) => 1);
+            List<int> prediction = model.userVote.voteSelected ??
+                List.generate(
+                    model.lunchtimeVoteModel.subVotes.length, (index) => 1);
+
             return Scaffold(
               body: Stack(
                 children: [
@@ -170,21 +180,6 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                               children: [
                                 Row(
                                   children: [
-                                    Text(
-                                      "예측 마감까지",
-                                      style: TextStyle(
-                                        fontFamily: 'AppleSDM',
-                                        fontSize: 17.sp,
-                                        color: Color(0xFF3E3E3E),
-
-                                        // fontWeight: FontWeight.w500,
-                                        letterSpacing: -1,
-                                        height: 1,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
                                     TopContainer(model),
                                   ],
                                 ),
@@ -227,6 +222,227 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                           SizedBox(
                             height: 12,
                           ),
+                          Table(
+                            // columnWidths: {
+                            //   0: FlexColumnWidth(2.0),
+                            //   1: FlexColumnWidth(1.5),
+                            //   2: FlexColumnWidth(1.5)
+                            // },
+                            children: [
+                              TableRow(
+                                children: [
+                                  Text(
+                                    "종목명",
+                                    // style: tableColumnStyle,
+                                    textAlign: TextAlign.left,
+                                  ),
+                                  Text(
+                                    "기준 가격",
+                                    // style: tableColumnStyle,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      "종가 예측",
+                                      // style: tableColumnStyle,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(children: [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                )
+                              ]),
+                              TableRow(children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: List.generate(
+                                        model.lunchtimeVoteModel.subVotes
+                                            .length, (index) {
+                                      bool isIndex = model.lunchtimeVoteModel
+                                              .subVotes[index].indexOrStocks ==
+                                          "index";
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          AutoSizeText(
+                                            model.lunchtimeVoteModel
+                                                .subVotes[index].name,
+                                            style: _contentStyle,
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          StreamBuilder(
+                                            stream: model.getRealtimePrice(
+                                                model.address,
+                                                model.lunchtimeVoteModel
+                                                    .subVotes[index].issueCode),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.data == null) {
+                                                return Center(
+                                                    child: Container());
+                                              } else {
+                                                PriceModel price0;
+                                                price0 = snapshot.data;
+                                                return price0.pricePctChange < 0
+                                                    ? Text(
+                                                        isIndex
+                                                            ? (formatIndex
+                                                                .format(price0
+                                                                    .price)
+                                                                .toString())
+                                                            : (formatPrice
+                                                                .format(price0
+                                                                    .price)
+                                                                .toString()),
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFF3485FF),
+                                                          fontSize: 16,
+                                                        ),
+                                                      )
+                                                    : Text(
+                                                        isIndex
+                                                            ? formatIndex
+                                                                .format(price0
+                                                                    .price)
+                                                                .toString()
+                                                            : formatPrice
+                                                                .format(price0
+                                                                    .price)
+                                                                .toString(),
+                                                        style: TextStyle(
+                                                          color:
+                                                              Color(0xFFFF3E3E),
+                                                          fontSize: 16,
+                                                          height: 1,
+                                                        ),
+                                                      );
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  ),
+                                ),
+                                Column(
+                                  children: List.generate(
+                                      model.lunchtimeVoteModel.subVotes.length,
+                                      (index) {
+                                    bool isIndex = model.lunchtimeVoteModel
+                                            .subVotes[index].indexOrStocks ==
+                                        "index";
+                                    return Column(
+                                      children: [
+                                        AutoSizeText(
+                                          isIndex
+                                              ? formatIndex
+                                                  .format(model
+                                                      .lunchtimeVoteModel
+                                                      .subVotes[index]
+                                                      .basePrice)
+                                                  .toString()
+                                              : formatPrice
+                                                  .format(model
+                                                      .lunchtimeVoteModel
+                                                      .subVotes[index]
+                                                      .basePrice)
+                                                  .toString(),
+                                          style: _contentStyle,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          " ",
+                                          style: TextStyle(
+                                            color: Color(0xFFFF3E3E),
+                                            fontSize: 16,
+                                            height: 1,
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  }),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: List.generate(
+                                        model.lunchtimeVoteModel.subVotes
+                                            .length, (index) {
+                                      UserVoteModel userVote = model.userVote;
+                                      // 예측 버튼 활성화 해야하는지 여부
+                                      bool isEnabled = model.isEnabled;
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            // color: Colors.yellow,
+                                            // width: 80,
+                                            height: 30,
+                                            child: CustomizedLiteRollingSwitch(
+                                              //initial value
+                                              value:
+                                                  userVote.voteSelected == null
+                                                      ? true
+                                                      : userVote.voteSelected[
+                                                                  index] ==
+                                                              1
+                                                          ? true
+                                                          : false,
+
+                                              textOn: '상승',
+                                              textOff: '하락',
+                                              colorOn: Color(0xFFFF3E3E),
+                                              colorOff: Color(0xFF3485FF),
+                                              iconOn: Icons.arrow_upward,
+                                              iconOff: Icons.arrow_downward,
+                                              textSize: 14.0,
+                                              isEnabled: isEnabled,
+                                              onChanged: (bool state) {
+                                                if (userVote.voteSelected ==
+                                                    null) {
+                                                  prediction[index] =
+                                                      state == true ? 1 : 2;
+                                                  //Use it to manage the different states
+                                                  print(
+                                                      'Current State of SWITCH IS: $state');
+                                                  print(prediction);
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                          Text(
+                                            " ",
+                                            style: TextStyle(
+                                              color: Color(0xFFFF3E3E),
+                                              fontSize: 16,
+                                              height: 1,
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                    }),
+                                  ),
+                                )
+                              ]),
+                            ],
+                          ),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             // mainAxisSize: MainAxisSize.max,
@@ -270,12 +486,19 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                 itemCount:
                                     model.lunchtimeVoteModel.subVotes.length,
                                 itemBuilder: (context, index) {
+                                  // 인덱스인지 종목인지 체크
                                   bool isIndex = model.lunchtimeVoteModel
                                           .subVotes[index].indexOrStocks ==
                                       "index";
+                                  // 유저보트 모델 가져와서 예측 기록 체크
+                                  UserVoteModel userVote = model.userVote;
+                                  // 예측 버튼 활성화 해야하는지 여부
+                                  bool isEnabled = model.isEnabled;
+
                                   TextStyle _contentStyle = TextStyle(
                                       fontFamily: 'AppleSDB', fontSize: 18);
                                   return Container(
+                                    // color: Colors.blue,
                                     // height: 70,
                                     child: Row(
                                       crossAxisAlignment:
@@ -285,21 +508,83 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                       children: [
                                         Expanded(
                                           flex: 5,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              AutoSizeText(
-                                                model.lunchtimeVoteModel
-                                                    .subVotes[index].name,
-                                                style: _contentStyle,
-                                                textAlign: TextAlign.left,
-                                              ),
-                                              Text("85,000"),
-                                              SizedBox(
-                                                height: 10,
-                                              )
-                                            ],
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              callNewModalBottomSheet(
+                                                  context,
+                                                  model
+                                                      .lunchtimeVoteModel
+                                                      .subVotes[index]
+                                                      .issueCode);
+                                            },
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                AutoSizeText(
+                                                  model.lunchtimeVoteModel
+                                                      .subVotes[index].name,
+                                                  style: _contentStyle,
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                                StreamBuilder(
+                                                  stream: model.getRealtimePrice(
+                                                      model.address,
+                                                      model
+                                                          .lunchtimeVoteModel
+                                                          .subVotes[index]
+                                                          .issueCode),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.data == null) {
+                                                      return Center(
+                                                          child: Container());
+                                                    } else {
+                                                      PriceModel price0;
+                                                      price0 = snapshot.data;
+                                                      return price0
+                                                                  .pricePctChange <
+                                                              0
+                                                          ? Text(
+                                                              isIndex
+                                                                  ? (formatIndex
+                                                                      .format(price0
+                                                                          .price)
+                                                                      .toString())
+                                                                  : (formatPrice
+                                                                      .format(price0
+                                                                          .price)
+                                                                      .toString()),
+                                                              style: TextStyle(
+                                                                color: Color(
+                                                                    0xFF3485FF),
+                                                                fontSize: 16,
+                                                              ),
+                                                            )
+                                                          : Text(
+                                                              isIndex
+                                                                  ? formatIndex
+                                                                      .format(price0
+                                                                          .price)
+                                                                      .toString()
+                                                                  : formatPrice
+                                                                      .format(price0
+                                                                          .price)
+                                                                      .toString(),
+                                                              style: TextStyle(
+                                                                color: Color(
+                                                                    0xFFFF3E3E),
+                                                                fontSize: 16,
+                                                                height: 1,
+                                                              ),
+                                                            );
+                                                    }
+                                                  },
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
                                         Expanded(
@@ -323,33 +608,65 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                           ),
                                         ),
                                         Spacer(),
-                                        Center(
-                                          child: Container(
-                                            // color: Colors.yellow,
-                                            // width: 80,
-                                            height: 30,
-                                            child: CustomizedLiteRollingSwitch(
-                                              //initial value
-                                              value: true,
+                                        model.lunchtimeVoteModel.isShowingResult
+                                            ? Container(
+                                                child: Text(model.userVote
+                                                            .voteSelected ==
+                                                        null
+                                                    ? "예측 안 함"
+                                                    : model.userVote.voteSelected[
+                                                                index] ==
+                                                            0
+                                                        ? "-"
+                                                        : model.userVote.voteSelected[
+                                                                    index] ==
+                                                                1
+                                                            ? "상승"
+                                                            : "하락"))
+                                            : Center(
+                                                child: Container(
+                                                  // color: Colors.yellow,
+                                                  // width: 80,
+                                                  height: 30,
+                                                  child:
+                                                      CustomizedLiteRollingSwitch(
+                                                    //initial value
+                                                    value: userVote
+                                                                .voteSelected ==
+                                                            null
+                                                        ? true
+                                                        : userVote.voteSelected[
+                                                                    index] ==
+                                                                1
+                                                            ? true
+                                                            : false,
 
-                                              textOn: '상승',
-                                              textOff: '하락',
-                                              colorOn: Color(0xFFFF3E3E),
-                                              colorOff: Color(0xFF3485FF),
-                                              iconOn: Icons.arrow_upward,
-                                              iconOff: Icons.arrow_downward,
-                                              textSize: 14.0,
-                                              onChanged: (bool state) {
-                                                prediction[index] =
-                                                    state == true ? 1 : 2;
-                                                //Use it to manage the different states
-                                                print(
-                                                    'Current State of SWITCH IS: $state');
-                                                print(prediction);
-                                              },
-                                            ),
-                                          ),
-                                        ),
+                                                    textOn: '상승',
+                                                    textOff: '하락',
+                                                    colorOn: Color(0xFFFF3E3E),
+                                                    colorOff: Color(0xFF3485FF),
+                                                    iconOn: Icons.arrow_upward,
+                                                    iconOff:
+                                                        Icons.arrow_downward,
+                                                    textSize: 14.0,
+                                                    isEnabled: isEnabled,
+                                                    onChanged: (bool state) {
+                                                      if (userVote
+                                                              .voteSelected ==
+                                                          null) {
+                                                        prediction[index] =
+                                                            state == true
+                                                                ? 1
+                                                                : 2;
+                                                        //Use it to manage the different states
+                                                        print(
+                                                            'Current State of SWITCH IS: $state');
+                                                        print(prediction);
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
                                       ],
                                     ),
                                   );
@@ -358,20 +675,52 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              model.userVote.voteSelected = prediction;
-                              model.userVote.isVoted = true;
-                              model.addUserVote(model.uid, model.userVote);
+                            onTap: () async {
+                              await model.getLunchtimeVoteModel(model.address);
+                              if (!model.checkIfInVotingTime()) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text("마감"),
+                                      );
+                                    });
+                              } else if (model.userVote.voteSelected != null) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text("이미 투표완료 "),
+                                      );
+                                    });
+                              } else {
+                                model.userVote.voteSelected = prediction;
+                                model.userVote.isVoted = true;
+                                model.addUserVote(model.uid, model.userVote);
+                                model.isEnabled = false;
+                                model.notifyListeners();
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text("예측완료 "),
+                                      );
+                                    });
+                              }
                             },
                             child: Container(
                               height: deviceHeight * .1,
                               width: double.infinity,
-                              color: Colors.yellow,
+                              color: Colors.yellow.withOpacity(.7),
                               child: Center(
-                                  child: Text(
-                                "종가 예측완료!",
-                                style: TextStyle(fontSize: 20),
-                              )),
+                                  child: model.checkingTimeFromServer
+                                      ? CircularProgressIndicator(
+                                          // valueColor: Colors.black,
+                                          )
+                                      : Text(
+                                          "종가 예측하기 (꾸욱 5개 소모)",
+                                          style: TextStyle(fontSize: 20),
+                                        )),
                             ),
                           )
                           // Row(
@@ -484,6 +833,63 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
           }
         });
   }
+
+  Future callNewModalBottomSheet(BuildContext context, String issueCode) {
+    ScrollController controller;
+    StreamController scrollStreamCtrl = StreamController<double>();
+    return showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (
+          context,
+        ) =>
+            StreamBuilder<double>(
+                stream: scrollStreamCtrl.stream,
+                initialData: 0,
+                builder: (context, snapshot) {
+                  double offset = snapshot.data;
+
+                  if (offset < -140) {
+                    WidgetsBinding.instance
+                        .addPostFrameCallback((_) => Navigator.pop(context));
+                  }
+
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 30,
+                        color: Colors.transparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 55,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: Color(0xFFEBEBEB),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: offset < 0
+                            ? (deviceHeight * .83) + offset
+                            : deviceHeight * .83,
+                        child: ChartForAllView(scrollStreamCtrl, issueCode),
+                      ),
+                    ],
+                  );
+                }));
+  }
 }
 
 class TopContainer extends StatefulWidget {
@@ -529,6 +935,7 @@ class _TopContainerState extends State<TopContainer> {
       // // getTimeFromNetwork();
       // // print("TIMER");
       // print("MODEL TIME" + model.nowFromNetwork.toString());
+
       setState(() {});
     });
   }
@@ -568,28 +975,92 @@ class _TopContainerState extends State<TopContainer> {
     //   // model.isVoteAvailable();
     // }
 
-    return RichText(
-      text: TextSpan(
-          text: strDurationHM.toString(),
-          style: TextStyle(
-            fontFamily: 'DmSans',
-            color: diff.inHours < 1 ? Color(0xFFE41818) : Color(0xFF3E3E3E),
-            fontSize: 17.sp,
-            fontWeight: FontWeight.bold,
-            letterSpacing: -.5,
-          ),
-          children: <TextSpan>[
-            TextSpan(
-                text: strDurationSec.toString(),
+    return diff == Duration(hours: 0, minutes: 0, seconds: 0)
+        ? Row(
+            children: [
+              Text(
+                "점심시간 종가 예측",
                 style: TextStyle(
-                  fontFamily: 'DmSans',
-                  color:
-                      diff.inHours < 1 ? Color(0xFFE41818) : Color(0xFFC1C1C1),
+                  fontFamily: 'AppleSDM',
                   fontSize: 17.sp,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -.5,
-                ))
-          ]),
-    );
+                  color: Color(0xFF3E3E3E),
+
+                  // fontWeight: FontWeight.w500,
+                  letterSpacing: -1,
+                  height: 1,
+                ),
+              ),
+              viewModel.lunchtimeVoteModel.isShowingResult
+                  ? Text(
+                      " 결과 발표!",
+                      style: TextStyle(
+                        fontFamily: 'AppleSDM',
+                        fontSize: 17.sp,
+                        color: Color(0xFFE41818),
+
+                        // fontWeight: FontWeight.w500,
+                        letterSpacing: -1,
+                        height: 1,
+                      ),
+                    )
+                  : Text(
+                      " 마감!",
+                      style: TextStyle(
+                        fontFamily: 'AppleSDM',
+                        fontSize: 17.sp,
+                        color: Color(0xFFE41818),
+
+                        // fontWeight: FontWeight.w500,
+                        letterSpacing: -1,
+                        height: 1,
+                      ),
+                    ),
+            ],
+          )
+        : Row(
+            children: [
+              Text(
+                "예측 마감까지",
+                style: TextStyle(
+                  fontFamily: 'AppleSDM',
+                  fontSize: 17.sp,
+                  color: Color(0xFF3E3E3E),
+
+                  // fontWeight: FontWeight.w500,
+                  letterSpacing: -1,
+                  height: 1,
+                ),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              RichText(
+                text: TextSpan(
+                    text: strDurationHM.toString(),
+                    style: TextStyle(
+                      fontFamily: 'DmSans',
+                      color: diff.inHours < 1
+                          ? Color(0xFFE41818)
+                          : Color(0xFF3E3E3E),
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -.5,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: strDurationSec.toString(),
+                          style: TextStyle(
+                            fontFamily: 'DmSans',
+                            color: diff.inHours < 1
+                                ? Color(0xFFE41818)
+                                : Color(0xFFC1C1C1),
+                            fontSize: 17.sp,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -.5,
+                          ))
+                    ]),
+              ),
+            ],
+          );
   }
 }

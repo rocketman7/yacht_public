@@ -1064,8 +1064,8 @@ class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'AppleSDM',
-                  fontSize: 16.sp,
-                  letterSpacing: -2.0,
+                  fontSize: 18.sp,
+                  letterSpacing: -1.5,
                 ))),
       ),
     );

@@ -59,6 +59,8 @@ class VoteSelectViewModel extends FutureViewModel {
   bool voteSelectTutorial;
   bool termsOfUse;
 
+  String lunchEventDate;
+
   int testVariableForAds = 0;
   void testMethodForAds() {
     testVariableForAds += 1;
@@ -278,6 +280,10 @@ class VoteSelectViewModel extends FutureViewModel {
 
   Future signOut() async {
     await _authService.signOut();
+  }
+
+  Stream<String> getLunchEvent() {
+    return _databaseService.getLunchEvent();
   }
 
   // void isVoteAvailable() {

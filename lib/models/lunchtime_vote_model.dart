@@ -6,6 +6,7 @@ class LunchtimeVoteModel {
   final dynamic voteEndDateTime;
   final int voteCount;
   final String voteNotice;
+  final bool isShowingResult;
   final List<int> result;
   final List<LunchtimeSubVoteModel> subVotes;
 
@@ -15,6 +16,7 @@ class LunchtimeVoteModel {
       this.voteEndDateTime,
       this.voteCount,
       this.voteNotice,
+      this.isShowingResult,
       this.result,
       this.subVotes});
 
@@ -26,6 +28,7 @@ class LunchtimeVoteModel {
         voteEndDateTime = data['voteEndDateTime'],
         voteNotice = data['voteNotice'],
         voteCount = data['voteCount'],
+        isShowingResult = data['isShowingResult'],
         result = data['result'] == null ? [] : data['result'].cast<int>(),
         subVotes = subVotesList;
 
@@ -37,6 +40,7 @@ class LunchtimeVoteModel {
       'voteEndDateTime': this.voteEndDateTime,
       'voteCount': this.voteCount,
       'voteNotice': this.voteNotice,
+      'isShowingResult': this.isShowingResult,
       'voteResult': this.result,
     };
   }

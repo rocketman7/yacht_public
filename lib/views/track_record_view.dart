@@ -412,7 +412,8 @@ class _TrackRecordViewState extends State<TrackRecordView> {
         Table(columnWidths: {
           0: FlexColumnWidth(2.0),
           1: FlexColumnWidth(1.0),
-          2: FlexColumnWidth(1.0)
+          2: FlexColumnWidth(1.0),
+
           // i want this one to take the rest available space
         }, children: [
           TableRow(
