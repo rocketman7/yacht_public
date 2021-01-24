@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NoticeModel {
+  final bool isActived;
   final String textOrNavigateTo;
   final List<String> navigateArgu;
   final String category;
@@ -9,6 +10,7 @@ class NoticeModel {
   final Timestamp noticeDateTime;
 
   NoticeModel({
+    this.isActived,
     this.textOrNavigateTo,
     this.navigateArgu,
     this.category,
@@ -18,7 +20,8 @@ class NoticeModel {
   });
 
   NoticeModel.fromData(Map<String, dynamic> data)
-      : textOrNavigateTo = data['textOrNavigateTo'],
+      : isActived = data['isActived'],
+        textOrNavigateTo = data['textOrNavigateTo'],
         navigateArgu = data['navigateArgu'] == null
             ? []
             : data['navigateArgu'].cast<String>(),
@@ -29,6 +32,7 @@ class NoticeModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'isActived': this.isActived,
       'textOrNavigateTo': this.textOrNavigateTo,
       'navigateArgu': this.navigateArgu,
       'category': this.category,

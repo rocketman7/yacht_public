@@ -26,4 +26,14 @@ class AdManager {
       throw new UnsupportedError("Unsupported platform");
     }
   }
+
+  static String get nativeAdUnitId {
+    if (Platform.isAndroid) {
+      return "ca-app-pub-3726614606720353/3671140756";
+    } else if (Platform.isIOS) {
+      return "ca-app-pub-3726614606720353/2848820155";
+    } else {
+      throw new UnsupportedError("Unsupported platform");
+    }
+  }
 }

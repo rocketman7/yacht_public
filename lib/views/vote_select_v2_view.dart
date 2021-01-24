@@ -6,6 +6,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:get/get.dart';
 
 import 'package:package_info/package_info.dart';
@@ -87,6 +90,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   // PreloadPageController _preloadPageController = PreloadPageController();
   ConfettiController _confettiController;
   // double leftContainer = 0;
+  final NativeAdmobController _nativeAdController = NativeAdmobController();
 
   // 최종 선택한 주제 index
   List<int> listSelected = [];
@@ -1978,7 +1982,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     // height: 550,
                                     child: ListView.builder(
                                         // physics: NeverScrollableScrollPhysics(),
-                                        itemCount: model.vote.voteCount,
+                                        // itemCount: model.vote.voteCount,
+                                        itemCount: model.vote.voteCount +
+                                            1, // 네이티브광고 위해 하나 더
                                         itemBuilder: (context, index) {
                                           return Column(
                                             crossAxisAlignment:
@@ -1986,16 +1992,71 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
-                                              buildStack(
-                                                model,
-                                                index,
-                                                context,
-                                                numSelected,
-                                                _scaffoldKey,
-                                                // diff,
-                                              ),
-                                              index ==
-                                                      (model.vote.voteCount - 1)
+                                              index != model.vote.voteCount
+                                                  ? buildStack(
+                                                      model,
+                                                      index,
+                                                      context,
+                                                      numSelected,
+                                                      _scaffoldKey,
+                                                      // diff,
+                                                    )
+                                                  : Container(
+                                                      height: 80,
+                                                      child: NativeAdmob(
+                                                          loading: Container(),
+                                                          error: Container(),
+                                                          adUnitID: AdManager
+                                                              .nativeAdUnitId,
+                                                          numberAds: 1,
+                                                          controller:
+                                                              _nativeAdController,
+                                                          options:
+                                                              NativeAdmobOptions(
+                                                            //Ad 스타일
+                                                            adLabelTextStyle:
+                                                                NativeTextStyle(
+                                                              fontSize: 12.sp,
+                                                              color:
+                                                                  Colors.white,
+                                                              backgroundColor:
+                                                                  Color(
+                                                                      0xFF1EC8CF),
+                                                            ),
+                                                            //광고 헤드라인 텍스트 스타일
+                                                            headlineTextStyle:
+                                                                NativeTextStyle(
+                                                              fontSize: 16.sp,
+                                                            ),
+                                                            //광고주 정보 텍스트 스타일
+                                                            advertiserTextStyle:
+                                                                NativeTextStyle(
+                                                              color: Color(
+                                                                  0xFF1EC8CF),
+                                                            ),
+                                                            //본문 텍스트 스타일
+                                                            bodyTextStyle:
+                                                                NativeTextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                            //링크 버튼 스타일
+                                                            callToActionStyle:
+                                                                NativeTextStyle(
+                                                              fontSize: 12.sp,
+                                                              color:
+                                                                  Colors.white,
+                                                              backgroundColor:
+                                                                  Color(
+                                                                      0xFF1EC8CF),
+                                                            ),
+                                                          ),
+                                                          // type: NativeAdmobType.full,
+                                                          type: NativeAdmobType
+                                                              .banner),
+                                                    ),
+                                              index == (model.vote.voteCount)
+                                                  // (model.vote.voteCount - 1)
                                                   ? Container(
                                                       height: 110,
                                                     )
