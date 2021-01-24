@@ -376,6 +376,10 @@ PODS:
   - Flutter (1.0.0)
   - flutter_chat_bubble (0.0.1):
     - Flutter
+  - flutter_native_admob (0.0.1):
+    - Flutter
+    - Google-Mobile-Ads-SDK
+    - PureLayout
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -452,6 +456,7 @@ PODS:
     - Flutter
   - PromisesObjC (1.2.12)
   - Protobuf (3.14.0)
+  - PureLayout (3.1.6)
   - shared_preferences (0.0.1):
     - Flutter
   - sqflite (0.0.1):
@@ -478,6 +483,7 @@ DEPENDENCIES:
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_chat_bubble (from `.symlinks/plugins/flutter_chat_bubble/ios`)
+  - flutter_native_admob (from `.symlinks/plugins/flutter_native_admob/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - kakao_flutter_sdk (from `.symlinks/plugins/kakao_flutter_sdk/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -519,6 +525,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - Protobuf
+    - PureLayout
     - Toast
 
 EXTERNAL SOURCES:
@@ -550,6 +557,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_chat_bubble:
     :path: ".symlinks/plugins/flutter_chat_bubble/ios"
+  flutter_native_admob:
+    :path: ".symlinks/plugins/flutter_native_admob/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   kakao_flutter_sdk:
@@ -599,6 +608,7 @@ SPEC CHECKSUMS:
   FirebaseStorage: 15e0f15ef3c7fec3d1899d68623e47d4447066b4
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_chat_bubble: cad6265ec611ba0f7bede70eabc26fdfce9bf2b0
+  flutter_native_admob: 384f39f8b8dc0a96624c7cfa4cd255205e7c3da5
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   Google-Mobile-Ads-SDK: 8b58584890539de4527c47ef01e4da941a10bc8a
@@ -616,6 +626,7 @@ SPEC CHECKSUMS:
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 0cde852566359049847168e51bd1c690e0f70056
+  PureLayout: bd3c4ec3a3819ad387c99ebb72c6b129c3ed4d2d
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196

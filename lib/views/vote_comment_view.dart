@@ -1,13 +1,20 @@
+import 'dart:io';
+
+import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/notice_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
+import 'package:yachtOne/services/adManager_service.dart';
 import 'package:yachtOne/services/dialog_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -54,6 +61,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
   int _currentIndex;
   // List<int> voteList;
+
+  final NativeAdmobController _nativeAdController = NativeAdmobController();
 
   @override
   void initState() {
@@ -259,7 +268,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                 model, model.newVote ?? model.vote),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -272,7 +281,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
   ListView buildListView(VoteCommentViewModel model, VoteModel vote) {
     print(vote.subVotes.length);
     return ListView.builder(
-      itemCount: model.vote.subVotes.length + 1,
+      itemCount: model.vote.subVotes.length + 2,
+      // itemCount: model.vote.subVotes.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
           return Column(
@@ -312,9 +322,99 @@ class _VoteCommentViewState extends State<VoteCommentView>
               ),
             ],
           );
+        } else if (index == model.vote.subVotes.length + 1) {
+          // return Column(
+          //   children: [
+          //     RaisedButton(
+          //       child: const Text('LOAD NATIVE'),
+          //       onPressed: () {
+          //         model.nativeAd ??= model.createNativeAd();
+          //         model.nativeAd.load();
+          //         // ..show(
+          //         //   anchorType:
+          //         //       Platform.isAndroid ? AnchorType.bottom : AnchorType.top,
+          //         // );
+          //       },
+          //     ),
+          //     RaisedButton(
+          //       child: const Text('SHOW NATIVE'),
+          //       onPressed: () {
+          //         model.nativeAd.show();
+          //       },
+          //     ),
+          //     RaisedButton(
+          //       child: const Text('REMOVE NATIVE'),
+          //       onPressed: () {
+          //         model.nativeAd?.dispose();
+          //         model.nativeAd = null;
+          //       },
+          //     ),
+          //   ],
+          // );
+          // return NativeAdmob(
+          //     adUnitID: "ca-app-pub-3726614606720353/2848820155");
+          // return Container(
+          //   height: 330,
+          //   padding: EdgeInsets.all(10),
+          //   margin: EdgeInsets.only(bottom: 20.0),
+          //   child: NativeAdmob(
+          //     // Your ad unit id
+          //     adUnitID: "ca-app-pub-3726614606720353/2848820155",
+          //     numberAds: 3,
+          //     // controller: _nativeAdController,
+          //     type: NativeAdmobType.full,
+          //   ),
+          // );
+          return Column(
+            children: [
+              Divider(
+                height: 0,
+              ),
+              Container(
+                height: 80,
+                padding: EdgeInsets.all(8),
+                // margin: EdgeInsets.only(bottom: 20.0),
+                child: NativeAdmob(
+                    loading: Container(),
+                    error: Container(),
+                    adUnitID: AdManager.nativeAdUnitId,
+                    numberAds: 1,
+                    controller: _nativeAdController,
+                    options: NativeAdmobOptions(
+                      //Ad 스타일
+                      adLabelTextStyle: NativeTextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.white,
+                        backgroundColor: Color(0xFF1EC8CF),
+                      ),
+                      //광고 헤드라인 텍스트 스타일
+                      headlineTextStyle: NativeTextStyle(
+                        fontSize: 16.sp,
+                      ),
+                      //광고주 정보 텍스트 스타일
+                      advertiserTextStyle: NativeTextStyle(
+                        color: Color(0xFF1EC8CF),
+                      ),
+                      //본문 텍스트 스타일
+                      bodyTextStyle: NativeTextStyle(
+                        color: Colors.grey,
+                      ),
+                      //링크 버튼 스타일
+                      callToActionStyle: NativeTextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.white,
+                        backgroundColor: Color(0xFF1EC8CF),
+                      ),
+                    ),
+                    // type: NativeAdmobType.full,
+                    type: NativeAdmobType.banner),
+              ),
+            ],
+          );
         } else {
           return buildEachCommunity(
             vote,
+            // vote.subVotes[index - 2],
             vote.subVotes[index - 1],
             index,
           );
@@ -1007,7 +1107,9 @@ class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
 
         //애니메이션 후 멈춰있는 속도는 아래에서 조정
         Future.delayed(Duration(milliseconds: 3000), () {
-          _noticeAnimationController.reverse();
+          if (mounted) _noticeAnimationController.reverse();
+          // if (_noticeAnimationController != null)
+          //   _noticeAnimationController.reverse();
         });
       }
 

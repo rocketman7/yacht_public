@@ -80,6 +80,7 @@ dependencies:
   vibration: ^1.7.1
   sliding_switch: ^0.0.3
   lite_rolling_switch: ^0.1.1
+  flutter_native_admob: ^2.1.0+3
 
 flutter_icons:
   android: "launcher_icon"

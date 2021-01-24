@@ -213,9 +213,9 @@ class DatabaseService {
   }
 
   // 계좌인증이 완료된 유저의 계좌정보 넣기, 선택적으로 넣도록 수정?
-  Future setAccInformation(UserModel user, String uid) async {
-    await _usersCollectionReference.doc(uid).set(user.toJson());
-  }
+  // Future setAccInformation(UserModel user, String uid) async {
+  //   await _usersCollectionReference.doc(uid).set(user.toJson());
+  // }
 
   Future setAccInformations(
       String accNumber, String accName, String secName, String uid) async {
@@ -859,6 +859,18 @@ class DatabaseService {
       DatabaseAddressModel databaseAddressModel) async {
     try {
       List<RankModel> rankList = [];
+
+      // await ranksCollectionReference
+      //     .doc("KR")
+      //     .collection("season002")
+      //     .doc("20210113")
+      //     .collection("20210113")
+      //     .orderBy('todayRank', descending: false)
+      //     // .orderBy('userName')
+      //     .get()
+      //     .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+      //           rankList.add(RankModel.fromData(element.data()));
+      //         }));
 
       await databaseAddressModel
           .ranksSeasonDateCollection()

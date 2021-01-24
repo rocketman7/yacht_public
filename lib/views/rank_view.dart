@@ -267,11 +267,36 @@ class RankView extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      Spacer()
+                                      // Spacer(),
+                                      // GestureDetector(
+                                      //   onTap: () async {
+                                      //     print('dddd');
+                                      //     await model.scrollToMyRank();
+                                      //   },
+                                      //   child: Container(
+                                      //     padding: EdgeInsets.symmetric(
+                                      //         horizontal: 8, vertical: 6),
+                                      //     decoration: BoxDecoration(
+                                      //         color: Colors.blueGrey,
+                                      //         borderRadius: BorderRadius.all(
+                                      //             Radius.circular(20))),
+                                      //     child: Center(
+                                      //       child: Text(
+                                      //         "내 순위로 가기",
+                                      //         style: TextStyle(
+                                      //             fontSize: 12,
+                                      //             height: 1,
+                                      //             color: Colors.white,
+                                      //             fontFamily: 'AppleSDM'),
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // )
                                     ],
                                   ),
                                   Expanded(
                                     child: ListView.builder(
+                                      // controller: model.scrollController,
                                       itemCount: model.rankModel.length,
                                       itemBuilder: (context, index) =>
                                           makesRankListView(

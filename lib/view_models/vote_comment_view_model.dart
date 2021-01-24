@@ -20,6 +20,10 @@ import '../services/database_service.dart';
 import '../services/navigation_service.dart';
 import '../view_models/base_model.dart';
 
+import '../services/adManager_service.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+
 class VoteCommentViewModel extends FutureViewModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final AuthService _authService = locator<AuthService>();
@@ -44,6 +48,29 @@ class VoteCommentViewModel extends FutureViewModel {
 
   // 공지사항용
   List<NoticeModel> noticeModel = [];
+
+  // 네이티브애즈용
+  // static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+  //     // testDevices: [""],
+  //     // keywords: <String>['foo', 'bar'],
+  //     // contentUrl: 'http://foo.com/bar.html',
+  //     // childDirected: true,
+  //     // nonPersonalizedAds: true,
+  //     );
+
+  // NativeAd nativeAd;
+
+  // NativeAd createNativeAd() {
+  //   return NativeAd(
+  //     adUnitId: AdManager.nativeAdUnitId,
+  //     // adUnitId: "ca-app-pub-3940256099942544/3986624511",
+  //     factoryId: 'adFactoryExample',
+  //     targetingInfo: targetingInfo,
+  //     listener: (MobileAdEvent event) {
+  //       print("$NativeAd event $event");
+  //     },
+  //   );
+  // }
 
   VoteCommentViewModel() {
     // _authService.signOut();
@@ -139,7 +166,16 @@ class VoteCommentViewModel extends FutureViewModel {
     //   content: '그렇습니다',
     // ));
 
-    return noticeModel;
+    //isActived 가 true 인 애들만 돌려준다.
+    List<NoticeModel> tempNoticeModel = [];
+
+    for (int i = 0; i < noticeModel.length; i++) {
+      if (noticeModel[i].isActived) {
+        tempNoticeModel.add(noticeModel[i]);
+      }
+    }
+
+    return tempNoticeModel;
   }
 
   @override

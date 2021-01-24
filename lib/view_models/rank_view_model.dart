@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:intl/intl.dart';
 import 'package:yachtOne/services/amplitude_service.dart';
@@ -34,14 +35,35 @@ class RankViewModel extends FutureViewModel {
 
   String uid;
   int myRank = 0;
+  int myRankForScroll = 0;
   int myWinPoint = 0;
   String myRankChange;
   String myRankChangeSymbol;
   List<String> rankChange = [];
   List<String> rankChangeSymbol = [];
 
+  ScrollController scrollController;
+
   RankViewModel() {
     uid = _authService.auth.currentUser.uid;
+
+    // scrollController = ScrollController();
+  }
+
+  Future<void> scrollToMyRank() async {
+    // scrollController.jumpTo(78573.7 / rankModel.length * 1230);
+
+    scrollController.animateTo(78573.7 / rankModel.length * 1230,
+        duration: Duration(seconds: 1), curve: Curves.ease);
+
+    //, duration(seconds: 1)),
+    //     curve: Curves.ease);
+    // print(scrollController.position.maxScrollExtent/rankModel.length);
+    // print(scrollController.position.maxScrollExtent);
+    //78573.7
+    //maxScrollExtent = 77844.348
+
+    notifyListeners();
   }
 
   // method
@@ -92,6 +114,7 @@ class RankViewModel extends FutureViewModel {
     for (int i = 0; i < rankModel.length; i++) {
       if (rankModel[i].uid == uid) {
         myRank = rankModel[i].todayRank;
+        myRankForScroll = i;
         myRankChangeSymbol = rankChangeSymbol[i];
         myRankChange = rankChange[i];
 
