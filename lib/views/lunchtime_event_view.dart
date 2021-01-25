@@ -222,226 +222,226 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                           SizedBox(
                             height: 12,
                           ),
-                          Table(
-                            // columnWidths: {
-                            //   0: FlexColumnWidth(2.0),
-                            //   1: FlexColumnWidth(1.5),
-                            //   2: FlexColumnWidth(1.5)
-                            // },
-                            children: [
-                              TableRow(
-                                children: [
-                                  Text(
-                                    "종목명",
-                                    // style: tableColumnStyle,
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  Text(
-                                    "기준 가격",
-                                    // style: tableColumnStyle,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      "종가 예측",
-                                      // style: tableColumnStyle,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              TableRow(children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                )
-                              ]),
-                              TableRow(children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: List.generate(
-                                        model.lunchtimeVoteModel.subVotes
-                                            .length, (index) {
-                                      bool isIndex = model.lunchtimeVoteModel
-                                              .subVotes[index].indexOrStocks ==
-                                          "index";
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          AutoSizeText(
-                                            model.lunchtimeVoteModel
-                                                .subVotes[index].name,
-                                            style: _contentStyle,
-                                            textAlign: TextAlign.left,
-                                          ),
-                                          StreamBuilder(
-                                            stream: model.getRealtimePrice(
-                                                model.address,
-                                                model.lunchtimeVoteModel
-                                                    .subVotes[index].issueCode),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.data == null) {
-                                                return Center(
-                                                    child: Container());
-                                              } else {
-                                                PriceModel price0;
-                                                price0 = snapshot.data;
-                                                return price0.pricePctChange < 0
-                                                    ? Text(
-                                                        isIndex
-                                                            ? (formatIndex
-                                                                .format(price0
-                                                                    .price)
-                                                                .toString())
-                                                            : (formatPrice
-                                                                .format(price0
-                                                                    .price)
-                                                                .toString()),
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0xFF3485FF),
-                                                          fontSize: 16,
-                                                        ),
-                                                      )
-                                                    : Text(
-                                                        isIndex
-                                                            ? formatIndex
-                                                                .format(price0
-                                                                    .price)
-                                                                .toString()
-                                                            : formatPrice
-                                                                .format(price0
-                                                                    .price)
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0xFFFF3E3E),
-                                                          fontSize: 16,
-                                                          height: 1,
-                                                        ),
-                                                      );
-                                              }
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    }),
-                                  ),
-                                ),
-                                Column(
-                                  children: List.generate(
-                                      model.lunchtimeVoteModel.subVotes.length,
-                                      (index) {
-                                    bool isIndex = model.lunchtimeVoteModel
-                                            .subVotes[index].indexOrStocks ==
-                                        "index";
-                                    return Column(
-                                      children: [
-                                        AutoSizeText(
-                                          isIndex
-                                              ? formatIndex
-                                                  .format(model
-                                                      .lunchtimeVoteModel
-                                                      .subVotes[index]
-                                                      .basePrice)
-                                                  .toString()
-                                              : formatPrice
-                                                  .format(model
-                                                      .lunchtimeVoteModel
-                                                      .subVotes[index]
-                                                      .basePrice)
-                                                  .toString(),
-                                          style: _contentStyle,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text(
-                                          " ",
-                                          style: TextStyle(
-                                            color: Color(0xFFFF3E3E),
-                                            fontSize: 16,
-                                            height: 1,
-                                          ),
-                                        )
-                                      ],
-                                    );
-                                  }),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: List.generate(
-                                        model.lunchtimeVoteModel.subVotes
-                                            .length, (index) {
-                                      UserVoteModel userVote = model.userVote;
-                                      // 예측 버튼 활성화 해야하는지 여부
-                                      bool isEnabled = model.isEnabled;
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Container(
-                                            // color: Colors.yellow,
-                                            // width: 80,
-                                            height: 30,
-                                            child: CustomizedLiteRollingSwitch(
-                                              //initial value
-                                              value:
-                                                  userVote.voteSelected == null
-                                                      ? true
-                                                      : userVote.voteSelected[
-                                                                  index] ==
-                                                              1
-                                                          ? true
-                                                          : false,
+                          // Table(
+                          //   columnWidths: {
+                          //     0: FlexColumnWidth(2.0),
+                          //     1: FlexColumnWidth(1.5),
+                          //     2: FlexColumnWidth(1.5)
+                          //   },
+                          //   children: [
+                          //     TableRow(
+                          //       children: [
+                          //         Text(
+                          //           "종목명",
+                          //           // style: tableColumnStyle,
+                          //           textAlign: TextAlign.left,
+                          //         ),
+                          //         Text(
+                          //           "기준 가격",
+                          //           // style: tableColumnStyle,
+                          //           textAlign: TextAlign.center,
+                          //         ),
+                          //         Align(
+                          //           alignment: Alignment.center,
+                          //           child: Text(
+                          //             "종가 예측",
+                          //             // style: tableColumnStyle,
+                          //             textAlign: TextAlign.center,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     TableRow(children: [
+                          //       SizedBox(
+                          //         height: 10,
+                          //       ),
+                          //       SizedBox(
+                          //         height: 10,
+                          //       ),
+                          //       SizedBox(
+                          //         height: 10,
+                          //       )
+                          //     ]),
+                          //     TableRow(children: [
+                          //       Align(
+                          //         alignment: Alignment.centerLeft,
+                          //         child: Column(
+                          //           crossAxisAlignment:
+                          //               CrossAxisAlignment.start,
+                          //           children: List.generate(
+                          //               model.lunchtimeVoteModel.subVotes
+                          //                   .length, (index) {
+                          //             bool isIndex = model.lunchtimeVoteModel
+                          //                     .subVotes[index].indexOrStocks ==
+                          //                 "index";
+                          //             return Column(
+                          //               crossAxisAlignment:
+                          //                   CrossAxisAlignment.start,
+                          //               children: [
+                          //                 AutoSizeText(
+                          //                   model.lunchtimeVoteModel
+                          //                       .subVotes[index].name,
+                          //                   style: _contentStyle,
+                          //                   textAlign: TextAlign.left,
+                          //                 ),
+                          //                 StreamBuilder(
+                          //                   stream: model.getRealtimePrice(
+                          //                       model.address,
+                          //                       model.lunchtimeVoteModel
+                          //                           .subVotes[index].issueCode),
+                          //                   builder: (context, snapshot) {
+                          //                     if (snapshot.data == null) {
+                          //                       return Center(
+                          //                           child: Container());
+                          //                     } else {
+                          //                       PriceModel price0;
+                          //                       price0 = snapshot.data;
+                          //                       return price0.pricePctChange < 0
+                          //                           ? Text(
+                          //                               isIndex
+                          //                                   ? (formatIndex
+                          //                                       .format(price0
+                          //                                           .price)
+                          //                                       .toString())
+                          //                                   : (formatPrice
+                          //                                       .format(price0
+                          //                                           .price)
+                          //                                       .toString()),
+                          //                               style: TextStyle(
+                          //                                 color:
+                          //                                     Color(0xFF3485FF),
+                          //                                 fontSize: 16,
+                          //                               ),
+                          //                             )
+                          //                           : Text(
+                          //                               isIndex
+                          //                                   ? formatIndex
+                          //                                       .format(price0
+                          //                                           .price)
+                          //                                       .toString()
+                          //                                   : formatPrice
+                          //                                       .format(price0
+                          //                                           .price)
+                          //                                       .toString(),
+                          //                               style: TextStyle(
+                          //                                 color:
+                          //                                     Color(0xFFFF3E3E),
+                          //                                 fontSize: 16,
+                          //                                 height: 1,
+                          //                               ),
+                          //                             );
+                          //                     }
+                          //                   },
+                          //                 ),
+                          //               ],
+                          //             );
+                          //           }),
+                          //         ),
+                          //       ),
+                          //       Column(
+                          //         children: List.generate(
+                          //             model.lunchtimeVoteModel.subVotes.length,
+                          //             (index) {
+                          //           bool isIndex = model.lunchtimeVoteModel
+                          //                   .subVotes[index].indexOrStocks ==
+                          //               "index";
+                          //           return Column(
+                          //             children: [
+                          //               AutoSizeText(
+                          //                 isIndex
+                          //                     ? formatIndex
+                          //                         .format(model
+                          //                             .lunchtimeVoteModel
+                          //                             .subVotes[index]
+                          //                             .basePrice)
+                          //                         .toString()
+                          //                     : formatPrice
+                          //                         .format(model
+                          //                             .lunchtimeVoteModel
+                          //                             .subVotes[index]
+                          //                             .basePrice)
+                          //                         .toString(),
+                          //                 style: _contentStyle,
+                          //                 textAlign: TextAlign.center,
+                          //               ),
+                          //               Text(
+                          //                 " ",
+                          //                 style: TextStyle(
+                          //                   color: Color(0xFFFF3E3E),
+                          //                   fontSize: 16,
+                          //                   height: 1,
+                          //                 ),
+                          //               )
+                          //             ],
+                          //           );
+                          //         }),
+                          //       ),
+                          //       Align(
+                          //         alignment: Alignment.centerRight,
+                          //         child: Column(
+                          //           crossAxisAlignment: CrossAxisAlignment.end,
+                          //           children: List.generate(
+                          //               model.lunchtimeVoteModel.subVotes
+                          //                   .length, (index) {
+                          //             UserVoteModel userVote = model.userVote;
+                          //             // 예측 버튼 활성화 해야하는지 여부
+                          //             bool isEnabled = model.isEnabled;
+                          //             return Column(
+                          //               crossAxisAlignment:
+                          //                   CrossAxisAlignment.end,
+                          //               children: [
+                          //                 Container(
+                          //                   // color: Colors.yellow,
+                          //                   // width: 80,
+                          //                   height: 30,
+                          //                   child: CustomizedLiteRollingSwitch(
+                          //                     //initial value
+                          //                     value:
+                          //                         userVote.voteSelected == null
+                          //                             ? true
+                          //                             : userVote.voteSelected[
+                          //                                         index] ==
+                          //                                     1
+                          //                                 ? true
+                          //                                 : false,
 
-                                              textOn: '상승',
-                                              textOff: '하락',
-                                              colorOn: Color(0xFFFF3E3E),
-                                              colorOff: Color(0xFF3485FF),
-                                              iconOn: Icons.arrow_upward,
-                                              iconOff: Icons.arrow_downward,
-                                              textSize: 14.0,
-                                              isEnabled: isEnabled,
-                                              onChanged: (bool state) {
-                                                if (userVote.voteSelected ==
-                                                    null) {
-                                                  prediction[index] =
-                                                      state == true ? 1 : 2;
-                                                  //Use it to manage the different states
-                                                  print(
-                                                      'Current State of SWITCH IS: $state');
-                                                  print(prediction);
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                          Text(
-                                            " ",
-                                            style: TextStyle(
-                                              color: Color(0xFFFF3E3E),
-                                              fontSize: 16,
-                                              height: 1,
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    }),
-                                  ),
-                                )
-                              ]),
-                            ],
-                          ),
+                          //                     textOn: '상승',
+                          //                     textOff: '하락',
+                          //                     colorOn: Color(0xFFFF3E3E),
+                          //                     colorOff: Color(0xFF3485FF),
+                          //                     iconOn: Icons.arrow_upward,
+                          //                     iconOff: Icons.arrow_downward,
+                          //                     textSize: 14.0,
+                          //                     isEnabled: isEnabled,
+                          //                     onChanged: (bool state) {
+                          //                       if (userVote.voteSelected ==
+                          //                           null) {
+                          //                         prediction[index] =
+                          //                             state == true ? 1 : 2;
+                          //                         //Use it to manage the different states
+                          //                         print(
+                          //                             'Current State of SWITCH IS: $state');
+                          //                         print(prediction);
+                          //                       }
+                          //                     },
+                          //                   ),
+                          //                 ),
+                          //                 Text(
+                          //                   " ",
+                          //                   style: TextStyle(
+                          //                     color: Color(0xFFFF3E3E),
+                          //                     fontSize: 16,
+                          //                     height: 1,
+                          //                   ),
+                          //                 )
+                          //               ],
+                          //             );
+                          //           }),
+                          //         ),
+                          //       )
+                          //     ]),
+                          //   ],
+                          // ),
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -465,6 +465,7 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                               ),
                               Spacer(),
                               Container(
+                                // color: Colors.blue,
                                 width: 80,
                                 child: Center(
                                   child: Text(
@@ -474,6 +475,22 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                   ),
                                 ),
                               ),
+                              model.lunchtimeVoteModel.isShowingResult
+                                  ? Spacer()
+                                  : Container(),
+                              model.lunchtimeVoteModel.isShowingResult
+                                  ? Container(
+                                      // color: Colors.blue,
+                                      width: 80,
+                                      child: Center(
+                                        child: Text(
+                                          "결과",
+                                          // style: tableColumnStyle,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    )
+                                  : Container()
                             ],
                           ),
                           SizedBox(
@@ -610,19 +627,23 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                         Spacer(),
                                         model.lunchtimeVoteModel.isShowingResult
                                             ? Container(
-                                                child: Text(model.userVote
-                                                            .voteSelected ==
-                                                        null
-                                                    ? "예측 안 함"
-                                                    : model.userVote.voteSelected[
-                                                                index] ==
-                                                            0
-                                                        ? "-"
-                                                        : model.userVote.voteSelected[
-                                                                    index] ==
-                                                                1
-                                                            ? "상승"
-                                                            : "하락"))
+                                                width: 80,
+                                                child: Center(
+                                                  child: Text(model.userVote
+                                                              .voteSelected ==
+                                                          null
+                                                      ? "예측 안 함"
+                                                      : model.userVote.voteSelected[
+                                                                  index] ==
+                                                              0
+                                                          ? "-"
+                                                          : model.userVote.voteSelected[
+                                                                      index] ==
+                                                                  1
+                                                              ? "상승"
+                                                              : "하락"),
+                                                ),
+                                              )
                                             : Center(
                                                 child: Container(
                                                   // color: Colors.yellow,
@@ -667,6 +688,32 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                                   ),
                                                 ),
                                               ),
+                                        model.lunchtimeVoteModel.isShowingResult
+                                            ? Spacer()
+                                            : Container(),
+                                        model.lunchtimeVoteModel.isShowingResult
+                                            ? Container(
+                                                width: 80,
+                                                child: Center(
+                                                  child: Text(model
+                                                              .lunchtimeVoteModel
+                                                              .result ==
+                                                          null
+                                                      ? "예측 안 함"
+                                                      : model.lunchtimeVoteModel
+                                                                      .result[
+                                                                  index] ==
+                                                              0
+                                                          ? "-"
+                                                          : model.lunchtimeVoteModel
+                                                                          .result[
+                                                                      index] ==
+                                                                  1
+                                                              ? "상승"
+                                                              : "하락"),
+                                                ),
+                                              )
+                                            : Container()
                                       ],
                                     ),
                                   );

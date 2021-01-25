@@ -2019,9 +2019,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                               fontSize: 12.sp,
                                                               color:
                                                                   Colors.white,
-                                                              backgroundColor:
-                                                                  Color(
-                                                                      0xFF1EC8CF),
+                                                              backgroundColor: model
+                                                                      .address
+                                                                      .isVoting
+                                                                  ? Color(
+                                                                      0xFF1EC8CF)
+                                                                  : Color(
+                                                                      0xFFB90FD0),
                                                             ),
                                                             //광고 헤드라인 텍스트 스타일
                                                             headlineTextStyle:
@@ -2031,8 +2035,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                             //광고주 정보 텍스트 스타일
                                                             advertiserTextStyle:
                                                                 NativeTextStyle(
-                                                              color: Color(
-                                                                  0xFF1EC8CF),
+                                                              color: model
+                                                                      .address
+                                                                      .isVoting
+                                                                  ? Color(
+                                                                      0xFF1EC8CF)
+                                                                  : Color(
+                                                                      0xFFB90FD0),
                                                             ),
                                                             //본문 텍스트 스타일
                                                             bodyTextStyle:
@@ -2046,9 +2055,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                               fontSize: 12.sp,
                                                               color:
                                                                   Colors.white,
-                                                              backgroundColor:
-                                                                  Color(
-                                                                      0xFF1EC8CF),
+                                                              backgroundColor: model
+                                                                      .address
+                                                                      .isVoting
+                                                                  ? Color(
+                                                                      0xFF1EC8CF)
+                                                                  : Color(
+                                                                      0xFFB90FD0),
                                                             ),
                                                           ),
                                                           // type: NativeAdmobType.full,
