@@ -763,8 +763,8 @@ class DatabaseService {
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) {
-      print("SNAP");
-      print(snapshot.toString());
+      // print("SNAP");
+      // print(snapshot.toString());
       // print(snapshot.docs.toString() + "FIRSTDATA");
       // PriceModel temp = PriceModel.fromData(snapshot.docs.first.data());
       // print(temp.toString());
@@ -777,7 +777,7 @@ class DatabaseService {
 
         return snapshot.docs.map((element) {
           // priceList.add(PriceModel.fromData(element.data()));
-          print(element.data());
+          // print(element.data());
           return PriceModel.fromData(element.data());
         }).toList();
         // print("AFTER STREAM " + priceList.toString());
@@ -1576,15 +1576,15 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20210125',
+      date: '20210201',
       // date: "20201024",
-      date: baseDate,
+      // date: baseDate,
       category: category,
       // season: "season002",
       season: season,
       // isVoting: false,
-      // isVoting: true,
-      isVoting: isVoting, //false면 장 중
+      isVoting: true,
+      // isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());

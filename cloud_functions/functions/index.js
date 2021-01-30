@@ -360,7 +360,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
 
   // const today = "20210108";
   var today = dateFormat(Date(), "yyyymmdd");
-  // const yesterday = "20210121";
+  // const yesterday = "20210128";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -556,6 +556,331 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
 });
 
 
+
+
+exports.lunchtimeScoreVote = functions.region('asia-northeast3').https.onRequest(async (req, res) => {
+  const db = admin.firestore();
+
+  // votes -> docu id: date -> voteResult array
+
+  const adminRef = db.collection("admin");
+  const votesRef = db.collection("votes");
+  const usersRef = db.collection("users");
+  const ranksRef = db.collection("ranks");
+
+  const openSeasonSnapshot = await adminRef.doc("openSeason").get();
+  const category = openSeasonSnapshot.data().category;
+
+  const season = "lunchEvent";
+  const votesSeasonCollection = votesRef.doc(category).collection(season);
+
+  // today -> string으로 변환
+  // var today = Date();
+  var today = dateFormat(Date(), "yyyymmdd");
+  // var today = '20210125';
+  console.log(today);
+  // const today = "20201005";
+  // today의 실제 결과 가져오기 (이전에 넣어야함)
+
+  // var today = "20201214";
+
+  function userVotesSeasonCollection(uid) {
+    return usersRef
+      .doc(uid)
+      .collection("userVote")
+      .doc(category)
+      .collection(season)
+      .doc(today);
+  }
+
+  function userVotesSeasonStatsCollection(uid) {
+    return usersRef
+      .doc(uid)
+      .collection("userVote")
+      .doc(category)
+      .collection(season)
+      .doc("stats");
+  }
+
+  // const todayRankCollectionRef = ranksRef
+  //   .doc(category)
+  //   .collection(season)
+  //   .doc(today)
+  //   .collection(today);
+
+  // const prevRankCollectionRef = ranksRef
+  //   .doc(category)
+  //   .collection(season)
+  //   .doc(yeseterday)
+  //   .collection(yeseterday);
+
+  // const dailyVoteSnapshot = votesSeasonCollection.doc(today).get();
+
+  // TODAY RESULT***
+  let todayResult = [];
+  todayResult = await votesSeasonCollection
+    .doc(today)
+    .get()
+    .then((doc) => doc.data().result); // [1, 2, 2, 1, 2]
+
+
+    // 임의로 result 넣기
+  // let todayResult = [2,2,2,2,2,2,2];
+  // user의 vote 선택 가져오기
+  console.log(todayResult);
+  let userCurrentCombo = {};
+  let userVotes = {};
+  let userScores = {};
+
+  let allUsers = {};
+  let allUserUid = [];
+
+  let prevRanks = {};
+  let userPrevWinPoint = {};
+  var userSnapshot = await usersRef.get();
+  userSnapshot.forEach((doc) => {
+    allUsers[doc.id] = doc.data();
+  });
+  // 모든 유저의 uid를 allUsers 리스트에 저장
+  userSnapshot.forEach((doc) => {
+    allUserUid.push(doc.id);
+  });
+
+  // var prevRankSnapshot = await prevRankCollectionRef.get();
+
+  // prevRankSnapshot.forEach((doc) => {
+  //   prevRanks[doc.data().uid] = doc.data().todayRank;
+  // });
+  function compareArray(arr1, arr2) {
+ 
+    // 결과값
+    var rst = false;
+ 
+    // 길이가 다르면 다른 배열이라고 판단
+    if (arr1.length !== arr2.length) {
+        return rst;
+    }
+ 
+    // arr1 배열의 크기만큼 반복
+    arr1.forEach((item) => {
+ 
+        // arr1 배열 아이템이, arr2 배열에 있는지 확인
+        // 있으면, arr2에 item이 존재하는 index 리턴
+        // 없으면, -1 리턴
+        var i = arr2.indexOf(item);
+ 
+        // 존재하면, splice함수를 이용해서 arr2 배열에서 item 삭제
+        if (i > -1) arr2.splice(i, 1);
+    });
+ 
+    // compare2의 길이가 0이면 동일하다고 판단.
+    rst = arr2.length === 0;
+ 
+    return rst;
+}
+
+
+
+
+  // uid 로 각 유저 오늘의 투표 voteSelected 리스트 return
+  async function getEachUserVote(datas) {
+    await Promise.all(
+      datas.map((uid) =>
+        userVotesSeasonCollection(uid)
+          .get()
+          .then((doc) => {
+
+            
+            // console.log(data);
+            // isVoted가 true인 것만 골라도 됨
+            if (
+              doc.data() !== undefined &&
+              doc.data() !== null &&
+              doc.data().voteSelected !== undefined &&
+              doc.data().voteSelected !== null &&
+              !compareArray(doc.data().voteSelected, [0,0,0,0,0,0,0]) 
+            ) {
+              // console.log(doc.data());
+              userVotes[uid] = doc.data().voteSelected;
+            }
+            return userVotes;
+          })
+      )
+    );
+    return userVotes;
+  }
+  // allUsers 리스트 안의 각 uid를 인자로
+  // 각 uservote의 voteSelected를 userVotes에 넣는 함수
+await getEachUserVote(allUserUid);
+  console.log(userVotes.length);
+
+  // userCurrentCombo array로부터 userVote sub-col의 사용자 선택 가져와서 dictionary로 만들기
+  // async function getEachUserVotesAndMakeDict(datas) {
+  //   await Promise.all(
+  //     datas.map((data) =>
+  //       users
+  //         .doc(data)
+  //         .collection("userVote")
+  //         .doc(today)
+  //         .get()
+  //         .then((doc) => {
+  //           userVotes[data] = doc.data().voteSelected;
+  //           console.log(userVotes);
+  //           return userVotes;
+  //         })
+  //     )
+  //   );
+  //   return userVotes;
+  // }
+
+  // 사용자 투표 데이터
+  // allUserVotesDict = await getEachUserVotesAndMakeDict(
+  //   Object.keys(userCurrentCombo)
+  // );
+  //{ m2UUvxsAwfdLFP4RB8q4SgkaNgr2: [ 2, 0, 2, 0, 0 ],
+  // itz7XAIaPxSOKrI7MFGEB6LgaBL2: [ 1, 0, 2, 0, 0 ],
+  // w9E2tSET3fTrtMoSB7ctTgWlGAO2: [ 0, 2, 2, 0, 0 ] }
+
+  // console.log("final console.log" + allUserVotesDict["itz7XAIaPxSOKrI7MFGEB6LgaBL2"]);
+
+  function scoreUserVotes(userVoteArr, resultArr) {
+    var score = 0;
+    for (var i = 0; i < resultArr.length; i++) {
+      if (userVoteArr[i] !== 0) {
+        if (userVoteArr[i] === resultArr[i]) {
+          score += 1;
+        } else if (resultArr[i] === 0) {
+          score += 1;
+        } else {
+          score += 0;
+        }
+      } else {
+        score += 0;
+      }
+      // console.log("%d번 째 문제 현재 점수 %d", i, score);
+    }
+
+    return score;
+  }
+
+  // userScores Object에 uid:score 로 매핑
+  Object.keys(userVotes).forEach((data) => {
+    // console.log(data);
+    // console.log(userVotes[data]);
+    userScores[data] = scoreUserVotes(userVotes[data], todayResult);
+  });
+
+  // for (let uid in userVotes) {
+  //   score = scoreUserVotes(userVotes[uid], todayResult);
+  //   userScores[uid] = score;
+  // }
+  // testScore = scoreUserVotes([0, 1, 1, 0, 2], [1, 2, 2, 1, 2]);
+  // console.log("test Score is " + testScore);
+
+  //{"nOsN2xoEFiPhWiCvyiSuwZXbbSt1":-3,
+  // "m2UUvxsAwfdLFP4RB8q4SgkaNgr2":3,
+  // "HPyTUH8vU0fFzssMtmttCdTodLA2":3,
+  // "JRwNWkUQuBWJ6HDd0xXDbf3XIjp2":-1}
+
+  // user collection에서 각 uid를 찾아 들어가 combo field 업데이트
+  async function updateUserScore(datas) {
+    await Promise.all(
+      Object.keys(datas).map((uid) => {
+        // let userScore =  datas[uid];
+        // newCombo = userSnapshot.doc(uid).data().combo + datas[uid];
+        // console.log(uid);
+
+        console.log(uid + " 's today score will be" + datas[uid]);
+        // userVotesSeasonCollection(uid).update({ score: 0 });
+        userVotesSeasonCollection(uid).update({ score: datas[uid] });
+        return 0;
+      })
+    );
+  }
+  // 주석 풀 곳 
+  await updateUserScore(userScores);
+
+  // winPointHistory 넣기 테스트
+  // await userVotesSeasonStatsCollection('kakao:1513684681').update({[`winPointHistory.${today}`] : 9});
+
+  async function updateWinPointForTodayVotedUser(datas) {
+    await Promise.all(
+      Object.keys(datas).map((uid) =>
+        userVotesSeasonStatsCollection(uid)
+          .get()
+          .then((doc) => {
+
+            // console.log(data);
+            // const increment = firebase.firestore.FieldValue.increment(userScores[uid]);
+            userVotesSeasonStatsCollection(uid).update({
+              
+              // currentWinPoint:0,
+              currentWinPoint:
+                ((doc.data() === undefined ||
+                doc.data() === null ||
+                doc.data().currentWinPoint === null ||
+                doc.data().currentWinPoint === undefined)
+                  ? 0 + userScores[uid]
+                  : doc.data().currentWinPoint + userScores[uid]) < 0
+                  ? 0
+                  : (doc.data() === undefined ||
+                    doc.data() === null ||
+                    doc.data().currentWinPoint === null ||
+                    doc.data().currentWinPoint === undefined)
+                  ? 0 + userScores[uid]
+                  : doc.data().currentWinPoint + userScores[uid],
+              updatedAt: today,
+              // [`winPointHistory.${today}`] : 0,
+              [`winPointHistory.${today}`] : userScores[uid],
+            });
+           
+            return 0;
+          })
+      )
+    );
+  }
+
+    // 주석 풀 곳 
+  // await updateWinPointForTodayVotedUser(userScores);
+
+  // async function updateCurrentWinPointAtUserVoteStats(
+  //   userPrevWinPoint,
+  //   userScores,
+  //   allUsers
+  // ) {
+  //   await Promise.all(
+  //     Object.keys(userScores).map((uid) => {
+  //       var prevWinPoint =
+  //         userPrevWinPoint[uid] === null || userPrevWinPoint[uid] === undefined
+  //           ? 0
+  //           : userPrevWinPoint[uid];
+
+  //       var updatedWinPoint =
+  //         userPrevWinPoint[uid] === null || userPrevWinPoint[uid] === undefined
+  //           ? 0 + userScores[uid]
+  //           : userPrevWinPoint[uid] + userScores[uid];
+  //       if (updatedWinPoint < 0) {
+  //         updatedWinPoint = 0;
+  //       }
+  //       //user stat에 currentWinPoint에 업데이트
+  //       userVotesSeasonStatsCollection(uid).update({
+  //         currentWinPoint: updatedWinPoint,
+  //         updatedAt: today,
+  //       });
+
+  //       return 0;
+  //     })
+  //   );
+  // }
+
+  // await updateCurrentWinPointAtUserVoteStats(
+  //   userPrevWinPoint,
+  //   userScores,
+  //   allUsers
+  // );
+
+  res.send(userScores);
+});
 
 // exports.tempQuries = functions.https.onRequest(async (req, res) => {
 //   const db = admin.firestore();

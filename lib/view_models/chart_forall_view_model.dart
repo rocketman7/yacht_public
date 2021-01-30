@@ -48,11 +48,11 @@ class ChartForAllViewModel extends FutureViewModel {
   List<bool> isDurationSelected = [false, false, false, true];
   List<String> durationChoiceString = ["1개월", "3개월", "6개월", "1년"];
   List<String> durationString = ["지난 1개월", "지난 3개월", "지난 6개월", "지난 1년"];
-  List<int> durationDays = [20, 60, 120, 200];
+  List<int> durationDays = [20, 60, 120, 250];
 
   int durationIndex;
   String lastDays;
-  int priceSubLength = 200;
+  int priceSubLength = 250;
 
   Future getAllModel(
     countryCode,
