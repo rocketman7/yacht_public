@@ -17,6 +17,7 @@ import 'views/mypage_documents/avatarSelect_view.dart';
 import 'views/mypage_documents/mypage_friendsCodeInsert_view.dart';
 import 'views/mypage_documents/mypage_reward_view.dart';
 import 'views/nicknameSet_view.dart';
+import 'views/notification_list_view.dart';
 import 'views/oneOnOne_view.dart';
 import 'views/register_view.dart';
 import 'views/startup_view.dart';
@@ -146,6 +147,8 @@ class Routers {
         return MaterialPageRoute(builder: (context) => FaqView());
       case 'notice':
         return MaterialPageRoute(builder: (context) => NoticeView());
+      case 'notification':
+        return MaterialPageRoute(builder: (context) => NotificationListView());
       case 'notice_text_based':
         return MaterialPageRoute(
             builder: (context) => NoticeTextBasedView(routeSettings.arguments));

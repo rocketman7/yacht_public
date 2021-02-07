@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:yachtOne/models/all_stock_list_model.dart';
 import 'package:yachtOne/models/lunchtime_vote_model.dart';
+import 'package:yachtOne/models/notification_list_model.dart';
 import 'package:yachtOne/models/user_reward_model.dart';
 import 'package:yachtOne/views/lunchtime_event_view.dart';
 import 'api/customized_ntp.dart';
@@ -1130,6 +1131,56 @@ class DatabaseService {
     }
   }
 
+  // Read: Notification List 불러오자
+  Future<List<NotificationListModel>> getNotificationList() async {
+    try {
+      List<NotificationListModel> notificationList = [];
+
+      await adminCollectionReference
+          .doc('adminPost')
+          .collection('notification')
+          .orderBy('notificationTime', descending: true)
+          .get()
+          .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+                notificationList
+                    .add(NotificationListModel.fromData(element.data()));
+              }));
+
+      return notificationList;
+    } catch (e) {
+      print('noticeficationList load error: ${e.toString()}');
+
+      return null;
+    }
+  }
+
+  // Read: Notification List 불러오자
+  Future<Timestamp> getNotificationLatestTime() async {
+    try {
+      Timestamp notificationLatestTime;
+
+      await adminCollectionReference
+          .doc('adminPost')
+          .collection('notification')
+          .orderBy('notificationTime', descending: true)
+          .limit(1)
+          .get()
+          .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+                notificationLatestTime = element.data()['notificationTime'];
+              }));
+
+      // print("================getNotificationLatestTime================");
+      // print(notificationLatestTime);
+      // print("================getNotificationLatestTime================");
+
+      return notificationLatestTime;
+    } catch (e) {
+      print('noticeficationLatestTime load error: ${e.toString()}');
+
+      return null;
+    }
+  }
+
   Future<List<dynamic>> getAllUserNameSnapshot() async {
     try {
       List<String> allUserName = [];
@@ -1576,9 +1627,9 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20210203',
+      date: '20210209',
       // date: "20201024",
-      date: baseDate,
+      // date: baseDate,
       category: category,
       // season: "season003",
       season: season,
