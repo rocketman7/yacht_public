@@ -30,11 +30,9 @@ class NoticeView extends StatelessWidget {
                   : model.isBusy
                       ? Container()
                       : SafeArea(
-                          child: Padding(
-                              padding: EdgeInsets.only(top: 8),
-                              child: ListView(
-                                children: noticeList(model),
-                              )),
+                          child: ListView(
+                            children: noticeList(model),
+                          ),
                         ));
         });
   }
@@ -71,7 +69,7 @@ List<Widget> noticeList(NoticeViewModel model) {
                           : "${model.noticeModel[i].category}",
                       style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'AppleSDEM',
+                          fontFamily: 'AppleSDM',
                           fontSize: 12.sp,
                           letterSpacing: -0.28),
                     ),
@@ -90,7 +88,7 @@ List<Widget> noticeList(NoticeViewModel model) {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Colors.black,
-                          fontFamily: 'AppleSDEM',
+                          fontFamily: 'AppleSDM',
                           fontSize: 16.sp,
                           letterSpacing: -0.28,
                         ),
@@ -100,7 +98,7 @@ List<Widget> noticeList(NoticeViewModel model) {
                         style: TextStyle(
                             fontSize: 12.sp,
                             letterSpacing: -0.28,
-                            fontFamily: 'AppleSDEM',
+                            fontFamily: 'AppleSDM',
                             color: Color(0xFF787878)),
                       ),
                     ],

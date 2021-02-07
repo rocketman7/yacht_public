@@ -764,21 +764,26 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                         radix: 16))),
               ),
               SizedBox(
-                width: 8,
+                width: 8.w,
               ),
               Text(
                 '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
-                style: TextStyle(fontSize: 18, fontFamily: 'DmSans'),
+                style: TextStyle(
+                  fontSize: 17.sp,
+                  height: 1,
+                  fontFamily: 'AppleSDM',
+                ),
               ),
               SizedBox(
-                width: 8,
+                width: 8.w,
               ),
               Text(
-                '${model.getInitialRatio(model.orderDrawingItem[i])}',
+                '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
                 style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'DmSans',
-                    fontWeight: FontWeight.w600,
+                    fontSize: 17.sp,
+                    fontFamily: 'AppleSDM',
+                    height: 1,
+                    textBaseline: TextBaseline.alphabetic,
                     color: Color(int.parse(
                         'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
                         radix: 16))),

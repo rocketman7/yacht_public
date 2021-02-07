@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:yachtOne/models/dialog_model.dart';
 
 import 'navigation_service.dart';
 import 'dialog_service.dart';
@@ -18,12 +19,15 @@ class PushNotificationService {
 
   // 여기서 모든 푸쉬알람 리스트, 설정 등을 관리해준다.
   // * /models/shared_preferences_const 에서도 key 값을 관리해주어야함.
+  // * 정상적인 배포에서는 현재 푸쉬알람이 3개여야 하고, 'testPushAlarm'이런 애들은 모두 주석처리되어야함
   int numOfPushAlarm = 3;
   List<bool> pushAlarm = [
     false,
     false,
-    false
+    false,
+    // false,
   ]; //***중요:false 면 알림이 오는것이고, true면 알림 거부하는 것임
+  // List<String> topics = ['vote', 'time', 'result', 'testPushAlarm'];
   List<String> topics = ['vote', 'time', 'result'];
   List<String> pushAlarmTitles = [
     '투표 관련 알림',
@@ -97,17 +101,17 @@ class PushNotificationService {
       onMessage: (Map<String, dynamic> message) async {
         // 앱이 실행중일 때
         print("onMessage: $message");
-        // _serializeAndNavigate(message);
+        // _onMessageDialog(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
-        // 앱이 꺼져있을 때
+        // 앱이 꺼져있을 때 // 이 때 알림 옴
         print("onLaunch: $message");
-        // _serializeAndNavigate(message);
+        _onNonMessageNavigate(message);
       },
       onResume: (Map<String, dynamic> message) async {
-        // 앱이 실행 중이지만 백그라운드에 있을 때
+        // 앱이 실행 중이지만 백그라운드에 있을 때 // 이 때도 알림 옴
         print("onResume: $message");
-        // _serializeAndNavigate(message);
+        _onNonMessageNavigate(message);
       },
     );
 
@@ -127,10 +131,45 @@ class PushNotificationService {
     }
   }
 
-  void _serializeAndNavigate(Map<String, dynamic> message) {
-    _dialogService.showDialog(title: message['notification']['body']);
+  // void _serializeAndNavigate(Map<String, dynamic> message) {
+  //   _dialogService.showDialog(title: message['notification']['body']);
 
-    // if (message['view'] == 'voteSelect')
-    //   _navigationService.navigateWithArgTo('startup', 1);
+  //   // if (message['view'] == 'voteSelect')
+  //   //   _navigationService.navigateWithArgTo('startup', 1);
+  // }
+
+  // 앱이 실행중일 때는 다이얼로그를 띄워준다. 알림 내용 그대로.
+  // Future<void> _onMessageDialog(Map<String, dynamic> message) async {
+  //   // DialogResponse dialogResponse;
+  //   // dialogResponse = await _dialogService.showDialog(
+  //   //     title: message['notification']['title'],
+  //   //     description: message['notification']['body'],
+  //   //     buttonTitle: '확인',
+  //   //     cancelTitle: '취소');
+
+  //   // if (dialogResponse.confirmed) {
+  //   // _navigationService.navigateTo('mypage_main');
+  //   // }
+  // }
+
+  // 앱이 실행중일 때는 다이얼로그를 띄워준다. 알림 내용 그대로.
+  void _onMessageDialog(Map<String, dynamic> message) {
+    // print('call showDialog=-=-=-=-=--=-=-=-=');
+    // _dialogService.showDialog(title: message['notification']['body']);
+    // DialogResponse dialogResponse;
+    // dialogResponse = await _dialogService.showDialog(
+    //     title: message['notification']['title'],
+    //     description: message['notification']['body'],
+    //     buttonTitle: '확인',
+    //     cancelTitle: '취소');
+
+    // if (dialogResponse.confirmed) {
+    // _navigationService.navigateTo('mypage_main');
+    // }
+  }
+
+  // 앱이 꺼져있거나 백그라운드에 있을 때는 알림 페이지로 바로 네비게잇할 수 있도록 한다.
+  void _onNonMessageNavigate(Map<String, dynamic> message) {
+    _navigationService.navigateTo('notification');
   }
 }

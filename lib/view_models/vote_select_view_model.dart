@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../services/api/customized_ntp.dart';
 import 'package:stacked/stacked.dart';
@@ -60,6 +61,9 @@ class VoteSelectViewModel extends FutureViewModel {
   bool termsOfUse;
 
   String lunchEventDate;
+
+  //
+  bool notificationNewCheck = false;
 
   int testVariableForAds = 0;
   void testMethodForAds() {
@@ -356,6 +360,52 @@ class VoteSelectViewModel extends FutureViewModel {
 
     // _navigationService.popAndNavigateWithArgTo('initial');
     // }
+  }
+
+  // Future.. 노티피케이션 알림이 최신꺼가 있는지 따로 빼서 관리해주자~
+  Future<void> hasLatestNotificationTime() async {
+    Timestamp tempLatestNotificationTime;
+    String lastCheckTime;
+    String lastCheckTimeWithT;
+    DateTime lastCheckDateTime;
+
+    tempLatestNotificationTime =
+        await _databaseService.getNotificationLatestTime();
+
+    lastCheckTime = await _sharedPreferencesService.getSharedPreferencesValue(
+        lastCheckTimeKey, String);
+
+    if (lastCheckTime == '') {
+      // 최초 쉐어드프리퍼런스여서 값이 없으면 우리 앱 런칭일로
+      // lastCheckTime = '202102061001';
+      lastCheckTime = '202012010000';
+      print('lastchecktime 프리퍼런스 없음. 따라서 최초값으로.');
+    }
+
+    lastCheckTimeWithT =
+        lastCheckTime.substring(0, 8) + 'T' + lastCheckTime.substring(8);
+    lastCheckDateTime = DateTime.parse(lastCheckTimeWithT);
+
+    // New 인지 판단해준다.
+    // print('======lastcheckTime is .... $lastCheckTime');
+    // print(
+    //     '======notificationTime is .... ${tempLatestNotificationTime.toDate().toString()}');
+    if (lastCheckDateTime
+            .difference(tempLatestNotificationTime.toDate())
+            .inMinutes <
+        0) {
+      // print('=======최신알림 있음=======');
+      notificationNewCheck = true;
+    } else {
+      notificationNewCheck = false;
+    }
+  }
+
+  void updateNotification() {
+    // print('notificationNewCheck false gogo');
+    notificationNewCheck = false;
+
+    notifyListeners();
   }
 
   @override

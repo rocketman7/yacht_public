@@ -69,6 +69,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:confetti/confetti.dart';
 
 import 'constants/holiday.dart';
+import 'notification_list_view.dart';
 
 class VoteSelectV2View extends StatefulWidget {
   @override
@@ -1297,8 +1298,83 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           color: model.address.isVoting
                                               ? Colors.black.withOpacity(0.7)
                                               : Color(0xFFDEDEDE),
-                                          size: 32.sp,
+                                          // size: 32.sp,
+                                          size: 28.sp,
                                         ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 8.w,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            CupertinoPageRoute(
+                                                builder: (context) =>
+                                                    NotificationListView(
+                                                        callbackFunc: model
+                                                            .updateNotification)));
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Icon(
+                                              Icons.notifications_none_outlined,
+                                              color: model.address.isVoting
+                                                  ? Colors.black
+                                                      .withOpacity(0.7)
+                                                  : Color(0xFFDEDEDE),
+                                              // size: 32.sp,
+                                              size: 28.sp,
+                                            ),
+                                          ),
+                                          FutureBuilder(
+                                            future: model
+                                                .hasLatestNotificationTime(),
+                                            builder: (context, snapshot) {
+                                              // if (snapshot.hasData) {
+                                              //   if (snapshot.data) {
+                                              //     return Positioned(
+                                              //       left:
+                                              //           22.w, // (28 - 6 이니까 22)
+                                              //       top: 0.h,
+                                              //       child: Container(
+                                              //         decoration: BoxDecoration(
+                                              //           shape: BoxShape.circle,
+                                              //           color:
+                                              //               Colors.deepOrange,
+                                              //         ),
+                                              //         height: 6.h,
+                                              //         width: 6.w,
+                                              //       ),
+                                              //     );
+                                              //   } else {
+                                              //     return Container();
+                                              //   }
+                                              // } else {
+                                              //   return Container();
+                                              // }
+                                              if (model.notificationNewCheck) {
+                                                return Positioned(
+                                                  left: 22.w, // (28 - 6 이니까 22)
+                                                  top: 0.h,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Colors.deepOrange,
+                                                    ),
+                                                    height: 6.h,
+                                                    width: 6.w,
+                                                  ),
+                                                );
+                                              } else {
+                                                return Container();
+                                              }
+                                            },
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],

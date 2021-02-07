@@ -14,6 +14,7 @@ class DialogService {
 
   // 콜백 함수를 레지스터한다. 일반적으로 다이얼로그를 보여주는 함수
   void registerDialogListner(Function(DialogRequest) showDialogListner) {
+    print('register DialogListner');
     _showDialogListner = showDialogListner;
   }
 
@@ -24,13 +25,17 @@ class DialogService {
     String buttonTitle = 'OK',
     String cancelTitle,
   }) {
+    print('future call showDialog=-=-=-=-=--=-=-=-=');
     _dialogCompleter = Completer<DialogResponse>();
+    print('complete call showDialog=-=-=-=-=--=-=-=-=');
     _showDialogListner(DialogRequest(
       title: title,
       description: description,
       buttonTitle: buttonTitle,
       cancelTitle: cancelTitle,
     ));
+
+    print('showDialog=-=-=-=-=--=-=-=-=');
     return _dialogCompleter.future;
   }
 
