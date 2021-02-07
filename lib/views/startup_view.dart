@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/managers/dialog_manager.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/views/home_view.dart';
 import 'package:yachtOne/views/login_view.dart';
@@ -65,6 +66,7 @@ class _StartUpViewState extends State<StartUpView>
 
     _viewList = <Widget>[
       // HomeView(goToTab),
+      // DialogManager(child: VoteSelectV2View()),
       VoteSelectV2View(),
       VoteCommentView(),
       RankView(),
