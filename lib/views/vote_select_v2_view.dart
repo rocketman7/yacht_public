@@ -512,7 +512,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       gravity: ToastGravity.TOP,
       toastDuration: Duration(
         seconds: 1,
-        milliseconds: 200,
+        milliseconds: 800,
       ),
     );
 
@@ -1296,7 +1296,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           // key: keyButton1,
                                           Icons.dehaze_rounded,
                                           color: model.address.isVoting
-                                              ? Colors.black.withOpacity(0.7)
+                                              ? Colors.black
                                               : Color(0xFFDEDEDE),
                                           // size: 32.sp,
                                           size: 28.sp,
@@ -1321,13 +1321,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           Align(
                                             alignment: Alignment.centerRight,
                                             child: Icon(
-                                              Icons.notifications_none_outlined,
+                                              Icons.notifications_outlined,
                                               color: model.address.isVoting
                                                   ? Colors.black
-                                                      .withOpacity(0.7)
+                                                  // .withOpacity(0.7)
                                                   : Color(0xFFDEDEDE),
                                               // size: 32.sp,
-                                              size: 28.sp,
+                                              size: 30.sp,
                                             ),
                                           ),
                                           FutureBuilder(
@@ -1624,6 +1624,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                       ),
                                     ),
                                     SizedBox(height: 8),
+                                    // 여기서부터 주석 풀어야함
                                     StreamBuilder(
                                         stream: model.getLunchEvent(),
                                         builder: (context, snapshot) {
@@ -1661,8 +1662,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                   ),
                                                 ));
                                           }
-                                        }),
+                                        }), // 여기까지 주석 풀어야 함
 
+                                    // 테스트 끝내고 주석처리 필요함
                                     // GestureDetector(
                                     //     onTap: () {
                                     //       _navigationService.navigateWithArgTo(
@@ -1686,6 +1688,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     //                 fontFamily: 'AppleSDB')),
                                     //       ),
                                     //     ))
+                                    // 테스트 끝나면 여기까지 주석 풀어야 함
                                   ],
                                 )
 
@@ -2047,9 +2050,14 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             )
                                           : GestureDetector(
                                               onTap: () {
-                                                setState(() {
-                                                  showMyVote = !showMyVote;
-                                                });
+                                                model.userVote.voteSelected ==
+                                                        null
+                                                    ? _showToast(
+                                                        "오늘 예측을 잊으셨군요.\n오후 4시부터 새로운 예측에 꾸~욱 참여해주세요!")
+                                                    : setState(() {
+                                                        showMyVote =
+                                                            !showMyVote;
+                                                      });
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
