@@ -26,6 +26,7 @@ class LunchtimeEventViewModel extends FutureViewModel {
   bool isEnabled = false;
   bool isEnded = false;
   bool checkingTimeFromServer = false;
+  List<int> prediction;
   // List<LunchtimeSubVoteModel> lunchtimeVoteList;
 
   LunchtimeEventViewModel(this.lunchEventBaseDate) {
@@ -44,6 +45,8 @@ class LunchtimeEventViewModel extends FutureViewModel {
     if (userVote.voteSelected == null && checkIfInVotingTime() == true) {
       isEnabled = true;
     }
+    prediction = userVote.voteSelected ??
+        List.generate(lunchtimeVoteModel.subVotes.length, (index) => 1);
     // print(lunchtimeVoteList);
   }
 

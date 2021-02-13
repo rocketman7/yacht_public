@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -96,9 +98,9 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
               ],
             );
           } else {
-            List<int> prediction = model.userVote.voteSelected ??
-                List.generate(
-                    model.lunchtimeVoteModel.subVotes.length, (index) => 1);
+            // List<int> prediction = model.userVote.voteSelected ??
+            //     List.generate(
+            //         model.lunchtimeVoteModel.subVotes.length, (index) => 1);
             DateTime endTime =
                 model.lunchtimeVoteModel.voteEndDateTime.toDate();
 
@@ -727,10 +729,11 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                                   child:
                                                       CustomizedLiteRollingSwitch(
                                                     //initial value
-                                                    value:
-                                                        prediction[index] == 1
-                                                            ? true
-                                                            : false,
+                                                    value: model.prediction[
+                                                                index] ==
+                                                            1
+                                                        ? true
+                                                        : false,
 
                                                     // userVote
                                                     //             .voteSelected ==
@@ -755,14 +758,15 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                                       if (userVote
                                                               .voteSelected ==
                                                           null) {
-                                                        prediction[index] =
+                                                        model.prediction[
+                                                                index] =
                                                             state == true
                                                                 ? 1
                                                                 : 2;
                                                         //Use it to manage the different states
                                                         print(
                                                             'Current State of SWITCH IS: $state');
-                                                        print(prediction);
+                                                        print(model.prediction);
                                                       }
                                                     },
                                                   ),
@@ -839,42 +843,262 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                       String btnLabel = "확인";
                                       String btnLabelCancel = "취소";
                                       String title = "종가 예측을 확정할까요?";
-                                      return AlertDialog(
-                                        title: Text(title),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              model.notifyListeners();
-                                            },
-                                            child: Text(
-                                              btnLabelCancel,
-                                              style:
-                                                  TextStyle(color: Colors.grey),
-                                            ),
-                                          ),
-                                          FlatButton(
-                                            onPressed: () {
-                                              model.userVote.voteSelected =
-                                                  prediction;
-                                              model.userVote.isVoted = true;
-                                              model.addUserVote(
-                                                  model.uid, model.userVote);
-                                              model.isEnabled = false;
-                                              model.notifyListeners();
-                                              Navigator.pop(context);
-                                              // showDialog(
-                                              //     context: context,
-                                              //     builder: (context) {
-                                              //       return AlertDialog(
-                                              //         title: Text("예측완료 "),
-                                              //       );
-                                              //     });
-                                            },
-                                            child: Text(btnLabel),
-                                          )
-                                        ],
-                                      );
+
+                                      return Platform.isAndroid
+                                          ? MediaQuery(
+                                              data: MediaQuery.of(context)
+                                                  .copyWith(
+                                                      textScaleFactor: 1.0),
+                                              child: AlertDialog(
+                                                title: Text(title),
+                                                content: Container(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    10.0),
+                                                        child: Text(
+                                                            "제시된 기준 가격 대비",
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'AppleSDM',
+                                                              color: Colors
+                                                                  .black87,
+                                                              fontSize: 14,
+                                                            )),
+                                                      ),
+                                                      SizedBox(height: 5),
+                                                      Container(
+                                                        // height: double.maxFinite,
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: List.generate(
+                                                              model
+                                                                  .lunchtimeVoteModel
+                                                                  .subVotes
+                                                                  .length,
+                                                              (index) {
+                                                            //       return Container(
+                                                            // child:
+                                                            return Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10.0),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                      model
+                                                                          .lunchtimeVoteModel
+                                                                          .subVotes[
+                                                                              index]
+                                                                          .name,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis),
+                                                                  model.prediction[
+                                                                              index] ==
+                                                                          1
+                                                                      ? Icon(
+                                                                          Icons
+                                                                              .arrow_upward,
+                                                                          color:
+                                                                              Color(0xFFFF3E3E),
+                                                                        )
+                                                                      : Icon(
+                                                                          Icons
+                                                                              .arrow_downward,
+                                                                          color:
+                                                                              Color(0xFF3485FF),
+                                                                        )
+                                                                ],
+                                                              ),
+                                                            );
+                                                            //   );
+                                                          }),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                actions: <Widget>[
+                                                  FlatButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      model.notifyListeners();
+                                                    },
+                                                    child: Text(
+                                                      btnLabelCancel,
+                                                      style: TextStyle(
+                                                          color: Colors.grey),
+                                                    ),
+                                                  ),
+                                                  FlatButton(
+                                                    onPressed: () {
+                                                      model.userVote
+                                                              .voteSelected =
+                                                          model.prediction;
+                                                      model.userVote.isVoted =
+                                                          true;
+                                                      model.addUserVote(
+                                                          model.uid,
+                                                          model.userVote);
+                                                      model.isEnabled = false;
+                                                      model.notifyListeners();
+                                                      Navigator.pop(context);
+                                                      // showDialog(
+                                                      //     context: context,
+                                                      //     builder: (context) {
+                                                      //       return AlertDialog(
+                                                      //         title: Text("예측완료 "),
+                                                      //       );
+                                                      //     });
+                                                    },
+                                                    child: Text(btnLabel),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          : MediaQuery(
+                                              data: MediaQuery.of(context)
+                                                  .copyWith(
+                                                      textScaleFactor: 1.0),
+                                              child: CupertinoAlertDialog(
+                                                title: Text(title),
+                                                content: Container(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      SizedBox(height: 10),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    10.0),
+                                                        child: Text(
+                                                            "제시된 기준 가격 대비",
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'AppleSDM',
+                                                              color: Colors
+                                                                  .black87,
+                                                              fontSize: 14,
+                                                            )),
+                                                      ),
+                                                      SizedBox(height: 5),
+                                                      Container(
+                                                        // height: double.maxFinite,
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: List.generate(
+                                                              model
+                                                                  .lunchtimeVoteModel
+                                                                  .subVotes
+                                                                  .length,
+                                                              (index) {
+                                                            //       return Container(
+                                                            // child:
+                                                            return Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10.0),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Text(
+                                                                      model
+                                                                          .lunchtimeVoteModel
+                                                                          .subVotes[
+                                                                              index]
+                                                                          .name,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis),
+                                                                  model.prediction[
+                                                                              index] ==
+                                                                          1
+                                                                      ? Icon(
+                                                                          Icons
+                                                                              .arrow_upward,
+                                                                          color:
+                                                                              Color(0xFFFF3E3E),
+                                                                        )
+                                                                      : Icon(
+                                                                          Icons
+                                                                              .arrow_downward,
+                                                                          color:
+                                                                              Color(0xFF3485FF),
+                                                                        )
+                                                                ],
+                                                              ),
+                                                            );
+                                                            //   );
+                                                          }),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                actions: <Widget>[
+                                                  CupertinoDialogAction(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      model.notifyListeners();
+                                                    },
+                                                    child: Text(
+                                                      btnLabelCancel,
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.black54),
+                                                    ),
+                                                  ),
+                                                  CupertinoDialogAction(
+                                                    onPressed: () {
+                                                      model.userVote
+                                                              .voteSelected =
+                                                          model.prediction;
+                                                      model.userVote.isVoted =
+                                                          true;
+                                                      model.addUserVote(
+                                                          model.uid,
+                                                          model.userVote);
+                                                      model.isEnabled = false;
+                                                      model.notifyListeners();
+                                                      Navigator.pop(context);
+                                                      // showDialog(
+                                                      //     context: context,
+                                                      //     builder: (context) {
+                                                      //       return AlertDialog(
+                                                      //         title: Text("예측완료 "),
+                                                      //       );
+                                                      //     });
+                                                    },
+                                                    child: Text(btnLabel),
+                                                  )
+                                                ],
+                                              ),
+                                            );
                                     });
 
                                 // model.userVote.voteSelected = prediction;
@@ -1164,7 +1388,9 @@ class _TopContainerState extends State<TopContainer> {
       // DateTime nowFromNetwork = model.now;
       // model.renewTimeFromNetwork();
       // DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
-      return endTime.difference(_timezoneService.koreaTime(DateTime.now()));
+      return _timezoneService
+          .koreaTime(endTime)
+          .difference(_timezoneService.koreaTime(DateTime.now()));
       // timeLeftArr = diffFinal.split(":");
       // return diffFinal;
     }

@@ -512,7 +512,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       gravity: ToastGravity.TOP,
       toastDuration: Duration(
         seconds: 1,
-        milliseconds: 200,
+        milliseconds: 800,
       ),
     );
 
@@ -1296,7 +1296,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           // key: keyButton1,
                                           Icons.dehaze_rounded,
                                           color: model.address.isVoting
-                                              ? Colors.black.withOpacity(0.7)
+                                              ? Colors.black
                                               : Color(0xFFDEDEDE),
                                           // size: 32.sp,
                                           size: 28.sp,
@@ -1321,13 +1321,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           Align(
                                             alignment: Alignment.centerRight,
                                             child: Icon(
-                                              Icons.notifications_none_outlined,
+                                              Icons.notifications_outlined,
                                               color: model.address.isVoting
                                                   ? Colors.black
-                                                      .withOpacity(0.7)
+                                                  // .withOpacity(0.7)
                                                   : Color(0xFFDEDEDE),
                                               // size: 32.sp,
-                                              size: 28.sp,
+                                              size: 30.sp,
                                             ),
                                           ),
                                           FutureBuilder(
@@ -1624,68 +1624,71 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                       ),
                                     ),
                                     SizedBox(height: 8),
-                                    // StreamBuilder(
-                                    //     stream: model.getLunchEvent(),
-                                    //     builder: (context, snapshot) {
-                                    //       if (!snapshot.hasData) {
-                                    //         return Container();
-                                    //       } else {
-                                    //         return GestureDetector(
-                                    //             onTap: () {
-                                    //               _navigationService
-                                    //                   .navigateWithArgTo(
-                                    //                       'lunchtime',
-                                    //                       snapshot.data);
-                                    //             },
-                                    //             child: Align(
-                                    //               alignment:
-                                    //                   Alignment.centerRight,
-                                    //               child: Container(
-                                    //                 padding:
-                                    //                     EdgeInsets.symmetric(
-                                    //                         horizontal: 8,
-                                    //                         vertical: 2),
-                                    //                 decoration: BoxDecoration(
-                                    //                     color:
-                                    //                         Color(0xFFFFDE34),
-                                    //                     borderRadius:
-                                    //                         BorderRadius.all(
-                                    //                             Radius.circular(
-                                    //                                 5))),
-                                    //                 child: Text("점심시간 이벤트",
-                                    //                     style: TextStyle(
-                                    //                         fontSize: 16,
-                                    //                         color: Colors.black,
-                                    //                         fontFamily:
-                                    //                             'AppleSDB')),
-                                    //               ),
-                                    //             ));
-                                    //       }
-                                    //     }),
+                                    // 여기서부터 주석 풀어야함
+                                    StreamBuilder(
+                                        stream: model.getLunchEvent(),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return Container();
+                                          } else {
+                                            return GestureDetector(
+                                                onTap: () {
+                                                  _navigationService
+                                                      .navigateWithArgTo(
+                                                          'lunchtime',
+                                                          snapshot.data);
+                                                },
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: Container(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 8,
+                                                            vertical: 2),
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                            Color(0xFFFFDE34),
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    5))),
+                                                    child: Text("점심시간 이벤트",
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: Colors.black,
+                                                            fontFamily:
+                                                                'AppleSDB')),
+                                                  ),
+                                                ));
+                                          }
+                                        }), // 여기까지 주석 풀어야 함
 
-                                    GestureDetector(
-                                        onTap: () {
-                                          _navigationService.navigateWithArgTo(
-                                              // 'lunchtime', "snapshot.data");
-                                              'lunchtime',
-                                              "20210125");
-                                        },
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 2),
-                                            decoration: BoxDecoration(
-                                                color: Color(0xFFFFDE34),
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(5))),
-                                            child: Text("점심시간 이벤트",
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black,
-                                                    fontFamily: 'AppleSDB')),
-                                          ),
-                                        ))
+                                    // 테스트 끝내고 주석처리 필요함
+                                    // GestureDetector(
+                                    //     onTap: () {
+                                    //       _navigationService.navigateWithArgTo(
+                                    //           // 'lunchtime', "snapshot.data");
+                                    //           'lunchtime',
+                                    //           "20210210");
+                                    //     },
+                                    //     child: Align(
+                                    //       alignment: Alignment.centerRight,
+                                    //       child: Container(
+                                    //         padding: EdgeInsets.symmetric(
+                                    //             horizontal: 8, vertical: 2),
+                                    //         decoration: BoxDecoration(
+                                    //             color: Color(0xFFFFDE34),
+                                    //             borderRadius: BorderRadius.all(
+                                    //                 Radius.circular(5))),
+                                    //         child: Text("점심시간 이벤트",
+                                    //             style: TextStyle(
+                                    //                 fontSize: 16,
+                                    //                 color: Colors.black,
+                                    //                 fontFamily: 'AppleSDB')),
+                                    //       ),
+                                    //     ))
+                                    // 테스트 끝나면 여기까지 주석 풀어야 함
                                   ],
                                 )
 
@@ -2047,9 +2050,14 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             )
                                           : GestureDetector(
                                               onTap: () {
-                                                setState(() {
-                                                  showMyVote = !showMyVote;
-                                                });
+                                                model.userVote.voteSelected ==
+                                                        null
+                                                    ? _showToast(
+                                                        "오늘 예측을 잊으셨군요.\n오후 4시부터 새로운 예측에 꾸~욱 참여해주세요!")
+                                                    : setState(() {
+                                                        showMyVote =
+                                                            !showMyVote;
+                                                      });
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
@@ -4603,6 +4611,8 @@ class _TopContainerState extends State<TopContainer> {
               DateTime today = strToDate(voteSelectViewModel.address.date);
               DateTime seoulMarketEnd = tz.TZDateTime(_timezoneService.seoul,
                   today.year, today.month, today.day, 15, 30, 0);
+              // DateTime seoulMarketEnd =
+              //     DateTime(today.year, today.month, today.day, 15, 30, 0);
               DateTime marketEnd = seoulMarketEnd;
               // tz.TZDateTime.from(seoulMarketEnd, _timezoneService.seoul);
               DateTime endTime = voteSelectViewModel.address.isVoting
@@ -4612,7 +4622,8 @@ class _TopContainerState extends State<TopContainer> {
               // DateTime nowFromNetwork = model.now;
               // model.renewTimeFromNetwork();
               // DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
-              return endTime
+              return _timezoneService
+                  .koreaTime(endTime)
                   .difference(_timezoneService.koreaTime(DateTime.now()));
               // timeLeftArr = diffFinal.split(":");
               // return diffFinal;
