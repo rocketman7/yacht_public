@@ -30,6 +30,7 @@ import 'services/navigation_service.dart';
 
 import 'services/adManager_service.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 void main() async {
   tz.initializeTimeZones();
@@ -53,14 +54,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final ConnectionCheckService _connectionCheckService =
       locator<ConnectionCheckService>();
+  // Mixpanel mixpanel;
   // final APP_STORE_URL =
   //     'https://phobos.apple.com/WebObjects/MZStore.woa/wa/viewSoftwareUpdate?id=YOUR-APP-ID&mt=8';
   // final PLAY_STORE_URL =
   //     'https://play.google.com/store/apps/details?id=YOUR-APP-ID';
 
+  // Future<void> initMixpanel() async {
+  //   mixpanel = await Mixpanel.init("afd70bf6950f6a48c4c38856b667dffd",
+  //       optOutTrackingDefault: false);
+  // }
+
   @override
   void initState() {
     super.initState();
+    // initMixpanel();
     // _connectionCheckService.checkConnection(context);
   }
 

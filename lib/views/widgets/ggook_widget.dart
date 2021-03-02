@@ -18,6 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:vibration/vibration.dart';
 
 import 'package:yachtOne/models/sub_vote_model.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/views/constants/holiday.dart';
 
 import '../../locator.dart';
@@ -68,6 +69,7 @@ class _GgookWidgetState extends State<GgookWidget>
   Animation animation1;
 
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   void onTapDown(int choice) {
     print("ONTAPDOWN triggered");
     print(choice);
@@ -598,6 +600,7 @@ class InnerBlob extends StatefulWidget {
 class _InnerBlobState extends State<InnerBlob> {
   BlobController blobCtrl;
   NavigationService _navigationService = locator<NavigationService>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   void dispose() {
     // blobCtrl.dispose();
@@ -982,6 +985,8 @@ class _InnerBlobState extends State<InnerBlob> {
                                 FlatButton(
                                   minWidth: deviceWidth * .28,
                                   onPressed: () {
+                                    _mixpanelService.mixpanel
+                                        .track('Home View - Kkook');
                                     Navigator.pop(context);
                                     _navigationService.navigateWithArgTo(
                                         'startup', 0);
@@ -1001,6 +1006,8 @@ class _InnerBlobState extends State<InnerBlob> {
                                 Expanded(
                                   child: RaisedButton(
                                     onPressed: () {
+                                      _mixpanelService.mixpanel
+                                          .track('Community View - Kkook');
                                       Navigator.pop(context);
                                       _navigationService.navigateWithArgTo(
                                           'startup', 1);

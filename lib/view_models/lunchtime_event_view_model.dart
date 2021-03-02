@@ -7,6 +7,7 @@ import 'package:yachtOne/models/user_model.dart';
 import 'package:yachtOne/models/user_vote_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/database_service.dart';
+import 'package:yachtOne/services/stateManage_service.dart';
 import 'package:yachtOne/services/timezone_service.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -16,7 +17,7 @@ class LunchtimeEventViewModel extends FutureViewModel {
   AuthService _authService = locator<AuthService>();
   DatabaseService _databaseService = locator<DatabaseService>();
   final TimezoneService _timezoneService = locator<TimezoneService>();
-
+  final StateManageService _stateManageService = locator<StateManageService>();
   String uid;
   String category;
   DatabaseAddressModel address;
@@ -59,6 +60,13 @@ class LunchtimeEventViewModel extends FutureViewModel {
     notifyListeners();
     lunchtimeVoteModel = await _databaseService.getLunchtimeVote(address);
     checkingTimeFromServer = false;
+    notifyListeners();
+  }
+
+  Future updateUserItem(int itemChange) async {
+    await _databaseService.updateUserItem(uid, itemChange);
+    await _stateManageService.userModelUpdate();
+    user = await _databaseService.getUser(uid);
     notifyListeners();
   }
 

@@ -16,6 +16,7 @@ import 'package:yachtOne/models/notice_model.dart';
 import 'package:yachtOne/models/sub_vote_model.dart';
 import 'package:yachtOne/services/adManager_service.dart';
 import 'package:yachtOne/services/dialog_service.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../locator.dart';
@@ -63,7 +64,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
   // List<int> voteList;
 
   final NativeAdmobController _nativeAdController = NativeAdmobController();
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   void initState() {
     super.initState();
@@ -227,6 +228,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                 GestureDetector(
                                   behavior: HitTestBehavior.opaque,
                                   onTap: () {
+                                    _mixpanelService.mixpanel
+                                        .track('Notice View - Community');
                                     _navigationService.navigateTo('notice');
                                   },
                                   child: Text('공지사항',
@@ -289,6 +292,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
             children: [
               ListTile(
                 onTap: () {
+                  _mixpanelService.mixpanel.track('Season Post');
                   _navigationService.navigateTo('seasonComment');
                 },
                 // leading: Container(
@@ -532,6 +536,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
         ),
         ListTile(
           onTap: () {
+            _mixpanelService.mixpanel.track('Subject Post');
             _navigationService
                 .navigateWithArgTo('subjectComment', [vote, index - 1]);
           },
@@ -1077,6 +1082,7 @@ class NoticeBar extends StatefulWidget {
 
 class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   //공지사항용
   List<NoticeModel> noticeModel;
   // List<String> temp;
@@ -1152,6 +1158,7 @@ class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
+        _mixpanelService.mixpanel.track('Select Notice - Community');
         selectNotice(noticeIdx);
       },
       child: Container(

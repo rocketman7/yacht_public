@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 
+import '../locator.dart';
 import '../view_models/stock_list_view_model.dart';
 import 'chart_forall_view.dart';
 import 'constants/size.dart';
@@ -16,6 +18,7 @@ class StockListView extends StatefulWidget {
 
 class _StockListViewState extends State<StockListView> {
   // 오로지 검색 기능을 위하여 stateful widget이 되는 것.
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   FocusNode _myFocusNode = FocusNode();
   Icon _searchIcon = Icon(
     Icons.search,
@@ -162,7 +165,11 @@ class _StockListViewState extends State<StockListView> {
         print('${model.searchingAllStockListModel.subStocks[index].name}');
         _myFocusNode.unfocus();
         model.notifyListeners();
-
+        _mixpanelService.mixpanel.track('Stock Info View - Stock List',
+            properties: {
+              'Issue Code':
+                  model.searchingAllStockListModel.subStocks[index].issueCode
+            });
         callNewModalBottomSheet(context,
             model.searchingAllStockListModel.subStocks[index].issueCode);
       },

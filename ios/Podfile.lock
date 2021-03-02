@@ -445,6 +445,12 @@ PODS:
   - kakao_flutter_sdk (0.5.2):
     - Flutter
   - leveldb-library (1.22)
+  - Mixpanel-swift (2.8.3):
+    - Mixpanel-swift/Complete (= 2.8.3)
+  - Mixpanel-swift/Complete (2.8.3)
+  - mixpanel_flutter (1.0.0):
+    - Flutter
+    - Mixpanel-swift (= 2.8.3)
   - nanopb (1.30906.0):
     - nanopb/decode (= 1.30906.0)
     - nanopb/encode (= 1.30906.0)
@@ -488,6 +494,7 @@ DEPENDENCIES:
   - flutter_native_admob (from `.symlinks/plugins/flutter_native_admob/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - kakao_flutter_sdk (from `.symlinks/plugins/kakao_flutter_sdk/ios`)
+  - mixpanel_flutter (from `.symlinks/plugins/mixpanel_flutter/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
@@ -525,6 +532,7 @@ SPEC REPOS:
     - gRPC-Core
     - GTMSessionFetcher
     - leveldb-library
+    - Mixpanel-swift
     - nanopb
     - PromisesObjC
     - Protobuf
@@ -566,6 +574,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   kakao_flutter_sdk:
     :path: ".symlinks/plugins/kakao_flutter_sdk/ios"
+  mixpanel_flutter:
+    :path: ".symlinks/plugins/mixpanel_flutter/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   path_provider:
@@ -626,6 +636,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   kakao_flutter_sdk: c314c15347e033a31279acaa3c5efb5cad1426eb
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
+  Mixpanel-swift: 947354668bf7dcaff5aaf9c64232fb5bea6ff0c7
+  mixpanel_flutter: 581a2cb32d1a6ac50d3d3b8bc598a6b1ab0e790a
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c

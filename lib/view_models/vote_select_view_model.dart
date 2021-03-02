@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import '../services/api/customized_ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
@@ -38,6 +39,7 @@ class VoteSelectViewModel extends FutureViewModel {
       locator<SharedPreferencesService>(); //
   final StateManageService _stateManageService = locator<StateManageService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
 
   //Code:
 
@@ -192,6 +194,10 @@ class VoteSelectViewModel extends FutureViewModel {
   }
 
   Future getAllModel(uid) async {
+    await _mixpanelService.initMixpanel();
+    _mixpanelService.mixpanel.identify(uid);
+    _mixpanelService.mixpanel.track('Home View');
+    _mixpanelService.mixpanel.flush();
     // signOut();
     // var key = await _sharedPreferencesService.getSharedPreferencesValue(
     //     isNameUpdatedKey, String);

@@ -6,7 +6,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 
+import '../locator.dart';
 import '../view_models/mypage_main_view_model.dart';
 import 'constants/size.dart';
 import 'widgets/avatar_widget.dart';
@@ -18,6 +20,7 @@ import 'dart:math' as math;
 
 class MypageMainView extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MypageMainViewModel>.reactive(
@@ -318,7 +321,20 @@ class MypageMainView extends StatelessWidget {
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            if (navigateTo != null) model.navigateToMypageToDown(navigateTo);
+            // _mixpanelService.mixpanel.track('FAQ');
+            if (navigateTo != null) {
+              if (navigateTo == 'notice') {
+                _mixpanelService.mixpanel.track('Notice View - Mypage');
+              } else if (navigateTo == 'faq') {
+                _mixpanelService.mixpanel.track('FAQ');
+              } else if (navigateTo == 'mypage_accoutverification') {
+                _mixpanelService.mixpanel.track('My Account');
+              } else if (navigateTo == 'mypage_reward') {
+                _mixpanelService.mixpanel.track('My Reward');
+              }
+
+              model.navigateToMypageToDown(navigateTo);
+            }
           },
           child: Padding(
             padding: const EdgeInsets.only(top: 16, bottom: 16),

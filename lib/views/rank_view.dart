@@ -8,7 +8,9 @@ import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 
+import '../locator.dart';
 import 'constants/size.dart';
 import '../models/rank_model.dart';
 import '../view_models/rank_view_model.dart';
@@ -16,7 +18,7 @@ import '../views/widgets/avatar_widget.dart';
 
 class RankView extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   DateTime currentBackPressTime;
   Future<bool> _onWillPop() async {
     if (currentBackPressTime == null ||
@@ -134,6 +136,8 @@ class RankView extends StatelessWidget {
                                       Spacer(),
                                       GestureDetector(
                                         onTap: () {
+                                          _mixpanelService.mixpanel
+                                              .track('Portfolio View - Rank');
                                           model.navigateToPortfolioPage();
                                         },
                                         child: Text(

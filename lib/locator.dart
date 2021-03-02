@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:yachtOne/services/amplitude_service.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 
 import 'services/auth_service.dart';
 import 'services/connection_check_service.dart';
@@ -35,4 +36,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => AmplitudeService());
   locator.registerLazySingleton(() => ConnectionCheckService());
   locator.registerLazySingleton(() => TimezoneService());
+  locator.registerLazySingleton(() => MixpanelService());
 }

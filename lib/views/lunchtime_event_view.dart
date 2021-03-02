@@ -836,6 +836,14 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                         title: Text("이미 예측에 참여했습니다."),
                                       );
                                     });
+                              } else if (model.user.item < 5) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text("꾸욱 아이템이 부족합니다."),
+                                      );
+                                    });
                               } else {
                                 showDialog(
                                     context: context,
@@ -956,6 +964,7 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                                           model.uid,
                                                           model.userVote);
                                                       model.isEnabled = false;
+                                                      model.updateUserItem(-5);
                                                       model.notifyListeners();
                                                       Navigator.pop(context);
                                                       // showDialog(
@@ -1084,6 +1093,7 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                                           model.uid,
                                                           model.userVote);
                                                       model.isEnabled = false;
+                                                      model.updateUserItem(-5);
                                                       model.notifyListeners();
                                                       Navigator.pop(context);
                                                       // showDialog(
