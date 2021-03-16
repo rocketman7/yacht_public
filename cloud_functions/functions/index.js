@@ -360,7 +360,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
 
   // const today = "20210108";
   var today = dateFormat(Date(), "yyyymmdd");
-  const yesterday = "20210226";
+  // const yesterday = "20210315";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -625,7 +625,7 @@ exports.lunchtimeScoreVote = functions.region('asia-northeast3').https.onRequest
 
 
     // 임의로 result 넣기
-  // let todayResult = [2,2,1,2,1];
+  // let todayResult = [1,1,1,1,1];
   // user의 vote 선택 가져오기
   console.log(todayResult);
   let userCurrentCombo = {};

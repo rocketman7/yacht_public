@@ -713,6 +713,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       urgentMessage = remoteConfig.getString('urgent_message');
 
       isShowWinners = remoteConfig.getBool('show_winners');
+      // isShowWinners = true;
       // 홈 기본 텍스트 불러오기
 
       // defaultMainText = remoteConfig.getString('default_main_text');
@@ -1685,7 +1686,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     //       _navigationService.navigateWithArgTo(
                                     //           // 'lunchtime', "snapshot.data");
                                     //           'lunchtime',
-                                    //           "20210223");
+                                    //           "20210312");
                                     //     },
                                     //     child: Align(
                                     //       alignment: Alignment.centerRight,

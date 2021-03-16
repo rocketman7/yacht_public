@@ -1627,14 +1627,14 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20210303',
-      date: baseDate,
+      date: '20210317',
+      // date: baseDate,
       category: category,
-      // season: "season004",
+      // season: "season006",
       season: season,
       // isVoting: false,
-      // isVoting: true,
-      isVoting: isVoting, //false면 장 중
+      isVoting: true,
+      // isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());
