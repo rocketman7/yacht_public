@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:yachtOne/models/all_stock_list_model.dart';
 import 'package:yachtOne/models/lunchtime_vote_model.dart';
 import 'package:yachtOne/models/notification_list_model.dart';
+import '../models/post_model.dart';
 import 'package:yachtOne/models/user_reward_model.dart';
 import 'package:yachtOne/views/lunchtime_event_view.dart';
 import 'api/customized_ntp.dart';
@@ -470,6 +471,14 @@ class DatabaseService {
     // return user.data()['avatarImage'];
   }
 
+  Future<String> getNickName(uid) async {
+    String data = await usersCollectionReference
+        .doc(uid)
+        .get()
+        .then((value) => value['userName']);
+    return data;
+  }
+
   Future getAllSeasonVote(DatabaseAddressModel address) async {
     try {
       List<VoteModel> voteList = [];
@@ -707,6 +716,24 @@ class DatabaseService {
         .map((snapshot) => snapshot.docs
             .map((document) {
               return VoteCommentModel.fromData(document.id, document.data());
+            })
+            .toList()
+            .reversed
+            .toList());
+  }
+
+  //new Post
+  Stream<List<PostModel>> getPostList(String category, String issueCode) {
+    return _postsCollectionReference
+        .doc(category)
+        .collection(issueCode)
+        .where('parent', isNull: true)
+        // .where('parent', isEqualTo: ' RiAtiMDNUQZQPMF4Uk35')
+        .orderBy('postDateTime', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((document) {
+              return PostModel.fromData(document.id, document.data());
             })
             .toList()
             .reversed
@@ -1627,15 +1654,15 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: '20210215',
+      // date: '20210215',
       // date: "20201024",
-      // date: baseDate,
+      date: baseDate,
       category: category,
       // season: "season003",
       season: season,
       // isVoting: false,
-      isVoting: true,
-      // isVoting: isVoting, //false면 장 중
+      // isVoting: true,
+      isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());
