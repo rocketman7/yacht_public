@@ -225,6 +225,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+<<<<<<< HEAD
   ffi:
     dependency: transitive
     description:
@@ -232,6 +233,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+=======
+>>>>>>> ydev
   file:
     dependency: transitive
     description:
@@ -995,5 +998,10 @@ packages:
     source: hosted
     version: "0.1.2"
 sdks:
+<<<<<<< HEAD
   dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.24.0-10"
+=======
+  dart: ">=2.12.0-0.0 <3.0.0"
+  flutter: ">=1.22.0"
+>>>>>>> ydev
