@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/season_model.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/view_models/track_record_view_model.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -21,6 +22,8 @@ class TrackRecordView extends StatefulWidget {
 
 class _TrackRecordViewState extends State<TrackRecordView> {
   final NavigationService _navigationService = locator<NavigationService>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
+
   DateTime currentBackPressTime;
   Future<bool> _onWillPop() async {
     if (currentBackPressTime == null ||
@@ -122,6 +125,11 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                               // color: Colors.deepPurpleAccent,
                                               ),
                                           onChanged: (String newValue) {
+                                            _mixpanelService.mixpanel.track(
+                                                'Other Season Record',
+                                                properties: {
+                                                  'Season': newValue
+                                                });
                                             model.renewAddress(newValue);
                                             // showingSeasonName = newValue;
                                           },

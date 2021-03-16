@@ -1627,11 +1627,10 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: '20210215',
-      // date: "20201024",
+      date: '20210317',
       // date: baseDate,
       category: category,
-      // season: "season003",
+      // season: "season006",
       season: season,
       // isVoting: false,
       isVoting: true,

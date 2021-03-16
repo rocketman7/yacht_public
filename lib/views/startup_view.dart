@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/managers/dialog_manager.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/navigation_service.dart';
 import 'package:yachtOne/views/home_view.dart';
 import 'package:yachtOne/views/login_view.dart';
@@ -32,6 +33,7 @@ class StartUpView extends StatefulWidget {
 class _StartUpViewState extends State<StartUpView>
     with SingleTickerProviderStateMixin {
   NavigationService _navigationService = locator<NavigationService>();
+  MixpanelService _mixpanelService = locator<MixpanelService>();
 
   final GlobalKey navBarGlobalKey = GlobalKey<NavigatorState>();
   int _startIdx;
@@ -40,6 +42,7 @@ class _StartUpViewState extends State<StartUpView>
   TabController _tabController;
   bool isDisposed = false;
   List<Widget> _viewList;
+  List<String> _bottomViewNameList;
 
   // HomeView에서 버튼으로 navigate할 수 있도록 callback function을 만든다.
   void goToTab(int idxFromOtherPages) {
@@ -72,6 +75,14 @@ class _StartUpViewState extends State<StartUpView>
       RankView(),
       StockListView(),
       TrackRecordView(),
+    ];
+
+    _bottomViewNameList = [
+      "Home View",
+      "Community View",
+      "Rank View",
+      "Stock List View",
+      "Track Record View"
     ];
     print("viewLIST DONE");
 
@@ -132,6 +143,8 @@ class _StartUpViewState extends State<StartUpView>
 
                   type: BottomNavigationBarType.fixed,
                   onTap: (index) => {
+                    _mixpanelService.mixpanel.track(_bottomViewNameList[index]),
+
                     setState(() {
                       _selectedIndex = index;
                       _tabController.index = index;

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stacked/stacked.dart';
 import 'package:kakao_flutter_sdk/link.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 
+import '../../locator.dart';
 import '../../view_models/mypage_friendsCode_view_model.dart';
 
 class MypageFriendsCodeView extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   // void shareMyCode() async {
   //   try {
   //     var template = _getTemplate();
@@ -161,6 +163,8 @@ class MypageFriendsCodeView extends StatelessWidget {
                             GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               onTap: () async {
+                                _mixpanelService.mixpanel
+                                    .track('Share with Kakao');
                                 bool installed = await isKakaoTalkInstalled();
                                 // print(installed);
                                 if (installed)

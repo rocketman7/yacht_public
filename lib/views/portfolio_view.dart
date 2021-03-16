@@ -9,6 +9,7 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tutorial_coach_mark/animated_focus_light.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 
 import '../locator.dart';
 import 'constants/size.dart';
@@ -26,6 +27,7 @@ class _PortfolioViewState extends State<PortfolioView>
     with TickerProviderStateMixin {
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   NavigationService _navigationService = locator<NavigationService>();
   AnimationController _chartAnimationController;
   Animation chartAnimation;
@@ -261,7 +263,11 @@ class _PortfolioViewState extends State<PortfolioView>
                           // mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             GestureDetector(
-                              onTap: showTutorial,
+                              onTap: () {
+                                _mixpanelService.mixpanel
+                                    .track('Portfolio Tutorial View');
+                                showTutorial();
+                              },
                               child: Row(
                                 children: [
                                   Container(
@@ -309,45 +315,57 @@ class _PortfolioViewState extends State<PortfolioView>
                             SizedBox(
                               height: 40.h,
                             ),
-                            Stack(
-                              children: [
-                                makePortfolioArc(model),
-                                !_chartAnimationController.isCompleted
-                                    ? AnimatedBuilder(
-                                        animation: chartAnimation,
-                                        builder: (context, child) {
-                                          return CustomPaint(
-                                            size: Size(deviceWidth - 64,
-                                                deviceWidth - 64),
-                                            painter: PortfolioArcChartLoading(
-                                                center: Offset(
-                                                    (deviceWidth - 64) / 2 + 16,
-                                                    (deviceWidth - 64) / 2),
-                                                percentage1:
-                                                    model.startPercentage[0],
-                                                percentage2:
-                                                    model.startPercentage[0] +
-                                                        chartAnimation.value),
-                                          );
-                                        })
-                                    : Container(),
-                                makePortfolioArcLine(model),
-                                Center(
-                                  key: tutorialKey1,
-                                  child: Container(
-                                    width: deviceWidth - 64,
-                                    height: deviceWidth - 64,
-                                    child: Center(
-                                        child: Text(
-                                      '${model.seasonModel.seasonName}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 14.sp,
-                                          fontFamily: 'AppleSDB'),
-                                    )),
-                                  ),
+                            GestureDetector(
+                              onTap: () {
+                                _mixpanelService.mixpanel
+                                    .track('Portfolio Chart Tap');
+                              },
+                              child: Container(
+                                // color: Colors.blue,
+                                child: Stack(
+                                  children: [
+                                    makePortfolioArc(model),
+                                    !_chartAnimationController.isCompleted
+                                        ? AnimatedBuilder(
+                                            animation: chartAnimation,
+                                            builder: (context, child) {
+                                              return CustomPaint(
+                                                size: Size(deviceWidth - 64,
+                                                    deviceWidth - 64),
+                                                painter: PortfolioArcChartLoading(
+                                                    center: Offset(
+                                                        (deviceWidth - 64) / 2 +
+                                                            16,
+                                                        (deviceWidth - 64) / 2),
+                                                    percentage1: model
+                                                        .startPercentage[0],
+                                                    percentage2:
+                                                        model.startPercentage[
+                                                                0] +
+                                                            chartAnimation
+                                                                .value),
+                                              );
+                                            })
+                                        : Container(),
+                                    makePortfolioArcLine(model),
+                                    Center(
+                                      key: tutorialKey1,
+                                      child: Container(
+                                        width: deviceWidth - 64,
+                                        height: deviceWidth - 64,
+                                        child: Center(
+                                            child: Text(
+                                          '${model.seasonModel.seasonName}',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 14.sp,
+                                              fontFamily: 'AppleSDB'),
+                                        )),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                             // SizedBox(
                             //   height: 40.h,

@@ -18,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/models/sharedPreferences_const.dart';
 import 'package:yachtOne/services/amplitude_service.dart';
 import 'package:yachtOne/services/connection_check_service.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
 import 'package:yachtOne/services/timezone_service.dart';
 import 'package:yachtOne/view_models/top_container_view_model.dart';
@@ -85,6 +86,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
 
   String uid;
 
@@ -101,7 +103,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
   DateTime _now;
   var stringDate = DateFormat("yyyyMMdd");
-  var stringDateWithDash = DateFormat("yyy기y-MM-dd");
+  var stringDateWithDash = DateFormat("yyyy-MM-dd");
   String _nowToStr;
 
   bool isDisposed = false;
@@ -534,7 +536,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   // setState로 반영하여 계속 리빌드 시킨다
   @override
   void initState() {
+    // _mixpanelService.initMixpanel();
     initTutorialTargetsIsVoting();
+
     // WidgetsBinding.instance.addPostFrameCallback(_afterLayoutIsVoting);
 
     initTutorialTargetsIsNotVoting();
@@ -709,6 +713,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       urgentMessage = remoteConfig.getString('urgent_message');
 
       isShowWinners = remoteConfig.getBool('show_winners');
+      // isShowWinners = true;
       // 홈 기본 텍스트 불러오기
 
       // defaultMainText = remoteConfig.getString('default_main_text');
@@ -1225,6 +1230,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     // 튜토리얼을 다시 불러오는 ? 버튼
                                     GestureDetector(
                                       onTap: () {
+                                        _mixpanelService.mixpanel
+                                            .track('Home Tutorial View');
                                         // model.tutorialRestart();
                                         model.address.isVoting
                                             ? showTutorialIsVoting()
@@ -1277,6 +1284,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     GestureDetector(
                                       key: tutorialKey6,
                                       onTap: () {
+                                        _mixpanelService.mixpanel
+                                            .track('MyPage View');
                                         // print('open drawer');
                                         // scaffoldKey.currentState
                                         //     .openEndDrawer();
@@ -1308,6 +1317,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     ),
                                     GestureDetector(
                                       onTap: () {
+                                        _mixpanelService.mixpanel
+                                            .track('Notification View');
+                                        // mixpanel.track('Sent Message');
                                         Navigator.push(
                                             context,
                                             CupertinoPageRoute(
@@ -1542,6 +1554,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     GestureDetector(
                                       key: tutorialKey2,
                                       onTap: () {
+                                        _mixpanelService.mixpanel
+                                            .track('Portfolio View - Home');
                                         _navigationService
                                             .navigateTo('portfolio');
                                       },
@@ -1633,6 +1647,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           } else {
                                             return GestureDetector(
                                                 onTap: () {
+                                                  _mixpanelService.mixpanel
+                                                      .track('Lunchtime Event');
                                                   _navigationService
                                                       .navigateWithArgTo(
                                                           'lunchtime',
@@ -1670,7 +1686,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     //       _navigationService.navigateWithArgTo(
                                     //           // 'lunchtime', "snapshot.data");
                                     //           'lunchtime',
-                                    //           "20210210");
+                                    //           "20210312");
                                     //     },
                                     //     child: Align(
                                     //       alignment: Alignment.centerRight,
@@ -2563,6 +2579,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                           Expanded(
                             child: RaisedButton(
                               onPressed: () {
+                                _mixpanelService.mixpanel
+                                    .track('Go to Vote View');
                                 Navigator.pop(context);
                                 _navigationService.navigateWithArgTo(
                                   'ggook',
@@ -2740,6 +2758,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                   child: Text('좋아요'),
                   onPressed: rewardedAdsLoaded
                       ? () {
+                          _mixpanelService.mixpanel.track('Ad View');
                           Navigator.pop(context);
                           model.showRewardedAds();
                         }
@@ -2782,6 +2801,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                   child: Text('좋아요'),
                   onPressed: rewardedAdsLoaded
                       ? () {
+                          _mixpanelService.mixpanel.track('Ad View');
                           Navigator.pop(context);
                           model.showRewardedAds();
                         }
@@ -2931,6 +2951,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                       : EdgeInsets.only(left: 0),
                   child: GestureDetector(
                     onTap: () {
+                      _mixpanelService.mixpanel.track('Stock Info View - Home',
+                          properties: {'Index': idx});
                       // buildModalBottomSheet(
                       //     context, hexToColor, model, idx, numOfChoices, diff);
                       callNewModalBottomSheet(
@@ -3430,6 +3452,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                   color: Colors.red,
                                                 ),
                                                 onPressed: () {
+                                                  _mixpanelService.mixpanel
+                                                      .track('Vote Reset');
                                                   Navigator.of(context).pop();
                                                   model.initialiseOneVote(idx);
                                                 }),
