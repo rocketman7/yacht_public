@@ -69,6 +69,7 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:confetti/confetti.dart';
 
+import 'community_view.dart';
 import 'constants/holiday.dart';
 import 'notification_list_view.dart';
 
@@ -1327,6 +1328,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                     NotificationListView(
                                                         callbackFunc: model
                                                             .updateNotification)));
+
+                                        // Navigator.push(
+                                        //     context,
+                                        //     CupertinoPageRoute(
+                                        //         builder: (context) =>
+                                        //             CommunityView("KR",
+                                        //                 "000080", "하이트진로")));
                                       },
                                       child: Stack(
                                         children: [
