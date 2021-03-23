@@ -60,12 +60,16 @@ class NotificationListView extends StatelessWidget {
                 .toString()
           });
           if (model.notificationListModel[i].url != null) {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                    builder: (context) => NotificationWebView(
-                        model.notificationListModel[i].title,
-                        model.notificationListModel[i].url)));
+            if (model.notificationListModel[i].url.startsWith('https'))
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: (context) => NotificationWebView(
+                          model.notificationListModel[i].title,
+                          model.notificationListModel[i].url)));
+            else {
+              model.navigateToSurvey(i);
+            }
           } else {
             if (model.notificationListModel[i].moreContent != null) {
               _mixpanelService.mixpanel

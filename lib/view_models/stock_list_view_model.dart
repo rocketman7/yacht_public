@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:yachtOne/models/all_stock_list_model.dart';
+
+import '../models/all_stock_list_model.dart';
 
 import '../services/database_service.dart';
 
@@ -20,21 +21,6 @@ class StockListViewModel extends FutureViewModel {
 
   ///me
   StockListViewModel() {
-    // filter.addListener(() {
-    //   filter.addListener(() {
-    //     if (filter.text.isEmpty) {
-    //       searchingName = "";
-    //       searchingAllStockListModel =
-    //           searchStocksInAllStockList(searchingName);
-    //       notifyListeners();
-    //     } else {
-    //       searchingName = filter.text;
-    //       searchingAllStockListModel =
-    //           searchStocksInAllStockList(searchingName);
-    //       notifyListeners();
-    //     }
-    //   });
-    // });
     filter.addListener(() {
       if (filter.text.isEmpty) {
         searchingName = "";

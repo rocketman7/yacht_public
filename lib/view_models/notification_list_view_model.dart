@@ -1,4 +1,5 @@
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/services/navigation_service.dart';
 
 import '../locator.dart';
 import '../models/notification_list_model.dart';
@@ -11,6 +12,7 @@ class NotificationListViewModel extends FutureViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   SharedPreferencesService _sharedPreferencesService =
       locator<SharedPreferencesService>();
+  final NavigationService _navigationService = locator<NavigationService>();
 
   // 변수 Setting
   List<NotificationListModel> notificationListModel = [];
@@ -71,6 +73,11 @@ class NotificationListViewModel extends FutureViewModel {
     isSelected[index] = !isSelected[index];
 
     notifyListeners();
+  }
+
+  //
+  void navigateToSurvey(int i) {
+    _navigationService.navigateTo(notificationListModel[i].url.toString());
   }
 
   @override

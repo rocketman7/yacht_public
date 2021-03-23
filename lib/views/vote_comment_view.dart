@@ -42,7 +42,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
     with TickerProviderStateMixin {
   final NavigationService _navigationService = locator<NavigationService>();
   final DialogService _dialogService = locator<DialogService>();
-  final VoteCommentViewModel _viewModel = VoteCommentViewModel();
+  // final VoteCommentViewModel _viewModel = VoteCommentViewModel();
   final GlobalKey _globalKey = GlobalKey();
   ScrollController _calendarController = ScrollController();
 
@@ -127,7 +127,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
     print(nowString);
 
     return ViewModelBuilder<VoteCommentViewModel>.reactive(
-        viewModelBuilder: () => VoteCommentViewModel(),
+        viewModelBuilder: () => VoteCommentViewModel(context),
         builder: (context, model, child) {
           if (model.isBusy) {
             return Scaffold(
@@ -152,6 +152,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
               ),
             ));
           } else {
+            if (!model.firstSurvey) {
+              WidgetsBinding.instance
+                  .addPostFrameCallback((_) => model.showEventModal(context));
+            }
+
             return Scaffold(
               body: WillPopScope(
                 onWillPop: _onWillPop,
@@ -294,6 +299,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 onTap: () {
                   _mixpanelService.mixpanel.track('Season Post');
                   _navigationService.navigateTo('seasonComment');
+                  // model.showEventModal(context);
                 },
                 // leading: Container(
                 //     alignment: Alignment.center,

@@ -3,8 +3,13 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/notice_model.dart';
 import 'package:yachtOne/models/season_model.dart';
+import 'package:yachtOne/models/sharedPreferences_const.dart';
 import 'package:yachtOne/services/amplitude_service.dart';
 import 'package:yachtOne/services/dialog_service.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
+import 'package:yachtOne/services/storage_service.dart';
+import 'package:yachtOne/views/constants/size.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../services/stateManage_service.dart';
 
@@ -31,6 +36,10 @@ class VoteCommentViewModel extends FutureViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   final StateManageService _stateManageService = locator<StateManageService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
+  final StorageService storageService =
+      locator<StorageService>(); //for first survey
+  final SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
 
   VoteCommentModel voteFeedModel;
 
@@ -48,6 +57,106 @@ class VoteCommentViewModel extends FutureViewModel {
 
   // 공지사항용
   List<NoticeModel> noticeModel = [];
+
+  String surveyImageURL; //for first survey
+  var theImage; //for first survey
+  bool firstSurvey;
+
+  Future getSurveyImage(BuildContext context) async {
+    surveyImageURL = await storageService.downloadImageURL('firstSurvey.png');
+
+    theImage = Image.network(surveyImageURL, fit: BoxFit.cover);
+
+    context ?? precacheImage(theImage.image, context);
+  }
+
+  Future showEventModal(BuildContext context) {
+    return showModalBottomSheet(
+        // enableDrag: false,
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+        // ),
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => Container(
+              height: deviceHeight - 100,
+              child: Stack(
+                // child: Column(
+                children: [
+                  // Container(
+                  //   height: 50,
+                  //   decoration: BoxDecoration(
+                  //       color: Colors.red,
+                  //       borderRadius:
+                  //           BorderRadius.vertical(top: Radius.circular(25.0))),
+                  // ),
+                  Container(
+                    height: deviceHeight - 100,
+                    // height: deviceHeight - 100 - 60,
+                    child: theImage,
+                  ),
+                  Positioned(
+                    left: 16,
+                    top: deviceHeight - 100 - 50 - 16,
+                    child: GestureDetector(
+                      onTap: () {
+                        // 다시 열지 않기. 쉐어드프리퍼런스 firstSurveyKey 이용해서 true로 해주면됨.
+                        _sharedPreferencesService.setSharedPreferencesValue(
+                            firstSurveyKey, true);
+
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        height: 50,
+                        width: (deviceWidth - 48) / 2,
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(40.0))),
+                        child: Center(
+                          child: Text(
+                            '다시 열지 않기',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                              fontFamily: 'AppleSDM',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: deviceWidth / 2 + 8,
+                    top: deviceHeight - 100 - 50 - 16,
+                    child: GestureDetector(
+                      onTap: () {
+                        // 서베이뷰로 가기.
+                      },
+                      child: Container(
+                        height: 50,
+                        width: (deviceWidth - 48) / 2,
+                        decoration: BoxDecoration(
+                            color: Color(0xFF1EC8CF),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(40.0))),
+                        child: Center(
+                          child: Text(
+                            '설문하러 가기',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                              fontFamily: 'AppleSDM',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ));
+  }
 
   // 네이티브애즈용
   // static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
@@ -72,11 +181,13 @@ class VoteCommentViewModel extends FutureViewModel {
   //   );
   // }
 
-  VoteCommentViewModel() {
+  VoteCommentViewModel(BuildContext context) {
     // _authService.signOut();
 
     uid = _authService.auth.currentUser.uid;
     // getUser();
+
+    getSurveyImage(context);
   }
 
   Future getAllModel(uid) async {
@@ -103,6 +214,9 @@ class VoteCommentViewModel extends FutureViewModel {
     vote = await _databaseService.getVotes(address); //예측 참여 수 즉각 업뎃하기 위해
     // userVote = await _databaseService.getUserVote(address);
     // seasonInfo = await _databaseService.getSeasonInfo(address);
+
+    firstSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
+        firstSurveyKey, bool);
 
     setBusy(false);
   }
