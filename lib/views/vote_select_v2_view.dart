@@ -22,6 +22,7 @@ import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/sharedPreferences_service.dart';
 import 'package:yachtOne/services/timezone_service.dart';
 import 'package:yachtOne/view_models/top_container_view_model.dart';
+import 'package:yachtOne/views/user_survey_view.dart';
 import 'package:yachtOne/views/winner_view.dart';
 import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
@@ -1230,13 +1231,24 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                   children: [
                                     // 튜토리얼을 다시 불러오는 ? 버튼
                                     GestureDetector(
-                                      onTap: () {
-                                        _mixpanelService.mixpanel
-                                            .track('Home Tutorial View');
-                                        // model.tutorialRestart();
-                                        model.address.isVoting
-                                            ? showTutorialIsVoting()
-                                            : showTutorialIsNotVoting();
+                                      onTap: () async {
+                                        // 배포할 때 주석풀기
+                                        // _mixpanelService.mixpanel
+                                        //     .track('Home Tutorial View');
+                                        // model.address.isVoting
+                                        //     ? showTutorialIsVoting()
+                                        //     : showTutorialIsNotVoting(); // 여기까지 주석풀기
+
+                                        // 테스트
+                                        // await Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) =>
+                                        //             UserSurveyView()));
+                                        // model.notifyListeners();
+                                        _navigationService.navigateWithArgTo(
+                                            'userSurvey',
+                                            model.updateUserModel);
                                       },
                                       child: Align(
                                           alignment: Alignment.centerLeft,
