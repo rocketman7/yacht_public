@@ -19,6 +19,7 @@ class InitialViewModel extends FutureViewModel {
 
   bool isTwoFactorAuthed = true;
   bool didSurvey;
+  bool firstSurvey;
   var authChange;
 
   Stream<User> getAuthChange() {
@@ -49,6 +50,8 @@ class InitialViewModel extends FutureViewModel {
 
     didSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
         didSurveyKey, bool);
+    firstSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
+        firstSurveyKey, bool);
     // _sharedPreferencesService.setSharedPreferencesValue(didSurveyKey, false);
     // print('didSurvey(shared preference only) is.. ' + didSurvey.toString());
     print(isTwoFactorAuthed);

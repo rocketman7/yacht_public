@@ -184,7 +184,7 @@ class _StockListViewState extends State<StockListView> {
                 '${model.searchingAllStockListModel.subStocks[index].name}',
                 style: TextStyle(
                   fontSize: 20.sp,
-                  fontFamily: 'AppleSDEM',
+                  fontFamily: 'AppleSDM',
                 ),
               ),
               SizedBox(
