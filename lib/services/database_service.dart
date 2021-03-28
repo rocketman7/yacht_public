@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:yachtOne/models/all_stock_list_model.dart';
 import 'package:yachtOne/models/lunchtime_vote_model.dart';
 import 'package:yachtOne/models/notification_list_model.dart';
+import 'package:yachtOne/models/user_survey_model.dart';
 import '../models/post_model.dart';
 import 'package:yachtOne/models/user_reward_model.dart';
 import 'package:yachtOne/views/lunchtime_event_view.dart';
@@ -1395,6 +1396,59 @@ class DatabaseService {
         .set({'userBubbleSurvey': userBubbleSurvey});
   }
 
+  Future getUserSurveyModel() async {
+    String surveyName;
+    UserSurveyModel userSurveyModel;
+    List<SurveyQuestionModel> surveyQuestionModel = [];
+    surveyName = await _databaseService
+        .collection('survey')
+        .doc('openedSurvey')
+        .get()
+        .then((value) => value.data()['surveyName']);
+    print(surveyName);
+    var userSurveySnap =
+        await _databaseService.collection('survey').doc(surveyName).get();
+
+    print(userSurveySnap);
+    await _databaseService
+        .collection('survey')
+        .doc(surveyName)
+        .collection(surveyName)
+        .get()
+        .then((querySnap) {
+      querySnap.docs.forEach((result) {
+        surveyQuestionModel.add(SurveyQuestionModel.fromData(result.data()));
+      });
+    });
+    print(UserSurveyModel.fromData(userSurveySnap.data(), surveyQuestionModel));
+    return UserSurveyModel.fromData(userSurveySnap.data(), surveyQuestionModel);
+  }
+
+  Future checkUserSurveyDone(String uid, String surveyName) async {
+    bool checking = await _usersCollectionReference
+        .doc(uid)
+        .collection('userSurvey')
+        .doc(surveyName)
+        .get()
+        .then((val) => val.data()['hasDone']);
+
+    return checking;
+  }
+
+  Future updateUserSurvey(
+      String uid,
+      String surveyName,
+      List<Map<String, dynamic>> userFinalAnswers,
+      List<Map<String, dynamic>> shortAnswers) async {
+    print(userFinalAnswers[0]);
+    print(shortAnswers);
+    await _usersCollectionReference
+        .doc(uid)
+        .collection('userSurvey')
+        .doc(surveyName)
+        .set({'choices': userFinalAnswers, 'shortAnswers': shortAnswers});
+  }
+
   Future test() async {
     List<Map<String, dynamic>> a = [
       {"issueCode": "000080", "name": "하이트진로"},
@@ -1654,15 +1708,15 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      // date: '20210215',
+      date: '20210329',
       // date: "20201024",
-      date: baseDate,
+      // date: baseDate,
       category: category,
-      // season: "season006",
-      season: season,
+      season: "season007",
+      // season: season,
       // isVoting: false,
-      // isVoting: true,
-      isVoting: isVoting, //false면 장 중
+      isVoting: true,
+      // isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());

@@ -9,6 +9,7 @@ import 'package:yachtOne/views/phone_auth_view.dart';
 import 'package:yachtOne/views/season_community_view.dart';
 import 'package:yachtOne/views/subject_community_view.dart';
 import 'package:yachtOne/views/track_record_view.dart';
+import 'package:yachtOne/views/user_survey_view.dart';
 import 'package:yachtOne/views/winner_view.dart';
 import 'managers/dialog_manager.dart';
 import 'views/home_view.dart';
@@ -156,6 +157,9 @@ class Routers {
         return MaterialPageRoute(builder: (context) => OneOnOneView());
       case 'survey':
         return MaterialPageRoute(builder: (context) => SurveyView());
+      case 'userSurvey':
+        return MaterialPageRoute(
+            builder: (context) => UserSurveyView(routeSettings.arguments));
       case 'startup':
         return MaterialPageRoute(
             builder: (context) =>

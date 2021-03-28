@@ -55,6 +55,7 @@ dependencies:
   flutter_svg: ^0.20.0-nullsafety.3
   fluttertoast: ^7.1.1
   font_awesome_flutter: ^8.11.0
+  flare_checkbox: ^1.0.4
   get: ^3.23.1
   get_it: ^4.0.2
   http: ^0.12.2

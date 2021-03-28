@@ -162,6 +162,11 @@ class VoteSelectViewModel extends FutureViewModel {
   //   now = await NTP.now();
   //   notifyListeners();
   // }
+  updateUserModel() {
+    // _stateManageService.userModelUpdate();
+    user = _stateManageService.userModel;
+    notifyListeners();
+  }
 
   // 리워드광고 관련 메쏘드
   loadRewardedAds() {
