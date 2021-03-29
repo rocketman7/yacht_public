@@ -99,7 +99,7 @@ class _UserSurveyViewState extends State<UserSurveyView> {
                             padding:
                                 // EdgeInsets.symmetric(
                                 //     vertical: 48.0, horizontal: 32.0),
-                                EdgeInsets.fromLTRB(48, 0, 48, 32),
+                                EdgeInsets.fromLTRB(36, 0, 36, 32),
                             // Step이 0이면 intro 화면먼저
                             child: model.currentStep == 0
                                 ? buildSurveyIntro(model)
@@ -112,7 +112,7 @@ class _UserSurveyViewState extends State<UserSurveyView> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                             SizedBox(
-                                              height: 80,
+                                              height: 120,
                                             ),
                                             Text(model.userSurveyModel.thank,
                                                 style: TextStyle(
@@ -357,7 +357,7 @@ class _UserSurveyViewState extends State<UserSurveyView> {
                                                                             0xFFcf4d1e)),
                                                                 // constraints: BoxConstraints.expand(),
 
-                                                                height: 20,
+                                                                height: 10,
                                                                 // width: 10,
                                                                 // child: Text(
                                                                 //   "ProgressBAR",
@@ -388,7 +388,7 @@ class _UserSurveyViewState extends State<UserSurveyView> {
                                                             fontFamily:
                                                                 'AppleSDEB')),
                                                     SizedBox(
-                                                      height: 20,
+                                                      height: 30,
                                                     ),
                                                     Column(
                                                         children: List.generate(

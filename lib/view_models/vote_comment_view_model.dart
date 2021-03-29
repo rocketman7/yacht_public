@@ -89,6 +89,7 @@ class VoteCommentViewModel extends FutureViewModel {
         context: context,
         builder: (context) => Container(
               height: deviceHeight - 100,
+              color: Color(0xff1ec8cf),
               child: Stack(
                 // child: Column(
                 children: [
@@ -304,11 +305,9 @@ class VoteCommentViewModel extends FutureViewModel {
     buildContext = context;
     uid = _authService.auth.currentUser.uid;
     // getUser();
-
-    getSurveyImage(context);
   }
 
-  Future getAllModel(uid) async {
+  Future getAllModel(uid, context) async {
     setBusy(true);
     // _sharedPreferencesService.setSharedPreferencesValue(firstSurveyKey, false);
 
@@ -334,13 +333,13 @@ class VoteCommentViewModel extends FutureViewModel {
     vote = await _databaseService.getVotes(address); //예측 참여 수 즉각 업뎃하기 위해
     // userVote = await _databaseService.getUserVote(address);
     // seasonInfo = await _databaseService.getSeasonInfo(address);
-
     firstSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
         firstSurveyKey, bool);
 
     setBusy(false);
 
     if (!firstSurvey) {
+      await getSurveyImage(buildContext);
       WidgetsBinding.instance
           .addPostFrameCallback((_) => showEventModal(buildContext));
     }
@@ -418,5 +417,5 @@ class VoteCommentViewModel extends FutureViewModel {
   }
 
   @override
-  Future futureToRun() => getAllModel(uid);
+  Future futureToRun() => getAllModel(uid, buildContext);
 }

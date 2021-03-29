@@ -117,7 +117,7 @@ class SurveyQuestionModel {
   factory SurveyQuestionModel.fromData(Map<String, dynamic> data) {
     return SurveyQuestionModel(
       data['question'],
-      List<String>.from(data['answers']),
+      data['answers'] == null ? [] : List<String>.from(data['answers']),
       data['multipleChoice'],
       data['shortAnswer'],
     );
