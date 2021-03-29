@@ -158,8 +158,7 @@ class Routers {
       case 'survey':
         return MaterialPageRoute(builder: (context) => SurveyView());
       case 'userSurvey':
-        return MaterialPageRoute(
-            builder: (context) => UserSurveyView(routeSettings.arguments));
+        return MaterialPageRoute(builder: (context) => UserSurveyView());
       case 'startup':
         return MaterialPageRoute(
             builder: (context) =>

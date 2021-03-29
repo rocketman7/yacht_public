@@ -1405,11 +1405,11 @@ class DatabaseService {
         .doc('openedSurvey')
         .get()
         .then((value) => value.data()['surveyName']);
-    print(surveyName);
+    // print(surveyName);
     var userSurveySnap =
         await _databaseService.collection('survey').doc(surveyName).get();
 
-    print(userSurveySnap);
+    // print(userSurveySnap);
     await _databaseService
         .collection('survey')
         .doc(surveyName)
@@ -1420,11 +1420,20 @@ class DatabaseService {
         surveyQuestionModel.add(SurveyQuestionModel.fromData(result.data()));
       });
     });
-    print(UserSurveyModel.fromData(userSurveySnap.data(), surveyQuestionModel));
+    // print(UserSurveyModel.fromData(userSurveySnap.data(), surveyQuestionModel));
     return UserSurveyModel.fromData(userSurveySnap.data(), surveyQuestionModel);
   }
 
-  Future checkUserSurveyDone(String uid, String surveyName) async {
+  Future checkUserSurveyDone(
+    String uid,
+  ) async {
+    String surveyName;
+    surveyName = await _databaseService
+        .collection('survey')
+        .doc('openedSurvey')
+        .get()
+        .then((value) => value.data()['surveyName']);
+
     bool checking = await _usersCollectionReference
         .doc(uid)
         .collection('userSurvey')
@@ -1446,7 +1455,11 @@ class DatabaseService {
         .doc(uid)
         .collection('userSurvey')
         .doc(surveyName)
-        .set({'choices': userFinalAnswers, 'shortAnswers': shortAnswers});
+        .set({
+      'choices': userFinalAnswers,
+      'shortAnswers': shortAnswers,
+      'hasDone': true
+    });
   }
 
   Future test() async {
@@ -1708,15 +1721,15 @@ class DatabaseService {
 
     _databaseAddress = DatabaseAddressModel(
       uid: uid,
-      date: '20210329',
+      // date: '20210330',
       // date: "20201024",
-      // date: baseDate,
+      date: baseDate,
       category: category,
-      season: "season007",
-      // season: season,
+      // season: "season007",
+      season: season,
       // isVoting: false,
-      isVoting: true,
-      // isVoting: isVoting, //false면 장 중
+      // isVoting: true,
+      isVoting: isVoting, //false면 장 중
     );
 
     print("TODAY DATA ADDRESS" + _databaseAddress.isVoting.toString());

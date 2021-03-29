@@ -1233,22 +1233,15 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     GestureDetector(
                                       onTap: () async {
                                         // 배포할 때 주석풀기
-                                        // _mixpanelService.mixpanel
-                                        //     .track('Home Tutorial View');
-                                        // model.address.isVoting
-                                        //     ? showTutorialIsVoting()
-                                        //     : showTutorialIsNotVoting(); // 여기까지 주석풀기
+                                        _mixpanelService.mixpanel
+                                            .track('Home Tutorial View');
+                                        model.address.isVoting
+                                            ? showTutorialIsVoting()
+                                            : showTutorialIsNotVoting(); // 여기까지 주석풀기
 
-                                        // 테스트
-                                        // await Navigator.push(
-                                        //     context,
-                                        //     MaterialPageRoute(
-                                        //         builder: (context) =>
-                                        //             UserSurveyView()));
-                                        // model.notifyListeners();
-                                        _navigationService.navigateWithArgTo(
-                                            'userSurvey',
-                                            model.updateUserModel);
+                                        // _navigationService.navigateWithArgTo(
+                                        //     'userSurvey',
+                                        //     model.updateUserModel);
                                       },
                                       child: Align(
                                           alignment: Alignment.centerLeft,

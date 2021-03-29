@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:yachtOne/models/sharedPreferences_const.dart';
+
 import 'package:yachtOne/models/user_survey_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/database_service.dart';
+import 'package:yachtOne/services/sharedPreferences_service.dart';
 import 'package:yachtOne/services/stateManage_service.dart';
 
 import '../locator.dart';
@@ -10,13 +14,16 @@ class UserSurveyViewModel extends FutureViewModel {
   final DatabaseService _databaseService = locator<DatabaseService>();
   final AuthService _authService = locator<AuthService>();
   final StateManageService _stateManageService = locator<StateManageService>();
+  final SharedPreferencesService _sharedPreferencesService =
+      locator<SharedPreferencesService>();
   // tempModel 작업
   // UserSurveyModel tempModel;
 
   String uid;
-
-  UserSurveyViewModel() {
+  BuildContext context;
+  UserSurveyViewModel(BuildContext context) {
     uid = _authService.auth.currentUser.uid;
+    context = context;
   }
 
   // model에서 가져올 서베이 정보들
@@ -24,9 +31,12 @@ class UserSurveyViewModel extends FutureViewModel {
   int currentStep = 0;
   bool proceed = false;
   List<String> steps = [];
-  String introTitle = "도와줘요 꾸욱 피플! \n2분 20초만요 :)";
-  String introDescription =
-      "꾸욱은 더 재미있는 예측게임과 투자 정보를 제공하기 위해 대대적인 리뉴얼을 준비 중입니다. 오픈 베타에 참여해주신 꾸욱 유저분들의 소중한 의견이 필요해요.";
+  bool firstSurvey;
+  bool hasDone;
+
+  // String introTitle = "도와줘요 꾸욱 피플! \n2분 20초만요 :)";
+  // String introDescription =
+  //     "꾸욱은 더 재미있는 예측게임과 투자 정보를 제공하기 위해 대대적인 리뉴얼을 준비 중입니다. 오픈 베타에 참여해주신 꾸욱 유저분들의 소중한 의견이 필요해요.";
   // final UserSurveyModel tempModel =
   //     UserSurveyModel("title", "desp", tempQuestions);
   // static List<SurveyQuestionModel> tempQuestions = [
@@ -52,7 +62,12 @@ class UserSurveyViewModel extends FutureViewModel {
   Future getUserSurveyModel() async {
     setBusy(true);
     userSurveyModel = await _databaseService.getUserSurveyModel();
+    hasDone = await _databaseService.checkUserSurveyDone(uid);
     print(userSurveyModel.surveyQuestions);
+    firstSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
+        firstSurveyKey, bool);
+    print("hasDOne" + hasDone.toString());
+
     setBusy(false);
   }
   // List<Object> answers = List.generate(tempQuestions.length, (index) {
@@ -159,16 +174,19 @@ class UserSurveyViewModel extends FutureViewModel {
   }
 
   bool finalizingSurvey = false;
-  Future finalizeSurvey(String uid, Function notifyHomeView) async {
+  Future finalizeSurvey(
+    String uid,
+  ) async {
     finalizingSurvey = true;
     notifyListeners();
     print(uid);
+    _sharedPreferencesService.setSharedPreferencesValue(firstSurveyKey, true);
     await _databaseService.updateUserItem(uid, 20);
     await _databaseService.updateUserSurvey(
         uid, 'survey001', userFinalAnswers, shortAnswers);
     await _stateManageService.userModelUpdate();
     // notifyListeners();
-    await notifyHomeView();
+    // await notifyHomeView();
     finalizingSurvey = false;
     notifyListeners();
   }

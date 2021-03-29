@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
@@ -70,6 +71,14 @@ class VoteCommentViewModel extends FutureViewModel {
     context ?? precacheImage(theImage.image, context);
   }
 
+  updateUserModel() {
+    // _stateManageService.userModelUpdate();
+    user = _stateManageService.userModel;
+    notifyListeners();
+  }
+
+  // bool notShowAgain = false; // false면 계속 보는 거, true면 다시 안 보는 거
+
   Future showEventModal(BuildContext context) {
     return showModalBottomSheet(
         // enableDrag: false,
@@ -97,62 +106,171 @@ class VoteCommentViewModel extends FutureViewModel {
                   ),
                   Positioned(
                     left: 16,
-                    top: deviceHeight - 100 - 50 - 16,
-                    child: GestureDetector(
-                      onTap: () {
-                        // 다시 열지 않기. 쉐어드프리퍼런스 firstSurveyKey 이용해서 true로 해주면됨.
-                        _sharedPreferencesService.setSharedPreferencesValue(
-                            firstSurveyKey, true);
+                    bottom: 36,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            TextButton(
+                                onPressed: () async {
+                                  await _sharedPreferencesService
+                                      .setSharedPreferencesValue(
+                                          firstSurveyKey, true);
+                                  firstSurvey = await _sharedPreferencesService
+                                      .getSharedPreferencesValue(
+                                          firstSurveyKey, bool);
+                                  notifyListeners();
+                                  // _navigationService.popAndNavigateWithArgTo('userSurvey', updateUserModel)
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  "다시 보지 않기",
+                                  style: TextStyle(color: Colors.white),
+                                ))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                //  다시 열지 않기. 쉐어드프리퍼런스 firstSurveyKey 이용해서 true로 해주면됨.
+                                // await _sharedPreferencesService
+                                //     .setSharedPreferencesValue(
+                                //         firstSurveyKey, true);
+                                // firstSurvey = await _sharedPreferencesService
+                                //     .getSharedPreferencesValue(
+                                //         firstSurveyKey, bool);
+                                // notifyListeners();
+                                // _navigationService.popAndNavigateWithArgTo('userSurvey', updateUserModel)
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 0),
+                                height: 50,
+                                width: (deviceWidth - 32) / 3,
+                                decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(40.0))),
+                                child: Center(
+                                  child: AutoSizeText(
+                                    '닫기',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.sp,
+                                      fontFamily: 'AppleSDM',
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () async {
+                                //서베이뷰 이동
+                                // await _sharedPreferencesService
+                                //     .setSharedPreferencesValue(
+                                //         firstSurveyKey, true);
+                                // firstSurvey = await _sharedPreferencesService
+                                //     .getSharedPreferencesValue(
+                                //         firstSurveyKey, bool);
+                                // notifyListeners();
+                                // _navigationService.popAndNavigateWithArgTo('userSurvey', updateUserModel)
+                                Navigator.of(context).pop();
+                                _navigationService.navigateWithArgTo(
+                                    'userSurvey', updateUserModel);
+                              },
+                              child: Container(
+                                // color: Colors.blue,
+                                decoration: BoxDecoration(
+                                    color: Color(0xFFcf4d1e),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(40.0))),
+                                height: 50,
+                                width: ((deviceWidth - 32) * 2 / 3) - 10,
+                                child: Center(
+                                  child: AutoSizeText(
+                                    '설문하러 가기',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      // fontSize: 18.sp,
+                                      fontFamily: 'AppleSDB',
+                                    ),
+                                    maxLines: 1,
+                                    minFontSize: 20.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                  // Positioned(
+                  //   left: 16,
+                  //   // top: deviceHeight - 100 - 50 - 16,
+                  //   bottom: 32,
+                  //   child: GestureDetector(
+                  //     onTap: () {
+                  //       // 다시 열지 않기. 쉐어드프리퍼런스 firstSurveyKey 이용해서 true로 해주면됨.
+                  //       _sharedPreferencesService.setSharedPreferencesValue(
+                  //           firstSurveyKey, true);
 
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        height: 50,
-                        width: (deviceWidth - 48) / 2,
-                        decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(40.0))),
-                        child: Center(
-                          child: Text(
-                            '다시 열지 않기',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.sp,
-                              fontFamily: 'AppleSDM',
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: deviceWidth / 2 + 8,
-                    top: deviceHeight - 100 - 50 - 16,
-                    child: GestureDetector(
-                      onTap: () {
-                        // 서베이뷰로 가기.
-                      },
-                      child: Container(
-                        height: 50,
-                        width: (deviceWidth - 48) / 2,
-                        decoration: BoxDecoration(
-                            color: Color(0xFF1EC8CF),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(40.0))),
-                        child: Center(
-                          child: Text(
-                            '설문하러 가기',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.sp,
-                              fontFamily: 'AppleSDM',
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  //       Navigator.pop(context);
+                  //     },
+                  //     child: Container(
+                  //       height: 50,
+                  //       width: (deviceWidth - 48) / 3,
+                  //       decoration: BoxDecoration(
+                  //           color: Colors.grey,
+                  //           borderRadius:
+                  //               BorderRadius.all(Radius.circular(40.0))),
+                  //       child: Center(
+                  //         child: Text(
+                  //           '닫기',
+                  //           style: TextStyle(
+                  //             color: Colors.white,
+                  //             fontSize: 18.sp,
+                  //             fontFamily: 'AppleSDM',
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Positioned(
+                  //   left: deviceWidth / 2 + 8,
+                  //   // top: deviceHeight - 100 - 50 - 16,
+                  //   bottom: 32,
+                  //   child: GestureDetector(
+                  //     onTap: () {
+                  //       // 서베이뷰로 가기.
+                  //     },
+                  //     child: Container(
+                  //       height: 50,
+                  //       width: (deviceWidth - 48) * 2 / 3,
+                  //       decoration: BoxDecoration(
+                  //           color: Color(0xFF1EC8CF),
+                  //           borderRadius:
+                  //               BorderRadius.all(Radius.circular(40.0))),
+                  //       child: Center(
+                  //         child: Text(
+                  //           '설문하러 가기',
+                  //           style: TextStyle(
+                  //             color: Colors.white,
+                  //             fontSize: 18.sp,
+                  //             fontFamily: 'AppleSDM',
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ));
@@ -180,10 +298,10 @@ class VoteCommentViewModel extends FutureViewModel {
   //     },
   //   );
   // }
-
+  BuildContext buildContext;
   VoteCommentViewModel(BuildContext context) {
     // _authService.signOut();
-
+    buildContext = context;
     uid = _authService.auth.currentUser.uid;
     // getUser();
 
@@ -192,6 +310,8 @@ class VoteCommentViewModel extends FutureViewModel {
 
   Future getAllModel(uid) async {
     setBusy(true);
+    // _sharedPreferencesService.setSharedPreferencesValue(firstSurveyKey, false);
+
     await _amplitudeService.logCommunityMain(uid);
     if (_stateManageService.appStart) {
       print("App is newly started");
@@ -219,6 +339,11 @@ class VoteCommentViewModel extends FutureViewModel {
         firstSurveyKey, bool);
 
     setBusy(false);
+
+    if (!firstSurvey) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => showEventModal(buildContext));
+    }
   }
 
   Future getNewVote(address) async {

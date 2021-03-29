@@ -152,10 +152,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
               ),
             ));
           } else {
-            if (!model.firstSurvey) {
-              WidgetsBinding.instance
-                  .addPostFrameCallback((_) => model.showEventModal(context));
-            }
+            // if (!model.firstSurvey) {
+            //   WidgetsBinding.instance
+            //       .addPostFrameCallback((_) => model.showEventModal(context));
+            // }
 
             return Scaffold(
               body: WillPopScope(
