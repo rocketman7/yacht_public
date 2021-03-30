@@ -198,11 +198,11 @@ class VoteCommentViewModel extends FutureViewModel {
                                     '설문하러 가기',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      // fontSize: 18.sp,
+                                      fontSize: 20.sp,
                                       fontFamily: 'AppleSDB',
                                     ),
                                     maxLines: 1,
-                                    minFontSize: 20.sp,
+                                    // minFontSize: 20.sp,
                                   ),
                                 ),
                               ),
