@@ -213,9 +213,11 @@ PODS:
     - abseil/base/config
     - abseil/meta/type_traits
   - Amplitude (5.2.1)
+  - Amplitude-iOS (4.8.2)
   - amplitude_flutter (0.0.1):
     - Amplitude (= 5.2.1)
     - Flutter
+  - Analytics (3.7.0)
   - apple_sign_in (0.0.1):
     - Flutter
   - BoringSSL-GRPC (0.0.7):
@@ -380,6 +382,10 @@ PODS:
     - Flutter
     - Google-Mobile-Ads-SDK
     - PureLayout
+  - flutter_segment (0.0.1):
+    - Analytics (= 3.7.0)
+    - Flutter
+    - Segment-Amplitude (= 3.0.1)
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
@@ -463,6 +469,9 @@ PODS:
   - PromisesObjC (1.2.12)
   - Protobuf (3.14.0)
   - PureLayout (3.1.7)
+  - Segment-Amplitude (3.0.1):
+    - Amplitude-iOS (~> 4.8.0)
+    - Analytics (~> 3.7.0)
   - shared_preferences (0.0.1):
     - Flutter
   - sqflite (0.0.2):
@@ -492,6 +501,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_chat_bubble (from `.symlinks/plugins/flutter_chat_bubble/ios`)
   - flutter_native_admob (from `.symlinks/plugins/flutter_native_admob/ios`)
+  - flutter_segment (from `.symlinks/plugins/flutter_segment/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - kakao_flutter_sdk (from `.symlinks/plugins/kakao_flutter_sdk/ios`)
   - mixpanel_flutter (from `.symlinks/plugins/mixpanel_flutter/ios`)
@@ -507,6 +517,8 @@ SPEC REPOS:
   trunk:
     - abseil
     - Amplitude
+    - Amplitude-iOS
+    - Analytics
     - BoringSSL-GRPC
     - Firebase
     - FirebaseABTesting
@@ -537,6 +549,7 @@ SPEC REPOS:
     - PromisesObjC
     - Protobuf
     - PureLayout
+    - Segment-Amplitude
     - Toast
 
 EXTERNAL SOURCES:
@@ -570,6 +583,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_chat_bubble/ios"
   flutter_native_admob:
     :path: ".symlinks/plugins/flutter_native_admob/ios"
+  flutter_segment:
+    :path: ".symlinks/plugins/flutter_segment/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   kakao_flutter_sdk:
@@ -594,7 +609,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   Amplitude: 9774e93d48d9f41f271a4479e06369a30ab31db1
+  Amplitude-iOS: 46c8e6e65c49bb1ad1909a9add1a68e1f8562b3f
   amplitude_flutter: 5b9cab3f48db637a37d67b93e5dc49fa9b206686
+  Analytics: 77fd5fb102a4a5eedafa2c2b0245ceb7b7c15e45
   apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 4ca7179a70349b6e3a154311a9108d6be35677cd
@@ -624,6 +641,7 @@ SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_chat_bubble: cad6265ec611ba0f7bede70eabc26fdfce9bf2b0
   flutter_native_admob: 384f39f8b8dc0a96624c7cfa4cd255205e7c3da5
+  flutter_segment: f20a38d465030de0f1b2aa9325cef9c1442b0721
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   Google-Mobile-Ads-SDK: 8b58584890539de4527c47ef01e4da941a10bc8a
@@ -644,6 +662,7 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 0cde852566359049847168e51bd1c690e0f70056
   PureLayout: e9e5921347547e1068333f3149e737c972cb6037
+  Segment-Amplitude: 1b3b02a2e92f4b08a413a72bf7aa44f78566ab3b
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196

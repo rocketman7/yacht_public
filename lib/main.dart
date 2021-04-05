@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_segment/flutter_segment.dart';
 import 'package:kakao_flutter_sdk/auth.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -81,6 +82,10 @@ class _MyAppState extends State<MyApp> {
   GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
   @override
   Widget build(BuildContext context) {
+    Segment.screen(
+      screenName: 'Test Screen for main.dart',
+    );
+
     // 아이폰 프로 같은애들 기존에 지가 다크테마 쓰고있어서 스테이터스바 글씨색 하얀색일 경우를 위해
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.black,

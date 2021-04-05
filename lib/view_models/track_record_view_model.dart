@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_segment/flutter_segment.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/season_model.dart';
@@ -47,6 +48,15 @@ class TrackRecordViewModel extends FutureViewModel {
 
   Future getAllModel(uid) async {
     await _amplitudeService.logTrackRecordView(uid);
+
+    Segment.track(
+      eventName: 'Test ButtonClicked',
+      properties: {
+        'foo': 'bar',
+        'number': 1337,
+        'clicked': true,
+      },
+    );
 
     if (_stateManageService.appStart) {
       await _stateManageService.initStateManage(initUid: uid);

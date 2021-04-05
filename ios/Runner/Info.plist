@@ -77,6 +77,14 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!--  -->
+	<key>com.claimsforce.segment.WRITE_KEY</key>
+	<string>V3KbK1zCVVUVPnLNqpritmYWEfVXe2m0</string>
+	<key>com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS</key>
+	<false/>
+	<key>com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION</key>
+	<false/>
+	<!--  -->
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>

@@ -412,6 +412,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
+  flutter_segment:
+    dependency: "direct main"
+    description:
+      name: flutter_segment
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   flutter_svg:
     dependency: "direct main"
     description:

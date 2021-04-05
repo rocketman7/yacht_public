@@ -84,6 +84,7 @@ dependencies:
   flutter_native_admob: ^2.1.0+3
   webview_flutter: ^1.0.7
   mixpanel_flutter: ^1.0.0
+  flutter_segment: ^3.0.0
 
 flutter_icons:
   android: "launcher_icon"
