@@ -360,7 +360,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
 
   // const today = "20210108";
   var today = dateFormat(Date(), "yyyymmdd");
-  // const yesterday = "20210401";
+  const yesterday = "20210405";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -499,7 +499,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
     );
   }
   // 주석 풀 곳 
-  // await updateTodayRank(participatedUserSortedCurrentWinPoint, prevRankDocs);
+  await updateTodayRank(participatedUserSortedCurrentWinPoint, prevRankDocs);
 
 
 
