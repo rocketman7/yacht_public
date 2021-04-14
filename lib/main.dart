@@ -14,6 +14,7 @@ import 'package:yachtOne/views/chart_view.dart';
 import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/intro_view.dart';
 import 'package:yachtOne/views/lunchtime_event_view.dart';
+import 'package:yachtOne/views/test_home_view.dart';
 import 'package:yachtOne/views/track_record_view.dart';
 import 'managers/dialog_manager.dart';
 import 'router.dart';
@@ -102,7 +103,7 @@ class _MyAppState extends State<MyApp> {
         // key: navBarGlobalKey,
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: Routers.generateRoute,
-        home: InitialView(),
+        home: TestHomeView(),
         builder: (context, navigator) {
           var lang = Localizations.localeOf(context).languageCode;
           print("MAINLanguage is " + lang);
