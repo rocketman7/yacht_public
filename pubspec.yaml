@@ -141,21 +141,19 @@ flutter:
           weight: 500
         - asset: assets/fonts/dm_sans/DMSans-Bold.ttf
           weight: 700
-    - family: AppleSDL
-      fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoL.ttf
-    - family: AppleSDM
+
+    - family: AppleSD
       fonts:
         - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoM.ttf
-    - family: AppleSDB
-      fonts:
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoL.ttf
+          weight: 300
         - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoB.ttf
-    - family: AppleSDEB
-      fonts:
+          weight: 700
         - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoEB.ttf
-    - family: AppleSDH
-      fonts:
+          weight: 800
         - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoH.ttf
+          weight: 900
+
         # - asset: assets/fonts/advent_pro/AdventPro-SemiBold.ttf
   #   - family: Trajan Pro
   #     fonts:

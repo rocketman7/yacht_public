@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_segment/flutter_segment.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:intl/intl.dart';
 import 'package:kakao_flutter_sdk/auth.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,6 +28,8 @@ import 'package:timezone/timezone.dart' as tz;
 // import 'views/register_view.dart';
 // import 'views/sliding_card.dart';
 import 'services/connection_check_service.dart';
+import 'views/constants/theme.dart';
+import 'views/constants/view_constants.dart';
 import 'views/startup_view.dart';
 
 import 'locator.dart';
@@ -80,7 +85,7 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-  GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
+  // GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
   @override
   Widget build(BuildContext context) {
     Segment.screen(
@@ -94,32 +99,26 @@ class _MyAppState extends State<MyApp> {
       // statusBarColor: Colors.white,
       statusBarBrightness: Brightness.light,
     ));
-
+    // var lang = Localizations.localeOf(context).languageCode;
+    // print("MAINLanguage is " + lang);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: MaterialApp(
-        // theme: ThemeData(scaffoldBackgroundColor: const Color(0xFF000000)),
+        theme: theme(),
         debugShowCheckedModeBanner: false,
+
         // showPerformanceOverlay: true,
         // key: navBarGlobalKey,
-        navigatorKey: locator<NavigationService>().navigatorKey,
-        onGenerateRoute: Routers.generateRoute,
-        home: InitialView(),
-        builder: (context, navigator) {
-          var lang = Localizations.localeOf(context).languageCode;
-          print("MAINLanguage is " + lang);
-
+        // navigatorKey: locator<NavigationService>().navigatorKey,
+        // onGenerateRoute: Routers.generateRoute,
+        home: TestHomeView(),
+        // textDirection: TextDirection.LTR,
+        builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: Theme(
-              data: ThemeData(
-                fontFamily: lang == 'en' ? 'DmSans' : 'AppleSD',
-                primaryColor: Colors.white,
-              ),
-              child: navigator,
-            ),
+            child: child,
           );
         },
       ),
