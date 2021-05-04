@@ -25,12 +25,14 @@ dependencies:
     sdk: flutter
   align_positioned: ^1.2.8
   amplitude_flutter: ^2.2.2
+  app_tracking_transparency: ^2.0.0
   apple_sign_in: ^0.1.0
   auto_size_text: ^2.1.0
   back_button_interceptor: ^4.4.0
   blobs: ^1.2.0
   bubble: ^1.1.9+1
   cached_network_image: ^2.3.1
+  carousel_slider: ^3.0.0
   charts_flutter: ^0.9.0
   circular_check_box: ^1.0.4
   cloud_firestore: ^0.14.1+3

@@ -218,6 +218,8 @@ PODS:
     - Amplitude (= 5.2.1)
     - Flutter
   - Analytics (3.7.0)
+  - app_tracking_transparency (0.0.1):
+    - Flutter
   - apple_sign_in (0.0.1):
     - Flutter
   - BoringSSL-GRPC (0.0.7):
@@ -487,6 +489,7 @@ PODS:
 
 DEPENDENCIES:
   - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
+  - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
   - apple_sign_in (from `.symlinks/plugins/apple_sign_in/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
@@ -555,6 +558,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   amplitude_flutter:
     :path: ".symlinks/plugins/amplitude_flutter/ios"
+  app_tracking_transparency:
+    :path: ".symlinks/plugins/app_tracking_transparency/ios"
   apple_sign_in:
     :path: ".symlinks/plugins/apple_sign_in/ios"
   cloud_firestore:
@@ -612,6 +617,7 @@ SPEC CHECKSUMS:
   Amplitude-iOS: 46c8e6e65c49bb1ad1909a9add1a68e1f8562b3f
   amplitude_flutter: 5b9cab3f48db637a37d67b93e5dc49fa9b206686
   Analytics: 77fd5fb102a4a5eedafa2c2b0245ceb7b7c15e45
+  app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
   apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 4ca7179a70349b6e3a154311a9108d6be35677cd

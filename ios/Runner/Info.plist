@@ -57,6 +57,8 @@
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<true/>
 	</dict>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>무료로 운영되는 꾸욱은 유저에게 더 나은 서비스를 제공하고자 노력하고 있습니다. 추적을 허용하시면 맞춤형 광고를 제공 받을 수 있습니다. 추적되는 모든 정보는 익명화됩니다.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

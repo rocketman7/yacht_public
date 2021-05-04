@@ -333,16 +333,17 @@ class VoteCommentViewModel extends FutureViewModel {
     vote = await _databaseService.getVotes(address); //예측 참여 수 즉각 업뎃하기 위해
     // userVote = await _databaseService.getUserVote(address);
     // seasonInfo = await _databaseService.getSeasonInfo(address);
-    firstSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
-        firstSurveyKey, bool);
+    // firstSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
+    //     firstSurveyKey, bool);
+    firstSurvey = false;
 
     setBusy(false);
 
-    if (!firstSurvey) {
-      await getSurveyImage(buildContext);
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => showEventModal(buildContext));
-    }
+    // if (!firstSurvey) {
+    //   await getSurveyImage(buildContext);
+    //   WidgetsBinding.instance
+    //       .addPostFrameCallback((_) => showEventModal(buildContext));
+    // }
   }
 
   Future getNewVote(address) async {

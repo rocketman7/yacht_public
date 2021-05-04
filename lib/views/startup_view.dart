@@ -1,6 +1,8 @@
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/managers/dialog_manager.dart';
@@ -46,7 +48,6 @@ class _StartUpViewState extends State<StartUpView>
 
   // HomeView에서 버튼으로 navigate할 수 있도록 callback function을 만든다.
   void goToTab(int idxFromOtherPages) {
-    print("THIS VOID CALLED");
     setState(() {
       _selectedIndex = idxFromOtherPages;
       _tabController.index = _selectedIndex;
@@ -60,8 +61,36 @@ class _StartUpViewState extends State<StartUpView>
     }
   }
 
+  String _authStatus = 'Unknown';
+  Future<void> initPlugin() async {
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      final TrackingStatus status =
+          await AppTrackingTransparency.trackingAuthorizationStatus;
+      setState(() => _authStatus = '$status');
+      // If the system can show an authorization request dialog
+      if (status == TrackingStatus.notDetermined) {
+        // Show a custom explainer dialog before the system dialog
+        // if (await showCustomTrackingDialog(context)) {
+        //   // Wait for dialog popping animation
+        //   await Future.delayed(const Duration(milliseconds: 200));
+        // Request system's tracking authorization dialog
+        final TrackingStatus status =
+            await AppTrackingTransparency.requestTrackingAuthorization();
+        setState(() => _authStatus = '$status');
+        // }
+      }
+    } on PlatformException {
+      setState(() => _authStatus = 'PlatformException was thrown');
+    }
+
+    final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
+    print("UUID: $uuid");
+  }
+
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => initPlugin());
     _startIdx = widget.startIdx ?? 0;
     _selectedIndex = _startIdx;
     // TODO: implement initState

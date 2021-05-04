@@ -89,7 +89,9 @@ class _MyAppState extends State<MyApp> {
 
     // 아이폰 프로 같은애들 기존에 지가 다크테마 쓰고있어서 스테이터스바 글씨색 하얀색일 경우를 위해
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
+      systemNavigationBarColor: Colors.blue, // navigation bar color
+      statusBarColor: Colors.pink,
+      // statusBarColor: Colors.white,
       statusBarBrightness: Brightness.light,
     ));
 
@@ -98,12 +100,13 @@ class _MyAppState extends State<MyApp> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: MaterialApp(
+        // theme: ThemeData(scaffoldBackgroundColor: const Color(0xFF000000)),
         debugShowCheckedModeBanner: false,
         // showPerformanceOverlay: true,
         // key: navBarGlobalKey,
         navigatorKey: locator<NavigationService>().navigatorKey,
         onGenerateRoute: Routers.generateRoute,
-        home: TestHomeView(),
+        home: InitialView(),
         builder: (context, navigator) {
           var lang = Localizations.localeOf(context).languageCode;
           print("MAINLanguage is " + lang);
