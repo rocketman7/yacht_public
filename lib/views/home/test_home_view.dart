@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/route_manager.dart';
 
+import '../constants/size_config.dart';
+import '../constants/view_constants.dart';
+
 class TestHomeView extends StatefulWidget {
   @override
   _TestHomeViewState createState() => _TestHomeViewState();
@@ -28,17 +31,17 @@ class _TestHomeViewState extends State<TestHomeView> {
   List<dynamic> imgList = [0, 1, 2, 3];
   @override
   Widget build(BuildContext context) {
-    const Color appBackgroundColor = Colors.black;
-    const Color textColor = Colors.white;
+    SizeConfig().init(context);
 
+    // 퀘스트 카드 샘플
     final List<Widget> imageSliders = imgList
         .map(
           (item) => Container(
             decoration: BoxDecoration(
-              color: Colors.white24,
+              color: Color(0xFFB3E7F2),
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
             ),
-            margin: EdgeInsets.all(5.0),
+            margin: const EdgeInsets.all(5.0),
             child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 child: Stack(
@@ -47,14 +50,10 @@ class _TestHomeViewState extends State<TestHomeView> {
                       padding: const EdgeInsets.all(12.0),
                       child: Align(
                         alignment: Alignment.topCenter,
-                        child: Text(
-                          "5,000,000원",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'AppleSDB',
-                              fontSize: 24),
-                          // textAlign: TextAlign.center,
-                        ),
+                        child: Text("5,000,000원",
+                            style: Theme.of(context).textTheme.headline5
+                            // textAlign: TextAlign.center,
+                            ),
                       ),
                     ),
                     Container(
@@ -77,7 +76,7 @@ class _TestHomeViewState extends State<TestHomeView> {
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [Colors.white10, Colors.white60],
+                            colors: [Color(0xFF82C0D9), Color(0xFF82C0D9)],
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                           ),
@@ -85,14 +84,11 @@ class _TestHomeViewState extends State<TestHomeView> {
                         padding: EdgeInsets.symmetric(
                             vertical: 5.0, horizontal: 20.0),
                         child: Center(
-                          child: Text(
-                            '월간 꾸욱 리그 상금',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child: Text('월간 리그 상금 Top 10',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  .copyWith(fontSize: 20, color: Colors.white)),
                         ),
                       ),
                     ),
@@ -102,58 +98,47 @@ class _TestHomeViewState extends State<TestHomeView> {
         )
         .toList();
 
-    return GetMaterialApp(
-      // debugShowCheckedModeBanner: false,
-      // color: Colors.red,
-      theme: ThemeData(
-        scaffoldBackgroundColor: appBackgroundColor,
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        // backgroundColor: appBackgroundColor.withBlue(20),
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) {},
+        currentIndex: 0,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Community'),
+          // BottomNavigationBarItem(icon: Icon(Icons.person), label: 'My'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'My')
+        ],
       ),
-      home: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: appBackgroundColor.withBlue(20),
-          type: BottomNavigationBarType.fixed,
-          onTap: (index) {},
-          currentIndex: 0,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.grey,
-          unselectedLabelStyle: TextStyle(color: Colors.white),
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Community'),
-            // BottomNavigationBarItem(icon: Icon(Icons.person), label: 'My'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'My')
-          ],
-        ),
-        body: Container(
-          color: appBackgroundColor,
-          child: SafeArea(
-              child: Scaffold(
-            // backgroundColor: Colors.black,
-            body: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  elevation: 0.0, // 스크롤했을 때 SliverAppbar 아래 shadow.
-                  backgroundColor: appBackgroundColor,
-                  textTheme:
-                      TextTheme(headline6: TextStyle(color: Colors.black)),
-                  // title: Text("APP TITLE"),
-                  pinned: true,
-                  expandedHeight: 120,
-                  flexibleSpace: FlexibleSpaceBar(
-                    titlePadding: EdgeInsets.fromLTRB(16, 0, 0, 16),
-                    centerTitle: false,
-                    title: Row(
+      body: Container(
+        // color: appBackgroundColor,
+        child: SafeArea(
+            child: Scaffold(
+          // backgroundColor: Colors.black,
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                elevation: 0.0, // 스크롤했을 때 SliverAppbar 아래 shadow.
+
+                backgroundColor: kPrimaryBackGroundColorLight,
+                // textTheme:
+                // TextTheme(headline6: TextStyle(color: Colors.black)),
+                // title: Text("APP TITLE"),
+                pinned: true,
+                expandedHeight: 100,
+                flexibleSpace: FlexibleSpaceBar(
+                  titlePadding: EdgeInsets.fromLTRB(16, 0, 0, 16),
+                  centerTitle: false,
+                  title: GestureDetector(
+                    onTap: () {
+                      Get.snackbar("title", "message");
+                    },
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          "요트  ",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'AppleSDB',
-                            letterSpacing: -1,
-                            fontSize: 24,
-                          ),
-                        ),
+                        Text("요트  ",
+                            style: Theme.of(context).textTheme.headline6),
                         Text(
                           "나만의 투자 항해 ⛵️",
                           style: TextStyle(
@@ -167,22 +152,22 @@ class _TestHomeViewState extends State<TestHomeView> {
                     ),
                   ),
                 ),
-                // SliverPersistentHeader(
-                //   delegate: CustomSliverAppBarDelegate(expandedHeight: 200),
-                //   pinned: true,
-                // ),
-                buildHomeContents(imageSliders)
-              ],
-            ),
-          )),
-        ),
+              ),
+              // SliverPersistentHeader(
+              //   delegate: CustomSliverAppBarDelegate(expandedHeight: 200),
+              //   pinned: true,
+              // ),
+              buildHomeContents(imageSliders)
+            ],
+          ),
+        )),
       ),
     );
   }
 
   Widget buildHomeContents(List<Widget> imageSliders) {
-    const TextStyle _titleStyle =
-        TextStyle(color: Colors.white, fontSize: 22, fontFamily: 'AppleSDB');
+    // const TextStyle _titleStyle =
+    //     TextStyle(color: Colors.black, fontSize: 22, fontFamily: 'AppleSD');
 
     const EdgeInsets _titlePadding =
         EdgeInsets.symmetric(horizontal: 16, vertical: 12);
@@ -197,13 +182,13 @@ class _TestHomeViewState extends State<TestHomeView> {
               padding: _titlePadding,
               child: Text(
                 "이 달의 상금 주식",
-                style: _titleStyle,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
             Container(
-              height: 60,
+              height: getProportionateScreenHeight(65),
               decoration: BoxDecoration(
-                color: Colors.white12,
+                color: Color(0xFF7CDA7A),
               ),
               // borderRadius: BorderRadius.circular(5)),
               child: Row(
@@ -211,17 +196,17 @@ class _TestHomeViewState extends State<TestHomeView> {
                 children: [
                   Text(
                     "총 10,000,000원",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
-                        fontFamily: 'AppleSDB'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline3
+                        .copyWith(fontSize: 28, color: Colors.white),
                   ),
                   SizedBox(
                     width: 16,
                   ),
                   SvgPicture.asset(
                     'assets/icons/bottom_rank2.svg',
-                    color: Colors.white54,
+                    color: Colors.white70,
                     height: 32,
                   ),
                 ],
@@ -240,7 +225,7 @@ class _TestHomeViewState extends State<TestHomeView> {
               padding: _titlePadding,
               child: Text(
                 "꾸욱 점수 얻기",
-                style: _titleStyle,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
             Padding(
@@ -258,7 +243,7 @@ class _TestHomeViewState extends State<TestHomeView> {
                               height: 150,
                               width: 150,
                               decoration: BoxDecoration(
-                                  color: Colors.white24,
+                                  color: Colors.blueGrey,
                                   borderRadius: BorderRadius.circular(15)),
                               child: Padding(
                                 padding:
@@ -269,24 +254,24 @@ class _TestHomeViewState extends State<TestHomeView> {
                                   children: [
                                     Text(
                                       "카테고리",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'AppleSDB',
-                                          fontSize: 16),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(color: Colors.white),
                                     ),
                                     Text(
                                       "꾸욱 3점",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'AppleSDB',
-                                          fontSize: 28),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline3
+                                          .copyWith(color: Colors.white),
                                     ),
                                     Text(
                                       "포인트를 차지하세요",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'AppleSDB',
-                                          fontSize: 16),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(color: Colors.white),
                                     )
                                   ],
                                 ),
@@ -329,7 +314,7 @@ class _TestHomeViewState extends State<TestHomeView> {
               padding: _titlePadding,
               child: Text(
                 "이 달의 랭킹",
-                style: _titleStyle,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
             Padding(
@@ -389,7 +374,7 @@ class _TestHomeViewState extends State<TestHomeView> {
               padding: _titlePadding,
               child: Text(
                 "오늘의 마켓",
-                style: _titleStyle,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
             Padding(
@@ -457,7 +442,7 @@ class _TestHomeViewState extends State<TestHomeView> {
               padding: _titlePadding,
               child: Text(
                 "스토리",
-                style: _titleStyle,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
             Padding(

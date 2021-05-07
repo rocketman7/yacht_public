@@ -4,12 +4,18 @@ import 'view_constants.dart';
 
 ThemeData theme() {
   return ThemeData(
-    scaffoldBackgroundColor: Colors.white,
-    // fontFamily: "AppleSD",
-    // appBarTheme: appBarTheme(),
-    // textTheme: textTheme(),
-    // inputDecorationTheme: inputDecorationTheme(),
-    // visualDensity: VisualDensity.adaptivePlatformDensity,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: kPrimaryBackGroundColorLight,
+        elevation: 0.0,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        unselectedLabelStyle: TextStyle(color: kTextColor)),
+    scaffoldBackgroundColor: kPrimaryBackGroundColorLight,
+    fontFamily: "AppleSD",
+    appBarTheme: appBarTheme(),
+    textTheme: textTheme(),
+    inputDecorationTheme: inputDecorationTheme(),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 }
 
@@ -33,8 +39,23 @@ InputDecorationTheme inputDecorationTheme() {
 
 TextTheme textTheme() {
   return TextTheme(
-    bodyText1: TextStyle(color: kTextColor),
-    bodyText2: TextStyle(color: kTextColor),
+    headline3: TextStyle(
+        fontFamily: "AppleSD",
+        color: kTextColor,
+        fontSize: 26,
+        fontWeight: FontWeight.w700),
+    headline5: TextStyle(
+        fontFamily: "AppleSD",
+        color: kTextColor,
+        fontSize: 24,
+        fontWeight: FontWeight.w700),
+    headline6: TextStyle(
+        fontFamily: "AppleSD",
+        color: kTextColor,
+        fontSize: 20,
+        fontWeight: FontWeight.w700),
+    bodyText1: TextStyle(fontFamily: "AppleSD", color: kTextColor),
+    bodyText2: TextStyle(fontFamily: "AppleSD", color: kTextColor),
   );
 }
 

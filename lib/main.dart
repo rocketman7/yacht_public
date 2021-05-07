@@ -17,7 +17,7 @@ import 'package:yachtOne/views/chart_view.dart';
 import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/intro_view.dart';
 import 'package:yachtOne/views/lunchtime_event_view.dart';
-import 'package:yachtOne/views/test_home_view.dart';
+import 'package:yachtOne/views/home/test_home_view.dart';
 import 'package:yachtOne/views/track_record_view.dart';
 import 'managers/dialog_manager.dart';
 import 'router.dart';
@@ -38,6 +38,8 @@ import 'services/navigation_service.dart';
 import 'services/adManager_service.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+
+import 'views/test_splash_view.dart';
 
 void main() async {
   tz.initializeTimeZones();
@@ -105,7 +107,7 @@ class _MyAppState extends State<MyApp> {
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
-      child: MaterialApp(
+      child: GetMaterialApp(
         theme: theme(),
         debugShowCheckedModeBanner: false,
 
