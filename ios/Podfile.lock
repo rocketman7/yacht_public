@@ -469,8 +469,8 @@ PODS:
   - path_provider (0.0.1):
     - Flutter
   - PromisesObjC (1.2.12)
-  - Protobuf (3.14.0)
-  - PureLayout (3.1.7)
+  - Protobuf (3.17.0)
+  - PureLayout (3.1.8)
   - Segment-Amplitude (3.0.1):
     - Amplitude-iOS (~> 4.8.0)
     - Analytics (~> 3.7.0)
@@ -666,8 +666,8 @@ SPEC CHECKSUMS:
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Protobuf: 0cde852566359049847168e51bd1c690e0f70056
-  PureLayout: e9e5921347547e1068333f3149e737c972cb6037
+  Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
+  PureLayout: a4afb3d79dd958564ce33d22c89f407280d8e6a8
   Segment-Amplitude: 1b3b02a2e92f4b08a413a72bf7aa44f78566ab3b
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
@@ -678,4 +678,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0661a8b4d2adb53671731a5c90a8e5964fc4bf1f
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

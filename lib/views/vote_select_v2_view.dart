@@ -24,6 +24,7 @@ import 'package:yachtOne/services/timezone_service.dart';
 import 'package:yachtOne/view_models/top_container_view_model.dart';
 import 'package:yachtOne/views/user_survey_view.dart';
 import 'package:yachtOne/views/winner_view.dart';
+import 'package:yachtOne/views/yacht_portfolio_view.dart';
 import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -1326,13 +1327,21 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         _mixpanelService.mixpanel
                                             .track('Notification View');
                                         // mixpanel.track('Sent Message');
+                                        // 반드시 주석해제! 아래꺼가 진짜 알람뷰로 가는것.
+                                        // Navigator.push(
+                                        //     context,
+                                        //     CupertinoPageRoute(
+                                        //         builder: (context) =>
+                                        //             NotificationListView(
+                                        //                 callbackFunc: model
+                                        //                     .updateNotification)));
+
+                                        // 반드시 주석처리! 테스트를 위해 잠깐잠깐 주석 오픈하는거
                                         Navigator.push(
                                             context,
                                             CupertinoPageRoute(
                                                 builder: (context) =>
-                                                    NotificationListView(
-                                                        callbackFunc: model
-                                                            .updateNotification)));
+                                                    YachtPortfolioView()));
 
                                         // Navigator.push(
                                         //     context,
