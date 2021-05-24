@@ -8,13 +8,9 @@ class ChartModel {
   double high;
   double low;
   double close;
-  ChartModel({
-    this.date,
-    this.open,
-    this.high,
-    this.low,
-    this.close,
-  });
+  double volume;
+  ChartModel(
+      {this.date, this.open, this.high, this.low, this.close, this.volume});
   // DateTime dateTime;
 
   ChartModel copyWith({
@@ -23,14 +19,15 @@ class ChartModel {
     double high,
     double low,
     double close,
+    double volume,
   }) {
     return ChartModel(
-      date: date ?? this.date,
-      open: open ?? this.open,
-      high: high ?? this.high,
-      low: low ?? this.low,
-      close: close ?? this.close,
-    );
+        date: date ?? this.date,
+        open: open ?? this.open,
+        high: high ?? this.high,
+        low: low ?? this.low,
+        close: close ?? this.close,
+        volume: volume ?? this.volume);
   }
 
   Map<String, dynamic> toJson() {
@@ -40,6 +37,7 @@ class ChartModel {
       'high': high,
       'low': low,
       'close': close,
+      'volume': volume,
     };
   }
 
@@ -50,12 +48,14 @@ class ChartModel {
     double high = double.tryParse(data['high'].toString());
     double low = double.tryParse(data['low'].toString());
     double close = double.tryParse(data['close'].toString());
+    double volume = double.tryParse(data['volume'].toString());
     return ChartModel(
       date: data['date'],
       open: open,
       high: high,
       low: low,
       close: close,
+      volume: volume,
     );
   }
 
@@ -64,7 +64,7 @@ class ChartModel {
 
   @override
   String toString() {
-    return 'ChartModel(date: $date, open: $open, high: $high, low: $low, close: $close)';
+    return 'ChartModel(date: $date, open: $open, high: $high, low: $low, close: $close, volume: $volume)';
   }
 
   @override
@@ -76,7 +76,8 @@ class ChartModel {
         o.open == open &&
         o.high == high &&
         o.low == low &&
-        o.close == close;
+        o.close == close &&
+        o.volume == volume;
   }
 
   @override
@@ -85,6 +86,7 @@ class ChartModel {
         open.hashCode ^
         high.hashCode ^
         low.hashCode ^
-        close.hashCode;
+        close.hashCode ^
+        volume.hashCode;
   }
 }

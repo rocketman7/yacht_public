@@ -188,7 +188,7 @@ class _TestHomeViewState extends State<TestHomeView> {
             Container(
               height: getProportionateScreenHeight(65),
               decoration: BoxDecoration(
-                color: Color(0xFF7CDA7A),
+                color: Color(0xFFD4EC82),
               ),
               // borderRadius: BorderRadius.circular(5)),
               child: Row(
@@ -199,14 +199,14 @@ class _TestHomeViewState extends State<TestHomeView> {
                     style: Theme.of(context)
                         .textTheme
                         .headline3
-                        .copyWith(fontSize: 28, color: Colors.white),
+                        .copyWith(fontSize: 28, color: Colors.black87),
                   ),
                   SizedBox(
                     width: 16,
                   ),
                   SvgPicture.asset(
                     'assets/icons/bottom_rank2.svg',
-                    color: Colors.white70,
+                    color: Colors.black87,
                     height: 32,
                   ),
                 ],
@@ -228,55 +228,20 @@ class _TestHomeViewState extends State<TestHomeView> {
                 style: Theme.of(context).textTheme.headline6,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: imgList.map((e) {
-                    return Row(
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: imgList.map((e) {
+                  return Padding(
+                    padding: e == 0
+                        ? const EdgeInsets.only(left: 16.0)
+                        : const EdgeInsets.only(left: 0),
+                    child: Row(
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Container(
-                              height: 150,
-                              width: 150,
-                              decoration: BoxDecoration(
-                                  color: Colors.blueGrey,
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "카테고리",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .copyWith(color: Colors.white),
-                                    ),
-                                    Text(
-                                      "꾸욱 3점",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline3
-                                          .copyWith(color: Colors.white),
-                                    ),
-                                    Text(
-                                      "포인트를 차지하세요",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          .copyWith(color: Colors.white),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
+                            buildSqaureQuest(),
                             SizedBox(
                               height: 8,
                             ),
@@ -302,9 +267,9 @@ class _TestHomeViewState extends State<TestHomeView> {
                           width: 16,
                         )
                       ],
-                    );
-                  }).toList(),
-                ),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
             SizedBox(
@@ -504,6 +469,44 @@ class _TestHomeViewState extends State<TestHomeView> {
             //   height: 200,
             //   decoration: BoxDecoration(border: Border.all(width: 4)),
             // )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container buildSqaureQuest() {
+    return Container(
+      height: 150,
+      width: 150,
+      decoration: BoxDecoration(
+          color: Colors.blueGrey, borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "카테고리",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: Colors.white),
+            ),
+            Text(
+              "꾸욱 3점",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline3
+                  .copyWith(color: Colors.white),
+            ),
+            Text(
+              "포인트를 차지하세요",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: Colors.white),
+            )
           ],
         ),
       ),

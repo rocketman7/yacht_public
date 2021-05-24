@@ -39,6 +39,7 @@ import 'services/adManager_service.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
+import 'views/stocks/stock_info_kr_view.dart';
 import 'views/test_splash_view.dart';
 
 void main() async {
@@ -115,7 +116,7 @@ class _MyAppState extends State<MyApp> {
         // key: navBarGlobalKey,
         // navigatorKey: locator<NavigationService>().navigatorKey,
         // onGenerateRoute: Routers.generateRoute,
-        home: TestHomeView(),
+        home: StockInfoKrView(),
         // textDirection: TextDirection.LTR,
         builder: (context, child) {
           return MediaQuery(

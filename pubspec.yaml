@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.2.9+33
+version: 1.3.0+34
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -60,6 +60,7 @@ dependencies:
   flare_checkbox: ^1.0.4
   get: ^3.23.1
   get_it: ^4.0.2
+  google_mobile_ads: ^0.13.0
   http: ^0.12.2
   intl: ^0.16.1
   kakao_flutter_sdk: ^0.5.2
@@ -141,19 +142,21 @@ flutter:
           weight: 500
         - asset: assets/fonts/dm_sans/DMSans-Bold.ttf
           weight: 700
-
-    - family: AppleSD
+    - family: AppleSDL
+      fonts:
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoL.ttf
+    - family: AppleSDM
       fonts:
         - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoM.ttf
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoL.ttf
-          weight: 300
+    - family: AppleSDB
+      fonts:
         - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoB.ttf
-          weight: 700
+    - family: AppleSDEB
+      fonts:
         - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoEB.ttf
-          weight: 800
+    - family: AppleSDH
+      fonts:
         - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoH.ttf
-          weight: 900
-
         # - asset: assets/fonts/advent_pro/AdventPro-SemiBold.ttf
   #   - family: Trajan Pro
   #     fonts:

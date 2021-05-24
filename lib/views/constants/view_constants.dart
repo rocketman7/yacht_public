@@ -15,11 +15,20 @@ const kTextColor = Colors.black;
 
 const kAnimationDuration = Duration(milliseconds: 200);
 
+const kHorizontalPadding = EdgeInsets.symmetric(horizontal: 16);
+
 final headingStyle = TextStyle(
   fontSize: getProportionateScreenWidth(28),
   fontWeight: FontWeight.bold,
   color: Colors.black,
-  height: 1.5,
+  height: 1,
+);
+
+final titleStyle = TextStyle(
+  fontSize: getProportionateScreenWidth(22),
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+  height: 1,
 );
 
 const defaultDuration = Duration(milliseconds: 250);
