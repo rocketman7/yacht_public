@@ -9,33 +9,33 @@ import '../models/sharedPreferences_const.dart';
 
 class NotificationListViewModel extends FutureViewModel {
   // Services Setting
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  SharedPreferencesService _sharedPreferencesService =
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
 
   // 변수 Setting
-  List<NotificationListModel> notificationListModel = [];
+  List<NotificationListModel>? notificationListModel = [];
   List<String> notificationTimeStr = [];
   List<bool> isSelected = [];
 
-  Function callbackFunc;
+  Function? callbackFunc;
 
   NotificationListViewModel({this.callbackFunc});
 
   // method
   // futureToRun으로 호출하는.
   Future getNotificationList() async {
-    notificationListModel = await _databaseService.getNotificationList();
+    notificationListModel = await _databaseService!.getNotificationList();
 
-    for (int i = 0; i < notificationListModel.length; i++) {
+    for (int i = 0; i < notificationListModel!.length; i++) {
       isSelected.add(false);
     }
 
     // 날짜를 String 형태로 바꿔놓는다
-    for (int i = 0; i < notificationListModel.length; i++) {
+    for (int i = 0; i < notificationListModel!.length; i++) {
       notificationTimeStr
-          .add(notificationListModel[i].notificationTime.toDate().toString());
+          .add(notificationListModel![i].notificationTime!.toDate().toString());
 
       notificationTimeStr[i] = notificationTimeStr[i].substring(0, 4) +
           '.' +
@@ -59,11 +59,11 @@ class NotificationListViewModel extends FutureViewModel {
 
     // print(nowString);
 
-    await _sharedPreferencesService.setSharedPreferencesValue(
+    await _sharedPreferencesService!.setSharedPreferencesValue(
         lastCheckTimeKey, nowString);
 
     // 이러면 pop으로 돌아가면 바로 노티피케이션 빨간 점 없어짐
-    if (callbackFunc != null) callbackFunc();
+    if (callbackFunc != null) callbackFunc!();
 
     notifyListeners();
   }
@@ -77,7 +77,7 @@ class NotificationListViewModel extends FutureViewModel {
 
   //
   void navigateToSurvey(int i) {
-    _navigationService.navigateTo(notificationListModel[i].url.toString());
+    _navigationService!.navigateTo(notificationListModel![i].url.toString());
   }
 
   @override

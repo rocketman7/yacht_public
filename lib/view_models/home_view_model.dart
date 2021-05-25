@@ -20,22 +20,22 @@ import '../services/navigation_service.dart';
 import '../view_models/base_model.dart';
 
 class HomeViewModel extends FutureViewModel {
-  final AuthService _authService = locator<AuthService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  SharedPreferencesService _sharedPreferencesService =
+  final AuthService? _authService = locator<AuthService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
   // UserModel _user;
-  UserModel user;
+  UserModel? user;
   // UserModel get user => _user;
-  DatabaseAddressModel address;
-  VoteModel vote;
-  UserVoteModel userVote;
-  SeasonModel seasonInfo;
-  PortfolioModel portfolioModel;
+  late DatabaseAddressModel address;
+  VoteModel? vote;
+  late UserVoteModel userVote;
+  SeasonModel? seasonInfo;
+  PortfolioModel? portfolioModel;
 
-  String uid;
+  String? uid;
   // String get uid => _uid;
   // Stream<User> get authUserState => _authUserState();
   // UserModel user;
@@ -45,12 +45,12 @@ class HomeViewModel extends FutureViewModel {
     // _authService.signOut();
     print("HOMEVIEWMODEL STARTED");
 
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
 
     // _sharedPreferencesService.setSharedPreferencesValue('twoFactor', true);
     // getUser();
-    if (_authService.auth.currentUser.email != null) {
-      _sharedPreferencesService.setSharedPreferencesValue('twoFactor', true);
+    if (_authService!.auth.currentUser!.email != null) {
+      _sharedPreferencesService!.setSharedPreferencesValue('twoFactor', true);
     }
   }
 
@@ -61,23 +61,23 @@ class HomeViewModel extends FutureViewModel {
     // _allModel.add(await getUser(uid));
     // _allModel.add(await getVote(address));
 
-    address = await _databaseService.getAddress(uid);
-    user = await _databaseService.getUser(uid);
-    vote = await _databaseService.getVotes(address);
-    userVote = await _databaseService.getUserVote(address);
-    seasonInfo = await _databaseService.getSeasonInfo(address);
-    portfolioModel = await _databaseService.getPortfolio(address);
-    print(userVote.userVoteStats.currentWinPoint.toString());
-    print("LENGTH" + vote.subVotes[0].issueCode.length.toString());
+    address = await _databaseService!.getAddress(uid);
+    user = await (_databaseService!.getUser(uid) as FutureOr<UserModel?>);
+    vote = await _databaseService!.getVotes(address);
+    userVote = await (_databaseService!.getUserVote(address) as FutureOr<UserVoteModel>);
+    seasonInfo = await _databaseService!.getSeasonInfo(address);
+    portfolioModel = await _databaseService!.getPortfolio(address);
+    print(userVote.userVoteStats!.currentWinPoint.toString());
+    print("LENGTH" + vote!.subVotes![0].issueCode!.length.toString());
     setBusy(false);
   }
 
   String getPortfolioValue() {
     int totalValue = 0;
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      totalValue += portfolioModel.subPortfolio[i].sharesNum *
-          portfolioModel.subPortfolio[i].currentPrice;
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
+      totalValue += portfolioModel!.subPortfolio![i].sharesNum! *
+          portfolioModel!.subPortfolio![i].currentPrice!;
     }
 
     var f = NumberFormat("#,###", "en_US");
@@ -86,7 +86,7 @@ class HomeViewModel extends FutureViewModel {
   }
 
   Future signOut() async {
-    await _authService.signOut();
+    await _authService!.signOut();
     // _navigationService.navigateTo('/');
     // var hasUserLoggedIn = await _authService.isUserLoggedIn();
     // if (hasUserLoggedIn) {

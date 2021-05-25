@@ -40,7 +40,7 @@ class SurveyView extends StatelessWidget {
                   ? Container()
                   : WillPopScope(
                       onWillPop: () async {
-                        _navigatorKey.currentState.maybePop();
+                        _navigatorKey.currentState!.maybePop();
                         return false;
                       },
                       child: SafeArea(
@@ -50,15 +50,15 @@ class SurveyView extends StatelessWidget {
                             // cro: MainAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: deviceHeight * .05,
+                                height: deviceHeight! * .05,
                               ),
                               Align(
                                 alignment: Alignment.centerLeft,
                                 child: Container(
                                   height: 5,
                                   width: model.progress > 1
-                                      ? (1 * deviceWidth)
-                                      : (model.progress * deviceWidth),
+                                      ? (1 * deviceWidth!)
+                                      : (model.progress * deviceWidth!),
                                   decoration: BoxDecoration(
                                       color: Color(0xFF4F4F4F),
                                       gradient: LinearGradient(
@@ -73,7 +73,7 @@ class SurveyView extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(
-                                height: deviceHeight * .02,
+                                height: deviceHeight! * .02,
                               ),
                               !(model.didBubbleSurvey)
                                   ? bubbleSurvey(model)
@@ -115,11 +115,11 @@ class SurveyView extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: deviceHeight * .03,
+          height: deviceHeight! * .03,
         ),
         Container(
           width: deviceWidth,
-          height: deviceHeight * .68,
+          height: deviceHeight! * .68,
           child: makeBubbleChoices(model),
         ),
         GestureDetector(
@@ -128,7 +128,7 @@ class SurveyView extends StatelessWidget {
             // model.test();
           },
           child: Container(
-              height: deviceHeight * .068,
+              height: deviceHeight! * .068,
               // width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -162,42 +162,42 @@ class SurveyView extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          top: deviceHeight * .11,
+          top: deviceHeight! * .11,
           left: 0,
           child: bubbleItem(model, 0),
         ),
         Positioned(
-          top: deviceHeight * .05,
-          left: deviceWidth * .3,
+          top: deviceHeight! * .05,
+          left: deviceWidth! * .3,
           child: bubbleItem(model, 1),
         ),
         Positioned(
-          top: deviceHeight * .12,
-          left: deviceWidth * .6,
+          top: deviceHeight! * .12,
+          left: deviceWidth! * .6,
           child: bubbleItem(model, 2),
         ),
         Positioned(
-          top: deviceHeight * .33,
+          top: deviceHeight! * .33,
           child: bubbleItem(model, 3),
         ),
         Positioned(
-          top: deviceHeight * .26,
-          left: deviceWidth * .31,
+          top: deviceHeight! * .26,
+          left: deviceWidth! * .31,
           child: bubbleItem(model, 4),
         ),
         Positioned(
-          top: deviceHeight * .46,
-          left: deviceWidth * .51,
+          top: deviceHeight! * .46,
+          left: deviceWidth! * .51,
           child: bubbleItem(model, 5),
         ),
         Positioned(
-          top: deviceHeight * .48,
-          left: deviceWidth * .20,
+          top: deviceHeight! * .48,
+          left: deviceWidth! * .20,
           child: bubbleItem(model, 6),
         ),
         Positioned(
-          top: deviceHeight * .3,
-          left: deviceWidth * .6,
+          top: deviceHeight! * .3,
+          left: deviceWidth! * .6,
           child: bubbleItem(model, 7),
         ),
       ],
@@ -225,21 +225,21 @@ class SurveyView extends StatelessWidget {
       child: model.itemsChoiced[index]
           ? Container()
           : Container(
-              width: deviceWidth * .28,
-              height: deviceWidth * .28,
+              width: deviceWidth! * .28,
+              height: deviceWidth! * .28,
               decoration: BoxDecoration(
                 color: colorList[index],
                 shape: BoxShape.circle,
               ),
               child: Center(
                 child: Container(
-                  width: deviceWidth * .25,
+                  width: deviceWidth! * .25,
                   child: AutoSizeText(
-                    model.randomStocks[index],
+                    model.randomStocks[index]!,
                     // "매우긴종목의테스트를",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: deviceWidth / 22,
+                      fontSize: deviceWidth! / 22,
                       color: Colors.white,
                       fontFamily: 'AppleSDM',
                     ),
@@ -289,7 +289,7 @@ class SurveyView extends StatelessWidget {
             //이렇게 최대 height로 해야 Text크기에 구애받지않고, flex를 제대로 활용
             height: double.infinity,
             child: AutoSizeText(
-              model.basicSurveys['title'][model.surveyCurrentStep],
+              model.basicSurveys['title']![model.surveyCurrentStep],
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 28,
@@ -313,7 +313,7 @@ class SurveyView extends StatelessWidget {
   Widget makeChoices(SurveyViewModel model) {
     return Container(
       // color: Colors.blue,
-      height: deviceHeight * .8,
+      height: deviceHeight! * .8,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: choices(model),
@@ -325,7 +325,7 @@ class SurveyView extends StatelessWidget {
     List<Widget> result = [];
 
     for (int i = 0;
-        i < model.basicSurveys['choices'][model.surveyCurrentStep].length;
+        i < model.basicSurveys['choices']![model.surveyCurrentStep].length;
         i++) {
       result.add(Flexible(
           flex: 1,
@@ -334,7 +334,7 @@ class SurveyView extends StatelessWidget {
               model.surveyStepPlus(i);
             },
             child: Container(
-                height: deviceHeight * .15,
+                height: deviceHeight! * .15,
                 width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
@@ -349,7 +349,7 @@ class SurveyView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: AutoSizeText(
-                          model.basicSurveys['choices'][model.surveyCurrentStep]
+                          model.basicSurveys['choices']![model.surveyCurrentStep]
                               [i],
                           textAlign: TextAlign.center,
                           style: TextStyle(

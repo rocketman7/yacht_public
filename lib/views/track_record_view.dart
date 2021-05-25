@@ -21,13 +21,13 @@ class TrackRecordView extends StatefulWidget {
 }
 
 class _TrackRecordViewState extends State<TrackRecordView> {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
 
-  DateTime currentBackPressTime;
+  DateTime? currentBackPressTime;
   Future<bool> _onWillPop() async {
     if (currentBackPressTime == null ||
-        DateTime.now().difference(currentBackPressTime) >
+        DateTime.now().difference(currentBackPressTime!) >
             Duration(seconds: 2)) {
       currentBackPressTime = DateTime.now();
       Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
@@ -56,7 +56,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
               child: Stack(
                 children: [
                   Positioned(
-                    top: deviceHeight / 2 - 100,
+                    top: deviceHeight! / 2 - 100,
                     child: Container(
                       height: 100,
                       width: deviceWidth,
@@ -103,13 +103,13 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                             ),
                             Align(
                               alignment: Alignment.bottomCenter,
-                              child: FutureBuilder(
+                              child: FutureBuilder<List<String?>>(
                                   future: model.getAllSeasonList(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return Container(color: Colors.blue);
                                     } else {
-                                      List<String> seasonList = snapshot.data;
+                                      List<String?>? seasonList = snapshot.data;
                                       return Container(
                                         height: 40,
                                         // width: 90,
@@ -124,8 +124,8 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                               // height: 2,
                                               // color: Colors.deepPurpleAccent,
                                               ),
-                                          onChanged: (String newValue) {
-                                            _mixpanelService.mixpanel.track(
+                                          onChanged: (String? newValue) {
+                                            _mixpanelService!.mixpanel.track(
                                                 'Other Season Record',
                                                 properties: {
                                                   'Season': newValue
@@ -133,12 +133,12 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                             model.renewAddress(newValue);
                                             // showingSeasonName = newValue;
                                           },
-                                          items: seasonList
+                                          items: seasonList!
                                               .map<DropdownMenuItem<String>>(
-                                                  (String value) {
+                                                  (String? value) {
                                             return DropdownMenuItem<String>(
                                               value: value,
-                                              child: Text(value),
+                                              child: Text(value!),
                                             );
                                           }).toList(),
                                         ),
@@ -176,9 +176,9 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                       Align(
                                         alignment: Alignment.topCenter,
                                         child: avatarWidget(
-                                            model.user.avatarImage ??
+                                            model.user!.avatarImage ??
                                                 'avatar001',
-                                            model.user.item),
+                                            model.user!.item),
                                       ),
                                       SizedBox(
                                         width: 8.sp,
@@ -189,7 +189,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                     height: 8.sp,
                                   ),
                                   AutoSizeText(
-                                    model.user.userName,
+                                    model.user!.userName!,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 22.sp,
@@ -212,11 +212,11 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: <Widget>[
                                       Text(
-                                        model.userVote.userVoteStats
+                                        model.userVote!.userVoteStats!
                                                     .currentWinPoint ==
                                                 null
                                             ? 0.toString()
-                                            : model.userVote.userVoteStats
+                                            : model.userVote!.userVoteStats!
                                                 .currentWinPoint
                                                 .toString(),
                                         style: TextStyle(
@@ -344,12 +344,14 @@ class _TrackRecordViewState extends State<TrackRecordView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              model.allSeasonVoteList[eachVoteNumber].voteDate.substring(0, 4) +
+              model.allSeasonVoteList[eachVoteNumber].voteDate!
+                      .substring(0, 4) +
                   "." +
-                  model.allSeasonVoteList[eachVoteNumber].voteDate
+                  model.allSeasonVoteList[eachVoteNumber].voteDate!
                       .substring(4, 6) +
                   "." +
-                  model.allSeasonVoteList[eachVoteNumber].voteDate.substring(6),
+                  model.allSeasonVoteList[eachVoteNumber].voteDate!
+                      .substring(6),
               style: TextStyle(
                 fontSize: 20.sp,
                 fontFamily: 'DmSans',
@@ -365,7 +367,8 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                         ? Container()
                         : model.allSeasonUserVoteList[userVoteIdx].score == 0
                             ? Container()
-                            : model.allSeasonUserVoteList[userVoteIdx].score < 0
+                            : model.allSeasonUserVoteList[userVoteIdx].score! <
+                                    0
                                 ? Container(
                                     height: 13.h,
                                     width: 13.h,
@@ -390,7 +393,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                       ? "0"
                       : model.allSeasonUserVoteList[userVoteIdx].score == null
                           ? "-"
-                          : model.allSeasonUserVoteList[userVoteIdx].score
+                          : model.allSeasonUserVoteList[userVoteIdx].score!
                               .abs()
                               .toString(),
                   style: TextStyle(
@@ -408,7 +411,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                       0
                                   ? Colors.black
                                   : model.allSeasonUserVoteList[userVoteIdx]
-                                              .score <
+                                              .score! <
                                           0
                                       ? Colors.blue
                                       : Colors.red),
@@ -449,7 +452,8 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                 // alignment: Alignment.centerLeft,
                 child: Column(
                     children: List.generate(
-                        model.allSeasonVoteList[eachVoteNumber].subVotes.length,
+                        model
+                            .allSeasonVoteList[eachVoteNumber].subVotes!.length,
                         (index)
                             // print(model.allSeasonVoteList[eachVoteNumber].toJson());
                             =>
@@ -457,7 +461,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 model.allSeasonVoteList[eachVoteNumber]
-                                    .subVotes[index].title,
+                                    .subVotes![index].title!,
                                 style: tableSubjectTextStyle,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -465,7 +469,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
               ),
               Column(
                 children: List.generate(
-                    model.allSeasonVoteList[eachVoteNumber].subVotes.length,
+                    model.allSeasonVoteList[eachVoteNumber].subVotes!.length,
                     (index) {
                   int userVoteIdx = model.allSeasonUserVoteList.indexWhere(
                       (element) =>
@@ -479,17 +483,17 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                                 null
                             ? "-"
                             : model.allSeasonUserVoteList[userVoteIdx]
-                                        .voteSelected[index] ==
+                                        .voteSelected![index] ==
                                     0
                                 ? "-"
                                 : model.allSeasonUserVoteList[userVoteIdx]
-                                            .voteSelected[index] ==
+                                            .voteSelected![index] ==
                                         1
                                     ? model.allSeasonVoteList[eachVoteNumber]
-                                        .subVotes[index].voteChoices[0]
+                                        .subVotes![index].voteChoices![0]
                                         .toString()
                                     : model.allSeasonVoteList[eachVoteNumber]
-                                        .subVotes[index].voteChoices[1]
+                                        .subVotes![index].voteChoices![1]
                                         .toString()
                         : "-",
                     style: tableVoteTextStyle,
@@ -499,7 +503,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
               ),
               Column(
                 children: List.generate(
-                    model.allSeasonVoteList[eachVoteNumber].subVotes.length,
+                    model.allSeasonVoteList[eachVoteNumber].subVotes!.length,
                     (index) {
                   // int userVoteIdx = model.allSeasonUserVoteList.indexWhere(
                   //     (element) =>
@@ -510,11 +514,11 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                   //         .toString());
                   // // return Text(")"); //
 
-                  int answerIdx =
-                      model.allSeasonVoteList[eachVoteNumber].result.length == 0
-                          ? -1
-                          : model
-                              .allSeasonVoteList[eachVoteNumber].result[index];
+                  int answerIdx = model.allSeasonVoteList[eachVoteNumber]
+                              .result!.length ==
+                          0
+                      ? -1
+                      : model.allSeasonVoteList[eachVoteNumber].result![index];
 
                   return Text(
                     answerIdx < 0
@@ -522,7 +526,7 @@ class _TrackRecordViewState extends State<TrackRecordView> {
                         : answerIdx == 0
                             ? "무승부"
                             : model.allSeasonVoteList[eachVoteNumber]
-                                .subVotes[index].voteChoices[answerIdx - 1],
+                                .subVotes![index].voteChoices![answerIdx - 1],
                     style: tableVoteTextStyle,
                     overflow: TextOverflow.ellipsis,
                   );

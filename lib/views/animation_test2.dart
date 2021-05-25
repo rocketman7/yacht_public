@@ -6,7 +6,7 @@ class Carroussel extends StatefulWidget {
 }
 
 class _CarrousselState extends State<Carroussel> {
-  PageController controller;
+  PageController? controller;
   int currentpage = 0;
 
   @override
@@ -21,7 +21,7 @@ class _CarrousselState extends State<Carroussel> {
 
   @override
   dispose() {
-    controller.dispose();
+    controller!.dispose();
     super.dispose();
   }
 
@@ -47,11 +47,11 @@ class _CarrousselState extends State<Carroussel> {
 
   builder(int index) {
     return new AnimatedBuilder(
-      animation: controller,
+      animation: controller!,
       builder: (context, child) {
         double value = 1.0;
-        if (controller.position.haveDimensions) {
-          value = controller.page - index; // 0~1
+        if (controller!.position.haveDimensions) {
+          value = controller!.page! - index; // 0~1
           value = (1 - (value.abs() * .5)).clamp(0.0, 1.0);
         }
         // print(value);

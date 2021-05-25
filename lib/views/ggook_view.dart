@@ -15,7 +15,7 @@ import 'widgets/ggook_widget.dart';
 class GgookView extends StatefulWidget {
   // votesToday Object를 voteSelectView로부터 받아온다.
   // 이 리스트에는 uid, voteModel(오늘의 vote 데이터 모델), voteList(해당 사용자가 선택한 투표 리스트)가 있음
-  final List<Object> ggookArgs;
+  final List<Object>? ggookArgs;
   GgookView(this.ggookArgs);
 
   @override
@@ -23,17 +23,17 @@ class GgookView extends StatefulWidget {
 }
 
 class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
 
-  List<Object> ggookArgs; // address, user, vote, listSelected, idx(= 0),
-  DatabaseAddressModel _address;
-  UserModel _user;
-  VoteModel _vote;
-  UserVoteModel _userVote;
-  List<int> _listSelected;
-  int _idx;
+  List<Object>? ggookArgs; // address, user, vote, listSelected, idx(= 0),
+  DatabaseAddressModel? _address;
+  UserModel? _user;
+  VoteModel? _vote;
+  UserVoteModel? _userVote;
+  List<int>? _listSelected;
+  int? _idx;
 
   // LongPressGestureRecognizer _longPressGestureRecognizer =
   //     LongPressGestureRecognizer(
@@ -42,8 +42,8 @@ class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
 
   TapGestureRecognizer _tapGestureRecognizer = TapGestureRecognizer();
 
-  AnimationController _animationController;
-  Animation _expandCircleAnimation;
+  late AnimationController _animationController;
+  Animation? _expandCircleAnimation;
   // final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   @override
   void initState() {
@@ -73,12 +73,12 @@ class _GgookViewState extends State<GgookView> with TickerProviderStateMixin {
     ggookArgs =
         widget.ggookArgs; // address, user, vote, listSelected, idx(= 0),
     print(ggookArgs);
-    _address = ggookArgs[0];
-    _user = ggookArgs[1];
-    _vote = ggookArgs[2];
-    _userVote = ggookArgs[3];
-    _listSelected = ggookArgs[4];
-    _idx = ggookArgs[5];
+    _address = ggookArgs![0] as DatabaseAddressModel?;
+    _user = ggookArgs![1] as UserModel?;
+    _vote = ggookArgs![2] as VoteModel?;
+    _userVote = ggookArgs![3] as UserVoteModel?;
+    _listSelected = ggookArgs![4] as List<int>?;
+    _idx = ggookArgs![5] as int?;
 
     return ViewModelBuilder<GgookViewModel>.reactive(
       viewModelBuilder: () => GgookViewModel(),

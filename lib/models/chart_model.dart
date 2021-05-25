@@ -3,23 +3,23 @@ import 'dart:convert';
 import 'package:yachtOne/views/constants/holiday.dart';
 
 class ChartModel {
-  String date;
-  double open;
-  double high;
-  double low;
-  double close;
-  double volume;
+  String? date;
+  double? open;
+  double? high;
+  double? low;
+  double? close;
+  double? volume;
   ChartModel(
       {this.date, this.open, this.high, this.low, this.close, this.volume});
   // DateTime dateTime;
 
   ChartModel copyWith({
-    String date,
-    double open,
-    double high,
-    double low,
-    double close,
-    double volume,
+    String? date,
+    double? open,
+    double? high,
+    double? low,
+    double? close,
+    double? volume,
   }) {
     return ChartModel(
         date: date ?? this.date,
@@ -41,14 +41,21 @@ class ChartModel {
     };
   }
 
-  factory ChartModel.fromData(Map<String, dynamic> data) {
-    if (data == null) return null;
+  factory ChartModel.fromData(Map<String, dynamic>? data) {
+    if (data == null)
+      return ChartModel(
+          date: null,
+          open: null,
+          high: null,
+          low: null,
+          close: null,
+          volume: null);
 
-    double open = double.tryParse(data['open'].toString());
-    double high = double.tryParse(data['high'].toString());
-    double low = double.tryParse(data['low'].toString());
-    double close = double.tryParse(data['close'].toString());
-    double volume = double.tryParse(data['volume'].toString());
+    double? open = double.tryParse(data['open'].toString());
+    double? high = double.tryParse(data['high'].toString());
+    double? low = double.tryParse(data['low'].toString());
+    double? close = double.tryParse(data['close'].toString());
+    double? volume = double.tryParse(data['volume'].toString());
     return ChartModel(
       date: data['date'],
       open: open,

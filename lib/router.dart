@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:yachtOne/view_models/winner_view_model.dart';
 import 'package:yachtOne/views/initial_view.dart';
 import 'package:yachtOne/views/last_season_portfolio_view.dart';
 import 'package:yachtOne/views/last_season_rank_view.dart';
@@ -12,6 +14,7 @@ import 'package:yachtOne/views/track_record_view.dart';
 import 'package:yachtOne/views/user_survey_view.dart';
 import 'package:yachtOne/views/winner_view.dart';
 import 'managers/dialog_manager.dart';
+import 'models/notice_model.dart';
 import 'views/home_view.dart';
 import 'views/login_view.dart';
 import 'views/mypage_documents/avatarSelect_view.dart';
@@ -50,12 +53,13 @@ class Routers {
             builder: (context) => DialogManager(child: PhoneAuthView()));
       case 'loggedIn':
         return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: HomeView(routeSettings.arguments)));
+            builder: (context) => DialogManager(
+                child: HomeView(routeSettings.arguments as Function?)));
       case 'register':
         return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: RegisterView(routeSettings.arguments)));
+            builder: (context) => DialogManager(
+                child: RegisterView(
+                    routeSettings.arguments as PhoneAuthCredential?)));
       case 'login':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: LoginView()));
@@ -64,8 +68,8 @@ class Routers {
             builder: (context) => DialogManager(child: VoteSelectV2View()));
       case 'ggook':
         return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: GgookView(routeSettings.arguments)));
+            builder: (context) => DialogManager(
+                child: GgookView(routeSettings.arguments as List<Object>?)));
       case 'voteComment':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: VoteCommentView()));
@@ -82,11 +86,13 @@ class Routers {
       case 'lastSeasonRank':
         return MaterialPageRoute(
             builder: (context) => DialogManager(
-                child: LastSeasonRankView(routeSettings.arguments)));
+                child: LastSeasonRankView(
+                    routeSettings.arguments as WinnerViewModel?)));
       case 'lastSeasonPortfolio':
         return MaterialPageRoute(
             builder: (context) => DialogManager(
-                child: LastSeasonPortfolioView(routeSettings.arguments)));
+                child: LastSeasonPortfolioView(
+                    routeSettings.arguments as WinnerViewModel?)));
       case 'winner':
         return MaterialPageRoute(
             builder: (context) =>
@@ -94,7 +100,7 @@ class Routers {
       case 'lunchtime':
         return MaterialPageRoute(
             builder: (context) => DialogManager(
-                child: LunchtimeEventView(routeSettings.arguments)));
+                child: LunchtimeEventView(routeSettings.arguments as String?)));
       case 'mypage_main':
         return MaterialPageRoute(
             builder: (context) => DialogManager(child: MypageMainView()));
@@ -105,7 +111,9 @@ class Routers {
         return MaterialPageRoute(
             builder: (context) =>
                 // DialogManager(child: NicknameSetView(routeSettings.arguments)));
-                DialogManager(child: NicknameSetView(routeSettings.arguments)));
+                DialogManager(
+                    child:
+                        NicknameSetView(routeSettings.arguments as String?)));
       case 'password_change':
         return MaterialPageRoute(builder: (context) => PasswordChangeView());
       case 'mypage_termsofuse':
@@ -152,7 +160,8 @@ class Routers {
         return MaterialPageRoute(builder: (context) => NotificationListView());
       case 'notice_text_based':
         return MaterialPageRoute(
-            builder: (context) => NoticeTextBasedView(routeSettings.arguments));
+            builder: (context) =>
+                NoticeTextBasedView(routeSettings.arguments as NoticeModel?));
       case 'oneonone':
         return MaterialPageRoute(builder: (context) => OneOnOneView());
       case 'survey':
@@ -161,12 +170,12 @@ class Routers {
         return MaterialPageRoute(builder: (context) => UserSurveyView());
       case 'startup':
         return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: StartUpView(routeSettings.arguments)));
+            builder: (context) => DialogManager(
+                child: StartUpView(routeSettings.arguments as int?)));
       default:
         return MaterialPageRoute(
-            builder: (context) =>
-                DialogManager(child: StartUpView(routeSettings.arguments)));
+            builder: (context) => DialogManager(
+                child: StartUpView(routeSettings.arguments as int?)));
     }
   }
 }

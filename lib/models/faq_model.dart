@@ -1,7 +1,7 @@
 class FaqModel {
-  final String category;
-  final String title;
-  final String content;
+  final String? category;
+  final String? title;
+  final String? content;
 
   FaqModel({
     this.category,

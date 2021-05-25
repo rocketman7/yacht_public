@@ -8,7 +8,7 @@ import '../../view_models/mypage_editProfile_view_model.dart';
 import '../widgets/avatar_widget.dart';
 
 class MypageEditProfileView extends StatelessWidget {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MypageEditProfileViewModel>.reactive(
@@ -46,7 +46,7 @@ class MypageEditProfileView extends StatelessWidget {
                               child: Center(
                                   child: avatarWidget(
                                       model.sharedPrefForAvatarImage,
-                                      model.user.item)),
+                                      model.user!.item)),
                             ),
                             SizedBox(
                               height: 10,
@@ -83,8 +83,8 @@ class MypageEditProfileView extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                _navigationService.navigateWithArgTo(
-                                    'nickname_set', model.user.userName);
+                                _navigationService!.navigateWithArgTo(
+                                    'nickname_set', model.user!.userName);
                               },
                               child: Row(children: [
                                 Text(
@@ -93,7 +93,7 @@ class MypageEditProfileView extends StatelessWidget {
                                 ),
                                 Spacer(),
                                 Text(
-                                  model.user.userName,
+                                  model.user!.userName!,
                                   style: TextStyle(fontSize: 16),
                                 ),
                                 SizedBox(
@@ -126,7 +126,7 @@ class MypageEditProfileView extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          _navigationService.navigateTo(
+                                          _navigationService!.navigateTo(
                                             'password_change',
                                           );
                                         },
@@ -303,7 +303,7 @@ Future buildModalBottomSheet(
           48.0,
         ),
         child: Container(
-            height: deviceHeight / 2,
+            height: deviceHeight! / 2,
             child: Column(
               children: [
                 Text(
@@ -398,23 +398,23 @@ List<Widget> makeAvatarItemList(
       Row(
         children: [
           SizedBox(
-            width: (deviceWidth - 16 * 2 - 72 * 3) / 4,
+            width: (deviceWidth! - 16 * 2 - 72 * 3) / 4,
           ),
           avatarItems(model, setState, i),
           SizedBox(
-            width: (deviceWidth - 16 * 2 - 72 * 3) / 4,
+            width: (deviceWidth! - 16 * 2 - 72 * 3) / 4,
           ),
           (i + 1 < model.avatarImages.length)
               ? avatarItems(model, setState, i + 1)
               : Container(),
           SizedBox(
-            width: (deviceWidth - 16 * 2 - 72 * 3) / 4,
+            width: (deviceWidth! - 16 * 2 - 72 * 3) / 4,
           ),
           (i + 2 < model.avatarImages.length)
               ? avatarItems(model, setState, i + 2)
               : Container(),
           SizedBox(
-            width: (deviceWidth - 16 * 2 - 72 * 3) / 4,
+            width: (deviceWidth! - 16 * 2 - 72 * 3) / 4,
           ),
         ],
       ),

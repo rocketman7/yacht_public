@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserPostModel {
-  final String category;
-  final String season;
-  final String subVote;
-  final String date;
+  final String? category;
+  final String? season;
+  final String? subVote;
+  final String? date;
 
-  final Timestamp createdAt;
+  final Timestamp? createdAt;
 
   UserPostModel({
     this.category,
@@ -27,7 +27,7 @@ class UserPostModel {
   }
 
   factory UserPostModel.fromMap(Map<String, dynamic> data) {
-    if (data == null) return null;
+    // if (data == null) return null;
 
     return UserPostModel(
       category: data['category'],

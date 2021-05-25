@@ -24,7 +24,7 @@ import 'constants/size.dart';
 
 class ChartForAllView extends StatefulWidget {
   final StreamController scrollStreamCtrl;
-  final String issueCode;
+  final String? issueCode;
 
   ChartForAllView(
     this.scrollStreamCtrl,
@@ -35,19 +35,19 @@ class ChartForAllView extends StatefulWidget {
 }
 
 class _ChartForAllViewState extends State<ChartForAllView> {
-  List<double> closeList;
-  List<double> closeChartList;
-  List<ChartModel> priceDataSourceList;
-  List<StatsModel> statsDataSourceList;
-  int priceSubLength;
-  int statsSubLength;
+  List<double>? closeList;
+  List<double>? closeChartList;
+  List<ChartModel>? priceDataSourceList;
+  List<StatsModel>? statsDataSourceList;
+  int? priceSubLength;
+  int? statsSubLength;
   double displayPrice = 0.0;
   StreamController priceStreamCtrl = StreamController<double>();
   StreamController dateTimeStreamCtrl = StreamController<DateTime>();
-  ScrollController controller;
+  ScrollController? controller;
   StreamController scrollStreamCtrl = StreamController<double>();
-  SeasonModel seasonInfo;
-  String issueCode;
+  SeasonModel? seasonInfo;
+  String? issueCode;
   int choice = 0;
 
   // 종목 정보 불러올 때 필요한 변수들
@@ -60,11 +60,11 @@ class _ChartForAllViewState extends State<ChartForAllView> {
     controller = ScrollController(
       initialScrollOffset: 0,
     );
-    controller.addListener(() {
-      scrollStreamCtrl.add(controller.offset);
-      if (controller.offset < -140) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          controller.dispose();
+    controller!.addListener(() {
+      scrollStreamCtrl.add(controller!.offset);
+      if (controller!.offset < -140) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          controller!.dispose();
         });
       }
     });
@@ -138,7 +138,7 @@ class _ChartForAllViewState extends State<ChartForAllView> {
         dateTimeStreamCtrl,
         scrollStreamCtrl,
       ),
-      builder: (context, model, child) {
+      builder: (context, dynamic model, child) {
         if (model.isBusy) {
           return Scaffold(body: Container());
         } else {
@@ -197,7 +197,7 @@ class _ChartForAllViewState extends State<ChartForAllView> {
                           ),
                           StreamBuilder<double>(
                               // 차트에 tap하는 곳의 가격 stream
-                              stream: priceStreamCtrl.stream,
+                              stream: priceStreamCtrl.stream as Stream<double>?,
                               initialData: model.chartList.last.close,
                               builder: (context, snapshot) {
                                 return Column(
@@ -222,25 +222,25 @@ class _ChartForAllViewState extends State<ChartForAllView> {
                                         Text(
                                           stockOrIndex == "stocks"
                                               ? formatPriceUpDown
-                                                  .format((snapshot.data -
-                                                      priceDataSourceList
-                                                          .first.close))
+                                                  .format((snapshot.data! -
+                                                      priceDataSourceList!
+                                                          .first.close!))
                                                   .toString()
                                               : formatIndexUpDown
-                                                  .format((snapshot.data -
-                                                      priceDataSourceList
-                                                          .first.close))
+                                                  .format((snapshot.data! -
+                                                      priceDataSourceList!
+                                                          .first.close!))
                                                   .toString(),
                                           style: TextStyle(
                                             fontSize: 16,
-                                            color: (snapshot.data -
-                                                        priceDataSourceList
-                                                            .first.close) <
+                                            color: (snapshot.data! -
+                                                        priceDataSourceList!
+                                                            .first.close!) <
                                                     0
                                                 ? Colors.blue
-                                                : (snapshot.data -
-                                                            priceDataSourceList
-                                                                .first.close) ==
+                                                : (snapshot.data! -
+                                                            priceDataSourceList!
+                                                                .first.close!) ==
                                                         0
                                                     ? Colors.black
                                                     : Colors.red,
@@ -253,22 +253,22 @@ class _ChartForAllViewState extends State<ChartForAllView> {
                                         Text(
                                           "(" +
                                               formatReturnPct
-                                                  .format(((snapshot.data /
-                                                          priceDataSourceList
-                                                              .first.close) -
+                                                  .format(((snapshot.data! /
+                                                          priceDataSourceList!
+                                                              .first.close!) -
                                                       1))
                                                   .toString() +
                                               ")",
                                           style: TextStyle(
                                             fontSize: 16,
-                                            color: (snapshot.data -
-                                                        priceDataSourceList
-                                                            .first.close) <
+                                            color: (snapshot.data! -
+                                                        priceDataSourceList!
+                                                            .first.close!) <
                                                     0
                                                 ? Colors.blue
-                                                : (snapshot.data -
-                                                            priceDataSourceList
-                                                                .first.close) ==
+                                                : (snapshot.data! -
+                                                            priceDataSourceList!
+                                                                .first.close!) ==
                                                         0
                                                     ? Colors.black
                                                     : Colors.red,
@@ -293,11 +293,11 @@ class _ChartForAllViewState extends State<ChartForAllView> {
                                 );
                               }),
                           StreamBuilder<DateTime>(
-                              stream: dateTimeStreamCtrl.stream,
+                              stream: dateTimeStreamCtrl.stream as Stream<DateTime>?,
                               initialData: strToDate(model.chartList.last.date),
                               builder: (context, snapshot) {
                                 return Text(stringDateWithDay
-                                    .format(snapshot.data)
+                                    .format(snapshot.data!)
                                     .toString());
                               }),
                         ],
@@ -319,21 +319,21 @@ class _ChartForAllViewState extends State<ChartForAllView> {
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            width: (deviceWidth - 10) / 5,
+                            width: (deviceWidth! - 10) / 5,
                             height: 40,
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5)),
                                 color: model.isDurationSelected[index] == true
-                                    ? (priceDataSourceList.last.close -
-                                                priceDataSourceList
-                                                    .first.close) >
+                                    ? (priceDataSourceList!.last.close! -
+                                                priceDataSourceList!
+                                                    .first.close!) >
                                             0
                                         ? Colors.red
-                                        : (priceDataSourceList.last.close -
-                                                    priceDataSourceList
-                                                        .first.close) ==
+                                        : (priceDataSourceList!.last.close! -
+                                                    priceDataSourceList!
+                                                        .first.close!) ==
                                                 0
                                             ? Colors.black
                                             : Colors.blue
@@ -1183,16 +1183,16 @@ class _ChartForAllViewState extends State<ChartForAllView> {
           height: 20,
         ),
         Container(
-          height: deviceHeight * 0.23,
+          height: deviceHeight! * 0.23,
           child: SfCartesianChart(
             plotAreaBorderWidth: 0,
             series: <ChartSeries>[
               ScatterSeries<StatsModel, String>(
                 color: Color(0xFFFF5959).withOpacity(.3),
-                dataSource: statsDataSourceList,
+                dataSource: statsDataSourceList!,
                 xValueMapper: (StatsModel stats, _) => stats.announcedAt == null
                     ? null
-                    : stats.announcedAt.replaceAll("\\n", "\n"),
+                    : stats.announcedAt!.replaceAll("\\n", "\n"),
                 yValueMapper: (StatsModel stats, _) => stats.expectedEps,
                 markerSettings: MarkerSettings(
                   width: 16,
@@ -1201,9 +1201,9 @@ class _ChartForAllViewState extends State<ChartForAllView> {
               ),
               ScatterSeries<StatsModel, String>(
                 color: Color(0xFFFF5959),
-                dataSource: statsDataSourceList,
+                dataSource: statsDataSourceList!,
                 xValueMapper: (StatsModel stats, _) =>
-                    stats.announcedAt.replaceAll("\\n", "\n"),
+                    stats.announcedAt!.replaceAll("\\n", "\n"),
                 yValueMapper: (StatsModel stats, _) => stats.actualEps,
                 markerSettings: MarkerSettings(
                   width: 16,
@@ -1295,7 +1295,7 @@ class _ChartForAllViewState extends State<ChartForAllView> {
 
   Container buildContainerForChart(model) {
     return Container(
-      height: deviceHeight * 0.23,
+      height: deviceHeight! * 0.23,
       child: SfCartesianChart(
         plotAreaBorderWidth: 0,
         margin: EdgeInsets.all(0),
@@ -1311,21 +1311,21 @@ class _ChartForAllViewState extends State<ChartForAllView> {
             model.whenTrackEnd(),
         series: <ChartSeries>[
           FastLineSeries<ChartModel, DateTime>(
-            dataSource: priceDataSourceList,
+            dataSource: priceDataSourceList!,
             emptyPointSettings: EmptyPointSettings(
               mode: EmptyPointMode.gap,
             ),
-            color: (priceDataSourceList.last.close -
-                        priceDataSourceList.first.close) >
+            color: (priceDataSourceList!.last.close! -
+                        priceDataSourceList!.first.close!) >
                     0
                 ? Colors.red
-                : (priceDataSourceList.last.close -
-                            priceDataSourceList.first.close) ==
+                : (priceDataSourceList!.last.close! -
+                            priceDataSourceList!.first.close!) ==
                         0
                     ? Colors.black
                     : Colors.blue,
             enableTooltip: true,
-            xValueMapper: (ChartModel chart, _) => strToDate(chart.date),
+            xValueMapper: (ChartModel chart, _) => strToDate(chart.date!),
             yValueMapper: (ChartModel chart, _) => chart.close,
           )
         ],
@@ -1335,13 +1335,13 @@ class _ChartForAllViewState extends State<ChartForAllView> {
           ),
           isVisible: false,
           minimum: (quiver.min(
-                List.generate(priceDataSourceList.length, (index) {
-                  return priceDataSourceList[index].close;
+                List.generate(priceDataSourceList!.length, (index) {
+                  return priceDataSourceList![index].close;
                 }),
-              ) *
+              )! *
               0.97),
-          maximum: (quiver.max(List.generate(priceDataSourceList.length,
-                  (index) => priceDataSourceList[index].close)) *
+          maximum: (quiver.max(List.generate(priceDataSourceList!.length,
+                  (index) => priceDataSourceList![index].close))! *
               1.03),
         ),
         primaryXAxis: CategoryAxis(

@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:firebase_admob/firebase_admob.dart';
-import 'package:flutter_native_admob/flutter_native_admob.dart';
+// import 'package:firebase_admob/firebase_admob.dart';
+// import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_admob/native_admob_controller.dart';
-import 'package:flutter_native_admob/native_admob_options.dart';
+// import 'package:flutter_native_admob/native_admob_controller.dart';
+// import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -40,31 +40,31 @@ class VoteCommentView extends StatefulWidget {
 
 class _VoteCommentViewState extends State<VoteCommentView>
     with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final DialogService _dialogService = locator<DialogService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final DialogService? _dialogService = locator<DialogService>();
   // final VoteCommentViewModel _viewModel = VoteCommentViewModel();
   final GlobalKey _globalKey = GlobalKey();
   ScrollController _calendarController = ScrollController();
 
-  Future<List<Object>> _getAllModel;
-  Future<UserModel> _userModel;
-  Future<DatabaseAddressModel> _addressModel;
-  Future<VoteModel> _voteModel;
+  Future<List<Object>>? _getAllModel;
+  Future<UserModel>? _userModel;
+  Future<DatabaseAddressModel>? _addressModel;
+  Future<VoteModel>? _voteModel;
   // Stream<List<VoteCommentModel>> _postStream;
-  String uid;
+  String? uid;
   bool isDisposed = false;
-  TabController _tabController;
-  ScrollController _controller;
+  TabController? _tabController;
+  ScrollController? _controller;
 
-  VoteCommentModel voteCommentModel;
-  VoteModel voteModel;
-  UserVoteModel userVoteModel;
+  VoteCommentModel? voteCommentModel;
+  VoteModel? voteModel;
+  UserVoteModel? userVoteModel;
 
-  int _currentIndex;
+  int? _currentIndex;
   // List<int> voteList;
 
-  final NativeAdmobController _nativeAdController = NativeAdmobController();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  // final NativeAdmobController _nativeAdController = NativeAdmobController();
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
   @override
   void initState() {
     super.initState();
@@ -97,10 +97,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
     // isDisposed = true;
   }
 
-  DateTime currentBackPressTime;
+  DateTime? currentBackPressTime;
   Future<bool> _onWillPop() async {
     if (currentBackPressTime == null ||
-        DateTime.now().difference(currentBackPressTime) >
+        DateTime.now().difference(currentBackPressTime!) >
             Duration(seconds: 2)) {
       currentBackPressTime = DateTime.now();
       Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
@@ -117,11 +117,11 @@ class _VoteCommentViewState extends State<VoteCommentView>
   Widget build(BuildContext context) {
     final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
     // Size size = MediaQuery.of(context).size;
-    double displayRatio = deviceHeight / deviceWidth;
+    double displayRatio = deviceHeight! / deviceWidth!;
 
     DateTime now = DateTime.now();
     DateFormat dateFormat = DateFormat('yyyy-MM-dd_HH:mm:ss:SSS');
-    VoteModel newVote;
+    VoteModel? newVote;
     print(now);
     String nowString = dateFormat.format(now);
     print(nowString);
@@ -137,7 +137,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
               child: Stack(
                 children: [
                   Positioned(
-                    top: deviceHeight / 2 - 100,
+                    top: deviceHeight! / 2 - 100,
                     child: Container(
                       height: 100,
                       width: deviceWidth,
@@ -233,9 +233,9 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                 GestureDetector(
                                   behavior: HitTestBehavior.opaque,
                                   onTap: () {
-                                    _mixpanelService.mixpanel
+                                    _mixpanelService!.mixpanel
                                         .track('Notice View - Community');
-                                    _navigationService.navigateTo('notice');
+                                    _navigationService!.navigateTo('notice');
                                   },
                                   child: Text('공지사항',
                                       style: TextStyle(
@@ -249,12 +249,12 @@ class _VoteCommentViewState extends State<VoteCommentView>
                                   width: 8.w,
                                 ),
                                 Expanded(
-                                  child: FutureBuilder(
+                                  child: FutureBuilder<List<NoticeModel>>(
                                     future: model.getNotice(),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         print(snapshot.data);
-                                        print(snapshot.data[0].title);
+                                        // print(snapshot.data[0].title);
                                         return NoticeBar(snapshot.data);
                                       } else {
                                         return Container();
@@ -273,7 +273,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                             child: buildListView(
-                                model, model.newVote ?? model.vote),
+                                model, model.newVote ?? model.vote!),
                           ),
                         ),
                       ),
@@ -287,9 +287,9 @@ class _VoteCommentViewState extends State<VoteCommentView>
   }
 
   ListView buildListView(VoteCommentViewModel model, VoteModel vote) {
-    print(vote.subVotes.length);
+    print(vote.subVotes!.length);
     return ListView.builder(
-      itemCount: model.vote.subVotes.length + 2,
+      itemCount: model.vote!.subVotes!.length + 2,
       // itemCount: model.vote.subVotes.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -297,8 +297,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
             children: [
               ListTile(
                 onTap: () {
-                  _mixpanelService.mixpanel.track('Season Post');
-                  _navigationService.navigateTo('seasonComment');
+                  _mixpanelService!.mixpanel.track('Season Post');
+                  _navigationService!.navigateTo('seasonComment');
                   // model.showEventModal(context);
                 },
                 // leading: Container(
@@ -332,7 +332,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
               ),
             ],
           );
-        } else if (index == model.vote.subVotes.length + 1) {
+        } else if (index == model.vote!.subVotes!.length + 1) {
           // return Column(
           //   children: [
           //     RaisedButton(
@@ -380,52 +380,52 @@ class _VoteCommentViewState extends State<VoteCommentView>
               Divider(
                 height: 0,
               ),
-              Container(
-                height: 80,
-                padding: EdgeInsets.all(8),
-                // margin: EdgeInsets.only(bottom: 20.0),
-                child: NativeAdmob(
-                    loading: Container(),
-                    error: Container(),
-                    adUnitID: AdManager.nativeAdUnitId,
-                    numberAds: 1,
-                    controller: _nativeAdController,
-                    options: NativeAdmobOptions(
-                      //Ad 스타일
-                      adLabelTextStyle: NativeTextStyle(
-                        fontSize: 12.sp,
-                        color: Colors.white,
-                        backgroundColor: Color(0xFF1EC8CF),
-                      ),
-                      //광고 헤드라인 텍스트 스타일
-                      headlineTextStyle: NativeTextStyle(
-                        fontSize: 16.sp,
-                      ),
-                      //광고주 정보 텍스트 스타일
-                      advertiserTextStyle: NativeTextStyle(
-                        color: Color(0xFF1EC8CF),
-                      ),
-                      //본문 텍스트 스타일
-                      bodyTextStyle: NativeTextStyle(
-                        color: Colors.grey,
-                      ),
-                      //링크 버튼 스타일
-                      callToActionStyle: NativeTextStyle(
-                        fontSize: 12.sp,
-                        color: Colors.white,
-                        backgroundColor: Color(0xFF1EC8CF),
-                      ),
-                    ),
-                    // type: NativeAdmobType.full,
-                    type: NativeAdmobType.banner),
-              ),
+              // Container(
+              //   height: 80,
+              //   padding: EdgeInsets.all(8),
+              //   // margin: EdgeInsets.only(bottom: 20.0),
+              //   child: NativeAdmob(
+              //       loading: Container(),
+              //       error: Container(),
+              //       adUnitID: AdManager.nativeAdUnitId,
+              //       numberAds: 1,
+              //       controller: _nativeAdController,
+              //       options: NativeAdmobOptions(
+              //         //Ad 스타일
+              //         adLabelTextStyle: NativeTextStyle(
+              //           fontSize: 12.sp,
+              //           color: Colors.white,
+              //           backgroundColor: Color(0xFF1EC8CF),
+              //         ),
+              //         //광고 헤드라인 텍스트 스타일
+              //         headlineTextStyle: NativeTextStyle(
+              //           fontSize: 16.sp,
+              //         ),
+              //         //광고주 정보 텍스트 스타일
+              //         advertiserTextStyle: NativeTextStyle(
+              //           color: Color(0xFF1EC8CF),
+              //         ),
+              //         //본문 텍스트 스타일
+              //         bodyTextStyle: NativeTextStyle(
+              //           color: Colors.grey,
+              //         ),
+              //         //링크 버튼 스타일
+              //         callToActionStyle: NativeTextStyle(
+              //           fontSize: 12.sp,
+              //           color: Colors.white,
+              //           backgroundColor: Color(0xFF1EC8CF),
+              //         ),
+              //       ),
+              //       // type: NativeAdmobType.full,
+              //       type: NativeAdmobType.banner),
+              // ),
             ],
           );
         } else {
           return buildEachCommunity(
             vote,
             // vote.subVotes[index - 2],
-            vote.subVotes[index - 1],
+            vote.subVotes![index - 1],
             index,
           );
         }
@@ -433,7 +433,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
     );
   }
 
-  Widget buildHorizontalCalendar(VoteCommentViewModel model, VoteModel vote) {
+  Widget buildHorizontalCalendar(VoteCommentViewModel model, VoteModel? vote) {
     return HorizontalCalendar(
       padding: EdgeInsets.fromLTRB(0, 6.h, 0, 0),
       defaultDecoration: BoxDecoration(
@@ -445,7 +445,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
       height: 94,
       isDateDisabled: (dateTime) {
         // dateTime을 넣고 휴일 여부를 bool로
-        return dateTime.isAfter(strToDate(model.address.date));
+        return dateTime.isAfter(strToDate(model.address!.date!));
       },
       disabledDecoration: BoxDecoration(
           shape: BoxShape.rectangle,
@@ -468,18 +468,18 @@ class _VoteCommentViewState extends State<VoteCommentView>
         print(newBaseDate);
         DatabaseAddressModel newAddress;
         newAddress = DatabaseAddressModel(
-          uid: model.address.uid,
+          uid: model.address!.uid,
           date: newBaseDate,
-          category: model.address.category,
-          season: model.address.season,
-          isVoting: model.address.isVoting,
+          category: model.address!.category,
+          season: model.address!.season,
+          isVoting: model.address!.isVoting,
         );
 
         model.getNewVote(newAddress);
       },
       scrollController: _calendarController,
       minSelectedDateCount: 1,
-      initialSelectedDates: strToDate(model.address.date),
+      initialSelectedDates: strToDate(model.address!.date!),
       labelOrder: [LabelType.date, LabelType.weekday],
       dateTextStyle: TextStyle(
         fontSize: 24.sp,
@@ -494,10 +494,10 @@ class _VoteCommentViewState extends State<VoteCommentView>
         fontFamily: 'DmSans',
       ),
       firstDate: DateTime(
-          int.parse(model.seasonInfo.startDate.substring(0, 4)),
-          int.parse(model.seasonInfo.startDate.substring(4, 6)),
-          int.parse(model.seasonInfo.startDate.substring(6))),
-      lastDate: nextNthBusinessDay(strToDate(model.address.date), 3),
+          int.parse(model.seasonInfo!.startDate!.substring(0, 4)),
+          int.parse(model.seasonInfo!.startDate!.substring(4, 6)),
+          int.parse(model.seasonInfo!.startDate!.substring(6))),
+      lastDate: nextNthBusinessDay(strToDate(model.address!.date!), 3),
       selectedDateTextStyle: TextStyle(
         fontFamily: 'DmSans',
         fontSize: 24.sp,
@@ -542,8 +542,8 @@ class _VoteCommentViewState extends State<VoteCommentView>
         ),
         ListTile(
           onTap: () {
-            _mixpanelService.mixpanel.track('Subject Post');
-            _navigationService
+            _mixpanelService!.mixpanel.track('Subject Post');
+            _navigationService!
                 .navigateWithArgTo('subjectComment', [vote, index - 1]);
           },
           // leading: subVote.issueCode.length == 1
@@ -645,15 +645,15 @@ class _VoteCommentViewState extends State<VoteCommentView>
           //         ),
           //         // color: Colors.red,
           //       ),
-          title: Text(subVote.title,
+          title: Text(subVote.title!,
               style: TextStyle(
                 fontSize: 18.sp,
                 // fontWeight: FontWeight.bold,
                 fontFamily: 'AppleSDB',
               )),
-          subtitle: Text((subVote.numVoted0 + subVote.numVoted1) == 0
+          subtitle: Text((subVote.numVoted0! + subVote.numVoted1!) == 0
               ? "아직 아무도 예측에 참여하지 않았습니다."
-              : (subVote.numVoted0 + subVote.numVoted1).toString() +
+              : (subVote.numVoted0! + subVote.numVoted1!).toString() +
                   "명이 예측에 참여하였습니다."),
         ),
       ],
@@ -668,9 +668,9 @@ class _VoteCommentViewState extends State<VoteCommentView>
       unselectedLabelColor: Colors.black,
       isScrollable: true,
       tabs: List.generate(
-        vote.subVotes.length,
+        vote.subVotes!.length,
         (index) => subVoteList(
-          vote.subVotes[index].title.toString(),
+          vote.subVotes![index].title.toString(),
         ),
       ),
     );
@@ -901,7 +901,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   Row(
                     children: <Widget>[
                       Text(
-                        voteComment.userName,
+                        voteComment.userName!,
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -928,7 +928,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      voteComment.postText,
+                      voteComment.postText!,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 14,
@@ -951,7 +951,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
                 voteComment.postDateTime == null
                     ? 'null'
                     : DateTime.now()
-                            .difference(voteComment.postDateTime.toDate())
+                            .difference(voteComment.postDateTime!.toDate())
                             .inMinutes
                             .toString() +
                         ' Mins ago',
@@ -1078,7 +1078,7 @@ class _VoteCommentViewState extends State<VoteCommentView>
 
 // 공지사항용 bar. 애니메이션 + 퓨처빌더쓰기위해서 나눠줌
 class NoticeBar extends StatefulWidget {
-  final List<NoticeModel> noticeModel;
+  final List<NoticeModel>? noticeModel;
 
   NoticeBar(this.noticeModel);
 
@@ -1087,15 +1087,15 @@ class NoticeBar extends StatefulWidget {
 }
 
 class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
   //공지사항용
-  List<NoticeModel> noticeModel;
+  List<NoticeModel>? noticeModel;
   // List<String> temp;
 
-  AnimationController _noticeAnimationController;
-  Animation _noticeOpacity;
-  int noticeIdx;
+  late AnimationController _noticeAnimationController;
+  late Animation _noticeOpacity;
+  int? noticeIdx;
 
   @override
   void initState() {
@@ -1129,8 +1129,8 @@ class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
         // print('animation dismissed');
         setState(() {
           // if (noticeIdx < temp.length - 1) {
-          if (noticeIdx < noticeModel.length - 1) {
-            noticeIdx++;
+          if (noticeIdx! < noticeModel!.length - 1) {
+            if (noticeIdx != null) noticeIdx = noticeIdx! + 1;
           } else {
             noticeIdx = 0;
           }
@@ -1149,13 +1149,13 @@ class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
 
   //notice_view_model 의 메쏘드랑 일치하여야 함.
   void selectNotice(int index) {
-    if (noticeModel[index].textOrNavigateTo == 'text') {
-      _navigationService.navigateWithArgTo(
-          'notice_text_based', noticeModel[index]);
+    if (noticeModel![index].textOrNavigateTo == 'text') {
+      _navigationService!
+          .navigateWithArgTo('notice_text_based', noticeModel![index]);
     } else {
-      _navigationService.navigateWithArgTo(
-          noticeModel[index].textOrNavigateTo.toString(),
-          noticeModel[index].navigateArgu);
+      _navigationService!.navigateWithArgTo(
+          noticeModel![index].textOrNavigateTo.toString(),
+          noticeModel![index].navigateArgu);
     }
   }
 
@@ -1164,16 +1164,16 @@ class _NoticeBarState extends State<NoticeBar> with TickerProviderStateMixin {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        _mixpanelService.mixpanel.track('Select Notice - Community');
-        selectNotice(noticeIdx);
+        _mixpanelService!.mixpanel.track('Select Notice - Community');
+        selectNotice(noticeIdx!);
       },
       child: Container(
         // width: double.infinity,
         // height: 40.h,
         child: FadeTransition(
-            opacity: _noticeOpacity,
+            opacity: _noticeOpacity as Animation<double>,
             // child: Text(temp[noticeIdx],
-            child: Text(noticeModel[noticeIdx].title,
+            child: Text(noticeModel![noticeIdx!].title!,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(

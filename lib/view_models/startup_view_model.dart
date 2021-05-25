@@ -11,16 +11,16 @@ import '../services/navigation_service.dart';
 import '../view_models/base_model.dart';
 
 class StartUpViewModel extends BaseViewModel {
-  final AuthService _authService = locator<AuthService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  SharedPreferencesService _sharedPreferencesService =
+  final AuthService? _authService = locator<AuthService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
-  int index;
-  String uid;
+  int? index;
+  String? uid;
   StartUpViewModel() {
     index = 0;
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   // bool isTwoFactorAuthed;

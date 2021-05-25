@@ -1,12 +1,12 @@
 import '../models/sub_vote_model.dart';
 
 class VoteModel {
-  final String voteDate;
+  final String? voteDate;
   final dynamic voteStartDateTime;
   final dynamic voteEndDateTime;
-  final int voteCount;
-  final List<int> result;
-  final List<SubVote> subVotes;
+  final int? voteCount;
+  final List<int>? result;
+  final List<SubVote>? subVotes;
 
   VoteModel({
     this.voteDate,

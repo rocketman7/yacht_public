@@ -6,10 +6,10 @@ import '../services/database_service.dart';
 
 class FaqViewModel extends FutureViewModel {
   // Services Setting
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
 
   // 변수 Setting
-  List<FaqModel> faqModel = [];
+  List<FaqModel>? faqModel = [];
   List<bool> isSelected = [];
 
   FaqViewModel();
@@ -17,9 +17,9 @@ class FaqViewModel extends FutureViewModel {
   // method
   // futureToRun으로 호출하는.
   Future getFaqList() async {
-    faqModel = await _databaseService.getFaq();
+    faqModel = await _databaseService!.getFaq();
 
-    for (int i = 0; i < faqModel.length; i++) {
+    for (int i = 0; i < faqModel!.length; i++) {
       // faqModel[i].content.replaceAll('\\n', '\n');
       isSelected.add(false);
     }

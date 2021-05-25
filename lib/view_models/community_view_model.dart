@@ -8,19 +8,19 @@ import '../models/post_model.dart';
 
 // 커뮤니티 메인페이지에서 포스트콜렉션의 하위다큐, 콜렉션인 "KR", "000080" 등 종목코드를 넘겨준다고 가정
 class CommunityViewModel extends FutureViewModel {
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
 
   final String category;
   final String issueCode;
   final String name;
 
-  String uid;
+  String? uid;
 
   //KR 등 카테고리와 000080 등 종목의 이슈코드
   //자유게시판은 KR 이 아닌 카테고리. 밑에 이슈코드는 더미로 넣어놓거나 하면 될듯
   CommunityViewModel(this.category, this.issueCode, this.name) {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   Future initCommunityViewModel() async {
@@ -37,17 +37,17 @@ class CommunityViewModel extends FutureViewModel {
 
   //   return '하이트진로';
   // }
-  Future getAvatar(String uid) async {
-    return await _databaseService.getAvatar(uid);
+  Future getAvatar(String? uid) async {
+    return await _databaseService!.getAvatar(uid);
   }
 
-  Future getNickName(String uid) async {
-    return await _databaseService.getNickName(uid);
+  Future getNickName(String? uid) async {
+    return await _databaseService!.getNickName(uid);
   }
 
   //for Stream
   Stream<List<PostModel>> getPost() {
-    return _databaseService.getPostList(category, issueCode);
+    return _databaseService!.getPostList(category, issueCode);
   }
 }
 // import 'package:stacked/stacked.dart';

@@ -1,7 +1,7 @@
 import 'package:yachtOne/views/constants/holiday.dart';
 
 List<DateTime> getDateList(DateTime firstDate, DateTime lastDate) {
-  List<DateTime> list = List();
+  List<DateTime> list = [];
   int count = daysCount(toDateMonthYear(firstDate), toDateMonthYear(lastDate));
   for (int i = 0; i < count; i++) {
     String firstDateStr = stringDate.format(firstDate.add(Duration(days: i)));

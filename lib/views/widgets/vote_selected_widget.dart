@@ -42,7 +42,7 @@ class VoteSelected extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 10),
                   child: Text(
-                    vote.subVotes[idx].voteChoices[0],
+                    vote.subVotes![idx].voteChoices![0],
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -79,7 +79,7 @@ class VoteSelected extends StatelessWidget {
                   height: 4,
                 ),
                 Text(
-                  vote.subVotes[idx].voteChoices[1],
+                  vote.subVotes![idx].voteChoices![1],
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flutter/material.dart';
@@ -8,14 +10,14 @@ import '../services/customCacheManager_service.dart';
 
 class MypageAvatarSelectViewModel extends FutureViewModel {
   // Services Setting
-  final StorageService storageService = locator<StorageService>();
-  final CustomCacheManagerService customCacheManagerService =
+  final StorageService? storageService = locator<StorageService>();
+  final CustomCacheManagerService? customCacheManagerService =
       locator<CustomCacheManagerService>();
 
   // 변수 Setting
   List<String> avatarImageAddress = [];
-  int avatarNum;
-  List<String> avatarImageURL = [];
+  int? avatarNum;
+  List<String?> avatarImageURL = [];
 
   // 생성자에서 Storage에서 cache 이미지화할 것들을 저장해준다.
   // *나중에 앱의 어느 부분에서 cache 이미지를 쓸지 구체화되면 DB에서 관리하도록 코드수정 필요
@@ -44,21 +46,21 @@ class MypageAvatarSelectViewModel extends FutureViewModel {
 
   // method
   Future loadAvatarImageURL() async {
-    for (int i = 0; i < avatarNum; i++) {
-      avatarImageURL
-          .add(await storageService.downloadImageURL(avatarImageAddress[i]));
+    for (int i = 0; i < avatarNum!; i++) {
+      avatarImageURL.add(await (storageService!
+          .downloadImageURL(avatarImageAddress[i]) as FutureOr<String?>));
     }
 
     return null;
   }
 
-  String getAvatarImageURL(int index) {
+  String? getAvatarImageURL(int index) {
     return avatarImageURL[index];
   }
 
-  Widget paintChachedNetworkImage(int index, {double width, double height}) {
+  Widget paintChachedNetworkImage(int index, {double? width, double? height}) {
     return CachedNetworkImage(
-      imageUrl: getAvatarImageURL(index),
+      imageUrl: getAvatarImageURL(index)!,
       width: width == null ? 100 : width,
       height: height == null ? 100 : height,
       cacheManager: customCacheManagerService,
@@ -66,7 +68,7 @@ class MypageAvatarSelectViewModel extends FutureViewModel {
   }
 
   void emptyCacheAll() {
-    customCacheManagerService.emptyCacheAll();
+    customCacheManagerService!.emptyCacheAll();
   }
 
   @override

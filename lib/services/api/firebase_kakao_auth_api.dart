@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:cloud_functions/cloud_functions.dart';
@@ -15,12 +16,12 @@ import 'base_auth_api.dart';
 import 'dart:convert';
 
 class FirebaseKakaoAuthAPI implements BaseAuthAPI {
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
   FirebaseKakaoAuthAPI();
-  final SharedPreferencesService _sharedPreferencesService =
+  final SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
-  AuthService _authService = locator<AuthService>();
+  AuthService? _authService = locator<AuthService>();
   static const String providerId = 'kakaocorp.com';
 
   @override
@@ -29,19 +30,20 @@ class FirebaseKakaoAuthAPI implements BaseAuthAPI {
       print("KaKao Sign in started");
       final String token = await _retrieveToken();
       print(token);
-      final String verifiedToken = await _verifyToken(token);
+      final String verifiedToken =
+          await (_verifyToken(token) as FutureOr<String>);
       print(verifiedToken);
       // await _sharedPreferencesService.setSharedPreferencesValue(
       //     'twoFactor', true);
       final authResult =
-          await _authService.auth.signInWithCustomToken(verifiedToken);
+          await _authService!.auth.signInWithCustomToken(verifiedToken);
 
-      final User firebaseUser = authResult.user;
-      final User currentUser = _authService.auth.currentUser;
+      final User firebaseUser = authResult.user!;
+      final User currentUser = _authService!.auth.currentUser!;
       assert(firebaseUser.uid == currentUser.uid);
 
       await _updateEmailInfo(firebaseUser);
-      var userDatabase = await _databaseService.getUser(currentUser.uid);
+      var userDatabase = await _databaseService!.getUser(currentUser.uid);
       print("User Auth = " + currentUser.toString());
       print("User Database = " + userDatabase.toString());
       // if (userDatabase == null) {
@@ -94,19 +96,20 @@ class FirebaseKakaoAuthAPI implements BaseAuthAPI {
     return token.accessToken;
   }
 
-  Future<void> _updateEmailInfo(User firebaseUser) async {
+  Future<void> _updateEmailInfo(User? firebaseUser) async {
     // When sign in is done, update email info.
     Kakao.User kakaoUser = await Kakao.UserApi.instance.me();
-    if (kakaoUser.kakaoAccount.email.isNotEmpty) {
-      firebaseUser.updateEmail(kakaoUser.kakaoAccount.email);
+    if (kakaoUser.kakaoAccount!.email!.isNotEmpty) {
+      firebaseUser!.updateEmail(kakaoUser.kakaoAccount!.email!);
     }
   }
 
-  Future<String> _verifyToken(String kakaoToken) async {
+  Future<String?> _verifyToken(String kakaoToken) async {
     try {
       print("start calling");
-      final HttpsCallable callable = CloudFunctions(region: 'asia-northeast3')
-          .getHttpsCallable(functionName: 'verifyKakaoToken');
+      final HttpsCallable callable =
+          FirebaseFunctions.instanceFor(region: 'asia-northeast3')
+              .httpsCallable('verifyKakaoToken');
 
       print("callable function made");
       final HttpsCallableResult result = await callable.call(
@@ -156,13 +159,13 @@ class FirebaseKakaoAuthAPI implements BaseAuthAPI {
   }
 
   @override
-  Future<User> linkWith(User user) async {
+  Future<User?> linkWith(User user) async {
     try {
       final token = await _retrieveToken();
 
-      final HttpsCallable callable = CloudFunctions.instance
-          .getHttpsCallable(functionName: 'linkWithKakao')
-            ..timeout = const Duration(seconds: 30);
+      final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
+          'linkWithKakao',
+          options: HttpsCallableOptions(timeout: const Duration(seconds: 30)));
 
       final HttpsCallableResult result = await callable.call(
         <String, dynamic>{
@@ -173,7 +176,7 @@ class FirebaseKakaoAuthAPI implements BaseAuthAPI {
       if (result.data['error'] != null) {
         return Future.error(result.data['error']);
       } else {
-        User user = _authService.auth.currentUser;
+        User? user = _authService!.auth.currentUser;
 
         // Update email info if possible.
         await _updateEmailInfo(user);

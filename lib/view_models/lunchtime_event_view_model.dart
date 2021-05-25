@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/models/database_address_model.dart';
@@ -14,59 +16,62 @@ import 'package:timezone/timezone.dart' as tz;
 class LunchtimeEventViewModel extends FutureViewModel {
   final lunchEventBaseDate;
 
-  AuthService _authService = locator<AuthService>();
-  DatabaseService _databaseService = locator<DatabaseService>();
-  final TimezoneService _timezoneService = locator<TimezoneService>();
-  final StateManageService _stateManageService = locator<StateManageService>();
-  String uid;
-  String category;
-  DatabaseAddressModel address;
-  UserModel user;
-  UserVoteModel userVote;
-  LunchtimeVoteModel lunchtimeVoteModel;
+  AuthService? _authService = locator<AuthService>();
+  DatabaseService? _databaseService = locator<DatabaseService>();
+  final TimezoneService? _timezoneService = locator<TimezoneService>();
+  final StateManageService? _stateManageService = locator<StateManageService>();
+  String? uid;
+  String? category;
+  late DatabaseAddressModel address;
+  UserModel? user;
+  late UserVoteModel userVote;
+  late LunchtimeVoteModel lunchtimeVoteModel;
   bool isEnabled = false;
   bool isEnded = false;
   bool checkingTimeFromServer = false;
-  List<int> prediction;
+  List<int>? prediction;
   // List<LunchtimeSubVoteModel> lunchtimeVoteList;
 
   LunchtimeEventViewModel(this.lunchEventBaseDate) {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   Future getAllModels() async {
-    address = await _databaseService.getAddress(uid);
+    address = await _databaseService!.getAddress(uid);
     address.date = lunchEventBaseDate;
     address.season = 'lunchEvent';
-    user = await _databaseService.getUser(uid);
+    user = await (_databaseService!.getUser(uid) as FutureOr<UserModel?>);
     print("LUNCHTIME" + address.season.toString());
-    userVote = await _databaseService.getUserVote(address);
+    userVote = await (_databaseService!.getUserVote(address)
+        as FutureOr<UserVoteModel>);
 
-    lunchtimeVoteModel = await _databaseService.getLunchtimeVote(address);
+    lunchtimeVoteModel = await (_databaseService!.getLunchtimeVote(address)
+        as FutureOr<LunchtimeVoteModel>);
     if (userVote.voteSelected == null && checkIfInVotingTime() == true) {
       isEnabled = true;
     }
     prediction = userVote.voteSelected ??
-        List.generate(lunchtimeVoteModel.subVotes.length, (index) => 1);
+        List.generate(lunchtimeVoteModel.subVotes!.length, (index) => 1);
     // print(lunchtimeVoteList);
   }
 
   Future addUserVote(String uid, UserVoteModel userVote) async {
-    await _databaseService.addUserVote(address, userVote);
+    await _databaseService!.addUserVote(address, userVote);
   }
 
   Future getLunchtimeVoteModel(address) async {
     checkingTimeFromServer = true;
     notifyListeners();
-    lunchtimeVoteModel = await _databaseService.getLunchtimeVote(address);
+    lunchtimeVoteModel = await (_databaseService!.getLunchtimeVote(address)
+        as FutureOr<LunchtimeVoteModel>);
     checkingTimeFromServer = false;
     notifyListeners();
   }
 
   Future updateUserItem(int itemChange) async {
-    await _databaseService.updateUserItem(uid, itemChange);
-    await _stateManageService.userModelUpdate();
-    user = await _databaseService.getUser(uid);
+    await _databaseService!.updateUserItem(uid, itemChange);
+    await _stateManageService!.userModelUpdate();
+    user = await (_databaseService!.getUser(uid) as FutureOr<UserModel?>);
     notifyListeners();
   }
 
@@ -75,14 +80,14 @@ class LunchtimeEventViewModel extends FutureViewModel {
     String issueCode,
   ) {
     print("Price Stream returns");
-    return _databaseService.getRealtimeReturn(address, issueCode);
+    return _databaseService!.getRealtimeReturn(address, issueCode);
   }
 
   bool checkIfInVotingTime() {
-    if (_timezoneService
+    if (_timezoneService!
             .koreaTime(DateTime.now())
             .isAfter(lunchtimeVoteModel.voteStartDateTime.toDate()) &&
-        _timezoneService
+        _timezoneService!
             .koreaTime(DateTime.now())
             .isBefore(lunchtimeVoteModel.voteEndDateTime.toDate())) {
       return true;

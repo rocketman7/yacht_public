@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../models/notice_model.dart';
 
 class NoticeTextBasedView extends StatelessWidget {
-  final NoticeModel noticeModel;
+  final NoticeModel? noticeModel;
 
   NoticeTextBasedView(this.noticeModel);
 
@@ -30,7 +30,7 @@ class NoticeTextBasedView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${noticeModel.title}',
+                '${noticeModel!.title}',
                 maxLines: 100,
                 overflow: TextOverflow.visible,
                 style: TextStyle(
@@ -43,7 +43,7 @@ class NoticeTextBasedView extends StatelessWidget {
                 height: 8.h,
               ),
               Text(
-                '${noticeModel.noticeDateTime.toDate().toString().substring(0, 4)}.${noticeModel.noticeDateTime.toDate().toString().substring(5, 7)}.${noticeModel.noticeDateTime.toDate().toString().substring(8, 10)}',
+                '${noticeModel!.noticeDateTime!.toDate().toString().substring(0, 4)}.${noticeModel!.noticeDateTime!.toDate().toString().substring(5, 7)}.${noticeModel!.noticeDateTime!.toDate().toString().substring(8, 10)}',
                 style: TextStyle(
                   fontFamily: 'AppleSDEM',
                   fontSize: 12.sp,
@@ -65,7 +65,7 @@ class NoticeTextBasedView extends StatelessWidget {
                 child: ListView(
                   children: [
                     Text(
-                      '${noticeModel.content.replaceAll("\\n", "\n")}',
+                      '${noticeModel!.content!.replaceAll("\\n", "\n")}',
                       style: TextStyle(
                           fontFamily: 'AppleSDEM', fontSize: 16.h, height: 1.5
                           // letterSpacing: 1,

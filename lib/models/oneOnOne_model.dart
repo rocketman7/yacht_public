@@ -1,8 +1,8 @@
 class OneOnOneModel {
-  final bool state;
-  final String questionTitle;
-  final String questionContent;
-  final String answer;
+  final bool? state;
+  final String? questionTitle;
+  final String? questionContent;
+  final String? answer;
 
   OneOnOneModel({
     this.state,

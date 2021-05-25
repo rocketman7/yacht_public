@@ -18,34 +18,34 @@ import '../views/constants/holiday.dart';
 
 class RankViewModel extends FutureViewModel {
   // Services Setting
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  final StateManageService _stateManageService = locator<StateManageService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final StateManageService? _stateManageService = locator<StateManageService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
 
   // 변수 Setting
   // 아래에 stateManagerService에 있는 놈들 중 사용할 모델들 설정
-  DatabaseAddressModel addressModel;
-  PortfolioModel portfolioModel;
-  SeasonModel seasonModel;
-  UserModel userModel;
+  DatabaseAddressModel? addressModel;
+  PortfolioModel? portfolioModel;
+  SeasonModel? seasonModel;
+  UserModel? userModel;
   // 여기는 이 화면 고유의 모델 설정
-  List<RankModel> rankModel = [];
+  List<RankModel>? rankModel = [];
 
-  String uid;
-  int myRank = 0;
+  String? uid;
+  int? myRank = 0;
   int myRankForScroll = 0;
-  int myWinPoint = 0;
-  String myRankChange;
-  String myRankChangeSymbol;
+  int? myWinPoint = 0;
+  String? myRankChange;
+  String? myRankChangeSymbol;
   List<String> rankChange = [];
   List<String> rankChangeSymbol = [];
 
-  ScrollController scrollController;
+  late ScrollController scrollController;
 
   RankViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
 
     // scrollController = ScrollController();
   }
@@ -53,7 +53,7 @@ class RankViewModel extends FutureViewModel {
   Future<void> scrollToMyRank() async {
     // scrollController.jumpTo(78573.7 / rankModel.length * 1230);
 
-    scrollController.animateTo(78573.7 / rankModel.length * 1230,
+    scrollController.animateTo(78573.7 / rankModel!.length * 1230,
         duration: Duration(seconds: 1), curve: Curves.ease);
 
     //, duration(seconds: 1)),
@@ -70,31 +70,31 @@ class RankViewModel extends FutureViewModel {
   // futureToRun으로 호출하는.
   Future getUserAndRankList() async {
     await _amplitudeService.logRankingView(uid);
-    if (_stateManageService.appStart) {
-      await _stateManageService.initStateManage(initUid: uid);
+    if (_stateManageService!.appStart) {
+      await _stateManageService!.initStateManage(initUid: uid);
     } else {
-      if (await _stateManageService.isNeededUpdate())
-        await _stateManageService.initStateManage(initUid: uid);
+      if (await _stateManageService!.isNeededUpdate())
+        await _stateManageService!.initStateManage(initUid: uid);
     }
 
-    addressModel = _stateManageService.addressModel;
-    portfolioModel = _stateManageService.portfolioModel;
-    seasonModel = _stateManageService.seasonModel;
-    userModel = _stateManageService.userModel;
-    rankModel = _stateManageService.rankModel;
+    addressModel = _stateManageService!.addressModel;
+    portfolioModel = _stateManageService!.portfolioModel;
+    seasonModel = _stateManageService!.seasonModel;
+    userModel = _stateManageService!.userModel;
+    rankModel = _stateManageService!.rankModel;
 
     // 혹시 우승자들 있으면 랭크모델 수정해서.. 1등으로 바꿔주기
     // 어차피 스테이트매니지 랭크모델은 안바꾸면서 매번 페이지 들어올때마다만 바꿔주는거니까 무리없음
-    for (int i = 0; i < rankModel.length; i++) {
-      if (rankModel[i].currentWinPoint >= seasonModel.winningPoint) {
-        rankModel[i].todayRank = 1;
+    for (int i = 0; i < rankModel!.length; i++) {
+      if (rankModel![i].currentWinPoint! >= seasonModel!.winningPoint!) {
+        rankModel![i].todayRank = 1;
       }
     }
 
     // 순위변동 구해주자.
-    for (int i = 0; i < rankModel.length; i++) {
-      if (rankModel[i].prevRank != null) {
-        int tempRankChange = rankModel[i].prevRank - rankModel[i].todayRank;
+    for (int i = 0; i < rankModel!.length; i++) {
+      if (rankModel![i].prevRank != null) {
+        int tempRankChange = rankModel![i].prevRank! - rankModel![i].todayRank!;
         rankChange.add(tempRankChange.toString());
 
         if (tempRankChange > 0)
@@ -111,14 +111,14 @@ class RankViewModel extends FutureViewModel {
     }
 
     // 나의 현재순위 구해주자
-    for (int i = 0; i < rankModel.length; i++) {
-      if (rankModel[i].uid == uid) {
-        myRank = rankModel[i].todayRank;
+    for (int i = 0; i < rankModel!.length; i++) {
+      if (rankModel![i].uid == uid) {
+        myRank = rankModel![i].todayRank;
         myRankForScroll = i;
         myRankChangeSymbol = rankChangeSymbol[i];
         myRankChange = rankChange[i];
 
-        myWinPoint = rankModel[i].currentWinPoint;
+        myWinPoint = rankModel![i].currentWinPoint;
 
         print("MY RANK" + myRank.toString());
       }
@@ -129,7 +129,7 @@ class RankViewModel extends FutureViewModel {
 
   // 어드레스모델이 가리키는 전 날짜를 가져와서 xxxx.xx.xx 형식으로 변환
   String getDateFormChange() {
-    DateTime previousdate = strToDate(_stateManageService.addressModel.date);
+    DateTime previousdate = strToDate(_stateManageService!.addressModel!.date!);
 
     previousdate = previousBusinessDay(previousdate);
     String previousdateStr = stringDate.format(previousdate);
@@ -146,11 +146,11 @@ class RankViewModel extends FutureViewModel {
     int totalValue = 0;
 
     for (int i = 0;
-        i < _stateManageService.portfolioModel.subPortfolio.length;
+        i < _stateManageService!.portfolioModel!.subPortfolio!.length;
         i++) {
       totalValue +=
-          _stateManageService.portfolioModel.subPortfolio[i].sharesNum *
-              _stateManageService.portfolioModel.subPortfolio[i].currentPrice;
+          _stateManageService!.portfolioModel!.subPortfolio![i].sharesNum! *
+              _stateManageService!.portfolioModel!.subPortfolio![i].currentPrice!;
     }
     // int totalValue = 100000;
 
@@ -163,11 +163,11 @@ class RankViewModel extends FutureViewModel {
   String getUsersNum() {
     var f = NumberFormat("#,###", "en_US");
 
-    return f.format(rankModel.length);
+    return f.format(rankModel!.length);
   }
 
   // 랭킹숫자 등 ###,###,### 형태로 반환
-  String returnDigitFormat(int value) {
+  String returnDigitFormat(int? value) {
     var f = NumberFormat("#,###", "en_US");
 
     return f.format(value);
@@ -175,11 +175,11 @@ class RankViewModel extends FutureViewModel {
 
   // 포트폴리오화면으로 가는 버튼~
   void navigateToPortfolioPage() {
-    _navigationService.navigateTo('portfolio');
+    _navigationService!.navigateTo('portfolio');
   }
 
-  Future<void> addRank() {
-    _databaseService.addRank();
+  Future<void>? addRank() {
+    _databaseService!.addRank();
 
     notifyListeners();
 

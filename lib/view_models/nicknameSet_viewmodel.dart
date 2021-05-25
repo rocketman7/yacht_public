@@ -16,18 +16,18 @@ import '../services/sharedPreferences_service.dart';
 
 class NicknameSetViewModel extends BaseViewModel {
   // Services Setting
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
   // final DialogService _dialogService = locator<DialogService>();
-  final StateManageService _stateManageService = locator<StateManageService>();
-  SharedPreferencesService _sharedPreferencesService =
+  final StateManageService? _stateManageService = locator<StateManageService>();
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
   // 변수 Setting
-  String uid;
+  String? uid;
   // String userName;
-  UserModel user;
+  UserModel? user;
 
   bool checking = false;
   void setChecking(bool value) {
@@ -37,13 +37,13 @@ class NicknameSetViewModel extends BaseViewModel {
 
   // method
   NicknameSetViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
-  Future<bool> checkUserNameDuplicateAndSet(
+  Future<bool?> checkUserNameDuplicateAndSet(
       String userName, BuildContext context) async {
     setChecking(true);
-    bool temp = await _databaseService.isUserNameDuplicated(userName);
+    bool? temp = await _databaseService!.isUserNameDuplicated(userName);
     print(temp); // true면 중복있는 것
     if (temp == true) {
       setChecking(false);
@@ -84,11 +84,11 @@ class NicknameSetViewModel extends BaseViewModel {
       // return true;
       // return true;
     } else {
-      _databaseService.updateUserName(uid, userName);
-      _sharedPreferencesService.setSharedPreferencesValue(didSurveyKey, true);
-      _stateManageService.userModelUpdate();
+      _databaseService!.updateUserName(uid, userName);
+      _sharedPreferencesService!.setSharedPreferencesValue(didSurveyKey, true);
+      _stateManageService!.userModelUpdate();
       setChecking(false);
-      _navigationService.navigateWithArgTo('startup', 0);
+      _navigationService!.navigateWithArgTo('startup', 0);
       return true;
     }
 

@@ -27,15 +27,15 @@ import '../models/sub_vote_model.dart';
 import 'widgets/avatar_widget.dart';
 
 class HomeView extends StatefulWidget {
-  final Function goToTab;
+  final Function? goToTab;
   HomeView(this.goToTab);
   @override
   _HomeViewState createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final AuthService _authService = locator<AuthService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final AuthService? _authService = locator<AuthService>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   // GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
@@ -80,7 +80,7 @@ class _HomeViewState extends State<HomeView> {
     Size size = MediaQuery.of(context).size;
     deviceHeight = size.height;
     deviceWidth = size.width;
-    double displayRatio = deviceHeight / deviceWidth;
+    double displayRatio = deviceHeight! / deviceWidth!;
 
     var lang = Localizations.localeOf(context).languageCode;
     // print("Language is " + lang);
@@ -88,7 +88,7 @@ class _HomeViewState extends State<HomeView> {
         viewModelBuilder: () => HomeViewModel(),
         // onModelReady: (model) => print("onModelReady" + model.uid),
         // StreamBuilder로 onAuthChanged를 듣다가 아래 if 조건이 만족하면 model.getUser()의 FutureBuilder를 return.
-        builder: (context, model, child) {
+        builder: (context, dynamic model, child) {
           print("Start" + DateTime.now().toString());
 
           // UserModel userModel = model.getUser(_widgetAddress.uid);
@@ -110,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
               : Scaffold(
                   body: WillPopScope(
                     onWillPop: () async {
-                      _navigatorKey.currentState.maybePop();
+                      _navigatorKey.currentState!.maybePop();
                       return false;
                     },
                     child: SafeArea(
@@ -182,7 +182,7 @@ class _HomeViewState extends State<HomeView> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        _navigationService
+                                        _navigationService!
                                             .navigateTo('trackRecord');
                                       },
                                       child: Row(
@@ -389,7 +389,7 @@ class _HomeViewState extends State<HomeView> {
                                   height: 20,
                                 ),
                                 GestureDetector(
-                                  onTap: () => widget.goToTab(1),
+                                  onTap: () => widget.goToTab!(1),
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
                                       horizontal: 32,
@@ -482,7 +482,7 @@ class _HomeViewState extends State<HomeView> {
 
   Widget buildRow(HomeViewModel model, int idx) {
     // 선택지 수
-    int numOfChoices = model.vote.subVotes[idx].issueCode.length;
+    int numOfChoices = model.vote!.subVotes![idx].issueCode!.length;
     Color hexToColor(String code) {
       return Color(int.parse(code, radix: 16) + 0xFF0000000);
     }
@@ -504,20 +504,20 @@ class _HomeViewState extends State<HomeView> {
                   border: Border.all(
                     width: 4.0,
                     color: hexToColor(
-                      model.vote.subVotes[idx].colorCode[0],
+                      model.vote!.subVotes![idx].colorCode![0],
                     ),
                   ),
                   borderRadius: BorderRadius.circular(
-                      model.vote.subVotes[idx].shape[0] == 'oval' ? 30 : 0),
+                      model.vote!.subVotes![idx].shape![0] == 'oval' ? 30 : 0),
                 ),
                 child: Text(
-                  model.vote.subVotes[idx].title,
+                  model.vote!.subVotes![idx].title!,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     letterSpacing: -1.0,
                     color: hexToColor(
-                      model.vote.subVotes[idx].colorCode[0],
+                      model.vote!.subVotes![idx].colorCode![0],
                     ),
                   ),
                 ),
@@ -536,7 +536,7 @@ class _HomeViewState extends State<HomeView> {
             // #1
             children: <Widget>[
               Flexible(
-                flex: model.vote.subVotes[idx].voteChoices[0].length + 2,
+                flex: model.vote!.subVotes![idx].voteChoices![0].length + 2,
                 child: Container(
                   height: 60,
                   alignment: Alignment.center,
@@ -545,20 +545,20 @@ class _HomeViewState extends State<HomeView> {
                     border: Border.all(
                       width: 4.0,
                       color: hexToColor(
-                        model.vote.subVotes[idx].colorCode[0],
+                        model.vote!.subVotes![idx].colorCode![0],
                       ),
                     ),
                     borderRadius: BorderRadius.circular(
-                        model.vote.subVotes[idx].shape[0] == 'oval' ? 30 : 0),
+                        model.vote!.subVotes![idx].shape![0] == 'oval' ? 30 : 0),
                   ),
                   child: Text(
-                    model.vote.subVotes[idx].voteChoices[0],
+                    model.vote!.subVotes![idx].voteChoices![0],
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -2.0,
                       color: hexToColor(
-                        model.vote.subVotes[idx].colorCode[0],
+                        model.vote!.subVotes![idx].colorCode![0],
                       ),
                     ),
                     maxLines: 1,
@@ -590,31 +590,31 @@ class _HomeViewState extends State<HomeView> {
                 width: 6,
               ),
               Flexible(
-                flex: model.vote.subVotes[idx].voteChoices[1].length + 2,
+                flex: model.vote!.subVotes![idx].voteChoices![1].length + 2,
                 child: Container(
                   height: 60,
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
-                        model.vote.subVotes[idx].shape[1] == 'oval' ? 30 : 0),
+                        model.vote!.subVotes![idx].shape![1] == 'oval' ? 30 : 0),
                     border: Border.all(
                       width: 4.0,
                       color: hexToColor(
-                        model.vote.subVotes[idx].colorCode[1],
+                        model.vote!.subVotes![idx].colorCode![1],
                       ),
                     ),
                     // borderRadius: BorderRadius.all(
                     //     Radius.circular(30)),
                   ),
                   child: Text(
-                    model.vote.subVotes[idx].voteChoices[1],
+                    model.vote!.subVotes![idx].voteChoices![1],
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -2.0,
                       color: hexToColor(
-                        model.vote.subVotes[idx].colorCode[1],
+                        model.vote!.subVotes![idx].colorCode![1],
                       ),
                     ),
                     maxLines: 1,
@@ -624,15 +624,15 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               SizedBox(
-                  width: (model.vote.subVotes[idx].voteChoices[0].length +
-                              model.vote.subVotes[idx].voteChoices[1].length >
+                  width: (model.vote!.subVotes![idx].voteChoices![0].length +
+                              model.vote!.subVotes![idx].voteChoices![1].length >
                           9
                       ? 0
-                      : (150 -
-                          (model.vote.subVotes[idx].voteChoices[0].length +
-                                  model.vote.subVotes[idx].voteChoices[1]
+                      : 150 -
+                          (model.vote!.subVotes![idx].voteChoices![0].length +
+                                  model.vote!.subVotes![idx].voteChoices![1]
                                       .length) *
-                              15.0)))
+                              15.0 as double?))
             ],
           ),
           SizedBox(

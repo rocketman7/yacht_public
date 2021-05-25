@@ -12,11 +12,11 @@ import '../services/navigation_service.dart';
 import '../view_models/base_model.dart';
 
 class LoginViewModel extends BaseViewModel {
-  final AuthService _authService = locator<AuthService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthService? _authService = locator<AuthService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
   // final DialogService _dialogService = locator<DialogService>();
-  final SharedPreferencesService _sharedPreferencesService =
+  final SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
   // Future doThings() async {
@@ -28,12 +28,12 @@ class LoginViewModel extends BaseViewModel {
 
   // 로그인 function. View로부터 전달받은 계정정보를 input으로 authService의 로그인 함수를 호출.
   Future login(
-      {@required String email,
-      @required String password,
-      BuildContext context}) async {
+      {required String email,
+      required String password,
+      BuildContext? context}) async {
     setBusy(true);
     var result =
-        await _authService.loginWithEmail(email: email, password: password);
+        await _authService!.loginWithEmail(email: email, password: password);
     // 로그인 성공하면
     print(result.toString());
     if (result is bool) {
@@ -41,8 +41,8 @@ class LoginViewModel extends BaseViewModel {
       if (result == true) {
         // print('Login Success');
         // loggedIn 화면으로 route (HomeView)
-        _sharedPreferencesService.setSharedPreferencesValue("twoFactor", true);
-        _navigationService.navigateTo(
+        _sharedPreferencesService!.setSharedPreferencesValue("twoFactor", true);
+        _navigationService!.navigateTo(
           'startup',
         );
       } else {
@@ -51,7 +51,7 @@ class LoginViewModel extends BaseViewModel {
     } else {
       setBusy(false);
       return showDialog(
-          context: context,
+          context: context!,
           builder: (context) {
             return MediaQuery(
               data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

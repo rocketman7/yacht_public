@@ -36,11 +36,11 @@ import 'locator.dart';
 import 'services/navigation_service.dart';
 
 import 'services/adManager_service.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 import 'views/stocks/stock_info_kr_view.dart';
 import 'views/test_splash_view.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   tz.initializeTimeZones();
@@ -49,7 +49,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-  await FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+  await MobileAds.instance.initialize();
 
 // portrait 모드 고정
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -62,7 +62,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final ConnectionCheckService _connectionCheckService =
+  final ConnectionCheckService? _connectionCheckService =
       locator<ConnectionCheckService>();
   // Mixpanel mixpanel;
   // final APP_STORE_URL =
@@ -84,7 +84,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    _connectionCheckService.listener.cancel();
+    _connectionCheckService!.listener.cancel();
     super.dispose();
   }
 
@@ -116,12 +116,12 @@ class _MyAppState extends State<MyApp> {
         // key: navBarGlobalKey,
         // navigatorKey: locator<NavigationService>().navigatorKey,
         // onGenerateRoute: Routers.generateRoute,
-        home: StockInfoKrView(),
+        home: InitialView(),
         // textDirection: TextDirection.LTR,
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-            child: child,
+            child: child!,
           );
         },
       ),

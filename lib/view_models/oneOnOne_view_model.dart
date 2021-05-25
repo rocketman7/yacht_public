@@ -6,10 +6,10 @@ import '../services/database_service.dart';
 
 class OneOnOneViewModel extends FutureViewModel {
   // Services Setting
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
 
   // 변수 Setting
-  List<OneOnOneModel> oneOnOneModel = [];
+  List<OneOnOneModel>? oneOnOneModel = [];
   List<bool> isSelected = [];
   bool isPageOne = true;
 
@@ -18,9 +18,9 @@ class OneOnOneViewModel extends FutureViewModel {
   // method
   // futureToRun으로 호출하는.
   Future getOneOnOneList() async {
-    oneOnOneModel = await _databaseService.getOneOnOne();
+    oneOnOneModel = await _databaseService!.getOneOnOne();
 
-    for (int i = 0; i < oneOnOneModel.length; i++) {
+    for (int i = 0; i < oneOnOneModel!.length; i++) {
       isSelected.add(false);
     }
     notifyListeners();

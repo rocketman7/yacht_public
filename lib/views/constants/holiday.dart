@@ -6,7 +6,7 @@ import 'package:yachtOne/services/timezone_service.dart';
 import '../../locator.dart';
 
 var stringDate = DateFormat("yyyyMMdd");
-final TimezoneService _timezoneService = locator<TimezoneService>();
+final TimezoneService? _timezoneService = locator<TimezoneService>();
 
 String dateToStr(DateTime dateTime) {
   // dateTime = _timezoneService.koreaTime(dateTime);

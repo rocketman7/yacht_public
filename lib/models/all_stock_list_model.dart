@@ -1,7 +1,7 @@
 class SubStockList {
-  final String issueCode;
-  final String name;
-  final String alternativeName;
+  final String? issueCode;
+  final String? name;
+  final String? alternativeName;
 
   SubStockList({this.issueCode, this.name, this.alternativeName});
 
@@ -12,7 +12,7 @@ class SubStockList {
 }
 
 class AllStockListModel {
-  final List<SubStockList> subStocks;
+  final List<SubStockList>? subStocks;
 
   AllStockListModel({this.subStocks});
 

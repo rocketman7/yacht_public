@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 class SeasonModel {
-  final String seasonId;
-  final String seasonName;
-  final String startDate;
-  final int maxDailyVote;
-  final int correctPoint;
-  final int wrongPoint;
-  final int initialAwardValue;
-  final int winningPoint;
-  final String endDate;
+  final String? seasonId;
+  final String? seasonName;
+  final String? startDate;
+  final int? maxDailyVote;
+  final int? correctPoint;
+  final int? wrongPoint;
+  final int? initialAwardValue;
+  final int? winningPoint;
+  final String? endDate;
 
   SeasonModel(
       this.seasonId,
@@ -36,7 +36,7 @@ class SeasonModel {
     };
   }
 
-  SeasonModel.fromData(Map<String, dynamic> map, String seasonId)
+  SeasonModel.fromData(Map<String, dynamic> map, String? seasonId)
       : seasonId = seasonId ?? null,
         seasonName = map['seasonName'] ?? null,
         startDate = map['startDate'] ?? null,

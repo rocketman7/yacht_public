@@ -20,15 +20,20 @@ class InitialView extends StatefulWidget {
 }
 
 class _InitialViewState extends State<InitialView> {
-  final AuthService _authService = locator<AuthService>();
+  // final AuthService? _authService = locator<AuthService>();
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context,
-        designSize: Size(375, 812), allowFontScaling: true);
+    ScreenUtil.init(
+      BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width,
+        maxHeight: MediaQuery.of(context).size.height,
+      ),
+      designSize: Size(375, 812),
+    );
 
     return ViewModelBuilder.reactive(
         viewModelBuilder: () => InitialViewModel(),
-        builder: (context, model, child) {
+        builder: (context, dynamic model, child) {
           return (model.isBusy)
               ? Container()
               : StreamBuilder<User>(
@@ -51,7 +56,7 @@ class _InitialViewState extends State<InitialView> {
                                 : AppTitleView(),
                       );
                     } else {
-                      print(snapshot.data.uid);
+                      print(snapshot.data!.uid);
                       if (model.didSurvey)
                         return StartUpView(0);
                       else

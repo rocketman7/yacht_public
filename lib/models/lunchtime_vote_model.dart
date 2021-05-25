@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 class LunchtimeVoteModel {
-  final String voteDate;
+  final String? voteDate;
   final dynamic voteStartDateTime;
   final dynamic voteEndDateTime;
-  final int voteCount;
-  final String voteNotice;
-  final bool isShowingResult;
-  final List<int> result;
-  final List<LunchtimeSubVoteModel> subVotes;
+  final int? voteCount;
+  final String? voteNotice;
+  final bool? isShowingResult;
+  final List<int>? result;
+  final List<LunchtimeSubVoteModel>? subVotes;
 
   LunchtimeVoteModel(
       {this.voteDate,
@@ -47,11 +47,11 @@ class LunchtimeVoteModel {
 }
 
 class LunchtimeSubVoteModel {
-  final String name;
-  final String indexOrStocks;
-  final String issueCode;
-  final String marketCode;
-  final num basePrice;
+  final String? name;
+  final String? indexOrStocks;
+  final String? issueCode;
+  final String? marketCode;
+  final num? basePrice;
 
   LunchtimeSubVoteModel({
     this.name,
@@ -62,11 +62,11 @@ class LunchtimeSubVoteModel {
   });
 
   LunchtimeSubVoteModel copyWith({
-    String name,
-    String indexOrStocks,
-    String issueCode,
-    String marketCode,
-    num basePrice,
+    String? name,
+    String? indexOrStocks,
+    String? issueCode,
+    String? marketCode,
+    num? basePrice,
   }) {
     return LunchtimeSubVoteModel(
       name: name ?? this.name,
@@ -88,7 +88,7 @@ class LunchtimeSubVoteModel {
   }
 
   factory LunchtimeSubVoteModel.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+    // if (map == null) return null;
 
     return LunchtimeSubVoteModel(
       name: map['name'],

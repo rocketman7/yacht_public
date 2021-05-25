@@ -29,40 +29,43 @@ import '../models/sharedPreferences_const.dart';
 import '../views/mypage_main_view.dart';
 
 import '../services/adManager_service.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:firebase_admob/firebase_admob.dart';
 
 class VoteSelectViewModel extends FutureViewModel {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  SharedPreferencesService _sharedPreferencesService =
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>(); //
-  final StateManageService _stateManageService = locator<StateManageService>();
+  final StateManageService? _stateManageService = locator<StateManageService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
 
   //Code:
 
-  String uid;
-  UserModel user;
-  DatabaseAddressModel address;
-  VoteModel vote;
-  UserVoteModel userVote;
-  SeasonModel seasonInfo;
-  List<SubVote> subVote;
-  PortfolioModel portfolioModel;
-  Timer _everySecond;
-  DateTime now;
+  String? uid;
+  UserModel? user;
+  DatabaseAddressModel? address;
+  VoteModel? vote;
+  UserVoteModel? userVote;
+  SeasonModel? seasonInfo;
+  List<SubVote>? subVote;
+  PortfolioModel? portfolioModel;
+  Timer? _everySecond;
+  DateTime? now;
+
+  RewardedAd? _rewardedAd;
 
   List<String> timeLeftArr = ["", "", ""];
 
-  Timer get everySecond => _everySecond;
+  Timer? get everySecond => _everySecond;
 
-  bool isNameUpdated;
-  bool voteSelectTutorial;
-  bool termsOfUse;
+  bool? isNameUpdated;
+  late bool voteSelectTutorial;
+  bool? termsOfUse;
 
-  String lunchEventDate;
+  String? lunchEventDate;
 
   //
   bool notificationNewCheck = false;
@@ -84,9 +87,9 @@ class VoteSelectViewModel extends FutureViewModel {
   String getPortfolioValue() {
     int totalValue = 0;
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      totalValue += portfolioModel.subPortfolio[i].sharesNum *
-          portfolioModel.subPortfolio[i].currentPrice;
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
+      totalValue += portfolioModel!.subPortfolio![i].sharesNum! *
+          portfolioModel!.subPortfolio![i].currentPrice!;
     }
 
     var f = NumberFormat("#,###", "en_US");
@@ -97,62 +100,78 @@ class VoteSelectViewModel extends FutureViewModel {
   VoteSelectViewModel() {
     // _authService.signOut();
 
-    uid = _authService.auth.currentUser.uid;
-    print("UID " + uid);
+    uid = _authService!.auth.currentUser!.uid;
+    print("UID " + uid!);
     // _now = getNow();
     // getUser();
 
+// 리워드 AD 이벤트 listen
+
+    _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (RewardedAd ad) =>
+          print('$ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (RewardedAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+      },
+      onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+      },
+      onAdImpression: (RewardedAd ad) => print('$ad impression occurred.'),
+    );
+
     // 리워드광고 로직을 구현해야 하는 부분.
-    RewardedVideoAd.instance.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      if (event == RewardedVideoAdEvent.rewarded) {
-        //유저가 reward받을 수 있는 조건을 충족하면,
-        //아이템을 한 개 늘려주고,
-        _databaseService.updateUserItem(uid, 1);
-        //'오늘'의 보상 카운팅을 1개 늘려주고
-        _databaseService.updateUserRewardedCnt(uid, 1);
-        //stateManage 업데이트
-        _stateManageService.userModelUpdate();
-        user = _stateManageService.userModel;
-        notifyListeners();
-        // print(rewardAmount);
-        print('reward ads: rewarded');
-      } else if (event == RewardedVideoAdEvent.closed) {
-        // 리워드 광고가 닫히면, 새로운 리워드 광고를 로드해줘야함
-        rewardedAdsLoaded = false;
-        print(rewardedAdsLoaded);
-        // _stateManageService.userModelUpdate();
-        loadRewardedAds();
-        user = _stateManageService.userModel;
-        notifyListeners();
-        print('reward ads: closed');
-      } else if (event == RewardedVideoAdEvent.loaded) {
-        // 로딩이 다 되면 로딩됏다고.
-        rewardedAdsLoaded = true;
+    // RewardedVideoAd.instance.listener =
+    //     (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+    //   if (event == RewardedVideoAdEvent.rewarded) {
+    //     //유저가 reward받을 수 있는 조건을 충족하면,
+    //     //아이템을 한 개 늘려주고,
+    //     _databaseService.updateUserItem(uid, 1);
+    //     //'오늘'의 보상 카운팅을 1개 늘려주고
+    //     _databaseService.updateUserRewardedCnt(uid, 1);
+    //     //stateManage 업데이트
+    //     _stateManageService.userModelUpdate();
+    //     user = _stateManageService.userModel;
+    //     notifyListeners();
+    //     // print(rewardAmount);
+    //     print('reward ads: rewarded');
+    //   } else if (event == RewardedVideoAdEvent.closed) {
+    //     // 리워드 광고가 닫히면, 새로운 리워드 광고를 로드해줘야함
+    //     rewardedAdsLoaded = false;
+    //     print(rewardedAdsLoaded);
+    //     // _stateManageService.userModelUpdate();
+    //     loadRewardedAds();
+    //     user = _stateManageService.userModel;
+    //     notifyListeners();
+    //     print('reward ads: closed');
+    //   } else if (event == RewardedVideoAdEvent.loaded) {
+    //     // 로딩이 다 되면 로딩됏다고.
+    //     rewardedAdsLoaded = true;
 
-        // notifyListeners();
-        print('reward ads: loaded');
-      } else if (event == RewardedVideoAdEvent.failedToLoad) {
-        // 로딩에 실패하면..
-        print(RewardedVideoAdEvent.failedToLoad.toString());
-        rewardedAdsLoaded = false;
-        // 다시 로딩 시도
-        // loadRewardedAds();
-        // x: 이러면 실패시 너무 많은 로딩 요청을 할 수 있음
+    //     // notifyListeners();
+    //     print('reward ads: loaded');
+    //   } else if (event == RewardedVideoAdEvent.failedToLoad) {
+    //     // 로딩에 실패하면..
+    //     print(RewardedVideoAdEvent.failedToLoad.toString());
+    //     rewardedAdsLoaded = false;
+    //     // 다시 로딩 시도
+    //     // loadRewardedAds();
+    //     // x: 이러면 실패시 너무 많은 로딩 요청을 할 수 있음
 
-        // notifyListeners();
-        print('reward ads: failedToLoad');
-      }
-      // else if (event == RewardedVideoAdEvent.completed) {
-      //   print('reward ads: completed');
-      // } else if (event == RewardedVideoAdEvent.started) {
-      //   print('reward ads: started');
-      // } else if (event == RewardedVideoAdEvent.opened) {
-      //   print('reward ads: opened');
-      // } else if (event == RewardedVideoAdEvent.leftApplication) {
-      //   print('reward ads: leftApplication');
-      // }
-    };
+    //     // notifyListeners();
+    //     print('reward ads: failedToLoad');
+    //   }
+    //   // else if (event == RewardedVideoAdEvent.completed) {
+    //   //   print('reward ads: completed');
+    //   // } else if (event == RewardedVideoAdEvent.started) {
+    //   //   print('reward ads: started');
+    //   // } else if (event == RewardedVideoAdEvent.opened) {
+    //   //   print('reward ads: opened');
+    //   // } else if (event == RewardedVideoAdEvent.leftApplication) {
+    //   //   print('reward ads: leftApplication');
+    //   // }
+    // };
 
     // 여튼 페이지 처음 들어오면 RV광고 로딩 함 해준다.
     loadRewardedAds();
@@ -164,7 +183,7 @@ class VoteSelectViewModel extends FutureViewModel {
   // }
   updateUserModel() {
     // _stateManageService.userModelUpdate();
-    user = _stateManageService.userModel;
+    user = _stateManageService!.userModel;
     notifyListeners();
   }
 
@@ -172,37 +191,70 @@ class VoteSelectViewModel extends FutureViewModel {
   loadRewardedAds() {
     notifyListeners();
     print('reward ads: start to load');
-    RewardedVideoAd.instance.load(
-      targetingInfo: MobileAdTargetingInfo(),
-      adUnitId: AdManager.rewardedAdUnitId,
-    );
+    RewardedAd.load(
+        // targetingInfo: MobileAdTargetingInfo(),
+        adUnitId: AdManager.rewardedAdUnitId,
+        request: AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (RewardedAd ad) {
+            print('$ad loaded.');
+            // Keep a reference to the ad so you can show it later.
+            _rewardedAd = ad;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            _rewardedAd = null;
+            loadRewardedAds();
+          },
+        ));
   }
 
   showRewardedAds() {
     _amplitudeService.logAdsView(uid);
-    RewardedVideoAd.instance.show();
+    if (_rewardedAd == null) {
+      print('Warning: attempt to show rewarded before loaded.');
+      return;
+    }
+    _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (RewardedAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (RewardedAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        loadRewardedAds();
+      },
+      onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        loadRewardedAds();
+      },
+    );
+
+    _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
+      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
+    });
+    _rewardedAd = null;
   }
 
   // Future startStateManager() async {
   //   //stateManager 시작
   //   await _stateManagerService.initStateManager();
   // }
-  List<bool> selected;
+  List<bool>? selected;
 
   void selectUpdate(int idx, bool value) {
-    selected[idx] = value;
+    selected![idx] = value;
     notifyListeners();
   }
 
   Future getDefaultText() async {
-    return _databaseService.getDefaultText();
+    return _databaseService!.getDefaultText();
   }
 
   Future getAllModel(uid) async {
-    await _mixpanelService.initMixpanel();
-    _mixpanelService.mixpanel.identify(uid);
-    _mixpanelService.mixpanel.track('Home View');
-    _mixpanelService.mixpanel.flush();
+    await _mixpanelService!.initMixpanel();
+    _mixpanelService!.mixpanel.identify(uid);
+    _mixpanelService!.mixpanel.track('Home View');
+    _mixpanelService!.mixpanel.flush();
     // signOut();
     // var key = await _sharedPreferencesService.getSharedPreferencesValue(
     //     isNameUpdatedKey, String);
@@ -241,20 +293,20 @@ class VoteSelectViewModel extends FutureViewModel {
 
     //앱이 최초로 시작하면 여기서 startStateManager를 실행해주고,
     //아니면 다른 화면과 마찬가지로 stateManager 하 지배를 받음.
-    if (_stateManageService.appStart) {
-      await _stateManageService.initStateManage(initUid: uid);
+    if (_stateManageService!.appStart) {
+      await _stateManageService!.initStateManage(initUid: uid);
     } else {
-      if (await _stateManageService.isNeededUpdate())
-        await _stateManageService.initStateManage(initUid: uid);
+      if (await _stateManageService!.isNeededUpdate())
+        await _stateManageService!.initStateManage(initUid: uid);
     }
 
-    address = _stateManageService.addressModel;
+    address = _stateManageService!.addressModel;
 
-    user = _stateManageService.userModel;
-    vote = _stateManageService.voteModel;
-    userVote = _stateManageService.userVoteModel;
-    portfolioModel = _stateManageService.portfolioModel;
-    seasonInfo = _stateManageService.seasonModel;
+    user = _stateManageService!.userModel;
+    vote = _stateManageService!.voteModel;
+    userVote = _stateManageService!.userVoteModel;
+    portfolioModel = _stateManageService!.portfolioModel;
+    seasonInfo = _stateManageService!.seasonModel;
     // now = await NTP.now();
     // address = await _databaseService.getAddress(uid);
     // user = await _databaseService.getUser(uid);
@@ -263,13 +315,13 @@ class VoteSelectViewModel extends FutureViewModel {
     // portfolioModel = await _databaseService.getPortfolio(address);
     // seasonInfo = await _databaseService.getSeasonInfo(address);
 
-    voteSelectTutorial = await _sharedPreferencesService
-        .getSharedPreferencesValue(voteSelectTutorialKey, bool);
+    voteSelectTutorial = await (_sharedPreferencesService!
+        .getSharedPreferencesValue(voteSelectTutorialKey, bool) as FutureOr<bool>);
 
-    print("ISVOTING????? " + address.isVoting.toString());
-    print(userVote.userVoteStats);
+    print("ISVOTING????? " + address!.isVoting.toString());
+    print(userVote!.userVoteStats);
     // selected = List<bool>.filled(vote.subVotes.length, false, growable: true);
-    selected = List<bool>.filled(vote.subVotes.length, false, growable: true);
+    selected = List<bool>.filled(vote!.subVotes!.length, false, growable: true);
     setBusy(false);
 
     notifyListeners();
@@ -283,22 +335,22 @@ class VoteSelectViewModel extends FutureViewModel {
   // }
 
   Future initialiseOneVote(int resetTarget) async {
-    await _databaseService.initialiseOneVote(
-      address,
-      userVote,
+    await _databaseService!.initialiseOneVote(
+      address!,
+      userVote!,
       resetTarget,
     );
-    await _stateManageService.userVoteModelUpdate();
-    userVote = _stateManageService.userVoteModel;
+    await _stateManageService!.userVoteModelUpdate();
+    userVote = _stateManageService!.userVoteModel;
     notifyListeners();
   }
 
   Future signOut() async {
-    await _authService.signOut();
+    await _authService!.signOut();
   }
 
-  Stream<String> getLunchEvent() {
-    return _databaseService.getLunchEvent();
+  Stream<String?> getLunchEvent() {
+    return _databaseService!.getLunchEvent();
   }
 
   // void isVoteAvailable() {
@@ -312,7 +364,7 @@ class VoteSelectViewModel extends FutureViewModel {
     String issueCode,
   ) {
     print("Price Stream returns");
-    return _databaseService.getRealtimeReturn(address, issueCode);
+    return _databaseService!.getRealtimeReturn(address, issueCode);
   }
 
   // Stream<List<PriceModel>> getMultiRealtimePrice(
@@ -332,28 +384,28 @@ class VoteSelectViewModel extends FutureViewModel {
   // }
 
   Future<void> navigateToMypageToDown(String routeName) async {
-    await _navigationService.navigateTo(routeName);
+    await _navigationService!.navigateTo(routeName);
     // 이렇게 페이지 넘어가는 부분에서 await 걸어주고 후에 후속조치 취해주면 하위페이지에서 변동된 데이터를 적용할 수 있음
     await getModels();
     notifyListeners();
   }
 
   Future<void> navigateToMypage() async {
-    await _navigationService.navigateToMyPage(MypageMainView());
+    await _navigationService!.navigateToMyPage(MypageMainView());
     // await _navigationService.navigateTo('mypage_main');
     await getModels();
     notifyListeners();
   }
 
   Future getModels() async {
-    if (_stateManageService.appStart) {
-      await _stateManageService.initStateManage(initUid: uid);
+    if (_stateManageService!.appStart) {
+      await _stateManageService!.initStateManage(initUid: uid);
     } else {
-      if (await _stateManageService.isNeededUpdate())
-        await _stateManageService.initStateManage(initUid: uid);
+      if (await _stateManageService!.isNeededUpdate())
+        await _stateManageService!.initStateManage(initUid: uid);
     }
 
-    user = _stateManageService.userModel;
+    user = _stateManageService!.userModel;
   }
 
   // 로그아웃 버튼이 눌렸을 경우..
@@ -365,9 +417,9 @@ class VoteSelectViewModel extends FutureViewModel {
     //     cancelTitle: '아니오');
     // if (dialogResult.confirmed) {
     // _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
-    _stateManageService.setMyState();
+    _stateManageService!.setMyState();
     FirebaseKakaoAuthAPI().signOut();
-    _authService.signOut();
+    _authService!.signOut();
 
     // _navigationService.popAndNavigateWithArgTo('initial');
     // }
@@ -375,16 +427,16 @@ class VoteSelectViewModel extends FutureViewModel {
 
   // Future.. 노티피케이션 알림이 최신꺼가 있는지 따로 빼서 관리해주자~
   Future<void> hasLatestNotificationTime() async {
-    Timestamp tempLatestNotificationTime;
+    Timestamp? tempLatestNotificationTime;
     String lastCheckTime;
     String lastCheckTimeWithT;
     DateTime lastCheckDateTime;
 
     tempLatestNotificationTime =
-        await _databaseService.getNotificationLatestTime();
+        await _databaseService!.getNotificationLatestTime();
 
-    lastCheckTime = await _sharedPreferencesService.getSharedPreferencesValue(
-        lastCheckTimeKey, String);
+    lastCheckTime = await (_sharedPreferencesService!.getSharedPreferencesValue(
+        lastCheckTimeKey, String) as FutureOr<String>);
 
     if (lastCheckTime == '') {
       // 최초 쉐어드프리퍼런스여서 값이 없으면 우리 앱 런칭일로
@@ -402,7 +454,7 @@ class VoteSelectViewModel extends FutureViewModel {
     // print(
     //     '======notificationTime is .... ${tempLatestNotificationTime.toDate().toString()}');
     if (lastCheckDateTime
-            .difference(tempLatestNotificationTime.toDate())
+            .difference(tempLatestNotificationTime!.toDate())
             .inMinutes <
         0) {
       // print('=======최신알림 있음=======');

@@ -5,20 +5,20 @@ import 'package:collection/collection.dart';
 import 'package:yachtOne/models/stats_model.dart';
 
 class IndexInfoModel {
-  final String name;
-  final String stocksOrIndex;
-  final String issueCode;
-  final String marketCode;
-  final String descriptionTitle;
-  final String description;
-  final int marketCap;
-  final double per;
-  final int numOfListed;
+  final String? name;
+  final String? stocksOrIndex;
+  final String? issueCode;
+  final String? marketCode;
+  final String? descriptionTitle;
+  final String? description;
+  final int? marketCap;
+  final double? per;
+  final int? numOfListed;
   final dynamic indexBaseDate;
-  final num indexBasePoint;
-  final String methodology;
+  final num? indexBasePoint;
+  final String? methodology;
   final dynamic updatedAt;
-  List<ListedStockModel> topListed;
+  List<ListedStockModel>? topListed;
   IndexInfoModel({
     this.name,
     this.stocksOrIndex,
@@ -37,20 +37,20 @@ class IndexInfoModel {
   });
 
   IndexInfoModel copyWith({
-    String name,
-    String stocksOrIndex,
-    String issueCode,
-    String marketCode,
-    String descriptionTitle,
-    String description,
-    int marketCap,
-    double per,
-    int numOfListed,
+    String? name,
+    String? stocksOrIndex,
+    String? issueCode,
+    String? marketCode,
+    String? descriptionTitle,
+    String? description,
+    int? marketCap,
+    double? per,
+    int? numOfListed,
     dynamic indexBaseDate,
-    double indexBasePoint,
-    String methodology,
+    double? indexBasePoint,
+    String? methodology,
     dynamic updatedAt,
-    List<ListedStockModel> topListed,
+    List<ListedStockModel>? topListed,
   }) {
     return IndexInfoModel(
       name: name ?? this.name,
@@ -104,12 +104,12 @@ class IndexInfoModel {
       'indexBasePoint': indexBasePoint,
       'methodology': methodology,
       'updatedAt': updatedAt,
-      'topListed': topListed?.map((x) => x?.toJson())?.toList(),
+      'topListed': topListed?.map((x) => x.toJson()).toList(),
     };
   }
 
   factory IndexInfoModel.fromData(Map<String, dynamic> data) {
-    if (data == null) return null;
+    // if (data == null) return null;
     return IndexInfoModel(
       name: data['name'],
       stocksOrIndex: data['stocksOrIndex'],
@@ -175,9 +175,9 @@ class IndexInfoModel {
 }
 
 class ListedStockModel {
-  final String name;
-  final int marketCap;
-  final double weight;
+  final String? name;
+  final int? marketCap;
+  final double? weight;
   ListedStockModel({
     this.name,
     this.marketCap,
@@ -185,9 +185,9 @@ class ListedStockModel {
   });
 
   ListedStockModel copyWith({
-    String name,
-    int marketCap,
-    double weight,
+    String? name,
+    int? marketCap,
+    double? weight,
   }) {
     return ListedStockModel(
       name: name ?? this.name,
@@ -204,11 +204,11 @@ class ListedStockModel {
     };
   }
 
-  factory ListedStockModel.fromData(Map<String, dynamic> data) {
-    if (data == null) return null;
+  factory ListedStockModel.fromData(Map<String, dynamic>? data) {
+    // if (data == null) return null;
 
     return ListedStockModel(
-      name: data['name'],
+      name: data!['name'],
       marketCap: data['marketCap'],
       weight: data['weight'],
     );

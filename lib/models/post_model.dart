@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostModel {
-  final String postUid;
-  final String uid;
-  final String replyTo;
-  final List<dynamic> replyList;
-  final String postText;
-  final Timestamp postDateTime;
-  final String parent;
-  final List<dynamic> likedBy;
+  final String? postUid;
+  final String? uid;
+  final String? replyTo;
+  final List<dynamic>? replyList;
+  final String? postText;
+  final Timestamp? postDateTime;
+  final String? parent;
+  final List<dynamic>? likedBy;
 
   PostModel({
     this.postUid,

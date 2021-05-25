@@ -18,11 +18,11 @@ import '../views/widgets/avatar_widget.dart';
 
 class RankView extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
-  DateTime currentBackPressTime;
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
+  DateTime? currentBackPressTime;
   Future<bool> _onWillPop() async {
     if (currentBackPressTime == null ||
-        DateTime.now().difference(currentBackPressTime) >
+        DateTime.now().difference(currentBackPressTime!) >
             Duration(seconds: 2)) {
       currentBackPressTime = DateTime.now();
       Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
@@ -52,7 +52,7 @@ class RankView extends StatelessWidget {
                           child: Stack(
                             children: [
                               Positioned(
-                                top: deviceHeight / 2 - 100,
+                                top: deviceHeight! / 2 - 100,
                                 child: Container(
                                   height: 100,
                                   width: deviceWidth,
@@ -76,8 +76,8 @@ class RankView extends StatelessWidget {
                                 children: [
                                   Row(
                                     children: [
-                                      avatarWidget(model.userModel.avatarImage,
-                                          model.userModel.item),
+                                      avatarWidget(model.userModel!.avatarImage,
+                                          model.userModel!.item),
                                       SizedBox(
                                         width: 12,
                                       ),
@@ -97,7 +97,7 @@ class RankView extends StatelessWidget {
                                                   30,
                                                 )),
                                             child: Text(
-                                              "${model.seasonModel.seasonName}",
+                                              "${model.seasonModel!.seasonName}",
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontFamily: 'DmSans',
@@ -105,7 +105,7 @@ class RankView extends StatelessWidget {
                                             ),
                                           ),
                                           AutoSizeText(
-                                            model.userModel.userName,
+                                            model.userModel!.userName!,
                                             style: TextStyle(
                                               fontSize: 24,
                                               letterSpacing: -1.0,
@@ -136,7 +136,7 @@ class RankView extends StatelessWidget {
                                       Spacer(),
                                       GestureDetector(
                                         onTap: () {
-                                          _mixpanelService.mixpanel
+                                          _mixpanelService!.mixpanel
                                               .track('Portfolio View - Rank');
                                           model.navigateToPortfolioPage();
                                         },
@@ -176,7 +176,7 @@ class RankView extends StatelessWidget {
                                       ),
                                       Spacer(),
                                       Text(
-                                        '${model.myWinPoint}   /   ${model.seasonModel.winningPoint}',
+                                        '${model.myWinPoint}   /   ${model.seasonModel!.winningPoint}',
                                         style: TextStyle(
                                           fontSize: 20.sp,
                                           fontFamily: 'AppleSDM',
@@ -235,7 +235,7 @@ class RankView extends StatelessWidget {
                                                 letterSpacing: -2.0,
                                                 fontWeight: FontWeight.bold),
                                           ),
-                                          (model.rankModel.length != 0)
+                                          (model.rankModel!.length != 0)
                                               ? Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
@@ -301,11 +301,11 @@ class RankView extends StatelessWidget {
                                   Expanded(
                                     child: ListView.builder(
                                       // controller: model.scrollController,
-                                      itemCount: model.rankModel.length,
+                                      itemCount: model.rankModel!.length,
                                       itemBuilder: (context, index) =>
                                           makesRankListView(
                                         model,
-                                        model.rankModel[index],
+                                        model.rankModel![index],
                                         index,
                                       ),
                                     ),
@@ -334,7 +334,7 @@ class RankView extends StatelessWidget {
                   height: 28,
                   child: Center(
                     child: Text(
-                      '${model.returnDigitFormat(model.rankModel[index].todayRank)}',
+                      '${model.returnDigitFormat(model.rankModel![index].todayRank)}',
                       style: TextStyle(
                           fontSize: 24,
                           letterSpacing: -0.28,
@@ -419,7 +419,7 @@ class RankView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      ranksModel.userName,
+                      ranksModel.userName!,
                       style: TextStyle(
                         fontSize: 20,
                         letterSpacing: -0.28,
@@ -477,19 +477,19 @@ class RankView extends StatelessWidget {
 }
 
 class DrawTriangle extends CustomPainter {
-  bool isUp;
-  Paint _paint;
+  bool? isUp;
+  late Paint _paint;
 
   DrawTriangle({this.isUp}) {
     _paint = Paint()
-      ..color = isUp ? Color(0xFFFF402B) : Color(0xFF2B40FF)
+      ..color = isUp! ? Color(0xFFFF402B) : Color(0xFF2B40FF)
       ..style = PaintingStyle.fill;
   }
 
   @override
   void paint(Canvas canvas, Size size) {
     var path = Path();
-    if (isUp) {
+    if (isUp!) {
       path.moveTo(size.width / 2, 0);
       path.lineTo(0, size.height);
       path.lineTo(size.width, size.height);

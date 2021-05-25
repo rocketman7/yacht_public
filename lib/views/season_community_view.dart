@@ -28,20 +28,20 @@ class SeasonCommunityView extends StatefulWidget {
 final TextEditingController _commentInputController = TextEditingController();
 final ScrollController _commentScrollController = ScrollController();
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-VoteCommentModel voteCommentModel;
+late VoteCommentModel voteCommentModel;
 final _scaffoldKey = GlobalKey<ScaffoldState>();
-int _textLength;
+int? _textLength;
 
 class _SeasonCommunityViewState extends State<SeasonCommunityView> {
-  final NavigationService _navigationService = locator<NavigationService>();
-  bool isliked;
+  final NavigationService? _navigationService = locator<NavigationService>();
+  bool? isliked;
   @override
   Widget build(BuildContext context) {
     print(deviceHeight);
 
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => SeasonCommunityViewModel(),
-      builder: (context, model, child) {
+      builder: (context, dynamic model, child) {
         // print("BUILDING" + model.idx.toString());
         return model.isBusy
             ? Scaffold(
@@ -71,11 +71,11 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                             children: <Widget>[
                               GestureDetector(
                                   onTap: () {
-                                    FocusScope.of(_navigationService
-                                            .navigatorKey.currentContext)
+                                    FocusScope.of(_navigationService!
+                                            .navigatorKey.currentContext!)
                                         .unfocus();
-                                    Navigator.of(_navigationService
-                                            .navigatorKey.currentContext)
+                                    Navigator.of(_navigationService!
+                                            .navigatorKey.currentContext!)
                                         .pop();
                                   },
                                   child: Icon(Icons.arrow_back_ios)),
@@ -132,14 +132,14 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                     constraints: BoxConstraints(
                                       minHeight: 42,
                                     ),
-                                    width: (deviceWidth * .75),
+                                    width: (deviceWidth! * .75),
                                     child: TextFormField(
                                       // scrollController: _commentScrollController,
                                       // scrollPhysics: ScrollPhysics(),
                                       controller: _commentInputController,
                                       textAlign: TextAlign.start,
                                       validator: (value) {
-                                        if (value.length < 1) {
+                                        if (value!.length < 1) {
                                           print(value.length);
                                           return "의견을 입력해주세요.";
                                         }
@@ -187,7 +187,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                     right: 0,
                                     child: GestureDetector(
                                       onTap: () {
-                                        if (_formKey.currentState.validate()) {
+                                        if (_formKey.currentState!.validate()) {
                                           voteCommentModel = VoteCommentModel(
                                             uid: model.user.uid,
 
@@ -261,8 +261,8 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
 
   Widget buildSquares(SeasonCommunityViewModel model, int idx) {
     // 각 투표수 가져오기
-    var numVoted0 = model.vote.subVotes[idx].numVoted0 ?? 1;
-    var numVoted1 = model.vote.subVotes[idx].numVoted1 ?? 1;
+    var numVoted0 = model.vote!.subVotes![idx].numVoted0 ?? 1;
+    var numVoted1 = model.vote!.subVotes![idx].numVoted1 ?? 1;
 
     // 투표수 -> 퍼센티지 변환
     double vote0Percentage = numVoted0 / (numVoted0 + numVoted1);
@@ -273,16 +273,16 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
     var formatReturnPct = new NumberFormat("0.00%");
 
     // length가 1이면 상,하 대결. 2이면 종목 대결
-    int length = model.vote.subVotes[idx].issueCode.length;
+    int length = model.vote!.subVotes![idx].issueCode!.length;
     Color hexToColor(String code) {
       return Color(int.parse(code, radix: 16) + 0xFF0000000);
     }
 
     if (length == 1) {
-      return StreamBuilder(
+      return StreamBuilder<PriceModel>(
           stream: model.getRealtimePrice(
-            model.address,
-            model.vote.subVotes[idx].issueCode[0],
+            model.address!,
+            model.vote!.subVotes![idx].issueCode![0],
           ),
           builder: (context, snapshot) {
             print("STREAM BUILDING");
@@ -291,9 +291,9 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
               return Center(child: CircularProgressIndicator());
             } else {
               print("SNAP RECEIVED");
-              PriceModel price0;
+              PriceModel? price0;
               price0 = snapshot.data;
-              print(model.vote.subVotes[idx].voteChoices[1].toString());
+              print(model.vote!.subVotes![idx].voteChoices![1].toString());
               return Stack(children: <Widget>[
                 Row(
                   children: <Widget>[
@@ -302,7 +302,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                       child: Stack(children: <Widget>[
                         Container(
                           // width: 150,
-                          height: deviceHeight * .17,
+                          height: deviceHeight! * .17,
                           decoration: BoxDecoration(
                             color: Color(0xFFFF3E3E),
                             border: Border(
@@ -332,7 +332,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(12, 12, 0, 0),
                           child: Text(
-                            model.vote.subVotes[idx].voteChoices[0] +
+                            model.vote!.subVotes![idx].voteChoices![0] +
                                 " ${(formatVotePct.format(vote0Percentage)).toString()}",
                             style: TextStyle(
                               fontSize: 16,
@@ -401,7 +401,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                         Container(
                           // 종목2
                           // width: 150,
-                          height: deviceHeight * .17,
+                          height: deviceHeight! * .17,
                           decoration: BoxDecoration(
                             color: Color(0xFF3485FF),
                             border: Border(
@@ -431,7 +431,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(12, 12, 0, 0),
                           child: Text(
-                            model.vote.subVotes[idx].voteChoices[1] +
+                            model.vote!.subVotes![idx].voteChoices![1] +
                                 " ${(formatVotePct.format(vote1Percentage)).toString()}",
                             style: TextStyle(
                               fontSize: 16,
@@ -498,8 +498,8 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                 // vs or 가운데 수익률 마크
                 Positioned(
                     // 기기width에서 padding 빼고 vote0이 차지하는 비중 곱한 뒤 vs위젯 width의 절반을 마이너스 offset
-                    left: (deviceWidth - 32) * vote0Percentage - 40,
-                    top: (deviceHeight * .17 / 2) - 20,
+                    left: (deviceWidth! - 32) * vote0Percentage - 40,
+                    top: (deviceHeight! * .17 / 2) - 20,
                     child: Container(
                       alignment: Alignment.center,
                       width: 80,
@@ -510,10 +510,10 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                             40,
                           )),
                       child: Text(
-                          " ${(formatReturnPct.format(price0.pricePctChange)).toString()}",
+                          " ${(formatReturnPct.format(price0!.pricePctChange)).toString()}",
                           style: TextStyle(
                             fontSize: 16,
-                            color: price0.pricePctChange < 0
+                            color: price0.pricePctChange! < 0
                                 ? Color(0xFF3485FF)
                                 : Color(0xFFFF3E3E),
                             fontWeight: FontWeight.bold,
@@ -525,25 +525,25 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
     } else {
       return StreamBuilder<PriceModel>(
           stream: model.getRealtimePrice(
-            model.address,
-            model.vote.subVotes[idx].issueCode[0],
+            model.address!,
+            model.vote!.subVotes![idx].issueCode![0],
           ),
           builder: (context, snapshot0) {
             if (snapshot0.data == null) {
               return Center(child: CircularProgressIndicator());
             } else {
-              PriceModel price0;
+              PriceModel? price0;
               price0 = snapshot0.data;
               return StreamBuilder<PriceModel>(
                   stream: model.getRealtimePrice(
-                    model.address,
-                    model.vote.subVotes[idx].issueCode[1],
+                    model.address!,
+                    model.vote!.subVotes![idx].issueCode![1],
                   ),
                   builder: (context, snapshot1) {
                     if (snapshot1.data == null) {
                       return Center(child: CircularProgressIndicator());
                     } else {
-                      PriceModel price1;
+                      PriceModel? price1;
                       price1 = snapshot1.data;
                       return Stack(children: <Widget>[
                         Row(
@@ -553,13 +553,13 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                               child: Stack(children: <Widget>[
                                 Container(
                                   // width: 150,
-                                  height: deviceHeight * .17,
+                                  height: deviceHeight! * .17,
                                   decoration: BoxDecoration(
                                     color: length == 1
                                         ? Color(0xFFFF3E3E)
                                         : hexToColor(
-                                            model.vote.subVotes[idx]
-                                                .colorCode[0],
+                                            model.vote!.subVotes![idx]
+                                                .colorCode![0],
                                           ),
                                     border: Border(
                                       left: BorderSide(
@@ -589,7 +589,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                   padding:
                                       const EdgeInsets.fromLTRB(12, 12, 0, 0),
                                   child: Text(
-                                    model.vote.subVotes[idx].voteChoices[0] +
+                                    model.vote!.subVotes![idx].voteChoices![0] +
                                         " ${(formatVotePct.format(vote0Percentage)).toString()}",
                                     style: TextStyle(
                                         fontSize: 16,
@@ -598,7 +598,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                 ),
                                 Container(
                                   // 종목 1
-                                  height: deviceHeight * .17,
+                                  height: deviceHeight! * .17,
                                   child: Align(
                                     alignment: Alignment.bottomRight,
                                     child: Padding(
@@ -618,14 +618,15 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                         child: Container(
                                           padding: EdgeInsets.all(6),
                                           decoration: BoxDecoration(
-                                              color: (price0.pricePctChange < 0)
-                                                  ? Color(0xFF3485FF)
-                                                  : Colors.red,
+                                              color:
+                                                  (price0!.pricePctChange! < 0)
+                                                      ? Color(0xFF3485FF)
+                                                      : Colors.red,
                                               borderRadius:
                                                   BorderRadius.circular(
                                                 30,
                                               )),
-                                          child: price0.pricePctChange < 0
+                                          child: price0.pricePctChange! < 0
                                               ? Text(
                                                   formatReturnPct
                                                       .format(
@@ -660,13 +661,13 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                 Container(
                                   // 종목2
                                   // width: 150,
-                                  height: deviceHeight * .17,
+                                  height: deviceHeight! * .17,
                                   decoration: BoxDecoration(
                                     color: length == 1
                                         ? Color(0xFF3485FF)
                                         : hexToColor(
-                                            model.vote.subVotes[idx]
-                                                .colorCode[1],
+                                            model.vote!.subVotes![idx]
+                                                .colorCode![1],
                                           ),
                                     border: Border(
                                       left: BorderSide(
@@ -696,7 +697,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                   padding:
                                       const EdgeInsets.fromLTRB(12, 12, 0, 0),
                                   child: Text(
-                                    model.vote.subVotes[idx].voteChoices[1] +
+                                    model.vote!.subVotes![idx].voteChoices![1] +
                                         " ${(formatVotePct.format(vote1Percentage)).toString()}",
                                     style: TextStyle(
                                         fontSize: 16,
@@ -704,7 +705,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                   ),
                                 ),
                                 Container(
-                                  height: deviceHeight * .17,
+                                  height: deviceHeight! * .17,
                                   child: Align(
                                     alignment: Alignment.bottomRight,
                                     child: Padding(
@@ -724,14 +725,15 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                         child: Container(
                                           padding: EdgeInsets.all(6),
                                           decoration: BoxDecoration(
-                                              color: (price1.pricePctChange < 0)
-                                                  ? Color(0xFF3485FF)
-                                                  : Colors.red,
+                                              color:
+                                                  (price1!.pricePctChange! < 0)
+                                                      ? Color(0xFF3485FF)
+                                                      : Colors.red,
                                               borderRadius:
                                                   BorderRadius.circular(
                                                 30,
                                               )),
-                                          child: price1.pricePctChange < 0
+                                          child: price1.pricePctChange! < 0
                                               ? Text(
                                                   formatReturnPct
                                                       .format(
@@ -766,8 +768,9 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                         (length == 1)
                             ? Positioned(
                                 // 기기width에서 padding 빼고 vote0이 차지하는 비중 곱한 뒤 vs위젯 width의 절반을 마이너스 offset
-                                left: (deviceWidth - 32) * vote0Percentage - 20,
-                                top: (deviceHeight * .17 / 2) - 20,
+                                left:
+                                    (deviceWidth! - 32) * vote0Percentage - 20,
+                                top: (deviceHeight! * .17 / 2) - 20,
                                 child: Container(
                                   alignment: Alignment.center,
                                   width: 40,
@@ -777,7 +780,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                       borderRadius: BorderRadius.circular(
                                         40,
                                       )),
-                                  child: price0.pricePctChange < 0
+                                  child: price0.pricePctChange! < 0
                                       ? Text(
                                           formatReturnPct
                                               .format(price0.pricePctChange)
@@ -800,8 +803,9 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                 ))
                             : Positioned(
                                 // 기기width에서 padding 빼고 vote0이 차지하는 비중 곱한 뒤 vs위젯 width의 절반을 마이너스 offset
-                                left: (deviceWidth - 32) * vote0Percentage - 20,
-                                top: (deviceHeight * .17 / 2) - 20,
+                                left:
+                                    (deviceWidth! - 32) * vote0Percentage - 20,
+                                top: (deviceHeight! * .17 / 2) - 20,
                                 child: Container(
                                   alignment: Alignment.center,
                                   width: 40,
@@ -830,13 +834,13 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
     SeasonCommunityViewModel model,
   ) {
     return StreamBuilder<List<VoteCommentModel>>(
-        stream: model.getPost(model.address),
+        stream: model.getPost(model.address!),
         builder: (context, snapshot) {
-          List<VoteCommentModel> beforeCommentList = snapshot.data;
+          List<VoteCommentModel>? beforeCommentList = snapshot.data;
 
           if (snapshot.data == null) {
             return Container();
-          } else if (snapshot.data.length == 0) {
+          } else if (snapshot.data!.length == 0) {
             return Center(
               child: Text(
                 "아직 의견이 없습니다.\n ${model.user.userName}님이 첫 번째 의견을 나눠보세요.",
@@ -850,10 +854,10 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
               ),
             );
           } else {
-            List<dynamic> blockList = model.user.blockList;
+            List<dynamic>? blockList = model.user.blockList;
             List<VoteCommentModel> commentList = [];
             if (blockList != null) {
-              for (int i = 0; i < beforeCommentList.length; i++) {
+              for (int i = 0; i < beforeCommentList!.length; i++) {
                 if (blockList.contains(beforeCommentList[i].uid)) {
                   print("NOT Contain");
                 } else {
@@ -879,6 +883,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                       }));
             }
           }
+          return Container();
         });
   }
 
@@ -892,10 +897,10 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
 
     now = DateTime.now();
 
-    bool isPostLiked = voteComment.likedBy.contains(model.uid);
-    Duration timeElapsed = now.difference(voteComment.postDateTime.toDate());
+    bool isPostLiked = voteComment.likedBy!.contains(model.uid);
+    Duration timeElapsed = now.difference(voteComment.postDateTime!.toDate());
 
-    print(voteComment.likedBy.contains(model.uid));
+    print(voteComment.likedBy!.contains(model.uid));
     print(voteComment.likedBy.toString());
     // likedBy에 있으면 true
     // isPostLiked = voteComment.likedBy.contains(model.uid);
@@ -920,7 +925,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                       future: model.getAvatar(voteComment.uid),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          String _avatar = snapshot.data;
+                          String? _avatar = snapshot.data.toString();
                           print("FutureBUilder" + snapshot.data.toString());
                           return Container(
                               height: 40,
@@ -940,7 +945,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(voteComment.userName,
+                      Text(voteComment.userName!,
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
@@ -980,7 +985,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                         countPostion: CountPostion.right,
                         likeCount: voteComment.likedBy == null
                             ? 0
-                            : voteComment.likedBy.length,
+                            : voteComment.likedBy!.length,
                         likeCountAnimationType: LikeCountAnimationType.all,
                         onTap: (isPostLiked) async {
                           Future.delayed(const Duration(milliseconds: 500), () {
@@ -1008,7 +1013,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                       voteComment.uid == model.uid
                           ? GestureDetector(
                               onTap: () {
-                                print(model.address.postsSeasonCollection());
+                                print(model.address!.postsSeasonCollection());
                                 print(voteComment.postUid);
                                 showDialog(
                                   context: context,
@@ -1031,7 +1036,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                                   onPressed: () {
                                                     Navigator.pop(context);
                                                     model.deleteComment(
-                                                        model.address,
+                                                        model.address!,
                                                         voteComment.postUid);
                                                     // model.logout();
                                                   },
@@ -1053,7 +1058,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
                                                     Navigator.pop(context);
 
                                                     model.deleteComment(
-                                                        model.address,
+                                                        model.address!,
                                                         voteComment.postUid);
                                                     // model.logout();
                                                     // model.logout();
@@ -1164,7 +1169,7 @@ class _SeasonCommunityViewState extends State<SeasonCommunityView> {
         Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              voteComment.postText,
+              voteComment.postText!,
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 16.sp,

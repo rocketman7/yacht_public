@@ -14,23 +14,23 @@ import '../services/navigation_service.dart';
 import 'base_model.dart';
 
 class GgookViewModel extends BaseViewModel {
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final AuthService _authService = locator<AuthService>();
-  final StateManageService _stateManageService = locator<StateManageService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  final AuthService? _authService = locator<AuthService>();
+  final StateManageService? _stateManageService = locator<StateManageService>();
 
-  DatabaseAddressModel _address;
-  String uid;
+  DatabaseAddressModel? _address;
+  String? uid;
 
   GgookViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   Future addUserVoteDB(
     DatabaseAddressModel address,
     UserVoteModel userVote,
   ) async {
-    await _databaseService.addUserVote(address, userVote);
-    await _stateManageService.userVoteModelUpdate();
+    await _databaseService!.addUserVote(address, userVote);
+    await _stateManageService!.userVoteModelUpdate();
     print("FUTURE CALLED");
   }
 
@@ -40,24 +40,24 @@ class GgookViewModel extends BaseViewModel {
   // }
 
   Future decreaseUserItem() async {
-    await _databaseService.decreaseUserItem(uid);
-    await _stateManageService.userModelUpdate();
+    await _databaseService!.decreaseUserItem(uid);
+    await _stateManageService!.userModelUpdate();
   }
 
 // subVote DB의 numVoted 업데이트
   Future counterUserVote(
-    DatabaseAddressModel address,
+    DatabaseAddressModel? address,
     List<int> voteSelected,
   ) async {
-    await _databaseService.countUserVote(address, voteSelected);
+    await _databaseService!.countUserVote(address, voteSelected);
   }
 
-  Future<DatabaseAddressModel> getAddress() async {
-    _address = await _databaseService.getAddress(uid);
+  Future<DatabaseAddressModel?> getAddress() async {
+    _address = await _databaseService!.getAddress(uid);
     return _address;
   }
 
-  Future checkIfVotingTime(String category) async {
+  Future checkIfVotingTime(String? category) async {
     // DateTime now = await CustomizedNTP.now();
     DateTime now = DateTime.now();
     return DateTimeModel().isVoteAvailable(category, now);

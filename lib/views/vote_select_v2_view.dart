@@ -4,16 +4,17 @@ import 'dart:io';
 import 'package:align_positioned/align_positioned.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_admob/flutter_native_admob.dart';
-import 'package:flutter_native_admob/native_admob_controller.dart';
-import 'package:flutter_native_admob/native_admob_options.dart';
+// import 'package:flutter_native_admob/flutter_native_admob.dart';
+// import 'package:flutter_native_admob/native_admob_controller.dart';
+// import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:get/get.dart';
 
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
-import 'package:tutorial_coach_mark/custom_target_position.dart';
+// import 'package:tutorial_coach_mark/custom_target_position.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/models/sharedPreferences_const.dart';
 import 'package:yachtOne/services/amplitude_service.dart';
@@ -36,7 +37,7 @@ import 'package:intl/intl.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:stacked/stacked.dart';
 import 'package:bubble/bubble.dart';
-import 'package:tutorial_coach_mark/animated_focus_light.dart';
+// import 'package:tutorial_coach_mark/animated_focus_light.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/models/price_model.dart';
@@ -65,7 +66,7 @@ import '../views/widgets/vote_selected_widget.dart';
 import 'chart_view.dart';
 
 import '../services/adManager_service.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+// import 'package:firebase_admob/firebase_admob.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:confetti/confetti.dart';
@@ -81,35 +82,35 @@ class VoteSelectV2View extends StatefulWidget {
 
 class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     with SingleTickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
   final VoteSelectViewModel _viewModel = VoteSelectViewModel();
-  final TimezoneService _timezoneService = locator<TimezoneService>();
+  final TimezoneService? _timezoneService = locator<TimezoneService>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
 
-  String uid;
+  String? uid;
 
   // PreloadPageController _preloadPageController = PreloadPageController();
-  ConfettiController _confettiController;
+  late ConfettiController _confettiController;
   // double leftContainer = 0;
-  final NativeAdmobController _nativeAdController = NativeAdmobController();
+  // final NativeAdmobController _nativeAdController = NativeAdmobController();
 
   // 최종 선택한 주제 index
   List<int> listSelected = [];
   List<String> timeLeftArr = ["", "", ""]; // 시간, 분, 초 array
 
-  Timer _timer;
+  Timer? _timer;
 
-  DateTime _now;
+  DateTime? _now;
   var stringDate = DateFormat("yyyyMMdd");
   var stringDateWithDash = DateFormat("yyyy-MM-dd");
-  String _nowToStr;
+  String? _nowToStr;
 
   bool isDisposed = false;
-  bool isVoteAvailable;
+  bool? isVoteAvailable;
 
   int numSelected = 0;
   bool canSelect = true;
@@ -118,9 +119,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   //애니메이션은 천천히 생각해보자.
 
   //튜토리얼 관련된 애들
-  TutorialCoachMark tutorialCoachMark;
-  List<TargetFocus> targetsIsVoting = List();
-  List<TargetFocus> targetsIsNotVoting = List();
+  TutorialCoachMark? tutorialCoachMark;
+  List<TargetFocus> targetsIsVoting = [];
+  List<TargetFocus> targetsIsNotVoting = [];
 
   GlobalKey tutorialKey1 = GlobalKey();
   GlobalKey tutorialKey2 = GlobalKey();
@@ -135,8 +136,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         identify: 'tutorial target 1',
         keyTarget: tutorialKey1,
         contents: [
-          ContentTarget(
-              align: AlignContent.bottom,
+          TargetContent(
+              align: ContentAlign.bottom,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -168,8 +169,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         identify: 'tutorial target 2',
         keyTarget: tutorialKey2,
         contents: [
-          ContentTarget(
-              align: AlignContent.bottom,
+          TargetContent(
+              align: ContentAlign.bottom,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -201,8 +202,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         identify: 'tutorial target 3',
         keyTarget: tutorialKey3,
         contents: [
-          ContentTarget(
-              align: AlignContent.top,
+          TargetContent(
+              align: ContentAlign.top,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -234,8 +235,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         identify: 'tutorial target 4',
         keyTarget: tutorialKey4,
         contents: [
-          ContentTarget(
-              align: AlignContent.top,
+          TargetContent(
+              align: ContentAlign.top,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -257,8 +258,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                   ],
                 ),
               )),
-          ContentTarget(
-              align: AlignContent.bottom,
+          TargetContent(
+              align: ContentAlign.bottom,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -282,8 +283,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         identify: 'tutorial target 5',
         keyTarget: tutorialKey5,
         contents: [
-          ContentTarget(
-              align: AlignContent.bottom,
+          TargetContent(
+              align: ContentAlign.bottom,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -315,8 +316,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         identify: 'tutorial target 6',
         keyTarget: tutorialKey6,
         contents: [
-          ContentTarget(
-              align: AlignContent.left,
+          TargetContent(
+              align: ContentAlign.left,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -362,13 +363,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         textSkip: "도움말 종료하기",
         opacityShadow: 0.95, onFinish: () {
       print("finish");
-      _sharedPreferencesService.setSharedPreferencesValue(
-          voteSelectTutorialKey, true);
+      _sharedPreferencesService!
+          .setSharedPreferencesValue(voteSelectTutorialKey, true);
       renewTutorialKey();
-    }, onClickSkip: () async {
+    }, onSkip: () async {
       print("skip");
-      _sharedPreferencesService.setSharedPreferencesValue(
-          voteSelectTutorialKey, true);
+      _sharedPreferencesService!
+          .setSharedPreferencesValue(voteSelectTutorialKey, true);
       renewTutorialKey();
     })
       ..show();
@@ -386,13 +387,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         textSkip: "도움말 종료하기",
         opacityShadow: 0.95, onFinish: () {
       print("finish");
-      _sharedPreferencesService.setSharedPreferencesValue(
-          voteSelectTutorialKey, true);
+      _sharedPreferencesService!
+          .setSharedPreferencesValue(voteSelectTutorialKey, true);
       renewTutorialKey();
-    }, onClickSkip: () {
+    }, onSkip: () {
       print("skip");
-      _sharedPreferencesService.setSharedPreferencesValue(
-          voteSelectTutorialKey, true);
+      _sharedPreferencesService!
+          .setSharedPreferencesValue(voteSelectTutorialKey, true);
       renewTutorialKey();
     })
       ..show();
@@ -406,8 +407,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
 
   bool tutorialKeyCheck = false;
   Future<void> renewTutorialKey() async {
-    tutorialKeyCheck = await _sharedPreferencesService
-        .getSharedPreferencesValue(voteSelectTutorialKey, bool);
+    tutorialKeyCheck = await (_sharedPreferencesService!
+            .getSharedPreferencesValue(voteSelectTutorialKey, bool)
+        as FutureOr<bool>);
   }
   // voteData를 가져와 voteTodayCard에 넣어 위젯 리스트를 만드는 함수
   // void getVoteTodayWidget(VoteModel votesToday) {
@@ -462,7 +464,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     }
   }
 
-  FToast fToast;
+  late FToast fToast;
 
   _showToast(String message) {
     Widget toast = Container(
@@ -600,21 +602,21 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     print("initState Done");
   }
 
-  String app_store_url;
-  String play_store_url;
+  late String app_store_url;
+  late String play_store_url;
   bool isSeasonStarted = true;
   bool isUrgentNotice = false;
   String urgentMessage = "";
-  bool termsOfUse;
-  String defaultMainText;
+  bool? termsOfUse;
+  String? defaultMainText;
   bool isShowWinners = false;
-  String dialogOldSeason;
-  String dialogNewSeason;
-  String dialogNewSeasonStart;
+  late String dialogOldSeason;
+  late String dialogNewSeason;
+  String? dialogNewSeasonStart;
 
   checkIfAgreeTerms(context) async {
-    termsOfUse = await _sharedPreferencesService.getSharedPreferencesValue(
-        termsOfUseKey, bool);
+    termsOfUse = await (_sharedPreferencesService!
+        .getSharedPreferencesValue(termsOfUseKey, bool) as FutureOr<bool?>);
     if (termsOfUse == false) {
       _showTermsDialog(context);
     }
@@ -633,25 +635,25 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         String message = "꾸욱을 계속 이용하기 위해서 업데이트가 필요합니다. 감사합니다.";
         String btnLabel = "수락";
         String btnLabelCancel = "거부";
-        String _termsOfUse;
+        String? _termsOfUse;
         ;
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
           child: WillPopScope(
-              onWillPop: () {},
+              onWillPop: () {} as Future<bool> Function()?,
               child: CupertinoAlertDialog(
                 title: Text(title),
                 content: FutureBuilder(
                     future: _termsOfUseFuture(),
                     builder: (context, snapshot) {
-                      _termsOfUse = snapshot.data;
+                      _termsOfUse = snapshot.data.toString();
                       if (snapshot.hasData) {
                         return Container(
                           height: 400,
                           width: 180,
                           child: SingleChildScrollView(
                               child: Text(
-                            _termsOfUse,
+                            _termsOfUse!,
                             textAlign: TextAlign.left,
                           )),
                         );
@@ -670,8 +672,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                   CupertinoDialogAction(
                     child: Text(btnLabel),
                     onPressed: () {
-                      _sharedPreferencesService.setSharedPreferencesValue(
-                          termsOfUseKey, true);
+                      _sharedPreferencesService!
+                          .setSharedPreferencesValue(termsOfUseKey, true);
                       Navigator.pop(context);
                     },
                   ),
@@ -690,12 +692,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     print("CURRENT VERSION IS " + currentVersion.toString());
 
     //Get Latest version info from firebase config
-    final RemoteConfig remoteConfig = await RemoteConfig.instance;
+    final RemoteConfig remoteConfig = RemoteConfig.instance;
 
     try {
       // Using default duration to force fetching from remote server.
-      await remoteConfig.fetch(expiration: const Duration(seconds: 0));
-      await remoteConfig.activateFetched();
+      await remoteConfig.fetch();
+      await remoteConfig.activate();
       // remoteConfig.getString('force_update_current_version');
       double newVersion = double.parse(remoteConfig
           .getString('force_update_current_version')
@@ -741,7 +743,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
       if (isShowWinners) {
         showWinnerDialog(context);
       }
-    } on FetchThrottledException catch (exception) {
+    } on FirebaseException catch (exception) {
       // Fetch throttled.
       print(exception);
     } catch (exception) {
@@ -822,7 +824,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         ? dialogOldSeason +
                                             " 종료일 다음날" +
                                             " 오후 4시"
-                                        : dialogNewSeasonStart + "오후 4시",
+                                        : dialogNewSeasonStart! + "오후 4시",
                                     style: TextStyle(
                                       fontFamily: 'AppleSDM',
                                       color: Colors.red,
@@ -873,11 +875,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                               void popAndNavigate(_) {
                                 Future.delayed(Duration(milliseconds: 100), () {
                                   Navigator.pop(context);
-                                  _navigationService.navigateTo('winner');
+                                  _navigationService!.navigateTo('winner');
                                 });
                               }
 
-                              WidgetsBinding.instance
+                              WidgetsBinding.instance!
                                   .addPostFrameCallback(popAndNavigate);
                               // Navigator.pop(context);
                               // _navigationService.navigateTo('winner');
@@ -924,7 +926,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: WillPopScope(
-              onWillPop: () {},
+              onWillPop: () {} as Future<bool> Function()?,
               child: Platform.isIOS
                   ? CupertinoAlertDialog(
                       title: Text(title),
@@ -961,7 +963,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
           child: WillPopScope(
-            onWillPop: () {},
+            onWillPop: () {} as Future<bool> Function()?,
             child: Platform.isIOS
                 ? new CupertinoAlertDialog(
                     title: Text(title),
@@ -1010,8 +1012,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     }
   }
 
-  AnimationController _controller;
-  Animation<Color> animation;
+  AnimationController? _controller;
+  Animation<Color>? animation;
 
   // final colors = <Tween<Color>>[
   //   ColorTween(begin: Colors.red, end: Colors.blue),
@@ -1094,13 +1096,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   //   // return true;
   // }
 
-  SharedPreferencesService _sharedPreferencesService =
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
   var formatKoreanDate = DateFormat('MM' + "월" + " " + "dd" + "일");
-  DateTime currentBackPressTime;
+  DateTime? currentBackPressTime;
   Future<bool> _onWillPop() async {
     if (currentBackPressTime == null ||
-        DateTime.now().difference(currentBackPressTime) >
+        DateTime.now().difference(currentBackPressTime!) >
             Duration(seconds: 2)) {
       currentBackPressTime = DateTime.now();
       Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
@@ -1137,7 +1139,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
             child: Stack(
               children: [
                 Positioned(
-                  top: deviceHeight / 2 - 100,
+                  top: deviceHeight! / 2 - 100,
                   child: Container(
                     height: 100,
                     width: deviceWidth,
@@ -1152,7 +1154,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
             ),
           ));
         } else {
-          numSelected = model.selected.where((item) => item == true).length;
+          numSelected = model.selected!.where((item) => item == true).length;
           print("IS VOTING ?? " + isVoting.toString());
 
           // Duration diff = getTimeLeft(model).inSeconds < 0
@@ -1171,16 +1173,18 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
           print('model.voteSelectTutorial is ...' +
               model.voteSelectTutorial.toString());
           if (!model.voteSelectTutorial && !tutorialKeyCheck) {
-            model.address.isVoting
-                ? WidgetsBinding.instance
+            model.address!.isVoting!
+                ? WidgetsBinding.instance!
                     .addPostFrameCallback(_afterLayoutIsVoting)
-                : WidgetsBinding.instance
+                : WidgetsBinding.instance!
                     .addPostFrameCallback(_afterLayoutIsNotVoting);
           }
           return Scaffold(
             backgroundColor:
                 // model.address.isVoting ? Color(0xFF1EC8CF) : animation.value,
-                model.address.isVoting ? Color(0xFF1EC8CF) : Color(0xFFB90FD0),
+                model.address!.isVoting!
+                    ? Color(0xFF1EC8CF)
+                    : Color(0xFFB90FD0),
 
             key: _scaffoldKey,
             // endDrawer: myPage(model),
@@ -1233,9 +1237,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     GestureDetector(
                                       onTap: () async {
                                         // 배포할 때 주석풀기
-                                        _mixpanelService.mixpanel
+                                        _mixpanelService!.mixpanel
                                             .track('Home Tutorial View');
-                                        model.address.isVoting
+                                        model.address!.isVoting!
                                             ? showTutorialIsVoting()
                                             : showTutorialIsNotVoting(); // 여기까지 주석풀기
 
@@ -1290,7 +1294,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     GestureDetector(
                                       key: tutorialKey6,
                                       onTap: () {
-                                        _mixpanelService.mixpanel
+                                        _mixpanelService!.mixpanel
                                             .track('MyPage View');
                                         // print('open drawer');
                                         // scaffoldKey.currentState
@@ -1310,7 +1314,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           // Icons.settings_rounded,
                                           // key: keyButton1,
                                           Icons.dehaze_rounded,
-                                          color: model.address.isVoting
+                                          color: model.address!.isVoting!
                                               ? Colors.black
                                               : Color(0xFFDEDEDE),
                                           // size: 32.sp,
@@ -1323,7 +1327,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        _mixpanelService.mixpanel
+                                        _mixpanelService!.mixpanel
                                             .track('Notification View');
                                         // mixpanel.track('Sent Message');
                                         Navigator.push(
@@ -1347,7 +1351,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             alignment: Alignment.centerRight,
                                             child: Icon(
                                               Icons.notifications_outlined,
-                                              color: model.address.isVoting
+                                              color: model.address!.isVoting!
                                                   ? Colors.black
                                                   // .withOpacity(0.7)
                                                   : Color(0xFFDEDEDE),
@@ -1537,7 +1541,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             color: Color(0xFFFFDE34),
                                           ),
                                           child: Text(
-                                            model.seasonInfo.seasonName,
+                                            model.seasonInfo!.seasonName!,
                                             style: TextStyle(
                                               fontFamily: 'AppleSDB',
                                               fontSize: 16,
@@ -1553,7 +1557,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           style: TextStyle(
                                             fontFamily: 'AppleSDB',
                                             fontSize: 18,
-                                            color: model.address.isVoting
+                                            color: model.address!.isVoting!
                                                 ? Colors.black
                                                 : Colors.white,
                                             letterSpacing: -.5,
@@ -1567,9 +1571,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     GestureDetector(
                                       key: tutorialKey2,
                                       onTap: () {
-                                        _mixpanelService.mixpanel
+                                        _mixpanelService!.mixpanel
                                             .track('Portfolio View - Home');
-                                        _navigationService
+                                        _navigationService!
                                             .navigateTo('portfolio');
                                       },
                                       child: Row(
@@ -1586,7 +1590,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             style: TextStyle(
                                               fontFamily: 'DmSans',
                                               fontSize: 42.sp,
-                                              color: model.address.isVoting
+                                              color: model.address!.isVoting!
                                                   ? Colors.black
                                                   : Colors.white,
                                               // height: 1,
@@ -1599,7 +1603,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             style: TextStyle(
                                               fontFamily: 'AppleSDB',
                                               fontSize: 42.sp,
-                                              color: model.address.isVoting
+                                              color: model.address!.isVoting!
                                                   ? Colors.black
                                                   : Colors.white,
                                               // height: 1,
@@ -1608,7 +1612,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           ),
                                           Icon(
                                             Icons.arrow_forward_ios,
-                                            color: model.address.isVoting
+                                            color: model.address!.isVoting!
                                                 ? Colors.black.withOpacity(.7)
                                                 : Color(0xFFDEDEDE),
                                             size: 30,
@@ -1639,12 +1643,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     //   ),
                                     // ),
                                     Text(
-                                      "우승까지 승점 ${(model.seasonInfo.winningPoint - (model.userVote.userVoteStats.currentWinPoint ?? 0)).toString()}점",
+                                      "우승까지 승점 ${(model.seasonInfo!.winningPoint! - (model.userVote!.userVoteStats!.currentWinPoint ?? 0)).toString()}점",
                                       key: tutorialKey1,
                                       style: TextStyle(
                                         fontFamily: 'AppleSDB',
                                         fontSize: 18,
-                                        color: model.address.isVoting
+                                        color: model.address!.isVoting!
                                             ? Colors.black.withOpacity(.6)
                                             : Color(0xFFDEDEDE),
                                         letterSpacing: -.5,
@@ -1660,9 +1664,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           } else {
                                             return GestureDetector(
                                                 onTap: () {
-                                                  _mixpanelService.mixpanel
+                                                  _mixpanelService!.mixpanel
                                                       .track('Lunchtime Event');
-                                                  _navigationService
+                                                  _navigationService!
                                                       .navigateWithArgTo(
                                                           'lunchtime',
                                                           snapshot.data);
@@ -1919,14 +1923,14 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         children: [
                                           Text(
                                             // "11월 14일의 예측주제",
-                                            model.address.isVoting
+                                            model.address!.isVoting!
                                                 ? formatKoreanDate.format(
                                                         strToDate(model
-                                                            .vote.voteDate)) +
+                                                            .vote!.voteDate!)) +
                                                     "의 예측 주제"
                                                 : formatKoreanDate.format(
                                                     strToDate(
-                                                        model.vote.voteDate)),
+                                                        model.vote!.voteDate!)),
                                             style: TextStyle(
                                               fontFamily: 'AppleSDEB',
                                               fontSize: 22.sp,
@@ -1936,7 +1940,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             ),
                                           ),
                                           SizedBox(width: 8),
-                                          model.address.isVoting
+                                          model.address!.isVoting!
                                               ? Container()
                                               : Container(
                                                   padding: EdgeInsets.symmetric(
@@ -1967,7 +1971,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         key: tutorialKey5,
                                         // 광고 활성화 해야 함
                                         onTap: () {
-                                          model.user.rewardedCnt < 5
+                                          model.user!.rewardedCnt! < 5
                                               ? rewardedAdsLoaded
                                                   ? showAdsDialog(
                                                       context, model)
@@ -1997,9 +2001,9 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             ),
                                             SizedBox(width: 4.w),
                                             Text(
-                                              (model.user.item == null)
+                                              (model.user!.item == null)
                                                   ? 0.toString()
-                                                  : (model.user.item -
+                                                  : (model.user!.item! -
                                                           numSelected)
                                                       .toString(),
                                               style: TextStyle(
@@ -2024,7 +2028,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     children: [
                                       Row(
                                         children: [
-                                          model.address.isVoting
+                                          model.address!.isVoting!
                                               ? Text(
                                                   "예측 마감까지",
                                                   style: TextStyle(
@@ -2053,10 +2057,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           TopContainer(model, checkVoteTime),
                                         ],
                                       ),
-                                      model.address.isVoting
+                                      model.address!.isVoting!
                                           ? GestureDetector(
                                               onTap: () {
-                                                model.user.rewardedCnt < 5
+                                                model.user!.rewardedCnt! < 5
                                                     ? rewardedAdsLoaded
                                                         ? showAdsDialog(
                                                             context, model)
@@ -2079,7 +2083,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             )
                                           : GestureDetector(
                                               onTap: () {
-                                                model.userVote.voteSelected ==
+                                                model.userVote!.voteSelected ==
                                                         null
                                                     ? _showToast(
                                                         "오늘 예측을 잊으셨군요.\n오후 4시부터 새로운 예측에 꾸~욱 참여해주세요!")
@@ -2135,7 +2139,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     child: ListView.builder(
                                         // physics: NeverScrollableScrollPhysics(),
                                         // itemCount: model.vote.voteCount,
-                                        itemCount: model.vote.voteCount +
+                                        itemCount: model.vote!.voteCount! +
                                             1, // 네이티브광고 위해 하나 더
                                         itemBuilder: (context, index) {
                                           return Column(
@@ -2144,7 +2148,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
-                                              index != model.vote.voteCount
+                                              index != model.vote!.voteCount
                                                   ? buildStack(
                                                       model,
                                                       index,
@@ -2155,72 +2159,72 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                     )
                                                   : Container(
                                                       height: 80,
-                                                      child: NativeAdmob(
-                                                          loading: Container(),
-                                                          error: Container(),
-                                                          adUnitID: AdManager
-                                                              .nativeAdUnitId,
-                                                          numberAds: 1,
-                                                          controller:
-                                                              _nativeAdController,
-                                                          options:
-                                                              NativeAdmobOptions(
-                                                            //Ad 스타일
-                                                            adLabelTextStyle:
-                                                                NativeTextStyle(
-                                                              fontSize: 12.sp,
-                                                              color:
-                                                                  Colors.white,
-                                                              backgroundColor: model
-                                                                      .address
-                                                                      .isVoting
-                                                                  ? Color(
-                                                                      0xFF1EC8CF)
-                                                                  : Color(
-                                                                      0xFFB90FD0),
-                                                            ),
-                                                            //광고 헤드라인 텍스트 스타일
-                                                            headlineTextStyle:
-                                                                NativeTextStyle(
-                                                              fontSize: 16.sp,
-                                                            ),
-                                                            //광고주 정보 텍스트 스타일
-                                                            advertiserTextStyle:
-                                                                NativeTextStyle(
-                                                              color: model
-                                                                      .address
-                                                                      .isVoting
-                                                                  ? Color(
-                                                                      0xFF1EC8CF)
-                                                                  : Color(
-                                                                      0xFFB90FD0),
-                                                            ),
-                                                            //본문 텍스트 스타일
-                                                            bodyTextStyle:
-                                                                NativeTextStyle(
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                            //링크 버튼 스타일
-                                                            callToActionStyle:
-                                                                NativeTextStyle(
-                                                              fontSize: 12.sp,
-                                                              color:
-                                                                  Colors.white,
-                                                              backgroundColor: model
-                                                                      .address
-                                                                      .isVoting
-                                                                  ? Color(
-                                                                      0xFF1EC8CF)
-                                                                  : Color(
-                                                                      0xFFB90FD0),
-                                                            ),
-                                                          ),
-                                                          // type: NativeAdmobType.full,
-                                                          type: NativeAdmobType
-                                                              .banner),
+                                                      // child: NativeAdmob(
+                                                      //     loading: Container(),
+                                                      //     error: Container(),
+                                                      //     adUnitID: AdManager
+                                                      //         .nativeAdUnitId,
+                                                      //     numberAds: 1,
+                                                      //     controller:
+                                                      //         _nativeAdController,
+                                                      //     options:
+                                                      //         NativeAdmobOptions(
+                                                      //       //Ad 스타일
+                                                      //       adLabelTextStyle:
+                                                      //           NativeTextStyle(
+                                                      //         fontSize: 12.sp,
+                                                      //         color:
+                                                      //             Colors.white,
+                                                      //         backgroundColor: model
+                                                      //                 .address
+                                                      //                 .isVoting
+                                                      //             ? Color(
+                                                      //                 0xFF1EC8CF)
+                                                      //             : Color(
+                                                      //                 0xFFB90FD0),
+                                                      //       ),
+                                                      //       //광고 헤드라인 텍스트 스타일
+                                                      //       headlineTextStyle:
+                                                      //           NativeTextStyle(
+                                                      //         fontSize: 16.sp,
+                                                      //       ),
+                                                      //       //광고주 정보 텍스트 스타일
+                                                      //       advertiserTextStyle:
+                                                      //           NativeTextStyle(
+                                                      //         color: model
+                                                      //                 .address
+                                                      //                 .isVoting
+                                                      //             ? Color(
+                                                      //                 0xFF1EC8CF)
+                                                      //             : Color(
+                                                      //                 0xFFB90FD0),
+                                                      //       ),
+                                                      //       //본문 텍스트 스타일
+                                                      //       bodyTextStyle:
+                                                      //           NativeTextStyle(
+                                                      //         color:
+                                                      //             Colors.grey,
+                                                      //       ),
+                                                      //       //링크 버튼 스타일
+                                                      //       callToActionStyle:
+                                                      //           NativeTextStyle(
+                                                      //         fontSize: 12.sp,
+                                                      //         color:
+                                                      //             Colors.white,
+                                                      //         backgroundColor: model
+                                                      //                 .address
+                                                      //                 .isVoting
+                                                      //             ? Color(
+                                                      //                 0xFF1EC8CF)
+                                                      //             : Color(
+                                                      //                 0xFFB90FD0),
+                                                      //       ),
+                                                      //     ),
+                                                      //     // type: NativeAdmobType.full,
+                                                      //     type: NativeAdmobType
+                                                      //         .banner),
                                                     ),
-                                              index == (model.vote.voteCount)
+                                              index == (model.vote!.voteCount)
                                                   // (model.vote.voteCount - 1)
                                                   ? Container(
                                                       height: 110,
@@ -2273,7 +2277,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                         // )),
                       ],
                     ),
-                    model.address.isVoting
+                    model.address!.isVoting!
                         ? Positioned(
                             bottom: 0,
                             left: 0,
@@ -2282,28 +2286,28 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                               onTap: ((numSelected == 0) ||
                                       (model.userVote == null
                                           ? false
-                                          : (model.address.isVoting == false)))
+                                          : (model.address!.isVoting == false)))
                                   ? () {}
                                   : () {
                                       listSelected = [];
                                       for (int i = 0;
-                                          i < model.selected.length;
+                                          i < model.selected!.length;
                                           i++) {
-                                        model.selected[i] == true
+                                        model.selected![i] == true
                                             ? listSelected.add(i)
                                             : 0;
-                                        model.userVote.voteSelected == null
-                                            ? model.userVote.voteSelected =
+                                        model.userVote!.voteSelected == null
+                                            ? model.userVote!.voteSelected =
                                                 List.generate(
-                                                    model.vote.voteCount,
+                                                    model.vote!.voteCount!,
                                                     (index) => 0)
-                                            : model.userVote.voteSelected =
-                                                model.userVote.voteSelected;
+                                            : model.userVote!.voteSelected =
+                                                model.userVote!.voteSelected;
                                       }
                                       print("Has Voted? " +
-                                          model.userVote.isVoted.toString());
+                                          model.userVote!.isVoted.toString());
                                       isSeasonStarted
-                                          ? model.userVote.isVoted
+                                          ? model.userVote!.isVoted!
                                               ? showGoToAdditionalGgookDialog(
                                                   context,
                                                   model,
@@ -2407,7 +2411,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                             ),
                           )
                         : Container(),
-                    model.address.isVoting
+                    model.address!.isVoting!
                         ? Positioned(
                             bottom: 55,
                             child: Container(
@@ -2418,7 +2422,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(4)),
-                                color: (model.address.isVoting == false)
+                                color: (model.address!.isVoting == false)
                                     ? Color(0xFFE41818)
                                     : numSelected == 0
                                         ? Color(0xFFFFDE34)
@@ -2430,14 +2434,14 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                     if (snapshot.data == null) {
                                       return Container();
                                     } else {
-                                      defaultMainText = snapshot.data;
+                                      defaultMainText =
+                                          snapshot.data.toString();
                                       return Text(
-                                          model.address.isVoting == false
+                                          model.address!.isVoting == false
                                               ? "오늘의 예측이 마감되었습니다."
                                               : numSelected == 0
-                                                  ? defaultMainText.replaceAll(
-                                                          "\\n", "\n") ??
-                                                      ""
+                                                  ? defaultMainText!
+                                                      .replaceAll("\\n", "\n")
                                                   : "선택한 주제 $numSelected개, 승점 ${numSelected * 2}점에 도전해보세요!",
                                           style: TextStyle(
                                             fontSize: numSelected == 0
@@ -2446,7 +2450,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             fontFamily: 'AppleSDB',
                                             // height: 1,
                                             // fontWeight: FontWeight.w500,
-                                            color: (model.address.isVoting ==
+                                            color: (model.address!.isVoting ==
                                                     false)
                                                 ? Colors.white
                                                 : numSelected == 0
@@ -2477,7 +2481,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         context: context,
         builder: (BuildContext context) {
           int alreadyVoted = 0;
-          model.userVote.voteSelected.forEach((element) {
+          model.userVote!.voteSelected!.forEach((element) {
             if (element != 0) {
               alreadyVoted++;
             }
@@ -2575,7 +2579,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                       Row(
                         children: [
                           FlatButton(
-                            minWidth: deviceWidth * .28,
+                            minWidth: deviceWidth! * .28,
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -2592,10 +2596,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                           Expanded(
                             child: RaisedButton(
                               onPressed: () {
-                                _mixpanelService.mixpanel
+                                _mixpanelService!.mixpanel
                                     .track('Go to Vote View');
                                 Navigator.pop(context);
-                                _navigationService.navigateWithArgTo(
+                                _navigationService!.navigateWithArgTo(
                                   'ggook',
                                   [
                                     model.address,
@@ -2683,7 +2687,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                       Row(
                         children: [
                           FlatButton(
-                            minWidth: deviceWidth * .28,
+                            minWidth: deviceWidth! * .28,
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -2701,7 +2705,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                             child: RaisedButton(
                               onPressed: () {
                                 Navigator.pop(context);
-                                _navigationService.navigateWithArgTo(
+                                _navigationService!.navigateWithArgTo(
                                   'ggook',
                                   [
                                     model.address,
@@ -2750,7 +2754,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                       Spacer(),
                       Text('오늘 얻은 꾸욱 아이템: '),
                       Text(
-                        '${model.user.rewardedCnt}',
+                        '${model.user!.rewardedCnt}',
                         style: TextStyle(color: Colors.red),
                       ),
                       Text('/5'),
@@ -2771,7 +2775,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                   child: Text('좋아요'),
                   onPressed: rewardedAdsLoaded
                       ? () {
-                          _mixpanelService.mixpanel.track('Ad View');
+                          _mixpanelService!.mixpanel.track('Ad View');
                           Navigator.pop(context);
                           model.showRewardedAds();
                         }
@@ -2793,7 +2797,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                       Spacer(),
                       Text('오늘 얻은 꾸욱 아이템: '),
                       Text(
-                        '${model.user.rewardedCnt}',
+                        '${model.user!.rewardedCnt}',
                         style: TextStyle(color: Colors.red),
                       ),
                       Text('/5'),
@@ -2814,7 +2818,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                   child: Text('좋아요'),
                   onPressed: rewardedAdsLoaded
                       ? () {
-                          _mixpanelService.mixpanel.track('Ad View');
+                          _mixpanelService!.mixpanel.track('Ad View');
                           Navigator.pop(context);
                           model.showRewardedAds();
                         }
@@ -2923,14 +2927,14 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
     var formatIndex = NumberFormat("#,###.00");
     var formatPriceUpDown = NumberFormat("+#,###; -#,###");
     var formatIndexUpDown = NumberFormat("+#,###.00; -#,###.00");
-    int numOfChoices = model.vote.subVotes[idx].issueCode.length;
+    int numOfChoices = model.vote!.subVotes![idx].issueCode!.length;
     Color hexToColor(String code) {
       return Color(int.parse(code, radix: 16) + 0xFF0000000);
     }
 
-    int choice = model.userVote.voteSelected == null
+    int choice = model.userVote!.voteSelected == null
         ? 0
-        : model.userVote.voteSelected[idx];
+        : model.userVote!.voteSelected![idx];
 
     TextStyle voteTitleStyle = TextStyle(
         color: Colors.black,
@@ -2959,12 +2963,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                 height: 70,
                 // decoration: BoxDecoration(border: Border.all(width: 0.3)),
                 child: Padding(
-                  padding: model.address.isVoting
+                  padding: model.address!.isVoting!
                       ? EdgeInsets.only(left: 40)
                       : EdgeInsets.only(left: 0),
                   child: GestureDetector(
                     onTap: () {
-                      _mixpanelService.mixpanel.track('Stock Info View - Home',
+                      _mixpanelService!.mixpanel.track('Stock Info View - Home',
                           properties: {'Index': idx});
                       // buildModalBottomSheet(
                       //     context, hexToColor, model, idx, numOfChoices, diff);
@@ -2992,12 +2996,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Text(model.vote.subVotes[idx].title,
+                                      Text(model.vote!.subVotes![idx].title!,
                                           style: (showMyVote &&
-                                                  model.userVote.voteSelected !=
+                                                  model.userVote!
+                                                          .voteSelected !=
                                                       null)
-                                              ? (model.userVote
-                                                          .voteSelected[idx] ==
+                                              ? (model.userVote!
+                                                          .voteSelected![idx] ==
                                                       0)
                                                   ? notVotedTitleStyle
                                                   : voteTitleStyle
@@ -3006,20 +3011,21 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                         width: 6,
                                       ),
                                       (showMyVote &&
-                                              model.userVote.voteSelected !=
+                                              model.userVote!.voteSelected !=
                                                   null)
-                                          ? (model.userVote.voteSelected[idx] ==
+                                          ? (model.userVote!
+                                                      .voteSelected![idx] ==
                                                   0)
                                               ? Container()
                                               : Text(
-                                                  model.vote.subVotes[idx]
-                                                      .voteChoices[model
-                                                          .userVote
-                                                          .voteSelected[idx] -
+                                                  model.vote!.subVotes![idx]
+                                                      .voteChoices![model
+                                                          .userVote!
+                                                          .voteSelected![idx] -
                                                       1],
                                                   style: TextStyle(
-                                                      color: model.userVote
-                                                                      .voteSelected[
+                                                      color: model.userVote!
+                                                                      .voteSelected![
                                                                   idx] ==
                                                               1
                                                           ? Color(0xFFFF3E3E)
@@ -3032,35 +3038,35 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           : Container()
                                     ],
                                   ),
-                                  model.address.isVoting
+                                  model.address!.isVoting!
                                       ? choice == 0
                                           ? Container()
                                           : Text(
-                                              model.vote.subVotes[idx]
-                                                  .voteChoices[choice - 1],
+                                              model.vote!.subVotes![idx]
+                                                  .voteChoices![choice - 1],
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: choice == 1
                                                       ? Color(0xFFFF3E3E)
                                                       : Colors.blue),
                                             )
-                                      : StreamBuilder(
+                                      : StreamBuilder<PriceModel>(
                                           stream: model.getRealtimePrice(
-                                              model.address,
-                                              model.vote.subVotes[idx]
-                                                  .issueCode[0]),
+                                              model.address!,
+                                              model.vote!.subVotes![idx]
+                                                  .issueCode![0]),
                                           builder: (context, snapshot) {
                                             bool isIndex = model
-                                                    .vote
-                                                    .subVotes[idx]
-                                                    .indexOrStocks[0] ==
+                                                    .vote!
+                                                    .subVotes![idx]
+                                                    .indexOrStocks![0] ==
                                                 "index";
                                             if (snapshot.data == null) {
                                               return Center(child: Container());
                                             } else {
-                                              PriceModel price0;
+                                              PriceModel? price0;
                                               price0 = snapshot.data;
-                                              return price0.pricePctChange < 0
+                                              return price0!.pricePctChange! < 0
                                                   ? Text(
                                                       isIndex
                                                           ? (formatIndex
@@ -3137,28 +3143,30 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                       // mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Text(
-                                          model.vote.subVotes[idx]
-                                              .voteChoices[0],
+                                          model.vote!.subVotes![idx]
+                                              .voteChoices![0],
                                           style: (showMyVote &&
-                                                  model.userVote.voteSelected !=
+                                                  model.userVote!
+                                                          .voteSelected !=
                                                       null)
-                                              ? (model.userVote
-                                                          .voteSelected[idx] ==
+                                              ? (model.userVote!
+                                                          .voteSelected![idx] ==
                                                       0)
                                                   ? notVotedTitleStyle
-                                                  : model.userVote.voteSelected[
+                                                  : model.userVote!
+                                                                  .voteSelected![
                                                               idx] ==
                                                           1
                                                       ? voteTitleStyle
                                                       : notVotedTitleStyle
                                               : voteTitleStyle,
                                         ),
-                                        model.address.isVoting
+                                        model.address!.isVoting!
                                             ? choice == 0
                                                 ? Container()
                                                 : Text(
-                                                    model.vote.subVotes[idx]
-                                                            .voteChoices[
+                                                    model.vote!.subVotes![idx]
+                                                            .voteChoices![
                                                         choice - 1],
                                                     style: TextStyle(
                                                         fontSize: 14,
@@ -3167,20 +3175,20 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                             : Colors
                                                                 .transparent),
                                                   )
-                                            : StreamBuilder(
+                                            : StreamBuilder<PriceModel>(
                                                 stream: model.getRealtimePrice(
-                                                    model.address,
-                                                    model.vote.subVotes[idx]
-                                                        .issueCode[0]),
+                                                    model.address!,
+                                                    model.vote!.subVotes![idx]
+                                                        .issueCode![0]),
                                                 builder: (context, snapshot) {
                                                   if (snapshot.data == null) {
                                                     return Center(
                                                         child: Container());
                                                   } else {
-                                                    PriceModel price0;
+                                                    PriceModel? price0;
                                                     price0 = snapshot.data;
-                                                    return price0
-                                                                .pricePctChange <
+                                                    return price0!
+                                                                .pricePctChange! <
                                                             0
                                                         ? Text(
                                                             formatPrice
@@ -3235,7 +3243,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             // height: 1,
                                           ),
                                         ),
-                                        model.address.isVoting
+                                        model.address!.isVoting!
                                             ? choice == 0
                                                 ? Container()
                                                 : Text(
@@ -3256,28 +3264,30 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          model.vote.subVotes[idx]
-                                              .voteChoices[1],
+                                          model.vote!.subVotes![idx]
+                                              .voteChoices![1],
                                           style: (showMyVote &&
-                                                  model.userVote.voteSelected !=
+                                                  model.userVote!
+                                                          .voteSelected !=
                                                       null)
-                                              ? (model.userVote
-                                                          .voteSelected[idx] ==
+                                              ? (model.userVote!
+                                                          .voteSelected![idx] ==
                                                       0)
                                                   ? notVotedTitleStyle
-                                                  : model.userVote.voteSelected[
+                                                  : model.userVote!
+                                                                  .voteSelected![
                                                               idx] ==
                                                           1
                                                       ? notVotedTitleStyle
                                                       : voteTitleStyle
                                               : voteTitleStyle,
                                         ),
-                                        model.address.isVoting
+                                        model.address!.isVoting!
                                             ? choice == 0
                                                 ? Container()
                                                 : Text(
-                                                    model.vote.subVotes[idx]
-                                                            .voteChoices[
+                                                    model.vote!.subVotes![idx]
+                                                            .voteChoices![
                                                         choice - 1],
                                                     style: TextStyle(
                                                         fontSize: 14,
@@ -3286,20 +3296,20 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                             : Colors
                                                                 .transparent),
                                                   )
-                                            : StreamBuilder(
+                                            : StreamBuilder<PriceModel>(
                                                 stream: model.getRealtimePrice(
-                                                    model.address,
-                                                    model.vote.subVotes[idx]
-                                                        .issueCode[1]),
+                                                    model.address!,
+                                                    model.vote!.subVotes![idx]
+                                                        .issueCode![1]),
                                                 builder: (context, snapshot1) {
                                                   if (snapshot1.data == null) {
                                                     return Center(
                                                         child: Container());
                                                   } else {
-                                                    PriceModel price1;
+                                                    PriceModel? price1;
                                                     price1 = snapshot1.data;
-                                                    return price1
-                                                                .pricePctChange <
+                                                    return price1!
+                                                                .pricePctChange! <
                                                             0
                                                         ? Text(
                                                             formatPrice
@@ -3368,7 +3378,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
         //   ),
         // ),
         // Text("AAA"),
-        model.address.isVoting
+        model.address!.isVoting!
             ? Container(
                 // 이렇게 해야 튜토리얼에서 글로벌키를 인덱스가 0일때만 사용하기 때문에 같은 글로벌키를 여러 곳에서(목록이 3개니까) 사용해서 나는 오류가 없어진다.
                 key: idx == 0 ? tutorialKey4 : null,
@@ -3401,33 +3411,33 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                       horizontal: VisualDensity.minimumDensity,
                       vertical: VisualDensity.minimumDensity,
                     ),
-                    value: model.userVote.voteSelected == null
-                        ? model.selected[idx]
-                        : model.userVote.voteSelected[idx] != 0
+                    value: model.userVote!.voteSelected == null
+                        ? model.selected![idx]
+                        : model.userVote!.voteSelected![idx] != 0
                             ? true
-                            : model.selected[idx],
+                            : model.selected![idx],
                     hoverColor: Colors.white,
-                    activeColor: model.userVote.voteSelected == null
+                    activeColor: model.userVote!.voteSelected == null
                         ? Color(0xFF1EC8CF)
-                        : (model.address.isVoting == false ||
-                                model.userVote.voteSelected[idx] != 0)
+                        : (model.address!.isVoting == false ||
+                                model.userVote!.voteSelected![idx] != 0)
                             ? Color(0xFF989898)
                             : Color(0xFF1EC8CF),
-                    inactiveColor: model.userVote.voteSelected == null
+                    inactiveColor: model.userVote!.voteSelected == null
                         ? Color(0xFF1EC8CF)
-                        : (model.address.isVoting == false)
+                        : (model.address!.isVoting == false)
                             ? Color(0xFFC1C1C1)
                             : Color(0xFF1EC8CF),
                     // disabledColor: Colors.grey,
                     onChanged: (newValue) async {
                       int setChoice;
-                      setChoice = model.userVote.voteSelected == null
+                      setChoice = model.userVote!.voteSelected == null
                           ? 0
-                          : model.userVote.voteSelected[idx];
+                          : model.userVote!.voteSelected![idx];
 
                       setChoice != 0
                           ? await showDialog(
-                              context: _scaffoldKey.currentContext,
+                              context: _scaffoldKey.currentContext!,
                               barrierDismissible: true,
                               builder: (context) {
                                 String title = "예측을 초기화하시겠습니까?";
@@ -3465,7 +3475,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                                   color: Colors.red,
                                                 ),
                                                 onPressed: () {
-                                                  _mixpanelService.mixpanel
+                                                  _mixpanelService!.mixpanel
                                                       .track('Vote Reset');
                                                   Navigator.of(context).pop();
                                                   model.initialiseOneVote(idx);
@@ -3511,30 +3521,31 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                               // print(
                               //     model.seasonInfo.maxDailyVote - numSelected);
 
-                              if (model.seasonInfo.maxDailyVote - numSelected ==
+                              if (model.seasonInfo!.maxDailyVote! -
+                                      numSelected ==
                                   0) {
-                                if (newValue) {
-                                  model.selected[idx] = model.selected[idx];
+                                if (newValue!) {
+                                  model.selected![idx] = model.selected![idx];
                                   _showToast(
-                                      "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                      "하루 최대 ${model.seasonInfo!.maxDailyVote}개 주제를 예측할 수 있습니다.");
                                 } else {
-                                  model.selected[idx] = newValue;
+                                  model.selected![idx] = newValue;
                                 }
                               } else {
-                                if ((model.user.item == null
+                                if ((model.user!.item == null
                                         ? 0
-                                        : model.user.item - numSelected) <=
+                                        : model.user!.item! - numSelected) <=
                                     0) {
                                   // 선택되면 안됨
-                                  if (newValue) {
-                                    model.selected[idx] = model.selected[idx];
+                                  if (newValue!) {
+                                    model.selected![idx] = model.selected![idx];
 
                                     _showToast("보유 중인 아이템이 부족합니다.");
                                   } else {
-                                    model.selected[idx] = newValue;
+                                    model.selected![idx] = newValue;
                                   }
                                 } else {
-                                  model.selected[idx] = newValue;
+                                  model.selected![idx] = newValue!;
                                   print(model.selected);
                                   print(listSelected);
                                 }
@@ -3567,13 +3578,13 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
           context,
         ) =>
             StreamBuilder<double>(
-                stream: scrollStreamCtrl.stream,
+                stream: scrollStreamCtrl.stream as Stream<double>?,
                 initialData: 0,
                 builder: (context, snapshot) {
-                  double offset = snapshot.data;
+                  double offset = snapshot.data!;
 
                   if (offset < -140) {
-                    WidgetsBinding.instance
+                    WidgetsBinding.instance!
                         .addPostFrameCallback((_) => Navigator.pop(context));
                   }
 
@@ -3609,8 +3620,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                       ),
                       Container(
                         height: offset < 0
-                            ? (deviceHeight * .83) + offset
-                            : deviceHeight * .83,
+                            ? (deviceHeight! * .83) + offset
+                            : deviceHeight! * .83,
                         // height: 250 + offset * 1.4,
                         child: ChartView(
                             // controller,
@@ -3624,11 +3635,11 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                             model.user,
                             model.selectUpdate,
                             _showToast,
-                            model.userVote.voteSelected == null
+                            model.userVote!.voteSelected == null
                                 ? false
-                                : model.userVote.voteSelected[idx] == null
+                                : model.userVote!.voteSelected![idx] == null
                                     ? false
-                                    : model.userVote.voteSelected[idx] != 0),
+                                    : model.userVote!.voteSelected![idx] != 0),
                       ),
                     ],
                   );
@@ -3985,8 +3996,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
   ) {
     List<Widget> _widgets = [];
 
-    int tag0Length = model.vote.subVotes[idx].tag0.length;
-    int tag1Length = model.vote.subVotes[idx].tag1.length;
+    int tag0Length = model.vote!.subVotes![idx].tag0!.length;
+    int tag1Length = model.vote!.subVotes![idx].tag1!.length;
     print("TAGIS" + tag0Length.toString());
     for (int j = 0; j < numOfChoices; j++) {
       for (int i = 0; j == 0 ? i < tag0Length : i < tag1Length; i++) {
@@ -4003,8 +4014,8 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
             // ),
             label: Text(
               j == 0
-                  ? model.vote.subVotes[idx].tag0[i]
-                  : model.vote.subVotes[idx].tag1[i],
+                  ? model.vote!.subVotes![idx].tag0![i]
+                  : model.vote!.subVotes![idx].tag1![i],
               style: TextStyle(
                 fontSize: 16,
                 fontFamily: 'DmSans',
@@ -4012,7 +4023,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
               ),
             ),
             backgroundColor: hexToColor(
-              model.vote.subVotes[idx].colorCode[j],
+              model.vote!.subVotes![idx].colorCode![j],
             ),
           ),
         ));
@@ -4298,10 +4309,10 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
           children: [
             Container(
               // height: 200,
-              width: deviceWidth - 36 - 72,
+              width: deviceWidth! - 36 - 72,
               child: Column(
                 children: [
-                  model.user.accNumber == null
+                  model.user!.accNumber == null
                       ? Row(
                           children: [
                             Container(
@@ -4380,12 +4391,12 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                     children: [
                       Expanded(
                         child: Text(
-                          model.user.userName,
+                          model.user!.userName!,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: model.user.userName.length > 8
+                            fontSize: model.user!.userName!.length > 8
                                 ? 32
-                                : model.user.userName.length > 6
+                                : model.user!.userName!.length > 6
                                     ? 40
                                     : 48,
                             letterSpacing: -1.0,
@@ -4399,7 +4410,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                 ],
               ),
             ),
-            avatarWidget(model.user.avatarImage, model.user.item ?? 0)
+            avatarWidget(model.user!.avatarImage, model.user!.item ?? 0)
           ],
         ),
       ),
@@ -4580,10 +4591,10 @@ class TopContainer extends StatefulWidget {
 }
 
 class _TopContainerState extends State<TopContainer> {
-  final TimezoneService _timezoneService = locator<TimezoneService>();
-  Timer _timer;
-  VoteSelectViewModel voteSelectViewModel;
-  DateTime nowFromNetwork;
+  final TimezoneService? _timezoneService = locator<TimezoneService>();
+  late Timer _timer;
+  late VoteSelectViewModel voteSelectViewModel;
+  DateTime? nowFromNetwork;
   TopContainerViewModel model = TopContainerViewModel();
 
   @override
@@ -4645,23 +4656,23 @@ class _TopContainerState extends State<TopContainer> {
             //   setState(() {});
             // });
             Duration getTimeLeft(VoteSelectViewModel voteSelectViewModel) {
-              DateTime today = strToDate(voteSelectViewModel.address.date);
-              DateTime seoulMarketEnd = tz.TZDateTime(_timezoneService.seoul,
+              DateTime today = strToDate(voteSelectViewModel.address!.date!);
+              DateTime seoulMarketEnd = tz.TZDateTime(_timezoneService!.seoul,
                   today.year, today.month, today.day, 15, 30, 0);
               // DateTime seoulMarketEnd =
               //     DateTime(today.year, today.month, today.day, 15, 30, 0);
               DateTime marketEnd = seoulMarketEnd;
               // tz.TZDateTime.from(seoulMarketEnd, _timezoneService.seoul);
-              DateTime endTime = voteSelectViewModel.address.isVoting
-                  ? voteSelectViewModel.vote.voteEndDateTime.toDate()
+              DateTime endTime = voteSelectViewModel.address!.isVoting!
+                  ? voteSelectViewModel.vote!.voteEndDateTime.toDate()
                   : marketEnd;
 
               // DateTime nowFromNetwork = model.now;
               // model.renewTimeFromNetwork();
               // DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
-              return _timezoneService
+              return _timezoneService!
                   .koreaTime(endTime)
-                  .difference(_timezoneService.koreaTime(DateTime.now()));
+                  .difference(_timezoneService!.koreaTime(DateTime.now()));
               // timeLeftArr = diffFinal.split(":");
               // return diffFinal;
             }

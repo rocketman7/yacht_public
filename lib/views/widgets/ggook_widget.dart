@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:math';
@@ -31,12 +32,12 @@ import '../../view_models/ggook_view_model.dart';
 import '../../views/constants/size.dart';
 
 class GgookWidget extends StatefulWidget {
-  final DatabaseAddressModel address;
-  final UserModel user;
-  final VoteModel vote;
-  final List<int> listSelected;
-  final int idx;
-  final UserVoteModel userVote;
+  final DatabaseAddressModel? address;
+  final UserModel? user;
+  final VoteModel? vote;
+  final List<int>? listSelected;
+  final int? idx;
+  final UserVoteModel? userVote;
   final GgookViewModel model;
   GgookWidget(
     this.address,
@@ -54,35 +55,35 @@ class GgookWidget extends StatefulWidget {
 
 class _GgookWidgetState extends State<GgookWidget>
     with TickerProviderStateMixin {
-  DatabaseAddressModel address;
-  UserModel user;
-  VoteModel vote;
-  List<int> listSelected;
-  int idx;
-  UserVoteModel userVote;
-  GgookViewModel model;
+  DatabaseAddressModel? address;
+  UserModel? user;
+  VoteModel? vote;
+  List<int>? listSelected;
+  int? idx;
+  UserVoteModel? userVote;
+  GgookViewModel? model;
   bool forwardAnimating = true;
 
-  AnimationController animationController0;
-  Animation animation0;
-  AnimationController animationController1;
-  Animation animation1;
+  AnimationController? animationController0;
+  Animation? animation0;
+  AnimationController? animationController1;
+  Animation? animation1;
 
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
   void onTapDown(int choice) {
     print("ONTAPDOWN triggered");
     print(choice);
     choice == 0
-        ? animationController0.forward()
-        : animationController1.forward();
+        ? animationController0!.forward()
+        : animationController1!.forward();
   }
 
   void onTapUp(int choice) {
     print("ONTAPUP Triggered");
     choice == 0
-        ? animationController0.reverse()
-        : animationController1.reverse();
+        ? animationController0!.reverse()
+        : animationController1!.reverse();
   }
 
   var randomNumber = Random();
@@ -93,16 +94,16 @@ class _GgookWidgetState extends State<GgookWidget>
     animationController0 =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     animation0 =
-        Tween<double>(begin: 0.0, end: 100.0).animate(animationController0);
-    animationController0.addListener(() {
+        Tween<double>(begin: 0.0, end: 100.0).animate(animationController0!);
+    animationController0!.addListener(() {
       // setState(() {});
     });
 
     animationController1 =
         AnimationController(duration: Duration(milliseconds: 500), vsync: this);
     animation1 =
-        Tween<double>(begin: 0.0, end: 100.0).animate(animationController1);
-    animationController1.addListener(() {
+        Tween<double>(begin: 0.0, end: 100.0).animate(animationController1!);
+    animationController1!.addListener(() {
       // setState(() {});
     });
     super.initState();
@@ -123,13 +124,13 @@ class _GgookWidgetState extends State<GgookWidget>
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
 
-    double blobSize = (deviceWidth - 32) * .47;
+    double blobSize = (deviceWidth! - 32) * .47;
     // print(blobSize);
     // print("RANDOM" + randomNumber.nextDouble().toString());
 
     return WillPopScope(
       onWillPop: () async {
-        _navigatorKey.currentState.maybePop();
+        _navigatorKey.currentState!.maybePop();
         return false;
       },
       child: Stack(
@@ -176,7 +177,7 @@ class _GgookWidgetState extends State<GgookWidget>
                         height: (availableHeight / 2) * .15,
                       ),
                       AutoSizeText(
-                        '${vote.subVotes[listSelected[idx]].ggookDescription.replaceAll("\\n", "\n")}',
+                        '${vote!.subVotes![listSelected![idx!]].ggookDescription!.replaceAll("\\n", "\n")}',
                         // "10월 12일 신성이엔지와 SK하이닉스중 더 많이 상승할 종목을 선택해주세요",
                         style: TextStyle(
                           color: Colors.white,
@@ -266,7 +267,7 @@ class _GgookWidgetState extends State<GgookWidget>
                             ),
                           ),
                           Text(
-                            '${(vote.subVotes[idx].numVoted0 ?? 0) + (vote.subVotes[idx].numVoted1 ?? 0)}명이 이 주제에 참여했습니다.',
+                            '${(vote!.subVotes![idx!].numVoted0 ?? 0) + (vote!.subVotes![idx!].numVoted1 ?? 0)}명이 이 주제에 참여했습니다.',
                             style: TextStyle(
                               fontFamily: 'AppleSDM',
                               fontSize: 14,
@@ -278,7 +279,7 @@ class _GgookWidgetState extends State<GgookWidget>
                       ),
                       SizedBox(height: 14),
                       Text(
-                        "선택한 주제 ${idx + 1} / ${listSelected.length}",
+                        "선택한 주제 ${idx! + 1} / ${listSelected!.length}",
                         style: TextStyle(
                           fontFamily: 'AppleSDM',
                           fontSize: 16,
@@ -336,8 +337,8 @@ class _GgookWidgetState extends State<GgookWidget>
                 //  50,
                 (randomNumber.nextDouble() *
                         (((availableHeight / 2) - blobSize) -
-                            deviceHeight * .1)) +
-                    (deviceHeight * .1),
+                            deviceHeight! * .1)) +
+                    (deviceHeight! * .1),
 
             // deviceHeight * .1,
             // (availableHeight / 2) - blobSize,
@@ -568,14 +569,14 @@ class _GgookWidgetState extends State<GgookWidget>
 // }
 
 class InnerBlob extends StatefulWidget {
-  final DatabaseAddressModel address;
-  final UserModel user;
-  final VoteModel vote;
-  final List<int> listSelected;
-  final int idx;
+  final DatabaseAddressModel? address;
+  final UserModel? user;
+  final VoteModel? vote;
+  final List<int>? listSelected;
+  final int? idx;
   final int choice;
-  final UserVoteModel userVote;
-  final GgookViewModel model;
+  final UserVoteModel? userVote;
+  final GgookViewModel? model;
   final Function onTapDown;
   final Function onTapUp;
   final double blobSize;
@@ -598,9 +599,9 @@ class InnerBlob extends StatefulWidget {
 }
 
 class _InnerBlobState extends State<InnerBlob> {
-  BlobController blobCtrl;
-  NavigationService _navigationService = locator<NavigationService>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  late BlobController blobCtrl;
+  NavigationService? _navigationService = locator<NavigationService>();
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
   @override
   void dispose() {
     // blobCtrl.dispose();
@@ -610,14 +611,14 @@ class _InnerBlobState extends State<InnerBlob> {
 
   @override
   Widget build(BuildContext context) {
-    final DatabaseAddressModel address = widget.address;
-    final UserModel user = widget.user;
-    final VoteModel vote = widget.vote;
-    final List<int> listSelected = widget.listSelected;
-    final int idx = widget.idx;
+    final DatabaseAddressModel? address = widget.address;
+    final UserModel? user = widget.user;
+    final VoteModel vote = widget.vote!;
+    final List<int> listSelected = widget.listSelected!;
+    final int idx = widget.idx!;
     final int choice = widget.choice;
-    final UserVoteModel userVote = widget.userVote;
-    final GgookViewModel model = widget.model;
+    final UserVoteModel? userVote = widget.userVote;
+    final GgookViewModel? model = widget.model;
 
     LongPressGestureRecognizer _longPressGesture = LongPressGestureRecognizer(
       duration: Duration(milliseconds: 600),
@@ -653,9 +654,10 @@ class _InnerBlobState extends State<InnerBlob> {
                 //   Vibration.vibrate();
                 // }
                 if (idx + 1 < listSelected.length) {
-                  isVoting = await model.checkIfVotingTime(address.category);
+                  isVoting = await (model!.checkIfVotingTime(address!.category)
+                      as FutureOr<bool>);
                   if (isVoting) {
-                    List<int> tempList = userVote.voteSelected;
+                    List<int> tempList = userVote!.voteSelected!;
                     print(tempList);
                     tempList.fillRange(
                         listSelected[idx], listSelected[idx] + 1, choice + 1);
@@ -667,7 +669,7 @@ class _InnerBlobState extends State<InnerBlob> {
                     model.decreaseUserItem();
                     // model.counterUserVote(address, userVote.voteSelected);
 
-                    _navigationService.navigateWithArgTo('ggook', [
+                    _navigationService!.navigateWithArgTo('ggook', [
                       address,
                       user,
                       vote,
@@ -680,10 +682,11 @@ class _InnerBlobState extends State<InnerBlob> {
                   }
                   // 남은 투표 없을 때
                 } else {
-                  isVoting = await model.checkIfVotingTime(address.category);
+                  isVoting = await (model!.checkIfVotingTime(address!.category)
+                      as FutureOr<bool>);
                   // TODO: userVote 모델로 만들어서 넘겨야함.
                   if (isVoting) {
-                    List<int> tempList = userVote.voteSelected;
+                    List<int> tempList = userVote!.voteSelected!;
                     print(tempList);
                     tempList.fillRange(
                         listSelected[idx], listSelected[idx] + 1, choice + 1);
@@ -696,7 +699,7 @@ class _InnerBlobState extends State<InnerBlob> {
                     // 마지막 선택에서만 counter 콜해야됨
                     // int newItem = user.item - listSelected.length;
                     // model.updateUserItem(newItem);
-                    model.counterUserVote(address, userVote.voteSelected);
+                    model.counterUserVote(address, userVote.voteSelected!);
 
                     showVoteSummary(context, vote, tempList);
                   } else {
@@ -725,7 +728,7 @@ class _InnerBlobState extends State<InnerBlob> {
                 width: widget.blobSize - 70,
                 // color: Colors.blue,
                 child: AutoSizeText(
-                  vote.subVotes[listSelected[idx]].voteChoices[choice],
+                  vote.subVotes![listSelected[idx]].voteChoices![choice],
                   // "삼성바이오로직스",
                   style: TextStyle(
                     fontSize: 20,
@@ -762,14 +765,14 @@ class _InnerBlobState extends State<InnerBlob> {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
             child: WillPopScope(
-              onWillPop: () {},
+              onWillPop: () {} as Future<bool> Function()?,
               child: Dialog(
                 shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(10.0)), //this right here
                 child: Container(
                   height: 300,
-                  width: deviceWidth * .9,
+                  width: deviceWidth! * .9,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12.0,
@@ -785,7 +788,7 @@ class _InnerBlobState extends State<InnerBlob> {
                           children: [
                             AutoSizeText(
                               formatKoreanDate
-                                      .format(strToDate(vote.voteDate)) +
+                                      .format(strToDate(vote.voteDate!)) +
                                   "의 예측 완료!",
                               style: TextStyle(
                                 fontFamily: 'AppleSDB',
@@ -841,7 +844,7 @@ class _InnerBlobState extends State<InnerBlob> {
                                   );
 
                                   int length =
-                                      vote.subVotes[index].issueCode.length;
+                                      vote.subVotes![index].issueCode!.length;
                                   return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -850,7 +853,8 @@ class _InnerBlobState extends State<InnerBlob> {
                                           ? Row(
                                               children: [
                                                 AutoSizeText(
-                                                    vote.subVotes[index].title,
+                                                    vote.subVotes![index]
+                                                        .title!,
                                                     style: tempList[index] == 0
                                                         ? notSelectedTitle
                                                         : selectedTitle),
@@ -861,13 +865,17 @@ class _InnerBlobState extends State<InnerBlob> {
                                                     ? Container()
                                                     : tempList[index] == 1
                                                         ? AutoSizeText(
-                                                            vote.subVotes[index]
-                                                                .voteChoices[0],
+                                                            vote
+                                                                .subVotes![
+                                                                    index]
+                                                                .voteChoices![0],
                                                             style: selectedUp,
                                                           )
                                                         : AutoSizeText(
-                                                            vote.subVotes[index]
-                                                                .voteChoices[1],
+                                                            vote
+                                                                .subVotes![
+                                                                    index]
+                                                                .voteChoices![1],
                                                             style: selectedDown,
                                                           ),
                                               ],
@@ -875,8 +883,8 @@ class _InnerBlobState extends State<InnerBlob> {
                                           : Row(
                                               children: [
                                                 AutoSizeText(
-                                                  vote.subVotes[index]
-                                                      .voteChoices[0],
+                                                  vote.subVotes![index]
+                                                      .voteChoices![0],
                                                   style: tempList[index] == 0
                                                       ? notSelectedTitle
                                                       : tempList[index] == 1
@@ -894,8 +902,8 @@ class _InnerBlobState extends State<InnerBlob> {
                                                   width: 4,
                                                 ),
                                                 AutoSizeText(
-                                                  vote.subVotes[index]
-                                                      .voteChoices[1],
+                                                  vote.subVotes![index]
+                                                      .voteChoices![1],
                                                   style: tempList[index] == 0
                                                       ? notSelectedTitle
                                                       : tempList[index] == 2
@@ -983,13 +991,13 @@ class _InnerBlobState extends State<InnerBlob> {
                             Row(
                               children: [
                                 FlatButton(
-                                  minWidth: deviceWidth * .28,
+                                  minWidth: deviceWidth! * .28,
                                   onPressed: () {
-                                    _mixpanelService.mixpanel
+                                    _mixpanelService!.mixpanel
                                         .track('Home View - Kkook');
                                     Navigator.pop(context);
-                                    _navigationService.navigateWithArgTo(
-                                        'startup', 0);
+                                    _navigationService!
+                                        .navigateWithArgTo('startup', 0);
                                   },
                                   child: AutoSizeText(
                                     "홈으로 이동",
@@ -1006,11 +1014,11 @@ class _InnerBlobState extends State<InnerBlob> {
                                 Expanded(
                                   child: RaisedButton(
                                     onPressed: () {
-                                      _mixpanelService.mixpanel
+                                      _mixpanelService!.mixpanel
                                           .track('Community View - Kkook');
                                       Navigator.pop(context);
-                                      _navigationService.navigateWithArgTo(
-                                          'startup', 1);
+                                      _navigationService!
+                                          .navigateWithArgTo('startup', 1);
                                     },
                                     child: AutoSizeText(
                                       "커뮤니티로 이동",
@@ -1042,7 +1050,7 @@ class _InnerBlobState extends State<InnerBlob> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return WillPopScope(
-            onWillPop: () {},
+            onWillPop: () {} as Future<bool> Function()?,
             child: MediaQuery(
               data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
               child: Platform.isIOS
@@ -1054,7 +1062,7 @@ class _InnerBlobState extends State<InnerBlob> {
                           child: Text("홈으로 돌아가기"),
                           onPressed: () {
                             Navigator.pop(context);
-                            _navigationService.navigateWithArgTo('startup', 0);
+                            _navigationService!.navigateWithArgTo('startup', 0);
                           },
                         )
                       ],
@@ -1067,7 +1075,7 @@ class _InnerBlobState extends State<InnerBlob> {
                           child: Text("홈으로 돌아가기"),
                           onPressed: () {
                             Navigator.pop(context);
-                            _navigationService.navigateWithArgTo('startup', 0);
+                            _navigationService!.navigateWithArgTo('startup', 0);
                           },
                         )
                       ],
@@ -1079,9 +1087,9 @@ class _InnerBlobState extends State<InnerBlob> {
 }
 
 class OuterBlob extends StatefulWidget {
-  final VoteModel vote;
-  final List<int> listSelected;
-  final int idx;
+  final VoteModel? vote;
+  final List<int>? listSelected;
+  final int? idx;
   final int choice;
   final double blobSize;
   OuterBlob(this.vote, this.listSelected, this.idx, this.choice, this.blobSize);
@@ -1091,7 +1099,7 @@ class OuterBlob extends StatefulWidget {
 }
 
 class _OuterBlobState extends State<OuterBlob> {
-  BlobController blobCtrl;
+  late BlobController blobCtrl;
 
   @override
   void dispose() {
@@ -1102,9 +1110,9 @@ class _OuterBlobState extends State<OuterBlob> {
 
   @override
   Widget build(BuildContext context) {
-    VoteModel vote = widget.vote;
-    List<int> listSelected = widget.listSelected;
-    int idx = widget.idx;
+    VoteModel vote = widget.vote!;
+    List<int> listSelected = widget.listSelected!;
+    int idx = widget.idx!;
 
     int choice = widget.choice;
     Color hexToColor(String code) {
@@ -1121,11 +1129,12 @@ class _OuterBlobState extends State<OuterBlob> {
           '10-7-88922'
         ],
         styles: BlobStyles(
-          color: vote.subVotes[listSelected[idx]].issueCode.length == 1
+          color: vote.subVotes![listSelected[idx]].issueCode!.length == 1
               ? choice == 0
                   ? Color(0xFFFFC8F3)
                   : Color(0xFFB2FAFF)
-              : hexToColor(vote.subVotes[listSelected[idx]].colorCode[choice]),
+              : hexToColor(
+                  vote.subVotes![listSelected[idx]].colorCode![choice]),
         ),
         controller: blobCtrl,
         loop: true,
@@ -1134,8 +1143,8 @@ class _OuterBlobState extends State<OuterBlob> {
 }
 
 class GgookGuage0 extends StatefulWidget {
-  final AnimationController animationController0;
-  final Animation animation0;
+  final AnimationController? animationController0;
+  final Animation? animation0;
   final double blobSize;
 
   GgookGuage0(
@@ -1164,15 +1173,15 @@ class _GgookGuage0State extends State<GgookGuage0>
 
   @override
   void dispose() {
-    widget.animationController0.dispose();
+    widget.animationController0!.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    AnimationController _animationController0 = widget.animationController0;
-    Animation animation0 = widget.animation0;
+    AnimationController? _animationController0 = widget.animationController0;
+    Animation animation0 = widget.animation0!;
     bool isForwarding = false;
 
     print("FORWARDING" + isForwarding.toString()); // return Transform.rotate(
@@ -1189,10 +1198,10 @@ class _GgookGuage0State extends State<GgookGuage0>
           return GestureDetector(
             onTapDown: (_) {
               print("PieChart tapped");
-              _animationController0.forward();
+              _animationController0!.forward();
             },
             onTapUp: (_) {
-              _animationController0.reverse();
+              _animationController0!.reverse();
             },
             child: CustomPaint(
                 size: Size(
@@ -1206,7 +1215,7 @@ class _GgookGuage0State extends State<GgookGuage0>
 }
 
 class PieChart0 extends CustomPainter {
-  double percentage = 0;
+  double? percentage = 0;
 
   PieChart0({this.percentage});
 
@@ -1221,7 +1230,7 @@ class PieChart0 extends CustomPainter {
 
     canvas.drawCircle(center, radius, paint);
 
-    double arcAngle = 2 * math.pi * (percentage / 100);
+    double arcAngle = 2 * math.pi * (percentage! / 100);
 
     paint..color = Color(0xFF91E0FD);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
@@ -1235,8 +1244,8 @@ class PieChart0 extends CustomPainter {
 }
 
 class GgookGuage1 extends StatefulWidget {
-  final AnimationController animationController1;
-  final Animation animation1;
+  final AnimationController? animationController1;
+  final Animation? animation1;
   final double blobSize;
 
   GgookGuage1(
@@ -1265,15 +1274,15 @@ class _GgookGuage1State extends State<GgookGuage1>
 
   @override
   void dispose() {
-    widget.animationController1.dispose();
+    widget.animationController1!.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    AnimationController _animationController1 = widget.animationController1;
-    Animation animation1 = widget.animation1;
+    AnimationController? _animationController1 = widget.animationController1;
+    Animation animation1 = widget.animation1!;
     bool isForwarding = false;
 
     print("FORWARDING" + isForwarding.toString()); // return Transform.rotate(
@@ -1290,10 +1299,10 @@ class _GgookGuage1State extends State<GgookGuage1>
           return GestureDetector(
             onTapDown: (_) {
               print("PieChart tapped");
-              _animationController1.forward();
+              _animationController1!.forward();
             },
             onTapUp: (_) {
-              _animationController1.reverse();
+              _animationController1!.reverse();
             },
             child: CustomPaint(
                 size: Size(
@@ -1307,7 +1316,7 @@ class _GgookGuage1State extends State<GgookGuage1>
 }
 
 class PieChart1 extends CustomPainter {
-  double percentage = 0;
+  double? percentage = 0;
 
   PieChart1({this.percentage});
 
@@ -1322,7 +1331,7 @@ class PieChart1 extends CustomPainter {
 
     canvas.drawCircle(center, radius, paint);
 
-    double arcAngle = 2 * math.pi * (percentage / 100);
+    double arcAngle = 2 * math.pi * (percentage! / 100);
 
     paint..color = Color(0xFF91E0FD);
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius),

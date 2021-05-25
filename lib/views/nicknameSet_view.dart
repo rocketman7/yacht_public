@@ -7,7 +7,7 @@ import '../locator.dart';
 import '../view_models/nicknameSet_viewmodel.dart';
 
 class NicknameSetView extends StatefulWidget {
-  final String beforeNickname;
+  final String? beforeNickname;
 
   NicknameSetView(this.beforeNickname);
   @override
@@ -69,7 +69,7 @@ class _NicknameSetViewState extends State<NicknameSetView> {
                                 ),
 
                                 validator: (value) {
-                                  if (value.length > 8) {
+                                  if (value!.length > 8) {
                                     return "8자 이하 닉네임을 입력하세요";
                                   }
                                   return null;
@@ -103,7 +103,7 @@ class _NicknameSetViewState extends State<NicknameSetView> {
                               ),
                               FlatButton(
                                 onPressed: () async {
-                                  if (_formKey.currentState.validate() &&
+                                  if (_formKey.currentState!.validate() &&
                                       (_nickLength > 0)) {
                                     model.checkUserNameDuplicateAndSet(
                                         _userNameController.text, context);

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/view_models/user_survey_view_model.dart';
-import 'package:flare_checkbox/flare_checkbox.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserSurveyView extends StatefulWidget {
@@ -16,10 +16,10 @@ class UserSurveyView extends StatefulWidget {
 
 class _UserSurveyViewState extends State<UserSurveyView> {
   final TextEditingController _controller = TextEditingController();
-  DateTime currentBackPressTime;
+  DateTime? currentBackPressTime;
   Future<bool> _onWillPop() async {
     if (currentBackPressTime == null ||
-        DateTime.now().difference(currentBackPressTime) >
+        DateTime.now().difference(currentBackPressTime!) >
             Duration(seconds: 2)) {
       currentBackPressTime = DateTime.now();
       Fluttertoast.showToast(msg: "뒤로 가기를 다시 누르면 앱이 종료됩니다");
@@ -114,7 +114,7 @@ class _UserSurveyViewState extends State<UserSurveyView> {
                                             SizedBox(
                                               height: 120,
                                             ),
-                                            Text(model.userSurveyModel.thank,
+                                            Text(model.userSurveyModel.thank!,
                                                 style: TextStyle(
                                                     color: Color(0xFF1EC8CF),
                                                     fontSize: 30,
@@ -124,7 +124,7 @@ class _UserSurveyViewState extends State<UserSurveyView> {
                                             ),
                                             Text(
                                                 model.userSurveyModel
-                                                    .endingStatement,
+                                                    .endingStatement!,
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 20,
@@ -446,7 +446,7 @@ class _UserSurveyViewState extends State<UserSurveyView> {
                                                                           groupValue:
                                                                               model.singleChoice,
                                                                           onChanged:
-                                                                              (val) {
+                                                                              (dynamic val) {
                                                                             model.changeRadioValue(val);
                                                                             setState(() {
                                                                               model.proceed = true;
@@ -482,7 +482,7 @@ class _UserSurveyViewState extends State<UserSurveyView> {
                                                                           value:
                                                                               model.multipleChoices[index],
                                                                           onChanged:
-                                                                              (bool val) {
+                                                                              (bool? val) {
                                                                             model.toggleChoice(index);
                                                                           },
                                                                           title: AutoSizeText(
@@ -706,7 +706,7 @@ class _UserSurveyViewState extends State<UserSurveyView> {
             SizedBox(
               height: 80,
             ),
-            Text(model.userSurveyModel.title.replaceAll("\\n", "\n"),
+            Text(model.userSurveyModel.title!.replaceAll("\\n", "\n"),
                 style: TextStyle(
                     color: Color(0xFF1EC8CF),
                     fontSize: 30,
@@ -714,7 +714,7 @@ class _UserSurveyViewState extends State<UserSurveyView> {
             SizedBox(
               height: 10,
             ),
-            Text(model.userSurveyModel.description.replaceAll("\\n", "\n"),
+            Text(model.userSurveyModel.description!.replaceAll("\\n", "\n"),
                 style: TextStyle(
                     color: Colors.white, fontSize: 20, fontFamily: 'AppleSDM')),
             SizedBox(

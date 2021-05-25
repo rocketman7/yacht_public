@@ -8,21 +8,21 @@ class SlidingCardsView extends StatefulWidget {
 }
 
 class _SlidingCardsViewState extends State<SlidingCardsView> {
-  PageController pageController;
-  double pageOffset = 0;
+  PageController? pageController;
+  double? pageOffset = 0;
 
   @override
   void initState() {
     super.initState();
     pageController = PageController(viewportFraction: 0.8);
-    pageController.addListener(() {
-      setState(() => pageOffset = pageController.page);
+    pageController!.addListener(() {
+      setState(() => pageOffset = pageController!.page);
     });
   }
 
   @override
   void dispose() {
-    pageController.dispose();
+    pageController!.dispose();
     super.dispose();
   }
 
@@ -45,7 +45,7 @@ class _SlidingCardsViewState extends State<SlidingCardsView> {
               name: 'Dawan District, Guangdong Hong Kong and Macao',
               date: '4.28-31',
               assetName: 'rodion-kutsaev.jpeg',
-              offset: pageOffset - 1,
+              offset: pageOffset! - 1,
             ),
           ],
         ),
@@ -58,21 +58,21 @@ class SlidingCard extends StatelessWidget {
   final String name;
   final String date;
   final String assetName;
-  final double offset;
+  final double? offset;
 
   const SlidingCard({
-    Key key,
-    @required this.name,
-    @required this.date,
-    @required this.assetName,
-    @required this.offset,
+    Key? key,
+    required this.name,
+    required this.date,
+    required this.assetName,
+    required this.offset,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double gauss = math.exp(-(math.pow((offset.abs() - 0.5), 2) / 0.08));
+    double gauss = math.exp(-(math.pow((offset!.abs() - 0.5), 2) / 0.08));
     return Transform.translate(
-      offset: Offset(-32 * gauss * offset.sign, 0),
+      offset: Offset(-32 * gauss * offset!.sign, 0),
       child: Card(
         margin: EdgeInsets.only(left: 8, right: 8, bottom: 24),
         elevation: 8,
@@ -85,7 +85,7 @@ class SlidingCard extends StatelessWidget {
                 color: Colors.red,
                 height: MediaQuery.of(context).size.height * 0.3,
                 width: 100,
-                alignment: Alignment(-offset.abs() * 2, 0),
+                alignment: Alignment(-offset!.abs() * 2, 0),
               ),
 
               //   'assets/$assetName',
@@ -115,10 +115,10 @@ class CardContent extends StatelessWidget {
   final double offset;
 
   const CardContent(
-      {Key key,
-      @required this.name,
-      @required this.date,
-      @required this.offset})
+      {Key? key,
+      required this.name,
+      required this.date,
+      required this.offset})
       : super(key: key);
 
   @override

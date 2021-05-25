@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_segment/flutter_segment.dart';
 import 'package:intl/intl.dart';
@@ -17,32 +19,32 @@ import '../services/stateManage_service.dart';
 import '../locator.dart';
 
 class TrackRecordViewModel extends FutureViewModel {
-  AuthService _authService = locator<AuthService>();
-  DatabaseService _databaseService = locator<DatabaseService>();
+  AuthService? _authService = locator<AuthService>();
+  DatabaseService? _databaseService = locator<DatabaseService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
-  final StateManageService _stateManageService = locator<StateManageService>();
+  final StateManageService? _stateManageService = locator<StateManageService>();
 
-  String uid;
-  DatabaseAddressModel address;
-  DatabaseAddressModel newAddress;
-  UserModel user;
-  UserVoteModel userVote;
-  VoteModel vote;
-  SeasonModel seasonModel;
-  SeasonModel newSeasonModel;
-  String showingSeasonName;
-  List<RankModel> rankModel = [];
+  String? uid;
+  DatabaseAddressModel? address;
+  late DatabaseAddressModel newAddress;
+  UserModel? user;
+  UserVoteModel? userVote;
+  VoteModel? vote;
+  SeasonModel? seasonModel;
+  SeasonModel? newSeasonModel;
+  String? showingSeasonName;
+  List<RankModel>? rankModel = [];
   List<UserVoteModel> allSeasonUserVoteList = [];
   List<VoteModel> allSeasonVoteList = [];
   List<String> seasonNameList = [];
-  List<SeasonModel> seasonModelList = [];
+  List<SeasonModel>? seasonModelList = [];
   bool isChangingSeason = false;
   // List<Widget> voteRows;
 
-  int myRank = 0;
+  int? myRank = 0;
 
   TrackRecordViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
     print(uid);
   }
 
@@ -58,29 +60,30 @@ class TrackRecordViewModel extends FutureViewModel {
       },
     );
 
-    if (_stateManageService.appStart) {
-      await _stateManageService.initStateManage(initUid: uid);
+    if (_stateManageService!.appStart) {
+      await _stateManageService!.initStateManage(initUid: uid);
     } else {
-      if (await _stateManageService.isNeededUpdate())
-        await _stateManageService.initStateManage(initUid: uid);
+      if (await _stateManageService!.isNeededUpdate())
+        await _stateManageService!.initStateManage(initUid: uid);
     }
 
-    address = _stateManageService.addressModel;
-    user = _stateManageService.userModel;
-    vote = _stateManageService.voteModel;
-    userVote = _stateManageService.userVoteModel;
-    rankModel = _stateManageService.rankModel;
-    seasonModel = _stateManageService.seasonModel;
-    showingSeasonName = seasonModel.seasonName;
-    for (int i = 0; i < rankModel.length; i++) {
-      if (rankModel[i].uid == uid) {
-        myRank = rankModel[i].todayRank;
+    address = _stateManageService!.addressModel;
+    user = _stateManageService!.userModel;
+    vote = _stateManageService!.voteModel;
+    userVote = _stateManageService!.userVoteModel;
+    rankModel = _stateManageService!.rankModel;
+    seasonModel = _stateManageService!.seasonModel;
+    showingSeasonName = seasonModel!.seasonName;
+    for (int i = 0; i < rankModel!.length; i++) {
+      if (rankModel![i].uid == uid) {
+        myRank = rankModel![i].todayRank;
       }
     }
 
-    allSeasonUserVoteList =
-        await _databaseService.getAllSeasonUserVote(address);
-    allSeasonVoteList = await _databaseService.getAllSeasonVote(address);
+    allSeasonUserVoteList = await (_databaseService!
+        .getAllSeasonUserVote(address!) as FutureOr<List<UserVoteModel>>);
+    allSeasonVoteList = await (_databaseService!.getAllSeasonVote(address!)
+        as FutureOr<List<VoteModel>>);
     // print("ALLSEASON" + allSeasonVoteList.length.toString());
     // print(allSeasonVoteList[0].voteDate.toString());
     // print(allSeasonVoteList[1].voteDate.toString());
@@ -90,13 +93,13 @@ class TrackRecordViewModel extends FutureViewModel {
     // print(allSeasonVoteList[5].voteDate.toString());
   }
 
-  Future getAllSeasonList() async {
+  Future<List<String>> getAllSeasonList() async {
     List<String> seasonNameList = [];
 
-    seasonModelList = await _databaseService.getAllSeasonInfoList();
-    print("SEASONLIST" + seasonModelList[0].toString());
-    seasonModelList.forEach((element) {
-      seasonNameList.add(element.seasonName);
+    seasonModelList = await _databaseService!.getAllSeasonInfoList();
+    print("SEASONLIST" + seasonModelList![0].toString());
+    seasonModelList!.forEach((element) {
+      seasonNameList.add(element.seasonName.toString());
     });
     print("SEASON NAME LIST" + seasonNameList.toString());
     // seasonNameList = ['시즌 2', '시즌 1'];
@@ -104,14 +107,14 @@ class TrackRecordViewModel extends FutureViewModel {
     return seasonNameList;
   }
 
-  Future renewAddress(String seasonName) async {
-    String newEndDate;
-    String newSeason;
+  Future renewAddress(String? seasonName) async {
+    String? newEndDate;
+    String? newSeason;
 
-    for (var i = 0; i < seasonModelList.length; i++) {
-      if (seasonModelList[i].seasonName == seasonName) {
-        newEndDate = seasonModelList[i].endDate ?? address.date;
-        newSeason = seasonModelList[i].seasonId;
+    for (var i = 0; i < seasonModelList!.length; i++) {
+      if (seasonModelList![i].seasonName == seasonName) {
+        newEndDate = seasonModelList![i].endDate ?? address!.date;
+        newSeason = seasonModelList![i].seasonId;
         print(newEndDate);
         print(newSeason);
       }
@@ -122,28 +125,30 @@ class TrackRecordViewModel extends FutureViewModel {
     newAddress = DatabaseAddressModel(
       uid: uid,
       date: newEndDate,
-      category: address.category,
+      category: address!.category,
       season: newSeason,
       // isVoting: address.isVoting,
     );
 
-    userVote = await _databaseService.getUserVote(newAddress);
-    allSeasonUserVoteList =
-        await _databaseService.getAllSeasonUserVote(newAddress);
-    allSeasonVoteList = await _databaseService.getAllSeasonVote(newAddress);
-    newSeasonModel = await _databaseService.getSeasonInfo(newAddress);
-    showingSeasonName = newSeasonModel.seasonName;
-    rankModel = await _databaseService.getRankList(newAddress);
-    for (int i = 0; i < rankModel.length; i++) {
-      if (rankModel[i].uid == uid) {
-        myRank = rankModel[i].todayRank;
+    userVote = await (_databaseService!.getUserVote(newAddress)
+        as FutureOr<UserVoteModel?>);
+    allSeasonUserVoteList = await (_databaseService!
+        .getAllSeasonUserVote(newAddress) as FutureOr<List<UserVoteModel>>);
+    allSeasonVoteList = await (_databaseService!.getAllSeasonVote(newAddress)
+        as FutureOr<List<VoteModel>>);
+    newSeasonModel = await _databaseService!.getSeasonInfo(newAddress);
+    showingSeasonName = newSeasonModel!.seasonName;
+    rankModel = await _databaseService!.getRankList(newAddress);
+    for (int i = 0; i < rankModel!.length; i++) {
+      if (rankModel![i].uid == uid) {
+        myRank = rankModel![i].todayRank;
       }
     }
     isChangingSeason = false;
     notifyListeners();
   }
 
-  String returnDigitFormat(int value) {
+  String returnDigitFormat(int? value) {
     var f = NumberFormat("#,###", "en_US");
 
     return f.format(value);

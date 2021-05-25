@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tutorial_coach_mark/animated_focus_light.dart';
+// import 'package:tutorial_coach_mark/animated_focus_light.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 
@@ -25,19 +25,19 @@ class PortfolioView extends StatefulWidget {
 
 class _PortfolioViewState extends State<PortfolioView>
     with TickerProviderStateMixin {
-  SharedPreferencesService _sharedPreferencesService =
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
-  NavigationService _navigationService = locator<NavigationService>();
-  AnimationController _chartAnimationController;
-  Animation chartAnimation;
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
+  NavigationService? _navigationService = locator<NavigationService>();
+  late AnimationController _chartAnimationController;
+  late Animation chartAnimation;
 
-  AnimationController _itemAnimationController;
-  Animation itemAnimation;
+  late AnimationController _itemAnimationController;
+  Animation? itemAnimation;
 
   //튜토리얼 관련된 애들
-  TutorialCoachMark tutorialCoachMark;
-  List<TargetFocus> targets = List();
+  TutorialCoachMark? tutorialCoachMark;
+  List<TargetFocus> targets = [];
 
   GlobalKey tutorialKey1 = GlobalKey();
   GlobalKey tutorialKey2 = GlobalKey();
@@ -48,8 +48,8 @@ class _PortfolioViewState extends State<PortfolioView>
         identify: 'tutorial target 1',
         keyTarget: tutorialKey1,
         contents: [
-          ContentTarget(
-              align: AlignContent.top,
+          TargetContent(
+              align: ContentAlign.top,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -63,8 +63,8 @@ class _PortfolioViewState extends State<PortfolioView>
                   ],
                 ),
               )),
-          ContentTarget(
-              align: AlignContent.bottom,
+          TargetContent(
+              align: ContentAlign.bottom,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -90,8 +90,8 @@ class _PortfolioViewState extends State<PortfolioView>
         identify: 'tutorial target 2',
         keyTarget: tutorialKey2,
         contents: [
-          ContentTarget(
-              align: AlignContent.top,
+          TargetContent(
+              align: ContentAlign.top,
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -127,11 +127,11 @@ class _PortfolioViewState extends State<PortfolioView>
         colorShadow: Colors.transparent,
         textSkip: "도움말 종료하기",
         opacityShadow: 0.95, onFinish: () {
-      _sharedPreferencesService.setSharedPreferencesValue(
-          portfolioTutorialKey, true);
-    }, onClickSkip: () {
-      _sharedPreferencesService.setSharedPreferencesValue(
-          portfolioTutorialKey, true);
+      _sharedPreferencesService!
+          .setSharedPreferencesValue(portfolioTutorialKey, true);
+    }, onSkip: () {
+      _sharedPreferencesService!
+          .setSharedPreferencesValue(portfolioTutorialKey, true);
     })
       ..show();
   }
@@ -182,7 +182,7 @@ class _PortfolioViewState extends State<PortfolioView>
                 child: Stack(
                   children: [
                     Positioned(
-                      top: deviceHeight / 2 - 100,
+                      top: deviceHeight! / 2 - 100,
                       child: Container(
                         height: 100,
                         width: deviceWidth,
@@ -206,7 +206,7 @@ class _PortfolioViewState extends State<PortfolioView>
             if (_chartAnimationController.isCompleted &&
                 _itemAnimationController.isCompleted) {
               if (!model.portfolioTutorial) {
-                WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
+                WidgetsBinding.instance!.addPostFrameCallback(_afterLayout);
               }
             }
 
@@ -226,8 +226,8 @@ class _PortfolioViewState extends State<PortfolioView>
                             GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onTap: () {
-                                  Navigator.of(_navigationService
-                                          .navigatorKey.currentContext)
+                                  Navigator.of(_navigationService!
+                                          .navigatorKey.currentContext!)
                                       .pop();
                                 },
                                 child: Row(
@@ -264,7 +264,7 @@ class _PortfolioViewState extends State<PortfolioView>
                           children: [
                             GestureDetector(
                               onTap: () {
-                                _mixpanelService.mixpanel
+                                _mixpanelService!.mixpanel
                                     .track('Portfolio Tutorial View');
                                 showTutorial();
                               },
@@ -317,7 +317,7 @@ class _PortfolioViewState extends State<PortfolioView>
                             ),
                             GestureDetector(
                               onTap: () {
-                                _mixpanelService.mixpanel
+                                _mixpanelService!.mixpanel
                                     .track('Portfolio Chart Tap');
                               },
                               child: Container(
@@ -330,15 +330,18 @@ class _PortfolioViewState extends State<PortfolioView>
                                             animation: chartAnimation,
                                             builder: (context, child) {
                                               return CustomPaint(
-                                                size: Size(deviceWidth - 64,
-                                                    deviceWidth - 64),
+                                                size: Size(deviceWidth! - 64,
+                                                    deviceWidth! - 64),
                                                 painter: PortfolioArcChartLoading(
                                                     center: Offset(
-                                                        (deviceWidth - 64) / 2 +
+                                                        (deviceWidth! - 64) /
+                                                                2 +
                                                             16,
-                                                        (deviceWidth - 64) / 2),
-                                                    percentage1: model
-                                                        .startPercentage[0],
+                                                        (deviceWidth! - 64) /
+                                                            2),
+                                                    percentage1:
+                                                        model.startPercentage[
+                                                            0],
                                                     percentage2:
                                                         model.startPercentage[
                                                                 0] +
@@ -351,11 +354,11 @@ class _PortfolioViewState extends State<PortfolioView>
                                     Center(
                                       key: tutorialKey1,
                                       child: Container(
-                                        width: deviceWidth - 64,
-                                        height: deviceWidth - 64,
+                                        width: deviceWidth! - 64,
+                                        height: deviceWidth! - 64,
                                         child: Center(
                                             child: Text(
-                                          '${model.seasonModel.seasonName}',
+                                          '${model.seasonModel!.seasonName}',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: 14.sp,
@@ -428,7 +431,7 @@ class _PortfolioViewState extends State<PortfolioView>
 }
 
 Widget makePortfolioArcLine(PortfolioViewModel model) {
-  double portfolioArcRadius = deviceWidth - 64;
+  double portfolioArcRadius = deviceWidth! - 64;
   double portfolioArcRadiusCenter = 100.sp;
 
   return Container(
@@ -490,7 +493,7 @@ List<Widget> makePortfolioArcLineComponents(PortfolioViewModel model,
 }
 
 Widget makePortfolioArc(PortfolioViewModel model) {
-  double portfolioArcRadius = deviceWidth - 64;
+  double portfolioArcRadius = deviceWidth! - 64;
   double portfolioArcRadiusCenter = 100.sp;
 
   return Container(
@@ -507,7 +510,7 @@ List<Widget> makePortfolioArcComponents(PortfolioViewModel model,
     double portfolioArcRadius, double portfolioArcRadiusCenter) {
   List<Widget> result = [];
 
-  for (int i = 0; i < model.portfolioModel.subPortfolio.length; i++) {
+  for (int i = 0; i < model.portfolioModel!.subPortfolio!.length; i++) {
     result.add(GestureDetector(
       onTap: () {
         print('$i 번째 component tap');
@@ -528,7 +531,7 @@ List<Widget> makePortfolioArcComponents(PortfolioViewModel model,
           painter: PortfolioArcChart(
               center:
                   Offset(portfolioArcRadius / 2 + 16, portfolioArcRadius / 2),
-              color: model.portfolioModel.subPortfolio[i].colorCode,
+              color: model.portfolioModel!.subPortfolio![i].colorCode,
               percentage1: model.startPercentage[i],
               percentage2: model.startPercentage[i + 1]),
         ),
@@ -583,11 +586,11 @@ Widget makePortfolioItems(PortfolioViewModel model) {
 List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
   List<Widget> result = [];
 
-  for (int i = 0; i < model.portfolioModel.subPortfolio.length; i++) {
+  for (int i = 0; i < model.portfolioModel!.subPortfolio!.length; i++) {
     if (model.drawingMaxLength[i]) {
       result.add(Container(
         height: 32.h,
-        width: (deviceWidth - 32.h),
+        width: (deviceWidth! - 32.h),
         child: Row(
           children: [
             Container(
@@ -596,14 +599,14 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Color(int.parse(
-                      'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                      'FF${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].colorCode}',
                       radix: 16))),
             ),
             SizedBox(
               width: 8,
             ),
             Text(
-              '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+              '${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].stockName}',
               style: TextStyle(
                 fontSize: 17.sp,
                 height: 1,
@@ -614,25 +617,25 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
               width: 8.w,
             ),
             Text(
-              '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
+              '${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].sharesNum}주',
               style: TextStyle(
                   fontSize: 17.sp,
                   fontFamily: 'AppleSDM',
                   height: 1,
                   textBaseline: TextBaseline.alphabetic,
                   color: Color(int.parse(
-                      'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                      'FF${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].colorCode}',
                       radix: 16))),
             ),
           ],
         ),
       ));
     } else {
-      if (i + 1 < model.portfolioModel.subPortfolio.length) {
+      if (i + 1 < model.portfolioModel!.subPortfolio!.length) {
         if (model.drawingMaxLength[i + 1]) {
           result.add(Container(
             height: 32,
-            width: (deviceWidth - 32),
+            width: (deviceWidth! - 32),
             child: Row(
               children: [
                 Container(
@@ -641,14 +644,14 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Color(int.parse(
-                          'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                          'FF${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].colorCode}',
                           radix: 16))),
                 ),
                 SizedBox(
                   width: 8,
                 ),
                 Text(
-                  '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+                  '${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].stockName}',
                   style: TextStyle(
                     fontSize: 17.sp,
                     height: 1,
@@ -659,14 +662,14 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                   width: 8,
                 ),
                 Text(
-                  '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
+                  '${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].sharesNum}주',
                   style: TextStyle(
                       fontSize: 17.sp,
                       fontFamily: 'AppleSDM',
                       height: 1,
                       textBaseline: TextBaseline.alphabetic,
                       color: Color(int.parse(
-                          'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                          'FF${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].colorCode}',
                           radix: 16))),
                 ),
               ],
@@ -677,7 +680,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
             children: [
               Container(
                 height: 32,
-                width: (deviceWidth - 32) / 2 - 10,
+                width: (deviceWidth! - 32) / 2 - 10,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -687,14 +690,14 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Color(int.parse(
-                              'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                              'FF${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].colorCode}',
                               radix: 16))),
                     ),
                     SizedBox(
                       width: 8.w,
                     ),
                     Text(
-                      '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+                      '${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].stockName}',
                       style: TextStyle(
                         fontSize: 17.sp,
                         height: 1,
@@ -705,14 +708,14 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                       width: 8.w,
                     ),
                     Text(
-                      '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
+                      '${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].sharesNum}주',
                       style: TextStyle(
                           fontSize: 17.sp,
                           fontFamily: 'AppleSDM',
                           height: 1,
                           textBaseline: TextBaseline.alphabetic,
                           color: Color(int.parse(
-                              'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                              'FF${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].colorCode}',
                               radix: 16))),
                     ),
                   ],
@@ -721,7 +724,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
               Spacer(),
               Container(
                 height: 32,
-                width: (deviceWidth - 32) / 2 - 10,
+                width: (deviceWidth! - 32) / 2 - 10,
                 child: Row(
                   children: [
                     Container(
@@ -730,14 +733,14 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Color(int.parse(
-                              'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
+                              'FF${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i + 1]].colorCode}',
                               radix: 16))),
                     ),
                     SizedBox(
                       width: 8.w,
                     ),
                     Text(
-                      '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].stockName}',
+                      '${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i + 1]].stockName}',
                       style: TextStyle(
                         fontSize: 17.sp,
                         height: 1,
@@ -748,14 +751,14 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                       width: 8.w,
                     ),
                     Text(
-                      '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].sharesNum}주',
+                      '${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i + 1]].sharesNum}주',
                       style: TextStyle(
                           fontSize: 17.sp,
                           fontFamily: 'AppleSDM',
                           height: 1,
                           textBaseline: TextBaseline.alphabetic,
                           color: Color(int.parse(
-                              'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i + 1]].colorCode}',
+                              'FF${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i + 1]].colorCode}',
                               radix: 16))),
                     ),
                   ],
@@ -769,7 +772,7 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
       } else {
         result.add(Container(
           height: 32,
-          width: (deviceWidth - 32),
+          width: (deviceWidth! - 32),
           child: Row(
             children: [
               Container(
@@ -778,14 +781,14 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Color(int.parse(
-                        'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                        'FF${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].colorCode}',
                         radix: 16))),
               ),
               SizedBox(
                 width: 8.w,
               ),
               Text(
-                '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].stockName}',
+                '${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].stockName}',
                 style: TextStyle(
                   fontSize: 17.sp,
                   height: 1,
@@ -796,14 +799,14 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
                 width: 8.w,
               ),
               Text(
-                '${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].sharesNum}주',
+                '${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].sharesNum}주',
                 style: TextStyle(
                     fontSize: 17.sp,
                     fontFamily: 'AppleSDM',
                     height: 1,
                     textBaseline: TextBaseline.alphabetic,
                     color: Color(int.parse(
-                        'FF${model.portfolioModel.subPortfolio[model.orderDrawingItem[i]].colorCode}',
+                        'FF${model.portfolioModel!.subPortfolio![model.orderDrawingItem[i]].colorCode}',
                         radix: 16))),
               ),
             ],
@@ -817,10 +820,10 @@ List<Widget> makePortfolioItemsColumns(PortfolioViewModel model) {
 }
 
 class PortfolioArcChart extends CustomPainter {
-  Offset center;
-  String color;
-  double percentage1 = 0;
-  double percentage2 = 0;
+  Offset? center;
+  String? color;
+  double? percentage1 = 0;
+  double? percentage2 = 0;
 
   PortfolioArcChart(
       {this.center, this.color, this.percentage1, this.percentage2});
@@ -833,22 +836,22 @@ class PortfolioArcChart extends CustomPainter {
 
     double radius = size.width / 2;
 
-    if (percentage1 != 100) percentage1 = percentage1 % 100;
-    if (percentage2 != 100) percentage2 = percentage2 % 100;
+    if (percentage1 != 100) percentage1 = percentage1! % 100;
+    if (percentage2 != 100) percentage2 = percentage2! % 100;
 
-    if (percentage1 > percentage2) {
-      double arcAngle1 = 2 * math.pi * (percentage1 / 100);
-      canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle1,
-          2 * math.pi - arcAngle1, true, paint);
+    if (percentage1! > percentage2!) {
+      double arcAngle1 = 2 * math.pi * (percentage1! / 100);
+      canvas.drawArc(Rect.fromCircle(center: center!, radius: radius),
+          arcAngle1, 2 * math.pi - arcAngle1, true, paint);
 
-      double arcAngle2 = 2 * math.pi * (percentage2 / 100);
-      canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
+      double arcAngle2 = 2 * math.pi * (percentage2! / 100);
+      canvas.drawArc(Rect.fromCircle(center: center!, radius: radius),
           2 * math.pi, arcAngle2, true, paint);
     } else {
-      double arcAngle1 = 2 * math.pi * (percentage1 / 100);
-      double arcAngle2 = 2 * math.pi * (percentage2 / 100);
-      canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle1,
-          arcAngle2 - arcAngle1, true, paint);
+      double arcAngle1 = 2 * math.pi * (percentage1! / 100);
+      double arcAngle2 = 2 * math.pi * (percentage2! / 100);
+      canvas.drawArc(Rect.fromCircle(center: center!, radius: radius),
+          arcAngle1, arcAngle2 - arcAngle1, true, paint);
     }
   }
 
@@ -858,7 +861,7 @@ class PortfolioArcChart extends CustomPainter {
   }
 
   @override
-  bool hitTest(Offset position) {
+  bool? hitTest(Offset position) {
     // TODO: implement hitTest
     return super.hitTest(position);
   }
@@ -870,9 +873,9 @@ class PortfolioArcChart extends CustomPainter {
 }
 
 class PortfolioArcLine extends CustomPainter {
-  Offset center;
-  String color;
-  double standartRadius;
+  Offset? center;
+  String? color;
+  double? standartRadius;
 
   PortfolioArcLine({this.center, this.color, this.standartRadius});
 
@@ -887,10 +890,10 @@ class PortfolioArcLine extends CustomPainter {
 
     double startAngle = 0;
     final double maxAngle = 2 * math.pi;
-    final double space = 2 * math.pi / 200 * (standartRadius / size.width);
+    final double space = 2 * math.pi / 200 * (standartRadius! / size.width);
 
     while (startAngle < maxAngle) {
-      canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
+      canvas.drawArc(Rect.fromCircle(center: center!, radius: radius),
           startAngle, space, false, paint);
 
       startAngle += 2 * space;
@@ -904,9 +907,9 @@ class PortfolioArcLine extends CustomPainter {
 }
 
 class PortfolioArcChartLoading extends CustomPainter {
-  Offset center;
-  double percentage1 = 0;
-  double percentage2 = 0;
+  Offset? center;
+  double? percentage1 = 0;
+  double? percentage2 = 0;
 
   PortfolioArcChartLoading({this.center, this.percentage1, this.percentage2});
 
@@ -918,15 +921,15 @@ class PortfolioArcChartLoading extends CustomPainter {
 
     double radius = size.width / 2;
 
-    double arcAngle1 = 2 * math.pi * (percentage1 / 100);
-    double arcAngle2 = 2 * math.pi * (percentage2 / 100);
+    double arcAngle1 = 2 * math.pi * (percentage1! / 100);
+    double arcAngle2 = 2 * math.pi * (percentage2! / 100);
 
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle1,
+    canvas.drawArc(Rect.fromCircle(center: center!, radius: radius), arcAngle1,
         arcAngle2 - arcAngle1, true, paint);
 
     paint..color = Colors.white;
 
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle2,
+    canvas.drawArc(Rect.fromCircle(center: center!, radius: radius), arcAngle2,
         2 * math.pi - arcAngle2 + arcAngle1, true, paint);
   }
 

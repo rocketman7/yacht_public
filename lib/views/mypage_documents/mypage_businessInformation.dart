@@ -12,7 +12,7 @@ class MypageBusinessInformation extends StatelessWidget {
     return FutureBuilder(
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          String _termsOfUse = snapshot.data;
+          String _termsOfUse = snapshot.data.toString();
           return Scaffold(
             appBar: AppBar(
               title: Text(

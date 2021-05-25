@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NotificationWebView extends StatefulWidget {
-  final String title;
-  final String url;
+  final String? title;
+  final String? url;
 
   NotificationWebView(this.title, this.url);
   @override

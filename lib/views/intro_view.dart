@@ -12,17 +12,17 @@ class IntroView extends StatefulWidget {
 
 class _IntroViewState extends State<IntroView> with TickerProviderStateMixin {
   // 애니메이션 컨트롤러, 애니메이션 선언
-  AnimationController _firstAnimationController;
-  Animation _firstAnimation;
+  late AnimationController _firstAnimationController;
+  late Animation _firstAnimation;
 
-  AnimationController _secondAnimationController;
-  Animation _secondAnimation;
+  AnimationController? _secondAnimationController;
+  Animation? _secondAnimation;
 
-  AnimationController _thirdAnimationController;
-  Animation _thirdAnimation;
+  AnimationController? _thirdAnimationController;
+  Animation? _thirdAnimation;
 
-  AnimationController _fourthAnimationController;
-  Animation _fourthAnimation;
+  AnimationController? _fourthAnimationController;
+  Animation? _fourthAnimation;
 
   double firstWidth = 1;
 
@@ -68,8 +68,8 @@ class _IntroViewState extends State<IntroView> with TickerProviderStateMixin {
     Size size = MediaQuery.of(context).size;
     deviceHeight = size.height;
     deviceWidth = size.width;
-    double containerHeight = deviceHeight * .09;
-    double sizedBoxHeight = deviceHeight * .018;
+    double containerHeight = deviceHeight! * .09;
+    double sizedBoxHeight = deviceHeight! * .018;
     TextStyle titleStyleWhite = TextStyle(
       fontSize: 26.sp,
       fontFamily: 'AppleSDB',

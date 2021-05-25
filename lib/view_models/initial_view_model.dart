@@ -10,16 +10,16 @@ import '../models/sharedPreferences_const.dart';
 import '../locator.dart';
 
 class InitialViewModel extends FutureViewModel {
-  final AuthService _authService = locator<AuthService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  final SharedPreferencesService _sharedPreferencesService =
+  final AuthService? _authService = locator<AuthService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
-  final PushNotificationService _pushNotificationService =
+  final PushNotificationService? _pushNotificationService =
       locator<PushNotificationService>();
 
   bool isTwoFactorAuthed = true;
-  bool didSurvey;
-  bool firstSurvey;
+  bool didSurvey = true;
+  bool firstSurvey = false;
   var authChange;
 
   Stream<User> getAuthChange() {
@@ -27,7 +27,7 @@ class InitialViewModel extends FutureViewModel {
     if (isTwoFactorAuthed) {
       print("TWO FACTOR AT INITIAL when" + isTwoFactorAuthed.toString());
       print("AUTH STATE CHANGE IS " + authChange.toString());
-      authChange = _authService.auth.authStateChanges();
+      authChange = _authService!.auth.authStateChanges();
       // print("TWO FACTOR AT INITIAL" + isTwoFactorAuthed.toString());
     } else {
       print("TWO FACTOR AT INITIAL" + isTwoFactorAuthed.toString());
@@ -39,19 +39,19 @@ class InitialViewModel extends FutureViewModel {
   }
 
   Future<bool> getTwoFactor() async {
-    return await _sharedPreferencesService.getSharedPreferencesValue(
-        'twoFactor', bool);
+    return await (_sharedPreferencesService!
+        .getSharedPreferencesValue('twoFactor', bool) as FutureOr<bool>);
   }
 
   Future getSharedPreferences() async {
     print(isTwoFactorAuthed);
-    isTwoFactorAuthed = await _sharedPreferencesService
-        .getSharedPreferencesValue('twoFactor', bool);
+    isTwoFactorAuthed = await (_sharedPreferencesService!
+        .getSharedPreferencesValue('twoFactor', bool) as FutureOr<bool>);
 
-    didSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
-        didSurveyKey, bool);
-    firstSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
-        firstSurveyKey, bool);
+    didSurvey = await (_sharedPreferencesService!
+        .getSharedPreferencesValue(didSurveyKey, bool));
+    firstSurvey = await (_sharedPreferencesService!
+        .getSharedPreferencesValue(firstSurveyKey, bool));
     // _sharedPreferencesService.setSharedPreferencesValue(didSurveyKey, false);
     // print('didSurvey(shared preference only) is.. ' + didSurvey.toString());
     print(isTwoFactorAuthed);
@@ -60,7 +60,7 @@ class InitialViewModel extends FutureViewModel {
 
   @override
   Future futureToRun() async {
-    await _pushNotificationService.initialise();
+    await _pushNotificationService!.initialise();
     // _sharedPreferencesService.setSharedPreferencesValue(
     //     voteSelectTutorialKey, false);
     // await _sharedPreferencesService.setSharedPreferencesValue(

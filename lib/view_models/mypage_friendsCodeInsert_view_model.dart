@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:stacked/stacked.dart';
 
 import '../models/user_model.dart';
@@ -8,25 +10,25 @@ import '../services/stateManage_service.dart';
 
 class MypageFriendsCodeInsertViewModel extends FutureViewModel {
   // Services Setting
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final StateManageService _stateManageService = locator<StateManageService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  final StateManageService? _stateManageService = locator<StateManageService>();
 
   // 변수 Setting
-  String uid;
-  UserModel user;
+  String? uid;
+  late UserModel user;
   bool checking = false;
   bool didInserted = false;
-  String insertedCode = '';
+  String? insertedCode = '';
   String errMsg = "";
 
   // method
   MypageFriendsCodeInsertViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   Future getModels() async {
-    user = await _databaseService.getUser(uid);
+    user = await (_databaseService!.getUser(uid) as FutureOr<UserModel>);
     if (user.insertedFriendsCode == null) {
       didInserted = false;
     } else {
@@ -57,7 +59,7 @@ class MypageFriendsCodeInsertViewModel extends FutureViewModel {
       return true;
     } else {
       // 비로소 이제.. 그 추천코드를 가진 다른 유저가 있는지 검사해준다.
-      var a = await _databaseService.searchByFriendsCode(code);
+      var a = await _databaseService!.searchByFriendsCode(code);
       // null 이면 없는 거고.. 아니면 있는것. uid를 뱉어냄
       if (a == null) {
         checking = false;
@@ -66,11 +68,12 @@ class MypageFriendsCodeInsertViewModel extends FutureViewModel {
 
         return true;
       } else {
-        UserModel tempUser = await _databaseService.getUser(a.toString());
+        UserModel tempUser = await (_databaseService!.getUser(a.toString())
+            as FutureOr<UserModel>);
         // _databaseService.updateUserItem(uid, 5);
-        _databaseService.updateUserItem(a.toString(), 5);
-        _databaseService.updateInsertedFriendsCode(uid, code);
-        await _stateManageService.userModelUpdate();
+        _databaseService!.updateUserItem(a.toString(), 5);
+        _databaseService!.updateInsertedFriendsCode(uid, code);
+        await _stateManageService!.userModelUpdate();
 
         insertedCode = code;
 

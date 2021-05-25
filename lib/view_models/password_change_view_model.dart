@@ -16,18 +16,18 @@ import '../services/sharedPreferences_service.dart';
 
 class PasswordChangeViewModel extends BaseViewModel {
   // Services Setting
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  final DialogService _dialogService = locator<DialogService>();
-  final StateManageService _stateManageService = locator<StateManageService>();
-  SharedPreferencesService _sharedPreferencesService =
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final DialogService? _dialogService = locator<DialogService>();
+  final StateManageService? _stateManageService = locator<StateManageService>();
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
   // 변수 Setting
-  String uid;
+  String? uid;
   // String userName;
-  UserModel user;
+  UserModel? user;
 
   bool checking = false;
   void setChecking(bool value) {
@@ -37,12 +37,12 @@ class PasswordChangeViewModel extends BaseViewModel {
 
   // method
   PasswordChangeViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   Future chanegePassword(String newPassword, BuildContext context) async {
     setChecking(true);
-    var result = await _authService.changePassword(newPassword);
+    var result = await _authService!.changePassword(newPassword);
     print("RESULTD " + result.toString());
     if (result == true) {
       setChecking(false);

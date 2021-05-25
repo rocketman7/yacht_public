@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 class NewsModel {
-  final String title;
-  final String link;
-  final String newsFrom;
+  final String? title;
+  final String? link;
+  final String? newsFrom;
   final dynamic date;
   NewsModel({
     this.title,
@@ -13,9 +13,9 @@ class NewsModel {
   });
 
   NewsModel copyWith({
-    String title,
-    String link,
-    String newsFrom,
+    String? title,
+    String? link,
+    String? newsFrom,
     dynamic date,
   }) {
     return NewsModel(
@@ -35,11 +35,11 @@ class NewsModel {
     };
   }
 
-  factory NewsModel.fromData(Map<String, dynamic> data) {
-    if (data == null) return null;
+  factory NewsModel.fromData(Map<String, dynamic>? data) {
+    // if (data == null) return null;
 
     return NewsModel(
-      title: data['title'],
+      title: data!['title'],
       link: data['link'],
       newsFrom: data['newsFrom'],
       date: data['date'],

@@ -11,7 +11,7 @@ import '../../locator.dart';
 import '../../view_models/mypage_reward_view_model.dart';
 
 class MypageRewardView extends StatelessWidget {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
   _launchURL(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -129,7 +129,7 @@ class MypageRewardView extends StatelessWidget {
       ));
       return result;
     } else {
-      for (int i = 0; i < model.userRewardModels.length; i++) {
+      for (int i = 0; i < model.userRewardModels!.length; i++) {
         result.add(makeUserRewardListBeforeDeliveryItem(context, model, i));
       }
     }
@@ -140,7 +140,7 @@ class MypageRewardView extends StatelessWidget {
   // 보유 중인 상금 List의 개별항목들을 만드는
   Widget makeUserRewardListBeforeDeliveryItem(
       BuildContext context, MypageRewardViewModel model, int index) {
-    return (model.userRewardModels[index].deliveryStatus != -1)
+    return (model.userRewardModels![index].deliveryStatus != -1)
         ? Column(
             children: [
               Row(
@@ -149,13 +149,13 @@ class MypageRewardView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${model.userRewardModels[index].rewardTitle}',
+                      Text('${model.userRewardModels![index].rewardTitle}',
                           style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'AppleSDM',
                               fontWeight: FontWeight.bold)),
                       Text(
-                        '${model.dateFormChange(model.userRewardModels[index].awardDate)}',
+                        '${model.dateFormChange(model.userRewardModels![index].awardDate!)}',
                         style: TextStyle(
                             fontFamily: 'AppleSDL',
                             fontSize: 12,
@@ -167,12 +167,12 @@ class MypageRewardView extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       print("tax needed? " +
-                          model.userRewardModels[index].isTax.toString());
-                      (model.userRewardModels[index].deliveryStatus == 0)
+                          model.userRewardModels![index].isTax.toString());
+                      (model.userRewardModels![index].deliveryStatus == 0)
                           ? showDeliveryDialogforLoad(context, model)
                           : (model.userModel.accNumber == null)
                               ? showDeliveryDialogforNotVerif(context, model)
-                              : model.userRewardModels[index].isTax
+                              : model.userRewardModels![index].isTax!
                                   ? showDialog(
                                       context: context,
                                       barrierDismissible: true,
@@ -182,7 +182,7 @@ class MypageRewardView extends StatelessWidget {
                                             "주민등록번호 인증이 왜 필요한가요?\n\n상금으로 지급되는 주식은 사용자에게 기타소득이 됩니다. 1회의 기타소득 가치가 5만원이 넘을 경우, 기타소득 지급자인 주식회사 팀요트는 원천징수 의무자로서 기타소득 지급명세서 제출을 위해 사용자의 주민등록번호를 수집할 수 있습니다 (관련 법령 하단 참조). \n당사는 수집한 주민등록번호를 오직 기타소득 원천징수 지급명세서 작성 용도로만 활용한 후 즉시 폐기합니다.\n\n*관련 법령\n1) 소득세법 제145조(기타소득에 대한 원천징수 시기와 방법 및 원천징수영수증의 발급) ① 원천징수의무자가 기타소득을 지급할 때에는 그 기타소득금액에 원천징수세율을 적용하여 계산한 소득세를 원천징수한다. \n2) 제164조(지급명세서의 제출) ① 제2조에 따라 소득세 납세의무가 있는 개인에게 다음 각 호의 어느 하나에 해당하는 소득을 국내에서 지급하는 자는 대통령령으로 정하는 바에 따라 지급명세서를 그 지급일이 속하는 과세기간의 다음 연도 2월 말일까지 원천징수 관할 세무서장, 지방국세청장 또는 국세청장에게 제출하여야 한다.";
                                         String goCheckName = "인증하러 가기";
                                         String checkNameUrl =
-                                            model.checkNameUrl + model.uid;
+                                            model.checkNameUrl + model.uid!;
                                         return MediaQuery(
                                           data: MediaQuery.of(context)
                                               .copyWith(textScaleFactor: 1.0),
@@ -215,7 +215,7 @@ class MypageRewardView extends StatelessWidget {
                     },
                     child: Row(
                       children: [
-                        (model.userRewardModels[index].deliveryStatus == 1)
+                        (model.userRewardModels![index].deliveryStatus == 1)
                             ? Text('출고하기',
                                 style: TextStyle(
                                     fontSize: 16, fontFamily: 'AppleSDM'))
@@ -224,7 +224,7 @@ class MypageRewardView extends StatelessWidget {
                                     fontSize: 16,
                                     fontFamily: 'AppleSDM',
                                     color: Color(0xFFFF402B))),
-                        (model.userRewardModels[index].deliveryStatus == 1)
+                        (model.userRewardModels![index].deliveryStatus == 1)
                             ? Icon(
                                 Icons.arrow_forward_ios,
                                 size: 16,
@@ -235,7 +235,7 @@ class MypageRewardView extends StatelessWidget {
                   ),
                 ],
               ),
-              FutureBuilder(
+              FutureBuilder<List<double>>(
                 future: model.getHistoricalPrices(index),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -255,7 +255,7 @@ class MypageRewardView extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              StreamBuilder<String>(
+              StreamBuilder<String?>(
                   stream: model.getNameCheckResult(model.uid),
                   builder: (context, snapshot) {
                     print("reward index" + index.toString());
@@ -265,7 +265,7 @@ class MypageRewardView extends StatelessWidget {
                     } else {
                       print("GETNAME SNAPSHOT" + snapshot.data.toString());
                       if (snapshot.data == "1") {
-                        model.userRewardModels[index].isTax = false;
+                        model.userRewardModels![index].isTax = false;
                         model.notifyListeners();
                       }
                       return Container();
@@ -278,15 +278,15 @@ class MypageRewardView extends StatelessWidget {
 
   // 보유 중인 상금 List에서 개별 주식들의 List를 만드는
   List<Widget> makeUserRewardListBeforeDeliveryItemForEach(
-      MypageRewardViewModel model, int index, List<double> histPrices) {
+      MypageRewardViewModel model, int index, List<double>? histPrices) {
     List<Widget> result = [];
 
     if (histPrices != null) {
       for (int i = 0;
-          i < model.userRewardModels[index].listOfAward.length;
+          i < model.userRewardModels![index].listOfAward.length;
           i++) {
         print("STOCKNAME" +
-            model.userRewardModels[index].listOfAward[i].stockName.toString());
+            model.userRewardModels![index].listOfAward[i].stockName.toString());
         result.add(Column(
           children: [
             SizedBox(
@@ -299,10 +299,10 @@ class MypageRewardView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                        '${model.userRewardModels[index].listOfAward[i].stockName}',
+                        '${model.userRewardModels![index].listOfAward[i].stockName}',
                         style: TextStyle(fontSize: 20, fontFamily: 'AppleSDM')),
                     Text(
-                        '${model.userRewardModels[index].listOfAward[i].sharesNum}주',
+                        '${model.userRewardModels![index].listOfAward[i].sharesNum}주',
                         style: TextStyle(fontSize: 18, fontFamily: 'AppleSDM')),
                   ],
                 ),
@@ -563,7 +563,7 @@ class MypageRewardView extends StatelessWidget {
       ));
       return result;
     } else {
-      for (int i = 0; i < model.userRewardModels.length; i++) {
+      for (int i = 0; i < model.userRewardModels!.length; i++) {
         result.add(makeUserRewardListAfterDeliveryItem(model, i));
       }
     }
@@ -574,7 +574,7 @@ class MypageRewardView extends StatelessWidget {
   // 출고 완료한인 상금 List의 개별항목들을 만드는
   Widget makeUserRewardListAfterDeliveryItem(
       MypageRewardViewModel model, int index) {
-    return (model.userRewardModels[index].deliveryStatus != -1)
+    return (model.userRewardModels![index].deliveryStatus != -1)
         ? Container()
         : Column(
             children: [
@@ -584,13 +584,13 @@ class MypageRewardView extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${model.userRewardModels[index].rewardTitle}',
+                      Text('${model.userRewardModels![index].rewardTitle}',
                           style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'AppleSDM',
                               fontWeight: FontWeight.bold)),
                       Text(
-                        '${model.dateFormChange(model.userRewardModels[index].awardDate)}',
+                        '${model.dateFormChange(model.userRewardModels![index].awardDate!)}',
                         style: TextStyle(
                             fontFamily: 'AppleSDL',
                             fontSize: 12,
@@ -641,7 +641,9 @@ class MypageRewardView extends StatelessWidget {
       MypageRewardViewModel model, int index) {
     List<Widget> result = [];
 
-    for (int i = 0; i < model.userRewardModels[index].listOfAward.length; i++) {
+    for (int i = 0;
+        i < model.userRewardModels![index].listOfAward.length;
+        i++) {
       result.add(Column(
         children: [
           SizedBox(
@@ -654,10 +656,10 @@ class MypageRewardView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                      '${model.userRewardModels[index].listOfAward[i].stockName}',
+                      '${model.userRewardModels![index].listOfAward[i].stockName}',
                       style: TextStyle(fontSize: 20, fontFamily: 'AppleSDM')),
                   Text(
-                      '${model.userRewardModels[index].listOfAward[i].sharesNum}주',
+                      '${model.userRewardModels![index].listOfAward[i].sharesNum}주',
                       style: TextStyle(fontSize: 18, fontFamily: 'AppleSDM')),
                 ],
               ),

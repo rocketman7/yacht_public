@@ -20,7 +20,7 @@ import 'dart:math' as math;
 
 class MypageMainView extends StatelessWidget {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MypageMainViewModel>.reactive(
@@ -38,7 +38,7 @@ class MypageMainView extends StatelessWidget {
                         child: Stack(
                           children: [
                             Positioned(
-                              top: deviceHeight / 2 - 100,
+                              top: deviceHeight! / 2 - 100,
                               child: Container(
                                 height: 100,
                                 width: deviceWidth,
@@ -193,10 +193,10 @@ class MypageMainView extends StatelessWidget {
           children: [
             Container(
               // height: 200,
-              width: deviceWidth - 36 - 72,
+              width: deviceWidth! - 36 - 72,
               child: Column(
                 children: [
-                  model.user.accNumber == null
+                  model.user!.accNumber == null
                       ? Row(
                           children: [
                             Container(
@@ -289,7 +289,7 @@ class MypageMainView extends StatelessWidget {
                         //   ),
                         // ),
                         child: AutoSizeText(
-                          model.user.userName,
+                          model.user!.userName!,
                           style: TextStyle(
                               fontSize: 48,
                               letterSpacing: -1.0,
@@ -306,7 +306,7 @@ class MypageMainView extends StatelessWidget {
                 onTap: () {
                   model.navigateToMypageToDown('mypage_editprofile');
                 },
-                child: avatarWidget(model.user.avatarImage, model.user.item))
+                child: avatarWidget(model.user!.avatarImage, model.user!.item))
           ],
         ),
       ),
@@ -324,13 +324,13 @@ class MypageMainView extends StatelessWidget {
             // _mixpanelService.mixpanel.track('FAQ');
             if (navigateTo != null) {
               if (navigateTo == 'notice') {
-                _mixpanelService.mixpanel.track('Notice View - Mypage');
+                _mixpanelService!.mixpanel.track('Notice View - Mypage');
               } else if (navigateTo == 'faq') {
-                _mixpanelService.mixpanel.track('FAQ');
+                _mixpanelService!.mixpanel.track('FAQ');
               } else if (navigateTo == 'mypage_accoutverification') {
-                _mixpanelService.mixpanel.track('My Account');
+                _mixpanelService!.mixpanel.track('My Account');
               } else if (navigateTo == 'mypage_reward') {
-                _mixpanelService.mixpanel.track('My Reward');
+                _mixpanelService!.mixpanel.track('My Reward');
               }
 
               model.navigateToMypageToDown(navigateTo);
@@ -562,8 +562,8 @@ class MypageTempGGookView extends StatefulWidget {
 
 class _MypageTempGGookViewState extends State<MypageTempGGookView>
     with TickerProviderStateMixin {
-  Animation<double> animation;
-  AnimationController animationController;
+  Animation<double>? animation;
+  late AnimationController animationController;
   // AnimationController _animationController;
   // Animation animation;
 
@@ -965,7 +965,7 @@ class _TestWidgetState extends State<TestWidget> {
   // var stream1 = Stream.periodic(Duration(milliseconds: 1), (x) => (x)).take(10);
 //   var stream2;
 
-  BlobController blobCtrl;
+  late BlobController blobCtrl;
 //   Future<Animation> future;
 
 //   AnimationController _animationController;
@@ -1055,16 +1055,16 @@ class _TestWidgetState extends State<TestWidget> {
 }
 
 class Test2Widget extends StatefulWidget {
-  final Color blobColor;
+  final Color? blobColor;
 
-  const Test2Widget({Key key, this.blobColor}) : super(key: key);
+  const Test2Widget({Key? key, this.blobColor}) : super(key: key);
 
   @override
   _Test2WidgetState createState() => _Test2WidgetState();
 }
 
 class _Test2WidgetState extends State<Test2Widget> {
-  BlobController blobCtrl;
+  late BlobController blobCtrl;
 
   @override
   void dispose() {
@@ -1085,7 +1085,7 @@ class _Test2WidgetState extends State<Test2Widget> {
           '10-7-424041',
         ],
         styles: BlobStyles(
-          color: widget.blobColor,
+          color: widget.blobColor!,
           // color: Color(0xFFFFDE34).withOpacity(.5),
         ),
         controller: blobCtrl,
@@ -1101,8 +1101,8 @@ class Test3Widget extends StatefulWidget {
 
 class _Test3WidgetState extends State<Test3Widget>
     with TickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation animation;
+  late AnimationController _animationController;
+  late Animation animation;
 
   @override
   void initState() {
@@ -1145,7 +1145,7 @@ class _Test3WidgetState extends State<Test3Widget>
 }
 
 class PieChart extends CustomPainter {
-  double percentage = 0;
+  double? percentage = 0;
 
   PieChart({this.percentage});
 
@@ -1160,7 +1160,7 @@ class PieChart extends CustomPainter {
 
     canvas.drawCircle(center, radius, paint);
 
-    double arcAngle = 2 * math.pi * (percentage / 100);
+    double arcAngle = 2 * math.pi * (percentage! / 100);
 
     paint..color = Colors.white;
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
@@ -1179,7 +1179,7 @@ class Test4Widget extends StatefulWidget {
 }
 
 class _Test4WidgetState extends State<Test4Widget> {
-  BlobController blobCtrl;
+  late BlobController blobCtrl;
 
   @override
   void dispose() {
@@ -1231,8 +1231,8 @@ class ScaleBlobAnimation extends StatefulWidget {
 
 class _ScaleBlobAnimationState extends State<ScaleBlobAnimation>
     with TickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation animation;
+  late AnimationController _animationController;
+  Animation? animation;
 
   @override
   void initState() {
@@ -1275,17 +1275,17 @@ class _ScaleBlobAnimationState extends State<ScaleBlobAnimation>
 }
 
 class BlobAnimation extends StatefulWidget {
-  final Color blobColor;
-  final double size;
+  final Color? blobColor;
+  final double? size;
 
-  const BlobAnimation({Key key, this.blobColor, this.size}) : super(key: key);
+  const BlobAnimation({Key? key, this.blobColor, this.size}) : super(key: key);
   @override
   _BlobAnimationState createState() => _BlobAnimationState();
 }
 
 class _BlobAnimationState extends State<BlobAnimation>
     with TickerProviderStateMixin {
-  BlobController blobCtrl;
+  late BlobController blobCtrl;
 
   @override
   void initState() {
@@ -1313,7 +1313,7 @@ class _BlobAnimationState extends State<BlobAnimation>
               '10-7-424041',
             ],
             styles: BlobStyles(
-              color: widget.blobColor,
+              color: widget.blobColor!,
               // color: Color(0xFFFFDE34).withOpacity(.5),
             ),
             controller: blobCtrl,

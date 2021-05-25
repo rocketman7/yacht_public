@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-Widget avatarWidget(String avatarImage, int itemNum) {
+Widget avatarWidget(String? avatarImage, int? itemNum) {
   return Container(
     height: 82,
     child: Stack(
@@ -68,7 +68,7 @@ Widget avatarWidget(String avatarImage, int itemNum) {
 }
 
 Widget avatarWidgetWithoutItem(
-  String avatarImage,
+  String? avatarImage,
 ) {
   return Container(
     // height: 40,

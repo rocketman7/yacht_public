@@ -127,7 +127,7 @@ class OneOnOneView extends StatelessWidget {
 List<Widget> oneOnOneList(OneOnOneViewModel model) {
   List<Widget> result = [];
 
-  for (int i = 0; i < model.oneOnOneModel.length; i++) {
+  for (int i = 0; i < model.oneOnOneModel!.length; i++) {
     result.add(GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -144,7 +144,7 @@ List<Widget> oneOnOneList(OneOnOneViewModel model) {
                   width: 50,
                   height: 20,
                   decoration: BoxDecoration(
-                      color: model.oneOnOneModel[i].state
+                      color: model.oneOnOneModel![i].state!
                           ? Color(0xFF1EC8CF)
                           : Colors.black,
                       borderRadius: BorderRadius.circular(
@@ -152,7 +152,7 @@ List<Widget> oneOnOneList(OneOnOneViewModel model) {
                       )),
                   child: Center(
                     child: Text(
-                      model.oneOnOneModel[i].state ? '완료' : '대기',
+                      model.oneOnOneModel![i].state! ? '완료' : '대기',
                       style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'DmSans',
@@ -166,7 +166,7 @@ List<Widget> oneOnOneList(OneOnOneViewModel model) {
                   width: 16,
                 ),
                 Expanded(
-                    child: Text('${model.oneOnOneModel[i].questionTitle}',
+                    child: Text('${model.oneOnOneModel![i].questionTitle}',
                         maxLines: model.isSelected[i] ? 100 : 1,
                         overflow: model.isSelected[i]
                             ? TextOverflow.visible
@@ -204,7 +204,7 @@ List<Widget> oneOnOneList(OneOnOneViewModel model) {
               padding:
                   const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
               child: Text(
-                '${model.oneOnOneModel[i].questionContent}',
+                '${model.oneOnOneModel![i].questionContent}',
                 style: TextStyle(
                     fontSize: 16,
                     letterSpacing: -0.28,
@@ -214,14 +214,14 @@ List<Widget> oneOnOneList(OneOnOneViewModel model) {
           ))
         : result.add(Container());
 
-    model.isSelected[i] && model.oneOnOneModel[i].state
+    model.isSelected[i] && model.oneOnOneModel![i].state!
         ? result.add(Container(
             color: Color(0xFF1EC8CF).withOpacity(0.3),
             child: Padding(
               padding:
                   const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
               child: Text(
-                '${model.oneOnOneModel[i].answer}',
+                '${model.oneOnOneModel![i].answer}',
                 style: TextStyle(
                     fontSize: 16,
                     letterSpacing: -0.28,

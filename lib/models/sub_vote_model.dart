@@ -10,21 +10,21 @@ class SubVote {
 //     'choiceCounts': 2,
 //     'Result': null
 //   },
-  final int id;
-  final String title;
-  final String selectDescription;
-  final String ggookDescription;
-  final String voteImgUrl;
-  final List<dynamic> voteChoices;
-  final List<dynamic> tag0;
-  final List<dynamic> tag1;
-  final int numVoted0;
-  final int numVoted1;
-  final int result;
-  final List<dynamic> issueCode;
-  final List<dynamic> indexOrStocks;
-  final List<dynamic> colorCode;
-  final List<dynamic> shape;
+  final int? id;
+  final String? title;
+  final String? selectDescription;
+  final String? ggookDescription;
+  final String? voteImgUrl;
+  final List<dynamic>? voteChoices;
+  final List<dynamic>? tag0;
+  final List<dynamic>? tag1;
+  final int? numVoted0;
+  final int? numVoted1;
+  final int? result;
+  final List<dynamic>? issueCode;
+  final List<dynamic>? indexOrStocks;
+  final List<dynamic>? colorCode;
+  final List<dynamic>? shape;
 
   SubVote({
     this.id,

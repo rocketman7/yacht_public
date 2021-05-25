@@ -24,7 +24,7 @@ class _NotVotingViewState extends State<NotVotingView> {
                   Container(
                     color: Colors.green[50],
                     width: double.infinity,
-                    height: deviceHeight * .12,
+                    height: deviceHeight! * .12,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +33,7 @@ class _NotVotingViewState extends State<NotVotingView> {
                           "01:05:30",
                           style: TextStyle(
                             fontFamily: 'Akrhip',
-                            fontSize: deviceHeight * .12 * 0.45,
+                            fontSize: deviceHeight! * .12 * 0.45,
                             fontWeight: FontWeight.w700,
                             letterSpacing: -2.5,
                           ),
@@ -42,7 +42,7 @@ class _NotVotingViewState extends State<NotVotingView> {
                           "예측마감까지 남은시간",
                           style: TextStyle(
                             // fontFamily: 'Akrhip',
-                            fontSize: deviceHeight * .12 * 0.17,
+                            fontSize: deviceHeight! * .12 * 0.17,
                             fontWeight: FontWeight.w500,
                             letterSpacing: -2,
                           ),
@@ -90,7 +90,7 @@ class _NotVotingViewState extends State<NotVotingView> {
                     borderRadius: BorderRadius.circular(30.0),
                     child: Container(
                       color: Colors.blue,
-                      height: deviceHeight * .07,
+                      height: deviceHeight! * .07,
                       child: FlatButton(
                         color: Colors.black,
                         onPressed: () {},
@@ -109,7 +109,7 @@ class _NotVotingViewState extends State<NotVotingView> {
                                   "예측하러 가기",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: deviceHeight * .07 * .36,
+                                    fontSize: deviceHeight! * .07 * .36,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -141,7 +141,7 @@ class _NotVotingViewState extends State<NotVotingView> {
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
             child: Container(
-              height: deviceHeight * .15,
+              height: deviceHeight! * .15,
               // color: Colors.redAccent,
               child: FlatButton(
                 color: color,
@@ -157,7 +157,7 @@ class _NotVotingViewState extends State<NotVotingView> {
                   text,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: deviceHeight * .15 * .35,
+                    fontSize: deviceHeight! * .15 * .35,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

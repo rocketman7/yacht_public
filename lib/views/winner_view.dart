@@ -22,7 +22,7 @@ import 'last_season_rank_view.dart';
 class WinnerView extends StatelessWidget {
   final dynamic oldSeasonInfo;
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
 
   WinnerView(this.oldSeasonInfo);
 
@@ -46,7 +46,7 @@ class WinnerView extends StatelessWidget {
                           child: Stack(
                             children: [
                               Positioned(
-                                top: deviceHeight / 2 - 100,
+                                top: deviceHeight! / 2 - 100,
                                 child: Container(
                                   height: 100,
                                   width: deviceWidth,
@@ -125,7 +125,7 @@ class WinnerView extends StatelessWidget {
                                                   20,
                                                 )),
                                             child: Text(
-                                              model.seasonModel.seasonName,
+                                              model.seasonModel!.seasonName!,
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   height: 1,
@@ -148,7 +148,7 @@ class WinnerView extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          _navigationService.navigateWithArgTo(
+                                          _navigationService!.navigateWithArgTo(
                                               'lastSeasonPortfolio', model);
                                         },
                                         child: Row(
@@ -191,7 +191,7 @@ class WinnerView extends StatelessWidget {
                                       Spacer(),
                                       Text(
                                         model.getDateFormChange(
-                                          model.seasonModel.startDate,
+                                          model.seasonModel!.startDate!,
                                         ),
                                         style: TextStyle(
                                           fontSize: 20.sp,
@@ -218,7 +218,7 @@ class WinnerView extends StatelessWidget {
                                       ),
                                       Spacer(),
                                       Text(
-                                        '${model.seasonModel.winningPoint}점',
+                                        '${model.seasonModel!.winningPoint}점',
                                         style: TextStyle(
                                           fontSize: 20.sp,
                                           height: 1,
@@ -268,7 +268,7 @@ class WinnerView extends StatelessWidget {
                                       //   model.rankModel,
                                       // ]);
 
-                                      _navigationService.navigateWithArgTo(
+                                      _navigationService!.navigateWithArgTo(
                                         'lastSeasonRank',
                                         model,
                                       );
@@ -286,7 +286,7 @@ class WinnerView extends StatelessWidget {
                                                 Radius.circular(20))),
                                         height: 30,
                                         child: Text(
-                                          model.seasonModel.seasonName
+                                          model.seasonModel!.seasonName
                                                   .toString() +
                                               " 전체 순위 보러 가기",
                                           // textAlign: TextAlign.center,
@@ -345,7 +345,7 @@ class WinnerView extends StatelessWidget {
                                   SizedBox(height: 16),
                                   Center(
                                     child: Text(
-                                      '${model.seasonModel.seasonName} 우승자',
+                                      '${model.seasonModel!.seasonName} 우승자',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           color: Color(0xFFBD0E0E),
@@ -360,7 +360,7 @@ class WinnerView extends StatelessWidget {
                                         model.winners.length,
                                         (index) => buildWinnersListView(
                                               model,
-                                              model.rankModel[index],
+                                              model.rankModel![index],
                                               index,
                                             )),
                                   ),
@@ -387,7 +387,7 @@ class WinnerView extends StatelessWidget {
                                   SizedBox(
                                     height: 12,
                                   ),
-                                  FutureBuilder(
+                                  FutureBuilder<Map<String, dynamic>?>(
                                       future: model.getSpecialAwardsMap(
                                           model.lastSeasonAddressModel),
                                       builder: (context, snapshot) {
@@ -395,12 +395,13 @@ class WinnerView extends StatelessWidget {
                                           return Container();
                                         } else {
                                           print(snapshot.data);
-                                          Map<String, String> specialAwardMap;
+                                          Map<String, dynamic>? specialAwardMap;
                                           specialAwardMap = snapshot.data;
                                           List specialAwards = [];
                                           List<String> specialAwardsUserNames =
                                               [];
-                                          specialAwardMap.forEach((key, value) {
+                                          specialAwardMap!
+                                              .forEach((key, value) {
                                             specialAwards.add(key);
                                             specialAwardsUserNames.add(value);
                                           });
@@ -463,7 +464,7 @@ class WinnerView extends StatelessWidget {
                                   SizedBox(
                                     height: 12,
                                   ),
-                                  FutureBuilder<String>(
+                                  FutureBuilder<String?>(
                                       future: model.getSpecialAwardsDescription(
                                           model.lastSeasonAddressModel),
                                       builder: (context, snapshot) {
@@ -515,7 +516,7 @@ class WinnerView extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text(
-                                        '${model.newSeasonModel.seasonName} 시작일',
+                                        '${model.newSeasonModel!.seasonName} 시작일',
                                         style: TextStyle(
                                           fontSize: 20.sp,
                                           height: 1,
@@ -526,7 +527,7 @@ class WinnerView extends StatelessWidget {
                                       Spacer(),
                                       Text(
                                         model.getDateFormChange(
-                                            model.newSeasonModel.startDate),
+                                            model.newSeasonModel!.startDate!),
                                         style: TextStyle(
                                           fontSize: 20.sp,
                                           height: 1,
@@ -552,7 +553,7 @@ class WinnerView extends StatelessWidget {
                                       ),
                                       Spacer(),
                                       Text(
-                                        '${model.newSeasonModel.winningPoint}점',
+                                        '${model.newSeasonModel!.winningPoint}점',
                                         style: TextStyle(
                                           fontSize: 20.sp,
                                           height: 1,
@@ -579,7 +580,7 @@ class WinnerView extends StatelessWidget {
                                       Spacer(),
                                       GestureDetector(
                                         onTap: () {
-                                          _navigationService
+                                          _navigationService!
                                               .navigateTo('portfolio');
                                         },
                                         child: Text(
@@ -594,7 +595,7 @@ class WinnerView extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          _navigationService
+                                          _navigationService!
                                               .navigateTo('portfolio');
                                         },
                                         child: Icon(

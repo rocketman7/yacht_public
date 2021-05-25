@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class UserVoteStatsModel {
-  final String firstVote;
-  final int currentWinPoint;
-  final int maxWinPoint;
-  final List<bool> participation;
-  final Map<String, dynamic> winPointHistory;
-  final int numOfPrediction;
-  final int numOfWin;
+  final String? firstVote;
+  final int? currentWinPoint;
+  final int? maxWinPoint;
+  final List<bool>? participation;
+  final Map<String, dynamic>? winPointHistory;
+  final int? numOfPrediction;
+  final int? numOfWin;
 
   UserVoteStatsModel({
     this.firstVote,
@@ -22,20 +22,20 @@ class UserVoteStatsModel {
   });
 
   UserVoteStatsModel copyWith({
-    String firstVote,
-    int currentWinPoint,
-    int maxWinningPoint,
-    List<bool> participation,
-    Map<dynamic, int> winPointHistory,
-    int numOfPrediction,
-    int numOfWin,
+    String? firstVote,
+    int? currentWinPoint,
+    int? maxWinningPoint,
+    List<bool>? participation,
+    Map<dynamic, int>? winPointHistory,
+    int? numOfPrediction,
+    int? numOfWin,
   }) {
     return UserVoteStatsModel(
       firstVote: firstVote ?? this.firstVote,
       currentWinPoint: currentWinPoint ?? this.currentWinPoint,
       maxWinPoint: maxWinningPoint ?? this.maxWinPoint,
       participation: participation ?? this.participation,
-      winPointHistory: winPointHistory ?? this.winPointHistory,
+      winPointHistory: winPointHistory as Map<String, dynamic>? ?? this.winPointHistory,
       numOfPrediction: numOfPrediction ?? this.numOfPrediction,
     );
   }

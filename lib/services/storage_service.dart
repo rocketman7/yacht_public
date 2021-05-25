@@ -5,11 +5,11 @@ abstract class StorageService {
 }
 
 class StorageServiceFirebase extends StorageService {
-  String downloadAddress;
+  String? downloadAddress;
 
-  StorageReference _storageReference = FirebaseStorage.instance.ref();
+  Reference _storageReference = FirebaseStorage.instance.ref();
 
-  Future<String> downloadImageURL(String storageAddress) async {
+  Future<String?> downloadImageURL(String storageAddress) async {
     try {
       downloadAddress = await _storageReference
           .child(storageAddress.toString())

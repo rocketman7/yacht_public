@@ -8,8 +8,8 @@ class TestSplashView extends StatefulWidget {
 
 class _TestSplashViewState extends State<TestSplashView>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<Offset> _animation;
+  late AnimationController _controller;
+  late Animation<Offset> _animation;
   @override
   void initState() {
     super.initState();

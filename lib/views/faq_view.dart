@@ -38,7 +38,7 @@ class FaqView extends StatelessWidget {
 List<Widget> faqList(FaqViewModel model) {
   List<Widget> result = [];
 
-  for (int i = 0; i < model.faqModel.length; i++) {
+  for (int i = 0; i < model.faqModel!.length; i++) {
     result.add(GestureDetector(
       // 이거 해줘야 나머지 페딩영역 선택해도 탭 됨
       behavior: HitTestBehavior.opaque,
@@ -66,7 +66,7 @@ List<Widget> faqList(FaqViewModel model) {
                       )),
                   child: Center(
                     child: Text(
-                      "${model.faqModel[i].category}",
+                      "${model.faqModel![i].category}",
                       style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'DmSans',
@@ -80,7 +80,7 @@ List<Widget> faqList(FaqViewModel model) {
                   width: 16,
                 ),
                 Expanded(
-                    child: Text('${model.faqModel[i].title}',
+                    child: Text('${model.faqModel![i].title}',
                         maxLines: model.isSelected[i] ? 100 : 1,
                         overflow: model.isSelected[i]
                             ? TextOverflow.visible
@@ -118,7 +118,7 @@ List<Widget> faqList(FaqViewModel model) {
               padding:
                   const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
               child: Text(
-                '${model.faqModel[i].content.replaceAll("\\n", "\n")}',
+                '${model.faqModel![i].content!.replaceAll("\\n", "\n")}',
                 style: TextStyle(
                     fontSize: 16,
                     letterSpacing: -0.28,

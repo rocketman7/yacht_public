@@ -4,9 +4,9 @@ import 'package:http/http.dart' as http;
 
 abstract class AccountVerificationService {
   Future<Object> accOwnerVerification(
-      String accNum, String bankCode, String custName);
+      String accNum, String? bankCode, String custName);
   Future<Object> accOccupyVerification(
-      String accNum, String bankCode, String authText);
+      String accNum, String? bankCode, String authText);
   int authTextGenerate();
   int getBankListLength();
   Map<String, String> getBankList();
@@ -82,7 +82,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
 
   @override
   Future<Object> accOwnerVerification(
-      String accNum, String bankCode, String custName) async {
+      String accNum, String? bankCode, String custName) async {
     http.Response resp;
     Map<String, dynamic> body = {
       'OID': null,
@@ -94,7 +94,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
     print("BODY" + body.toString());
     resp = await http.post(
         // 'https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOwner',
-        'https://api.mydatahub.co.kr/scrap/common/settlebank/accountOwner',
+        Uri.parse('https://api.mydatahub.co.kr/scrap/common/settlebank/accountOwner'),
         headers: {
           'Authorization': 'Token $_token',
           // 'Host': 'datahub-dev.scraping.co.kr',
@@ -104,13 +104,13 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
         body: json.encode(body),
         encoding: Encoding.getByName('utf-8'));
 
-    Map<String, dynamic> respBody;
+    Map<String, dynamic>? respBody;
     respBody = json.decode(resp.body);
     print('$respBody');
 
     if (resp.statusCode == 200) {
       print(respBody);
-      if (respBody['errCode'] == '0000') if (respBody['data']['OUTSTATCD'] ==
+      if (respBody!['errCode'] == '0000') if (respBody['data']['OUTSTATCD'] ==
           '0021')
         return [true, 'success'];
       else
@@ -124,7 +124,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
 
   @override
   Future<Object> accOccupyVerification(
-      String accNum, String bankCode, String authText) async {
+      String accNum, String? bankCode, String authText) async {
     http.Response resp;
     Map<String, dynamic> body = {
       'OID': null,
@@ -136,7 +136,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
 
     resp = await http.post(
         // 'https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOccupation',
-        'https://api.mydatahub.co.kr/scrap/common/settlebank/accountOccupation',
+        Uri.parse('https://api.mydatahub.co.kr/scrap/common/settlebank/accountOccupation'),
         headers: {
           'Authorization': 'Token $_token',
           // 'Host': 'datahub-dev.scraping.co.kr',
@@ -146,12 +146,12 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
         body: json.encode(body),
         encoding: Encoding.getByName('utf-8'));
 
-    Map<String, dynamic> respBody;
+    Map<String, dynamic>? respBody;
     respBody = json.decode(resp.body);
     print('$respBody');
 
     if (resp.statusCode == 200) {
-      if (respBody['errCode'] == '0000') if (respBody['data']['OUTSTATCD'] ==
+      if (respBody!['errCode'] == '0000') if (respBody['data']['OUTSTATCD'] ==
           '0021') {
         return [true, 'success'];
       } else

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -14,15 +15,15 @@ import 'package:yachtOne/view_models/base_model.dart';
 import '../locator.dart';
 
 class PhoneAuthViewModel extends FutureViewModel {
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
   // final DialogService _dialogService = locator<DialogService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  SharedPreferencesService _sharedPreferencesService =
+  final NavigationService? _navigationService = locator<NavigationService>();
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
   bool isTwoFactorAuthed = false;
-  String get verificationId => _authService.verificationId;
+  String? get verificationId => _authService!.verificationId;
 
   // authService로 폰 번호와 content 넘겨서 폰 인증 작업 시작
   Future<dynamic> phoneAuth(
@@ -32,8 +33,8 @@ class PhoneAuthViewModel extends FutureViewModel {
     setBusy(true);
     // 기존에 가입한 핸드폰 번호인지 check해야 함
     // 이미 가입한 핸드폰 있으면 false 반환
-    bool duplicatePhoneNumber =
-        await _databaseService.duplicatePhoneNumberCheck(phoneNumber);
+    bool duplicatePhoneNumber = await (_databaseService!
+        .duplicatePhoneNumberCheck(phoneNumber) as FutureOr<bool>);
 
     if (duplicatePhoneNumber == false) {
       setBusy(false);
@@ -73,7 +74,7 @@ class PhoneAuthViewModel extends FutureViewModel {
 
       // return true;
     } else {
-      await _authService.sendPhoneAuthSms(phoneNumber, context);
+      await _authService!.sendPhoneAuthSms(phoneNumber, context);
       setBusy(false);
     }
   }
@@ -83,7 +84,7 @@ class PhoneAuthViewModel extends FutureViewModel {
     print(verificationId);
     // setTwoFactorAuth(false);
 
-    var credential = await _authService.verifySms(code, verificationId);
+    var credential = await _authService!.verifySms(code, verificationId!);
 
     print("AFTER PHONEAUTH " + credential.toString());
 
@@ -126,13 +127,13 @@ class PhoneAuthViewModel extends FutureViewModel {
       // );
     } else {
       setBusy(false);
-      _navigationService.navigateWithArgTo('register', credential);
+      _navigationService!.navigateWithArgTo('register', credential);
     }
   }
 
   @override
   Future futureToRun() =>
-      _sharedPreferencesService.setSharedPreferencesValue('twoFactor', false);
+      _sharedPreferencesService!.setSharedPreferencesValue('twoFactor', false);
 
   // void setTwoFactorAuth(bool isTwoFactored) {
   //   _sharedPreferencesService.setSharedPreferencesValue(

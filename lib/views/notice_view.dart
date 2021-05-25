@@ -41,7 +41,7 @@ class NoticeView extends StatelessWidget {
 List<Widget> noticeList(NoticeViewModel model) {
   List<Widget> result = [];
 
-  for (int i = 0; i < model.noticeModel.length; i++) {
+  for (int i = 0; i < model.noticeModel!.length; i++) {
     result.add(GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
@@ -66,7 +66,7 @@ List<Widget> noticeList(NoticeViewModel model) {
                     child: Text(
                       model.isNew[i]
                           ? "NEW"
-                          : "${model.noticeModel[i].category}",
+                          : "${model.noticeModel![i].category}",
                       style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'AppleSDM',
@@ -83,7 +83,7 @@ List<Widget> noticeList(NoticeViewModel model) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${model.noticeModel[i].title}',
+                        '${model.noticeModel![i].title}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

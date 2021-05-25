@@ -29,7 +29,7 @@ import 'package:stacked/stacked.dart';
 import 'package:yachtOne/view_models/lunchtime_event_view_model.dart';
 
 class LunchtimeEventView extends StatefulWidget {
-  final String lunchEventBaseDate;
+  final String? lunchEventBaseDate;
 
   LunchtimeEventView(this.lunchEventBaseDate);
   @override
@@ -37,10 +37,10 @@ class LunchtimeEventView extends StatefulWidget {
 }
 
 class _LunchtimeEventViewState extends State<LunchtimeEventView> {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final TimezoneService _timezoneService = locator<TimezoneService>();
-  UserVoteModel userVote;
-  String lunchEventBaseDate;
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final TimezoneService? _timezoneService = locator<TimezoneService>();
+  UserVoteModel? userVote;
+  String? lunchEventBaseDate;
   @override
   Widget build(BuildContext context) {
     var formatPrice = NumberFormat("#,###");
@@ -49,15 +49,20 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
     deviceHeight = size.height;
     deviceWidth = size.width;
     //나중에 아래 Screen Util initial 주석처리
-    ScreenUtil.init(context,
-        designSize: Size(375, 812), allowFontScaling: true);
+    ScreenUtil.init(
+      BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width,
+        maxHeight: MediaQuery.of(context).size.height,
+      ),
+      designSize: Size(375, 812),
+    );
 
     TextStyle _contentStyle = TextStyle(fontFamily: 'AppleSDB', fontSize: 18);
 
     return ViewModelBuilder.reactive(
         viewModelBuilder: () =>
             LunchtimeEventViewModel(widget.lunchEventBaseDate),
-        builder: (context, model, child) {
+        builder: (context, dynamic model, child) {
           if (model.isBusy) {
             return Stack(
               children: [
@@ -84,7 +89,7 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                       ])),
                 ),
                 Positioned(
-                  top: deviceHeight / 2 - 100,
+                  top: deviceHeight! / 2 - 100,
                   child: Container(
                     height: 100,
                     width: deviceWidth,
@@ -105,7 +110,7 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                 model.lunchtimeVoteModel.voteEndDateTime.toDate();
 
             bool isEnded =
-                endTime.isAfter(_timezoneService.koreaTime(DateTime.now()));
+                endTime.isAfter(_timezoneService!.koreaTime(DateTime.now()));
             return Scaffold(
               body: Stack(
                 children: [
@@ -144,8 +149,8 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                           GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               onTap: () {
-                                Navigator.of(_navigationService
-                                        .navigatorKey.currentContext)
+                                Navigator.of(_navigationService!
+                                        .navigatorKey.currentContext!)
                                     .pop();
                               },
                               child: Row(
@@ -572,9 +577,9 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                           .subVotes[index].indexOrStocks ==
                                       "index";
                                   // 유저보트 모델 가져와서 예측 기록 체크
-                                  UserVoteModel userVote = model.userVote;
+                                  UserVoteModel? userVote = model.userVote;
                                   // 예측 버튼 활성화 해야하는지 여부
-                                  bool isEnabled = model.isEnabled;
+                                  bool? isEnabled = model.isEnabled;
 
                                   TextStyle _contentStyle = TextStyle(
                                       fontFamily: 'AppleSDB', fontSize: 18);
@@ -613,7 +618,7 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                                   style: _contentStyle,
                                                   textAlign: TextAlign.left,
                                                 ),
-                                                StreamBuilder(
+                                                StreamBuilder<PriceModel>(
                                                   stream: model.getRealtimePrice(
                                                       model.address,
                                                       model
@@ -625,10 +630,10 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                                       return Center(
                                                           child: Container());
                                                     } else {
-                                                      PriceModel price0;
+                                                      PriceModel? price0;
                                                       price0 = snapshot.data;
-                                                      return price0
-                                                                  .pricePctChange <
+                                                      return price0!
+                                                                  .pricePctChange! <
                                                               0
                                                           ? Text(
                                                               isIndex
@@ -754,8 +759,8 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                                                         Icons.arrow_downward,
                                                     textSize: 14.0,
                                                     isEnabled: isEnabled,
-                                                    onChanged: (bool state) {
-                                                      if (userVote
+                                                    onChanged: (bool? state) {
+                                                      if (userVote!
                                                               .voteSelected ==
                                                           null) {
                                                         model.prediction[
@@ -1276,8 +1281,8 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
         });
   }
 
-  Future callNewModalBottomSheet(BuildContext context, String issueCode,
-      String indexOrStocks, DatabaseAddressModel address) {
+  Future callNewModalBottomSheet(BuildContext context, String? issueCode,
+      String? indexOrStocks, DatabaseAddressModel? address) {
     ScrollController controller;
     StreamController scrollStreamCtrl = StreamController<double>();
     return showModalBottomSheet(
@@ -1288,13 +1293,13 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
           context,
         ) =>
             StreamBuilder<double>(
-                stream: scrollStreamCtrl.stream,
+                stream: scrollStreamCtrl.stream as Stream<double>?,
                 initialData: 0,
                 builder: (context, snapshot) {
-                  double offset = snapshot.data;
+                  double offset = snapshot.data!;
 
                   if (offset < -140) {
-                    WidgetsBinding.instance
+                    WidgetsBinding.instance!
                         .addPostFrameCallback((_) => Navigator.pop(context));
                   }
 
@@ -1325,8 +1330,8 @@ class _LunchtimeEventViewState extends State<LunchtimeEventView> {
                       ),
                       Container(
                         height: offset < 0
-                            ? (deviceHeight * .83) + offset
-                            : deviceHeight * .83,
+                            ? (deviceHeight! * .83) + offset
+                            : deviceHeight! * .83,
                         child: ChartForLunchtimeView(scrollStreamCtrl,
                             issueCode, indexOrStocks, address),
                       ),
@@ -1347,10 +1352,10 @@ class TopContainer extends StatefulWidget {
 }
 
 class _TopContainerState extends State<TopContainer> {
-  final TimezoneService _timezoneService = locator<TimezoneService>();
-  Timer _timer;
-  LunchtimeEventViewModel viewModel;
-  DateTime nowFromNetwork;
+  final TimezoneService? _timezoneService = locator<TimezoneService>();
+  late Timer _timer;
+  late LunchtimeEventViewModel viewModel;
+  DateTime? nowFromNetwork;
 
   @override
   void dispose() {
@@ -1398,9 +1403,9 @@ class _TopContainerState extends State<TopContainer> {
       // DateTime nowFromNetwork = model.now;
       // model.renewTimeFromNetwork();
       // DateTime temp = DateTime(2020, 11, 22, 15, 52, 20);
-      return _timezoneService
+      return _timezoneService!
           .koreaTime(endTime)
-          .difference(_timezoneService.koreaTime(DateTime.now()));
+          .difference(_timezoneService!.koreaTime(DateTime.now()));
       // timeLeftArr = diffFinal.split(":");
       // return diffFinal;
     }
@@ -1436,7 +1441,7 @@ class _TopContainerState extends State<TopContainer> {
                   height: 1,
                 ),
               ),
-              viewModel.lunchtimeVoteModel.isShowingResult
+              viewModel.lunchtimeVoteModel.isShowingResult!
                   ? Text(
                       " 결과 발표!",
                       style: TextStyle(

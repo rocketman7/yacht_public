@@ -71,7 +71,7 @@ class _PasswordChangeViewState extends State<PasswordChangeView> {
                                 ),
 
                                 validator: (value) {
-                                  if (value.length < 7) {
+                                  if (value!.length < 7) {
                                     return "7자 이상 비밀번호를 입력하세요";
                                   }
                                   return null;
@@ -157,7 +157,7 @@ class _PasswordChangeViewState extends State<PasswordChangeView> {
                               ),
                               FlatButton(
                                 onPressed: () async {
-                                  if (_formKey.currentState.validate() &&
+                                  if (_formKey.currentState!.validate() &&
                                       (_passwordLength * _checkPasswordLength >
                                           0)) {
                                     model.chanegePassword(

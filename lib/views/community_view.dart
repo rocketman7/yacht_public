@@ -63,17 +63,17 @@ class _CommunityViewState extends State<CommunityView> {
     return StreamBuilder<List<PostModel>>(
       stream: model.getPost(),
       builder: (context, snapshot) {
-        List<PostModel> postList = snapshot.data;
+        List<PostModel>? postList = snapshot.data;
 
         if (snapshot.data == null) {
           print('snapshot.data is null');
           return Container();
-        } else if (snapshot.data.length == 0) {
+        } else if (snapshot.data!.length == 0) {
           print('snapshot.data is 0');
           return Container();
         } else {
           return ListView.builder(
-            itemCount: snapshot.data.length,
+            itemCount: snapshot.data!.length,
             reverse: true,
             itemBuilder: (context, index) {
               return InkWell(
@@ -97,10 +97,10 @@ class _CommunityViewState extends State<CommunityView> {
                           height: 36,
                           width: 36,
                           child: FutureBuilder(
-                            future: model.getAvatar(postList[index].uid),
+                            future: model.getAvatar(postList![index].uid),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                String _avatar = snapshot.data;
+                                String? _avatar = snapshot.data.toString();
                                 return CircleAvatar(
                                   maxRadius: 36,
                                   backgroundColor: Colors.transparent,
@@ -127,7 +127,8 @@ class _CommunityViewState extends State<CommunityView> {
                                 future: model.getNickName(postList[index].uid),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
-                                    String _nickName = snapshot.data;
+                                    String? _nickName =
+                                        snapshot.data.toString();
 
                                     return Row(
                                       children: [
@@ -184,7 +185,7 @@ class _CommunityViewState extends State<CommunityView> {
                                 Row(
                                   children: [
                                     Container(
-                                      width: deviceWidth - 74,
+                                      width: deviceWidth! - 74,
                                       child: Text(
                                         '${postList[index].postText}',
                                         maxLines: 3,
@@ -211,7 +212,7 @@ class _CommunityViewState extends State<CommunityView> {
                                   height: 6,
                                 ),
                                 Container(
-                                  width: deviceWidth - 72,
+                                  width: deviceWidth! - 72,
                                   child: Row(
                                     children: [
                                       Container(
@@ -225,7 +226,7 @@ class _CommunityViewState extends State<CommunityView> {
                                         width: 4,
                                       ),
                                       Text(
-                                        '${postList[index].likedBy.length}',
+                                        '${postList[index].likedBy!.length}',
                                         style: TextStyle(
                                             fontFamily: 'AppleSDM',
                                             fontSize: 12.sp,
@@ -246,7 +247,7 @@ class _CommunityViewState extends State<CommunityView> {
                                         width: 4,
                                       ),
                                       Text(
-                                        '${postList[index].replyList.length}',
+                                        '${postList[index].replyList!.length}',
                                         style: TextStyle(
                                             fontFamily: 'AppleSDM',
                                             fontSize: 12.sp,
@@ -285,10 +286,10 @@ class _CommunityViewState extends State<CommunityView> {
                                 SizedBox(
                                   height: 6,
                                 ),
-                                postList[index].replyList.length == 0
+                                postList[index].replyList!.length == 0
                                     ? Container()
                                     : Text(
-                                        '답글 ${postList[index].replyList.length}개',
+                                        '답글 ${postList[index].replyList!.length}개',
                                         style: TextStyle(
                                             fontFamily: 'AppleSDB',
                                             fontSize: 12.sp,

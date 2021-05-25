@@ -24,8 +24,8 @@ class CustomizedLiteRollingSwitch extends StatefulWidget {
   @required
   final bool value;
   @required
-  final bool isEnabled;
-  final Function(bool) onChanged;
+  final bool? isEnabled;
+  final Function(bool?)? onChanged;
   final String textOff;
   final String textOn;
   final Color colorOn;
@@ -34,9 +34,9 @@ class CustomizedLiteRollingSwitch extends StatefulWidget {
   final Duration animationDuration;
   final IconData iconOn;
   final IconData iconOff;
-  final Function onTap;
-  final Function onDoubleTap;
-  final Function onSwipe;
+  final Function? onTap;
+  final Function? onDoubleTap;
+  final Function? onSwipe;
 
   CustomizedLiteRollingSwitch(
       {this.value = false,
@@ -62,11 +62,11 @@ class CustomizedLiteRollingSwitch extends StatefulWidget {
 class _CustomizedLiteRollingSwitchState
     extends State<CustomizedLiteRollingSwitch>
     with SingleTickerProviderStateMixin {
-  AnimationController animationController;
-  Animation<double> animation;
+  late AnimationController animationController;
+  late Animation<double> animation;
   double value = 0.0;
 
-  bool turnState;
+  bool? turnState;
 
   @override
   void dispose() {
@@ -95,20 +95,20 @@ class _CustomizedLiteRollingSwitchState
 
   @override
   Widget build(BuildContext context) {
-    Color transitionColor = Color.lerp(widget.colorOff, widget.colorOn, value);
+    Color? transitionColor = Color.lerp(widget.colorOff, widget.colorOn, value);
 
     return GestureDetector(
       onDoubleTap: () {
-        widget.isEnabled ? _action() : {};
-        if (widget.onDoubleTap != null) widget.onDoubleTap();
+        widget.isEnabled! ? _action() : {};
+        if (widget.onDoubleTap != null) widget.onDoubleTap!();
       },
       onTap: () {
-        widget.isEnabled ? _action() : {};
-        if (widget.onTap != null) widget.onTap();
+        widget.isEnabled! ? _action() : {};
+        if (widget.onTap != null) widget.onTap!();
       },
       onPanEnd: (details) {
-        widget.isEnabled ? _action() : {};
-        if (widget.onSwipe != null) widget.onSwipe();
+        widget.isEnabled! ? _action() : {};
+        if (widget.onSwipe != null) widget.onSwipe!();
         //widget.onSwipe();
       },
       child: Container(
@@ -159,7 +159,7 @@ class _CustomizedLiteRollingSwitchState
             Transform.translate(
               offset: Offset(40 * value, 0),
               child: Transform.rotate(
-                angle: lerpDouble(0, 2 * pi, value),
+                angle: lerpDouble(0, 2 * pi, value)!,
                 child: Container(
                   height: 40,
                   width: 30,
@@ -203,12 +203,12 @@ class _CustomizedLiteRollingSwitchState
 
   _determine({bool changeState = false}) {
     setState(() {
-      if (changeState) turnState = !turnState;
-      (turnState)
+      if (changeState) turnState = !turnState!;
+      turnState!
           ? animationController.forward()
           : animationController.reverse();
 
-      widget.onChanged(turnState);
+      widget.onChanged!(turnState);
     });
   }
 }

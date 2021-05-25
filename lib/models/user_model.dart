@@ -1,20 +1,20 @@
 class UserModel {
-  final String uid;
-  final String userName;
-  final String email;
-  final String phoneNumber;
-  final String friendsCode;
-  final String insertedFriendsCode;
-  int item;
-  int rewardedCnt;
-  final String avatarImage;
+  final String? uid;
+  final String? userName;
+  final String? email;
+  final String? phoneNumber;
+  final String? friendsCode;
+  final String? insertedFriendsCode;
+  int? item;
+  int? rewardedCnt;
+  final String? avatarImage;
 
-  String accNumber;
-  String accName;
-  String secName;
+  String? accNumber;
+  String? accName;
+  String? secName;
 
-  final bool isNameUpdated;
-  List<dynamic> blockList;
+  final bool? isNameUpdated;
+  List<dynamic>? blockList;
   // final List<UserVote> userVotes;
 
   UserModel({

@@ -1,8 +1,8 @@
 class SubPortfolio {
-  final String stockName;
-  final int sharesNum;
-  final int initialPrice;
-  final int currentPrice;
+  final String? stockName;
+  final int? sharesNum;
+  final int? initialPrice;
+  final int? currentPrice;
   final dynamic colorCode;
 
   SubPortfolio(
@@ -27,7 +27,7 @@ class SubPortfolio {
 }
 
 class PortfolioModel {
-  final List<SubPortfolio> subPortfolio;
+  final List<SubPortfolio>? subPortfolio;
 
   PortfolioModel({this.subPortfolio});
 

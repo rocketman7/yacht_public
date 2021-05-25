@@ -9,11 +9,11 @@ import '../locator.dart';
 
 class StockListViewModel extends FutureViewModel {
   ///se
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
 
   ///va
-  AllStockListModel allStockListModel;
-  AllStockListModel searchingAllStockListModel;
+  AllStockListModel? allStockListModel;
+  AllStockListModel? searchingAllStockListModel;
 
   ///ui va
   final TextEditingController filter = TextEditingController();
@@ -34,22 +34,22 @@ class StockListViewModel extends FutureViewModel {
     });
   }
 
-  AllStockListModel searchStocksInAllStockList(String name) {
+  AllStockListModel? searchStocksInAllStockList(String name) {
     List<SubStockList> tempSubStockList = [];
 
     if (name == "") {
       return allStockListModel;
     } else {
-      for (int i = 0; i < allStockListModel.subStocks.length; i++) {
-        if (allStockListModel.subStocks[i].name
+      for (int i = 0; i < allStockListModel!.subStocks!.length; i++) {
+        if (allStockListModel!.subStocks![i].name!
                 .toLowerCase()
                 .contains(name.toLowerCase()) ||
-            allStockListModel.subStocks[i].alternativeName
+            allStockListModel!.subStocks![i].alternativeName!
                 .toLowerCase()
                 .contains(name.toLowerCase())) {
           tempSubStockList.add(SubStockList(
-              issueCode: allStockListModel.subStocks[i].issueCode,
-              name: allStockListModel.subStocks[i].name));
+              issueCode: allStockListModel!.subStocks![i].issueCode,
+              name: allStockListModel!.subStocks![i].name));
         }
       }
 
@@ -62,7 +62,7 @@ class StockListViewModel extends FutureViewModel {
 
   // for futureToRun
   Future getModels() async {
-    allStockListModel = await _databaseService.getAllStockList();
+    allStockListModel = await _databaseService!.getAllStockList();
     searchingAllStockListModel = allStockListModel;
   }
 

@@ -35,13 +35,13 @@ import 'loading_view.dart';
 class ChartView extends StatefulWidget {
   // final ScrollController controller;
   final StreamController scrollStreamCtrl;
-  final List<bool> selected;
+  final List<bool>? selected;
   final int idx;
   final int numSelected;
-  final VoteModel vote;
-  final SeasonModel seasonInfo;
-  final DatabaseAddressModel address;
-  final UserModel user;
+  final VoteModel? vote;
+  final SeasonModel? seasonInfo;
+  final DatabaseAddressModel? address;
+  final UserModel? user;
   final Function selectUpdate;
   final Function showToast;
   final bool isButtonBlocked;
@@ -65,45 +65,45 @@ class ChartView extends StatefulWidget {
 
 class _ChartViewState extends State<ChartView> {
   // DateTime temp = DateTime.now().add(duration);
-  final _navigationService = locator<NavigationService>();
-  final TimezoneService _timezoneService = locator<TimezoneService>();
-  DatabaseAddressModel address;
-  List<double> closeList;
-  List<double> closeChartList;
-  List<ChartModel> priceDataSourceList;
-  List<StatsModel> statsDataSourceList;
-  int priceSubLength;
-  int statsSubLength;
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final TimezoneService? _timezoneService = locator<TimezoneService>();
+  DatabaseAddressModel? address;
+  List<double>? closeList;
+  List<double>? closeChartList;
+  List<ChartModel>? priceDataSourceList;
+  List<StatsModel>? statsDataSourceList;
+  int? priceSubLength;
+  int? statsSubLength;
   double displayPrice = 0.0;
   BehaviorSubject behaviorCtrl = BehaviorSubject<double>();
-  StreamController priceStreamCtrl = StreamController<double>();
-  StreamController dateTimeStreamCtrl = StreamController<DateTime>();
-  ScrollController controller;
+  StreamController priceStreamCtrl = StreamController<double?>();
+  StreamController dateTimeStreamCtrl = StreamController<DateTime?>();
+  ScrollController? controller;
   StreamController scrollStreamCtrl = StreamController<double>();
-  List<bool> selected;
-  SeasonModel seasonInfo;
-  UserModel user;
-  int idx;
-  int numSelected;
-  String issueCode;
+  List<bool>? selected;
+  SeasonModel? seasonInfo;
+  UserModel? user;
+  int? idx;
+  late int numSelected;
+  String? issueCode;
   int choice = 0;
-  Function _showToast;
+  late Function _showToast;
 
   double _lastValue = 0.0;
 
   // 실시간 가격 데이터 리스트
-  List<PriceModel> realtimePriceDataSourceList;
-  Stream<List<PriceModel>> liveStream;
-  DatabaseService _databaseService = locator<DatabaseService>();
-  DateTime liveToday;
+  List<PriceModel>? realtimePriceDataSourceList;
+  Stream<List<PriceModel>>? liveStream;
+  DatabaseService? _databaseService = locator<DatabaseService>();
+  late DateTime liveToday;
   // 종목 정보 불러올 때 필요한 변수들
 
-  int numOfChoices;
+  int? numOfChoices;
   int indexChosen = 0;
   String countryCode = "KR";
-  String stockOrIndex;
-  String colorCode;
-  bool isButtonBlocked;
+  String? stockOrIndex;
+  String? colorCode;
+  late bool isButtonBlocked;
 
   Color hexToColor(String code) {
     return Color(int.parse(code, radix: 16) + 0xFF0000000);
@@ -118,16 +118,16 @@ class _ChartViewState extends State<ChartView> {
       initialScrollOffset: 0,
     );
     // Duration timestamp = Duration(milliseconds: 400);
-    controller.addListener(() {
+    controller!.addListener(() {
       // setState(() {
       // print(controller.offset);
-      scrollStreamCtrl.add(controller.offset);
-      if (controller.offset < -140) {
+      scrollStreamCtrl.add(controller!.offset);
+      if (controller!.offset < -140) {
         print("triggered");
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
           print("addPostFramecalled");
           // controller.removeListener(() {});
-          controller.dispose();
+          controller!.dispose();
           print("disposed");
         });
       }
@@ -140,7 +140,7 @@ class _ChartViewState extends State<ChartView> {
     // 이 스트림을 불러옴. 이러면 스트림을 다시 콜하지 않음.
     // liveStream =
     //     _databaseService.getRealtimePriceForChart(widget.address, issueCode);
-    print("WIDGET ADDRESS" + widget.address.date.toString());
+    print("WIDGET ADDRESS" + widget.address!.date.toString());
   }
 
   @override
@@ -213,16 +213,16 @@ class _ChartViewState extends State<ChartView> {
     selected = widget.selected;
     idx = widget.idx;
     numSelected = widget.numSelected;
-    issueCode = widget.vote.subVotes[idx].issueCode[indexChosen];
-    numOfChoices = widget.vote.subVotes[idx].issueCode.length;
+    issueCode = widget.vote!.subVotes![idx!].issueCode![indexChosen];
+    numOfChoices = widget.vote!.subVotes![idx!].issueCode!.length;
     print("numOfChoices " + numOfChoices.toString());
     seasonInfo = widget.seasonInfo;
     address = widget.address;
     user = widget.user;
-    stockOrIndex = widget.vote.subVotes[idx].indexOrStocks[indexChosen];
-    colorCode = widget.vote.subVotes[idx].colorCode[indexChosen];
+    stockOrIndex = widget.vote!.subVotes![idx!].indexOrStocks![indexChosen];
+    colorCode = widget.vote!.subVotes![idx!].colorCode![indexChosen];
     isButtonBlocked = widget.isButtonBlocked;
-    print("ISSUECODE " + issueCode);
+    print("ISSUECODE " + issueCode!);
 
     _showToast = widget.showToast;
 
@@ -241,9 +241,9 @@ class _ChartViewState extends State<ChartView> {
         behaviorCtrl,
         dateTimeStreamCtrl,
         scrollStreamCtrl,
-        address.isVoting,
+        address!.isVoting,
       ),
-      builder: (context, model, child) {
+      builder: (context, dynamic model, child) {
         if (model.isBusy) {
           return Scaffold(body: Container());
         } else {
@@ -325,7 +325,7 @@ class _ChartViewState extends State<ChartView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                widget.vote.subVotes[idx].selectDescription
+                                widget.vote!.subVotes![idx!].selectDescription!
                                     .replaceAll("\\n", "\n"),
                                 style: TextStyle(
                                   fontSize: 20,
@@ -333,12 +333,12 @@ class _ChartViewState extends State<ChartView> {
                                   color: Colors.grey[800],
                                 ),
                               ),
-                              (!selected[idx])
+                              (!selected![idx!])
                                   ? RaisedButton(
                                       onPressed: () {
-                                        address.isVoting == false
+                                        address!.isVoting == false
                                             ? {
-                                                _navigationService
+                                                _navigationService!
                                                     .navigateWithArgTo(
                                                         'subjectComment',
                                                         [widget.vote, idx])
@@ -346,15 +346,15 @@ class _ChartViewState extends State<ChartView> {
                                             : isButtonBlocked
                                                 ? {}
                                                 : setState(() {
-                                                    if (seasonInfo
-                                                                .maxDailyVote -
+                                                    if (seasonInfo!
+                                                                .maxDailyVote! -
                                                             numSelected ==
                                                         0) {
                                                       _showToast(
-                                                          "하루 최대 ${seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
-                                                    } else if ((user.item ==
+                                                          "하루 최대 ${seasonInfo!.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                                    } else if ((user!.item ==
                                                             null) ||
-                                                        (user.item -
+                                                        (user!.item! -
                                                                 numSelected <=
                                                             0)) {
                                                       // 선택되면 안됨
@@ -373,7 +373,7 @@ class _ChartViewState extends State<ChartView> {
                                                     }
                                                   });
                                       },
-                                      color: address.isVoting == false
+                                      color: address!.isVoting == false
                                           ? Color(0xFF1EC8CF)
                                           : isButtonBlocked
                                               ? Color(0xFFE4E4E4)
@@ -383,7 +383,7 @@ class _ChartViewState extends State<ChartView> {
                                       ),
                                       padding: EdgeInsets.symmetric(
                                         horizontal:
-                                            address.isVoting == false ? 25 : 20,
+                                            address!.isVoting == false ? 25 : 20,
                                         // vertical: 8,
                                       ),
                                       child: Row(
@@ -393,7 +393,7 @@ class _ChartViewState extends State<ChartView> {
                                           // (model.address.isVoting == false)
                                           //     ? SizedBox()
                                           // :
-                                          address.isVoting == false
+                                          address!.isVoting == false
                                               ? Container()
                                               : SvgPicture.asset(
                                                   'assets/icons/double_check_icon.svg',
@@ -402,14 +402,14 @@ class _ChartViewState extends State<ChartView> {
                                           // (model.address.isVoting == false)
                                           //     ? SizedBox()
                                           // :
-                                          address.isVoting == false
+                                          address!.isVoting == false
                                               ? Container()
                                               : SizedBox(width: 8),
                                           Text(
                                               // model.address.isVoting == false
                                               //     ? "오늘 예측이 마감되었습니다."
                                               // :
-                                              address.isVoting == false
+                                              address!.isVoting == false
                                                   ? "커뮤니티"
                                                   : "선택하기",
                                               style: TextStyle(
@@ -466,9 +466,9 @@ class _ChartViewState extends State<ChartView> {
                             children: [
                               Text(
                                 numOfChoices == 1
-                                    ? widget.vote.subVotes[idx].title
-                                    : widget.vote.subVotes[idx]
-                                        .voteChoices[indexChosen],
+                                    ? widget.vote!.subVotes![idx!].title!
+                                    : widget.vote!.subVotes![idx!]
+                                        .voteChoices![indexChosen],
                                 // "삼성바이오로직스",
                                 style: TextStyle(
                                   fontSize: 30,
@@ -490,16 +490,16 @@ class _ChartViewState extends State<ChartView> {
                                             model.getAllModel(
                                               countryCode,
                                               stockOrIndex,
-                                              widget.vote.subVotes[idx]
-                                                  .issueCode[indexChosen],
+                                              widget.vote!.subVotes![idx!]
+                                                  .issueCode![indexChosen],
                                             );
                                           });
                                         },
                                         child: Text(
                                           // "VS  삼성바이오로직스스스스",
                                           indexChosen == 0
-                                              ? "VS   ${widget.vote.subVotes[idx].voteChoices[1]}"
-                                              : "VS   ${widget.vote.subVotes[idx].voteChoices[0]}",
+                                              ? "VS   ${widget.vote!.subVotes![idx!].voteChoices![1]}"
+                                              : "VS   ${widget.vote!.subVotes![idx!].voteChoices![0]}",
                                           style: TextStyle(
                                             fontSize: 30,
                                             color: Color(0xFF8A8A8A),
@@ -512,9 +512,9 @@ class _ChartViewState extends State<ChartView> {
                                     ),
                             ],
                           ),
-                          StreamBuilder<double>(
+                          StreamBuilder<double?>(
                               // 차트에 tap하는 곳의 가격 stream
-                              stream: priceStreamCtrl.stream,
+                              stream: priceStreamCtrl.stream as Stream<double?>?,
                               initialData:
                                   //  address.isVoting == false
                                   //     ? Future.delayed(
@@ -573,52 +573,52 @@ class _ChartViewState extends State<ChartView> {
                                           model.isDurationSelected[0] == true
                                               ? stockOrIndex == "stocks"
                                                   ? formatPriceUpDown
-                                                      .format((snapshot.data -
-                                                          priceDataSourceList
-                                                              .last.close))
+                                                      .format((snapshot.data! -
+                                                          priceDataSourceList!
+                                                              .last.close!))
                                                       .toString()
                                                   : formatIndexUpDown
-                                                      .format((snapshot.data -
-                                                          priceDataSourceList
-                                                              .last.close))
+                                                      .format((snapshot.data! -
+                                                          priceDataSourceList!
+                                                              .last.close!))
                                                       .toString()
                                               : stockOrIndex == "stocks"
                                                   ? formatPriceUpDown
-                                                      .format((snapshot.data -
-                                                          priceDataSourceList
-                                                              .first.close))
+                                                      .format((snapshot.data! -
+                                                          priceDataSourceList!
+                                                              .first.close!))
                                                       .toString()
                                                   : formatIndexUpDown
-                                                      .format((snapshot.data -
-                                                          priceDataSourceList
-                                                              .first.close))
+                                                      .format((snapshot.data! -
+                                                          priceDataSourceList!
+                                                              .first.close!))
                                                       .toString(),
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: model.isDurationSelected[
                                                         0] ==
                                                     true
-                                                ? (snapshot.data -
-                                                            priceDataSourceList
-                                                                .last.close) <
+                                                ? (snapshot.data! -
+                                                            priceDataSourceList!
+                                                                .last.close!) <
                                                         0
                                                     ? Colors.blue
-                                                    : (snapshot.data -
-                                                                priceDataSourceList
+                                                    : (snapshot.data! -
+                                                                priceDataSourceList!
                                                                     .last
-                                                                    .close) ==
+                                                                    .close!) ==
                                                             0
                                                         ? Colors.black
                                                         : Colors.red
-                                                : (snapshot.data -
-                                                            priceDataSourceList
-                                                                .first.close) <
+                                                : (snapshot.data! -
+                                                            priceDataSourceList!
+                                                                .first.close!) <
                                                         0
                                                     ? Colors.blue
-                                                    : (snapshot.data -
-                                                                priceDataSourceList
+                                                    : (snapshot.data! -
+                                                                priceDataSourceList!
                                                                     .first
-                                                                    .close) ==
+                                                                    .close!) ==
                                                             0
                                                         ? Colors.black
                                                         : Colors.red,
@@ -632,18 +632,18 @@ class _ChartViewState extends State<ChartView> {
                                           model.isDurationSelected[0] == true
                                               ? "(" +
                                                   formatReturnPct
-                                                      .format(((snapshot.data /
-                                                              priceDataSourceList
-                                                                  .last.close) -
+                                                      .format(((snapshot.data! /
+                                                              priceDataSourceList!
+                                                                  .last.close!) -
                                                           1))
                                                       .toString() +
                                                   ")"
                                               : "(" +
                                                   formatReturnPct
-                                                      .format(((snapshot.data /
-                                                              priceDataSourceList
+                                                      .format(((snapshot.data! /
+                                                              priceDataSourceList!
                                                                   .first
-                                                                  .close) -
+                                                                  .close!) -
                                                           1))
                                                       .toString() +
                                                   ")",
@@ -652,27 +652,27 @@ class _ChartViewState extends State<ChartView> {
                                             color: model.isDurationSelected[
                                                         0] ==
                                                     true
-                                                ? (snapshot.data -
-                                                            priceDataSourceList
-                                                                .last.close) <
+                                                ? (snapshot.data! -
+                                                            priceDataSourceList!
+                                                                .last.close!) <
                                                         0
                                                     ? Colors.blue
-                                                    : (snapshot.data -
-                                                                priceDataSourceList
+                                                    : (snapshot.data! -
+                                                                priceDataSourceList!
                                                                     .last
-                                                                    .close) ==
+                                                                    .close!) ==
                                                             0
                                                         ? Colors.black
                                                         : Colors.red
-                                                : (snapshot.data -
-                                                            priceDataSourceList
-                                                                .first.close) <
+                                                : (snapshot.data! -
+                                                            priceDataSourceList!
+                                                                .first.close!) <
                                                         0
                                                     ? Colors.blue
-                                                    : (snapshot.data -
-                                                                priceDataSourceList
+                                                    : (snapshot.data! -
+                                                                priceDataSourceList!
                                                                     .first
-                                                                    .close) ==
+                                                                    .close!) ==
                                                             0
                                                         ? Colors.black
                                                         : Colors.red,
@@ -712,17 +712,17 @@ class _ChartViewState extends State<ChartView> {
                                 //   ),
                                 // );
                               }),
-                          StreamBuilder<DateTime>(
-                              stream: dateTimeStreamCtrl.stream,
+                          StreamBuilder<DateTime?>(
+                              stream: dateTimeStreamCtrl.stream as Stream<DateTime?>?,
                               initialData: model.isDurationSelected[0] == true
-                                  ? strToDate(address.date)
+                                  ? strToDate(address!.date!)
                                   : strToDate(model.chartList.last.date),
                               builder: (context, snapshot) {
                                 print("IS DURATION");
                                 print(model.isDurationSelected);
-                                print(address.date);
+                                print(address!.date);
                                 return Text(stringDateWithDay
-                                    .format(snapshot.data)
+                                    .format(snapshot.data!)
                                     .toString());
                               }),
                         ],
@@ -739,25 +739,25 @@ class _ChartViewState extends State<ChartView> {
                               if (!realtimeSnapshot.hasData) {
                                 print("NO DATA");
                                 return Container(
-                                  height: deviceHeight * 0.23,
+                                  height: deviceHeight! * 0.23,
                                 );
                               } else {
                                 realtimePriceDataSourceList =
                                     realtimeSnapshot.data;
-                                if (address.isVoting == false) {
-                                  print("FIRST LIST" + address.date);
+                                if (address!.isVoting == false) {
+                                  print("FIRST LIST" + address!.date!);
 
-                                  liveToday = strToDate(address.date);
+                                  liveToday = strToDate(address!.date!);
                                   print(
                                       "LIVE TODAY IS " + liveToday.toString());
                                   priceStreamCtrl.add(
-                                      realtimePriceDataSourceList.first.price);
+                                      realtimePriceDataSourceList!.first.price);
                                   dateTimeStreamCtrl.add(
-                                      realtimePriceDataSourceList
+                                      realtimePriceDataSourceList!
                                           .first.createdAt
                                           .toDate());
                                 }
-                                print(realtimeSnapshot.data.length);
+                                print(realtimeSnapshot.data!.length);
                                 return buildContainerForChart(model);
                               }
                             })
@@ -770,7 +770,7 @@ class _ChartViewState extends State<ChartView> {
                       children: List.generate(5, (index) {
                         return GestureDetector(
                           onTap: () {
-                            if (address.isVoting == true && index == 0) {
+                            if (address!.isVoting == true && index == 0) {
                               setState(() {});
                             } else {
                               model.changeDuration(index);
@@ -779,21 +779,21 @@ class _ChartViewState extends State<ChartView> {
                           child: Container(
                             alignment: Alignment.center,
                             // color: Colors.amber,
-                            width: (deviceWidth - 10) / 5,
+                            width: (deviceWidth! - 10) / 5,
                             height: 40,
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5)),
                                 color: model.isDurationSelected[index] == true
-                                    ? (priceDataSourceList.last.close -
-                                                priceDataSourceList
-                                                    .first.close) >
+                                    ? (priceDataSourceList!.last.close! -
+                                                priceDataSourceList!
+                                                    .first.close!) >
                                             0
                                         ? Colors.red
-                                        : (priceDataSourceList.last.close -
-                                                    priceDataSourceList
-                                                        .first.close) ==
+                                        : (priceDataSourceList!.last.close! -
+                                                    priceDataSourceList!
+                                                        .first.close!) ==
                                                 0
                                             ? Colors.black
                                             : Colors.blue
@@ -809,7 +809,7 @@ class _ChartViewState extends State<ChartView> {
                                   fontSize: 14,
                                   // height: 1,
                                   textBaseline: TextBaseline.alphabetic,
-                                  color: (address.isVoting == true &&
+                                  color: (address!.isVoting == true &&
                                           index == 0)
                                       ? Colors.grey
                                       : model.isDurationSelected[index] == true
@@ -1700,16 +1700,16 @@ class _ChartViewState extends State<ChartView> {
           height: 20,
         ),
         Container(
-          height: deviceHeight * 0.23,
+          height: deviceHeight! * 0.23,
           child: SfCartesianChart(
             plotAreaBorderWidth: 0,
             series: <ChartSeries>[
               ScatterSeries<StatsModel, String>(
                 color: Color(0xFFFF5959).withOpacity(.3),
-                dataSource: statsDataSourceList,
+                dataSource: statsDataSourceList!,
                 xValueMapper: (StatsModel stats, _) => stats.announcedAt == null
                     ? null
-                    : stats.announcedAt.replaceAll("\\n", "\n"),
+                    : stats.announcedAt!.replaceAll("\\n", "\n"),
                 yValueMapper: (StatsModel stats, _) => stats.expectedEps,
                 markerSettings: MarkerSettings(
                   width: 16,
@@ -1720,9 +1720,9 @@ class _ChartViewState extends State<ChartView> {
                 color:
                     // hexToColor(colorCode),
                     Color(0xFFFF5959),
-                dataSource: statsDataSourceList,
+                dataSource: statsDataSourceList!,
                 xValueMapper: (StatsModel stats, _) =>
-                    stats.announcedAt.replaceAll("\\n", "\n"),
+                    stats.announcedAt!.replaceAll("\\n", "\n"),
                 yValueMapper: (StatsModel stats, _) => stats.actualEps,
                 markerSettings: MarkerSettings(
                   width: 16,
@@ -1854,7 +1854,7 @@ class _ChartViewState extends State<ChartView> {
     // );
     return Container(
       // color: Colors.red,
-      height: deviceHeight * 0.23,
+      height: deviceHeight! * 0.23,
       child: SfCartesianChart(
         plotAreaBorderWidth: 0,
         margin: EdgeInsets.all(0),
@@ -1883,8 +1883,8 @@ class _ChartViewState extends State<ChartView> {
         onChartTouchInteractionUp: (ChartTouchInteractionArgs args) =>
             model.isDurationSelected[0] == true
                 ? model.whenTrackEndOnLive(
-                    realtimePriceDataSourceList.first.price,
-                    realtimePriceDataSourceList.first.createdAt.toDate())
+                    realtimePriceDataSourceList!.first.price,
+                    realtimePriceDataSourceList!.first.createdAt.toDate())
                 : model.whenTrackEnd(),
         // onChartTouchInteractionDown:
         //     (ChartTouchInteractionArgs args) =>
@@ -1894,13 +1894,13 @@ class _ChartViewState extends State<ChartView> {
           model.isDurationSelected[0] == true
               ? FastLineSeries<PriceModel, DateTime>(
                   animationDuration: 0,
-                  dataSource: realtimePriceDataSourceList,
-                  color: (realtimePriceDataSourceList.first.price -
-                              realtimePriceDataSourceList.last.price) >
+                  dataSource: realtimePriceDataSourceList!,
+                  color: (realtimePriceDataSourceList!.first.price! -
+                              realtimePriceDataSourceList!.last.price!) >
                           0
                       ? Colors.red
-                      : (realtimePriceDataSourceList.first.price -
-                                  realtimePriceDataSourceList.last.price) ==
+                      : (realtimePriceDataSourceList!.first.price! -
+                                  realtimePriceDataSourceList!.last.price!) ==
                               0
                           ? Colors.black
                           : Colors.blue,
@@ -1917,16 +1917,16 @@ class _ChartViewState extends State<ChartView> {
                   yValueMapper: (PriceModel price, _) => price.price,
                 )
               : FastLineSeries<ChartModel, DateTime>(
-                  dataSource: priceDataSourceList,
+                  dataSource: priceDataSourceList!,
                   emptyPointSettings: EmptyPointSettings(
                     mode: EmptyPointMode.gap,
                   ),
-                  color: (priceDataSourceList.last.close -
-                              priceDataSourceList.first.close) >
+                  color: (priceDataSourceList!.last.close! -
+                              priceDataSourceList!.first.close!) >
                           0
                       ? Colors.red
-                      : (priceDataSourceList.last.close -
-                                  priceDataSourceList.first.close) ==
+                      : (priceDataSourceList!.last.close! -
+                                  priceDataSourceList!.first.close!) ==
                               0
                           ? Colors.black
                           : Colors.blue,
@@ -1938,7 +1938,7 @@ class _ChartViewState extends State<ChartView> {
                   enableTooltip: true,
                   // <ChartModel>[
 
-                  xValueMapper: (ChartModel chart, _) => strToDate(chart.date),
+                  xValueMapper: (ChartModel chart, _) => strToDate(chart.date!),
                   yValueMapper: (ChartModel chart, _) => chart.close,
                   // animationDuration: 1000,
                 )
@@ -1952,34 +1952,34 @@ class _ChartViewState extends State<ChartView> {
               // LIVE 일 때,
               model.isDurationSelected[0] == true
                   ? (quiver.min(
-                        List.generate(realtimePriceDataSourceList.length,
+                        List.generate(realtimePriceDataSourceList!.length,
                             (index) {
                           // print(model.chartList[index].close);
-                          return realtimePriceDataSourceList[index].price;
+                          return realtimePriceDataSourceList![index].price;
                         }),
-                      ) *
+                      )! *
                       0.97)
                   : (quiver.min(
-                        List.generate(priceDataSourceList.length, (index) {
+                        List.generate(priceDataSourceList!.length, (index) {
                           // print(model.chartList[index].close);
-                          return priceDataSourceList[index].close;
+                          return priceDataSourceList![index].close;
                         }),
-                      ) *
+                      )! *
                       0.97),
           maximum:
 
               // LIVE 일 때,
               model.isDurationSelected[0] == true
                   ? (quiver.max(
-                        List.generate(realtimePriceDataSourceList.length,
+                        List.generate(realtimePriceDataSourceList!.length,
                             (index) {
                           // print(model.chartList[index].close);
-                          return realtimePriceDataSourceList[index].price;
+                          return realtimePriceDataSourceList![index].price;
                         }),
-                      ) *
+                      )! *
                       1.03)
-                  : (quiver.max(List.generate(priceDataSourceList.length,
-                          (index) => priceDataSourceList[index].close)) *
+                  : (quiver.max(List.generate(priceDataSourceList!.length,
+                          (index) => priceDataSourceList![index].close))! *
                       1.03),
         ),
         primaryXAxis: model.isDurationSelected[0] == true
@@ -1989,13 +1989,13 @@ class _ChartViewState extends State<ChartView> {
                 ),
                 isVisible: false,
                 minimum: tz.TZDateTime.from(
-                    tz.TZDateTime(_timezoneService.seoul, liveToday.year,
+                    tz.TZDateTime(_timezoneService!.seoul, liveToday.year,
                         liveToday.month, liveToday.day, 08, 50, 00),
-                    _timezoneService.seoul),
+                    _timezoneService!.seoul),
                 maximum: tz.TZDateTime.from(
-                    tz.TZDateTime(_timezoneService.seoul, liveToday.year,
+                    tz.TZDateTime(_timezoneService!.seoul, liveToday.year,
                         liveToday.month, liveToday.day, 15, 40, 00),
-                    _timezoneService.seoul),
+                    _timezoneService!.seoul),
               )
             : CategoryAxis(
                 majorGridLines: MajorGridLines(

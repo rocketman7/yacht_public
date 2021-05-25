@@ -12,7 +12,7 @@ class TestHomeView extends StatefulWidget {
 }
 
 class _TestHomeViewState extends State<TestHomeView> {
-  ScrollController _scrollController;
+  late ScrollController _scrollController;
   double _currentHeight = 0;
   @override
   void initState() {
@@ -87,7 +87,7 @@ class _TestHomeViewState extends State<TestHomeView> {
                           child: Text('월간 리그 상금 Top 10',
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline6
+                                  .headline6!
                                   .copyWith(fontSize: 20, color: Colors.white)),
                         ),
                       ),
@@ -198,7 +198,7 @@ class _TestHomeViewState extends State<TestHomeView> {
                     "총 10,000,000원",
                     style: Theme.of(context)
                         .textTheme
-                        .headline3
+                        .headline3!
                         .copyWith(fontSize: 28, color: Colors.black87),
                   ),
                   SizedBox(
@@ -490,21 +490,21 @@ class _TestHomeViewState extends State<TestHomeView> {
               "카테고리",
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
+                  .bodyText1!
                   .copyWith(color: Colors.white),
             ),
             Text(
               "꾸욱 3점",
               style: Theme.of(context)
                   .textTheme
-                  .headline3
+                  .headline3!
                   .copyWith(color: Colors.white),
             ),
             Text(
               "포인트를 차지하세요",
               style: Theme.of(context)
                   .textTheme
-                  .bodyText1
+                  .bodyText1!
                   .copyWith(color: Colors.white),
             )
           ],
@@ -515,9 +515,9 @@ class _TestHomeViewState extends State<TestHomeView> {
 }
 
 class VerticalSliderDemo extends StatelessWidget {
-  final List<Widget> imageSliders;
+  final List<Widget>? imageSliders;
 
-  const VerticalSliderDemo({Key key, this.imageSliders}) : super(key: key);
+  const VerticalSliderDemo({Key? key, this.imageSliders}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -538,7 +538,7 @@ class VerticalSliderDemo extends StatelessWidget {
 class CustomSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   const CustomSliverAppBarDelegate({
-    @required this.expandedHeight,
+    required this.expandedHeight,
   });
 
   @override

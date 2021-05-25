@@ -34,13 +34,13 @@ class SubjectCommunityView extends StatefulWidget {
 final TextEditingController _commentInputController = TextEditingController();
 final ScrollController _commentScrollController = ScrollController();
 
-VoteCommentModel voteCommentModel;
+VoteCommentModel? voteCommentModel;
 
 class _SubjectCommunityViewState extends State<SubjectCommunityView> {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  int idx;
-  VoteModel vote;
+  int? idx;
+  VoteModel? vote;
   bool isliked = false;
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
   }
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  int _textLength;
+  int? _textLength;
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +63,8 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     print(deviceHeight);
 
     return ViewModelBuilder.reactive(
-      viewModelBuilder: () => SubjectCommunityViewModel(vote.voteDate, idx),
-      builder: (context, model, child) {
+      viewModelBuilder: () => SubjectCommunityViewModel(vote!.voteDate, idx),
+      builder: (context, dynamic model, child) {
         // model.getNowFromNetwork();
         // print("BUILDING" + model.idx.toString());
         return model.isBusy
@@ -101,11 +101,11 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                               children: <Widget>[
                                 GestureDetector(
                                     onTap: () {
-                                      FocusScope.of(_navigationService
-                                              .navigatorKey.currentContext)
+                                      FocusScope.of(_navigationService!
+                                              .navigatorKey.currentContext!)
                                           .unfocus();
-                                      Navigator.of(_navigationService
-                                              .navigatorKey.currentContext)
+                                      Navigator.of(_navigationService!
+                                              .navigatorKey.currentContext!)
                                           .pop();
                                     },
                                     child: Icon(
@@ -159,14 +159,14 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                       var formatReturnPct =
                                                           new NumberFormat(
                                                               "0.00%");
-                                                      PriceModel price0;
+                                                      PriceModel? price0;
                                                       price0 = snapshot0.data;
                                                       return Column(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
                                                                 .spaceAround,
                                                         children: <Widget>[
-                                                          price0.pricePctChange <
+                                                          price0!.pricePctChange! <
                                                                   0
                                                               ? Text(
                                                                   formatReturnPct
@@ -223,7 +223,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                     if (snapshot.data == null) {
                                                       return Container();
                                                     } else {
-                                                      PriceModel price0;
+                                                      PriceModel? price0;
                                                       price0 = snapshot.data;
 
                                                       return Row(
@@ -231,7 +231,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                             MainAxisAlignment
                                                                 .spaceAround,
                                                         children: <Widget>[
-                                                          price0.pricePctChange <
+                                                          price0!.pricePctChange! <
                                                                   0
                                                               ? Text(
                                                                   formatReturnPct
@@ -360,7 +360,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                             var formatReturnPct =
                                                                 new NumberFormat(
                                                                     "0.00%");
-                                                            PriceModel price0;
+                                                            PriceModel? price0;
                                                             price0 =
                                                                 snapshot0.data;
                                                             return Column(
@@ -383,7 +383,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                                         'AppleSDB',
                                                                   ),
                                                                 ),
-                                                                price0.pricePctChange <
+                                                                price0!.pricePctChange! <
                                                                         0
                                                                     ? Text(
                                                                         formatReturnPct
@@ -443,7 +443,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                               null) {
                                                             return Container();
                                                           } else {
-                                                            PriceModel price0;
+                                                            PriceModel? price0;
                                                             price0 =
                                                                 snapshot.data;
                                                             return Row(
@@ -452,7 +452,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                                       .spaceAround,
                                                               children: <
                                                                   Widget>[
-                                                                price0.pricePctChange <
+                                                                price0!.pricePctChange! <
                                                                         0
                                                                     ? Text(
                                                                         formatReturnPct
@@ -735,7 +735,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                       fontSize: 14,
                                     ),
                                   ),
-                                  _numOfVoteChart(model, idx),
+                                  _numOfVoteChart(model, idx!),
                                 ],
                               ),
                             ),
@@ -766,7 +766,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                       constraints: BoxConstraints(
                                         minHeight: 40,
                                       ),
-                                      width: deviceWidth * .75,
+                                      width: deviceWidth! * .75,
                                       child: TextFormField(
                                         // scrollController: _commentScrollController,
                                         // scrollPhysics: ScrollPhysics(),
@@ -777,7 +777,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                         //   });
                                         // },
                                         validator: (value) {
-                                          if (value.length < 1) {
+                                          if (value!.length < 1) {
                                             print(value.length);
                                             return "의견을 입력해주세요.";
                                           }
@@ -828,7 +828,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                       right: 0,
                                       child: GestureDetector(
                                         onTap: () {
-                                          if (_formKey.currentState
+                                          if (_formKey.currentState!
                                               .validate()) {
                                             voteCommentModel = VoteCommentModel(
                                               uid: model.uid,
@@ -1519,13 +1519,13 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     SubjectCommunityViewModel model,
   ) {
     return StreamBuilder<List<VoteCommentModel>>(
-        stream: model.getPost(model.newAddress),
+        stream: model.getPost(model.newAddress!),
         builder: (context, snapshot) {
-          List<VoteCommentModel> beforeCommentList = snapshot.data;
+          List<VoteCommentModel>? beforeCommentList = snapshot.data;
 
           if (snapshot.data == null) {
             return Container();
-          } else if (snapshot.data.length == 0) {
+          } else if (snapshot.data!.length == 0) {
             return Center(
               child: Text(
                 "아직 의견이 없습니다.\n ${model.user.userName}님이 첫 번째 의견을 나눠보세요.",
@@ -1539,10 +1539,10 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
               ),
             );
           } else {
-            List<dynamic> blockList = model.user.blockList;
-            List<VoteCommentModel> commentList = [];
+            List<dynamic>? blockList = model.user.blockList;
+            List<VoteCommentModel>? commentList = [];
             if (blockList != null) {
-              for (int i = 0; i < beforeCommentList.length; i++) {
+              for (int i = 0; i < beforeCommentList!.length; i++) {
                 if (blockList.contains(beforeCommentList[i].uid)) {
                   print("NOT Contain");
                 } else {
@@ -1559,12 +1559,12 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                     key: _scaffoldKey,
                     controller: _commentScrollController,
                     // addAutomaticKeepAlives: true,
-                    itemCount: commentList.length,
+                    itemCount: commentList!.length,
                     scrollDirection: Axis.vertical,
                     reverse: true,
                     itemBuilder: (context, index) {
                       return buildColumn(
-                          model, commentList[index], commentList, index);
+                          model, commentList![index], commentList, index);
                     }));
           }
         });
@@ -1573,7 +1573,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
   Widget buildColumn(
     SubjectCommunityViewModel model,
     VoteCommentModel voteComment,
-    List<VoteCommentModel> commentList,
+    List<VoteCommentModel>? commentList,
     int index,
   ) {
     // String avatarImage = "avatar001";
@@ -1583,9 +1583,9 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     now = DateTime.now();
 
     // print(model.avatarImage);
-    bool isPostLiked = voteComment.likedBy.contains(model.uid);
+    bool isPostLiked = voteComment.likedBy!.contains(model.uid);
     print(voteComment.likedBy);
-    Duration timeElapsed = now.difference(voteComment.postDateTime.toDate());
+    Duration timeElapsed = now.difference(voteComment.postDateTime!.toDate());
 
     return Column(
       children: <Widget>[
@@ -1606,7 +1606,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                       future: model.getAvatar(voteComment.uid),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          String _avatar = snapshot.data;
+                          String? _avatar = snapshot.data.toString();
                           print("FutureBUilder" + snapshot.data.toString());
                           return Container(
                               height: 40,
@@ -1629,7 +1629,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                       Row(
                         children: [
                           Text(
-                            voteComment.userName,
+                            voteComment.userName!,
                             style: TextStyle(
                               fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
@@ -1639,7 +1639,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                           SizedBox(
                             width: 8,
                           ),
-                          Text(voteComment.choice)
+                          Text(voteComment.choice!)
                         ],
                       ),
                       Text(
@@ -1672,7 +1672,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                     countPostion: CountPostion.right,
                     likeCount: voteComment.likedBy == null
                         ? 0
-                        : voteComment.likedBy.length,
+                        : voteComment.likedBy!.length,
                     likeCountAnimationType: LikeCountAnimationType.all,
                     onTap: (isPostLiked) async {
                       Future.delayed(const Duration(milliseconds: 500), () {
@@ -1700,7 +1700,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                   voteComment.uid == model.uid
                       ? GestureDetector(
                           onTap: () {
-                            print(model.newAddress.postsSubVoteCollection());
+                            print(model.newAddress!.postsSubVoteCollection());
                             print(voteComment.postUid);
                             showDialog(
                               context: context,
@@ -1723,7 +1723,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                               onPressed: () {
                                                 Navigator.pop(context);
                                                 model.deleteComment(
-                                                    model.newAddress,
+                                                    model.newAddress!,
                                                     voteComment.postUid);
                                                 // model.logout();
                                               },
@@ -1745,7 +1745,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                 Navigator.pop(context);
 
                                                 model.deleteComment(
-                                                    model.newAddress,
+                                                    model.newAddress!,
                                                     voteComment.postUid);
                                                 // model.logout();
                                                 // model.logout();
@@ -1798,7 +1798,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                 model.addBlockList(
                                                     model.user, voteComment);
                                                 setState(() {
-                                                  commentList.removeAt(index);
+                                                  commentList!.removeAt(index);
                                                 });
                                                 // model.logout();
                                               },
@@ -1821,7 +1821,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
                                                 model.addBlockList(
                                                     model.user, voteComment);
                                                 setState(() {
-                                                  commentList.removeAt(index);
+                                                  commentList!.removeAt(index);
                                                 });
 
                                                 // model.logout();
@@ -1852,7 +1852,7 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
         Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              voteComment.postText,
+              voteComment.postText!,
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontSize: 16.sp,
@@ -1878,8 +1878,8 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
     var percenetFormat = NumberFormat("##%");
 
     // 각 투표수 가져오기
-    var numVoted0 = model.vote.subVotes[idx].numVoted0 ?? 0;
-    var numVoted1 = model.vote.subVotes[idx].numVoted1 ?? 0;
+    var numVoted0 = model.vote!.subVotes![idx].numVoted0 ?? 0;
+    var numVoted1 = model.vote!.subVotes![idx].numVoted1 ?? 0;
 
 // print("TOTAL VOTE")
     // 투표수 -> 퍼센티지 변환
@@ -1895,9 +1895,9 @@ class _SubjectCommunityViewState extends State<SubjectCommunityView> {
 
     // Bar 차트에 들어갈 데이터 오브젝트
     data = [
-      VoteChart(
-          model.vote.subVotes[idx].voteChoices[0], vote0Percentage, Colors.red),
-      VoteChart(model.vote.subVotes[idx].voteChoices[1], vote1Percentage,
+      VoteChart(model.vote!.subVotes![idx].voteChoices![0], vote0Percentage,
+          Colors.red),
+      VoteChart(model.vote!.subVotes![idx].voteChoices![1], vote1Percentage,
           Colors.blue),
     ];
 

@@ -5,25 +5,25 @@ import '../models/dialog_model.dart';
 import '../services/dialog_service.dart';
 
 class DialogManager extends StatefulWidget {
-  final Widget child;
-  DialogManager({Key key, this.child}) : super(key: key);
+  final Widget? child;
+  DialogManager({Key? key, this.child}) : super(key: key);
   @override
   _DialogManagerState createState() => _DialogManagerState();
 }
 
 // UI가 없는 stateful 위젯
 class _DialogManagerState extends State<DialogManager> {
-  DialogService _dialogService = locator<DialogService>();
+  DialogService? _dialogService = locator<DialogService>();
 
   @override
   void initState() {
     super.initState();
-    _dialogService.registerDialogListner(_showDialog);
+    _dialogService!.registerDialogListner(_showDialog);
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return widget.child!;
   }
 
   void _showDialog(DialogRequest request) {
@@ -31,15 +31,15 @@ class _DialogManagerState extends State<DialogManager> {
         // cancel 버튼이 없을 때
         ? Alert(
             context: context,
-            title: request.title,
+            title: request.title!,
             desc: request.description,
             closeFunction: () =>
-                _dialogService.dialogComplete(DialogResponse(confirmed: false)),
+                _dialogService!.dialogComplete(DialogResponse(confirmed: false)),
             buttons: [
                 DialogButton(
                   child: Text(request.buttonTitle),
                   onPressed: () {
-                    _dialogService
+                    _dialogService!
                         .dialogComplete(DialogResponse(confirmed: true));
                     Navigator.of(context).pop();
                   },
@@ -48,15 +48,15 @@ class _DialogManagerState extends State<DialogManager> {
         : // cancle 버튼이 있을 때
         Alert(
             context: context,
-            title: request.title,
+            title: request.title!,
             desc: request.description,
             closeFunction: () =>
-                _dialogService.dialogComplete(DialogResponse(confirmed: false)),
+                _dialogService!.dialogComplete(DialogResponse(confirmed: false)),
             buttons: [
                 DialogButton(
-                  child: Text(request.cancelTitle),
+                  child: Text(request.cancelTitle!),
                   onPressed: () {
-                    _dialogService
+                    _dialogService!
                         .dialogComplete(DialogResponse(confirmed: false));
                     Navigator.of(context).pop();
                   },
@@ -64,7 +64,7 @@ class _DialogManagerState extends State<DialogManager> {
                 DialogButton(
                   child: Text(request.buttonTitle),
                   onPressed: () {
-                    _dialogService
+                    _dialogService!
                         .dialogComplete(DialogResponse(confirmed: true));
                     Navigator.of(context).pop();
                   },

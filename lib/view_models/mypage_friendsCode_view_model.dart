@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:stacked/stacked.dart';
 import 'package:random_string/random_string.dart';
 
@@ -8,20 +10,20 @@ import '../services/database_service.dart';
 
 class MypageFriendsCodeViewModel extends FutureViewModel {
   // Services Setting
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
 
   // 변수 Setting
-  String uid;
-  UserModel user;
+  String? uid;
+  late UserModel user;
 
   // method
   MypageFriendsCodeViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   Future getModels() async {
-    user = await _databaseService.getUser(uid);
+    user = await (_databaseService!.getUser(uid) as FutureOr<UserModel>);
 
     //만약 프렌즈코드가 없다면,
     if (user.friendsCode == null) {
@@ -34,25 +36,25 @@ class MypageFriendsCodeViewModel extends FutureViewModel {
         // print(code);
 
         //
-        bool isDuplicated = await checkFriendsCode(genCode);
+        bool isDuplicated = await (checkFriendsCode(genCode) as FutureOr<bool>);
 
         if (!isDuplicated) {
           // DB에 프렌즈코드 넣어주기
-          _databaseService.updateFriendsCode(uid, genCode);
+          _databaseService!.updateFriendsCode(uid, genCode);
           break;
         }
         // print(isDuplicated);
       }
 
       // user 콜렉션 다시 불러와줘야.
-      user = await _databaseService.getUser(uid);
+      user = await (_databaseService!.getUser(uid) as FutureOr<UserModel>);
     } else {
       // print('프렌즈코드가 있어요');
     }
   }
 
-  Future<bool> checkFriendsCode(String code) async {
-    bool isDuplicated = await _databaseService.isFriendsCodeDuplicated(code);
+  Future<bool?> checkFriendsCode(String code) async {
+    bool? isDuplicated = await _databaseService!.isFriendsCodeDuplicated(code);
 
     return isDuplicated;
   }

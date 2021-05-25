@@ -9,7 +9,7 @@ import '../view_models/register_view_model.dart';
 import '../views/constants/size.dart';
 
 class RegisterView extends StatefulWidget {
-  final PhoneAuthCredential credential;
+  final PhoneAuthCredential? credential;
   RegisterView(this.credential);
 
   @override
@@ -17,7 +17,7 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _userNameController = TextEditingController();
@@ -26,10 +26,10 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  int _nickLength;
-  int _emailLength;
-  int _passwordLength;
-  int _confirmPasswordLength;
+  late int _nickLength;
+  late int _emailLength;
+  late int _passwordLength;
+  late int _confirmPasswordLength;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     AuthService _auth = AuthService();
 
-    final PhoneAuthCredential credential = widget.credential;
+    final PhoneAuthCredential? credential = widget.credential;
     final Size size = MediaQuery.of(context).size;
     final deviceHeight = size.height;
     final deviceWidth = size.width;
@@ -212,7 +212,7 @@ class _RegisterViewState extends State<RegisterView> {
                         controller: _passwordController,
                         keyboardType: TextInputType.text,
                         validator: (value) {
-                          if (value.length < 7) {
+                          if (value!.length < 7) {
                             return "7자 이상 비밀번호를 입력하세요";
                           }
                           return null;
@@ -296,7 +296,7 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                       FlatButton(
                         onPressed: () async {
-                          if (_formKey.currentState.validate() &&
+                          if (_formKey.currentState!.validate() &&
                               (_nickLength *
                                       _emailLength *
                                       _passwordLength *
@@ -411,7 +411,7 @@ class _RegisterViewState extends State<RegisterView> {
               controller: _passwordController,
               obscureText: true,
               validator: (value) {
-                if (value.length < 7) {
+                if (value!.length < 7) {
                   return "7자 이상 비밀번호를 입력하세요";
                 }
                 return null;
@@ -461,7 +461,7 @@ class _RegisterViewState extends State<RegisterView> {
             onPressed: () {
               //웨에 설정한 validation 들이 모두 true이면 아래 함수 실행
               // !! userName DB와 비교하여 중복 안 되게 해야 함!! //
-              if (_formKey.currentState.validate()) {
+              if (_formKey.currentState!.validate()) {
                 model.register(
                   userName: _userNameController.text,
                   email: _emailController.text,
@@ -496,7 +496,7 @@ class _RegisterViewState extends State<RegisterView> {
           ),
           FlatButton(
             onPressed: () {
-              _navigationService.navigateTo('login');
+              _navigationService!.navigateTo('login');
             },
             child: Text(
               "계정이 이미 있으면 로그인하세요!",

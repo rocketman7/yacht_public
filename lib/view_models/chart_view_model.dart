@@ -18,13 +18,13 @@ import '../locator.dart';
 
 class ChartViewModel extends FutureViewModel {
   final String countryCode;
-  final String stockOrIndex;
-  final String issueCode;
+  final String? stockOrIndex;
+  final String? issueCode;
   final StreamController priceStreamCtrl;
   final BehaviorSubject behaviorCtrl;
   final StreamController dateTimeStreamCtrl;
   final StreamController scrollStreamCtrl;
-  final bool isVoting;
+  final bool? isVoting;
 
   ChartViewModel(
     this.countryCode,
@@ -36,36 +36,36 @@ class ChartViewModel extends FutureViewModel {
     this.scrollStreamCtrl,
     this.isVoting,
   ) {
-    isDurationSelected = isVoting
+    isDurationSelected = isVoting!
         ? [false, false, false, false, true]
         : [true, false, false, false, false];
     lastDays = durationString[isDurationSelected.indexOf(true)];
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
-  List<ChartModel> chartList;
-  List<PriceModel> liveList;
-  double displayPrice = 0.0;
-  DateTime displayDateTime;
+  late List<ChartModel> chartList;
+  List<PriceModel>? liveList;
+  double? displayPrice = 0.0;
+  DateTime? displayDateTime;
   bool isSelected = false;
   bool isDaysVisible = true;
-  String uid;
-  StockInfoModel stockInfoModel;
-  IndexInfoModel indexInfoModel;
+  String? uid;
+  StockInfoModel? stockInfoModel;
+  IndexInfoModel? indexInfoModel;
 
   // 차트 기간 설정 관련된 변수들
 
   // List<bool> isDurationSelected = [false, false, false, false, true];
-  List<bool> isDurationSelected;
+  late List<bool> isDurationSelected;
   List<String> durationChoiceString = ["LIVE", "1개월", "3개월", "6개월", "1년"];
   List<String> durationString = ["LIVE", "지난 1개월", "지난 3개월", "지난 6개월", "지난 1년"];
   List<int> durationDays = [10, 20, 60, 120, 250];
 
-  int durationIndex;
-  String lastDays;
+  int? durationIndex;
+  String? lastDays;
   int priceSubLength = 250;
 
   Future getAllModel(
@@ -75,20 +75,20 @@ class ChartViewModel extends FutureViewModel {
   ) async {
     await _amplitudeService.logStockInfoView(uid);
     print("beforeStockinfo" + DateTime.now().toString());
-    chartList = await _databaseService.getPriceForChart(
+    chartList = await (_databaseService!.getPriceForChart(
       countryCode,
       issueCode,
-    );
+    ) as FutureOr<List<ChartModel>>);
 
     stockOrIndex == "stocks"
-        ? stockInfoModel = await _databaseService.getStockInfo(
+        ? stockInfoModel = await _databaseService!.getStockInfo(
             countryCode,
             issueCode,
           )
-        : indexInfoModel = await _databaseService.getIndexInfo(
+        : indexInfoModel = await (_databaseService!.getIndexInfo(
             countryCode,
             issueCode,
-          );
+          ) as FutureOr<IndexInfoModel?>);
     // print("Index info model get" + indexInfoModel.toString());
     print("Stock info model get" + stockInfoModel.toString());
     print("afterStockInfo" + DateTime.now().toString());
@@ -117,7 +117,7 @@ class ChartViewModel extends FutureViewModel {
     print(address.date.toString());
     print("ISSUE CODE ");
     print(issueCode);
-    return _databaseService.getRealtimePriceForChart(address, issueCode);
+    return _databaseService!.getRealtimePriceForChart(address, issueCode);
   }
 
   void trackball(TrackballArgs args) {
@@ -128,8 +128,8 @@ class ChartViewModel extends FutureViewModel {
 
     print("track ball triggered");
     // print(args.chartPointInfo.chartDataPoint.y);
-    displayPrice = args.chartPointInfo.chartDataPoint.y;
-    displayDateTime = args.chartPointInfo.chartDataPoint.x;
+    displayPrice = args.chartPointInfo.chartDataPoint!.y;
+    displayDateTime = args.chartPointInfo.chartDataPoint!.x;
     // notifyListeners();
     HapticFeedback.lightImpact();
     priceStreamCtrl.add(displayPrice);
@@ -144,7 +144,7 @@ class ChartViewModel extends FutureViewModel {
 
   void whenTrackEnd() {
     displayPrice = chartList.last.close;
-    displayDateTime = strToDate(chartList.last.date);
+    displayDateTime = strToDate(chartList.last.date!);
     priceStreamCtrl.add(displayPrice);
     dateTimeStreamCtrl.add(displayDateTime);
     // behaviorCtrl.add(displayPrice);

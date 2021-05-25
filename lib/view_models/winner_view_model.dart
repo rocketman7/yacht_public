@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/database_address_model.dart';
@@ -19,38 +21,38 @@ class WinnerViewModel extends FutureViewModel {
 
   @override
   Future futureToRun() => getUserAndRankList();
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  final StateManageService _stateManageService = locator<StateManageService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final StateManageService? _stateManageService = locator<StateManageService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
 
   // 변수 Setting
   // 아래에 stateManagerService에 있는 놈들 중 사용할 모델들 설정
-  DatabaseAddressModel lastSeasonAddressModel;
-  PortfolioModel portfolioModel;
-  PortfolioModel newPortfolioModel;
-  SeasonModel seasonModel;
-  SeasonModel newSeasonModel;
-  UserModel userModel;
+  DatabaseAddressModel? lastSeasonAddressModel;
+  PortfolioModel? portfolioModel;
+  PortfolioModel? newPortfolioModel;
+  SeasonModel? seasonModel;
+  SeasonModel? newSeasonModel;
+  late UserModel userModel;
   // 여기는 이 화면 고유의 모델 설정
-  List<RankModel> rankModel = [];
+  List<RankModel>? rankModel = [];
   List<RankModel> winners = [];
 
-  String uid;
-  int myRank = 0;
-  int myWinPoint = 0;
-  String myRankChange;
-  String myRankChangeSymbol;
+  String? uid;
+  int? myRank = 0;
+  int? myWinPoint = 0;
+  String? myRankChange;
+  String? myRankChangeSymbol;
   List<String> rankChange = [];
   List<String> rankChangeSymbol = [];
 
-  Map<String, String> specialAwardsMap;
+  Map<String, String>? specialAwardsMap;
   List<String> specialAwards = [];
   List<String> specialAwardsUserName = [];
 
   WinnerViewModel(this.oldSeasonInfo) {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
     print("OLDSEASON " + oldSeasonInfo.toString());
   }
 
@@ -65,7 +67,7 @@ class WinnerViewModel extends FutureViewModel {
     // 지난 시즌 어드레스 모델과 그에 맞는 모델들을 새로 불러와야 함
     oldSeasonInfo == null
         ? lastSeasonAddressModel =
-            await _databaseService.getOldSeasonAddress(uid)
+            await _databaseService!.getOldSeasonAddress(uid)
         : lastSeasonAddressModel = DatabaseAddressModel(
             uid: uid,
             category: oldSeasonInfo[0],
@@ -75,23 +77,24 @@ class WinnerViewModel extends FutureViewModel {
           );
 
     portfolioModel =
-        await _databaseService.getPortfolio(lastSeasonAddressModel);
-    seasonModel = await _databaseService.getSeasonInfo(lastSeasonAddressModel);
-    userModel = await _databaseService.getUser(uid);
+        await _databaseService!.getPortfolio(lastSeasonAddressModel!);
+    seasonModel =
+        await _databaseService!.getSeasonInfo(lastSeasonAddressModel!);
+    userModel = await (_databaseService!.getUser(uid) as FutureOr<UserModel>);
     rankModel =
-        await _databaseService.getOldSeasonRankList(lastSeasonAddressModel);
+        await _databaseService!.getOldSeasonRankList(lastSeasonAddressModel!);
 
     // 처음에 로딩 했으므로 state 매니지에 있는 모델들은 새 시즌 모델
-    newPortfolioModel = _stateManageService.portfolioModel;
-    newSeasonModel = _stateManageService.seasonModel;
+    newPortfolioModel = _stateManageService!.portfolioModel;
+    newSeasonModel = _stateManageService!.seasonModel;
     // 순위변동 구해주자.
-    for (int i = 0; i < rankModel.length; i++) {
+    for (int i = 0; i < rankModel!.length; i++) {
       // - 10 없애야 함
-      if (rankModel[i].currentWinPoint >= seasonModel.winningPoint) {
-        winners.add(rankModel[i]);
+      if (rankModel![i].currentWinPoint! >= seasonModel!.winningPoint!) {
+        winners.add(rankModel![i]);
       }
-      if (rankModel[i].prevRank != null) {
-        int tempRankChange = rankModel[i].prevRank - rankModel[i].todayRank;
+      if (rankModel![i].prevRank != null) {
+        int tempRankChange = rankModel![i].prevRank! - rankModel![i].todayRank!;
         rankChange.add(tempRankChange.toString());
 
         if (tempRankChange > 0)
@@ -108,13 +111,13 @@ class WinnerViewModel extends FutureViewModel {
     }
 
     // 나의 현재순위 구해주자
-    for (int i = 0; i < rankModel.length; i++) {
-      if (rankModel[i].uid == uid) {
-        myRank = rankModel[i].todayRank;
+    for (int i = 0; i < rankModel!.length; i++) {
+      if (rankModel![i].uid == uid) {
+        myRank = rankModel![i].todayRank;
         myRankChangeSymbol = rankChangeSymbol[i];
         myRankChange = rankChange[i];
 
-        myWinPoint = rankModel[i].currentWinPoint;
+        myWinPoint = rankModel![i].currentWinPoint;
 
         print("MY RANK" + myRank.toString());
       }
@@ -122,17 +125,19 @@ class WinnerViewModel extends FutureViewModel {
     notifyListeners();
   }
 
-  Future<Map<String, dynamic>> getSpecialAwardsMap(
+  Future<Map<String, dynamic>?> getSpecialAwardsMap(
       lastSeasonAddressModel) async {
     specialAwardsMap =
-        await _databaseService.getSpecialAwards(lastSeasonAddressModel);
+        await (_databaseService!.getSpecialAwards(lastSeasonAddressModel)
+            as FutureOr<Map<String, String>?>);
     print(specialAwardsMap);
     return specialAwardsMap;
   }
 
-  Future<String> getSpecialAwardsDescription(lastSeasonAddressModel) async {
-    String description = await _databaseService
-        .getSpecialAwardsDescription(lastSeasonAddressModel);
+  Future<String?> getSpecialAwardsDescription(lastSeasonAddressModel) async {
+    String? description = await (_databaseService!
+            .getSpecialAwardsDescription(lastSeasonAddressModel)
+        as FutureOr<String?>);
     // print(specialAwardsMap);
     return description;
   }
@@ -140,9 +145,9 @@ class WinnerViewModel extends FutureViewModel {
   String getLastSeasonPortfolioValue() {
     int totalValue = 0;
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      totalValue += portfolioModel.subPortfolio[i].sharesNum *
-          portfolioModel.subPortfolio[i].currentPrice;
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
+      totalValue += portfolioModel!.subPortfolio![i].sharesNum! *
+          portfolioModel!.subPortfolio![i].currentPrice!;
     }
     // int totalValue = 100000;
 
@@ -155,9 +160,9 @@ class WinnerViewModel extends FutureViewModel {
   String getPortfolioValue() {
     int totalValue = 0;
 
-    for (int i = 0; i < newPortfolioModel.subPortfolio.length; i++) {
-      totalValue += newPortfolioModel.subPortfolio[i].sharesNum *
-          newPortfolioModel.subPortfolio[i].currentPrice;
+    for (int i = 0; i < newPortfolioModel!.subPortfolio!.length; i++) {
+      totalValue += newPortfolioModel!.subPortfolio![i].sharesNum! *
+          newPortfolioModel!.subPortfolio![i].currentPrice!;
     }
     // int totalValue = 100000;
 
@@ -170,11 +175,11 @@ class WinnerViewModel extends FutureViewModel {
   String getUsersNum() {
     var f = NumberFormat("#,###", "en_US");
 
-    return f.format(rankModel.length);
+    return f.format(rankModel!.length);
   }
 
   // 랭킹숫자 등 ###,###,### 형태로 반환
-  String returnDigitFormat(int value) {
+  String returnDigitFormat(int? value) {
     var f = NumberFormat("#,###", "en_US");
 
     return f.format(value);

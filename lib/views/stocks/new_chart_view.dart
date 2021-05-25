@@ -25,7 +25,7 @@ class _NewChartViewState extends State<NewChartView> {
               highValueMapper: (ChartModel chart, _) => chart.high,
               openValueMapper: (ChartModel chart, _) => chart.open,
               closeValueMapper: (ChartModel chart, _) => chart.close,
-              xValueMapper: (ChartModel chart, _) => strToDate(chart.date),
+              xValueMapper: (ChartModel chart, _) => strToDate(chart.date!),
             ),
             // FastLineSeries<ChartModel, DateTime>(
             //   dataSource: tempChartData,

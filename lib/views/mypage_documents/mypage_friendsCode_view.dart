@@ -9,7 +9,7 @@ import '../../view_models/mypage_friendsCode_view_model.dart';
 
 class MypageFriendsCodeView extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
   // void shareMyCode() async {
   //   try {
   //     var template = _getTemplate();
@@ -19,10 +19,10 @@ class MypageFriendsCodeView extends StatelessWidget {
   //     print(error.toString());
   //   }
   // }
-  void shareMyCode(String friendsCode) async {
+  void shareMyCode(String? friendsCode) async {
     try {
       var uri = await LinkClient.instance
-          .customWithTalk(42121, templateArgs: {'key': friendsCode});
+          .customWithTalk(42121, templateArgs: {'key': friendsCode!});
       await LinkClient.instance.launchKakaoTalk(uri);
     } catch (e) {
       print(e.toString());
@@ -124,7 +124,7 @@ class MypageFriendsCodeView extends StatelessWidget {
                                       onTap: () {
                                         Clipboard.setData(ClipboardData(
                                             text: '${model.user.friendsCode}'));
-                                        scaffoldKey.currentState
+                                        scaffoldKey.currentState!
                                             .showSnackBar(SnackBar(
                                                 duration: Duration(seconds: 1),
                                                 content: Text(
@@ -163,14 +163,14 @@ class MypageFriendsCodeView extends StatelessWidget {
                             GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               onTap: () async {
-                                _mixpanelService.mixpanel
+                                _mixpanelService!.mixpanel
                                     .track('Share with Kakao');
                                 bool installed = await isKakaoTalkInstalled();
                                 // print(installed);
                                 if (installed)
                                   shareMyCode(model.user.friendsCode);
                                 else {
-                                  scaffoldKey.currentState
+                                  scaffoldKey.currentState!
                                       .showSnackBar(SnackBar(
                                           duration: Duration(seconds: 1),
                                           content: Text(

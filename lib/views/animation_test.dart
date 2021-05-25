@@ -9,8 +9,8 @@ class AnimationTest extends StatefulWidget {
 }
 
 class _AnimationTestState extends State<AnimationTest> {
-  PageController pageController;
-  double pageOffset = 0.0;
+  PageController? pageController;
+  double? pageOffset = 0.0;
 
   @override
   void initState() {
@@ -20,16 +20,16 @@ class _AnimationTestState extends State<AnimationTest> {
       viewportFraction: 0.8,
       keepPage: true,
     );
-    pageController.addListener(() {
+    pageController!.addListener(() {
       setState(() {
-        pageOffset = pageController.page;
+        pageOffset = pageController!.page;
       });
     });
   }
 
   @override
   void dispose() {
-    pageController.dispose();
+    pageController!.dispose();
     super.dispose();
   }
 

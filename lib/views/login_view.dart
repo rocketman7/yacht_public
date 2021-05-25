@@ -16,8 +16,8 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView>
     with SingleTickerProviderStateMixin {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final AuthService _authService = locator<AuthService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final AuthService? _authService = locator<AuthService>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -72,7 +72,7 @@ class _LoginViewState extends State<LoginView>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
-                      height: deviceHeight * .08,
+                      height: deviceHeight! * .08,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -82,7 +82,7 @@ class _LoginViewState extends State<LoginView>
                       ),
                     ),
                     SizedBox(
-                      height: deviceHeight * .02,
+                      height: deviceHeight! * .02,
                     ),
                     Text(
                       "이메일로 로그인",
@@ -226,7 +226,7 @@ class _LoginViewState extends State<LoginView>
                           // minWidth: 2,
                           child: FlatButton(
                             onPressed: () {
-                              _navigationService.navigateTo('phoneAuth');
+                              _navigationService!.navigateTo('phoneAuth');
                             },
                             child: Text("회원가입하기",
                                 style: TextStyle(
@@ -314,7 +314,7 @@ class _LoginViewState extends State<LoginView>
               ),
               FlatButton(
                 onPressed: () {
-                  _navigationService.navigateTo('phoneAuth');
+                  _navigationService!.navigateTo('phoneAuth');
                 },
                 child: Text(
                   "계정이 없으신가요? 지금 가입하세요!",

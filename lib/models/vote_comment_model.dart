@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class VoteCommentModel {
-  final String postUid;
-  final String uid;
-  final String userName;
-  final String postText;
-  final List<dynamic> likedBy;
-  final Timestamp postDateTime;
-  final String choice;
+  final String? postUid;
+  final String? uid;
+  final String? userName;
+  final String? postText;
+  final List<dynamic>? likedBy;
+  final Timestamp? postDateTime;
+  final String? choice;
 
   VoteCommentModel({
     this.postUid,

@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NoticeModel {
-  final bool isActived;
-  final String textOrNavigateTo;
-  final List<String> navigateArgu;
-  final String category;
-  final String title;
-  final String content;
-  final Timestamp noticeDateTime;
+  final bool? isActived;
+  final String? textOrNavigateTo;
+  final List<String>? navigateArgu;
+  final String? category;
+  final String? title;
+  final String? content;
+  final Timestamp? noticeDateTime;
 
   NoticeModel({
     this.isActived,

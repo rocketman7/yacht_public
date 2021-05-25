@@ -147,22 +147,22 @@ List<Map<String, String>> tier3 = [
 
 class SurveyViewModel extends FutureViewModel {
   // Services Setting
-  final NavigationService _navigationService = locator<NavigationService>();
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final SharedPreferencesService _sharedPreferencesService =
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  final SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
   // 변수 Setting
-  String uid;
-  UserModel user;
+  String? uid;
+  UserModel? user;
 
   // 얘는 아는 주식들 고르는거 관리
   bool didBubbleSurvey = false;
   bool allChoice = false;
   final _random = new Random();
   List<int> randomList = [];
-  List<String> randomStocks = [];
+  List<String?> randomStocks = [];
   List<bool> itemsChoiced = [
     false,
     false,
@@ -180,11 +180,11 @@ class SurveyViewModel extends FutureViewModel {
   int surveyTotalStep = surveyTitles.length - 1; //5-1 = 4
   int surveyCurrentStep = 0;
   // 아는 주식들 위한 로컬 변수
-  List tier1s;
-  List tier2s;
-  List tier3s;
+  late List tier1s;
+  late List tier2s;
+  late List tier3s;
   // 아는 주식들 답변 디비에 올리기 위한 변수
-  int currentTier;
+  int? currentTier;
   List<Map<String, String>> bubbleSurveysAnswer = [];
   // basic 서베이 로컬 변수
   Map<String, List> basicSurveys = {
@@ -199,7 +199,7 @@ class SurveyViewModel extends FutureViewModel {
 
   // method
   SurveyViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   double progress = 0;
@@ -461,7 +461,7 @@ class SurveyViewModel extends FutureViewModel {
       }
 
       // 이제 끝. DB에 올려주자
-      await _databaseService.updateBubbleSurvey(uid, bubbleSurveysAnswer);
+      await _databaseService!.updateBubbleSurvey(uid, bubbleSurveysAnswer);
 
       didBubbleSurvey = true;
     }
@@ -489,14 +489,14 @@ class SurveyViewModel extends FutureViewModel {
   // basic서베이 단계 진행할 때마다 호출, & 끝나면,
   Future surveyStepPlus(int answer) async {
     if (surveyCurrentStep == 1 && answer != 0) {
-      surveysAnswer['answer'].add(answer);
-      surveysAnswer['answer'].add(-1);
+      surveysAnswer['answer']!.add(answer);
+      surveysAnswer['answer']!.add(-1);
       surveyCurrentStep += 2;
 
       steps += 2;
       progress = steps / totalSteps;
     } else if (surveyCurrentStep < surveyTotalStep) {
-      surveysAnswer['answer'].add(answer);
+      surveysAnswer['answer']!.add(answer);
       surveyCurrentStep += 1;
 
       steps += 1;
@@ -505,12 +505,12 @@ class SurveyViewModel extends FutureViewModel {
       steps += 1;
       progress = steps / totalSteps;
       //db업데이트 후 종료
-      surveysAnswer['answer'].add(answer);
-      await _databaseService.updateSurvey(uid, surveysAnswer);
-      await _sharedPreferencesService.setSharedPreferencesValue(
+      surveysAnswer['answer']!.add(answer);
+      await _databaseService!.updateSurvey(uid, surveysAnswer);
+      await _sharedPreferencesService!.setSharedPreferencesValue(
           didSurveyKey, true);
 
-      _navigationService.popAndNavigateWithArgTo('initial');
+      _navigationService!.popAndNavigateWithArgTo('initial');
     }
 
     notifyListeners();

@@ -19,9 +19,9 @@ class _MypageAccountVerificationViewState
   final TextEditingController _accNumberController = TextEditingController();
   final TextEditingController _accNameController = TextEditingController();
   final TextEditingController _authNumController = TextEditingController();
-  FocusNode myFocusNode;
-  FocusNode myFocusNode2;
-  FocusNode myFocusNode3;
+  FocusNode? myFocusNode;
+  FocusNode? myFocusNode2;
+  FocusNode? myFocusNode3;
 
   @override
   void initState() {
@@ -34,9 +34,9 @@ class _MypageAccountVerificationViewState
 
   @override
   void dispose() {
-    myFocusNode.dispose();
-    myFocusNode2.dispose();
-    myFocusNode3.dispose();
+    myFocusNode!.dispose();
+    myFocusNode2!.dispose();
+    myFocusNode3!.dispose();
 
     super.dispose();
   }
@@ -215,7 +215,7 @@ class _MypageAccountVerificationViewState
                           // model.accNumberInsertProcess = true;
                           // model.ableBankListButton = false;
 
-                          myFocusNode3.requestFocus();
+                          myFocusNode3!.requestFocus();
                         } else {
                           model.accVerificationFailMsg = result;
                           model.ableBankListButton = true;
@@ -286,7 +286,7 @@ class _MypageAccountVerificationViewState
                           model.visibleBankList = true;
                           model.secName = '';
                           model.selectSecLogo = 100;
-                          myFocusNode.unfocus();
+                          myFocusNode!.unfocus();
                           model.notifyListeners();
                         })
                     : IconButton(
@@ -311,7 +311,7 @@ class _MypageAccountVerificationViewState
 
   Widget bankList(MypageAccountVerificationViewModel model) {
     return Container(
-      height: deviceHeight / 3,
+      height: deviceHeight! / 3,
       child: GridView.count(
         crossAxisCount: 2,
         childAspectRatio: 6,
@@ -324,7 +324,7 @@ class _MypageAccountVerificationViewState
                 print(model.secName);
                 model.visibleBankList = false;
                 model.selectSecLogo = index;
-                myFocusNode.requestFocus();
+                myFocusNode!.requestFocus();
                 model.notifyListeners();
               },
               child: Row(
@@ -399,7 +399,7 @@ class _MypageAccountVerificationViewState
             GestureDetector(
               onTap: () {
                 // 쓸데없는 영역이지만, 사용자가 텍스트필드 오른쪽을 클릭해도 포커스되도록
-                myFocusNode.requestFocus();
+                myFocusNode!.requestFocus();
               },
               child: IconButton(
                 icon: Icon(
@@ -466,7 +466,7 @@ class _MypageAccountVerificationViewState
             GestureDetector(
               onTap: () {
                 // 쓸데없는 영역이지만, 사용자가 텍스트필드 오른쪽을 클릭해도 포커스되도록
-                myFocusNode2.requestFocus();
+                myFocusNode2!.requestFocus();
               },
               child: IconButton(
                 icon: Icon(

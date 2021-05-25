@@ -11,8 +11,8 @@ class LoadingView extends StatefulWidget {
 class _LoadingViewState extends State<LoadingView>
     with SingleTickerProviderStateMixin {
   // 애니메이션 컨트롤러, 애니메이션 선언
-  AnimationController _aniController;
-  Animation _animation;
+  late AnimationController _aniController;
+  late Animation _animation;
 
   @override
   void initState() {

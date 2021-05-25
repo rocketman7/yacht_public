@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/sharedPreferences_const.dart';
@@ -11,18 +13,18 @@ import 'package:yachtOne/services/stateManage_service.dart';
 import '../locator.dart';
 
 class UserSurveyViewModel extends FutureViewModel {
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final AuthService _authService = locator<AuthService>();
-  final StateManageService _stateManageService = locator<StateManageService>();
-  final SharedPreferencesService _sharedPreferencesService =
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  final AuthService? _authService = locator<AuthService>();
+  final StateManageService? _stateManageService = locator<StateManageService>();
+  final SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
   // tempModel 작업
   // UserSurveyModel tempModel;
 
-  String uid;
-  BuildContext context;
+  String? uid;
+  BuildContext? context;
   UserSurveyViewModel(BuildContext context) {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
     context = context;
   }
 
@@ -31,8 +33,8 @@ class UserSurveyViewModel extends FutureViewModel {
   int currentStep = 0;
   bool proceed = false;
   List<String> steps = [];
-  bool firstSurvey;
-  bool hasDone;
+  bool? firstSurvey;
+  bool? hasDone;
 
   // String introTitle = "도와줘요 꾸욱 피플! \n2분 20초만요 :)";
   // String introDescription =
@@ -56,16 +58,18 @@ class UserSurveyViewModel extends FutureViewModel {
   //   SurveyQuestionModel("Q5", [], false, "short"),
   // ];
 
-  UserSurveyModel userSurveyModel;
+  late UserSurveyModel userSurveyModel;
 
   // 페이지 로딩하면서 서베이 모델 가져오기
   Future getUserSurveyModel() async {
     setBusy(true);
-    userSurveyModel = await _databaseService.getUserSurveyModel();
-    hasDone = await _databaseService.checkUserSurveyDone(uid);
+    userSurveyModel = await (_databaseService!.getUserSurveyModel()
+        as FutureOr<UserSurveyModel>);
+    hasDone =
+        await (_databaseService!.checkUserSurveyDone(uid) as FutureOr<bool?>);
     print(userSurveyModel.surveyQuestions);
-    firstSurvey = await _sharedPreferencesService.getSharedPreferencesValue(
-        firstSurveyKey, bool);
+    firstSurvey = await (_sharedPreferencesService!
+        .getSharedPreferencesValue(firstSurveyKey, bool) as FutureOr<bool?>);
     print("hasDOne" + hasDone.toString());
 
     setBusy(false);
@@ -85,11 +89,11 @@ class UserSurveyViewModel extends FutureViewModel {
   // String shortAnswer;
 
   List<bool> multipleChoices = [];
-  int singleChoice;
+  int? singleChoice;
   List<Map<String, dynamic>> userFinalAnswers = [];
   List<Map<String, dynamic>> shortAnswers = [];
   List<bool> selected = [];
-  String shortAnswer;
+  String? shortAnswer;
 
   toggleChoice(int questionNumber) {
     int i = 0;
@@ -132,7 +136,7 @@ class UserSurveyViewModel extends FutureViewModel {
     return multiAnswerList;
   }
 
-  changeRadioValue(int val) {
+  changeRadioValue(int? val) {
     singleChoice = val;
     notifyListeners();
   }
@@ -175,16 +179,16 @@ class UserSurveyViewModel extends FutureViewModel {
 
   bool finalizingSurvey = false;
   Future finalizeSurvey(
-    String uid,
+    String? uid,
   ) async {
     finalizingSurvey = true;
     notifyListeners();
     print(uid);
-    _sharedPreferencesService.setSharedPreferencesValue(firstSurveyKey, true);
-    await _databaseService.updateUserItem(uid, 20);
-    await _databaseService.updateUserSurvey(
-        uid, 'survey001', userFinalAnswers, shortAnswers);
-    await _stateManageService.userModelUpdate();
+    _sharedPreferencesService!.setSharedPreferencesValue(firstSurveyKey, true);
+    await _databaseService!.updateUserItem(uid, 20);
+    await _databaseService!
+        .updateUserSurvey(uid, 'survey001', userFinalAnswers, shortAnswers);
+    await _stateManageService!.userModelUpdate();
     // notifyListeners();
     // await notifyHomeView();
     finalizingSurvey = false;

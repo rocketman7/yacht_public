@@ -8,7 +8,7 @@ import 'package:path/path.dart' as path;
 class CustomCacheManagerService extends BaseCacheManager {
   static const key = "customCache";
 
-  static CustomCacheManagerService _instance;
+  static late CustomCacheManagerService _instance;
 
   // factory CustomCacheManagerService() {
   //   if (_instance == null) {
@@ -40,7 +40,7 @@ class CustomCacheManagerService extends BaseCacheManager {
 
   @override
   Future<FileInfo> downloadFile(String url,
-      {String key, Map<String, String> authHeaders, bool force = false}) {
+      {String? key, Map<String, String>? authHeaders, bool force = false}) {
     // TODO: implement downloadFile
     throw UnimplementedError();
   }
@@ -53,7 +53,7 @@ class CustomCacheManagerService extends BaseCacheManager {
 
   @override
   Stream<FileInfo> getFile(String url,
-      {String key, Map<String, String> headers}) {
+      {String? key, Map<String, String>? headers}) {
     // TODO: implement getFile
     throw UnimplementedError();
   }
@@ -72,22 +72,22 @@ class CustomCacheManagerService extends BaseCacheManager {
 
   @override
   Stream<FileResponse> getFileStream(String url,
-      {String key, Map<String, String> headers, bool withProgress}) {
+      {String? key, Map<String, String>? headers, bool? withProgress}) {
     // TODO: implement getFileStream
     throw UnimplementedError();
   }
 
   @override
   Future<File> getSingleFile(String url,
-      {String key, Map<String, String> headers}) {
+      {String? key, Map<String, String>? headers}) {
     // TODO: implement getSingleFile
     throw UnimplementedError();
   }
 
   @override
   Future<File> putFile(String url, Uint8List fileBytes,
-      {String key,
-      String eTag,
+      {String? key,
+      String? eTag,
       Duration maxAge = const Duration(days: 30),
       String fileExtension = 'file'}) {
     // TODO: implement putFile
@@ -96,8 +96,8 @@ class CustomCacheManagerService extends BaseCacheManager {
 
   @override
   Future<File> putFileStream(String url, Stream<List<int>> source,
-      {String key,
-      String eTag,
+      {String? key,
+      String? eTag,
       Duration maxAge = const Duration(days: 30),
       String fileExtension = 'file'}) {
     // TODO: implement putFileStream

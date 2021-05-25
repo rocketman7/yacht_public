@@ -12,7 +12,7 @@ class PhoneAuthView extends StatefulWidget {
 }
 
 class _PhoneAuthViewState extends State<PhoneAuthView> {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _phoneNumberController = TextEditingController();
@@ -20,7 +20,7 @@ class _PhoneAuthViewState extends State<PhoneAuthView> {
 
   String _textValue = "인증번호 전송";
   bool _visibility = false;
-  int _smsCodeLength;
+  int? _smsCodeLength;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _PhoneAuthViewState extends State<PhoneAuthView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
-                      height: deviceHeight * .08,
+                      height: deviceHeight! * .08,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -54,7 +54,7 @@ class _PhoneAuthViewState extends State<PhoneAuthView> {
                       ),
                     ),
                     SizedBox(
-                      height: deviceHeight * .02,
+                      height: deviceHeight! * .02,
                     ),
                     Text(
                       "휴대폰인증",
@@ -86,7 +86,7 @@ class _PhoneAuthViewState extends State<PhoneAuthView> {
                           controller: _phoneNumberController,
                           keyboardType: TextInputType.phone,
                           validator: (value) {
-                            if (value.length < 9) {
+                            if (value!.length < 9) {
                               return "휴대폰 번호가 잘못됐습니다";
                             }
                             return null;
@@ -131,8 +131,8 @@ class _PhoneAuthViewState extends State<PhoneAuthView> {
                             alignment: Alignment.centerRight,
                             child: InkWell(
                               onTap: () async {
-                                print(_formKey.currentState.validate());
-                                if (_formKey.currentState.validate()) {
+                                print(_formKey.currentState!.validate());
+                                if (_formKey.currentState!.validate()) {
                                   setState(() {
                                     _textValue = "재전송";
                                     _visibility = true;
@@ -265,7 +265,7 @@ class _PhoneAuthViewState extends State<PhoneAuthView> {
                           // minWidth: 2,
                           child: FlatButton(
                             onPressed: () {
-                              _navigationService.navigateTo('login');
+                              _navigationService!.navigateTo('login');
                             },
                             child: Text("로그인하기",
                                 style: TextStyle(

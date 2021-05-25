@@ -1,13 +1,13 @@
 import 'package:yachtOne/models/user_vote_stats_model.dart';
 
 class UserVoteModel {
-  final String uid;
-  String voteDate;
-  List<int> voteSelected;
-  final int score;
-  final bool voteVictory;
-  bool isVoted;
-  final UserVoteStatsModel userVoteStats;
+  final String? uid;
+  String? voteDate;
+  List<int>? voteSelected;
+  final int? score;
+  final bool? voteVictory;
+  bool? isVoted;
+  final UserVoteStatsModel? userVoteStats;
 
   UserVoteModel({
     this.uid,
@@ -23,7 +23,7 @@ class UserVoteModel {
 // Json -> SubVoteModel
   UserVoteModel.fromData(
     Map<String, dynamic> data,
-    UserVoteStatsModel userVoteStats,
+    UserVoteStatsModel? userVoteStats,
   )   : uid = data['uid'],
         voteDate = data['voteDate'],
         // List<int>를 json으로 가져오면 List<dynamic>으로 인식하여 int로 다시 cast해줌

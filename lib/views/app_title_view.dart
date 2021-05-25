@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_functions/cloud_functions.dart';
@@ -22,10 +23,10 @@ class AppTitleView extends StatefulWidget {
 }
 
 class _AppTitleViewState extends State<AppTitleView> {
-  final SharedPreferencesService _sharedPreferencesService =
+  final SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  final AuthService _authService = locator<AuthService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final AuthService? _authService = locator<AuthService>();
   bool _isLoading = false;
   bool _isAppleLoading = false;
   @override
@@ -33,8 +34,8 @@ class _AppTitleViewState extends State<AppTitleView> {
     Size size = MediaQuery.of(context).size;
     deviceHeight = size.height;
     deviceWidth = size.width;
-    double containerHeight = deviceHeight * .09;
-    double sizedBoxHeight = deviceHeight * .018;
+    double containerHeight = deviceHeight! * .09;
+    double sizedBoxHeight = deviceHeight! * .018;
 
     TextStyle titleStyleWhite = TextStyle(
       fontSize: 26.sp,
@@ -465,7 +466,7 @@ class _AppTitleViewState extends State<AppTitleView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      _navigationService.navigateTo('login');
+                      _navigationService!.navigateTo('login');
                     },
                     child: Container(
                       height: 52,
@@ -576,15 +577,15 @@ class _AppTitleViewState extends State<AppTitleView> {
       print(authResult);
       if (authResult != null) {
         // setBusy(false);
-        if (_authService.auth.currentUser != null) {
-          print("CurrentUSER" + _authService.auth.currentUser.toString());
+        if (_authService!.auth.currentUser != null) {
+          print("CurrentUSER" + _authService!.auth.currentUser.toString());
           // loggedIn 화면으로 route (HomeView)
-          _sharedPreferencesService.setSharedPreferencesValue(
-              "twoFactor", true);
-          bool isTwoFactorAuthed = await _sharedPreferencesService
-              .getSharedPreferencesValue('twoFactor', bool);
+          _sharedPreferencesService!
+              .setSharedPreferencesValue("twoFactor", true);
+          bool isTwoFactorAuthed = await (_sharedPreferencesService!
+              .getSharedPreferencesValue('twoFactor', bool) as FutureOr<bool>);
           print(isTwoFactorAuthed);
-          _navigationService.navigateTo(
+          _navigationService!.navigateTo(
             'initial',
           );
         } else {
@@ -600,11 +601,11 @@ class _AppTitleViewState extends State<AppTitleView> {
       }
     } on PlatformException catch (e) {
       print("platform exception: $e");
-      final snackBar = SnackBar(content: Text(e.message));
+      final snackBar = SnackBar(content: Text(e.message!));
       Scaffold.of(context).showSnackBar(snackBar);
     } catch (e) {
       print("other exceptions: $e");
-      final snackBar = SnackBar(content: Text(e));
+      final snackBar = SnackBar(content: Text(e.toString()));
       Scaffold.of(context).showSnackBar(snackBar);
     }
 
@@ -627,7 +628,7 @@ class _AppTitleViewState extends State<AppTitleView> {
       _isAppleLoading = true;
     });
 
-    await _authService.appleSignIn();
+    await _authService!.appleSignIn();
     if (mounted) {
       setState(() {
         _isAppleLoading = false;

@@ -9,8 +9,8 @@ import '../view_models/notification_list_view_model.dart';
 import 'notification_web_view.dart';
 
 class NotificationListView extends StatelessWidget {
-  final Function callbackFunc;
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final Function? callbackFunc;
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
   NotificationListView({this.callbackFunc});
 
   @override
@@ -50,32 +50,32 @@ class NotificationListView extends StatelessWidget {
       BuildContext context, NotificationListViewModel model) {
     List<Widget> result = [];
 
-    for (int i = 0; i < model.notificationListModel.length; i++) {
+    for (int i = 0; i < model.notificationListModel!.length; i++) {
       result.add(GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          _mixpanelService.mixpanel.track('Notification More URL', properties: {
-            'Notification Time': model.notificationListModel[i].notificationTime
+          _mixpanelService!.mixpanel.track('Notification More URL', properties: {
+            'Notification Time': model.notificationListModel![i].notificationTime!
                 .toDate()
                 .toString()
           });
-          if (model.notificationListModel[i].url != null) {
-            if (model.notificationListModel[i].url.startsWith('https'))
+          if (model.notificationListModel![i].url != null) {
+            if (model.notificationListModel![i].url!.startsWith('https'))
               Navigator.push(
                   context,
                   CupertinoPageRoute(
                       builder: (context) => NotificationWebView(
-                          model.notificationListModel[i].title,
-                          model.notificationListModel[i].url)));
+                          model.notificationListModel![i].title,
+                          model.notificationListModel![i].url)));
             else {
               model.navigateToSurvey(i);
             }
           } else {
-            if (model.notificationListModel[i].moreContent != null) {
-              _mixpanelService.mixpanel
+            if (model.notificationListModel![i].moreContent != null) {
+              _mixpanelService!.mixpanel
                   .track('Notification More Content', properties: {
                 'Notification Time': model
-                    .notificationListModel[i].notificationTime
+                    .notificationListModel![i].notificationTime!
                     .toDate()
                     .toString()
               });
@@ -95,7 +95,7 @@ class NotificationListView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${model.notificationListModel[i].title}',
+                          '${model.notificationListModel![i].title}',
                           maxLines: 100,
                           overflow: TextOverflow.visible,
                           style: TextStyle(
@@ -110,8 +110,8 @@ class NotificationListView extends StatelessWidget {
                         ),
                         Text(
                           model.isSelected[i]
-                              ? '${model.notificationListModel[i].moreContent.replaceAll("\\n", "\n")}'
-                              : '${model.notificationListModel[i].content}',
+                              ? '${model.notificationListModel![i].moreContent!.replaceAll("\\n", "\n")}'
+                              : '${model.notificationListModel![i].content}',
                           maxLines: 100,
                           overflow: TextOverflow.visible,
                           style: TextStyle(
@@ -134,7 +134,7 @@ class NotificationListView extends StatelessWidget {
                                   color: Color(0xFF787878)),
                             ),
                             Spacer(),
-                            model.notificationListModel[i].url != null
+                            model.notificationListModel![i].url != null
                                 ? Text(
                                     '더 보러 가기',
                                     style: TextStyle(
@@ -144,7 +144,7 @@ class NotificationListView extends StatelessWidget {
                                         fontFamily: 'AppleSDM',
                                         color: Color(0xFF1EC8CF)),
                                   )
-                                : model.notificationListModel[i].moreContent !=
+                                : model.notificationListModel![i].moreContent !=
                                         null
                                     ? Text(
                                         model.isSelected[i]

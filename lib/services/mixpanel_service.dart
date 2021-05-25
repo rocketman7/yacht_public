@@ -1,7 +1,7 @@
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 class MixpanelService {
-  Mixpanel mixpanel;
+  late Mixpanel mixpanel;
   // for Master
   // String token = "afd70bf6950f6a48c4c38856b667dffd";
 

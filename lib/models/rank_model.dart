@@ -1,10 +1,10 @@
 class RankModel {
-  final String uid;
-  final String userName;
-  final int currentWinPoint;
-  final String avatarImage;
-  final int prevRank;
-  int todayRank;
+  final String? uid;
+  final String? userName;
+  final int? currentWinPoint;
+  final String? avatarImage;
+  final int? prevRank;
+  int? todayRank;
 
   RankModel({
     this.uid,

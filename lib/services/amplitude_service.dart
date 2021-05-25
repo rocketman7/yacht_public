@@ -16,7 +16,7 @@ class AmplitudeService {
     );
   }
 
-  Future logStockInfoView(String uid) async {
+  Future logStockInfoView(String? uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
@@ -24,7 +24,7 @@ class AmplitudeService {
     analytics.logEvent('Stock Info View');
   }
 
-  Future logCommunityMain(String uid) async {
+  Future logCommunityMain(String? uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
@@ -32,7 +32,7 @@ class AmplitudeService {
     analytics.logEvent('Community Main View');
   }
 
-  Future logSeasonCommunity(String uid) async {
+  Future logSeasonCommunity(String? uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
@@ -40,7 +40,7 @@ class AmplitudeService {
     analytics.logEvent('Season Community View');
   }
 
-  Future logSubjectCommunity(String uid) async {
+  Future logSubjectCommunity(String? uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
@@ -48,7 +48,7 @@ class AmplitudeService {
     analytics.logEvent('Season Community View');
   }
 
-  Future logOtherDaysCommunity(String uid) async {
+  Future logOtherDaysCommunity(String? uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
@@ -56,7 +56,7 @@ class AmplitudeService {
     analytics.logEvent('Other Day Community Main View');
   }
 
-  Future logRankingView(String uid) async {
+  Future logRankingView(String? uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
@@ -64,7 +64,7 @@ class AmplitudeService {
     analytics.logEvent('Ranking View');
   }
 
-  Future logTrackRecordView(String uid) async {
+  Future logTrackRecordView(String? uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
@@ -72,7 +72,7 @@ class AmplitudeService {
     analytics.logEvent('Track Record View');
   }
 
-  Future logMyPageView(String uid) async {
+  Future logMyPageView(String? uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);
@@ -80,7 +80,7 @@ class AmplitudeService {
     analytics.logEvent('My Page Main View');
   }
 
-  Future logAdsView(String uid) async {
+  Future logAdsView(String? uid) async {
     analytics.init(apiKey);
     analytics.setUserId(uid);
     analytics.trackingSessionEvents(true);

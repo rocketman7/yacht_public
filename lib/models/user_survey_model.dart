@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class UserSurveyModel {
-  final String title;
-  final String description;
-  final String thank;
-  final String endingStatement;
+  final String? title;
+  final String? description;
+  final String? thank;
+  final String? endingStatement;
   final List<SurveyQuestionModel> surveyQuestions;
   UserSurveyModel(
     this.title,
@@ -17,11 +17,11 @@ class UserSurveyModel {
   );
 
   UserSurveyModel copyWith({
-    String title,
-    String description,
-    String thank,
-    String endingStatement,
-    List<SurveyQuestionModel> surveyQuestions,
+    String? title,
+    String? description,
+    String? thank,
+    String? endingStatement,
+    List<SurveyQuestionModel>? surveyQuestions,
   }) {
     return UserSurveyModel(
       title ?? this.title,
@@ -38,7 +38,7 @@ class UserSurveyModel {
       'description': description,
       'thank': thank,
       'endingStatement': endingStatement,
-      'surveyQuestions': surveyQuestions?.map((x) => x.toJson())?.toList(),
+      'surveyQuestions': surveyQuestions.map((x) => x.toJson()).toList(),
     };
   }
 
@@ -79,10 +79,10 @@ class UserSurveyModel {
 }
 
 class SurveyQuestionModel {
-  final String question;
+  final String? question;
   final List<String> answers;
-  final bool multipleChoice;
-  final String shortAnswer;
+  final bool? multipleChoice;
+  final String? shortAnswer;
 
   SurveyQuestionModel(
     this.question,
@@ -92,10 +92,10 @@ class SurveyQuestionModel {
   );
 
   SurveyQuestionModel copyWith({
-    String question,
-    List<String> answers,
-    bool multipleChoice,
-    String shortAnswer,
+    String? question,
+    List<String>? answers,
+    bool? multipleChoice,
+    String? shortAnswer,
   }) {
     return SurveyQuestionModel(
       question ?? this.question,

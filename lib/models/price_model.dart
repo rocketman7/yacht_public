@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 class PriceModel {
-  final String issueCode;
-  final double price;
-  final double pricePctChange;
+  final String? issueCode;
+  final double? price;
+  final double? pricePctChange;
   final dynamic createdAt;
 
   PriceModel(
@@ -14,14 +14,14 @@ class PriceModel {
   );
 
   PriceModel copyWith({
-    String issueCode,
-    num price,
-    double pricePctChange,
+    String? issueCode,
+    num? price,
+    double? pricePctChange,
     dynamic createdAt,
   }) {
     return PriceModel(
       issueCode ?? this.issueCode,
-      price ?? this.price,
+      price as double? ?? this.price,
       pricePctChange ?? this.pricePctChange,
       createdAt ?? this.createdAt,
     );
@@ -37,7 +37,7 @@ class PriceModel {
   }
 
   factory PriceModel.fromData(Map<String, dynamic> data) {
-    if (data == null) return null;
+    // if (data == null) return null;
 
     return PriceModel(
       data['issueCode'],

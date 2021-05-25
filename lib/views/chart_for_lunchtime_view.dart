@@ -10,6 +10,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 import 'package:quiver/iterables.dart' as quiver;
+
 import 'package:yachtOne/models/database_address_model.dart';
 import 'package:yachtOne/services/database_service.dart';
 import 'package:yachtOne/view_models/chart_for_lunchtime_view_model.dart';
@@ -27,9 +28,9 @@ import 'constants/size.dart';
 
 class ChartForLunchtimeView extends StatefulWidget {
   final StreamController scrollStreamCtrl;
-  final String issueCode;
-  final String indexOrStocks;
-  final DatabaseAddressModel address;
+  final String? issueCode;
+  final String? indexOrStocks;
+  final DatabaseAddressModel? address;
 
   ChartForLunchtimeView(
     this.scrollStreamCtrl,
@@ -42,29 +43,29 @@ class ChartForLunchtimeView extends StatefulWidget {
 }
 
 class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
-  final TimezoneService _timezoneService = locator<TimezoneService>();
-  List<double> closeList;
-  List<double> closeChartList;
-  List<ChartModel> priceDataSourceList;
-  List<StatsModel> statsDataSourceList;
-  int priceSubLength;
-  int statsSubLength;
+  final TimezoneService? _timezoneService = locator<TimezoneService>();
+  List<double>? closeList;
+  List<double>? closeChartList;
+  List<ChartModel>? priceDataSourceList;
+  List<StatsModel>? statsDataSourceList;
+  int? priceSubLength;
+  int? statsSubLength;
   double displayPrice = 0.0;
-  StreamController priceStreamCtrl = StreamController<double>();
-  StreamController dateTimeStreamCtrl = StreamController<DateTime>();
-  ScrollController controller;
+  StreamController priceStreamCtrl = StreamController<double?>();
+  StreamController dateTimeStreamCtrl = StreamController<DateTime?>();
+  ScrollController? controller;
   StreamController scrollStreamCtrl = StreamController<double>();
-  SeasonModel seasonInfo;
-  String issueCode;
-  String stockOrIndex;
-  DatabaseAddressModel address;
+  SeasonModel? seasonInfo;
+  String? issueCode;
+  String? stockOrIndex;
+  DatabaseAddressModel? address;
   int choice = 0;
 
   // 실시간 가격 데이터 리스트
-  List<PriceModel> realtimePriceDataSourceList;
-  Stream<List<PriceModel>> liveStream;
-  DatabaseService _databaseService = locator<DatabaseService>();
-  DateTime liveToday;
+  List<PriceModel>? realtimePriceDataSourceList;
+  Stream<List<PriceModel>>? liveStream;
+  DatabaseService? _databaseService = locator<DatabaseService>();
+  late DateTime liveToday;
 
   // 종목 정보 불러올 때 필요한 변수들
   String countryCode = "KR";
@@ -75,11 +76,11 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
     controller = ScrollController(
       initialScrollOffset: 0,
     );
-    controller.addListener(() {
-      scrollStreamCtrl.add(controller.offset);
-      if (controller.offset < -140) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          controller.dispose();
+    controller!.addListener(() {
+      scrollStreamCtrl.add(controller!.offset);
+      if (controller!.offset < -140) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          controller!.dispose();
         });
       }
     });
@@ -154,7 +155,7 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
         dateTimeStreamCtrl,
         scrollStreamCtrl,
       ),
-      builder: (context, model, child) {
+      builder: (context, dynamic model, child) {
         if (model.isBusy) {
           return Scaffold(body: Container());
         } else {
@@ -213,9 +214,9 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
                               SizedBox(width: 20),
                             ],
                           ),
-                          StreamBuilder<double>(
+                          StreamBuilder<double?>(
                               // 차트에 tap하는 곳의 가격 stream
-                              stream: priceStreamCtrl.stream,
+                              stream: priceStreamCtrl.stream as Stream<double?>?,
                               initialData: model.chartList.last.close,
                               builder: (context, snapshot) {
                                 return Column(
@@ -241,52 +242,52 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
                                           model.isDurationSelected[0] == true
                                               ? stockOrIndex == "stocks"
                                                   ? formatPriceUpDown
-                                                      .format((snapshot.data -
-                                                          priceDataSourceList
-                                                              .last.close))
+                                                      .format((snapshot.data! -
+                                                          priceDataSourceList!
+                                                              .last.close!))
                                                       .toString()
                                                   : formatIndexUpDown
-                                                      .format((snapshot.data -
-                                                          priceDataSourceList
-                                                              .last.close))
+                                                      .format((snapshot.data! -
+                                                          priceDataSourceList!
+                                                              .last.close!))
                                                       .toString()
                                               : stockOrIndex == "stocks"
                                                   ? formatPriceUpDown
-                                                      .format((snapshot.data -
-                                                          priceDataSourceList
-                                                              .first.close))
+                                                      .format((snapshot.data! -
+                                                          priceDataSourceList!
+                                                              .first.close!))
                                                       .toString()
                                                   : formatIndexUpDown
-                                                      .format((snapshot.data -
-                                                          priceDataSourceList
-                                                              .first.close))
+                                                      .format((snapshot.data! -
+                                                          priceDataSourceList!
+                                                              .first.close!))
                                                       .toString(),
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: model.isDurationSelected[
                                                         0] ==
                                                     true
-                                                ? (snapshot.data -
-                                                            priceDataSourceList
-                                                                .last.close) <
+                                                ? (snapshot.data! -
+                                                            priceDataSourceList!
+                                                                .last.close!) <
                                                         0
                                                     ? Colors.blue
-                                                    : (snapshot.data -
-                                                                priceDataSourceList
+                                                    : (snapshot.data! -
+                                                                priceDataSourceList!
                                                                     .last
-                                                                    .close) ==
+                                                                    .close!) ==
                                                             0
                                                         ? Colors.black
                                                         : Colors.red
-                                                : (snapshot.data -
-                                                            priceDataSourceList
-                                                                .first.close) <
+                                                : (snapshot.data! -
+                                                            priceDataSourceList!
+                                                                .first.close!) <
                                                         0
                                                     ? Colors.blue
-                                                    : (snapshot.data -
-                                                                priceDataSourceList
+                                                    : (snapshot.data! -
+                                                                priceDataSourceList!
                                                                     .first
-                                                                    .close) ==
+                                                                    .close!) ==
                                                             0
                                                         ? Colors.black
                                                         : Colors.red,
@@ -300,18 +301,18 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
                                           model.isDurationSelected[0] == true
                                               ? "(" +
                                                   formatReturnPct
-                                                      .format(((snapshot.data /
-                                                              priceDataSourceList
-                                                                  .last.close) -
+                                                      .format(((snapshot.data! /
+                                                              priceDataSourceList!
+                                                                  .last.close!) -
                                                           1))
                                                       .toString() +
                                                   ")"
                                               : "(" +
                                                   formatReturnPct
-                                                      .format(((snapshot.data /
-                                                              priceDataSourceList
+                                                      .format(((snapshot.data! /
+                                                              priceDataSourceList!
                                                                   .first
-                                                                  .close) -
+                                                                  .close!) -
                                                           1))
                                                       .toString() +
                                                   ")",
@@ -320,27 +321,27 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
                                             color: model.isDurationSelected[
                                                         0] ==
                                                     true
-                                                ? (snapshot.data -
-                                                            priceDataSourceList
-                                                                .last.close) <
+                                                ? (snapshot.data! -
+                                                            priceDataSourceList!
+                                                                .last.close!) <
                                                         0
                                                     ? Colors.blue
-                                                    : (snapshot.data -
-                                                                priceDataSourceList
+                                                    : (snapshot.data! -
+                                                                priceDataSourceList!
                                                                     .last
-                                                                    .close) ==
+                                                                    .close!) ==
                                                             0
                                                         ? Colors.black
                                                         : Colors.red
-                                                : (snapshot.data -
-                                                            priceDataSourceList
-                                                                .first.close) <
+                                                : (snapshot.data! -
+                                                            priceDataSourceList!
+                                                                .first.close!) <
                                                         0
                                                     ? Colors.blue
-                                                    : (snapshot.data -
-                                                                priceDataSourceList
+                                                    : (snapshot.data! -
+                                                                priceDataSourceList!
                                                                     .first
-                                                                    .close) ==
+                                                                    .close!) ==
                                                             0
                                                         ? Colors.black
                                                         : Colors.red,
@@ -364,17 +365,17 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
                                   ],
                                 );
                               }),
-                          StreamBuilder<DateTime>(
-                              stream: dateTimeStreamCtrl.stream,
+                          StreamBuilder<DateTime?>(
+                              stream: dateTimeStreamCtrl.stream as Stream<DateTime?>?,
                               initialData: model.isDurationSelected[0] == true
-                                  ? strToDate(address.date)
+                                  ? strToDate(address!.date!)
                                   : strToDate(model.chartList.last.date),
                               builder: (context, snapshot) {
                                 print("IS DURATION");
                                 print(model.isDurationSelected);
-                                print(address.date);
+                                print(address!.date);
                                 return Text(stringDateWithDay
-                                    .format(snapshot.data)
+                                    .format(snapshot.data!)
                                     .toString());
                               }),
                         ],
@@ -391,23 +392,23 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
                               if (!realtimeSnapshot.hasData) {
                                 print("NO DATA");
                                 return Container(
-                                  height: deviceHeight * 0.23,
+                                  height: deviceHeight! * 0.23,
                                 );
                               } else {
                                 realtimePriceDataSourceList =
                                     realtimeSnapshot.data;
                                 // if (address.isVoting == false) {
-                                print("FIRST LIST" + address.date);
+                                print("FIRST LIST" + address!.date!);
 
-                                liveToday = strToDate(address.date);
+                                liveToday = strToDate(address!.date!);
                                 print("LIVE TODAY IS " + liveToday.toString());
                                 priceStreamCtrl.add(
-                                    realtimePriceDataSourceList.first.price);
+                                    realtimePriceDataSourceList!.first.price);
                                 dateTimeStreamCtrl.add(
-                                    realtimePriceDataSourceList.first.createdAt
+                                    realtimePriceDataSourceList!.first.createdAt
                                         .toDate());
                                 // }
-                                print(realtimeSnapshot.data.length);
+                                print(realtimeSnapshot.data!.length);
                                 return buildContainerForChart(model);
                               }
                             })
@@ -424,21 +425,21 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
                           },
                           child: Container(
                             alignment: Alignment.center,
-                            width: (deviceWidth - 10) / 5,
+                            width: (deviceWidth! - 10) / 5,
                             height: 40,
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(5)),
                                 color: model.isDurationSelected[index] == true
-                                    ? (priceDataSourceList.last.close -
-                                                priceDataSourceList
-                                                    .first.close) >
+                                    ? (priceDataSourceList!.last.close! -
+                                                priceDataSourceList!
+                                                    .first.close!) >
                                             0
                                         ? Colors.red
-                                        : (priceDataSourceList.last.close -
-                                                    priceDataSourceList
-                                                        .first.close) ==
+                                        : (priceDataSourceList!.last.close! -
+                                                    priceDataSourceList!
+                                                        .first.close!) ==
                                                 0
                                             ? Colors.black
                                             : Colors.blue
@@ -1288,16 +1289,16 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
           height: 20,
         ),
         Container(
-          height: deviceHeight * 0.23,
+          height: deviceHeight! * 0.23,
           child: SfCartesianChart(
             plotAreaBorderWidth: 0,
             series: <ChartSeries>[
               ScatterSeries<StatsModel, String>(
                 color: Color(0xFFFF5959).withOpacity(.3),
-                dataSource: statsDataSourceList,
+                dataSource: statsDataSourceList!,
                 xValueMapper: (StatsModel stats, _) => stats.announcedAt == null
                     ? null
-                    : stats.announcedAt.replaceAll("\\n", "\n"),
+                    : stats.announcedAt!.replaceAll("\\n", "\n"),
                 yValueMapper: (StatsModel stats, _) => stats.expectedEps,
                 markerSettings: MarkerSettings(
                   width: 16,
@@ -1306,9 +1307,9 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
               ),
               ScatterSeries<StatsModel, String>(
                 color: Color(0xFFFF5959),
-                dataSource: statsDataSourceList,
+                dataSource: statsDataSourceList!,
                 xValueMapper: (StatsModel stats, _) =>
-                    stats.announcedAt.replaceAll("\\n", "\n"),
+                    stats.announcedAt!.replaceAll("\\n", "\n"),
                 yValueMapper: (StatsModel stats, _) => stats.actualEps,
                 markerSettings: MarkerSettings(
                   width: 16,
@@ -1409,7 +1410,7 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
     // );
     return Container(
       // color: Colors.red,
-      height: deviceHeight * 0.23,
+      height: deviceHeight! * 0.23,
       child: SfCartesianChart(
         plotAreaBorderWidth: 0,
         margin: EdgeInsets.all(0),
@@ -1438,8 +1439,8 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
         onChartTouchInteractionUp: (ChartTouchInteractionArgs args) =>
             model.isDurationSelected[0] == true
                 ? model.whenTrackEndOnLive(
-                    realtimePriceDataSourceList.first.price,
-                    realtimePriceDataSourceList.first.createdAt.toDate())
+                    realtimePriceDataSourceList!.first.price,
+                    realtimePriceDataSourceList!.first.createdAt.toDate())
                 : model.whenTrackEnd(),
         // onChartTouchInteractionDown:
         //     (ChartTouchInteractionArgs args) =>
@@ -1449,13 +1450,13 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
           model.isDurationSelected[0] == true
               ? FastLineSeries<PriceModel, DateTime>(
                   animationDuration: 0,
-                  dataSource: realtimePriceDataSourceList,
-                  color: (realtimePriceDataSourceList.first.price -
-                              realtimePriceDataSourceList.last.price) >
+                  dataSource: realtimePriceDataSourceList!,
+                  color: (realtimePriceDataSourceList!.first.price! -
+                              realtimePriceDataSourceList!.last.price!) >
                           0
                       ? Colors.red
-                      : (realtimePriceDataSourceList.first.price -
-                                  realtimePriceDataSourceList.last.price) ==
+                      : (realtimePriceDataSourceList!.first.price! -
+                                  realtimePriceDataSourceList!.last.price!) ==
                               0
                           ? Colors.black
                           : Colors.blue,
@@ -1472,16 +1473,16 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
                   yValueMapper: (PriceModel price, _) => price.price,
                 )
               : FastLineSeries<ChartModel, DateTime>(
-                  dataSource: priceDataSourceList,
+                  dataSource: priceDataSourceList!,
                   emptyPointSettings: EmptyPointSettings(
                     mode: EmptyPointMode.gap,
                   ),
-                  color: (priceDataSourceList.last.close -
-                              priceDataSourceList.first.close) >
+                  color: (priceDataSourceList!.last.close! -
+                              priceDataSourceList!.first.close!) >
                           0
                       ? Colors.red
-                      : (priceDataSourceList.last.close -
-                                  priceDataSourceList.first.close) ==
+                      : (priceDataSourceList!.last.close! -
+                                  priceDataSourceList!.first.close!) ==
                               0
                           ? Colors.black
                           : Colors.blue,
@@ -1493,7 +1494,7 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
                   enableTooltip: true,
                   // <ChartModel>[
 
-                  xValueMapper: (ChartModel chart, _) => strToDate(chart.date),
+                  xValueMapper: (ChartModel chart, _) => strToDate(chart.date!),
                   yValueMapper: (ChartModel chart, _) => chart.close,
                   // animationDuration: 1000,
                 )
@@ -1507,34 +1508,34 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
               // LIVE 일 때,
               model.isDurationSelected[0] == true
                   ? (quiver.min(
-                        List.generate(realtimePriceDataSourceList.length,
+                        List.generate(realtimePriceDataSourceList!.length,
                             (index) {
                           // print(model.chartList[index].close);
-                          return realtimePriceDataSourceList[index].price;
+                          return realtimePriceDataSourceList![index].price;
                         }),
-                      ) *
+                      )! *
                       0.97)
                   : (quiver.min(
-                        List.generate(priceDataSourceList.length, (index) {
+                        List.generate(priceDataSourceList!.length, (index) {
                           // print(model.chartList[index].close);
-                          return priceDataSourceList[index].close;
+                          return priceDataSourceList![index].close;
                         }),
-                      ) *
+                      )! *
                       0.97),
           maximum:
 
               // LIVE 일 때,
               model.isDurationSelected[0] == true
                   ? (quiver.max(
-                        List.generate(realtimePriceDataSourceList.length,
+                        List.generate(realtimePriceDataSourceList!.length,
                             (index) {
                           // print(model.chartList[index].close);
-                          return realtimePriceDataSourceList[index].price;
+                          return realtimePriceDataSourceList![index].price;
                         }),
-                      ) *
+                      )! *
                       1.03)
-                  : (quiver.max(List.generate(priceDataSourceList.length,
-                          (index) => priceDataSourceList[index].close)) *
+                  : (quiver.max(List.generate(priceDataSourceList!.length,
+                          (index) => priceDataSourceList![index].close))! *
                       1.03),
         ),
         primaryXAxis: model.isDurationSelected[0] == true
@@ -1544,13 +1545,13 @@ class _ChartForLunchtimeViewState extends State<ChartForLunchtimeView> {
                 ),
                 isVisible: false,
                 minimum: tz.TZDateTime.from(
-                    tz.TZDateTime(_timezoneService.seoul, liveToday.year,
+                    tz.TZDateTime(_timezoneService!.seoul, liveToday.year,
                         liveToday.month, liveToday.day, 08, 50, 00),
-                    _timezoneService.seoul),
+                    _timezoneService!.seoul),
                 maximum: tz.TZDateTime.from(
-                    tz.TZDateTime(_timezoneService.seoul, liveToday.year,
+                    tz.TZDateTime(_timezoneService!.seoul, liveToday.year,
                         liveToday.month, liveToday.day, 15, 40, 00),
-                    _timezoneService.seoul),
+                    _timezoneService!.seoul),
               )
             : CategoryAxis(
                 majorGridLines: MajorGridLines(

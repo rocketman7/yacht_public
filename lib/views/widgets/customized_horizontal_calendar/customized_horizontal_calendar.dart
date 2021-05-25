@@ -13,29 +13,29 @@ class HorizontalCalendar extends StatefulWidget {
   final DateTime firstDate;
   final DateTime lastDate;
   final double height;
-  final double dateWidth;
-  final TextStyle monthTextStyle;
-  final TextStyle selectedMonthTextStyle;
-  final String monthFormat;
-  final TextStyle dateTextStyle;
-  final TextStyle selectedDateTextStyle;
-  final String dateFormat;
-  final TextStyle weekDayTextStyle;
-  final TextStyle selectedWeekDayTextStyle;
-  final TextStyle disabledMonthTextStyle;
-  final TextStyle disabledDateTextStyle;
-  final TextStyle disabledWeekDayTextStyle;
-  final String weekDayFormat;
-  final DateSelectionCallBack onDateSelected;
-  final DateSelectionCallBack onDateLongTap;
-  final DateSelectionCallBack onDateUnSelected;
-  final VoidCallback onMaxDateSelectionReached;
-  final Decoration defaultDecoration;
-  final Decoration selectedDecoration;
-  final Decoration disabledDecoration;
-  final DateBuilder isDateDisabled;
-  final DateTime initialSelectedDates;
-  final ScrollController scrollController;
+  final double? dateWidth;
+  final TextStyle? monthTextStyle;
+  final TextStyle? selectedMonthTextStyle;
+  final String? monthFormat;
+  final TextStyle? dateTextStyle;
+  final TextStyle? selectedDateTextStyle;
+  final String? dateFormat;
+  final TextStyle? weekDayTextStyle;
+  final TextStyle? selectedWeekDayTextStyle;
+  final TextStyle? disabledMonthTextStyle;
+  final TextStyle? disabledDateTextStyle;
+  final TextStyle? disabledWeekDayTextStyle;
+  final String? weekDayFormat;
+  final DateSelectionCallBack? onDateSelected;
+  final DateSelectionCallBack? onDateLongTap;
+  final DateSelectionCallBack? onDateUnSelected;
+  final VoidCallback? onMaxDateSelectionReached;
+  final Decoration? defaultDecoration;
+  final Decoration? selectedDecoration;
+  final Decoration? disabledDecoration;
+  final DateBuilder? isDateDisabled;
+  final DateTime? initialSelectedDates;
+  final ScrollController? scrollController;
   final double spacingBetweenDates;
   final EdgeInsetsGeometry padding;
   final List<LabelType> labelOrder;
@@ -44,11 +44,11 @@ class HorizontalCalendar extends StatefulWidget {
   final bool isLabelUppercase;
 
   HorizontalCalendar({
-    Key key,
+    Key? key,
     this.height = 100,
     this.dateWidth,
-    @required this.firstDate,
-    @required this.lastDate,
+    required this.firstDate,
+    required this.lastDate,
     this.scrollController,
     this.onDateSelected,
     this.onDateLongTap,
@@ -105,9 +105,9 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
   final List<DateTime> selectedDates = [];
 
   void _scrollToBottom() {
-    if (widget.scrollController.hasClients) {
-      widget.scrollController.animateTo(
-          widget.scrollController.position.maxScrollExtent - 85,
+    if (widget.scrollController!.hasClients) {
+      widget.scrollController!.animateTo(
+          widget.scrollController!.position.maxScrollExtent - 85,
           duration: Duration(milliseconds: 1000),
           curve: Curves.elasticOut);
     } else {
@@ -120,7 +120,7 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
     super.initState();
     _scrollToBottom();
     allDates.addAll(getDateList(widget.firstDate, widget.lastDate));
-    selectedDates.add(toDateMonthYear(widget.initialSelectedDates));
+    selectedDates.add(toDateMonthYear(widget.initialSelectedDates!));
   }
 
   @override
@@ -144,7 +144,7 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
                   padding: widget.padding,
                   isSelected: selectedDates.contains(date),
                   isDisabled: widget.isDateDisabled != null
-                      ? widget.isDateDisabled(date)
+                      ? widget.isDateDisabled!(date)
                       : false,
                   date: date,
                   monthTextStyle: widget.monthTextStyle,
@@ -163,7 +163,7 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
                   selectedDecoration: widget.selectedDecoration,
                   disabledDecoration: widget.disabledDecoration,
                   labelOrder: widget.labelOrder,
-                  isLabelUppercase: widget.isLabelUppercase ?? false,
+                  isLabelUppercase: widget.isLabelUppercase,
                   onTap: () {
                     if (!selectedDates.contains(date)) {
                       if (widget.maxSelectedDateCount == 1 &&
@@ -172,26 +172,26 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
                       } else if (widget.maxSelectedDateCount ==
                           selectedDates.length) {
                         if (widget.onMaxDateSelectionReached != null) {
-                          widget.onMaxDateSelectionReached();
+                          widget.onMaxDateSelectionReached!();
                         }
                         return;
                       }
 
                       selectedDates.add(date);
                       if (widget.onDateSelected != null) {
-                        widget.onDateSelected(date);
+                        widget.onDateSelected!(date);
                       }
                     } else if (selectedDates.length >
                         widget.minSelectedDateCount) {
                       final isRemoved = selectedDates.remove(date);
                       if (isRemoved && widget.onDateUnSelected != null) {
-                        widget.onDateUnSelected(date);
+                        widget.onDateUnSelected!(date);
                       }
                     }
                     setState(() {});
                   },
                   onLongTap: () => widget.onDateLongTap != null
-                      ? widget.onDateLongTap(date)
+                      ? widget.onDateLongTap!(date)
                       : null,
                 ),
                 SizedBox(width: widget.spacingBetweenDates),

@@ -9,24 +9,24 @@ import 'package:timezone/timezone.dart' as tz;
 import '../locator.dart';
 
 class DateTimeModel {
-  final TimezoneService _timezoneService = locator<TimezoneService>();
+  final TimezoneService? _timezoneService = locator<TimezoneService>();
   // HOUR24_MINUTE_SECOND
   String hms(DateTime dateTime) {
-    dateTime = _timezoneService.koreaTime(dateTime);
+    dateTime = _timezoneService!.koreaTime(dateTime);
     return DateFormat.Hms().format(dateTime);
   }
 
   // yyyyMMdd
   String yyyyMMdd(DateTime dateTime) {
     print("YYYY" + dateTime.toString());
-    dateTime = _timezoneService.koreaTime(dateTime);
+    dateTime = _timezoneService!.koreaTime(dateTime);
     print("YYYY AFTER" + dateTime.toString());
     return DateFormat("yyyyMMdd").format(dateTime);
   }
 
 // 오늘 날짜가 평일이면 오늘 반환, 주말이면 다음 월요일 반환
   DateTime weekDay(DateTime dateTime) {
-    dateTime = _timezoneService.koreaTime(dateTime);
+    dateTime = _timezoneService!.koreaTime(dateTime);
 
     if (dateTime.weekday >= 1 && dateTime.weekday <= 5) {
       return (dateTime);
@@ -39,15 +39,15 @@ class DateTimeModel {
   }
 
 // Today의 장 오픈, 클로즈 시간 DateTime 리스트로 반환, 주말이면 다음 월요일로 반환
-  List<DateTime> marketOpeningPeriod(String category, DateTime now) {
+  List<DateTime> marketOpeningPeriod(String? category, DateTime now) {
     switch (category) {
       case 'KR':
         // 지금 시간이 평일인지 체크하고 평일이면 그대로 반환, 주말이면 가장 가까운 월요일 반환
         // DateTime _now = DateTime.now();
-        DateTime _timeNow = _timezoneService.koreaTime(now);
+        DateTime _timeNow = _timezoneService!.koreaTime(now);
         DateTime _nearestWeekDay = closestBusinessDay(_timeNow);
         DateTime _marketStart = tz.TZDateTime(
-            _timezoneService.seoul,
+            _timezoneService!.seoul,
             _nearestWeekDay.year,
             _nearestWeekDay.month,
             _nearestWeekDay.day,
@@ -55,7 +55,7 @@ class DateTimeModel {
             50,
             00);
         DateTime _marketEnd = tz.TZDateTime(
-            _timezoneService.seoul,
+            _timezoneService!.seoul,
             _nearestWeekDay.year,
             _nearestWeekDay.month,
             _nearestWeekDay.day,
@@ -72,9 +72,9 @@ class DateTimeModel {
   }
 
 // 투표 가능시간인지 가능이면 true, 불가능(장중)이면 false
-  bool isVoteAvailable(String category, DateTime now) {
+  bool isVoteAvailable(String? category, DateTime now) {
     // DateTime _now = DateTime.now();
-    DateTime koreaNow = _timezoneService.koreaTime(now);
+    DateTime koreaNow = _timezoneService!.koreaTime(now);
 
     print("ISVOTEAVAILABLE" + koreaNow.toString());
 
@@ -98,9 +98,9 @@ class DateTimeModel {
   }
 
 // 기준일자 8자리 String으로 반환하는 함수
-  Future<String> baseDate(String category, DateTime now) async {
+  Future<String> baseDate(String? category, DateTime now) async {
     // DateTime now = await NTP.now();
-    DateTime _timeNow = _timezoneService.koreaTime(now);
+    DateTime _timeNow = _timezoneService!.koreaTime(now);
     List<DateTime> dateTime = marketOpeningPeriod(category, now);
     bool votingNow = isVoteAvailable(category, now);
     print("TIME FOR BASEDATE" + _timeNow.toString());

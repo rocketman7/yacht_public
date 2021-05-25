@@ -17,7 +17,7 @@ class _MypageFriendsCodeInsertViewState
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _friendsCodeController = TextEditingController();
   int _codeLength = 0;
-  FocusNode myFocusNode;
+  FocusNode? myFocusNode;
 
   @override
   void initState() {
@@ -25,12 +25,12 @@ class _MypageFriendsCodeInsertViewState
 
     myFocusNode = FocusNode();
 
-    myFocusNode.requestFocus();
+    myFocusNode!.requestFocus();
   }
 
   @override
   void dispose() {
-    myFocusNode.dispose();
+    myFocusNode!.dispose();
 
     super.dispose();
   }

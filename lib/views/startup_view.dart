@@ -25,7 +25,7 @@ import 'vote_select_v2_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StartUpView extends StatefulWidget {
-  final int startIdx;
+  final int? startIdx;
   const StartUpView(this.startIdx);
 
   @override
@@ -34,23 +34,23 @@ class StartUpView extends StatefulWidget {
 
 class _StartUpViewState extends State<StartUpView>
     with SingleTickerProviderStateMixin {
-  NavigationService _navigationService = locator<NavigationService>();
-  MixpanelService _mixpanelService = locator<MixpanelService>();
+  NavigationService? _navigationService = locator<NavigationService>();
+  MixpanelService? _mixpanelService = locator<MixpanelService>();
 
   final GlobalKey navBarGlobalKey = GlobalKey<NavigatorState>();
-  int _startIdx;
+  int? _startIdx;
 
-  int _selectedIndex;
-  TabController _tabController;
+  int? _selectedIndex;
+  TabController? _tabController;
   bool isDisposed = false;
-  List<Widget> _viewList;
-  List<String> _bottomViewNameList;
+  late List<Widget> _viewList;
+  late List<String> _bottomViewNameList;
 
   // HomeView에서 버튼으로 navigate할 수 있도록 callback function을 만든다.
   void goToTab(int idxFromOtherPages) {
     setState(() {
       _selectedIndex = idxFromOtherPages;
-      _tabController.index = _selectedIndex;
+      _tabController!.index = _selectedIndex!;
     });
   }
 
@@ -90,7 +90,7 @@ class _StartUpViewState extends State<StartUpView>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => initPlugin());
+    WidgetsBinding.instance!.addPostFrameCallback((_) => initPlugin());
     _startIdx = widget.startIdx ?? 0;
     _selectedIndex = _startIdx;
     // TODO: implement initState
@@ -122,7 +122,7 @@ class _StartUpViewState extends State<StartUpView>
     );
     if (!isDisposed) {
       setState(() {
-        _selectedIndex = _tabController.index;
+        _selectedIndex = _tabController!.index;
       });
     }
 
@@ -172,11 +172,11 @@ class _StartUpViewState extends State<StartUpView>
 
                   type: BottomNavigationBarType.fixed,
                   onTap: (index) => {
-                    _mixpanelService.mixpanel.track(_bottomViewNameList[index]),
+                    // _mixpanelService!.mixpanel.track(_bottomViewNameList[index]),
 
                     setState(() {
                       _selectedIndex = index;
-                      _tabController.index = index;
+                      _tabController!.index = index;
                       // _viewList.insert(index, _viewList[index]);
                       // _viewList.removeAt(index);
                       print(_viewList.toString());

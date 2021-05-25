@@ -1,6 +1,6 @@
 // DB의 stateManager 값을 가져올 Model
 class StateManageModel {
-  final String state;
+  final String? state;
 
   StateManageModel({
     this.state,

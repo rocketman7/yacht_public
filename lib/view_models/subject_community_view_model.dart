@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
 import 'package:yachtOne/models/user_post_model.dart';
@@ -16,24 +18,24 @@ import '../services/api/customized_ntp.dart';
 import '../locator.dart';
 
 class SubjectCommunityViewModel extends FutureViewModel {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final AuthService _authService = locator<AuthService>();
-  final DialogService _dialogService = locator<DialogService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DialogService? _dialogService = locator<DialogService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
-  String uid;
-  final int idx;
-  final String date;
+  String? uid;
+  final int? idx;
+  final String? date;
 
-  DatabaseAddressModel address;
-  UserModel user;
-  VoteModel vote;
-  UserVoteModel userVote;
-  DatabaseAddressModel newAddress;
-  String avatarImage;
-  DateTime now;
+  late DatabaseAddressModel address;
+  late UserModel user;
+  VoteModel? vote;
+  UserVoteModel? userVote;
+  DatabaseAddressModel? newAddress;
+  String? avatarImage;
+  DateTime? now;
   SubjectCommunityViewModel(this.date, this.idx) {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   @override
@@ -42,7 +44,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
   Future getAllModel(uid) async {
     // setBusy(true);
     await _amplitudeService.logSubjectCommunity(uid);
-    address = await _databaseService.getAddress(uid);
+    address = await _databaseService!.getAddress(uid);
     newAddress = DatabaseAddressModel(
       uid: uid,
       date: date,
@@ -50,11 +52,12 @@ class SubjectCommunityViewModel extends FutureViewModel {
       season: address.season,
       isVoting: address.isVoting,
     );
-    newAddress.subVote = idx.toString();
+    newAddress!.subVote = idx.toString();
     // print(address);
-    user = await _databaseService.getUser(uid);
-    vote = await _databaseService.getVotes(newAddress);
-    userVote = await _databaseService.getUserVote(newAddress);
+    user = await (_databaseService!.getUser(uid) as FutureOr<UserModel>);
+    vote = await _databaseService!.getVotes(newAddress!);
+    userVote = await (_databaseService!.getUserVote(newAddress!)
+        as FutureOr<UserVoteModel?>);
 
     // setBusy(false);
     // notifyListeners();
@@ -79,7 +82,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
       date: address.date,
       createdAt: voteCommentModel.postDateTime,
     );
-    await _databaseService.postSubVoteComment(
+    await _databaseService!.postSubVoteComment(
       address,
       voteCommentModel,
       userPostModel,
@@ -107,15 +110,15 @@ class SubjectCommunityViewModel extends FutureViewModel {
 
   Future deleteComment(
     DatabaseAddressModel address,
-    String postUid,
+    String? postUid,
   ) async {
-    await _databaseService.deleteSubjectComment(address, postUid);
+    await _databaseService!.deleteSubjectComment(address, postUid);
   }
 
   Future likeComment(
     VoteCommentModel voteComment,
   ) async {
-    await _databaseService.likeSubVoteComment(
+    await _databaseService!.likeSubVoteComment(
       newAddress,
       voteComment,
       uid,
@@ -126,15 +129,15 @@ class SubjectCommunityViewModel extends FutureViewModel {
     UserModel user,
     VoteCommentModel voteComment,
   ) async {
-    await _databaseService.addBlockList(user, voteComment.uid);
+    await _databaseService!.addBlockList(user, voteComment.uid);
   }
 
-  Future getAvatar(String uid) async {
-    return await _databaseService.getAvatar(uid);
+  Future getAvatar(String? uid) async {
+    return await _databaseService!.getAvatar(uid);
   }
 
   Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
-    return _databaseService.getSubVotePostList(address);
+    return _databaseService!.getSubVotePostList(address);
   }
 
   Stream<PriceModel> getRealtimePrice(
@@ -142,7 +145,7 @@ class SubjectCommunityViewModel extends FutureViewModel {
     String issueCode,
   ) {
     print("Price Stream returns");
-    return _databaseService.getRealtimeReturn(address, issueCode);
+    return _databaseService!.getRealtimeReturn(address, issueCode);
   }
 
 //   List<String> listIssueCode(int idx) {

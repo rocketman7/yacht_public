@@ -18,20 +18,20 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseAuth get auth => _auth;
 
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  SharedPreferencesService _sharedPreferencesService =
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
   // 현재 User 데이터를 user model에 넣어서 저장
-  UserModel _currentUserModel;
-  UserModel get currentUser => _currentUserModel;
+  UserModel? _currentUserModel;
+  UserModel? get currentUser => _currentUserModel;
 
-  String _verificationId;
-  String get verificationId => _verificationId;
+  String? _verificationId;
+  String? get verificationId => _verificationId;
 
-  PhoneAuthCredential _authCredential;
-  PhoneAuthCredential get authCredential => _authCredential;
+  PhoneAuthCredential? _authCredential;
+  PhoneAuthCredential? get authCredential => _authCredential;
   // Phone Auth
   Future sendPhoneAuthSms(String value, BuildContext context) async {
     // Firebase Auth의 verifyPhoneNumber method
@@ -43,7 +43,7 @@ class AuthService {
       codeAutoRetrievalTimeout: (e) => print(e.characters),
       timeout: Duration(seconds: 120),
       // code 보내지면 아래 함수 call
-      codeSent: (String verificationId, [int forceResendingToken]) {
+      codeSent: (String verificationId, [int? forceResendingToken]) {
         // how to send this 'verificationId' to the ViewModel
         // verificationId;
         _verificationId = verificationId;
@@ -91,7 +91,7 @@ class AuthService {
     // credential을 만들 때 code check하지 않고 signInWithCredential에서 체크
     return await auth.signInWithCredential(credential).catchError((e) {
       print("ERROR CATCH" + e.message);
-      credential = null;
+      PhoneAuthCredential? credential;
       return credential;
     }).then((value) {
       // value = null;
@@ -100,7 +100,7 @@ class AuthService {
 
         print("VALUE IS NOT NULL AND CREDENTIAL IS " +
             credential.toString() +
-            auth.currentUser.uid); // auth.signOut();
+            auth.currentUser!.uid); // auth.signOut();
         // print("SignOut");
 
         return credential;
@@ -116,10 +116,10 @@ class AuthService {
 
   // 이메일 회원가입
   Future registerWithEmail({
-    @required userName,
-    @required email,
-    @required password,
-    @required PhoneAuthCredential phoneCredential,
+    required userName,
+    required email,
+    required password,
+    required PhoneAuthCredential phoneCredential,
   }) async {
     try {
       // final UserCredential authResult = await _auth
@@ -134,13 +134,13 @@ class AuthService {
       //   password: password,
       // );
 
-      var user = auth.currentUser;
-      print("UID" + auth.currentUser.uid);
+      var user = auth.currentUser!;
+      print("UID" + auth.currentUser!.uid);
       print(phoneCredential.smsCode);
       await user.linkWithCredential(credential);
 
-      User _user = _auth.currentUser;
-      String phoneNumber = _user.phoneNumber;
+      User _user = _auth.currentUser!;
+      String phoneNumber = _user.phoneNumber!;
       var rng = Random();
 
       print("my Phone Number is " + phoneNumber);
@@ -162,7 +162,7 @@ class AuthService {
       // await authResult.user.sendEmailVerification();
 
       // Database에 User정보 넣기
-      await _databaseService.createUser(_currentUserModel);
+      await _databaseService!.createUser(_currentUserModel!);
 
       // Register 성공하면 return true
 
@@ -184,8 +184,8 @@ class AuthService {
 
   // 이메일 로그인
   Future loginWithEmail({
-    @required email,
-    @required password,
+    required email,
+    required password,
   }) async {
     try {
       final authResult = await _auth.signInWithEmailAndPassword(
@@ -217,7 +217,7 @@ class AuthService {
   Future<bool> get appleSignInAvailable => AppleSignIn.isAvailable();
 
   /// Sign in with Apple
-  Future<User> appleSignIn() async {
+  Future<User?> appleSignIn() async {
     try {
       final AuthorizationResult appleResult =
           await AppleSignIn.performRequests([
@@ -236,7 +236,7 @@ class AuthService {
 
       UserCredential firebaseResult =
           await _auth.signInWithCredential(credential);
-      User user = firebaseResult.user;
+      User user = firebaseResult.user!;
       print("Firebase User " + user.toString());
       print("Apple credential" + appleResult.credential.toString());
       // Optional, Update user data in Firestore
@@ -250,7 +250,7 @@ class AuthService {
 
       // check if user exists
 
-      var existingUser = await _databaseService.checkIfUserDBExists(user.uid);
+      var existingUser = await _databaseService!.checkIfUserDBExists(user.uid);
       // print("EXISTING " + existingUser.uid.toString());
 
       if (existingUser == null) {
@@ -270,10 +270,10 @@ class AuthService {
           secName: null,
         );
 
-        await _databaseService.createUser(_currentUserModel);
+        await _databaseService!.createUser(_currentUserModel);
       }
-      _sharedPreferencesService.setSharedPreferencesValue("twoFactor", true);
-      _navigationService.navigateTo('initial');
+      _sharedPreferencesService!.setSharedPreferencesValue("twoFactor", true);
+      _navigationService!.navigateTo('initial');
       return user;
     } catch (error) {
       print("ERROR" + error.toString());
@@ -281,10 +281,10 @@ class AuthService {
     }
   }
 
-  Stream authState() {
+  Stream? authState() {
     var user = _auth.authStateChanges();
     if (user == null) {
-      _navigationService.navigateTo('login');
+      _navigationService!.navigateTo('login');
     }
     return null;
   }
@@ -296,7 +296,7 @@ class AuthService {
 
   Future deleteAccount() async {
     try {
-      User user = _auth.currentUser;
+      User user = _auth.currentUser!;
 
       user.delete();
     } catch (e) {
@@ -307,7 +307,7 @@ class AuthService {
   //  비밀번호 변경
 
   Future changePassword(String newPassword) async {
-    User user = _auth.currentUser;
+    User user = _auth.currentUser!;
 
     user.updatePassword(newPassword).then((_) {
       print("Succesfull changed password");

@@ -18,7 +18,7 @@ class StockListView extends StatefulWidget {
 
 class _StockListViewState extends State<StockListView> {
   // 오로지 검색 기능을 위하여 stateful widget이 되는 것.
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final MixpanelService? _mixpanelService = locator<MixpanelService>();
   FocusNode _myFocusNode = FocusNode();
   Icon _searchIcon = Icon(
     Icons.search,
@@ -143,8 +143,8 @@ class _StockListViewState extends State<StockListView> {
                             ),
                             Expanded(
                               child: ListView.builder(
-                                itemCount: model.searchingAllStockListModel
-                                    .subStocks.length,
+                                itemCount: model.searchingAllStockListModel!
+                                    .subStocks!.length,
                                 itemBuilder: (context, index) =>
                                     allStockListView(context, model, index),
                               ),
@@ -162,16 +162,16 @@ class _StockListViewState extends State<StockListView> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        print('${model.searchingAllStockListModel.subStocks[index].name}');
+        print('${model.searchingAllStockListModel!.subStocks![index].name}');
         _myFocusNode.unfocus();
         model.notifyListeners();
-        _mixpanelService.mixpanel.track('Stock Info View - Stock List',
+        _mixpanelService!.mixpanel.track('Stock Info View - Stock List',
             properties: {
               'Issue Code':
-                  model.searchingAllStockListModel.subStocks[index].issueCode
+                  model.searchingAllStockListModel!.subStocks![index].issueCode
             });
         callNewModalBottomSheet(context,
-            model.searchingAllStockListModel.subStocks[index].issueCode);
+            model.searchingAllStockListModel!.subStocks![index].issueCode);
       },
       child: Padding(
           padding: EdgeInsets.only(
@@ -181,7 +181,7 @@ class _StockListViewState extends State<StockListView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${model.searchingAllStockListModel.subStocks[index].name}',
+                '${model.searchingAllStockListModel!.subStocks![index].name}',
                 style: TextStyle(
                   fontSize: 20.sp,
                   fontFamily: 'AppleSDM',
@@ -200,7 +200,7 @@ class _StockListViewState extends State<StockListView> {
     );
   }
 
-  Future callNewModalBottomSheet(BuildContext context, String issueCode) {
+  Future callNewModalBottomSheet(BuildContext context, String? issueCode) {
     ScrollController controller;
     StreamController scrollStreamCtrl = StreamController<double>();
     return showModalBottomSheet(
@@ -211,13 +211,13 @@ class _StockListViewState extends State<StockListView> {
           context,
         ) =>
             StreamBuilder<double>(
-                stream: scrollStreamCtrl.stream,
+                stream: scrollStreamCtrl.stream as Stream<double>?,
                 initialData: 0,
                 builder: (context, snapshot) {
-                  double offset = snapshot.data;
+                  double offset = snapshot.data!;
 
                   if (offset < -140) {
-                    WidgetsBinding.instance
+                    WidgetsBinding.instance!
                         .addPostFrameCallback((_) => Navigator.pop(context));
                   }
 
@@ -248,8 +248,8 @@ class _StockListViewState extends State<StockListView> {
                       ),
                       Container(
                         height: offset < 0
-                            ? (deviceHeight * .83) + offset
-                            : deviceHeight * .83,
+                            ? (deviceHeight! * .83) + offset
+                            : deviceHeight! * .83,
                         child: ChartForAllView(scrollStreamCtrl, issueCode),
                       ),
                     ],

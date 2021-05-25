@@ -47,8 +47,8 @@ class DatabaseService {
   FirebaseFirestore get databaseService => _databaseService;
 
   // final AuthService _authService = locator<AuthService>();
-  final NavigationService _navigationService = locator<NavigationService>();
-  SharedPreferencesService _sharedPreferencesService =
+  final NavigationService? _navigationService = locator<NavigationService>();
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
   // final AuthService _authService = locator<AuthService>();
   DateFormat dateFormat = DateFormat('yyyy-MM-dd_HH:mm:ss:SSS');
@@ -92,13 +92,13 @@ class DatabaseService {
     try {
       await _usersCollectionReference.doc(user.uid).set(user.toJson());
     } catch (e) {
-      return e.message;
+      return e;
     }
   }
 
   Future deleteUser() async {
     try {
-      User user = AuthService().auth.currentUser;
+      User user = AuthService().auth.currentUser!;
       await _usersCollectionReference.doc(user.uid).delete();
     } catch (e) {
       print(e);
@@ -116,17 +116,17 @@ class DatabaseService {
   }
 
   // Read: User정보 users Collection으로부터 읽기
-  Future getUser(String uid) async {
+  Future getUser(String? uid) async {
     try {
       // users collection에서 해당 uid 다큐의 snapshot 가져오기 (return DocumentSnapshot)
       var userData = await _usersCollectionReference.doc(uid).get();
-      return UserModel.fromData(userData.data());
+      return UserModel.fromData(userData.data() as Map<String, dynamic>);
     } catch (e) {
       print(e.toString());
       // _sharedPreferencesService.setSharedPreferencesValue("twoFactor", false);
       // AuthService().auth.signOut();
       print("getUSER ERROR");
-      _navigationService.popAndNavigateWithArgTo('initial');
+      _navigationService!.popAndNavigateWithArgTo('initial');
     }
   }
 
@@ -136,7 +136,7 @@ class DatabaseService {
       var value = await _usersCollectionReference
           .doc(uid)
           .get()
-          .then((querysnapshot) => {querysnapshot.data()['$field']});
+          .then((querysnapshot) => {querysnapshot.get('$field')});
 
       return value.toList()[0].toString();
     } catch (e) {
@@ -155,14 +155,14 @@ class DatabaseService {
           .votesSeasonCollection()
           .doc(addressModel.date)
           .set(vote.toJson());
-      for (i = 0; i < vote.subVotes.length; i++) {
+      for (i = 0; i < vote.subVotes!.length; i++) {
         await addressModel
             .votesSeasonSubVoteCollection()
             .doc(i.toString())
             .set(subVote[i].toJson());
       }
     } catch (e) {
-      return e.message;
+      return e;
     }
   }
 
@@ -185,7 +185,7 @@ class DatabaseService {
 
       print("setDone");
     } catch (e) {
-      return e.message;
+      return e;
     }
   }
 
@@ -194,7 +194,7 @@ class DatabaseService {
     UserVoteModel userVote,
     int resetTarget,
   ) async {
-    List<int> voteSelected = userVote.voteSelected;
+    List<int> voteSelected = userVote.voteSelected!;
     bool isVoted = true;
     int check = 0;
     print(voteSelected);
@@ -221,7 +221,7 @@ class DatabaseService {
   // }
 
   Future setAccInformations(
-      String accNumber, String accName, String secName, String uid) async {
+      String accNumber, String accName, String secName, String? uid) async {
     await _usersCollectionReference.doc(uid).update({
       'account.accNumber': accNumber,
       'account.accName': accName,
@@ -230,7 +230,7 @@ class DatabaseService {
   }
 
   // user콜렉션에서 아바타이미지 바꾸기
-  Future setAvatarImage(String avatarImage, String uid) async {
+  Future setAvatarImage(String? avatarImage, String? uid) async {
     await _usersCollectionReference
         .doc(uid)
         .update({'avatarImage': avatarImage});
@@ -238,7 +238,7 @@ class DatabaseService {
 
   // 유저 선택 리스트 받아서 각 subVote 문서에 numVoted increment
   Future countUserVote(
-    DatabaseAddressModel address,
+    DatabaseAddressModel? address,
     List<int> voteSelected,
   ) async {
     try {
@@ -248,12 +248,12 @@ class DatabaseService {
         int vote = voteSelected[i];
         if (vote != 0) {
           if (vote == 1) {
-            address
+            address!
                 .votesSeasonSubVoteCollection()
                 .doc(i.toString())
                 .update({'numVoted0': increment});
           } else if (vote == 2) {
-            address
+            address!
                 .votesSeasonSubVoteCollection()
                 .doc(i.toString())
                 .update({'numVoted1': increment});
@@ -261,7 +261,7 @@ class DatabaseService {
         }
       }
     } catch (e) {
-      return e.message;
+      return e;
     }
   }
 
@@ -307,16 +307,16 @@ class DatabaseService {
       // return priceData.docs.map((e) => ChartModel.fromData(e.data())).toList();
       return chartList;
     } catch (e) {
-      print(e.message);
+      print(e);
     }
   }
 
-  Future<List<SeasonModel>> getAllSeasonInfoList() async {
+  Future<List<SeasonModel>?> getAllSeasonInfoList() async {
     try {
       List<SeasonModel> seasonModelList = [];
       var krVoteSnap =
           await _databaseService.collection('votes').doc('KR').get();
-      List<dynamic> seasonList = krVoteSnap.data()['subCollectionIds'];
+      List<dynamic> seasonList = krVoteSnap.data()!['subCollectionIds'];
       print(seasonList);
 
       for (var doc in seasonList) {
@@ -327,7 +327,7 @@ class DatabaseService {
             .doc('seasonInfo')
             .get()
             .then((value) {
-          var temp = SeasonModel.fromData(value.data(), doc);
+          var temp = SeasonModel.fromData(value.data()!, doc);
           seasonModelList.add(temp);
         });
       }
@@ -341,7 +341,7 @@ class DatabaseService {
       return seasonModelList;
     } catch (e) {
       print("ERROR CAUGHT" + e.toString());
-      return e.message;
+      // return e;
     }
   }
 
@@ -349,7 +349,7 @@ class DatabaseService {
     try {
       print("GETALLSEASON START");
       List<UserVoteModel> allSeasonUserVoteList = [];
-      UserVoteStatsModel userVoteStats;
+      UserVoteStatsModel? userVoteStats;
       await address
           .userVoteSeasonCollection()
           .orderBy('voteDate', descending: true)
@@ -358,9 +358,10 @@ class DatabaseService {
         print(colSnapshot.docs.first);
         colSnapshot.docs.forEach((result) {
           result.id == 'stats'
-              ? userVoteStats = UserVoteStatsModel.fromData(result.data())
-              : allSeasonUserVoteList
-                  .add(UserVoteModel.fromData(result.data(), userVoteStats));
+              ? userVoteStats = UserVoteStatsModel.fromData(
+                  result.data() as Map<String, dynamic>)
+              : allSeasonUserVoteList.add(UserVoteModel.fromData(
+                  result.data() as Map<String, dynamic>, userVoteStats));
         });
       });
 
@@ -410,13 +411,15 @@ class DatabaseService {
             .set(tempUserVoteStats.toJson());
         userVoteStats = tempUserVoteStats;
       } else {
-        userVoteStats = UserVoteStatsModel.fromData(userVoteStatsData.data());
+        userVoteStats = UserVoteStatsModel.fromData(
+            userVoteStatsData.data() as Map<String, dynamic>);
       }
 
       print("USERVOTE" + userVoteData.data().toString());
 
       return UserVoteModel.fromData(
-          userVoteData.data() ?? tempUserVote.toJson(), userVoteStats);
+          userVoteData.data() as Map<String, dynamic>? ?? tempUserVote.toJson(),
+          userVoteStats);
     } catch (e) {
       print("ERROR_getUserVote");
       print(e.toString());
@@ -440,7 +443,8 @@ class DatabaseService {
             .set(tempUserVoteStats.toJson());
         userVoteStats = tempUserVoteStats;
       } else {
-        userVoteStats = UserVoteStatsModel.fromData(userVoteStatsData.data());
+        userVoteStats = UserVoteStatsModel.fromData(
+            userVoteStatsData.data() as Map<String, dynamic>);
       }
 
       return userVoteStats;
@@ -450,12 +454,13 @@ class DatabaseService {
     }
   }
 
-  Future<SeasonModel> getSeasonInfo(DatabaseAddressModel address) async {
+  Future<SeasonModel?> getSeasonInfo(DatabaseAddressModel address) async {
     try {
       var seasonInfoData =
           await address.votesSeasonCollection().doc('seasonInfo').get();
 
-      return SeasonModel.fromData(seasonInfoData.data(), address.season);
+      return SeasonModel.fromData(
+          seasonInfoData.data() as Map<String, dynamic>, address.season);
     } catch (e) {
       print(e.toString());
       return null;
@@ -495,7 +500,7 @@ class DatabaseService {
           .votesSeasonCollection()
           .doc('seasonInfo')
           .get()
-          .then((value) => value.data()['startDate']);
+          .then((value) => value.get('startDate'));
 
       //시즌 시작일 datetime으로
       startDateTime = strToDate(startDateStr);
@@ -507,7 +512,7 @@ class DatabaseService {
       // print(strToDate(tempDate)
       //     .isBefore(strToDate(address.date).add(Duration(days: 1))));
       while (strToDate(tempDate)
-          .isBefore(strToDate(address.date).add(Duration(days: 1)))) {
+          .isBefore(strToDate(address.date!).add(Duration(days: 1)))) {
         tempSubVoteList = [];
         var voteData =
             await address.votesSeasonCollection().doc(tempDate).get();
@@ -524,7 +529,9 @@ class DatabaseService {
         // print("tempDate " + tempDate.toString());
 
         voteList.insert(
-            0, VoteModel.fromData(voteData.data(), tempSubVoteList));
+            0,
+            VoteModel.fromData(
+                voteData.data() as Map<String, dynamic>, tempSubVoteList));
         // print(tempSubVoteList[1].toJson());
         print("TEMPDATE BEFORE" + tempDate.toString());
         tempDate = dateToStr(nextNthBusinessDay(strToDate(tempDate), 1));
@@ -543,7 +550,7 @@ class DatabaseService {
   }
 
   // Read: Vote 정보 Vote Collection으로부터 읽기
-  Future<VoteModel> getVotes(DatabaseAddressModel addressModel) async {
+  Future<VoteModel?> getVotes(DatabaseAddressModel addressModel) async {
     try {
       // print('DB' + uid);
       List<SubVote> subVoteList = [];
@@ -559,14 +566,16 @@ class DatabaseService {
           .get()
           .then((querySnapshot) {
         querySnapshot.docs.forEach((result) {
-          subVoteList.add(SubVote.fromData(result.data()));
+          subVoteList
+              .add(SubVote.fromData(result.data() as Map<String, dynamic>));
         });
       });
       print(subVoteList[0].title);
       print(subVoteList.length);
       print(voteData.data());
       // print(userData);
-      return VoteModel.fromData(voteData.data(), subVoteList);
+      return VoteModel.fromData(
+          voteData.data() as Map<String, dynamic>, subVoteList);
     } catch (e) {
       print("ERROR22");
       print(e.toString());
@@ -617,22 +626,22 @@ class DatabaseService {
   }
 
   Future likeSubVoteComment(
-    DatabaseAddressModel address,
+    DatabaseAddressModel? address,
     VoteCommentModel voteComment,
-    String uid,
+    String? uid,
   ) async {
-    if (voteComment.likedBy.contains(uid)) {
+    if (voteComment.likedBy!.contains(uid)) {
       print("True Called");
-      voteComment.likedBy.remove(uid);
-      await address
+      voteComment.likedBy!.remove(uid);
+      await address!
           .postsSubVoteCollection()
           .doc(voteComment.postUid)
           .update({"likedBy": voteComment.likedBy});
     } else {
       print("false Called");
-      voteComment.likedBy.add(uid);
+      voteComment.likedBy!.add(uid);
       print(voteComment.likedBy);
-      await address
+      await address!
           .postsSubVoteCollection()
           .doc(voteComment.postUid)
           .update({"likedBy": voteComment.likedBy});
@@ -640,20 +649,20 @@ class DatabaseService {
   }
 
   Future likeSeasonComment(
-    DatabaseAddressModel address,
+    DatabaseAddressModel? address,
     VoteCommentModel voteComment,
-    String uid,
+    String? uid,
   ) async {
-    if (voteComment.likedBy.contains(uid)) {
-      voteComment.likedBy.remove(uid);
-      await address
+    if (voteComment.likedBy!.contains(uid)) {
+      voteComment.likedBy!.remove(uid);
+      await address!
           .postsSeasonCollection()
           .doc(voteComment.postUid)
           .update({"likedBy": voteComment.likedBy});
     } else {
-      voteComment.likedBy.add(uid);
+      voteComment.likedBy!.add(uid);
       // print(voteComment.likedBy);
-      await address
+      await address!
           .postsSeasonCollection()
           .doc(voteComment.postUid)
           .update({"likedBy": voteComment.likedBy});
@@ -662,7 +671,7 @@ class DatabaseService {
 
   Future deleteSeasonComment(
     DatabaseAddressModel address,
-    String postUid,
+    String? postUid,
   ) async {
     try {
       await address.postsSeasonCollection().doc(postUid).delete();
@@ -671,7 +680,7 @@ class DatabaseService {
 
   Future deleteSubjectComment(
     DatabaseAddressModel address,
-    String postUid,
+    String? postUid,
   ) async {
     try {
       await address.postsSubVoteCollection().doc(postUid).delete();
@@ -680,10 +689,10 @@ class DatabaseService {
 
   Future addBlockList(
     UserModel user,
-    String blockUid,
+    String? blockUid,
   ) async {
     print(user.blockList);
-    user.blockList.add(blockUid);
+    user.blockList!.add(blockUid);
     print(user.blockList);
     await _usersCollectionReference
         .doc(user.uid)
@@ -700,7 +709,8 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((document) {
-              return VoteCommentModel.fromData(document.id, document.data());
+              return VoteCommentModel.fromData(
+                  document.id, document.data() as Map<String, dynamic>);
             })
             .toList()
             .reversed
@@ -716,7 +726,8 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((document) {
-              return VoteCommentModel.fromData(document.id, document.data());
+              return VoteCommentModel.fromData(
+                  document.id, document.data() as Map<String, dynamic>);
             })
             .toList()
             .reversed
@@ -787,7 +798,7 @@ class DatabaseService {
     return _databaseService
         .collection('realtimePrice')
         .doc('KR')
-        .collection(address.date)
+        .collection(address.date!)
         .where('issueCode', isEqualTo: issueCode)
         .orderBy('createdAt', descending: true)
         .snapshots()
@@ -859,16 +870,16 @@ class DatabaseService {
   // }
 
   // Read: ranks collection 정보 읽어오기. 배치될 때에만 바뀌는 정보이므로 Future로 처리
-  Future<List<RankModel>> getOldSeasonRankList(
+  Future<List<RankModel>?> getOldSeasonRankList(
       DatabaseAddressModel databaseAddressModel) async {
     try {
       List<RankModel> rankList = [];
 
       await _ranksCollectionReference
           .doc(databaseAddressModel.category)
-          .collection(databaseAddressModel.season)
+          .collection(databaseAddressModel.season!)
           .doc(databaseAddressModel.date)
-          .collection(databaseAddressModel.date)
+          .collection(databaseAddressModel.date!)
           .orderBy('todayRank', descending: false)
           // .orderBy('userName')
           .get()
@@ -884,7 +895,7 @@ class DatabaseService {
     }
   }
 
-  Future<List<RankModel>> getRankList(
+  Future<List<RankModel>?> getRankList(
       DatabaseAddressModel databaseAddressModel) async {
     try {
       List<RankModel> rankList = [];
@@ -907,7 +918,8 @@ class DatabaseService {
           // .orderBy('userName')
           .get()
           .then((querysnapshot) => querysnapshot.docs.forEach((element) {
-                rankList.add(RankModel.fromData(element.data()));
+                rankList.add(
+                    RankModel.fromData(element.data() as Map<String, dynamic>));
               }));
 
       return rankList;
@@ -919,7 +931,7 @@ class DatabaseService {
   }
 
   // Read: ranks collection 정보 읽어오기. 배치될 때에만 바뀌는 정보이므로 Future로 처리. 시즌 상위 탑5만 불러온다(홈화면 위해)
-  Future<List<RankModel>> getRankListTopFive(
+  Future<List<RankModel>?> getRankListTopFive(
       DatabaseAddressModel databaseAddressModel) async {
     try {
       List<RankModel> rankList = [];
@@ -931,7 +943,8 @@ class DatabaseService {
           .limit(5)
           .get()
           .then((querysnapshot) => querysnapshot.docs.forEach((element) {
-                rankList.add(RankModel.fromData(element.data()));
+                rankList.add(
+                    RankModel.fromData(element.data() as Map<String, dynamic>));
               }));
 
       return rankList;
@@ -942,7 +955,7 @@ class DatabaseService {
     }
   }
 
-  Future<void> addRank() {
+  Future<void>? addRank() {
     // for (i = 1; i < 11; i++) {
     Random rnd;
     rnd = new Random();
@@ -967,11 +980,12 @@ class DatabaseService {
   }
 
   // admin -> stateManager 불러오기
-  Future<StateManageModel> getStateManage() async {
+  Future<StateManageModel?> getStateManage() async {
     try {
       var stateManageData =
           await adminCollectionReference.doc('stateManager').get();
-      return StateManageModel.fromData(stateManageData.data());
+      return StateManageModel.fromData(
+          stateManageData.data() as Map<String, dynamic>);
     } catch (e) {
       print('error at stateManage get');
       print(e.toString());
@@ -980,7 +994,8 @@ class DatabaseService {
   }
 
   // portfolio db 불러오기
-  Future<PortfolioModel> getPortfolio(DatabaseAddressModel addressModel) async {
+  Future<PortfolioModel?> getPortfolio(
+      DatabaseAddressModel addressModel) async {
     try {
       List<SubPortfolio> subPortfolioList = [];
 
@@ -989,7 +1004,8 @@ class DatabaseService {
           .get()
           .then((querySnapshot) {
         querySnapshot.docs.forEach((element) {
-          subPortfolioList.add(SubPortfolio.fromData(element.data()));
+          subPortfolioList.add(
+              SubPortfolio.fromData(element.data() as Map<String, dynamic>));
         });
       });
 
@@ -1002,7 +1018,7 @@ class DatabaseService {
   }
 
   // allStockList(Stock->KR의 섭콜렉션) db 불러오기
-  Future<AllStockListModel> getAllStockList() async {
+  Future<AllStockListModel?> getAllStockList() async {
     try {
       List<SubStockList> subStockList = [];
 
@@ -1028,7 +1044,7 @@ class DatabaseService {
   }
 
   // userReward db 불러오기
-  Future<List<UserRewardModel>> getUserRewardList(String uid) async {
+  Future<List<UserRewardModel>?> getUserRewardList(String? uid) async {
     try {
       List<UserRewardModel> userRewardList = [];
       List<RewardModel> rewardList;
@@ -1060,7 +1076,7 @@ class DatabaseService {
   }
 
   // userReward용 가격 불러오기 (from historicalPrice collection)
-  Future<double> getHistoricalPriceForUserReward(String issueCode) {
+  Future<double>? getHistoricalPriceForUserReward(String issueCode) {
     try {
       return _hitsPricesCollectionReference
           // 아래 코드는 카테고리가 모든 상금들에 대해 'KR'로 고정되어 있다고 가정한 코드임.
@@ -1086,7 +1102,7 @@ class DatabaseService {
 
   //
   Future updateUserRewardDeliveryStatus(
-      String uid, String id, int status) async {
+      String? uid, String id, int status) async {
     await _usersCollectionReference
         .doc(uid)
         .collection('userReward')
@@ -1095,7 +1111,7 @@ class DatabaseService {
   }
 
   // Read: Faq List 불러오자
-  Future<List<FaqModel>> getFaq() async {
+  Future<List<FaqModel>?> getFaq() async {
     try {
       List<FaqModel> faqList = [];
 
@@ -1116,7 +1132,7 @@ class DatabaseService {
   }
 
   // Read: Notice List 불러오자
-  Future<List<NoticeModel>> getNotice() async {
+  Future<List<NoticeModel>?> getNotice() async {
     try {
       List<NoticeModel> noticeList = [];
 
@@ -1139,7 +1155,7 @@ class DatabaseService {
   }
 
   // Read: Faq List 불러오자
-  Future<List<OneOnOneModel>> getOneOnOne() async {
+  Future<List<OneOnOneModel>?> getOneOnOne() async {
     try {
       List<OneOnOneModel> oneOnOneList = [];
 
@@ -1160,7 +1176,7 @@ class DatabaseService {
   }
 
   // Read: Notification List 불러오자
-  Future<List<NotificationListModel>> getNotificationList() async {
+  Future<List<NotificationListModel>?> getNotificationList() async {
     try {
       List<NotificationListModel> notificationList = [];
 
@@ -1183,9 +1199,9 @@ class DatabaseService {
   }
 
   // Read: Notification List 불러오자
-  Future<Timestamp> getNotificationLatestTime() async {
+  Future<Timestamp?> getNotificationLatestTime() async {
     try {
-      Timestamp notificationLatestTime;
+      Timestamp? notificationLatestTime;
 
       await adminCollectionReference
           .doc('adminPost')
@@ -1209,9 +1225,9 @@ class DatabaseService {
     }
   }
 
-  Future<List<dynamic>> getAllUserNameSnapshot() async {
+  Future<List<dynamic>?> getAllUserNameSnapshot() async {
     try {
-      List<String> allUserName = [];
+      List<String?> allUserName = [];
 
       var userDocuments = await _usersCollectionReference.get();
       print("user count" + userDocuments.docs.length.toString());
@@ -1225,7 +1241,7 @@ class DatabaseService {
       //   allUserName.add(element.data["userName"].toString());
       // });
       for (var i = 0; i < userDocuments.docs.length; i++) {
-        allUserName.add(userDocuments.docs[i].data()["userName"]);
+        allUserName.add(userDocuments.docs[i].get("userName"));
       }
 
       return allUserName;
@@ -1235,7 +1251,7 @@ class DatabaseService {
     }
   }
 
-  Future<bool> isUserNameDuplicated(String userName) async {
+  Future<bool?> isUserNameDuplicated(String userName) async {
     try {
       var data;
       await _usersCollectionReference
@@ -1254,7 +1270,7 @@ class DatabaseService {
   }
 
   // 프렌즈코드가 다른 유저들이랑 겹치는지 검사해준다.
-  Future<bool> isFriendsCodeDuplicated(String friendsCode) async {
+  Future<bool?> isFriendsCodeDuplicated(String friendsCode) async {
     try {
       var data;
 
@@ -1307,9 +1323,9 @@ class DatabaseService {
       return true;
   }
 
-  Future<List<String>> getAllUserPhoneSnapshot() async {
+  Future<List<String?>?> getAllUserPhoneSnapshot() async {
     try {
-      List<String> allUserPhone = [];
+      List<String?> allUserPhone = [];
 
       var userDocuments = await _usersCollectionReference.get();
 
@@ -1323,7 +1339,7 @@ class DatabaseService {
       //   allUserName.add(element.data["userName"].toString());
       // });
       for (var i = 0; i < userDocuments.docs.length; i++) {
-        allUserPhone.add(userDocuments.docs[i].data()["phoneNumber"]);
+        allUserPhone.add(userDocuments.docs[i].get("phoneNumber"));
       }
 
       return allUserPhone;
@@ -1333,7 +1349,7 @@ class DatabaseService {
     }
   }
 
-  Future updateUserItem(String uid, int reward) async {
+  Future updateUserItem(String? uid, int reward) async {
     // print("NEW ITEM IS" + newItem.toString());
     await _usersCollectionReference
         .doc(uid)
@@ -1348,20 +1364,20 @@ class DatabaseService {
   }
 
   Future decreaseUserItem(
-    String uid,
+    String? uid,
   ) async {
     await _usersCollectionReference
         .doc(uid)
         .update({'item': FieldValue.increment(-1)});
   }
 
-  Future updateUserName(String uid, String newUserName) async {
+  Future updateUserName(String? uid, String newUserName) async {
     print("NEW USERNAME IS" + newUserName);
     await _usersCollectionReference.doc(uid).update({'userName': newUserName});
     await _usersCollectionReference.doc(uid).update({'isNameUpdated': true});
   }
 
-  Future updateFriendsCode(String uid, String friendsCode) async {
+  Future updateFriendsCode(String? uid, String friendsCode) async {
     print("friendsCode IS" + friendsCode);
     await _usersCollectionReference
         .doc(uid)
@@ -1369,14 +1385,14 @@ class DatabaseService {
   }
 
   Future updateInsertedFriendsCode(
-      String uid, String insertedFriendsCode) async {
+      String? uid, String insertedFriendsCode) async {
     print("insertedFriendsCode IS" + insertedFriendsCode);
     await _usersCollectionReference
         .doc(uid)
         .update({'insertedFriendsCode': insertedFriendsCode});
   }
 
-  Future updateSurvey(String uid, Map<String, List> userSurvey) async {
+  Future updateSurvey(String? uid, Map<String, List> userSurvey) async {
     // print(userSurvey);
     await _usersCollectionReference
         .doc(uid)
@@ -1387,7 +1403,7 @@ class DatabaseService {
   }
 
   Future updateBubbleSurvey(
-      String uid, List<Map<String, String>> userBubbleSurvey) async {
+      String? uid, List<Map<String, String>> userBubbleSurvey) async {
     // print(userSurvey);
     await _usersCollectionReference
         .doc(uid)
@@ -1404,7 +1420,7 @@ class DatabaseService {
         .collection('survey')
         .doc('openedSurvey')
         .get()
-        .then((value) => value.data()['surveyName']);
+        .then((value) => value.data()!['surveyName']);
     // print(surveyName);
     var userSurveySnap =
         await _databaseService.collection('survey').doc(surveyName).get();
@@ -1421,31 +1437,32 @@ class DatabaseService {
       });
     });
     // print(UserSurveyModel.fromData(userSurveySnap.data(), surveyQuestionModel));
-    return UserSurveyModel.fromData(userSurveySnap.data(), surveyQuestionModel);
+    return UserSurveyModel.fromData(
+        userSurveySnap.data()!, surveyQuestionModel);
   }
 
   Future checkUserSurveyDone(
-    String uid,
+    String? uid,
   ) async {
     String surveyName;
     surveyName = await _databaseService
         .collection('survey')
         .doc('openedSurvey')
         .get()
-        .then((value) => value.data()['surveyName']);
+        .then((value) => value.data()!['surveyName']);
 
     bool checking = await _usersCollectionReference
         .doc(uid)
         .collection('userSurvey')
         .doc(surveyName)
         .get()
-        .then((val) => val.data()['hasDone']);
+        .then((val) => val.data()!['hasDone']);
 
     return checking;
   }
 
   Future updateUserSurvey(
-      String uid,
+      String? uid,
       String surveyName,
       List<Map<String, dynamic>> userFinalAnswers,
       List<Map<String, dynamic>> shortAnswers) async {
@@ -1571,7 +1588,7 @@ class DatabaseService {
               });
 
               // print(listedList.toString());
-              listedList.sort((a, b) => (b.weight).compareTo(a.weight));
+              listedList.sort((a, b) => b.weight!.compareTo(a.weight!));
 
               indexInfo.topListed = listedList;
               // stockDescription = stockDescription
@@ -1590,22 +1607,22 @@ class DatabaseService {
     return await _adminCollectionReference
         .doc('adminPost')
         .get()
-        .then((value) => value.data()['defaultMainText']);
+        .then((value) => value.get('defaultMainText'));
   }
 
-  Future<DatabaseAddressModel> getOldSeasonAddress(String uid) async {
+  Future<DatabaseAddressModel> getOldSeasonAddress(String? uid) async {
     DatabaseAddressModel _databaseAddress;
 
-    String category;
-    String season;
-    String baseDate;
+    String? category;
+    String? season;
+    String? baseDate;
     bool isVoting = true;
 
     await DatabaseAddressModel().adminClosedSeason().get().then((doc) {
       print(doc.data());
-      category = doc.data()['category'];
-      season = doc.data()['season'];
-      baseDate = doc.data()['baseDate'];
+      category = doc.get('category');
+      season = doc.get('season');
+      baseDate = doc.get('baseDate');
     });
 
     _databaseAddress = DatabaseAddressModel(
@@ -1621,21 +1638,21 @@ class DatabaseService {
 
   Future getSpecialAwards(DatabaseAddressModel lastSeasonAddressModel) async {
     Map<String, String> specialAwardsMap = {};
-    List specialAwardsName;
-    List specialAwardsUserName;
+    List? specialAwardsName;
+    List? specialAwardsUserName;
     await DatabaseAddressModel()
         .adminClosedSeason()
-        .collection(lastSeasonAddressModel.category)
+        .collection(lastSeasonAddressModel.category!)
         .doc(lastSeasonAddressModel.season)
         .get()
         .then((doc) {
       // doc.data();
-      specialAwardsName = doc.data()['specialAwardsName'];
-      specialAwardsUserName = doc.data()['specialAwardsUserName'];
+      specialAwardsName = doc.data()!['specialAwardsName'];
+      specialAwardsUserName = doc.data()!['specialAwardsUserName'];
     });
 
-    for (int i = 0; i < specialAwardsName.length; i++) {
-      specialAwardsMap[specialAwardsName[i]] = specialAwardsUserName[i];
+    for (int i = 0; i < specialAwardsName!.length; i++) {
+      specialAwardsMap[specialAwardsName![i]] = specialAwardsUserName![i];
     }
 
     return specialAwardsMap;
@@ -1643,32 +1660,32 @@ class DatabaseService {
 
   Future getSpecialAwardsDescription(
       DatabaseAddressModel lastSeasonAddressModel) async {
-    String description;
+    String? description;
     await DatabaseAddressModel()
         .adminClosedSeason()
-        .collection(lastSeasonAddressModel.category)
+        .collection(lastSeasonAddressModel.category!)
         .doc(lastSeasonAddressModel.season)
         .get()
         .then((doc) {
       // doc.data();
-      description = doc.data()['specialDescription'];
+      description = doc.data()!['specialDescription'];
     });
 
     return description;
   }
 
-  Stream<String> getLunchEvent() {
+  Stream<String?> getLunchEvent() {
     return _databaseService
         .collection('admin')
         .doc('lunchEvent')
         .snapshots()
         .map((snapshot) {
-      return snapshot.data()['baseDate'];
+      return snapshot.data()!['baseDate'];
     });
   }
 
   // database 및 time정보로 Database Address 모델 만들기
-  Future<DatabaseAddressModel> getAddress(String uid) async {
+  Future<DatabaseAddressModel> getAddress(String? uid) async {
     print("AddressGetStart" + DateTime.now().toString());
     DatabaseAddressModel _databaseAddress;
 
@@ -1678,9 +1695,9 @@ class DatabaseService {
     // DateTime end = DateTime(2020, 09, 06, 16, 00, 00);
     // List<DateTime> tempTime = [start, end];
 
-    String category;
-    String season;
-    String baseDate;
+    String? category;
+    String? season;
+    String? baseDate;
     bool isVoting = true;
     DateTime now;
     // now = await CustomizedNTP.now();
@@ -1688,8 +1705,8 @@ class DatabaseService {
     await DatabaseAddressModel().adminOpenSeason().get().then(
       (doc) async {
         print(doc.data());
-        category = doc.data()['category'];
-        season = doc.data()['season'];
+        category = doc.get('category');
+        season = doc.get('season');
 
         // 당일 포험 가장 가까운 영업일 가져오는 함수로 baseDate를 만들고,
         baseDate = await DateTimeModel().baseDate(category, now);
@@ -1697,13 +1714,13 @@ class DatabaseService {
         // 그 baseDate에 해당하는 voteData가 있는지 체크,
         var voteData = await _votesCollectionReference
             .doc(category)
-            .collection(season)
+            .collection(season!)
             .doc(baseDate)
             .get();
         print(voteData);
         // 없으면 admin collection에 있는 baseDate를 가져옴
         if (voteData.data() == null) {
-          baseDate = doc.data()['baseDate'];
+          baseDate = doc.get('baseDate');
           isVoting = true;
         } else {
           isVoting = DateTimeModel().isVoteAvailable(category, now);
@@ -1738,14 +1755,14 @@ class DatabaseService {
     return _databaseAddress;
   }
 
-  Stream<String> getNameCheckResult(uid) {
+  Stream<String?> getNameCheckResult(uid) {
     return _databaseService
         .collection('checkName')
         .doc(uid)
         .snapshots()
         .map((snapshot) {
       // print("GETNAME STREAM" + snapshot.data()['return'].toString());
-      return snapshot.data()['return'];
+      return snapshot.data()!['return'];
     });
   }
 
@@ -1754,7 +1771,7 @@ class DatabaseService {
         .collection('admin')
         .doc('adminPost')
         .get()
-        .then((value) => value.data()['checkNameUrl']);
+        .then((value) => value.data()!['checkNameUrl']);
   }
 
   Future getLunchtimeVote(DatabaseAddressModel address) async {
@@ -1764,7 +1781,7 @@ class DatabaseService {
     var voteData = await _databaseService
         .collection('votes')
         .doc('KR')
-        .collection(address.season)
+        .collection(address.season!)
         // .doc(address.date)
         .doc(address.date)
         .get();
@@ -1772,7 +1789,7 @@ class DatabaseService {
     await _databaseService
         .collection('votes')
         .doc('KR')
-        .collection(address.season)
+        .collection(address.season!)
         // .doc(address.date)
         .doc(address.date)
         .collection('subVote')
@@ -1785,7 +1802,7 @@ class DatabaseService {
         lunchtimeVoteList.add(LunchtimeSubVoteModel.fromMap(e.data()));
       });
     });
-    return LunchtimeVoteModel.fromData(voteData.data(), lunchtimeVoteList);
+    return LunchtimeVoteModel.fromData(voteData.data()!, lunchtimeVoteList);
     // return lunchtimeVoteList;
   }
 }

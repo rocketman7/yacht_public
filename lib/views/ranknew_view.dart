@@ -9,10 +9,10 @@ import '../view_models/ranknew_view_model.dart';
 const String LoadingIndicatorTitle = '^';
 
 class CreationAwareListItem extends StatefulWidget {
-  final Function itemCreated;
-  final Widget child;
+  final Function? itemCreated;
+  final Widget? child;
   const CreationAwareListItem({
-    Key key,
+    Key? key,
     this.itemCreated,
     this.child,
   }) : super(key: key);
@@ -26,19 +26,19 @@ class _CreationAwareListItemState extends State<CreationAwareListItem> {
   void initState() {
     super.initState();
     if (widget.itemCreated != null) {
-      widget.itemCreated();
+      widget.itemCreated!();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return widget.child!;
   }
 }
 
 class ListItem extends StatelessWidget {
-  final String title;
-  const ListItem({Key key, this.title}) : super(key: key);
+  final String? title;
+  const ListItem({Key? key, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,20 +50,20 @@ class ListItem extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               blurRadius: 16,
-              color: Colors.grey[400],
+              color: Colors.grey[400]!,
             ),
           ],
           borderRadius: BorderRadius.circular(5)),
       child: title == LoadingIndicatorTitle
           ? CircularProgressIndicator()
-          : Text(title),
+          : Text(title!),
       alignment: Alignment.center,
     );
   }
 }
 
 class RanknewView extends StatelessWidget {
-  const RanknewView({Key key}) : super(key: key);
+  const RanknewView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,14 +72,14 @@ class RanknewView extends StatelessWidget {
         create: (context) => RanknewViewModel(),
         child: Consumer<RanknewViewModel>(
           builder: (context, model, child) => ListView.builder(
-            itemCount: model.items.length,
+            itemCount: model.items!.length,
             itemBuilder: (context, index) => CreationAwareListItem(
               itemCreated: () {
-                SchedulerBinding.instance.addPostFrameCallback(
+                SchedulerBinding.instance!.addPostFrameCallback(
                     (duration) => model.handleItemCreated(index));
               },
               child: ListItem(
-                title: model.items[index],
+                title: model.items![index],
               ),
             ),
           ),

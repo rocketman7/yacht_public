@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ConnectionCheckService {
-  StreamSubscription<DataConnectionStatus> listener;
+  late StreamSubscription<DataConnectionStatus> listener;
   var internetStatus = "Unknown";
   var contentmessage = "Unknown";
 

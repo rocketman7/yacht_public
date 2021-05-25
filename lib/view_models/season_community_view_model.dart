@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../services/api/customized_ntp.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/models/price_model.dart';
@@ -17,22 +19,22 @@ import '../services/database_service.dart';
 import '../locator.dart';
 
 class SeasonCommunityViewModel extends FutureViewModel {
-  final NavigationService _navigationService = locator<NavigationService>();
-  final AuthService _authService = locator<AuthService>();
-  final DialogService _dialogService = locator<DialogService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DialogService? _dialogService = locator<DialogService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
   final AmplitudeService _amplitudeService = AmplitudeService();
-  String uid;
+  String? uid;
 
-  DatabaseAddressModel address;
-  UserModel user;
-  VoteModel vote;
-  UserVoteModel userVote;
-  DatabaseAddressModel newAddress;
-  SeasonModel seasonInfo;
-  DateTime now;
+  DatabaseAddressModel? address;
+  late UserModel user;
+  VoteModel? vote;
+  UserVoteModel? userVote;
+  DatabaseAddressModel? newAddress;
+  SeasonModel? seasonInfo;
+  DateTime? now;
   SeasonCommunityViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   @override
@@ -41,13 +43,14 @@ class SeasonCommunityViewModel extends FutureViewModel {
   Future getAllModel(uid) async {
     // setBusy(true);
     await _amplitudeService.logSeasonCommunity(uid);
-    address = await _databaseService.getAddress(uid);
+    address = await _databaseService!.getAddress(uid);
 
     print(address);
-    user = await _databaseService.getUser(uid);
-    vote = await _databaseService.getVotes(address);
-    seasonInfo = await _databaseService.getSeasonInfo(address);
-    userVote = await _databaseService.getUserVote(address);
+    user = await (_databaseService!.getUser(uid) as FutureOr<UserModel>);
+    vote = await _databaseService!.getVotes(address!);
+    seasonInfo = await _databaseService!.getSeasonInfo(address!);
+    userVote = await (_databaseService!.getUserVote(address!)
+        as FutureOr<UserVoteModel?>);
     // setBusy(false);
     // now = await NTP.now();
     // notifyListeners();
@@ -72,7 +75,7 @@ class SeasonCommunityViewModel extends FutureViewModel {
       date: address.date,
       createdAt: voteCommentModel.postDateTime,
     );
-    await _databaseService.postSeasonComment(
+    await _databaseService!.postSeasonComment(
       address,
       voteCommentModel,
       userPostModel,
@@ -99,15 +102,15 @@ class SeasonCommunityViewModel extends FutureViewModel {
   // }
   Future deleteComment(
     DatabaseAddressModel address,
-    String postUid,
+    String? postUid,
   ) async {
-    await _databaseService.deleteSeasonComment(address, postUid);
+    await _databaseService!.deleteSeasonComment(address, postUid);
   }
 
   Future likeComment(
     VoteCommentModel voteComment,
   ) async {
-    await _databaseService.likeSeasonComment(
+    await _databaseService!.likeSeasonComment(
       address,
       voteComment,
       uid,
@@ -118,24 +121,24 @@ class SeasonCommunityViewModel extends FutureViewModel {
     UserModel user,
     VoteCommentModel voteComment,
   ) async {
-    await _databaseService.addBlockList(user, voteComment.uid);
+    await _databaseService!.addBlockList(user, voteComment.uid);
   }
 
   Future reportComment() async {}
 
-  Future getAvatar(String uid) async {
-    return await _databaseService.getAvatar(uid);
+  Future getAvatar(String? uid) async {
+    return await _databaseService!.getAvatar(uid);
   }
 
   Stream<List<VoteCommentModel>> getPost(DatabaseAddressModel address) {
-    return _databaseService.getSeasonPostList(address);
+    return _databaseService!.getSeasonPostList(address);
   }
 
   Stream<PriceModel> getRealtimePrice(
     DatabaseAddressModel address,
     String issueCode,
   ) {
-    return _databaseService.getRealtimeReturn(address, issueCode);
+    return _databaseService!.getRealtimeReturn(address, issueCode);
   }
 
 //   List<String> listIssueCode(int idx) {

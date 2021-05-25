@@ -9,21 +9,21 @@ class NavigationService {
 
   // Navagation Service를 설정하여 context가 없는 class에서도 다른 페이지로 route 가능하게 만든다.
   Future<dynamic> navigateTo(String routeName) {
-    return navigatorKey.currentState.pushNamed(routeName);
+    return navigatorKey.currentState!.pushNamed(routeName);
   }
 
   Future<dynamic> navigateWithArgTo(String routeName, var argument) {
-    return navigatorKey.currentState.pushNamed(routeName, arguments: argument);
+    return navigatorKey.currentState!.pushNamed(routeName, arguments: argument);
   }
 
   Future<dynamic> popAndNavigateWithArgTo(String routeName, {var argument}) {
-    return navigatorKey.currentState
+    return navigatorKey.currentState!
         .pushNamedAndRemoveUntil(routeName, (Route<dynamic> route) => false);
   }
 
   //drawer처럼 오른쪽->왼쪽으로 나오고, 왼쪽->오른쪽으로 들어가는 움직임을 만들어주기 위해 만들어놨던건데. 그냥 쿠퍼티노페이지로 해결
   Future<dynamic> navigateToMyPage(var page) {
-    return navigatorKey.currentState.push(_createToMyPageRoute(page));
+    return navigatorKey.currentState!.push(_createToMyPageRoute(page));
   }
 
   Route _createToMyPageRoute(var page) {
@@ -45,7 +45,7 @@ class NavigationService {
   }
 
   Future<dynamic> navigateToHome(var page) {
-    return navigatorKey.currentState.push(_createToHomeRoute(page));
+    return navigatorKey.currentState!.push(_createToHomeRoute(page));
   }
 
   Route _createToHomeRoute(var page) {

@@ -12,7 +12,7 @@ class StockInfoKrView extends StatelessWidget {
     SizeConfig().init(context);
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => StockInfoKrViewModel(),
-      builder: (context, model, child) => Scaffold(
+      builder: (context, dynamic model, child) => Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(

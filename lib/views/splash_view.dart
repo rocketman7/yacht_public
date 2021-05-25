@@ -17,10 +17,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return Timer(_duration, navigationPage);
   }
 
-  NavigationService _navigationService = locator<NavigationService>();
+  NavigationService? _navigationService = locator<NavigationService>();
 
   void navigationPage() {
-    _navigationService.navigateTo('initial');
+    _navigationService!.navigateTo('initial');
   }
 
   @override

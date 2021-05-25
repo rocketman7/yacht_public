@@ -7,7 +7,7 @@ import 'package:yachtOne/view_models/winner_view_model.dart';
 import 'package:yachtOne/views/widgets/avatar_widget.dart';
 
 class LastSeasonRankView extends StatefulWidget {
-  final WinnerViewModel model;
+  final WinnerViewModel? model;
 
   LastSeasonRankView(
     this.model,
@@ -18,7 +18,7 @@ class LastSeasonRankView extends StatefulWidget {
 }
 
 class _LastSeasonRankViewState extends State<LastSeasonRankView> {
-  WinnerViewModel model;
+  WinnerViewModel? model;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
               Row(
                 children: [
                   avatarWidget(
-                      model.userModel.avatarImage, model.userModel.item),
+                      model!.userModel.avatarImage, model!.userModel.item),
                   SizedBox(
                     width: 12,
                   ),
@@ -80,7 +80,7 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
                               30,
                             )),
                         child: Text(
-                          "${model.seasonModel.seasonName}",
+                          "${model!.seasonModel!.seasonName}",
                           style: TextStyle(
                               color: Colors.white,
                               fontFamily: 'DmSans',
@@ -88,7 +88,7 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
                         ),
                       ),
                       AutoSizeText(
-                        model.userModel.userName,
+                        model!.userModel.userName!,
                         style: TextStyle(
                           fontSize: 24,
                           letterSpacing: -1.0,
@@ -119,7 +119,7 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
                   ),
                   Spacer(),
                   Text(
-                    '${model.myWinPoint}점',
+                    '${model!.myWinPoint}점',
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'AppleSDM',
@@ -143,9 +143,9 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
                   ),
                   Spacer(),
                   Text(
-                    model.myRank == 0
+                    model!.myRank == 0
                         ? '-'
-                        : '${model.returnDigitFormat(model.myRank)}위',
+                        : '${model!.returnDigitFormat(model!.myRank)}위',
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: 'AppleSDM',
@@ -177,7 +177,7 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
                             letterSpacing: -2.0,
                             fontWeight: FontWeight.bold),
                       ),
-                      (model.rankModel.length != 0)
+                      (model!.rankModel!.length != 0)
                           ? Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -195,7 +195,7 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
                                   width: 8,
                                 ),
                                 Text(
-                                  '총 ${model.getUsersNum()}명 참여',
+                                  '총 ${model!.getUsersNum()}명 참여',
                                   style: TextStyle(
                                       fontFamily: 'DmSans', fontSize: 14),
                                 )
@@ -214,10 +214,10 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: model.rankModel.length,
+                  itemCount: model!.rankModel!.length,
                   itemBuilder: (context, index) => makesRankListView(
-                    model,
-                    model.rankModel[index],
+                    model!,
+                    model!.rankModel![index],
                     index,
                   ),
                 ),
@@ -245,7 +245,7 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
                   height: 28,
                   child: Center(
                     child: Text(
-                      '${model.returnDigitFormat(model.rankModel[index].todayRank)}',
+                      '${model.returnDigitFormat(model.rankModel![index].todayRank)}',
                       style: TextStyle(
                           fontSize: 24,
                           letterSpacing: -0.28,
@@ -367,19 +367,19 @@ class _LastSeasonRankViewState extends State<LastSeasonRankView> {
 }
 
 class DrawTriangle extends CustomPainter {
-  bool isUp;
-  Paint _paint;
+  bool? isUp;
+  late Paint _paint;
 
   DrawTriangle({this.isUp}) {
     _paint = Paint()
-      ..color = isUp ? Color(0xFFFF402B) : Color(0xFF2B40FF)
+      ..color = isUp! ? Color(0xFFFF402B) : Color(0xFF2B40FF)
       ..style = PaintingStyle.fill;
   }
 
   @override
   void paint(Canvas canvas, Size size) {
     var path = Path();
-    if (isUp) {
+    if (isUp!) {
       path.moveTo(size.width / 2, 0);
       path.lineTo(0, size.height);
       path.lineTo(size.width, size.height);

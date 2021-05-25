@@ -9,7 +9,7 @@ class CustomizedNTP {
   static Future<int> getNtpOffset(
       {String lookUpAddress = 'pool.ntp.org',
       int port = 123,
-      DateTime localTime}) async {
+      DateTime? localTime}) async {
     final List<InternetAddress> addressArray =
         await InternetAddress.lookup(lookUpAddress);
 
@@ -23,15 +23,15 @@ class CustomizedNTP {
         await RawDatagramSocket.bind(clientAddress, 0, reuseAddress: true);
 
     final _NTPMessage _ntpMessage = _NTPMessage();
-    final List<int> buffer = _ntpMessage.toByteArray();
+    final List<int?> buffer = _ntpMessage.toByteArray();
     final DateTime time = localTime ?? DateTime.now();
     _ntpMessage.encodeTimestamp(buffer, 40,
         (time.millisecondsSinceEpoch / 1000.0) + _ntpMessage.timeToUtc);
 
     // Send buffer packet to the address from [addressArray] and port [port]
-    _datagramSocket.send(buffer, addressArray.first, port);
+    _datagramSocket.send(buffer as List<int>, addressArray.first, port);
     // Receive packet from socket
-    Datagram packet;
+    Datagram? packet;
 
     try {
       await _datagramSocket.firstWhere((RawSocketEvent event) {
@@ -51,7 +51,7 @@ class CustomizedNTP {
       return Future<int>.error('Error: Packet is empty!');
     }
 
-    final int offset = _parseData(packet.data, time);
+    final int offset = _parseData(packet!.data, time);
     return offset;
   }
 
@@ -83,7 +83,7 @@ class _NTPMessage {
   ///
   /// If byte array (raw NTP packet) is passed to constructor then the
   /// data is filled from a raw NTP packet.
-  _NTPMessage([List<int> array]) {
+  _NTPMessage([List<int>? array]) {
     if (array != null) {
       _leapIndicator = array[0] >> 6 & 0x3;
       _version = array[0] >> 3 & 0x7;
@@ -246,8 +246,8 @@ class _NTPMessage {
   double get transmitTimestamp => _transmitTimestamp;
 
   /// This method constructs the data bytes of a raw NTP packet.
-  List<int> toByteArray() {
-    final List<int> rawNtp = List<int>(48);
+  List<int?> toByteArray() {
+    final List<int?> rawNtp = [];
 
     /// All bytes are set to 0
     rawNtp.fillRange(0, 48, 0);
@@ -308,7 +308,7 @@ class _NTPMessage {
   }
 
   /// Encodes a timestamp in the specified position in the message
-  void encodeTimestamp(List<int> array, int pointer, double timestamp) {
+  void encodeTimestamp(List<int?> array, int pointer, double timestamp) {
     /// Converts a double into a 64-bit fixed point
     for (int i = 0; i < 8; i++) {
       /// 2^24, 2^16, 2^8, .. 2^-32
@@ -318,7 +318,7 @@ class _NTPMessage {
       array[pointer + i] = timestamp ~/ base;
 
       /// Subtract captured value from remaining total
-      timestamp = timestamp - (unsignedByteToShort(array[pointer + i]) * base);
+      timestamp = timestamp - (unsignedByteToShort(array[pointer + i]!) * base);
     }
 
     /// From RFC 2030: It is advisable to fill the non-significant

@@ -36,7 +36,7 @@ class VoteSelectView extends StatefulWidget {
 }
 
 class _VoteSelectViewState extends State<VoteSelectView> {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
   final VoteSelectViewModel _viewModel = VoteSelectViewModel();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -44,9 +44,9 @@ class _VoteSelectViewState extends State<VoteSelectView> {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Future<List<Object>> _getAllModel;
+  Future<List<Object>>? _getAllModel;
 
-  String uid;
+  String? uid;
 
   PreloadPageController _preloadPageController = PreloadPageController();
   // double leftContainer = 0;
@@ -55,15 +55,15 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   List<int> listSelected = [];
   List<String> timeLeftArr = ["", "", ""]; // 시간, 분, 초 array
 
-  Timer _timer;
+  late Timer _timer;
 
-  DateTime _now;
+  DateTime? _now;
   var stringDate = DateFormat("yyyyMMdd");
   var stringDateWithDash = DateFormat("yyyy-MM-dd");
-  String _nowToStr;
+  String? _nowToStr;
 
   bool isDisposed = false;
-  bool isVoteAvailable;
+  bool? isVoteAvailable;
 
   List<bool> selected = List<bool>.filled(5, false, growable: true);
   int numSelected = 0;
@@ -101,7 +101,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   // }
 
   Duration getTimeLeft(VoteSelectViewModel model) {
-    DateTime endTime = model.vote.voteEndDateTime.toDate();
+    DateTime endTime = model.vote!.voteEndDateTime.toDate();
     return endTime.difference(DateTime.now());
     // timeLeftArr = diffFinal.split(":");
     // return diffFinal;
@@ -114,7 +114,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     }
   }
 
-  FToast fToast;
+  late FToast fToast;
 
   _showToast(String message) {
     Widget toast = Container(
@@ -312,7 +312,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
             key: scaffoldKey,
             body: WillPopScope(
               onWillPop: () async {
-                _navigatorKey.currentState.maybePop();
+                _navigatorKey.currentState!.maybePop();
                 return false;
               },
               child: Stack(
@@ -398,7 +398,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                              (model.user.item - numSelected)
+                                              (model.user!.item! - numSelected)
                                                   .toString(),
                                               style: TextStyle(
                                                 fontSize: 20,
@@ -462,7 +462,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 // height: 550,
                                 child: ListView.builder(
                                     // physics: NeverScrollableScrollPhysics(),
-                                    itemCount: model.vote.voteCount,
+                                    itemCount: model.vote!.voteCount,
                                     itemBuilder: (context, index) {
                                       return buildStack(
                                         model,
@@ -485,7 +485,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                       (model.userVote == null
                                           ? false
                                           : (diff.inSeconds == 0 ||
-                                              model.userVote.isVoted)))
+                                              model.userVote!.isVoted!)))
                                   ? () {}
                                   : () {
                                       for (int i = 0;
@@ -496,7 +496,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                             : 0;
                                       }
 
-                                      _navigationService
+                                      _navigationService!
                                           .navigateWithArgTo('ggook', [
                                         model.address,
                                         model.user,
@@ -512,7 +512,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 height: 56,
                                 decoration: BoxDecoration(
                                     color: (diff.inSeconds == 0 ||
-                                            model.userVote.isVoted)
+                                            model.userVote!.isVoted!)
                                         ? Color(0xFFC1C1C1)
                                         : Colors.black,
                                     boxShadow: [
@@ -556,7 +556,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               ),
                               decoration: BoxDecoration(
                                 color: (diff.inSeconds == 0 ||
-                                        model.userVote.isVoted)
+                                        model.userVote!.isVoted!)
                                     ? Color(0xFFE41818)
                                     : numSelected == 0
                                         ? Color(0xFFFFDE34)
@@ -565,7 +565,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               child: Text(
                                   diff.inSeconds == 0
                                       ? "오늘의 예측이 마감되었습니다."
-                                      : model.userVote.isVoted
+                                      : model.userVote!.isVoted!
                                           ? "이미 오늘 예측에 참여하였습니다."
                                           : numSelected == 0
                                               ? "최대 3개의 주제를 선택하여 승점에 도전해보세요!"
@@ -575,7 +575,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                     fontFamily: 'DmSans',
                                     fontWeight: FontWeight.w500,
                                     color: (diff.inSeconds == 0 ||
-                                            model.userVote.isVoted)
+                                            model.userVote!.isVoted!)
                                         ? Colors.white
                                         : numSelected == 0
                                             ? Colors.black
@@ -607,7 +607,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     GlobalKey<ScaffoldState> scaffoldKey,
     Duration diff,
   ) {
-    int numOfChoices = model.vote.subVotes[idx].issueCode.length;
+    int numOfChoices = model.vote!.subVotes![idx].issueCode!.length;
     Color hexToColor(String code) {
       return Color(int.parse(code, radix: 16) + 0xFF0000000);
     }
@@ -615,7 +615,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     if (numOfChoices == 1) {
       return Padding(
         padding: EdgeInsets.fromLTRB(
-            0, 4, 0, idx == model.vote.voteCount - 1 ? 76 : 4),
+            0, 4, 0, idx == model.vote!.voteCount! - 1 ? 76 : 4),
         child: Stack(
           alignment: Alignment.centerLeft,
           children: <Widget>[
@@ -632,29 +632,29 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                   alignment: Alignment.center,
                   padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
                   decoration: BoxDecoration(
-                    color: model.userVote.isVoted
-                        ? model.userVote.voteSelected[idx] == 0
+                    color: model.userVote!.isVoted!
+                        ? model.userVote!.voteSelected![idx] == 0
                             ? Colors.white
-                            : model.userVote.voteSelected[idx] == 1
+                            : model.userVote!.voteSelected![idx] == 1
                                 ? Color(0xFFFF3E3E)
-                                : model.userVote.voteSelected[idx] == 2
+                                : model.userVote!.voteSelected![idx] == 2
                                     ? Color(0xFF3485FF)
                                     : Colors.white
                         : selected[idx]
                             ? hexToColor(
-                                model.vote.subVotes[idx].colorCode[0],
+                                model.vote!.subVotes![idx].colorCode![0],
                               )
                             : Colors.white,
                     borderRadius: BorderRadius.circular(
-                        model.vote.subVotes[idx].shape[0] == 'oval' ? 50 : 0),
+                        model.vote!.subVotes![idx].shape![0] == 'oval' ? 50 : 0),
                     border: Border.all(
                       width: 4.0,
-                      color: model.userVote.isVoted
-                          ? model.userVote.voteSelected[idx] == 0
+                      color: model.userVote!.isVoted!
+                          ? model.userVote!.voteSelected![idx] == 0
                               ? Color(0xFFC1C1C1)
-                              : model.userVote.voteSelected[idx] == 1
+                              : model.userVote!.voteSelected![idx] == 1
                                   ? Colors.black
-                                  : model.userVote.voteSelected[idx] == 2
+                                  : model.userVote!.voteSelected![idx] == 2
                                       ? Colors.black
                                       : Color(0xFFC1C1C1)
                           : selected[idx]
@@ -669,15 +669,15 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                   //   baseline: 28,
                   //   baselineType: TextBaseline.ideographic,
                   child: Text(
-                    model.vote.subVotes[idx].title,
+                    model.vote!.subVotes![idx].title!,
                     style: TextStyle(
                       // textBaseline: TextBaseline.alphabetic,
-                      color: model.userVote.isVoted
-                          ? model.userVote.voteSelected[idx] == 0
+                      color: model.userVote!.isVoted!
+                          ? model.userVote!.voteSelected![idx] == 0
                               ? Color(0xFFC1C1C1)
-                              : model.userVote.voteSelected[idx] == 1
+                              : model.userVote!.voteSelected![idx] == 1
                                   ? Colors.black
-                                  : model.userVote.voteSelected[idx] == 2
+                                  : model.userVote!.voteSelected![idx] == 2
                                       ? Colors.black
                                       : Color(0xFFC1C1C1)
                           : selected[idx]
@@ -711,10 +711,10 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                   visualDensity: VisualDensity(horizontal: 2, vertical: 0),
                   value: selected[idx],
                   hoverColor: Colors.white,
-                  activeColor: (diff.inSeconds == 0 || model.userVote.isVoted)
+                  activeColor: (diff.inSeconds == 0 || model.userVote!.isVoted!)
                       ? Color(0xFFC1C1C1)
                       : Color(0xFF1EC8CF),
-                  inactiveColor: (diff.inSeconds == 0 || model.userVote.isVoted)
+                  inactiveColor: (diff.inSeconds == 0 || model.userVote!.isVoted!)
                       ? Color(0xFFC1C1C1)
                       : Color(0xFF1EC8CF),
                   // disabledColor: Colors.grey,
@@ -722,23 +722,23 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                     (diff.inSeconds == 0)
                         ? _showToast(
                             "오늘 예측이 마감되었습니다.\n커뮤니티에서 실시간 대결 상황을\n살펴보세요!")
-                        : (model.userVote.isVoted)
+                        : model.userVote!.isVoted!
                             ? _showToast("이미 오늘 예측에 참여하였습니다.")
                             : setState(() {
-                                print(model.seasonInfo.maxDailyVote -
+                                print(model.seasonInfo!.maxDailyVote! -
                                     numSelected);
-                                if (model.seasonInfo.maxDailyVote -
+                                if (model.seasonInfo!.maxDailyVote! -
                                         numSelected ==
                                     0) {
                                   if (newValue) {
                                     selected[idx] = selected[idx];
                                     _showToast(
-                                        "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                        "하루 최대 ${model.seasonInfo!.maxDailyVote}개 주제를 예측할 수 있습니다.");
                                   } else {
                                     selected[idx] = newValue;
                                   }
                                 } else {
-                                  if (model.user.item - numSelected == 0) {
+                                  if (model.user!.item! - numSelected == 0) {
                                     // 선택되면 안됨
                                     if (newValue) {
                                       selected[idx] = selected[idx];
@@ -760,7 +760,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
     } else {
       return Padding(
         padding: EdgeInsets.fromLTRB(
-            0, 4, 0, idx == model.vote.voteCount - 1 ? 76 : 4),
+            0, 4, 0, idx == model.vote!.voteCount! - 1 ? 76 : 4),
         child: Stack(
           alignment: Alignment.centerLeft,
           children: <Widget>[
@@ -784,27 +784,27 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               alignment: Alignment.center,
                               padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
                               decoration: BoxDecoration(
-                                color: model.userVote.isVoted
-                                    ? model.userVote.voteSelected[idx] == 0
+                                color: model.userVote!.isVoted!
+                                    ? model.userVote!.voteSelected![idx] == 0
                                         ? Colors.white
-                                        : model.userVote.voteSelected[idx] == 1
-                                            ? hexToColor(model.vote
-                                                .subVotes[idx].colorCode[0])
+                                        : model.userVote!.voteSelected![idx] == 1
+                                            ? hexToColor(model.vote!
+                                                .subVotes![idx].colorCode![0])
                                             : Colors.white
                                     : selected[idx]
                                         ? hexToColor(model
-                                            .vote.subVotes[idx].colorCode[0])
+                                            .vote!.subVotes![idx].colorCode![0])
                                         : Colors.white,
                                 borderRadius: BorderRadius.circular(
-                                    model.vote.subVotes[idx].shape[0] == 'oval'
+                                    model.vote!.subVotes![idx].shape![0] == 'oval'
                                         ? 50
                                         : 0),
                                 border: Border.all(
                                   width: 4.0,
-                                  color: model.userVote.isVoted
-                                      ? model.userVote.voteSelected[idx] == 0
+                                  color: model.userVote!.isVoted!
+                                      ? model.userVote!.voteSelected![idx] == 0
                                           ? Color(0xFFC1C1C1)
-                                          : model.userVote.voteSelected[idx] ==
+                                          : model.userVote!.voteSelected![idx] ==
                                                   1
                                               ? Colors.black
                                               : Color(0xFFC1C1C1)
@@ -816,22 +816,22 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 //     Radius.circular(30)),
                               ),
                               child: Text(
-                                  model.vote.subVotes[idx].voteChoices[0],
+                                  model.vote!.subVotes![idx].voteChoices![0],
                                   maxLines: 1,
                                   overflow: TextOverflow.fade,
                                   softWrap: false,
                                   style: TextStyle(
-                                    fontSize: model.vote.subVotes[idx]
-                                                .voteChoices[0].length >
+                                    fontSize: model.vote!.subVotes![idx]
+                                                .voteChoices![0].length >
                                             5
                                         ? 22
                                         : 24,
                                     fontWeight: FontWeight.bold,
-                                    color: model.userVote.isVoted
-                                        ? model.userVote.voteSelected[idx] == 0
+                                    color: model.userVote!.isVoted!
+                                        ? model.userVote!.voteSelected![idx] == 0
                                             ? Color(0xFFC1C1C1)
-                                            : model.userVote
-                                                        .voteSelected[idx] ==
+                                            : model.userVote!
+                                                        .voteSelected![idx] ==
                                                     1
                                                 ? Colors.black
                                                 : Color(0xFFC1C1C1)
@@ -851,26 +851,26 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                               padding: EdgeInsets.fromLTRB(10, 0, 6, 0),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(
-                                    model.vote.subVotes[idx].shape[1] == 'oval'
+                                    model.vote!.subVotes![idx].shape![1] == 'oval'
                                         ? 50
                                         : 0),
-                                color: model.userVote.isVoted
-                                    ? model.userVote.voteSelected[idx] == 0
+                                color: model.userVote!.isVoted!
+                                    ? model.userVote!.voteSelected![idx] == 0
                                         ? Colors.white
-                                        : model.userVote.voteSelected[idx] == 2
-                                            ? hexToColor(model.vote
-                                                .subVotes[idx].colorCode[1])
+                                        : model.userVote!.voteSelected![idx] == 2
+                                            ? hexToColor(model.vote!
+                                                .subVotes![idx].colorCode![1])
                                             : Colors.white
                                     : selected[idx]
                                         ? hexToColor(model
-                                            .vote.subVotes[idx].colorCode[1])
+                                            .vote!.subVotes![idx].colorCode![1])
                                         : Colors.white,
                                 border: Border.all(
                                   width: 4.0,
-                                  color: model.userVote.isVoted
-                                      ? model.userVote.voteSelected[idx] == 0
+                                  color: model.userVote!.isVoted!
+                                      ? model.userVote!.voteSelected![idx] == 0
                                           ? Color(0xFFC1C1C1)
-                                          : model.userVote.voteSelected[idx] ==
+                                          : model.userVote!.voteSelected![idx] ==
                                                   2
                                               ? Colors.black
                                               : Color(0xFFC1C1C1)
@@ -882,22 +882,22 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 //     Radius.circular(30)),
                               ),
                               child: Text(
-                                  model.vote.subVotes[idx].voteChoices[1],
+                                  model.vote!.subVotes![idx].voteChoices![1],
                                   maxLines: 1,
                                   overflow: TextOverflow.fade,
                                   softWrap: false,
                                   style: TextStyle(
-                                    fontSize: model.vote.subVotes[idx]
-                                                .voteChoices[1].length >
+                                    fontSize: model.vote!.subVotes![idx]
+                                                .voteChoices![1].length >
                                             5
                                         ? 22
                                         : 24,
                                     fontWeight: FontWeight.bold,
-                                    color: model.userVote.isVoted
-                                        ? model.userVote.voteSelected[idx] == 0
+                                    color: model.userVote!.isVoted!
+                                        ? model.userVote!.voteSelected![idx] == 0
                                             ? Color(0xFFC1C1C1)
-                                            : model.userVote
-                                                        .voteSelected[idx] ==
+                                            : model.userVote!
+                                                        .voteSelected![idx] ==
                                                     2
                                                 ? Colors.black
                                                 : Color(0xFFC1C1C1)
@@ -963,11 +963,11 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                     visualDensity: VisualDensity(horizontal: 1, vertical: 0),
                     value: selected[idx],
                     checkColor: Colors.white,
-                    activeColor: (diff.inSeconds == 0 || model.userVote.isVoted)
+                    activeColor: (diff.inSeconds == 0 || model.userVote!.isVoted!)
                         ? Color(0xFFC1C1C1)
                         : Color(0xFF1EC8CF),
                     inactiveColor:
-                        (diff.inSeconds == 0 || model.userVote.isVoted)
+                        (diff.inSeconds == 0 || model.userVote!.isVoted!)
                             ? Color(0xFFC1C1C1)
                             : Color(0xFF1EC8CF),
                     disabledColor: Colors.grey,
@@ -975,23 +975,23 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                       (diff.inSeconds == 0)
                           ? _showToast(
                               "오늘 예측이 마감되었습니다.\n커뮤니티에서 실시간 대결 상황을\n살펴보세요!")
-                          : (model.userVote.isVoted)
+                          : model.userVote!.isVoted!
                               ? _showToast("이미 오늘 예측에 참여하였습니다.")
                               : setState(() {
-                                  print(model.seasonInfo.maxDailyVote -
+                                  print(model.seasonInfo!.maxDailyVote! -
                                       numSelected);
-                                  if (model.seasonInfo.maxDailyVote -
+                                  if (model.seasonInfo!.maxDailyVote! -
                                           numSelected ==
                                       0) {
                                     if (newValue) {
                                       selected[idx] = selected[idx];
                                       _showToast(
-                                          "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                          "하루 최대 ${model.seasonInfo!.maxDailyVote}개 주제를 예측할 수 있습니다.");
                                     } else {
                                       selected[idx] = newValue;
                                     }
                                   } else {
-                                    if (model.user.item - numSelected == 0) {
+                                    if (model.user!.item! - numSelected == 0) {
                                       // 선택되면 안됨
                                       if (newValue) {
                                         selected[idx] = selected[idx];
@@ -1060,7 +1060,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                             padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                             decoration: BoxDecoration(
                               color: hexToColor(
-                                model.vote.subVotes[idx].colorCode[0],
+                                model.vote!.subVotes![idx].colorCode![0],
                               ),
                               borderRadius: BorderRadius.circular(50),
                               border: Border.all(
@@ -1072,7 +1072,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                             ),
                             // color: Colors.redAccent,
                             child: Text(
-                              model.vote.subVotes[idx].title,
+                              model.vote!.subVotes![idx].title!,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 textBaseline: TextBaseline.ideographic,
@@ -1093,7 +1093,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                                 decoration: BoxDecoration(
                                   color: hexToColor(
-                                    model.vote.subVotes[idx].colorCode[0],
+                                    model.vote!.subVotes![idx].colorCode![0],
                                   ),
                                   borderRadius: BorderRadius.circular(50),
                                   border: Border.all(
@@ -1105,13 +1105,13 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                 ),
                                 // color: Colors.redAccent,
                                 child: Text(
-                                  model.vote.subVotes[idx].voteChoices[0],
+                                  model.vote!.subVotes![idx].voteChoices![0],
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     textBaseline: TextBaseline.ideographic,
                                     color: Colors.black,
-                                    fontSize: model.vote.subVotes[idx]
-                                                .voteChoices[0].length <
+                                    fontSize: model.vote!.subVotes![idx]
+                                                .voteChoices![0].length <
                                             6
                                         ? 22
                                         : 18,
@@ -1131,7 +1131,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                     padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                                     decoration: BoxDecoration(
                                       color: hexToColor(
-                                        model.vote.subVotes[idx].colorCode[1],
+                                        model.vote!.subVotes![idx].colorCode![1],
                                       ),
                                       borderRadius: BorderRadius.circular(50),
                                       border: Border.all(
@@ -1143,13 +1143,13 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                     ),
                                     // color: Colors.redAccent,
                                     child: Text(
-                                      model.vote.subVotes[idx].voteChoices[1],
+                                      model.vote!.subVotes![idx].voteChoices![1],
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         textBaseline: TextBaseline.ideographic,
                                         color: Colors.black,
-                                        fontSize: model.vote.subVotes[idx]
-                                                    .voteChoices[1].length <
+                                        fontSize: model.vote!.subVotes![idx]
+                                                    .voteChoices![1].length <
                                                 6
                                             ? 22
                                             : 18,
@@ -1193,7 +1193,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
               // Expanded(child: SizedBox()),
 
               Text(
-                model.vote.subVotes[idx].selectDescription,
+                model.vote!.subVotes![idx].selectDescription!,
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w700,
@@ -1204,7 +1204,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
                 child: Text(
-                  "현재 ${model.vote.subVotes[idx].numVoted0 + model.vote.subVotes[idx].numVoted1}명이 이 주제를 예측하였습니다",
+                  "현재 ${model.vote!.subVotes![idx].numVoted0! + model.vote!.subVotes![idx].numVoted1!}명이 이 주제를 예측하였습니다",
                   style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'DmSans',
@@ -1266,7 +1266,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                (model.userVote.isVoted || diff.inSeconds == 0)
+                                (model.userVote!.isVoted! || diff.inSeconds == 0)
                                     ? SizedBox()
                                     : Icon(
                                         Icons.cancel_outlined,
@@ -1290,16 +1290,16 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                       : Expanded(
                           child: RaisedButton(
                             onPressed: () {
-                              (model.userVote.isVoted || diff.inSeconds == 0)
+                              (model.userVote!.isVoted! || diff.inSeconds == 0)
                                   ? {}
                                   : setState(() {
-                                      if (model.seasonInfo.maxDailyVote -
+                                      if (model.seasonInfo!.maxDailyVote! -
                                               numSelected ==
                                           0) {
                                         _showToast(
-                                            "하루 최대 ${model.seasonInfo.maxDailyVote}개 주제를 예측할 수 있습니다.");
+                                            "하루 최대 ${model.seasonInfo!.maxDailyVote}개 주제를 예측할 수 있습니다.");
                                       } else {
-                                        if (model.user.item - numSelected ==
+                                        if (model.user!.item! - numSelected ==
                                             0) {
                                           // 선택되면 안됨
 
@@ -1312,7 +1312,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                                     });
                             },
                             color:
-                                (model.userVote.isVoted || diff.inSeconds == 0)
+                                (model.userVote!.isVoted! || diff.inSeconds == 0)
                                     ? Color(0xFFE4E4E4)
                                     : Color(0xFF1EC8CF),
                             shape: RoundedRectangleBorder(
@@ -1325,24 +1325,24 @@ class _VoteSelectViewState extends State<VoteSelectView> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                (model.userVote.isVoted || diff.inSeconds == 0)
+                                (model.userVote!.isVoted! || diff.inSeconds == 0)
                                     ? SizedBox()
                                     : SvgPicture.asset(
                                         'assets/icons/double_check_icon.svg',
                                         width: 20,
                                       ),
-                                (model.userVote.isVoted || diff.inSeconds == 0)
+                                (model.userVote!.isVoted! || diff.inSeconds == 0)
                                     ? SizedBox()
                                     : SizedBox(width: 8),
                                 Text(
-                                    model.userVote.isVoted
+                                    model.userVote!.isVoted!
                                         ? "이미 오늘 예측에 참여하였습니다."
                                         : diff.inSeconds == 0
                                             ? "오늘 예측이 마감되었습니다."
                                             : "선택하기",
                                     style: TextStyle(
                                       fontSize: 20,
-                                      color: (model.userVote.isVoted ||
+                                      color: (model.userVote!.isVoted! ||
                                               diff.inSeconds == 0)
                                           ? Colors.black
                                           : Colors.white,
@@ -1370,8 +1370,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
   ) {
     List<Widget> _widgets = [];
 
-    int tag0Length = model.vote.subVotes[idx].tag0.length;
-    int tag1Length = model.vote.subVotes[idx].tag1.length;
+    int tag0Length = model.vote!.subVotes![idx].tag0!.length;
+    int tag1Length = model.vote!.subVotes![idx].tag1!.length;
     print("TAGIS" + tag0Length.toString());
     for (int j = 0; j < numOfChoices; j++) {
       for (int i = 0; j == 0 ? i < tag0Length : i < tag1Length; i++) {
@@ -1388,8 +1388,8 @@ class _VoteSelectViewState extends State<VoteSelectView> {
             // ),
             label: Text(
               j == 0
-                  ? model.vote.subVotes[idx].tag0[i]
-                  : model.vote.subVotes[idx].tag1[i],
+                  ? model.vote!.subVotes![idx].tag0![i]
+                  : model.vote!.subVotes![idx].tag1![i],
               style: TextStyle(
                 fontSize: 16,
                 fontFamily: 'DmSans',
@@ -1397,7 +1397,7 @@ class _VoteSelectViewState extends State<VoteSelectView> {
               ),
             ),
             backgroundColor: hexToColor(
-              model.vote.subVotes[idx].colorCode[j],
+              model.vote!.subVotes![idx].colorCode![j],
             ),
           ),
         ));

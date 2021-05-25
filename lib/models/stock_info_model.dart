@@ -4,29 +4,29 @@ import 'package:collection/collection.dart';
 import 'package:yachtOne/models/stats_model.dart';
 
 class StockInfoModel {
-  final String name;
-  final String stocksOrIndex;
-  final String issueCode;
-  final String marketCode;
-  final String descriptionTitle;
-  final String description;
-  final int marketCap;
-  final double per;
-  final int revenue;
-  final int operatingIncome;
-  final int netIncome;
-  final num latestEps;
-  final String ceo;
-  final int employees;
-  final int avrSalary;
-  final String avrWorkingYears;
-  final String foundedIn;
-  final String announcedAt;
+  final String? name;
+  final String? stocksOrIndex;
+  final String? issueCode;
+  final String? marketCode;
+  final String? descriptionTitle;
+  final String? description;
+  final int? marketCap;
+  final double? per;
+  final int? revenue;
+  final int? operatingIncome;
+  final int? netIncome;
+  final num? latestEps;
+  final String? ceo;
+  final int? employees;
+  final int? avrSalary;
+  final String? avrWorkingYears;
+  final String? foundedIn;
+  final String? announcedAt;
   final dynamic uploadedAt;
-  final List<dynamic> tags;
+  final List<dynamic>? tags;
   dynamic news;
-  List<StatsModel> stats;
-  final String credit;
+  List<StatsModel>? stats;
+  final String? credit;
   StockInfoModel({
     this.name,
     this.stocksOrIndex,
@@ -54,29 +54,29 @@ class StockInfoModel {
   });
 
   StockInfoModel copyWith({
-    String name,
-    String stocksOrIndex,
-    String issueCode,
-    String marketCode,
-    String descriptionTitle,
-    String description,
-    int marketCap,
-    double per,
-    int revenue,
-    int operatingIncome,
-    int netIncome,
-    int latestEps,
-    String ceo,
-    int employees,
-    int avrSalary,
-    String avrWorkingYears,
-    String foundedIn,
-    String announcedAt,
+    String? name,
+    String? stocksOrIndex,
+    String? issueCode,
+    String? marketCode,
+    String? descriptionTitle,
+    String? description,
+    int? marketCap,
+    double? per,
+    int? revenue,
+    int? operatingIncome,
+    int? netIncome,
+    int? latestEps,
+    String? ceo,
+    int? employees,
+    int? avrSalary,
+    String? avrWorkingYears,
+    String? foundedIn,
+    String? announcedAt,
     dynamic uploadedAt,
-    List<dynamic> tags,
+    List<dynamic>? tags,
     dynamic news,
-    List<StatsModel> stats,
-    String credit,
+    List<StatsModel>? stats,
+    String? credit,
   }) {
     return StockInfoModel(
       name: name ?? this.name,
@@ -164,7 +164,7 @@ class StockInfoModel {
   factory StockInfoModel.fromData(
     Map<String, dynamic> data,
   ) {
-    if (data == null) return null;
+    // if (data == null) return null;
 
     return StockInfoModel(
       name: data['name'] ?? null,

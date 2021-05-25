@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 class StatsModel {
-  final num actualEps;
-  final num expectedEps;
-  final String announcedAt;
+  final num? actualEps;
+  final num? expectedEps;
+  final String? announcedAt;
   final dynamic uploadedAt;
   StatsModel({
     this.actualEps,
@@ -13,9 +13,9 @@ class StatsModel {
   });
 
   StatsModel copyWith({
-    num actualEps,
-    num expectedEps,
-    String announcedAt,
+    num? actualEps,
+    num? expectedEps,
+    String? announcedAt,
     dynamic uploadedAt,
   }) {
     return StatsModel(
@@ -35,11 +35,11 @@ class StatsModel {
     };
   }
 
-  factory StatsModel.fromData(Map<String, dynamic> data) {
-    if (data == null) return null;
+  factory StatsModel.fromData(Map<String, dynamic>? data) {
+    // if (data == null) return null;
 
     return StatsModel(
-      actualEps: data['actualEps'],
+      actualEps: data!['actualEps'],
       expectedEps: data['expectedEps'],
       announcedAt: data['announcedAt'],
       uploadedAt: data['uploadedAt'],

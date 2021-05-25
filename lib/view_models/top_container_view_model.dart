@@ -4,8 +4,8 @@ import 'package:stacked/stacked.dart';
 import '../services/api/customized_ntp.dart';
 
 class TopContainerViewModel extends FutureViewModel {
-  DateTime nowFromNetwork;
-  Timer timer;
+  DateTime? nowFromNetwork;
+  Timer? timer;
   // TopContainerViewModel() {}
 
   Future getModel() async {

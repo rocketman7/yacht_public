@@ -16,18 +16,18 @@ import '../models/date_time_model.dart';
 import '../views/constants/holiday.dart';
 
 class LastSeasonPortfolioViewModel extends FutureViewModel {
-  final WinnerViewModel winnerViewModel;
+  final WinnerViewModel? winnerViewModel;
   // Services Setting
-  final SharedPreferencesService _sharedPreferencesService =
+  final SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
   // final StateManageService _stateManageService = locator<StateManageService>();
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
   // 변수 Setting
   // 아래에 stateManagerService에 있는 놈들 중 사용할 모델들 설정
-  DatabaseAddressModel addressModel;
-  PortfolioModel portfolioModel;
-  SeasonModel seasonModel;
+  DatabaseAddressModel? addressModel;
+  PortfolioModel? portfolioModel;
+  SeasonModel? seasonModel;
   // 여기는 이 화면 고유의 모델 설정
 
   // UI용 변수
@@ -44,49 +44,49 @@ class LastSeasonPortfolioViewModel extends FutureViewModel {
   List<int> orderDrawingItem = [];
   List<bool> drawingMaxLength = [];
 
-  String uid;
+  String? uid;
 
   // 튜토리얼 변수
-  bool portfolioTutorial;
+  bool? portfolioTutorial;
 
   LastSeasonPortfolioViewModel(this.winnerViewModel) {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   // method
   // 포트폴리오 DB로부터 얻어오기 + UI용 변수들 계산
   Future getPortfolio() async {
-    addressModel = winnerViewModel.lastSeasonAddressModel;
-    portfolioModel = winnerViewModel.portfolioModel;
-    seasonModel = winnerViewModel.seasonModel;
+    addressModel = winnerViewModel!.lastSeasonAddressModel;
+    portfolioModel = winnerViewModel!.portfolioModel;
+    seasonModel = winnerViewModel!.seasonModel;
 
     print("PORTFOLIO MODEL " +
-        portfolioModel.subPortfolio[1].stockName.toString());
+        portfolioModel!.subPortfolio![1].stockName.toString());
 
     //=======================stateManagerService이용하여 뷰모델 시작=======================
 
     // 초기비중만큼 호를 나눠주기 위해 값 계산
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      totalInitialValue += portfolioModel.subPortfolio[i].sharesNum *
-          portfolioModel.subPortfolio[i].initialPrice;
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
+      totalInitialValue += portfolioModel!.subPortfolio![i].sharesNum! *
+          portfolioModel!.subPortfolio![i].initialPrice!;
     }
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      initialValueRatio.add((portfolioModel.subPortfolio[i].sharesNum *
-              portfolioModel.subPortfolio[i].initialPrice /
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
+      initialValueRatio.add((portfolioModel!.subPortfolio![i].sharesNum! *
+              portfolioModel!.subPortfolio![i].initialPrice! /
               totalInitialValue) *
           100.0);
     }
 
     // 얼마나 올랐는지(내렸는지) 보기 위한 값 계산. 최종적으로 1~3값으로 치환되어야함
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      valueIncreaseRatio.add(portfolioModel.subPortfolio[i].currentPrice /
-          portfolioModel.subPortfolio[i].initialPrice);
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
+      valueIncreaseRatio.add(portfolioModel!.subPortfolio![i].currentPrice! /
+          portfolioModel!.subPortfolio![i].initialPrice!);
 
       valueIncreaseRatio[i] -= 1.0;
     }
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
       if (valueIncreaseRatio[i] > maxValueIncreaseRatio)
         maxValueIncreaseRatio = valueIncreaseRatio[i];
 
@@ -98,7 +98,7 @@ class LastSeasonPortfolioViewModel extends FutureViewModel {
         ? maxOfMaxMin = maxValueIncreaseRatio
         : maxOfMaxMin = minValueIncreaseRatio;
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
       if (maxOfMaxMin > 0) {
         valueIncreaseRatio[i] = 2 + valueIncreaseRatio[i] / maxOfMaxMin;
       } else if (maxOfMaxMin < 0) {
@@ -113,7 +113,7 @@ class LastSeasonPortfolioViewModel extends FutureViewModel {
     // startPercentage.add(random.nextInt(100).toDouble());
     startPercentage.add(6); // 원래 시작점 위 두줄처럼 랜덤으로 정해주는거였는데 그냥 고정하자
 
-    for (int i = 1; i < portfolioModel.subPortfolio.length; i++) {
+    for (int i = 1; i < portfolioModel!.subPortfolio!.length; i++) {
       startPercentage.add(startPercentage[i - 1] + initialValueRatio[i - 1]);
     }
 
@@ -123,18 +123,18 @@ class LastSeasonPortfolioViewModel extends FutureViewModel {
     double temp;
     int iTemp;
     bool bTemp;
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
       initialValueTemp.add(getInitialRatioDouble(i));
       orderDrawingItem.add(i);
 
-      if (portfolioModel.subPortfolio[i].stockName.length > maxItemsNameLength)
+      if (portfolioModel!.subPortfolio![i].stockName!.length > maxItemsNameLength)
         drawingMaxLength.add(true);
       else
         drawingMaxLength.add(false);
     }
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      for (int j = i; j < portfolioModel.subPortfolio.length; j++) {
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
+      for (int j = i; j < portfolioModel!.subPortfolio!.length; j++) {
         if (initialValueTemp[j] > initialValueTemp[i]) {
           temp = initialValueTemp[j];
           initialValueTemp[j] = initialValueTemp[i];
@@ -159,7 +159,7 @@ class LastSeasonPortfolioViewModel extends FutureViewModel {
     // DateTime baseDate = strToDate(addressModel.date);
     // DateTime baseDate =
     //     strToDate(DateTimeModel().baseDate(addressModel.category));
-    DateTime baseDate = strToDate(addressModel.date);
+    DateTime baseDate = strToDate(addressModel!.date!);
     print("Portfolio basedate" + baseDate.toString());
     // print(DateTimeModel().baseDate(addressModel.category));
     // print(addressModel.category);
@@ -176,9 +176,9 @@ class LastSeasonPortfolioViewModel extends FutureViewModel {
     String result;
     int seasonNum;
 
-    seasonNum = int.parse(addressModel.season.substring(6, 9));
+    seasonNum = int.parse(addressModel!.season!.substring(6, 9));
 
-    result = addressModel.season.toUpperCase().substring(0, 6) +
+    result = addressModel!.season!.toUpperCase().substring(0, 6) +
         ' ' +
         seasonNum.toString();
 
@@ -189,9 +189,9 @@ class LastSeasonPortfolioViewModel extends FutureViewModel {
   String getPortfolioValue() {
     int totalValue = 0;
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      totalValue += portfolioModel.subPortfolio[i].sharesNum *
-          portfolioModel.subPortfolio[i].currentPrice;
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
+      totalValue += portfolioModel!.subPortfolio![i].sharesNum! *
+          portfolioModel!.subPortfolio![i].currentPrice!;
     }
 
     var f = NumberFormat("#,###", "en_US");
@@ -203,11 +203,11 @@ class LastSeasonPortfolioViewModel extends FutureViewModel {
     int totalValue = 0;
     int initialValue = 0;
 
-    for (int i = 0; i < portfolioModel.subPortfolio.length; i++) {
-      totalValue += portfolioModel.subPortfolio[i].sharesNum *
-          portfolioModel.subPortfolio[i].currentPrice;
-      initialValue += portfolioModel.subPortfolio[i].sharesNum *
-          portfolioModel.subPortfolio[i].initialPrice;
+    for (int i = 0; i < portfolioModel!.subPortfolio!.length; i++) {
+      totalValue += portfolioModel!.subPortfolio![i].sharesNum! *
+          portfolioModel!.subPortfolio![i].currentPrice!;
+      initialValue += portfolioModel!.subPortfolio![i].sharesNum! *
+          portfolioModel!.subPortfolio![i].initialPrice!;
     }
 
     var returnFormat = NumberFormat("##.##%", "en_US");
@@ -218,8 +218,8 @@ class LastSeasonPortfolioViewModel extends FutureViewModel {
 
   // 포트폴리우 구성종목의 초기비중을 리턴
   double getInitialRatioDouble(int i) {
-    double ratio = (portfolioModel.subPortfolio[i].initialPrice *
-            portfolioModel.subPortfolio[i].sharesNum) /
+    double ratio = (portfolioModel!.subPortfolio![i].initialPrice! *
+            portfolioModel!.subPortfolio![i].sharesNum!) /
         totalInitialValue.toDouble();
 
     return ratio;

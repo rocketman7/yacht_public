@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -11,10 +12,10 @@ import '../models/sharedPreferences_const.dart';
 import '../locator.dart';
 
 class PushNotificationService {
-  final FirebaseMessaging _fcm = FirebaseMessaging();
-  final NavigationService _navigationService = locator<NavigationService>();
-  final DialogService _dialogService = locator<DialogService>();
-  SharedPreferencesService _sharedPreferencesService =
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  final NavigationService? _navigationService = locator<NavigationService>();
+  final DialogService? _dialogService = locator<DialogService>();
+  SharedPreferencesService? _sharedPreferencesService =
       locator<SharedPreferencesService>();
 
   // 여기서 모든 푸쉬알람 리스트, 설정 등을 관리해준다.
@@ -42,11 +43,10 @@ class PushNotificationService {
 
   Future initialise() async {
     if (Platform.isIOS) {
-      _fcm.requestNotificationPermissions(
-          IosNotificationSettings(sound: true, badge: true, alert: true));
-      _fcm.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-        print("Settings registered: $settings");
-      });
+      _fcm.requestPermission(sound: true, badge: true, alert: true);
+      NotificationSettings settings = await _fcm.getNotificationSettings();
+
+      print("Settings registered: $settings");
 
       // print(_fcm.onIosSettingsRegistered);
       // _fcm.subscribeToTopic('test');
@@ -81,8 +81,8 @@ class PushNotificationService {
     // 현재 사용자의 푸쉬알림 상태에 따라 구독/구독취소를 해준다.
     // 안전하게 true면 구독취소까지해준다.
     for (int i = 0; i < numOfPushAlarm; i++)
-      pushAlarm[i] = await _sharedPreferencesService.getSharedPreferencesValue(
-          pushAlarmKey[i], bool);
+      pushAlarm[i] = await (_sharedPreferencesService!
+          .getSharedPreferencesValue(pushAlarmKey[i], bool) as FutureOr<bool>);
 
     print('=============================================================');
     for (int i = 0; i < numOfPushAlarm; i++) {
@@ -97,31 +97,32 @@ class PushNotificationService {
     print(pushAlarm);
     print('=============================================================');
 
-    _fcm.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        // 앱이 실행중일 때
-        print("onMessage: $message");
-        // _onMessageDialog(message);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        // 앱이 꺼져있을 때 // 이 때 알림 옴
-        print("onLaunch: $message");
-        _onNonMessageNavigate(message);
-      },
-      onResume: (Map<String, dynamic> message) async {
-        // 앱이 실행 중이지만 백그라운드에 있을 때 // 이 때도 알림 옴
-        print("onResume: $message");
-        _onNonMessageNavigate(message);
-      },
-    );
+    // configure가 없어졌으므로 새로운 event handling 적용 해야 함
+    // _fcm.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     // 앱이 실행중일 때
+    //     print("onMessage: $message");
+    //     // _onMessageDialog(message);
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     // 앱이 꺼져있을 때 // 이 때 알림 옴
+    //     print("onLaunch: $message");
+    //     _onNonMessageNavigate(message);
+    //   },
+    //   onResume: (Map<String, dynamic> message) async {
+    //     // 앱이 실행 중이지만 백그라운드에 있을 때 // 이 때도 알림 옴
+    //     print("onResume: $message");
+    //     _onNonMessageNavigate(message);
+    //   },
+    // );
 
-    _fcm.getToken().then((value) => print("TOKEN IS " + value));
+    _fcm.getToken().then((value) => print("TOKEN IS " + value!));
   }
 
   Future subOrUnscribeToTopic(int i, bool value) async {
     pushAlarm[i] = value;
-    await _sharedPreferencesService.setSharedPreferencesValue(
-        pushAlarmKey[i], value);
+    await _sharedPreferencesService!
+        .setSharedPreferencesValue(pushAlarmKey[i], value);
     if (value) {
       await _fcm.unsubscribeFromTopic(topics[i]);
       print('unsubscribe(${pushAlarmKey[i]}): ${topics[i]}');
@@ -170,6 +171,6 @@ class PushNotificationService {
 
   // 앱이 꺼져있거나 백그라운드에 있을 때는 알림 페이지로 바로 네비게잇할 수 있도록 한다.
   void _onNonMessageNavigate(Map<String, dynamic> message) {
-    _navigationService.navigateTo('notification');
+    _navigationService!.navigateTo('notification');
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:stacked/stacked.dart';
 
 import '../models/user_model.dart';
@@ -9,19 +11,19 @@ import '../services/stateManage_service.dart';
 
 class MypageAccountVerificationViewModel extends FutureViewModel {
   // Services Setting
-  final AuthService _authService = locator<AuthService>();
-  final DatabaseService _databaseService = locator<DatabaseService>();
-  final AccountVerificationService accountVerificationService =
+  final AuthService? _authService = locator<AuthService>();
+  final DatabaseService? _databaseService = locator<DatabaseService>();
+  final AccountVerificationService? accountVerificationService =
       locator<AccountVerificationService>();
-  final StateManageService _stateManageService = locator<StateManageService>();
+  final StateManageService? _stateManageService = locator<StateManageService>();
 
   // 변수 Setting
-  String uid;
-  UserModel user;
+  String? uid;
+  late UserModel user;
   // 차례대로 계좌인증 성공여부, 에러메세지 를 담는다.
   List accOwnerResp = [false, ''];
   List accOccupyResp = [false, ''];
-  int authNum;
+  int? authNum;
   // 증권계좌가 인증되지 않았을 때 인증절차에서 필요한 ui 변수들. 이마저 viewmodel에 담는게 나은것인지?
   bool visibleButton1 = true;
   bool visibleBankList = false;
@@ -37,28 +39,28 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   int selectSecLogo = 100;
   // 사용자가 선택, 입력한 증권계좌정보들
   String secName = '';
-  String bankCode = '';
+  String? bankCode = '';
   String accNumber = '';
   String accName = '';
 
   // method
   MypageAccountVerificationViewModel() {
-    uid = _authService.auth.currentUser.uid;
+    uid = _authService!.auth.currentUser!.uid;
   }
 
   Future getModels() async {
-    user = await _databaseService.getUser(uid);
-    for (int i = 0; i < accountVerificationService.getBankListLength(); i++) {
-      if (accountVerificationService.getBankList().keys.toList()[i] ==
+    user = await (_databaseService!.getUser(uid) as FutureOr<UserModel>);
+    for (int i = 0; i < accountVerificationService!.getBankListLength(); i++) {
+      if (accountVerificationService!.getBankList().keys.toList()[i] ==
           user.secName) selectSecLogo = i;
     }
   }
 
   Future<String> accOwnerVerificationRequest() async {
-    bankCode = accountVerificationService.getBankList()['$secName'];
+    bankCode = accountVerificationService!.getBankList()['$secName'];
 
-    accOwnerResp = await accountVerificationService.accOwnerVerification(
-        accNumber, bankCode, accName);
+    accOwnerResp = await (accountVerificationService!.accOwnerVerification(
+        accNumber, bankCode, accName) as FutureOr<List<dynamic>>);
 
     notifyListeners();
 
@@ -71,10 +73,10 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   Future<String> accOccupyVerificationRequest() async {
     authNum = AccoutVerificationServiceMydata().authTextGenerate();
 
-    bankCode = accountVerificationService.getBankList()['$secName'];
+    bankCode = accountVerificationService!.getBankList()['$secName'];
 
-    accOccupyResp = await accountVerificationService.accOccupyVerification(
-        accNumber, bankCode, authNum.toString());
+    accOccupyResp = await (accountVerificationService!.accOccupyVerification(
+        accNumber, bankCode, authNum.toString()) as FutureOr<List<dynamic>>);
 
     notifyListeners();
 
@@ -112,7 +114,7 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
 
       // setAccInformation();
       await setAccInformations();
-      await _stateManageService.userModelUpdate();
+      await _stateManageService!.userModelUpdate();
       return true;
     } else {
       verificationFailMsg = '인증번호가 틀립니다. 다시 입력해주세요';
@@ -125,15 +127,17 @@ class MypageAccountVerificationViewModel extends FutureViewModel {
   // }
 
   Future setAccInformations() async {
-    await _databaseService.setAccInformations(accNumber, accName, secName, uid);
+    await _databaseService!
+        .setAccInformations(accNumber, accName, secName, uid);
   }
 
-  int getBankListLength() => accountVerificationService.getBankListLength();
+  int getBankListLength() => accountVerificationService!.getBankListLength();
 
-  Map<String, String> getBankList() => accountVerificationService.getBankList();
+  Map<String, String> getBankList() =>
+      accountVerificationService!.getBankList();
 
   Map<String, String> getBankLogoList() =>
-      accountVerificationService.getBankLogoList();
+      accountVerificationService!.getBankLogoList();
 
   @override
   Future futureToRun() => getModels();
