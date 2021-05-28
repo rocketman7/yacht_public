@@ -24,7 +24,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   const adminRef = db.collection("admin");
   const votesRef = db.collection("votes");
   const usersRef = db.collection("users");
-  const ranksRef = db.collection("ranks");
+  // const ranksRef = db.collection("ranks");
 
   const openSeasonSnapshot = await adminRef.doc("openSeason").get();
   const category = openSeasonSnapshot.data().category;
@@ -86,15 +86,15 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // let todayResult = [2,2,2];
   // user의 vote 선택 가져오기
   console.log(todayResult);
-  let userCurrentCombo = {};
+  // let userCurrentCombo = {};
   let userVotes = {};
   let userScores = {};
 
   let allUsers = {};
   let allUserUid = [];
 
-  let prevRanks = {};
-  let userPrevWinPoint = {};
+  // let prevRanks = {};
+  // let userPrevWinPoint = {};
   var userSnapshot = await usersRef.get();
   userSnapshot.forEach((doc) => {
     allUsers[doc.id] = doc.data();
@@ -360,7 +360,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
 
   // const today = "20210108";
   var today = dateFormat(Date(), "yyyymmdd");
-  // const yesterday = "20210504";
+  // const yesterday = "20210526";
   // todayRankRef
 
   const seasonInfoRef = votesRef
