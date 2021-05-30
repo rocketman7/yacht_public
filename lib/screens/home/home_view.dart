@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yachtOne/screens/chart/chart_view.dart';
 
 class HomeView extends StatefulWidget {
   @override

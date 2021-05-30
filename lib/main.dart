@@ -11,7 +11,10 @@ import 'package:kakao_flutter_sdk/auth.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:yachtOne/screen/home/home_view.dart';
+import 'package:yachtOne/screens/home/home_view.dart';
+import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
+
+import 'screens/chart/chart_view.dart';
 
 void main() async {
   tz.initializeTimeZones();
@@ -57,7 +60,9 @@ class _MyAppState extends State<MyApp> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: GetMaterialApp(
-        home: HomeView(),
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        home: StockInfoKrView(),
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
