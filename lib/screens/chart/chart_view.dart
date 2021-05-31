@@ -5,8 +5,12 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../models/price_chart_model.dart';
 import '../../handlers/handle_date_time.dart';
 import 'chart_view_model.dart';
+import 'package:flutter/services.dart';
 
 class ChartView extends StatelessWidget {
+  // onTrackballPositionChanging에서 X Position이 변했는지 체크하기 위해 직전 X Position을 저장
+  double previousXPosition = 0;
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ChartViewModel>(
@@ -24,16 +28,29 @@ class ChartView extends StatelessWidget {
               (chartViewModel.priceList == null)
                   ? Container(height: 200, color: Colors.blue)
                   : Container(
-                      // height: 200,
-                      color: Colors.white,
+                      height: 200,
+                      // color: Colors.white,
                       child: SfCartesianChart(
+                        plotAreaBorderWidth: 0,
+                        onTrackballPositionChanging: (_) {
+                          // trackball의 X Position이 변하지 않으면 아무것도 하지 않음
+                          // trackball의 X Position이 변했으면 햅틱을 주고 직전 X Position을 업데이트함
+                          if (previousXPosition != _.chartPointInfo.xPosition) {
+                            print(_.chartPointInfo.markerXPos);
+                            HapticFeedback.lightImpact();
+                            previousXPosition = _.chartPointInfo.xPosition!;
+                          }
+                          // print(_.chartPointInfo.xPosition);
+                          // HapticFeedback.lightImpact();
+                        },
                         trackballBehavior: TrackballBehavior(
                           enable: true,
-                          activationMode: ActivationMode.singleTap,
+                          activationMode: ActivationMode.longPress,
                           tooltipSettings: InteractiveTooltip(
-                              // Formatting trackball tooltip text
-                              // format: ''
-                              ),
+                            enable: false,
+                            // Formatting trackball tooltip text
+                            // format: ''
+                          ),
                         ),
                         enableAxisAnimation: true,
                         series: <ChartSeries>[
@@ -61,7 +78,7 @@ class ChartView extends StatelessWidget {
                             xValueMapper: (PriceChartModel chart, _) =>
                                 stringToDateTime(chart.dateTime!),
                             yValueMapper: (PriceChartModel chart, _) =>
-                                (chart.tradeVolume! / 1000),
+                                chart.tradeVolume!,
                             yAxisName: 'volume',
                           )
                           // FastLineSeries<ChartModel, DateTime>(
@@ -70,17 +87,27 @@ class ChartView extends StatelessWidget {
                           //   xValueMapper: (ChartModel chart, _) => strToDate(chart.date),
                           // )
                         ],
-                        primaryXAxis: CategoryAxis(
+                        primaryXAxis: DateTimeCategoryAxis(
                             majorGridLines: MajorGridLines(
                               width: 0,
                             ),
                             isVisible: false),
                         primaryYAxis: NumericAxis(
-                            maximum: 70000,
-                            minimum: 40000,
+                            maximum: chartViewModel.maxPrice,
+                            minimum: chartViewModel.minPrice! *
+                                .8, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
                             majorGridLines: MajorGridLines(width: 0),
                             isVisible: false),
-                            
+                        axes: [
+                          NumericAxis(
+                              // 차트에 그려지는 PriceChartModel의 volume들 중 max값 받아서 영역의 1/5에만 그려지도록 maximum 값 설정
+                              maximum: chartViewModel.maxVolume! * 5,
+                              minimum: 0,
+                              majorGridLines: MajorGridLines(width: 0),
+                              isVisible: false,
+                              name: 'volume'),
+                        ],
+                        enableSideBySideSeriesPlacement: false,
                       ),
                     ),
               Row(

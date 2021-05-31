@@ -14,10 +14,7 @@ class StockInfoKrView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Container(
-              //   height: 20,
-              //   color: Colors.blue,
-              // ),
+              SizedBox(height: 8),
               Padding(
                 padding: kHorizontalPadding,
                 child: Text(
