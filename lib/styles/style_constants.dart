@@ -16,10 +16,12 @@ const kTextColor = Colors.black;
 const kAnimationDuration = Duration(milliseconds: 200);
 
 const kHorizontalPadding = EdgeInsets.symmetric(horizontal: 16);
+const kSymmetricPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16);
 
 final headingStyle = TextStyle(
   fontSize: getProportionateScreenWidth(28),
   fontWeight: FontWeight.bold,
+  fontFamily: 'DmSans',
   color: Colors.black,
   height: 1,
 );

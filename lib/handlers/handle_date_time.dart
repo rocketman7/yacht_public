@@ -1,3 +1,5 @@
+// String 형식의 DateTime을 DateTime으로 변환
+// 타임존 처리 필요
 DateTime? stringToDateTime(String dateTimeInString) {
   int length = dateTimeInString.length;
   switch (length) {

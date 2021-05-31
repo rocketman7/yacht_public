@@ -13,6 +13,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/screens/home/home_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import 'screens/chart/chart_view.dart';
 
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
-        home: StockInfoKrView(),
+        home: YachtDesignSystem(),
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),

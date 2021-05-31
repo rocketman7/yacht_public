@@ -32,10 +32,13 @@ class ChartViewModel extends GetxController {
     return fetchPrices();
   }
 
+  // subList를 기간 별로 만들어주는 로직 필요
+
 // update()는 notifyListeners() 처럼 쓰면 되고 그 전에 Future에서 받아온 데이터 넣으면 됨.
   void fetchPrices() async {
     print("get Called");
     priceList = await FirestoreService().getPrices();
+    // subList 기본값 만들어줘야 함
     subList = priceList!.sublist(1, 60);
     // print(subList);
     getMaxMin();
@@ -58,8 +61,8 @@ class ChartViewModel extends GetxController {
     // _minVolume = quiver.min(List.generate(
     //         subList!.length, (index) => subList![index].tradeVolume))! *
     //     0.95;
+    // 계산 소요시간 체크
     end = DateTime.now();
-
     print(end.difference(start));
   }
 }
