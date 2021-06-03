@@ -4,6 +4,8 @@ import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
 class StockInfoKrView extends StatelessWidget {
+  String _issueCode = "005930";
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -15,21 +17,11 @@ class StockInfoKrView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 8),
-              Padding(
-                padding: kHorizontalPadding,
-                child: Text(
-                  "삼성전자",
-                  style: headingStyle,
-                ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
               Container(
                 width: double.infinity,
                 // height: 250,
                 // color: Colors.grey,
-                child: Center(child: ChartView()),
+                child: Center(child: ChartView(issueCode: _issueCode)),
               ),
               SizedBox(
                 height: 16,

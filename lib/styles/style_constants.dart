@@ -15,23 +15,85 @@ const kTextColor = Colors.black;
 
 const kAnimationDuration = Duration(milliseconds: 200);
 
+// k-Bull & Bear Color
+const bullColorKR = Color(0xFFEB3A4F);
+const bearColorKR = Color(0xFF4F77F7);
+
+// Spacing
+const verticalSpaceLarge = SizedBox(height: 24);
+const verticalSpaceMedium = SizedBox(height: 16);
+const verticalSpaceSmall = SizedBox(height: 8);
 const kHorizontalPadding = EdgeInsets.symmetric(horizontal: 16);
 const kSymmetricPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16);
 
-final headingStyle = TextStyle(
-  fontSize: getProportionateScreenWidth(28),
-  fontWeight: FontWeight.bold,
+// Font Style
+final headingStyleEN = TextStyle(
+  fontSize: getProportionateScreenWidth(27.5),
+  fontWeight: FontWeight.w700,
   fontFamily: 'DmSans',
   color: Colors.black,
-  height: 1,
+  wordSpacing: -2,
+  height: 1.1,
+);
+
+final headingStyle = TextStyle(
+  fontSize: getProportionateScreenWidth(26),
+  fontWeight: FontWeight.w700,
+  fontFamily: 'NotoSansKR',
+  wordSpacing: -1,
+  height: 1.1,
 );
 
 final titleStyle = TextStyle(
-  fontSize: getProportionateScreenWidth(22),
-  fontWeight: FontWeight.bold,
-  color: Colors.black,
-  height: 1,
+  fontSize: getProportionateScreenWidth(24),
+  fontWeight: FontWeight.w700,
+  fontFamily: 'NotoSansKR',
+  wordSpacing: -1,
+  height: 1.1,
 );
+
+final subtitleStyle = TextStyle(
+  fontSize: getProportionateScreenWidth(20),
+  fontWeight: FontWeight.w400,
+  fontFamily: 'NotoSansKR',
+  color: Colors.grey[600],
+  wordSpacing: -1,
+  height: 1.1,
+);
+
+final contentStyle = TextStyle(
+    fontSize: getProportionateScreenHeight(16),
+    fontWeight: FontWeight.w500,
+    fontFamily: 'NotoSansKR',
+    height: 1.1);
+final detailStyle = TextStyle(
+    fontSize: getProportionateScreenHeight(14),
+    fontWeight: FontWeight.w500,
+    fontFamily: 'NotoSansKR',
+    height: 1.1);
+
+// 숫자 스타일
+
+final ohlcInfoStyle = TextStyle(
+    fontSize: getProportionateScreenHeight(16),
+    fontWeight: FontWeight.w400,
+    fontFamily: 'NotoSansKR',
+    wordSpacing: -1.0,
+    height: 1.1);
+
+final ohlcPriceStyle = TextStyle(
+    fontSize: getProportionateScreenHeight(18),
+    fontWeight: FontWeight.w500,
+    fontFamily: 'DmSans',
+    wordSpacing: -1.0,
+    height: 1.1);
+
+final detailPriceStyle = TextStyle(
+    fontSize: getProportionateScreenHeight(16),
+    fontWeight: FontWeight.w700,
+    fontFamily: 'DmSans',
+    wordSpacing: -1.0,
+    height: 1.1);
 
 const defaultDuration = Duration(milliseconds: 250);
 

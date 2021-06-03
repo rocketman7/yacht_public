@@ -134,6 +134,19 @@ flutter:
     - family: Arkhip
       fonts:
         - asset: assets/fonts/arkhip_regular.ttf
+    - family: NotoSansKR
+      fonts:
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Regular.otf
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Thin.otf
+          weight: 200
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Light.otf
+          weight: 300
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Medium.otf
+          weight: 500
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Bold.otf
+          weight: 700
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Black.otf
+          weight: 900
     - family: DmSans
       fonts:
         - asset: assets/fonts/dm_sans/DMSans-Regular.ttf
@@ -141,21 +154,25 @@ flutter:
           weight: 500
         - asset: assets/fonts/dm_sans/DMSans-Bold.ttf
           weight: 700
-    - family: AppleSDL
+    - family: AppleSDGothicNeo
       fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoL.ttf
-    - family: AppleSDM
-      fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoM.ttf
-    - family: AppleSDB
-      fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoB.ttf
-    - family: AppleSDEB
-      fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoEB.ttf
-    - family: AppleSDH
-      fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoH.ttf
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoR.otf
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoUL.otf
+          weight: 100
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoT.otf
+          weight: 200
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoL.otf
+          weight: 300
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoM.otf
+          weight: 500
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoSB.otf
+          weight: 600
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoB.otf
+          weight: 700
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoEB.otf
+          weight: 800
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoH.otf
+          weight: 900
         # - asset: assets/fonts/advent_pro/AdventPro-SemiBold.ttf
   #   - family: Trajan Pro
   #     fonts:
