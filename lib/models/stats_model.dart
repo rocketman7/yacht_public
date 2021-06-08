@@ -3,75 +3,128 @@ import 'dart:core';
 
 class StatsModel {
   final num? year;
-  final String? dateTime;
   final String? term;
-  final num? revenue;
-  final num? profit;
-  final num? operatingIncome;
-  final num? netIncome;
-  final num? equity;
-  final num? debt;
+  final String? dateTime;
+  // FS
+  final num? currentAssets; // 유동자산
+  final num? nonCurrentAssets; // 비유동자산
+  final num? totalAssets; // 자산총계
+  final num? currentLiabilities; // 유동부채
+  final num? nonCurrentLiabilities; // 비유동부채
+  final num? totalLiabilities; // 부채총계
+  final num? shareholdersEquity; // 자본금
+  final num? retainedEarnings; // 이익잉여금
+  final num? totalShareholdersEquity; // 자본총계
+  // IS
+  final num? sales; // 매출액
+  final num? operatingIncome; // 영업이익
+  final num? incomeBeforeTaxes; // 법인세차감전 순이익
+  final num? netIncome; // 당기순이익
+
+  final bool? isOfficial; // 확정
   StatsModel({
     this.year,
-    this.dateTime,
     this.term,
-    this.revenue,
-    this.profit,
+    this.dateTime,
+    this.currentAssets,
+    this.nonCurrentAssets,
+    this.totalAssets,
+    this.currentLiabilities,
+    this.nonCurrentLiabilities,
+    this.totalLiabilities,
+    this.shareholdersEquity,
+    this.retainedEarnings,
+    this.totalShareholdersEquity,
+    this.sales,
     this.operatingIncome,
+    this.incomeBeforeTaxes,
     this.netIncome,
-    this.equity,
-    this.debt,
+    this.isOfficial,
   });
 
   StatsModel copyWith({
     num? year,
-    String? dateTime,
     String? term,
-    num? revenue,
-    num? profit,
+    String? dateTime,
+    num? currentAssets,
+    num? nonCurrentAssets,
+    num? totalAssets,
+    num? currentLiabilities,
+    num? nonCurrentLiabilities,
+    num? totalLiabilities,
+    num? shareholdersEquity,
+    num? retainedEarnings,
+    num? totalShareholdersEquity,
+    num? sales,
     num? operatingIncome,
+    num? incomeBeforeTaxes,
     num? netIncome,
-    num? equity,
-    num? debt,
+    bool? isOfficial,
   }) {
     return StatsModel(
       year: year ?? this.year,
-      dateTime: dateTime ?? this.dateTime,
       term: term ?? this.term,
-      revenue: revenue ?? this.revenue,
-      profit: profit ?? this.profit,
+      dateTime: dateTime ?? this.dateTime,
+      currentAssets: currentAssets ?? this.currentAssets,
+      nonCurrentAssets: nonCurrentAssets ?? this.nonCurrentAssets,
+      totalAssets: totalAssets ?? this.totalAssets,
+      currentLiabilities: currentLiabilities ?? this.currentLiabilities,
+      nonCurrentLiabilities:
+          nonCurrentLiabilities ?? this.nonCurrentLiabilities,
+      totalLiabilities: totalLiabilities ?? this.totalLiabilities,
+      shareholdersEquity: shareholdersEquity ?? this.shareholdersEquity,
+      retainedEarnings: retainedEarnings ?? this.retainedEarnings,
+      totalShareholdersEquity:
+          totalShareholdersEquity ?? this.totalShareholdersEquity,
+      sales: sales ?? this.sales,
       operatingIncome: operatingIncome ?? this.operatingIncome,
+      incomeBeforeTaxes: incomeBeforeTaxes ?? this.incomeBeforeTaxes,
       netIncome: netIncome ?? this.netIncome,
-      equity: equity ?? this.equity,
-      debt: debt ?? this.debt,
+      isOfficial: isOfficial ?? this.isOfficial,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'year': year,
-      'dateTime': dateTime,
       'term': term,
-      'revenue': revenue,
-      'profit': profit,
+      'dateTime': dateTime,
+      'currentAssets': currentAssets,
+      'nonCurrentAssets': nonCurrentAssets,
+      'totalAssets': totalAssets,
+      'currentLiabilities': currentLiabilities,
+      'nonCurrentLiabilities': nonCurrentLiabilities,
+      'totalLiabilities': totalLiabilities,
+      'shareholdersEquity': shareholdersEquity,
+      'retainedEarnings': retainedEarnings,
+      'totalShareholdersEquity': totalShareholdersEquity,
+      'sales': sales,
       'operatingIncome': operatingIncome,
+      'incomeBeforeTaxes': incomeBeforeTaxes,
       'netIncome': netIncome,
-      'equity': equity,
-      'debt': debt,
+      'isOfficial': isOfficial,
     };
   }
 
   factory StatsModel.fromMap(Map<String, dynamic> map) {
     return StatsModel(
       year: map['year'],
-      dateTime: map['dateTime'],
       term: map['term'],
-      revenue: map['revenue'],
-      profit: map['profit'],
+      dateTime: map['dateTime'],
+      currentAssets: map['currentAssets'],
+      nonCurrentAssets: map['nonCurrentAssets'],
+      totalAssets: map['totalAssets'],
+      currentLiabilities: map['currentLiabilities'],
+      nonCurrentLiabilities: map['nonCurrentLiabilities'],
+      totalLiabilities: map['totalLiabilities'],
+      shareholdersEquity: map['shareholdersEquity'],
+      retainedEarnings: map['retainedEarnings'],
+      totalShareholdersEquity: map['totalShareholdersEquity'],
+      sales: map['sales'],
       operatingIncome: map['operatingIncome'],
+      incomeBeforeTaxes: map['incomeBeforeTaxes'],
       netIncome: map['netIncome'],
-      equity: map['equity'],
-      debt: map['debt'],
+      isOfficial: map['isOfficial'],
     );
   }
 
@@ -82,7 +135,7 @@ class StatsModel {
 
   @override
   String toString() {
-    return 'StatsModel(year: $year, dateTime: $dateTime, term: $term, revenue: $revenue, profit: $profit, operatingIncome: $operatingIncome, netIncome: $netIncome, equity: $equity, debt: $debt)';
+    return 'StatsModel(year: $year, term: $term, dateTime: $dateTime, currentAssets: $currentAssets, nonCurrentAssets: $nonCurrentAssets, totalAssets: $totalAssets, currentLiabilities: $currentLiabilities, nonCurrentLiabilities: $nonCurrentLiabilities, totalLiabilities: $totalLiabilities, shareholdersEquity: $shareholdersEquity, retainedEarnings: $retainedEarnings, totalShareholdersEquity: $totalShareholdersEquity, sales: $sales, operatingIncome: $operatingIncome, incomeBeforeTaxes: $incomeBeforeTaxes, netIncome: $netIncome, isOfficial: $isOfficial)';
   }
 
   @override
@@ -91,26 +144,42 @@ class StatsModel {
 
     return other is StatsModel &&
         other.year == year &&
-        other.dateTime == dateTime &&
         other.term == term &&
-        other.revenue == revenue &&
-        other.profit == profit &&
+        other.dateTime == dateTime &&
+        other.currentAssets == currentAssets &&
+        other.nonCurrentAssets == nonCurrentAssets &&
+        other.totalAssets == totalAssets &&
+        other.currentLiabilities == currentLiabilities &&
+        other.nonCurrentLiabilities == nonCurrentLiabilities &&
+        other.totalLiabilities == totalLiabilities &&
+        other.shareholdersEquity == shareholdersEquity &&
+        other.retainedEarnings == retainedEarnings &&
+        other.totalShareholdersEquity == totalShareholdersEquity &&
+        other.sales == sales &&
         other.operatingIncome == operatingIncome &&
+        other.incomeBeforeTaxes == incomeBeforeTaxes &&
         other.netIncome == netIncome &&
-        other.equity == equity &&
-        other.debt == debt;
+        other.isOfficial == isOfficial;
   }
 
   @override
   int get hashCode {
     return year.hashCode ^
-        dateTime.hashCode ^
         term.hashCode ^
-        revenue.hashCode ^
-        profit.hashCode ^
+        dateTime.hashCode ^
+        currentAssets.hashCode ^
+        nonCurrentAssets.hashCode ^
+        totalAssets.hashCode ^
+        currentLiabilities.hashCode ^
+        nonCurrentLiabilities.hashCode ^
+        totalLiabilities.hashCode ^
+        shareholdersEquity.hashCode ^
+        retainedEarnings.hashCode ^
+        totalShareholdersEquity.hashCode ^
+        sales.hashCode ^
         operatingIncome.hashCode ^
+        incomeBeforeTaxes.hashCode ^
         netIncome.hashCode ^
-        equity.hashCode ^
-        debt.hashCode;
+        isOfficial.hashCode;
   }
 }

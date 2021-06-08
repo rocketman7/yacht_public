@@ -4,6 +4,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/stats_model.dart';
+import 'package:get/get.dart';
 
 class RevenueView extends StatelessWidget {
   @override
@@ -14,10 +15,10 @@ class RevenueView extends StatelessWidget {
         SizedBox(
           height: 150,
           child: SfCartesianChart(
-            zoomPanBehavior: ZoomPanBehavior(
-              zoomMode: ZoomMode.x,
-              enablePanning: true,
-            ),
+            // zoomPanBehavior: ZoomPanBehavior(
+            //   zoomMode: ZoomMode.x,
+            //   enablePanning: true,
+            // ),
             series: [
               ColumnSeries<StatsModel, num>(
                   dataSource: tempData,
@@ -25,7 +26,7 @@ class RevenueView extends StatelessWidget {
                   yValueMapper: (StatsModel stats, _) {
                     var result;
                     if (stats.term! == '1Q') {
-                      result = stats.revenue!;
+                      result = stats.sales!;
                     }
                     return result;
                   }),
@@ -35,7 +36,7 @@ class RevenueView extends StatelessWidget {
                   yValueMapper: (StatsModel stats, _) {
                     var result;
                     if (stats.term! == '2Q') {
-                      result = stats.revenue!;
+                      result = stats.sales!;
                     }
                     return result;
                   }),
@@ -45,7 +46,7 @@ class RevenueView extends StatelessWidget {
                   yValueMapper: (StatsModel stats, _) {
                     var result;
                     if (stats.term! == '3Q') {
-                      result = stats.revenue!;
+                      result = stats.sales!;
                     }
                     return result;
                   }),
@@ -56,14 +57,14 @@ class RevenueView extends StatelessWidget {
                   yValueMapper: (StatsModel stats, _) {
                     var result;
                     if (stats.term! == '4Q') {
-                      result = stats.revenue!;
+                      result = stats.sales!;
                     }
                     return result;
                   }),
             ],
             primaryXAxis: CategoryAxis(
-                zoomPosition: 1,
-                zoomFactor: 0.85,
+                // zoomPosition: 1,
+                // zoomFactor: 0.85,
                 // isInversed: true,
                 majorGridLines: MajorGridLines(
                   width: 0,
@@ -87,79 +88,79 @@ class RevenueView extends StatelessWidget {
       dateTime: '20180331',
       year: 2018,
       term: '1Q',
-      revenue: 100000,
+      sales: 100000,
     ),
     StatsModel(
       dateTime: '20180630',
       year: 2018,
       term: '2Q',
-      revenue: 110000,
+      sales: 110000,
     ),
     StatsModel(
       dateTime: '20180930',
       year: 2018,
       term: '3Q',
-      revenue: 103000,
+      sales: 103000,
     ),
     StatsModel(
       dateTime: '20181231',
       year: 2018,
       term: '4Q',
-      revenue: 132000,
+      sales: 132000,
     ),
     StatsModel(
       dateTime: '20190331',
       year: 2019,
       term: '1Q',
-      revenue: 114000,
+      sales: 114000,
     ),
     StatsModel(
       dateTime: '20190630',
       year: 2019,
       term: '2Q',
-      revenue: 113000,
+      sales: 113000,
     ),
     StatsModel(
       dateTime: '20190930',
       year: 2019,
       term: '3Q',
-      revenue: 135000,
+      sales: 135000,
     ),
     StatsModel(
       dateTime: '20191231',
       year: 2019,
       term: '4Q',
-      revenue: 111000,
+      sales: 111000,
     ),
     StatsModel(
       dateTime: '20200331',
       year: 2020,
       term: '1Q',
-      revenue: 100000,
+      sales: 100000,
     ),
     StatsModel(
       dateTime: '20200630',
       year: 2020,
       term: '2Q',
-      revenue: 110000,
+      sales: 110000,
     ),
     StatsModel(
       dateTime: '20200930',
       year: 2020,
       term: '3Q',
-      revenue: 103000,
+      sales: 103000,
     ),
     StatsModel(
       dateTime: '20201231',
       year: 2020,
       term: '4Q',
-      revenue: 132000,
+      sales: 132000,
     ),
     StatsModel(
       dateTime: '20210331',
       year: 2021,
       term: '1Q',
-      revenue: 120000,
+      sales: 120000,
     ),
   ];
 }

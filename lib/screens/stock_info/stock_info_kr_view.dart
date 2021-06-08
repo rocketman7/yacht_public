@@ -18,20 +18,19 @@ class StockInfoKrView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 8),
+              // 차트 공간
               Container(
                 width: double.infinity,
                 // height: 250,
                 // color: Colors.grey,
                 child: Center(child: ChartView(issueCode: _issueCode)),
               ),
-              SizedBox(
-                height: 16,
-              ),
+              verticalSpaceExtraLarge,
               Padding(
                 padding: kHorizontalPadding,
                 child: Text(
                   "삼성전자는?",
-                  style: Theme.of(context).textTheme.headline6,
+                  style: subtitleStyle.copyWith(color: Colors.black),
                 ),
               ),
               SizedBox(
@@ -40,17 +39,15 @@ class StockInfoKrView extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 150,
-                color: Colors.grey,
+                // color: Colors.grey,
                 child: Center(child: Text("Space for Description")),
               ),
-              SizedBox(
-                height: 16,
-              ),
+              verticalSpaceExtraLarge,
               Padding(
                 padding: kHorizontalPadding,
                 child: Text(
                   "뉴스",
-                  style: Theme.of(context).textTheme.headline6,
+                  style: subtitleStyle.copyWith(color: Colors.black),
                 ),
               ),
               SizedBox(
@@ -59,12 +56,10 @@ class StockInfoKrView extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 150,
-                color: Colors.grey,
+                // color: Colors.grey,
                 child: Center(child: Text("Space for News")),
               ),
-              SizedBox(
-                height: 16,
-              ),
+              verticalSpaceExtraLarge,
               Padding(
                 padding: kHorizontalPadding,
                 child: Row(
@@ -72,11 +67,11 @@ class StockInfoKrView extends StatelessWidget {
                   children: [
                     Text(
                       "기업정보",
-                      style: Theme.of(context).textTheme.headline6,
+                      style: subtitleStyle.copyWith(color: Colors.black),
                     ),
                     Text(
                       "최근 사업보고서 기준",
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: contentStyle,
                     ),
                   ],
                 ),
@@ -100,7 +95,7 @@ class StockInfoKrView extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 150,
-                color: Colors.grey,
+                // color: Colors.grey,
                 child: Center(child: Text("Space for ColumnChart2")),
               ),
               SizedBox(
@@ -109,7 +104,7 @@ class StockInfoKrView extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 150,
-                color: Colors.grey,
+                // color: Colors.grey,
                 child: Center(child: Text("Space for ColumnChart3")),
               ),
               SizedBox(
@@ -118,7 +113,7 @@ class StockInfoKrView extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 150,
-                color: Colors.grey,
+                // color: Colors.grey,
                 child: Center(child: Text("Space for ColumnChart4")),
               ),
               SizedBox(
@@ -127,7 +122,7 @@ class StockInfoKrView extends StatelessWidget {
               Container(
                 width: double.infinity,
                 height: 150,
-                color: Colors.grey,
+                // color: Colors.grey,
                 child: Center(child: Text("Space for ColumnChart5")),
               ),
             ],

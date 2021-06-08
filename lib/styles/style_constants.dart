@@ -17,9 +17,10 @@ const kAnimationDuration = Duration(milliseconds: 200);
 
 // k-Bull & Bear Color
 const bullColorKR = Color(0xFFEB3A4F);
-const bearColorKR = Color(0xFF4F77F7);
+const bearColorKR = Color(0xFF0091D5);
 
 // Spacing
+const verticalSpaceExtraLarge = SizedBox(height: 32);
 const verticalSpaceLarge = SizedBox(height: 24);
 const verticalSpaceMedium = SizedBox(height: 16);
 const verticalSpaceSmall = SizedBox(height: 8);
@@ -32,7 +33,7 @@ final headingStyleEN = TextStyle(
   fontWeight: FontWeight.w700,
   fontFamily: 'DmSans',
   color: Colors.black,
-  wordSpacing: -2,
+  letterSpacing: -0.5,
   height: 1.1,
 );
 
@@ -40,7 +41,7 @@ final headingStyle = TextStyle(
   fontSize: getProportionateScreenWidth(26),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
-  wordSpacing: -1,
+  letterSpacing: -0.5,
   height: 1.1,
 );
 
@@ -48,16 +49,16 @@ final titleStyle = TextStyle(
   fontSize: getProportionateScreenWidth(24),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
-  wordSpacing: -1,
+  letterSpacing: -1,
   height: 1.1,
 );
 
 final subtitleStyle = TextStyle(
   fontSize: getProportionateScreenWidth(20),
-  fontWeight: FontWeight.w400,
+  fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
-  color: Colors.grey[600],
-  wordSpacing: -1,
+  color: Color(0xff212121),
+  letterSpacing: -1,
   height: 1.1,
 );
 
@@ -78,21 +79,21 @@ final ohlcInfoStyle = TextStyle(
     fontSize: getProportionateScreenHeight(16),
     fontWeight: FontWeight.w400,
     fontFamily: 'NotoSansKR',
-    wordSpacing: -1.0,
+    letterSpacing: -0.5,
     height: 1.1);
 
 final ohlcPriceStyle = TextStyle(
     fontSize: getProportionateScreenHeight(18),
     fontWeight: FontWeight.w500,
     fontFamily: 'DmSans',
-    wordSpacing: -1.0,
+    letterSpacing: -0.5,
     height: 1.1);
 
 final detailPriceStyle = TextStyle(
     fontSize: getProportionateScreenHeight(16),
     fontWeight: FontWeight.w700,
     fontFamily: 'DmSans',
-    wordSpacing: -1.0,
+    letterSpacing: -0.5,
     height: 1.1);
 
 const defaultDuration = Duration(milliseconds: 250);

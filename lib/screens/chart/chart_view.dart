@@ -111,14 +111,15 @@ class ChartView extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(height: 8),
+                                //TODO: 변동 폭 계산 필요
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("변동",
+                                    Text(" ",
                                         style: ohlcInfoStyle.copyWith(
                                             color: Colors.grey[600])),
-                                    Text("-2.24%", style: ohlcPriceStyle)
+                                    Text("", style: ohlcPriceStyle)
                                   ],
                                 )
                               ],
@@ -240,7 +241,7 @@ class ChartView extends StatelessWidget {
                               previousXPosition !=
                                   args.chartPointInfo.xPosition) {
                             // Printing Coordinate intersect point of first line
-                            HapticFeedback.mediumImpact();
+                            HapticFeedback.lightImpact();
                             print(args.chartPointInfo.chartDataPoint!.x);
                             chartViewModel.onTrackballChanging(args);
                           }
@@ -287,6 +288,7 @@ class ChartView extends StatelessWidget {
                         series: <ChartSeries>[
                           CandleSeries<PriceChartModel, DateTime>(
                             // borderWidth: 0,
+                            animationDuration: 500,
                             bullColor: bullColorKR,
                             bearColor: bearColorKR,
                             enableSolidCandles: true,
@@ -304,13 +306,13 @@ class ChartView extends StatelessWidget {
                             showIndicationForSameValues: true,
                           ),
                           ColumnSeries<PriceChartModel, DateTime>(
-                            dataSource: chartViewModel.subList!,
-                            xValueMapper: (PriceChartModel chart, _) =>
-                                stringToDateTime(chart.dateTime!),
-                            yValueMapper: (PriceChartModel chart, _) =>
-                                chart.tradeVolume!,
-                            yAxisName: 'volume',
-                          )
+                              dataSource: chartViewModel.subList!,
+                              xValueMapper: (PriceChartModel chart, _) =>
+                                  stringToDateTime(chart.dateTime!),
+                              yValueMapper: (PriceChartModel chart, _) =>
+                                  chart.tradeVolume!,
+                              yAxisName: 'volume',
+                              color: Color(0xFF607D8B).withOpacity(.5))
                           // FastLineSeries<ChartModel, DateTime>(
                           //   dataSource: tempChartData,
                           //   yValueMapper: (ChartModel chart, _) => chart.close,
@@ -321,17 +323,20 @@ class ChartView extends StatelessWidget {
                             majorGridLines: MajorGridLines(
                               width: 0,
                             ),
-                            isVisible: true),
+                            isVisible: false),
                         primaryYAxis: NumericAxis(
-                            maximum: chartViewModel.maxPrice! * 1.01,
-                            minimum: chartViewModel.minPrice! *
-                                0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
+                            maximum: chartViewModel.maxPrice!,
+                            minimum: (5 * chartViewModel.minPrice! -
+                                    chartViewModel.maxPrice!) /
+                                4,
+                            // chartViewModel.minPrice! *
+                            //     0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
                             majorGridLines: MajorGridLines(width: 0),
                             isVisible: false),
                         axes: [
                           NumericAxis(
                               // 차트에 그려지는 PriceChartModel의 volume들 중 max값 받아서 영역의 1/5에만 그려지도록 maximum 값 설정
-                              maximum: chartViewModel.maxVolume! * 5,
+                              maximum: chartViewModel.maxVolume! * 4.5,
                               minimum: 0,
                               majorGridLines: MajorGridLines(width: 0),
                               isVisible: false,
@@ -341,27 +346,36 @@ class ChartView extends StatelessWidget {
                       ),
                     ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children:
                     List.generate(chartViewModel.cycleList.length + 1, (index) {
                   return InkWell(
                     onTap: () {
                       if (chartViewModel.selectedCycle != index) {
                         chartViewModel.selectedCycle = index;
-                        HapticFeedback.lightImpact();
+                        HapticFeedback.mediumImpact();
                         chartViewModel.changeCycle();
                       }
                     },
                     child: Container(
-                      color: Colors.blueGrey.shade100,
+                      decoration: BoxDecoration(
+                        color: (chartViewModel.selectedCycle == index)
+                            ? Color(0xFFE8EAF6)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(70),
+                      ),
+                      // color: Colors.blueGrey.shade100,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 4, vertical: 2),
+                          horizontal: 10, vertical: 6),
                       child: (index == chartViewModel.cycleList.length)
                           ? Icon(
                               Icons.auto_graph,
                               size: 18,
                             )
-                          : Text(chartViewModel.cycleList[index]),
+                          : Text(
+                              chartViewModel.cycleList[index],
+                              style: detailStyle,
+                            ),
                     ),
                   );
                 }),
