@@ -161,32 +161,32 @@ class ChartView extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "${toPriceKRW(chartViewModel.subList!.last.close!)}",
+                                          "${toPriceKRW(chartViewModel.subList!.first.close!)}",
                                           style: headingStyleEN,
                                         ),
                                         SizedBox(height: 4),
                                         Row(
                                           children: [
                                             Text(
-                                              "${toPriceChangeKRW(chartViewModel.subList!.last.close! - chartViewModel.subList!.first.close!)}",
+                                              "${toPriceChangeKRW(chartViewModel.subList!.first.close! - chartViewModel.subList!.last.close!)}",
                                               style: detailPriceStyle.copyWith(
                                                   color: (chartViewModel
                                                                   .subList!
-                                                                  .last
+                                                                  .first
                                                                   .close! -
                                                               chartViewModel
                                                                   .subList!
-                                                                  .first
+                                                                  .last
                                                                   .close!) >
                                                           0
                                                       ? bullColorKR
                                                       : (chartViewModel
                                                                       .subList!
-                                                                      .last
+                                                                      .first
                                                                       .close! -
                                                                   chartViewModel
                                                                       .subList!
-                                                                      .first
+                                                                      .last
                                                                       .close!) <
                                                               0
                                                           ? bearColorKR
@@ -194,22 +194,22 @@ class ChartView extends StatelessWidget {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                                "(${toPercentageChange(chartViewModel.subList!.last.close! / chartViewModel.subList!.first.close! - 1)})",
+                                                "(${toPercentageChange(chartViewModel.subList!.first.close! / chartViewModel.subList!.last.close! - 1)})",
                                                 style:
                                                     detailPriceStyle.copyWith(
                                                         color: (chartViewModel
                                                                             .subList!
-                                                                            .last
+                                                                            .first
                                                                             .close! /
                                                                         chartViewModel
                                                                             .subList!
-                                                                            .first
+                                                                            .last
                                                                             .close! -
                                                                     1) >
                                                                 0
                                                             ? bullColorKR
-                                                            : (chartViewModel.subList!.last.close! /
-                                                                            chartViewModel.subList!.first.close! -
+                                                            : (chartViewModel.subList!.first.close! /
+                                                                            chartViewModel.subList!.last.close! -
                                                                         1) <
                                                                     0
                                                                 ? bearColorKR
@@ -240,6 +240,8 @@ class ChartView extends StatelessWidget {
                               previousXPosition !=
                                   args.chartPointInfo.xPosition) {
                             // Printing Coordinate intersect point of first line
+                            HapticFeedback.mediumImpact();
+                            print(args.chartPointInfo.chartDataPoint!.x);
                             chartViewModel.onTrackballChanging(args);
                           }
                           if (args.chartPointInfo.seriesIndex == 1) {
@@ -249,7 +251,6 @@ class ChartView extends StatelessWidget {
 
                           // }
                           previousXPosition = args.chartPointInfo.xPosition!;
-                          HapticFeedback.lightImpact();
 
                           // if (args.chartPointInfo.seriesIndex == 0) {
                           //   // Printing Coordinate intersect point of first line
@@ -282,14 +283,14 @@ class ChartView extends StatelessWidget {
                         ),
                         plotAreaBorderWidth: 0,
                         enableAxisAnimation: true,
+
                         series: <ChartSeries>[
                           CandleSeries<PriceChartModel, DateTime>(
                             // borderWidth: 0,
                             bullColor: bullColorKR,
                             bearColor: bearColorKR,
                             enableSolidCandles: true,
-                            dataSource:
-                                chartViewModel.priceList!.sublist(1, 60),
+                            dataSource: chartViewModel.subList!,
                             lowValueMapper: (PriceChartModel chart, _) =>
                                 chart.low,
                             highValueMapper: (PriceChartModel chart, _) =>
@@ -300,10 +301,10 @@ class ChartView extends StatelessWidget {
                                 chart.close,
                             xValueMapper: (PriceChartModel chart, _) =>
                                 stringToDateTime(chart.dateTime!),
+                            showIndicationForSameValues: true,
                           ),
                           ColumnSeries<PriceChartModel, DateTime>(
-                            dataSource:
-                                chartViewModel.priceList!.sublist(1, 60),
+                            dataSource: chartViewModel.subList!,
                             xValueMapper: (PriceChartModel chart, _) =>
                                 stringToDateTime(chart.dateTime!),
                             yValueMapper: (PriceChartModel chart, _) =>
@@ -324,7 +325,7 @@ class ChartView extends StatelessWidget {
                         primaryYAxis: NumericAxis(
                             maximum: chartViewModel.maxPrice! * 1.01,
                             minimum: chartViewModel.minPrice! *
-                                0.95, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
+                                0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
                             majorGridLines: MajorGridLines(width: 0),
                             isVisible: false),
                         axes: [
@@ -342,17 +343,26 @@ class ChartView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children:
-                    List.generate(chartViewModel.termList.length + 1, (index) {
-                  return Container(
-                    color: Colors.blueGrey.shade100,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                    child: (index == chartViewModel.termList.length)
-                        ? Icon(
-                            Icons.auto_graph,
-                            size: 18,
-                          )
-                        : Text(chartViewModel.termList[index]),
+                    List.generate(chartViewModel.cycleList.length + 1, (index) {
+                  return InkWell(
+                    onTap: () {
+                      if (chartViewModel.selectedCycle != index) {
+                        chartViewModel.selectedCycle = index;
+                        HapticFeedback.lightImpact();
+                        chartViewModel.changeCycle();
+                      }
+                    },
+                    child: Container(
+                      color: Colors.blueGrey.shade100,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 2),
+                      child: (index == chartViewModel.cycleList.length)
+                          ? Icon(
+                              Icons.auto_graph,
+                              size: 18,
+                            )
+                          : Text(chartViewModel.cycleList[index]),
+                    ),
                   );
                 }),
                 //

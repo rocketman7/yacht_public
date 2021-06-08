@@ -12,6 +12,33 @@ NumberFormat formatPriceChangeUSD = NumberFormat("+#,##0.00; -#,##0.00");
 // 퍼센티지
 NumberFormat formatPercentage = NumberFormat("##.0%");
 NumberFormat formatPercentageChange = NumberFormat("+0.00%;-0.00%");
+// 큰 숫자 처리
+String parseBigNumberKRW(num bigNumber) {
+  bool isNegative = false;
+  if (bigNumber < 0) {
+    isNegative = true;
+  }
+
+  if (bigNumber.abs() >= 1000000000000) {
+    num mod = bigNumber.abs() % 1000000000000;
+
+    return (isNegative ? "-" : "") +
+        formatPriceKRW.format((bigNumber.abs() / 1000000000000).floor()) +
+        "조 " +
+        formatPriceKRW.format((mod / 100000000).floor()) +
+        "억";
+  } else if (bigNumber.abs() >= 100000000) {
+    return (isNegative ? "-" : "") +
+        formatPriceKRW.format((bigNumber.abs() / 100000000).floor()) +
+        "억";
+  } else if (bigNumber.abs() >= 10000) {
+    return (isNegative ? "-" : "") +
+        formatPriceKRW.format((bigNumber.abs() / 10000).floor()) +
+        "만";
+  } else {
+    return (isNegative ? "-" : "") + formatPriceKRW.format(bigNumber.abs());
+  }
+}
 
 // 변환하는 함수. 전역으로 이거 쓰면 됨.
 String toPriceKRW(num number) {

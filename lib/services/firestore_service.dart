@@ -13,13 +13,13 @@ class FirestoreService extends GetxService {
   // 차트 그리기 위한 Historical Price
   Future<List<PriceChartModel>> getPrices() async {
     CollectionReference _samsungElectronic =
-        _firestoreService.collection('temp/KR/005930');
+        _firestoreService.collection('stocksKR/005930/historicalPrices');
 
     List<PriceChartModel> _priceChartModelList = [];
 
     try {
       await _samsungElectronic
-          .orderBy('date', descending: true)
+          .orderBy('dateTime', descending: true)
           .get()
           .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
                 // print(doc.id);  // document id 출력
