@@ -321,7 +321,7 @@ class ChartView extends StatelessWidget {
                             majorGridLines: MajorGridLines(
                               width: 0,
                             ),
-                            isVisible: false),
+                            isVisible: true),
                         primaryYAxis: NumericAxis(
                             maximum: chartViewModel.maxPrice! * 1.01,
                             minimum: chartViewModel.minPrice! *
