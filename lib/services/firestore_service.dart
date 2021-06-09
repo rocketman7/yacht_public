@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/models/price_chart_model.dart';
+import 'package:yachtOne/models/stats_model.dart';
 
 class FirestoreService extends GetxService {
   final FirebaseFirestore _firestoreService = FirebaseFirestore.instance;
@@ -14,7 +15,8 @@ class FirestoreService extends GetxService {
   Future<List<PriceChartModel>> getPrices() async {
     CollectionReference _samsungElectronic =
         _firestoreService.collection('stocksKR/005930/historicalPrices');
-
+    CollectionReference _skBioPharm =
+        _firestoreService.collection('stocksKR/326030/historicalPrices');
     List<PriceChartModel> _priceChartModelList = [];
 
     try {
@@ -28,6 +30,32 @@ class FirestoreService extends GetxService {
               }));
       // print(_priceChartModelList);
       return _priceChartModelList;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<StatsModel>> getStats() async {
+    CollectionReference _samsungElectronic =
+        _firestoreService.collection('stocksKR/005930/stats');
+    CollectionReference _skBioPharm =
+        _firestoreService.collection('stocksKR/326030/stats');
+    CollectionReference _abKo =
+        _firestoreService.collection('stocksKR/129890/stats');
+    List<StatsModel> _statstModelList = [];
+
+    try {
+      await _skBioPharm
+          .orderBy('dateTime', descending: true)
+          .get()
+          .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
+                // print(doc.id);  // document id 출력
+                _statstModelList.add(
+                    StatsModel.fromMap(doc.data() as Map<String, dynamic>));
+              }));
+      // print(_statstModelList);
+
+      return _statstModelList;
     } catch (e) {
       throw e;
     }

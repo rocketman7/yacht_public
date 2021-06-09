@@ -2,84 +2,101 @@ import 'dart:convert';
 import 'dart:core';
 
 class StatsModel {
-  final num? year;
+  final String? year;
   final String? term;
   final String? dateTime;
-  // FS
-  final num? currentAssets; // 유동자산
-  final num? nonCurrentAssets; // 비유동자산
-  final num? totalAssets; // 자산총계
-  final num? currentLiabilities; // 유동부채
-  final num? nonCurrentLiabilities; // 비유동부채
-  final num? totalLiabilities; // 부채총계
-  final num? shareholdersEquity; // 자본금
-  final num? retainedEarnings; // 이익잉여금
-  final num? totalShareholdersEquity; // 자본총계
+  // BS
+  final num? currentAssetsBS; // 유동자산
+  final num? nonCurrentAssetsBS; // 비유동자산
+  final num? totalAssetsBS; // 자산총계
+  final num? currentLiabilitiesBS; // 유동부채
+  final num? nonCurrentLiabilitiesBS; // 비유동부채
+  final num? totalLiabilitiesBS; // 부채총계
+  final num? shareholdersEquityBS; // 자본금
+  final num? retainedEarningsBS; // 이익잉여금
+  final num? totalShareholdersEquityBS; // 자본총계
   // IS
-  final num? sales; // 매출액
-  final num? operatingIncome; // 영업이익
-  final num? incomeBeforeTaxes; // 법인세차감전 순이익
-  final num? netIncome; // 당기순이익
+  final num? salesIS; // 매출액
+  final num? operatingIncomeIS; // 영업이익
+  final num? incomeBeforeTaxesIS; // 법인세차감전 순이익
+  final num? netIncomeIS; // 당기순이익
+  final num? salesAccIS; // 누적 매출액
+  final num? operatingIncomeAccIS; // 누적 영업이익
+  final num? incomeBeforeTaxesAccIS; // 누적 법인세차감전 순이익
+  final num? netIncomeAccIS; // 누적 당기순이익
 
   final bool? isOfficial; // 확정
   StatsModel({
     this.year,
     this.term,
     this.dateTime,
-    this.currentAssets,
-    this.nonCurrentAssets,
-    this.totalAssets,
-    this.currentLiabilities,
-    this.nonCurrentLiabilities,
-    this.totalLiabilities,
-    this.shareholdersEquity,
-    this.retainedEarnings,
-    this.totalShareholdersEquity,
-    this.sales,
-    this.operatingIncome,
-    this.incomeBeforeTaxes,
-    this.netIncome,
+    this.currentAssetsBS,
+    this.nonCurrentAssetsBS,
+    this.totalAssetsBS,
+    this.currentLiabilitiesBS,
+    this.nonCurrentLiabilitiesBS,
+    this.totalLiabilitiesBS,
+    this.shareholdersEquityBS,
+    this.retainedEarningsBS,
+    this.totalShareholdersEquityBS,
+    this.salesIS,
+    this.operatingIncomeIS,
+    this.incomeBeforeTaxesIS,
+    this.netIncomeIS,
+    this.salesAccIS,
+    this.operatingIncomeAccIS,
+    this.incomeBeforeTaxesAccIS,
+    this.netIncomeAccIS,
     this.isOfficial,
   });
 
   StatsModel copyWith({
-    num? year,
+    String? year,
     String? term,
     String? dateTime,
-    num? currentAssets,
-    num? nonCurrentAssets,
-    num? totalAssets,
-    num? currentLiabilities,
-    num? nonCurrentLiabilities,
-    num? totalLiabilities,
-    num? shareholdersEquity,
-    num? retainedEarnings,
-    num? totalShareholdersEquity,
-    num? sales,
-    num? operatingIncome,
-    num? incomeBeforeTaxes,
-    num? netIncome,
+    num? currentAssetsBS,
+    num? nonCurrentAssetsBS,
+    num? totalAssetsBS,
+    num? currentLiabilitiesBS,
+    num? nonCurrentLiabilitiesBS,
+    num? totalLiabilitiesBS,
+    num? shareholdersEquityBS,
+    num? retainedEarningsBS,
+    num? totalShareholdersEquityBS,
+    num? salesIS,
+    num? operatingIncomeIS,
+    num? incomeBeforeTaxesIS,
+    num? netIncomeIS,
+    num? salesAccIS,
+    num? operatingIncomeAccIS,
+    num? incomeBeforeTaxesAccIS,
+    num? netIncomeAccIS,
     bool? isOfficial,
   }) {
     return StatsModel(
       year: year ?? this.year,
       term: term ?? this.term,
       dateTime: dateTime ?? this.dateTime,
-      currentAssets: currentAssets ?? this.currentAssets,
-      nonCurrentAssets: nonCurrentAssets ?? this.nonCurrentAssets,
-      totalAssets: totalAssets ?? this.totalAssets,
-      currentLiabilities: currentLiabilities ?? this.currentLiabilities,
-      nonCurrentLiabilities:
-          nonCurrentLiabilities ?? this.nonCurrentLiabilities,
-      totalLiabilities: totalLiabilities ?? this.totalLiabilities,
-      shareholdersEquity: shareholdersEquity ?? this.shareholdersEquity,
-      retainedEarnings: retainedEarnings ?? this.retainedEarnings,
-      totalShareholdersEquity:
-          totalShareholdersEquity ?? this.totalShareholdersEquity,
-      sales: sales ?? this.sales,
-      operatingIncome: operatingIncome ?? this.operatingIncome,
-      incomeBeforeTaxes: incomeBeforeTaxes ?? this.incomeBeforeTaxes,
-      netIncome: netIncome ?? this.netIncome,
+      currentAssetsBS: currentAssetsBS ?? this.currentAssetsBS,
+      nonCurrentAssetsBS: nonCurrentAssetsBS ?? this.nonCurrentAssetsBS,
+      totalAssetsBS: totalAssetsBS ?? this.totalAssetsBS,
+      currentLiabilitiesBS: currentLiabilitiesBS ?? this.currentLiabilitiesBS,
+      nonCurrentLiabilitiesBS:
+          nonCurrentLiabilitiesBS ?? this.nonCurrentLiabilitiesBS,
+      totalLiabilitiesBS: totalLiabilitiesBS ?? this.totalLiabilitiesBS,
+      shareholdersEquityBS: shareholdersEquityBS ?? this.shareholdersEquityBS,
+      retainedEarningsBS: retainedEarningsBS ?? this.retainedEarningsBS,
+      totalShareholdersEquityBS:
+          totalShareholdersEquityBS ?? this.totalShareholdersEquityBS,
+      salesIS: salesIS ?? this.salesIS,
+      operatingIncomeIS: operatingIncomeIS ?? this.operatingIncomeIS,
+      incomeBeforeTaxesIS: incomeBeforeTaxesIS ?? this.incomeBeforeTaxesIS,
+      netIncomeIS: netIncomeIS ?? this.netIncomeIS,
+      salesAccIS: salesAccIS ?? this.salesAccIS,
+      operatingIncomeAccIS: operatingIncomeAccIS ?? this.operatingIncomeAccIS,
+      incomeBeforeTaxesAccIS:
+          incomeBeforeTaxesAccIS ?? this.incomeBeforeTaxesAccIS,
+      netIncomeAccIS: netIncomeAccIS ?? this.netIncomeAccIS,
       isOfficial: isOfficial ?? this.isOfficial,
     );
   }
@@ -89,19 +106,23 @@ class StatsModel {
       'year': year,
       'term': term,
       'dateTime': dateTime,
-      'currentAssets': currentAssets,
-      'nonCurrentAssets': nonCurrentAssets,
-      'totalAssets': totalAssets,
-      'currentLiabilities': currentLiabilities,
-      'nonCurrentLiabilities': nonCurrentLiabilities,
-      'totalLiabilities': totalLiabilities,
-      'shareholdersEquity': shareholdersEquity,
-      'retainedEarnings': retainedEarnings,
-      'totalShareholdersEquity': totalShareholdersEquity,
-      'sales': sales,
-      'operatingIncome': operatingIncome,
-      'incomeBeforeTaxes': incomeBeforeTaxes,
-      'netIncome': netIncome,
+      'currentAssetsBS': currentAssetsBS,
+      'nonCurrentAssetsBS': nonCurrentAssetsBS,
+      'totalAssetsBS': totalAssetsBS,
+      'currentLiabilitiesBS': currentLiabilitiesBS,
+      'nonCurrentLiabilitiesBS': nonCurrentLiabilitiesBS,
+      'totalLiabilitiesBS': totalLiabilitiesBS,
+      'shareholdersEquityBS': shareholdersEquityBS,
+      'retainedEarningsBS': retainedEarningsBS,
+      'totalShareholdersEquityBS': totalShareholdersEquityBS,
+      'salesIS': salesIS,
+      'operatingIncomeIS': operatingIncomeIS,
+      'incomeBeforeTaxesIS': incomeBeforeTaxesIS,
+      'netIncomeIS': netIncomeIS,
+      'salesAccIS': salesAccIS,
+      'operatingIncomeAccIS': operatingIncomeAccIS,
+      'incomeBeforeTaxesAccIS': incomeBeforeTaxesAccIS,
+      'netIncomeAccIS': netIncomeAccIS,
       'isOfficial': isOfficial,
     };
   }
@@ -111,19 +132,23 @@ class StatsModel {
       year: map['year'],
       term: map['term'],
       dateTime: map['dateTime'],
-      currentAssets: map['currentAssets'],
-      nonCurrentAssets: map['nonCurrentAssets'],
-      totalAssets: map['totalAssets'],
-      currentLiabilities: map['currentLiabilities'],
-      nonCurrentLiabilities: map['nonCurrentLiabilities'],
-      totalLiabilities: map['totalLiabilities'],
-      shareholdersEquity: map['shareholdersEquity'],
-      retainedEarnings: map['retainedEarnings'],
-      totalShareholdersEquity: map['totalShareholdersEquity'],
-      sales: map['sales'],
-      operatingIncome: map['operatingIncome'],
-      incomeBeforeTaxes: map['incomeBeforeTaxes'],
-      netIncome: map['netIncome'],
+      currentAssetsBS: map['currentAssetsBS'],
+      nonCurrentAssetsBS: map['nonCurrentAssetsBS'],
+      totalAssetsBS: map['totalAssetsBS'],
+      currentLiabilitiesBS: map['currentLiabilitiesBS'],
+      nonCurrentLiabilitiesBS: map['nonCurrentLiabilitiesBS'],
+      totalLiabilitiesBS: map['totalLiabilitiesBS'],
+      shareholdersEquityBS: map['shareholdersEquityBS'],
+      retainedEarningsBS: map['retainedEarningsBS'],
+      totalShareholdersEquityBS: map['totalShareholdersEquityBS'],
+      salesIS: map['salesIS'],
+      operatingIncomeIS: map['operatingIncomeIS'],
+      incomeBeforeTaxesIS: map['incomeBeforeTaxesIS'],
+      netIncomeIS: map['netIncomeIS'],
+      salesAccIS: map['salesAccIS'],
+      operatingIncomeAccIS: map['operatingIncomeAccIS'],
+      incomeBeforeTaxesAccIS: map['incomeBeforeTaxesAccIS'],
+      netIncomeAccIS: map['netIncomeAccIS'],
       isOfficial: map['isOfficial'],
     );
   }
@@ -135,7 +160,7 @@ class StatsModel {
 
   @override
   String toString() {
-    return 'StatsModel(year: $year, term: $term, dateTime: $dateTime, currentAssets: $currentAssets, nonCurrentAssets: $nonCurrentAssets, totalAssets: $totalAssets, currentLiabilities: $currentLiabilities, nonCurrentLiabilities: $nonCurrentLiabilities, totalLiabilities: $totalLiabilities, shareholdersEquity: $shareholdersEquity, retainedEarnings: $retainedEarnings, totalShareholdersEquity: $totalShareholdersEquity, sales: $sales, operatingIncome: $operatingIncome, incomeBeforeTaxes: $incomeBeforeTaxes, netIncome: $netIncome, isOfficial: $isOfficial)';
+    return 'StatsModel(year: $year, term: $term, dateTime: $dateTime, currentAssetsBS: $currentAssetsBS, nonCurrentAssetsBS: $nonCurrentAssetsBS, totalAssetsBS: $totalAssetsBS, currentLiabilitiesBS: $currentLiabilitiesBS, nonCurrentLiabilitiesBS: $nonCurrentLiabilitiesBS, totalLiabilitiesBS: $totalLiabilitiesBS, shareholdersEquityBS: $shareholdersEquityBS, retainedEarningsBS: $retainedEarningsBS, totalShareholdersEquityBS: $totalShareholdersEquityBS, salesIS: $salesIS, operatingIncomeIS: $operatingIncomeIS, incomeBeforeTaxesIS: $incomeBeforeTaxesIS, netIncomeIS: $netIncomeIS, salesAccIS: $salesAccIS, operatingIncomeAccIS: $operatingIncomeAccIS, incomeBeforeTaxesAccIS: $incomeBeforeTaxesAccIS, netIncomeAccIS: $netIncomeAccIS, isOfficial: $isOfficial)';
   }
 
   @override
@@ -146,19 +171,23 @@ class StatsModel {
         other.year == year &&
         other.term == term &&
         other.dateTime == dateTime &&
-        other.currentAssets == currentAssets &&
-        other.nonCurrentAssets == nonCurrentAssets &&
-        other.totalAssets == totalAssets &&
-        other.currentLiabilities == currentLiabilities &&
-        other.nonCurrentLiabilities == nonCurrentLiabilities &&
-        other.totalLiabilities == totalLiabilities &&
-        other.shareholdersEquity == shareholdersEquity &&
-        other.retainedEarnings == retainedEarnings &&
-        other.totalShareholdersEquity == totalShareholdersEquity &&
-        other.sales == sales &&
-        other.operatingIncome == operatingIncome &&
-        other.incomeBeforeTaxes == incomeBeforeTaxes &&
-        other.netIncome == netIncome &&
+        other.currentAssetsBS == currentAssetsBS &&
+        other.nonCurrentAssetsBS == nonCurrentAssetsBS &&
+        other.totalAssetsBS == totalAssetsBS &&
+        other.currentLiabilitiesBS == currentLiabilitiesBS &&
+        other.nonCurrentLiabilitiesBS == nonCurrentLiabilitiesBS &&
+        other.totalLiabilitiesBS == totalLiabilitiesBS &&
+        other.shareholdersEquityBS == shareholdersEquityBS &&
+        other.retainedEarningsBS == retainedEarningsBS &&
+        other.totalShareholdersEquityBS == totalShareholdersEquityBS &&
+        other.salesIS == salesIS &&
+        other.operatingIncomeIS == operatingIncomeIS &&
+        other.incomeBeforeTaxesIS == incomeBeforeTaxesIS &&
+        other.netIncomeIS == netIncomeIS &&
+        other.salesAccIS == salesAccIS &&
+        other.operatingIncomeAccIS == operatingIncomeAccIS &&
+        other.incomeBeforeTaxesAccIS == incomeBeforeTaxesAccIS &&
+        other.netIncomeAccIS == netIncomeAccIS &&
         other.isOfficial == isOfficial;
   }
 
@@ -167,19 +196,23 @@ class StatsModel {
     return year.hashCode ^
         term.hashCode ^
         dateTime.hashCode ^
-        currentAssets.hashCode ^
-        nonCurrentAssets.hashCode ^
-        totalAssets.hashCode ^
-        currentLiabilities.hashCode ^
-        nonCurrentLiabilities.hashCode ^
-        totalLiabilities.hashCode ^
-        shareholdersEquity.hashCode ^
-        retainedEarnings.hashCode ^
-        totalShareholdersEquity.hashCode ^
-        sales.hashCode ^
-        operatingIncome.hashCode ^
-        incomeBeforeTaxes.hashCode ^
-        netIncome.hashCode ^
+        currentAssetsBS.hashCode ^
+        nonCurrentAssetsBS.hashCode ^
+        totalAssetsBS.hashCode ^
+        currentLiabilitiesBS.hashCode ^
+        nonCurrentLiabilitiesBS.hashCode ^
+        totalLiabilitiesBS.hashCode ^
+        shareholdersEquityBS.hashCode ^
+        retainedEarningsBS.hashCode ^
+        totalShareholdersEquityBS.hashCode ^
+        salesIS.hashCode ^
+        operatingIncomeIS.hashCode ^
+        incomeBeforeTaxesIS.hashCode ^
+        netIncomeIS.hashCode ^
+        salesAccIS.hashCode ^
+        operatingIncomeAccIS.hashCode ^
+        incomeBeforeTaxesAccIS.hashCode ^
+        netIncomeAccIS.hashCode ^
         isOfficial.hashCode;
   }
 }

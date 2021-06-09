@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yachtOne/screens/chart/chart_view.dart';
-import 'package:yachtOne/screens/stats/revenue/revenue_view.dart';
+import 'package:yachtOne/screens/stats/stats_view.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
@@ -76,54 +76,13 @@ class StockInfoKrView extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
-              Padding(
-                padding: kHorizontalPadding,
-                child: Text("매출액"),
-              ),
+              verticalSpaceLarge,
+
               Container(
                 width: double.infinity,
-                height: 150,
+                // height: 150,
                 // color: Colors.grey,
-                child: RevenueView(),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                width: double.infinity,
-                height: 150,
-                // color: Colors.grey,
-                child: Center(child: Text("Space for ColumnChart2")),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                width: double.infinity,
-                height: 150,
-                // color: Colors.grey,
-                child: Center(child: Text("Space for ColumnChart3")),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                width: double.infinity,
-                height: 150,
-                // color: Colors.grey,
-                child: Center(child: Text("Space for ColumnChart4")),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                width: double.infinity,
-                height: 150,
-                // color: Colors.grey,
-                child: Center(child: Text("Space for ColumnChart5")),
+                child: StatsView(),
               ),
             ],
           ),

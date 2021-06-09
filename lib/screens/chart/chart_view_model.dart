@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:ffi';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:math';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -44,6 +46,8 @@ class ChartViewModel extends GetxController {
   Rx<num> volume = 0.obs;
   RxString? dateTime;
 
+  RxDouble opacity = 1.0.obs;
+
   // 이 뷰모델을 불러오면 onInit 실행.
   @override
   onInit() {
@@ -51,8 +55,27 @@ class ChartViewModel extends GetxController {
     return fetchPrices();
   }
 
+  Timer? _timer;
+  void opacityDown() {
+    if (opacity.value == 1) {
+      _timer = Timer.periodic(Duration(milliseconds: 1), (timer) {
+        if (opacity.value <= 0.1) {
+          // opacity(opacity.value = 0.0);
+          timer.cancel();
+        } else {
+          opacity(opacity.value -= 0.02);
+          // print(opacity.value);
+        }
+      });
+    }
+  }
+
   // Trackball 움직이고 있을 때
   void onTrackballChanging(TrackballArgs trackballArgs) {
+    if (opacity.value < 0.1) {
+      opacity(0.0);
+    }
+    // Future.delayed(Duration(seconds: 1), () {
     isTracking(true);
     if (trackballArgs.chartPointInfo.seriesIndex == 0) {
       open(trackballArgs.chartPointInfo.chartDataPoint!.open as int);
@@ -62,12 +85,16 @@ class ChartViewModel extends GetxController {
     } else {
       volume(trackballArgs.chartPointInfo.chartDataPoint!.yValue);
     }
+    // });
+
     // print(trackballArgs.chartPointInfo.series);
     // volume(trackballArgs.chartPointInfo.series.!.y as int);
   }
 
   // 차트에서 손 떼고 Trackball 없어질 때
   void onTracballEnds() {
+    opacity(opacity.value = 1);
+    _timer!.cancel();
     isTracking(false);
   }
 
@@ -170,6 +197,7 @@ class ChartViewModel extends GetxController {
         do {
           days.add(intradayPriceList[i].dateTime!.substring(0, 8));
           i++;
+          if (i > intradayPriceList.length - 1) break;
         } while (days.length <= 5);
 
         // 차트에 쓸 데이터들만
@@ -194,6 +222,7 @@ class ChartViewModel extends GetxController {
         do {
           days.add(intradayPriceList[i].dateTime!.substring(0, 8));
           i++;
+          if (i > intradayPriceList.length - 1) break;
         } while (days.length <= 20);
 
         // 차트에 쓸 데이터들만
@@ -220,6 +249,7 @@ class ChartViewModel extends GetxController {
             stringToDateTime(latestDate)!.subtract(Duration(days: 91)))) {
           temp.add(dailyPriceList[i]);
           i++;
+          if (i > dailyPriceList.length - 1) break;
         }
         subList = temp;
 
@@ -240,6 +270,7 @@ class ChartViewModel extends GetxController {
             stringToDateTime(latestDate)!.subtract(Duration(days: 366)))) {
           subdataForThisInterval.add(dailyPriceList[i]);
           i++;
+          if (i > dailyPriceList.length - 1) break;
         }
 
         // dateTime 오름차순으로 정렬
@@ -301,6 +332,7 @@ class ChartViewModel extends GetxController {
             stringToDateTime(latestDate)!.subtract(Duration(days: 1825)))) {
           subdataForThisInterval.add(dailyPriceList[i]);
           i++;
+          if (i > dailyPriceList.length - 1) break;
         }
 
         // dateTime 오름차순으로 정렬

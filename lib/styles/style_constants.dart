@@ -19,6 +19,16 @@ const kAnimationDuration = Duration(milliseconds: 200);
 const bullColorKR = Color(0xFFEB3A4F);
 const bearColorKR = Color(0xFF0091D5);
 
+// Volume Color
+Color volumeColor = Color(0xFF607D8B).withOpacity(.5);
+
+// Income Statement Bar Chart & Line Chart Color
+Color barColor1 = Color(0xFF607D8B).withOpacity(.3);
+Color barColor2 = Color(0xFF607D8B).withOpacity(.5);
+Color barColor3 = Color(0xFF607D8B).withOpacity(.7);
+Color barColor4 = Color(0xFF607D8B).withOpacity(.9);
+Color accLineColor = Color(0xFFFAAC00).withOpacity(.8);
+
 // Spacing
 const verticalSpaceExtraLarge = SizedBox(height: 32);
 const verticalSpaceLarge = SizedBox(height: 24);
