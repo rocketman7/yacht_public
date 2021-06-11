@@ -86,7 +86,8 @@ class YachtDesignSystem extends StatelessWidget {
                   style: headingStyleEN,
                 ),
                 SizedBox(width: 16),
-                Text("종목 정보에 메인 가격", style: contentStyle),
+                Text("시장 관련 숫자는 DmSans",
+                    style: contentStyle.copyWith(fontFamily: 'DmSans')),
               ],
             ),
             verticalSpaceSmall,
@@ -139,7 +140,7 @@ class YachtDesignSystem extends StatelessWidget {
                       )
                     ],
                   )),
-                  SizedBox(width: 36),
+                  horizontalSpaceExtraLarge,
                   Expanded(
                       child: Column(
                     children: [
@@ -176,6 +177,77 @@ class YachtDesignSystem extends StatelessWidget {
                   ))
                 ],
               ),
+            ),
+            verticalSpaceMedium,
+            Divider(),
+            verticalSpaceMedium,
+            Text(
+              "버튼 스타일",
+              style: headingStyle,
+            ),
+            verticalSpaceMedium,
+            // verticalSpaceExtraLarge
+            Text(
+              "토글 버튼",
+              style: subtitleStyle,
+            ),
+            verticalSpaceMedium,
+            Row(
+              children: [
+                Container(
+                    decoration: BoxDecoration(
+                      color: toggleButtonColor,
+                      borderRadius: BorderRadius.circular(70),
+                    ),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    child: Icon(
+                      Icons.auto_graph,
+                      size: 18,
+                    )),
+                horizontalSpaceSmall,
+                Container(
+                  decoration: BoxDecoration(
+                    color: toggleButtonColor,
+                    borderRadius: BorderRadius.circular(70),
+                  ),
+                  // color: Colors.blueGrey.shade100,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  child: Text(
+                    "1주일",
+                    style: detailStyle,
+                  ),
+                ),
+                horizontalSpaceSmall,
+                Container(
+                  decoration: BoxDecoration(
+                    // color: toggleButton,
+                    borderRadius: BorderRadius.circular(70),
+                  ),
+                  // color: Colors.blueGrey.shade100,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  child: Text(
+                    "분기",
+                    style: detailStyle,
+                  ),
+                ),
+                horizontalSpaceSmall,
+                Container(
+                  decoration: BoxDecoration(
+                    color: toggleButtonColor,
+                    borderRadius: BorderRadius.circular(70),
+                  ),
+                  // color: Colors.blueGrey.shade100,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  child: Text(
+                    "연간",
+                    style: detailStyle,
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               height: 100,

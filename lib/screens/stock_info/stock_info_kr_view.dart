@@ -60,27 +60,9 @@ class StockInfoKrView extends StatelessWidget {
                 child: Center(child: Text("Space for News")),
               ),
               verticalSpaceExtraLarge,
-              Padding(
-                padding: kHorizontalPadding,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "기업정보",
-                      style: subtitleStyle.copyWith(color: Colors.black),
-                    ),
-                    Text(
-                      "최근 사업보고서 기준",
-                      style: contentStyle,
-                    ),
-                  ],
-                ),
-              ),
-              verticalSpaceLarge,
 
               Container(
                 width: double.infinity,
-                // height: 150,
                 // color: Colors.grey,
                 child: StatsView(),
               ),

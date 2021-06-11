@@ -17,11 +17,13 @@ class ChartViewModel extends GetxController {
   // Rx<List<PriceChartModel>> priceList = Rx<List<PriceChartModel>>();
   // List<PriceChartModel> get prices => priceList.value;
 
-  List<PriceChartModel>? priceList;
-  List<PriceChartModel> dailyPriceList = [];
-  List<PriceChartModel> intradayPriceList = [];
-  List<PriceChartModel>? subList;
-  List<String> cycleList = ["1일", "1주", "1개월", "3개월", "1년", "5년"];
+  List<PriceChartModel>? prices;
+  List<PriceChartModel> dailyPrices = [];
+  List<PriceChartModel> intradayPrices = [];
+  List<PriceChartModel>? chartPrices; //차트에 쓰일 최종 가격 데이터
+  List<String> cycles = ["1일", "1주", "1개월", "3개월", "1년", "5년"];
+  // 차트 전환 토글
+  RxBool showingCandleChart = true.obs;
 
   // 차트 주기 선택
   int selectedCycle = 0;
@@ -44,7 +46,6 @@ class ChartViewModel extends GetxController {
   Rx<num> high = 0.obs;
   Rx<num> low = 0.obs;
   Rx<num> volume = 0.obs;
-  RxString? dateTime;
 
   RxDouble opacity = 1.0.obs;
 
@@ -52,7 +53,12 @@ class ChartViewModel extends GetxController {
   @override
   onInit() {
     super.onInit();
-    return fetchPrices();
+    return getPrices();
+  }
+
+  void toggleChartType() {
+    showingCandleChart(!showingCandleChart.value);
+    update();
   }
 
   Timer? _timer;
@@ -72,19 +78,27 @@ class ChartViewModel extends GetxController {
 
   // Trackball 움직이고 있을 때
   void onTrackballChanging(TrackballArgs trackballArgs) {
+    isTracking(true);
     if (opacity.value < 0.1) {
       opacity(0.0);
     }
     // Future.delayed(Duration(seconds: 1), () {
-    isTracking(true);
-    if (trackballArgs.chartPointInfo.seriesIndex == 0) {
-      open(trackballArgs.chartPointInfo.chartDataPoint!.open as int);
-      close(trackballArgs.chartPointInfo.chartDataPoint!.close as int);
-      high(trackballArgs.chartPointInfo.chartDataPoint!.high as int);
-      low(trackballArgs.chartPointInfo.chartDataPoint!.low as int);
+    if (showingCandleChart.value) {
+      print("candle tracking");
+      if (trackballArgs.chartPointInfo.seriesIndex == 0) {
+        open(trackballArgs.chartPointInfo.chartDataPoint!.open as int);
+        close(trackballArgs.chartPointInfo.chartDataPoint!.close as int);
+        high(trackballArgs.chartPointInfo.chartDataPoint!.high as int);
+        low(trackballArgs.chartPointInfo.chartDataPoint!.low as int);
+      } else {
+        volume(trackballArgs.chartPointInfo.chartDataPoint!.yValue);
+      }
     } else {
-      volume(trackballArgs.chartPointInfo.chartDataPoint!.yValue);
+      print("line tracking");
+      // // print(trackballArgs.chartPointInfo.chartDataPoint!.y);
+      close(trackballArgs.chartPointInfo.chartDataPoint!.y as int);
     }
+
     // });
 
     // print(trackballArgs.chartPointInfo.series);
@@ -101,9 +115,9 @@ class ChartViewModel extends GetxController {
   // subList를 기간 별로 만들어주는 로직 필요
 
 // update()는 notifyListeners() 처럼 쓰면 되고 그 전에 Future에서 받아온 데이터 넣으면 됨.
-  void fetchPrices() async {
+  void getPrices() async {
     // print("get Called");
-    priceList = await _firestoreService.getPrices();
+    prices = await _firestoreService.getPrices();
     // subList 기본값 만들어줘야 함
 
     // 선택된 기간에 따라 priceList 다루기
@@ -118,12 +132,12 @@ class ChartViewModel extends GetxController {
     // print(today.subtract(Duration(days: 7)));
 
     // 가져오는 PriceList는 최신이 first로, 오래된 것이 last로 정렬된다
-    priceList!.forEach((e) {
+    prices!.forEach((e) {
       if (e.cycle == "D") {
-        dailyPriceList.add(e);
+        dailyPrices.add(e);
       } else if (e.cycle == "10M") {
         // print("10M detected");
-        intradayPriceList.add(e);
+        intradayPrices.add(e);
       }
     });
 
@@ -154,7 +168,7 @@ class ChartViewModel extends GetxController {
     changeCycle();
 
     // combineCandles(subList!);
-    getMaxMin();
+    calculateMaxMin();
     update();
   }
 
@@ -162,27 +176,26 @@ class ChartViewModel extends GetxController {
   // 1) 먼저 받아온 차트 데이터에서 기간 별로 나눠주는 로직 구현하고,
   // 2) 데이터가 충분하지 않을 때 어떻게 처리할지 구현해야 함. (빅히트로)
   void changeCycle() {
-    switch (cycleList[selectedCycle]) {
+    switch (cycles[selectedCycle]) {
       case "1일":
         // 임시 price chart model list를 만들고
         List<PriceChartModel> temp = [];
         // intraday price list를 처음(현재로부터 가장 최신)부터 loop
         // print(i);
-        for (int i = 0; i < intradayPriceList.length; i++) {
+        for (int i = 0; i < intradayPrices.length; i++) {
           // intradayPriceList.first, 즉 가장 최신의 intraday 데이터에서
           // dateTime을 string으로 변환.
-          String? latestDate =
-              intradayPriceList.first.dateTime!.substring(0, 8);
+          String? latestDate = intradayPrices.first.dateTime!.substring(0, 8);
           //
-          if (intradayPriceList[i].dateTime!.substring(0, 8) == latestDate) {
-            temp.add(intradayPriceList[i]);
+          if (intradayPrices[i].dateTime!.substring(0, 8) == latestDate) {
+            temp.add(intradayPrices[i]);
           } else {
             break;
           }
         }
 
-        subList = temp;
-        getMaxMin();
+        chartPrices = temp;
+        calculateMaxMin();
         update();
         break;
 
@@ -195,20 +208,20 @@ class ChartViewModel extends GetxController {
         int i = 0;
         // 5 영업일 고르고
         do {
-          days.add(intradayPriceList[i].dateTime!.substring(0, 8));
+          days.add(intradayPrices[i].dateTime!.substring(0, 8));
           i++;
-          if (i > intradayPriceList.length - 1) break;
+          if (i > intradayPrices.length - 1) break;
         } while (days.length <= 5);
 
         // 차트에 쓸 데이터들만
-        subdataForThisInterval = intradayPriceList.sublist(0, i - 1);
+        subdataForThisInterval = intradayPrices.sublist(0, i - 1);
         // dateTime 오름차순으로 정렬
         subdataForThisInterval
             .sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
 
-        subList = loopByCycle(subdataForThisInterval, interval);
+        chartPrices = loopByCycle(subdataForThisInterval, interval);
 
-        getMaxMin();
+        calculateMaxMin();
         update();
         break;
 
@@ -220,57 +233,57 @@ class ChartViewModel extends GetxController {
         int i = 0;
         // 5 영업일 고르고
         do {
-          days.add(intradayPriceList[i].dateTime!.substring(0, 8));
+          days.add(intradayPrices[i].dateTime!.substring(0, 8));
           i++;
-          if (i > intradayPriceList.length - 1) break;
+          if (i > intradayPrices.length - 1) break;
         } while (days.length <= 20);
 
         // 차트에 쓸 데이터들만
-        subdataForThisInterval = intradayPriceList.sublist(0, i - 1);
+        subdataForThisInterval = intradayPrices.sublist(0, i - 1);
         // dateTime 오름차순으로 정렬
         subdataForThisInterval
             .sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
 
-        subList = loopByCycle(subdataForThisInterval, interval);
-        getMaxMin();
+        chartPrices = loopByCycle(subdataForThisInterval, interval);
+        calculateMaxMin();
         update();
         break;
 
       case "3개월":
         List<PriceChartModel> temp = [];
 
-        String? latestDate = dailyPriceList.first.dateTime!.substring(0, 8);
+        String? latestDate = dailyPrices.first.dateTime!.substring(0, 8);
         // print(latestDate);
 
         int i = 0;
         // loop 조건이 끝나면 바로 나갈 수 있게 if 대신 while로
         // 현재로부터 90일 이전 날짜까지 포함시키기
-        while (stringToDateTime(dailyPriceList[i].dateTime!)!.isAfter(
+        while (stringToDateTime(dailyPrices[i].dateTime!)!.isAfter(
             stringToDateTime(latestDate)!.subtract(Duration(days: 91)))) {
-          temp.add(dailyPriceList[i]);
+          temp.add(dailyPrices[i]);
           i++;
-          if (i > dailyPriceList.length - 1) break;
+          if (i > dailyPrices.length - 1) break;
         }
-        subList = temp;
+        chartPrices = temp;
 
-        getMaxMin();
+        calculateMaxMin();
         update();
         break;
 
       case "1년":
         List<PriceChartModel> subdataForThisInterval = [];
 
-        subList = [];
+        chartPrices = [];
         int interval = 5;
 
-        String? latestDate = dailyPriceList.first.dateTime!.substring(0, 8);
+        String? latestDate = dailyPrices.first.dateTime!.substring(0, 8);
         int i = 0;
         // 1년 전 데이터부터 오늘까지
-        while (stringToDateTime(dailyPriceList[i].dateTime!)!.isAfter(
+        while (stringToDateTime(dailyPrices[i].dateTime!)!.isAfter(
             stringToDateTime(latestDate)!.subtract(Duration(days: 366)))) {
-          subdataForThisInterval.add(dailyPriceList[i]);
+          subdataForThisInterval.add(dailyPrices[i]);
           i++;
-          if (i > dailyPriceList.length - 1) break;
+          if (i > dailyPrices.length - 1) break;
         }
 
         // dateTime 오름차순으로 정렬
@@ -279,7 +292,7 @@ class ChartViewModel extends GetxController {
 
         int j = 0;
         List<PriceChartModel> temp = [];
-        subList = [];
+        chartPrices = [];
 
         for (int i = 0; i < subdataForThisInterval.length - 1; i++) {
           //weekday 1~5만
@@ -300,39 +313,68 @@ class ChartViewModel extends GetxController {
             temp.add(subdataForThisInterval[i]);
             PriceChartModel combinedModel = combineCandles(temp);
             // temp에 있는 가격들의 OHLC 합쳐서 새 모델 만들어야 함.
-            subList!.add(combinedModel);
+            chartPrices!.add(combinedModel);
             temp = [];
           } else {
             temp.add(subdataForThisInterval[i]);
             if (i + 1 == subdataForThisInterval.length - 1) {
               temp.add(subdataForThisInterval[i + 1]);
               PriceChartModel combinedModel = combineCandles(temp);
-              subList!.add(combinedModel);
+              chartPrices!.add(combinedModel);
               temp = [];
             }
           }
         }
 
-        subList!.sort((b, a) => a.dateTime!.compareTo(b.dateTime!));
+        chartPrices!.sort((b, a) => a.dateTime!.compareTo(b.dateTime!));
 
-        getMaxMin();
+        calculateMaxMin();
         update();
         break;
 
       case "5년":
         List<PriceChartModel> subdataForThisInterval = [];
 
-        subList = [];
+        chartPrices = [];
         int interval = 5;
 
-        String? latestDate = dailyPriceList.first.dateTime!.substring(0, 8);
+        String? latestDate = dailyPrices.first.dateTime!.substring(0, 8);
         int i = 0;
         // 1년 전 데이터부터 오늘까지
-        while (stringToDateTime(dailyPriceList[i].dateTime!)!.isAfter(
+        while (stringToDateTime(dailyPrices[i].dateTime!)!.isAfter(
             stringToDateTime(latestDate)!.subtract(Duration(days: 1825)))) {
-          subdataForThisInterval.add(dailyPriceList[i]);
+          subdataForThisInterval.add(dailyPrices[i]);
           i++;
-          if (i > dailyPriceList.length - 1) break;
+          if (i > dailyPrices.length - 1) {
+            print(i);
+            break;
+            // subdataForThisInterval.add(PriceChartModel(
+            //   dateTime: dateTimeToString(
+            //       stringToDateTime(dailyPrices[i - 1].dateTime!)!
+            //           .subtract(Duration(days: 1)),
+            //       8),
+            //   open: dailyPrices[i - 1].open,
+            //   close: dailyPrices[i - 1].close,
+            //   high: dailyPrices[i - 1].high,
+            //   low: dailyPrices[i - 1].low,
+            // )
+            // );
+            // subdataForThisInterval.add(
+            //   subdataForThisInterval[i - 2].copyWith(
+            //     dateTime: dateTimeToString(
+            //         stringToDateTime(subdataForThisInterval[i - 1].dateTime!)!
+            //             .subtract(Duration(days: 1)),
+            //         8),
+            //     open: subdataForThisInterval[i - 2].open,
+            //     close: subdataForThisInterval[i - 2].open,
+            //     high: subdataForThisInterval[i - 2].open,
+            //     low: subdataForThisInterval[i - 2].open,
+            //     tradeAmount: 0,
+            //     tradeVolume: 0,
+            //   ),
+            // );
+          }
+          // break;
         }
 
         // dateTime 오름차순으로 정렬
@@ -341,7 +383,7 @@ class ChartViewModel extends GetxController {
 
         int j = 0;
         List<PriceChartModel> temp = [];
-        subList = [];
+        chartPrices = [];
 
         for (int i = 0; i < subdataForThisInterval.length - 1; i++) {
           //weekday 1~5만
@@ -352,20 +394,20 @@ class ChartViewModel extends GetxController {
             temp.add(subdataForThisInterval[i]);
             PriceChartModel combinedModel = combineCandles(temp);
             // temp에 있는 가격들의 OHLC 합쳐서 새 모델 만들어야 함.
-            subList!.add(combinedModel);
+            chartPrices!.add(combinedModel);
             temp = [];
           } else {
             temp.add(subdataForThisInterval[i]);
             if (i + 1 == subdataForThisInterval.length - 1) {
               temp.add(subdataForThisInterval[i + 1]);
               PriceChartModel combinedModel = combineCandles(temp);
-              subList!.add(combinedModel);
+              chartPrices!.add(combinedModel);
               temp = [];
             }
           }
         }
-        subList!.sort((b, a) => a.dateTime!.compareTo(b.dateTime!));
-        getMaxMin();
+        chartPrices!.sort((b, a) => a.dateTime!.compareTo(b.dateTime!));
+        calculateMaxMin();
         update();
         break;
 
@@ -451,17 +493,17 @@ class ChartViewModel extends GetxController {
   }
 
   // 차트에 그려줄 subList of PriceChartModel에서 각각 가격, 거래량 max, min 값 구하기
-  void getMaxMin() {
+  void calculateMaxMin() {
     DateTime start, end;
     start = DateTime.now();
-    _maxPrice = quiver.max(
-            List.generate(subList!.length, (index) => subList![index].high))! *
+    _maxPrice = quiver.max(List.generate(
+            chartPrices!.length, (index) => chartPrices![index].high))! *
         1.00;
-    _minPrice = quiver.min(
-            List.generate(subList!.length, (index) => subList![index].low))! *
+    _minPrice = quiver.min(List.generate(
+            chartPrices!.length, (index) => chartPrices![index].low))! *
         1.00;
     _maxVolume = quiver.max(List.generate(
-            subList!.length, (index) => subList![index].tradeVolume))! *
+            chartPrices!.length, (index) => chartPrices![index].tradeVolume))! *
         1.00;
     // _minVolume = quiver.min(List.generate(
     //         subList!.length, (index) => subList![index].tradeVolume))! *

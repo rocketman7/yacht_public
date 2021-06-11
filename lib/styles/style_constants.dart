@@ -27,13 +27,22 @@ Color barColor1 = Color(0xFF607D8B).withOpacity(.3);
 Color barColor2 = Color(0xFF607D8B).withOpacity(.5);
 Color barColor3 = Color(0xFF607D8B).withOpacity(.7);
 Color barColor4 = Color(0xFF607D8B).withOpacity(.9);
-Color accLineColor = Color(0xFFFAAC00).withOpacity(.8);
+// Color accLineColor = Color(0xFFFAAC00).withOpacity(.8);
 
+// Button Color
+const toggleButtonColor = Color(0xFFE8EAF6);
+const termToggleButtonColor = Color(0xFF6e608b);
+const termToggleSelectedTextColor = Color(0xffe6f2f2);
+const termToggleNotSelectedTextColor = Colors.black87;
 // Spacing
 const verticalSpaceExtraLarge = SizedBox(height: 32);
 const verticalSpaceLarge = SizedBox(height: 24);
 const verticalSpaceMedium = SizedBox(height: 16);
 const verticalSpaceSmall = SizedBox(height: 8);
+const horizontalSpaceExtraLarge = SizedBox(width: 32);
+const horizontalSpaceLarge = SizedBox(width: 24);
+const horizontalSpaceMedium = SizedBox(width: 16);
+const horizontalSpaceSmall = SizedBox(width: 8);
 const kHorizontalPadding = EdgeInsets.symmetric(horizontal: 16);
 const kSymmetricPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16);
 
@@ -76,11 +85,13 @@ final contentStyle = TextStyle(
     fontSize: getProportionateScreenHeight(16),
     fontWeight: FontWeight.w500,
     fontFamily: 'NotoSansKR',
+    letterSpacing: -.5,
     height: 1.1);
 final detailStyle = TextStyle(
     fontSize: getProportionateScreenHeight(14),
     fontWeight: FontWeight.w500,
     fontFamily: 'NotoSansKR',
+    letterSpacing: -.5,
     height: 1.1);
 
 // 숫자 스타일
@@ -105,6 +116,16 @@ final detailPriceStyle = TextStyle(
     fontFamily: 'DmSans',
     letterSpacing: -0.5,
     height: 1.1);
+
+Container toggleButton(Widget child, Color color) {
+  return Container(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(70),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      child: child);
+}
 
 const defaultDuration = Duration(milliseconds: 250);
 

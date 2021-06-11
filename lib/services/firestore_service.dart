@@ -45,7 +45,7 @@ class FirestoreService extends GetxService {
     List<StatsModel> _statstModelList = [];
 
     try {
-      await _skBioPharm
+      await _samsungElectronic
           .orderBy('dateTime', descending: true)
           .get()
           .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
