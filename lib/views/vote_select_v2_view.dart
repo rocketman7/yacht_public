@@ -25,6 +25,7 @@ import 'package:yachtOne/view_models/top_container_view_model.dart';
 import 'package:yachtOne/views/user_survey_view.dart';
 import 'package:yachtOne/views/winner_view.dart';
 import 'package:yachtOne/views/yacht_portfolio_view.dart';
+import 'package:yachtOne/views/yacht_portfolio_viewOld.dart';
 import '../views/widgets/customized_circular_check_box/customized_circular_check_box.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/cupertino.dart';
@@ -1341,6 +1342,7 @@ class _VoteSelectV2ViewState extends State<VoteSelectV2View>
                                             context,
                                             CupertinoPageRoute(
                                                 builder: (context) =>
+                                                    // YachtPortfolioViewOld()));
                                                     YachtPortfolioView()));
 
                                         // Navigator.push(
