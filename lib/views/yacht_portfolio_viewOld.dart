@@ -9,6 +9,7 @@ import 'dart:math' as math;
 import 'package:yachtOne/views/constants/size.dart';
 import '../view_models/yacht_portfolio_view_model.dart';
 
+/*
 // 필요한 const 및 dummy model을 아래에. const는 나중에 어플 통합 const로서 관리되면 더 좋고
 // dummy model 도 실제 model 이 되어 DB로 관리할 수 있어야 함.
 const double heightForSliverFlexibleSpace =
@@ -16,8 +17,7 @@ const double heightForSliverFlexibleSpace =
 const double paddingForRewardText = 8.0; // 상금 주식 가치 텍스트 위의 패딩(마진)
 const Color sliverAppBarColor = Color(0xFFD9D9D9);
 const Color backgroundColor = Colors.white;
-
-// fontSize가 n이라면 그 높이는 height가 n인 Container와 유사하다.
+////////////////////////////////////////////
 
 class YachtPortfolioViewOld extends StatelessWidget {
   final ScrollController _scrollController =
@@ -1400,4 +1400,730 @@ class _AnimationScrollState extends State<AnimationScroll> {
     );
   }
 }
+*/
+*/
+
+/*import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:stacked/stacked.dart';
+
+import 'dart:math' as math;
+
+import 'package:yachtOne/views/constants/size.dart';
+
+import '../view_models/yacht_portfolio_view_model.dart';
+
+// 앱 전체적으로 관리되는 색깔, 폰트 등
+const Color backgroundColor = Colors.white;
+const double mainPadding = 16.0;
+
+// text size get 함수
+Size textSizeGet(String txt, TextStyle txtStyle) {
+  return (TextPainter(
+          text: TextSpan(text: txt, style: txtStyle),
+          maxLines: 1,
+          textDirection: TextDirection.ltr)
+        ..layout())
+      .size;
+}
+
+class YachtPortfolioView extends StatelessWidget {
+  // final ScrollController _scrollController =
+  //     ScrollController(initialScrollOffset: 0.0);
+
+  @override
+  Widget build(BuildContext context) {
+    return ViewModelBuilder<YachtPortfolioViewModel>.reactive(
+        viewModelBuilder: () => YachtPortfolioViewModel(),
+        builder: (context, model, child) {
+          return Scaffold(
+            backgroundColor: backgroundColor,
+            // body: CustomScrollView(),
+            body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: mainPadding, right: mainPadding),
+                    child: Text('상금 주식 포트폴리오',
+                        style:
+                            TextStyle(fontFamily: 'AppleSDB', fontSize: 22.0)),
+                  ),
+                  SizedBox(
+                    height: 24.0,
+                  ),
+                  PortfolioArcChart(),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+}
+
+class PortfolioArcChart extends StatelessWidget {
+  final double portfolioArcRadius = deviceWidth - mainPadding * 2;
+
+  final Size size1 =
+      textSizeGet('46%', TextStyle(fontFamily: 'AppleSDEB', fontSize: 22.0));
+  final Size size2 =
+      textSizeGet('25%', TextStyle(fontFamily: 'AppleSDEB', fontSize: 22.0));
+  final Size size3 =
+      textSizeGet('16%', TextStyle(fontFamily: 'AppleSDEB', fontSize: 22.0));
+  final Size size11 =
+      textSizeGet('삼성전자', TextStyle(fontFamily: 'AppleSDM', fontSize: 12.0));
+  final Size size22 = textSizeGet('NHN한국사이버결제NHN한국사이버결제NHN한국사이버결제',
+      TextStyle(fontFamily: 'AppleSDM', fontSize: 12.0));
+  final Size size33 = textSizeGet(
+      '라이프사이언스테크놀로지', TextStyle(fontFamily: 'AppleSDM', fontSize: 12.0));
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: mainPadding, right: mainPadding),
+      child: Container(
+        width: portfolioArcRadius,
+        height: portfolioArcRadius,
+        child: Stack(children: [
+          GestureDetector(
+            onTap: () {},
+            child: CustomPaint(
+              size: Size(portfolioArcRadius, portfolioArcRadius),
+              painter: PortfolioArcChartPainter(
+                  center:
+                      Offset(portfolioArcRadius / 2, portfolioArcRadius / 2),
+                  color: '4F77F7',
+                  percentage1: 0.0,
+                  percentage2: 46.0),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: CustomPaint(
+              size: Size(portfolioArcRadius, portfolioArcRadius),
+              painter: PortfolioArcChartPainter(
+                  center:
+                      Offset(portfolioArcRadius / 2, portfolioArcRadius / 2),
+                  color: '5399E0',
+                  percentage1: 46.0,
+                  percentage2: 46.0 + 25.0),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: CustomPaint(
+              size: Size(portfolioArcRadius, portfolioArcRadius),
+              painter: PortfolioArcChartPainter(
+                  center:
+                      Offset(portfolioArcRadius / 2, portfolioArcRadius / 2),
+                  color: '48BADD',
+                  percentage1: 46.0 + 25.0,
+                  percentage2: 46.0 + 25.0 + 16.0),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: CustomPaint(
+              size: Size(portfolioArcRadius, portfolioArcRadius),
+              painter: PortfolioArcChartPainter(
+                  center:
+                      Offset(portfolioArcRadius / 2, portfolioArcRadius / 2),
+                  color: '4CEDE9',
+                  percentage1: 46.0 + 25.0 + 16.0,
+                  percentage2: 46.0 + 25.0 + 16.0 + 7.0),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: CustomPaint(
+              size: Size(portfolioArcRadius, portfolioArcRadius),
+              painter: PortfolioArcChartPainter(
+                  center:
+                      Offset(portfolioArcRadius / 2, portfolioArcRadius / 2),
+                  color: '88F3F1',
+                  percentage1: 46.0 + 25.0 + 16.0 + 7.0,
+                  percentage2: 46.0 + 25.0 + 16.0 + 7.0 + 3.0),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: CustomPaint(
+              size: Size(portfolioArcRadius, portfolioArcRadius),
+              painter: PortfolioArcChartPainter(
+                  center:
+                      Offset(portfolioArcRadius / 2, portfolioArcRadius / 2),
+                  color: 'BEF1F0',
+                  percentage1: 46.0 + 25.0 + 16.0 + 7.0 + 3.0,
+                  percentage2: 46.0 + 25.0 + 16.0 + 7.0 + 3.0 + 2.0),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: CustomPaint(
+              size: Size(portfolioArcRadius, portfolioArcRadius),
+              painter: PortfolioArcChartPainter(
+                  center:
+                      Offset(portfolioArcRadius / 2, portfolioArcRadius / 2),
+                  color: 'CFF8F7',
+                  percentage1: 46.0 + 25.0 + 16.0 + 7.0 + 3.0 + 2.0,
+                  percentage2: 46.0 + 25.0 + 16.0 + 7.0 + 3.0 + 2.0 + 1.0),
+            ),
+          ),
+          Positioned(
+            left: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.cos(2 * math.pi * ((0.0 + 46.0) / 2 / 100)) -
+                size1.width / 2,
+            top: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.sin(2 * math.pi * ((0.0 + 46.0) / 2 / 100)) -
+                size1.height,
+            child: Text(
+              '46%',
+              style: TextStyle(fontFamily: 'AppleSDEB', fontSize: 22.0),
+            ),
+          ),
+          Positioned(
+              left: portfolioArcRadius / 2 +
+                  (portfolioArcRadius / 2) *
+                      0.6 *
+                      math.cos(2 * math.pi * ((0.0 + 46.0) / 2 / 100)) -
+                  size11.width / 2 -
+                  3,
+              top: portfolioArcRadius / 2 +
+                  (portfolioArcRadius / 2) *
+                      0.6 *
+                      math.sin(2 * math.pi * ((0.0 + 46.0) / 2 / 100)),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 3,
+                  horizontal: 3,
+                ),
+                decoration: BoxDecoration(
+                    color: Color(0xFF4F77F7).withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(
+                      5.0,
+                    )),
+                child: Text(
+                  '삼성전자',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontFamily: 'AppleSDM'),
+                ),
+              )),
+          Positioned(
+            left: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.cos(2 * math.pi * ((46.0 + 71.0) / 2 / 100)) -
+                size2.width / 2,
+            top: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.sin(2 * math.pi * ((46.0 + 71.0) / 2 / 100)) -
+                size2.height,
+            child: Text(
+              '25%',
+              style: TextStyle(fontFamily: 'AppleSDEB', fontSize: 22.0),
+            ),
+          ),
+          Positioned(
+              left: portfolioArcRadius / 2 +
+                  (portfolioArcRadius / 2) *
+                      0.6 *
+                      math.cos(2 * math.pi * ((46.0 + 71.0) / 2 / 100)) -
+                  size22.width / 2 -
+                  3 +
+                  52,
+              top: portfolioArcRadius / 2 +
+                  (portfolioArcRadius / 2) *
+                      0.6 *
+                      math.sin(2 * math.pi * ((46.0 + 71.0) / 2 / 100)),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 3,
+                  horizontal: 3,
+                ),
+                decoration: BoxDecoration(
+                    color: Color(0xFF5399E0).withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(
+                      5.0,
+                    )),
+                child: Text(
+                  'NHN한국사이버결제NHN한국사이버결제NHN한국사이버결제',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontFamily: 'AppleSDM'),
+                ),
+              )),
+          Positioned(
+            left: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.cos(2 * math.pi * ((71.0 + 87.0) / 2 / 100)) -
+                size2.width / 2,
+            top: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.sin(2 * math.pi * ((71.0 + 87.0) / 2 / 100)) -
+                size2.height,
+            child: Text(
+              '16%',
+              style: TextStyle(fontFamily: 'AppleSDEB', fontSize: 22.0),
+            ),
+          ),
+          Positioned(
+              left: portfolioArcRadius / 2 +
+                  (portfolioArcRadius / 2) *
+                      0.6 *
+                      math.cos(2 * math.pi * ((71.0 + 87.0) / 2 / 100)) -
+                  size33.width / 2 -
+                  3,
+              top: portfolioArcRadius / 2 +
+                  (portfolioArcRadius / 2) *
+                      0.6 *
+                      math.sin(2 * math.pi * ((71.0 + 87.0) / 2 / 100)),
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 3,
+                  horizontal: 3,
+                ),
+                decoration: BoxDecoration(
+                    color: Color(0xFF48BADD).withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(
+                      5.0,
+                    )),
+                child: Text(
+                  '라이프사이언스테크놀로지',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontFamily: 'AppleSDM'),
+                ),
+              )),
+          Positioned(
+            left: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.cos(2 * math.pi * ((0.0 + 46.0) / 2 / 100)) -
+                2,
+            top: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.sin(2 * math.pi * ((0.0 + 46.0) / 2 / 100)) -
+                2,
+            child: Container(
+              height: 4.0,
+              width: 4.0,
+              color: Colors.red,
+            ),
+          ),
+          Positioned(
+            left: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.cos(2 * math.pi * ((46.0 + 71.0) / 2 / 100)) -
+                2,
+            top: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.sin(2 * math.pi * ((46.0 + 71.0) / 2 / 100)) -
+                2,
+            child: Container(
+              height: 4.0,
+              width: 4.0,
+              color: Colors.red,
+            ),
+          ),
+          Positioned(
+            left: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.cos(2 * math.pi * ((71.0 + 87.0) / 2 / 100)) -
+                2,
+            top: portfolioArcRadius / 2 +
+                (portfolioArcRadius / 2) *
+                    0.6 *
+                    math.sin(2 * math.pi * ((71.0 + 87.0) / 2 / 100)) -
+                2,
+            child: Container(
+              height: 4.0,
+              width: 4.0,
+              color: Colors.red,
+            ),
+          ),
+          CustomPaint(
+            size: Size(portfolioArcRadius * 0.2, portfolioArcRadius * 0.2),
+            painter: PortfolioArcChartPainter(
+                center: Offset(portfolioArcRadius / 2, portfolioArcRadius / 2),
+                color: 'FFFFFF',
+                percentage1: 0.0,
+                percentage2: 100.0),
+          ),
+        ]),
+      ),
+    );
+  }
+}
+
+class PortfolioArcChartPainter extends CustomPainter {
+  Offset center;
+  String color;
+  double percentage1 = 0.0;
+  double percentage2 = 0.0;
+
+  PortfolioArcChartPainter(
+      {this.center, this.color, this.percentage1, this.percentage2});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = Color(int.parse('FF$color', radix: 16))
+      ..style = PaintingStyle.fill;
+
+    double radius = size.width / 2;
+
+    if (percentage1 != 100) percentage1 = percentage1 % 100;
+    if (percentage2 != 100) percentage2 = percentage2 % 100;
+
+    if (percentage1 > percentage2) {
+      double arcAngle1 = 2 * math.pi * (percentage1 / 100);
+      canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle1,
+          2 * math.pi - arcAngle1, true, paint);
+
+      double arcAngle2 = 2 * math.pi * (percentage2 / 100);
+      canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
+          2 * math.pi, arcAngle2, true, paint);
+    } else {
+      double arcAngle1 = 2 * math.pi * (percentage1 / 100);
+      double arcAngle2 = 2 * math.pi * (percentage2 / 100);
+      canvas.drawArc(Rect.fromCircle(center: center, radius: radius), arcAngle1,
+          arcAngle2 - arcAngle1, true, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(PortfolioArcChartPainter oldDelegate) {
+    return false;
+  }
+
+  @override
+  bool hitTest(Offset position) {
+    return super.hitTest(position);
+    //   return paint.contains(position);
+  }
+}
+
+/*class PortfolioModel {
+  final String stockName;
+  final int sharesNum;
+  final double currentPrice;
+
+  PortfolioModel({this.stockName, this.sharesNum, this.currentPrice});
+}
+
+List<PortfolioModel> portfolioModel = [
+  PortfolioModel(stockName: '한국타이어앤테크놀로지', sharesNum: 30, currentPrice: 30000),
+  PortfolioModel(stockName: '삼성전자', sharesNum: 15, currentPrice: 100000)
+];
+
+Size textSizeGet(String portionTxt, String stockNameTxt,
+    TextStyle portionTxtStyle, TextStyle stockNameTxtStyle) {
+  Size portionTxtsize = (TextPainter(
+          text: TextSpan(text: portionTxt, style: portionTxtStyle),
+          maxLines: 1,
+          textDirection: TextDirection.ltr)
+        ..layout())
+      .size;
+  Size stockNameTxtsize = (TextPainter(
+          text: TextSpan(text: stockNameTxt, style: stockNameTxtStyle),
+          maxLines: 1,
+          textDirection: TextDirection.ltr)
+        ..layout())
+      .size;
+
+  return Size(math.max(portionTxtsize.width, stockNameTxtsize.width),
+      (portionTxtsize.height + stockNameTxtsize.height));
+}
+
+final TextStyle portionTxtStyle = TextStyle(
+  fontFamily: 'AppleSDEB',
+  fontSize: 22.0,
+);
+final TextStyle stockNameTxtStyle = TextStyle(
+  fontFamily: 'AppleSDL',
+  fontSize: 12.0,
+);
+
+class YachtPortfolioView extends StatelessWidget {
+  final List<Size> sizes = [
+    textSizeGet(
+        '40%', portfolioModel[0].stockName, portionTxtStyle, stockNameTxtStyle),
+    textSizeGet(
+        '60%', portfolioModel[1].stockName, portionTxtStyle, stockNameTxtStyle),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+          child: Stack(
+        children: [
+          Positioned(
+            left: 200 - sizes[0].width / 2,
+            top: 200 - sizes[0].height / 2,
+            child: Column(
+              children: [
+                Text(
+                  '46%',
+                  style: portionTxtStyle,
+                ),
+                Text(
+                  '${portfolioModel[0].stockName}',
+                  style: stockNameTxtStyle,
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            left: 200 - 1.5,
+            top: 200 - 1.5,
+            child: Container(
+              color: Colors.red,
+              height: 3,
+              width: 3,
+            ),
+          ),
+        ],
+      )),
+    );
+  }
+}*/
+
+// class YachtPortfolioView extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       body: SafeArea(
+//           child: Column(
+//         children: [
+//           // Container(
+//           //   height: 100,
+//           //   width: 100,
+//           // ),
+//           // Container(height: 100, width: 100, color: Colors.red),
+//           // Stack(
+//           //   children: [
+//           //     GestureDetector(
+//           //       onTap: () {
+//           //         print('dd1');
+//           //       },
+//           //       child: CustomPaint(
+//           //           size: Size(100, 100),
+//           //           painter: YachtPortfolioArcChart('4F77F7', 0.0, 60.0)),
+//           //     ),
+//           //     /*GestureDetector(
+//           //       onTap: () {
+//           //         print('dd2');
+//           //       },
+//           //       child: CustomPaint(
+//           //           size: Size(100, 100),
+//           //           painter: YachtPortfolioArcChart('5399E0', 60.0, 85.0)),
+//           //     ),
+//           //     GestureDetector(
+//           //       onTap: () {
+//           //         print('dd3');
+//           //       },
+//           //       child: CustomPaint(
+//           //           size: Size(100, 100),
+//           //           painter: YachtPortfolioArcChart('48BADD', 85.0, 94.0)),
+//           //     ),
+//           //     GestureDetector(
+//           //       onTap: () {
+//           //         print('dd4');
+//           //       },
+//           //       child: CustomPaint(
+//           //           size: Size(100, 100),
+//           //           painter: YachtPortfolioArcChart('4CEDE9', 94.0, 99.0)),
+//           //     ),*/
+//           //   ],
+//           // ),
+//           Stack(
+//             children: [
+//               CustomPaint(
+//                   size: Size(300, 300),
+//                   painter: YachtPortfolioArcChart('4F77F7', 50.0, 65.0)),
+//               // CustomPaint(
+//               //     size: Size(300, 300),
+//               //     painter: YachtPortfolioArcChart('5399E0', 55.0, 60.0)),
+//               Positioned(
+//                 left: 300 / 2 +
+//                     300 /
+//                         2 *
+//                         0.75 *
+//                         math.cos(2 * math.pi * ((50.0 + 65.0) / 2 / 100)),
+//                 top: 300 / 2 +
+//                     300 /
+//                         2 *
+//                         0.75 *
+//                         math.sin(2 * math.pi * ((50.0 + 65.0) / 2 / 100)),
+//                 child: Container(
+//                   width: 11 * 12.0 * 0.9 + 6,
+//                   height: 22.0 + 12.0 + 6.0 + 9.0,
+//                   color: Colors.grey,
+//                   child: Column(
+//                     children: [
+//                       Text(
+//                         '46%',
+//                         style: TextStyle(
+//                             fontSize: 22.0, fontWeight: FontWeight.bold),
+//                       ),
+//                       Container(
+//                         padding: const EdgeInsets.symmetric(
+//                           vertical: 3,
+//                           horizontal: 3,
+//                         ),
+//                         decoration: BoxDecoration(
+//                             color: Color(0xFF4F77F7).withOpacity(0.8),
+//                             borderRadius: BorderRadius.circular(
+//                               5.0,
+//                             )),
+//                         child: Text(
+//                           '한국타이어앤테크놀로지',
+//                           style: TextStyle(
+//                             color: Colors.black,
+//                             fontSize: 12,
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//               // Positioned(
+//               //   left: 300 / 2 +
+//               //       300 /
+//               //           2 *
+//               //           0.75 *
+//               //           math.cos(2 * math.pi * ((50.0 + 55.0) / 2 / 100)) -
+//               //       11,
+//               //   top: 300 / 2 +
+//               //       300 /
+//               //           2 *
+//               //           0.75 *
+//               //           math.sin(2 * math.pi * ((50.0 + 55.0) / 2 / 100)) -
+//               //       11 / 2 -
+//               //       6 -
+//               //       8,
+//               //   child:
+//               //       // Container(
+//               //       //   color: Colors.black,
+//               //       //   height: 4,
+//               //       //   width: 4,
+//               //       // ),
+//               //       Text(
+//               //     '46%',
+//               //     style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+//               //   ),
+//               // ),
+//               // Positioned(
+//               //   left: 300 / 2 +
+//               //       300 /
+//               //           2 *
+//               //           0.75 *
+//               //           math.cos(2 * math.pi * ((50.0 + 55.0) / 2 / 100)) -
+//               //       12 * 0.9 * 11 / 2 +
+//               //       17,
+//               //   top: 300 / 2 +
+//               //       300 /
+//               //           2 *
+//               //           0.75 *
+//               //           math.sin(2 * math.pi * ((50.0 + 55.0) / 2 / 100)) +
+//               //       11 / 2,
+//               //   child: Container(
+//               //     padding: const EdgeInsets.symmetric(
+//               //       vertical: 4,
+//               //       horizontal: 4,
+//               //     ),
+//               //     decoration: BoxDecoration(
+//               //         color: Color(0xFF4F77F7).withOpacity(0.8),
+//               //         borderRadius: BorderRadius.circular(
+//               //           5.0,
+//               //         )),
+//               //     child: Text(
+//               //       '한국타이어앤테크놀로지',
+//               //       style: TextStyle(
+//               //         color: Colors.black,
+//               //         fontSize: 12,
+//               //       ),
+//               //     ),
+//               //   ),
+//               // ),
+//             ],
+//           ),
+//         ],
+//       )),
+//     );
+//   }
+// }
+
+/*class YachtPortfolioArcChart extends CustomPainter {
+  String color;
+  double percentage1;
+  double percentage2;
+
+  YachtPortfolioArcChart(this.color, this.percentage1, this.percentage2);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = Color(int.parse('FF$color', radix: 16))
+      ..style = PaintingStyle.fill;
+
+    double radius = size.width / 2;
+
+    double arcAngle1 = 2 * math.pi * (percentage1 / 100);
+    double arcAngle2 = 2 * math.pi * (percentage2 / 100);
+    canvas.drawArc(
+        Rect.fromCircle(center: Offset(300 / 2, 300 / 2), radius: radius),
+        arcAngle1,
+        arcAngle2 - arcAngle1,
+        true,
+        paint);
+  }
+
+  @override
+  bool shouldRepaint(YachtPortfolioArcChart oldDelegate) {
+    return false;
+  }
+
+  @override
+  bool hitTest(Offset position) {
+    print('$position');
+    final Path path = Path();
+    // path.
+    path.moveTo(100 / 2, 100 / 2);
+    path.addArc(Rect.fromCircle(center: Offset(100 / 2, 100 / 2), radius: 50),
+        2 * math.pi * (percentage1 / 100), 2 * math.pi * (percentage2 / 100));
+
+    return path.contains(position);
+    // return super.hitTest(position);
+  }
+
+  // @override
+  // bool hitTest(Offset position) {
+  //   return paint.contains(position);
+  // }
+}
+*/
 */
