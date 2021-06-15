@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
@@ -249,6 +252,29 @@ class YachtDesignSystem extends StatelessWidget {
                 ),
               ],
             ),
+            verticalSpaceMedium,
+            Divider(),
+            // Divider(),
+            verticalSpaceMedium,
+            Text(
+              "컨테이너 스타일",
+              style: headingStyle,
+            ),
+            verticalSpaceMedium,
+            Text(
+              "퀘스트 카드 선택 컨테이너",
+              style: subtitleStyle,
+            ),
+            verticalSpaceMedium,
+            Text(
+              "종목 1개 상하",
+              style: contentStyle,
+            ),
+            verticalSpaceSmall,
+            QuestCard01(),
+            verticalSpaceSmall,
+            QuestCard02(),
+
             SizedBox(
               height: 100,
             )
@@ -286,6 +312,216 @@ class YachtDesignSystem extends StatelessWidget {
           ],
         );
       }),
+    );
+  }
+}
+
+class QuestCard01 extends StatefulWidget {
+  const QuestCard01({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _QuestCard01State createState() => _QuestCard01State();
+}
+
+class _QuestCard01State extends State<QuestCard01> {
+  double selectedOpaticy = 0.3;
+  double unselectedOpacity = 0.1;
+  bool upSelected = true;
+  bool downSelected = true;
+  @override
+  Widget build(BuildContext context) {
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Color(0xFFA8C6D2).withOpacity(.3),
+          ),
+          height: 140,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(
+                "7월 5일 삼성전자는?",
+                style: subtitleStyle,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      setState(() {
+                        upSelected = !upSelected;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                          color: bullColorKR.withOpacity(
+                              upSelected ? selectedOpaticy : unselectedOpacity),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        "상승",
+                        style: subtitleStyle.copyWith(
+                            color: upSelected ? bullColorKR : Colors.grey),
+                      ),
+                    ),
+                  ),
+                  horizontalSpaceExtraLarge,
+                  InkWell(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      setState(() {
+                        downSelected = !downSelected;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                          color: bearColorKR.withOpacity(downSelected
+                              ? selectedOpaticy
+                              : unselectedOpacity),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        "하락",
+                        style: subtitleStyle.copyWith(
+                            color: downSelected ? bearColorKR : Colors.grey),
+                        // style: subtitleStyle.copyWith(
+                        //   color: bearColorKR,
+                        // ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              InkWell(
+                  onTap: () {
+                    HapticFeedback.heavyImpact();
+                  },
+                  child: Text(
+                    "예측 완료하기",
+                    style: subtitleStyle.copyWith(
+                        color: (upSelected || downSelected)
+                            ? contentStyle.color
+                            : Colors.grey),
+                  )),
+            ],
+          ),
+          // color: Colors.blue,
+        ),
+      ),
+    );
+  }
+}
+
+class QuestCard02 extends StatefulWidget {
+  const QuestCard02({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _QuestCard02State createState() => _QuestCard02State();
+}
+
+class _QuestCard02State extends State<QuestCard02> {
+  double selectedOpaticy = 0.3;
+  double unselectedOpacity = 0.1;
+  bool upSelected = true;
+  bool downSelected = true;
+  @override
+  Widget build(BuildContext context) {
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Color(0xFF1E2017).withOpacity(.9),
+          ),
+          height: 140,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(
+                "7월 5일 삼성전자는?".toString(),
+                style: subtitleStyle.copyWith(color: Color(0xFFE5E5E4)),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      setState(() {
+                        upSelected = !upSelected;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                          color: Color(0xFFE2C2C6)
+                              .withOpacity(upSelected ? 1.0 : .2),
+                          // bullColorKR.withOpacity(
+                          //     upSelected ? selectedOpaticy : unselectedOpacity),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        "상승",
+                        style: subtitleStyle.copyWith(
+                            color: upSelected ? bullColorKR : Colors.grey),
+                      ),
+                    ),
+                  ),
+                  horizontalSpaceExtraLarge,
+                  InkWell(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      setState(() {
+                        downSelected = !downSelected;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                          color: Color(0xFF98C4D9)
+                              .withOpacity(downSelected ? 1.0 : .2),
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        "하락",
+                        style: subtitleStyle.copyWith(
+                            color: downSelected ? bearColorKR : Colors.grey),
+                        // style: subtitleStyle.copyWith(
+                        //   color: bearColorKR,
+                        // ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              InkWell(
+                  onTap: () {
+                    HapticFeedback.heavyImpact();
+                  },
+                  child: Text(
+                    "예측 완료하기",
+                    style: subtitleStyle.copyWith(
+                      color: (upSelected || downSelected)
+                          ? Colors.white
+                          : Color(0xFF1E2017),
+                    ),
+                  )),
+            ],
+          ),
+          // color: Colors.blue,
+        ),
+      ),
     );
   }
 }

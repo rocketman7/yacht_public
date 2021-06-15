@@ -27,6 +27,12 @@ class _HomeViewState extends State<HomeView> {
                 Get.toNamed('designSystem');
               },
             ),
+            ElevatedButton(
+              child: Text("Go To Quest View"),
+              onPressed: () {
+                Get.toNamed('quest');
+              },
+            ),
           ],
         ),
       ),

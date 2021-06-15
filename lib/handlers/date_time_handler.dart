@@ -63,3 +63,10 @@ DateTime marketEndKR(String date) {
   return marketStart;
 }
 
+String countDown(Duration duration) {
+  if (duration > Duration(days: 1)) {
+    return "${duration.inDays}일 ${duration.inHours.remainder(24)}시간 ${duration.inMinutes.remainder(60)}분 ${duration.inSeconds.remainder(60)}초";
+  } else {
+    return "${duration.inHours}시간 ${duration.inMinutes.remainder(60)}분 ${duration.inSeconds.remainder(60)}초";
+  }
+}

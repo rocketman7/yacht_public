@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -24,7 +25,7 @@ class ChartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('rebuilt');
+    print('chart view rebuilt');
     // Mixin Builder로 하니까 차트 onTap마다 차트가 다시 그려졌음.
     // 명확하게 update를 받아오는 부분에서 GetBuilder를 쓰거나
     // 아니면 필요한 위젯 상단에 Obx로 obs 밸류 가져오는 방법이 좋을듯
@@ -500,6 +501,18 @@ class MainPriceDisplay extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // AnimatedTextKit(
+                  //   isRepeatingAnimation: false,
+                  //   pause: Duration(milliseconds: 50),
+                  //   animatedTexts: [
+                  //     TyperAnimatedText(
+                  //       chartViewModel.isTracking.value == true
+                  //           ? "${toPriceKRW(chartViewModel.close.value)}"
+                  //           : "${toPriceKRW(chartViewModel.chartPrices!.first.close!)}",
+                  //       textStyle: headingStyleEN,
+                  //     )
+                  //   ],
+                  // ),
                   Text(
                     chartViewModel.isTracking.value == true
                         ? "${toPriceKRW(chartViewModel.close.value)}"

@@ -48,7 +48,7 @@ const kSymmetricPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16);
 
 // Font Style
 final headingStyleEN = TextStyle(
-  fontSize: getProportionateScreenWidth(27.5),
+  fontSize: getProportionateScreenHeight(27.5),
   fontWeight: FontWeight.w700,
   fontFamily: 'DmSans',
   color: Colors.black,
@@ -56,8 +56,16 @@ final headingStyleEN = TextStyle(
   height: 1.1,
 );
 
+final bigTitleStyle = TextStyle(
+  fontSize: getProportionateScreenHeight(34),
+  fontWeight: FontWeight.w700,
+  fontFamily: 'NotoSansKR',
+  letterSpacing: -0.5,
+  height: 1.1,
+);
+
 final headingStyle = TextStyle(
-  fontSize: getProportionateScreenWidth(26),
+  fontSize: getProportionateScreenHeight(26),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
   letterSpacing: -0.5,
@@ -65,7 +73,7 @@ final headingStyle = TextStyle(
 );
 
 final titleStyle = TextStyle(
-  fontSize: getProportionateScreenWidth(24),
+  fontSize: getProportionateScreenHeight(24),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
   letterSpacing: -1,
@@ -73,7 +81,7 @@ final titleStyle = TextStyle(
 );
 
 final subtitleStyle = TextStyle(
-  fontSize: getProportionateScreenWidth(20),
+  fontSize: getProportionateScreenHeight(20),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
   color: Color(0xff212121),
