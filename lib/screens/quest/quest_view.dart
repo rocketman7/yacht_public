@@ -105,7 +105,7 @@ class QuestView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "${toPriceKRW(questViewModel.tempQuestModel.cashReward)}원 + LP 3점",
+                                "${toPriceKRW(questViewModel.tempQuestModel.cashReward)}원 + 3점",
                                 style: bigTitleStyle.copyWith(
                                     color: Color(0xFFDBE9EE)),
                               ),
@@ -135,20 +135,41 @@ class QuestView extends StatelessWidget {
                           // ),
                           verticalSpaceSmall,
                           Obx(
-                            () => Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            () => Column(
                               children: [
-                                Text(
-                                  "예측 마감까지",
-                                  style: contentStyle.copyWith(
-                                      color: Color(0xFFDBE9EE)),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.people,
+                                      color: Color(0xFFDBE9EE),
+                                    ),
+                                    horizontalSpaceSmall,
+                                    Text(
+                                      "${questViewModel.tempQuestModel.count![0]}명 참여",
+                                      style: subtitleStyle.copyWith(
+                                          color: Color(0xFFDBE9EE)),
+                                    ),
+                                  ],
                                 ),
-                                horizontalSpaceSmall,
-                                Text(
-                                  "${questViewModel.timeToEnd.value}",
-                                  style: subtitleStyle.copyWith(
-                                      color: Color(0xFFDBE9EE)),
+                                verticalSpaceMedium,
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "예측 마감까지",
+                                      style: contentStyle.copyWith(
+                                          color: Color(0xFFDBE9EE)),
+                                    ),
+                                    horizontalSpaceSmall,
+                                    Text(
+                                      "${questViewModel.timeToEnd.value}",
+                                      style: subtitleStyle.copyWith(
+                                          color: Color(0xFFDBE9EE)),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

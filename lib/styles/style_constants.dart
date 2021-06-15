@@ -103,7 +103,6 @@ final detailStyle = TextStyle(
     height: 1.1);
 
 // 숫자 스타일
-
 final ohlcInfoStyle = TextStyle(
     fontSize: getProportionateScreenHeight(16),
     fontWeight: FontWeight.w400,

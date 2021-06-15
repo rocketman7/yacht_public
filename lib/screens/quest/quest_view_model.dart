@@ -31,6 +31,7 @@ class QuestViewModel extends GetxController {
         {"stocks": "005930"},
         {"stocks": "326030"}
       ],
+      count: [300, 450],
       result: [1, 0],
       startDateTime: DateTime(2021, 6, 12, 08, 50, 00),
       endDateTime: DateTime(2021, 6, 20, 08, 50),

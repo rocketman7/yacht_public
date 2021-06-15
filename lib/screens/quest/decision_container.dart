@@ -57,7 +57,9 @@ class _DecisionContainerState extends State<DecisionContainer> {
                   children: [
                     Text(
                       questViewModel.tempQuestModel.title,
-                      style: subtitleStyle,
+                      style: contentStyle.copyWith(
+                          fontSize: getProportionateScreenHeight(18),
+                          color: Colors.black87),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -90,17 +92,17 @@ class _DecisionContainerState extends State<DecisionContainer> {
                         );
                       }),
                     ),
-                    InkWell(
-                        onTap: () {
-                          HapticFeedback.heavyImpact();
-                        },
-                        child: Text(
-                          "예측 완료하기",
-                          style: subtitleStyle.copyWith(
-                              color: isSelected.contains(true)
-                                  ? contentStyle.color
-                                  : Colors.grey),
-                        )),
+                    // InkWell(
+                    //     onTap: () {
+                    //       HapticFeedback.heavyImpact();
+                    //     },
+                    //     child: Text(
+                    //       "예측 완료하기",
+                    //       style: subtitleStyle.copyWith(
+                    //           color: isSelected.contains(true)
+                    //               ? contentStyle.color
+                    //               : Colors.grey),
+                    //     )),
                   ],
                 ),
               ))),

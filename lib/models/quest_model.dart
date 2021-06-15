@@ -14,9 +14,9 @@ class QuestModel {
   final DateTime startDateTime;
   final DateTime endDateTime;
   final DateTime resultDateTime;
+  final List<int>? count;
   final List<int>? result;
   final List<Map<String, String>> candidates;
-
   QuestModel({
     required this.title,
     required this.country,
@@ -27,6 +27,7 @@ class QuestModel {
     required this.startDateTime,
     required this.endDateTime,
     required this.resultDateTime,
+    this.count,
     this.result,
     required this.candidates,
   });
@@ -41,6 +42,7 @@ class QuestModel {
     DateTime? startDateTime,
     DateTime? endDateTime,
     DateTime? resultDateTime,
+    List<int>? count,
     List<int>? result,
     List<Map<String, String>>? candidates,
   }) {
@@ -54,6 +56,7 @@ class QuestModel {
       startDateTime: startDateTime ?? this.startDateTime,
       endDateTime: endDateTime ?? this.endDateTime,
       resultDateTime: resultDateTime ?? this.resultDateTime,
+      count: count ?? this.count,
       result: result ?? this.result,
       candidates: candidates ?? this.candidates,
     );
@@ -70,6 +73,7 @@ class QuestModel {
       'startDateTime': startDateTime.millisecondsSinceEpoch,
       'endDateTime': endDateTime.millisecondsSinceEpoch,
       'resultDateTime': resultDateTime.millisecondsSinceEpoch,
+      'count': count,
       'result': result,
       'candidates': candidates,
     };
@@ -87,6 +91,7 @@ class QuestModel {
       endDateTime: DateTime.fromMillisecondsSinceEpoch(map['endDateTime']),
       resultDateTime:
           DateTime.fromMillisecondsSinceEpoch(map['resultDateTime']),
+      count: List<int>.from(map['count']),
       result: List<int>.from(map['result']),
       candidates:
           List<Map<String, String>>.from(map['candidates']?.map((x) => x)),
@@ -100,7 +105,7 @@ class QuestModel {
 
   @override
   String toString() {
-    return 'QuestModel(title: $title, country: $country, category: $category, pointReward: $pointReward, cashReward: $cashReward, exp: $exp, startDateTime: $startDateTime, endDateTime: $endDateTime, resultDateTime: $resultDateTime, result: $result, candidates: $candidates)';
+    return 'QuestModel(title: $title, country: $country, category: $category, pointReward: $pointReward, cashReward: $cashReward, exp: $exp, startDateTime: $startDateTime, endDateTime: $endDateTime, resultDateTime: $resultDateTime, count: $count, result: $result, candidates: $candidates)';
   }
 
   @override
@@ -117,6 +122,7 @@ class QuestModel {
         other.startDateTime == startDateTime &&
         other.endDateTime == endDateTime &&
         other.resultDateTime == resultDateTime &&
+        listEquals(other.count, count) &&
         listEquals(other.result, result) &&
         listEquals(other.candidates, candidates);
   }
@@ -132,6 +138,7 @@ class QuestModel {
         startDateTime.hashCode ^
         endDateTime.hashCode ^
         resultDateTime.hashCode ^
+        count.hashCode ^
         result.hashCode ^
         candidates.hashCode;
   }
