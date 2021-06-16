@@ -41,7 +41,7 @@ class _DecisionContainerState extends State<DecisionContainer> {
     QuestModel questModel = widget.questViewModel.tempQuestModel;
 
     return ClipRRect(
-      borderRadius: BorderRadius.circular(40),
+      borderRadius: BorderRadius.circular(15),
       child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
@@ -50,7 +50,7 @@ class _DecisionContainerState extends State<DecisionContainer> {
                 color: Color(0xFFA8C6D2).withOpacity(.7),
               ),
               width: SizeConfig.screenWidth - 50,
-              height: 140,
+              height: getProportionateScreenHeight(140),
               child: GetBuilder<QuestViewModel>(
                 builder: (questViewModel) => Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -73,22 +73,35 @@ class _DecisionContainerState extends State<DecisionContainer> {
                               }
                             });
                           },
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: bullColorKR.withOpacity(isSelected[index]
-                                    ? selectedOpaticy
-                                    : unselectedOpacity),
-                                borderRadius: BorderRadius.circular(20),
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                child: Container(
+                                  // padding: EdgeInsets.symmetric(
+                                  //     horizontal: 16, vertical: 8),
+                                  // decoration: BoxDecoration(
+                                  //   color: bullColorKR.withOpacity(
+                                  //       isSelected[index]
+                                  //           ? selectedOpaticy
+                                  // : unselectedOpacity),
+                                  // borderRadius: BorderRadius.circular(60),
+                                  child: Image.asset(
+                                    'assets/images/secLogo/hana.png',
+                                    height: getProportionateScreenHeight(60),
+                                    width: getProportionateScreenHeight(60),
+                                  ),
+                                ),
                               ),
-                              child: Text(
+                              verticalSpaceSmall,
+                              Text(
                                 "삼성전자",
                                 style: subtitleStyle.copyWith(
                                     color: isSelected[index]
                                         ? bullColorKR
                                         : Colors.grey),
-                              )),
+                              )
+                            ],
+                          ),
                         );
                       }),
                     ),

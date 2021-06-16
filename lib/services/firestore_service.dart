@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/models/price_chart_model.dart';
+import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 
 class FirestoreService extends GetxService {
@@ -59,5 +60,55 @@ class FirestoreService extends GetxService {
     } catch (e) {
       throw e;
     }
+  }
+
+  Future countTest(int index) async {
+    _firestoreService.collection('temp').doc('count').get().then((value) {
+      var temp = value.data()!['count'];
+      print(temp);
+
+      for (int i = 0; i < temp.length; i++) {
+        if (index == i) {
+          temp[i] = temp[i] + 1;
+        }
+        _firestoreService
+            .collection('temp')
+            .doc('count')
+            .update({'count': temp});
+      }
+      print(DateTime.now());
+    });
+    // await _firestoreService.collection('temp').doc('count').update({
+    //   // 'count': [FieldValue.increment(1), FieldValue.increment(1)]
+    //   // 'count': [7, 8]
+    // });
+    // print(temp.data()!['count']);
+  }
+
+  Future<QuestModel> getQuest() async {
+    // 1) get quest -> QuestModel 생성 : async step 1
+    // 2) 여기에서 퀘스트의 자산 종류, 국가, 코드 get
+    // 3) (KR이면) stocksKR collection 들어가서 get -> StockModel 생성 : async step n (퀘스트 종목 갯수)
+    // 4) StockModel에서 logoURL -> Storage 접근, 이미지 get
+    // 5) stocksKR -> stats -> StatsModel 생성 : async step n
+
+    final QuestModel tempQuestModel = QuestModel(
+        category: "one",
+        title: "수익률이 더 높을 종목은?",
+        country: "KR",
+        pointReward: 3,
+        cashReward: 50000,
+        exp: 300,
+        candidates: [
+          {"stocks": "005930"},
+          {"stocks": "326030"}
+        ],
+        count: [300, 450],
+        result: [1, 0],
+        startDateTime: DateTime(2021, 6, 12, 08, 50, 00),
+        endDateTime: DateTime(2021, 6, 20, 08, 50),
+        resultDateTime: DateTime(2021, 6, 14, 16, 00));
+
+    return tempQuestModel;
   }
 }

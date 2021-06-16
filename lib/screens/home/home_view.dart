@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/screens/chart/chart_view.dart';
+import 'package:yachtOne/services/firestore_service.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -31,6 +32,13 @@ class _HomeViewState extends State<HomeView> {
               child: Text("Go To Quest View"),
               onPressed: () {
                 Get.toNamed('quest');
+              },
+            ),
+            ElevatedButton(
+              child: Text("Count Test"),
+              onPressed: () {
+                print(DateTime.now());
+                FirestoreService().countTest(0);
               },
             ),
           ],

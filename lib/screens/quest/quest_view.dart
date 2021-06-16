@@ -32,9 +32,6 @@ class QuestView extends StatelessWidget {
   final stockInfoViewModel = Get.put(StockInfoKRViewModel());
   final questViewModel = Get.put(QuestViewModel());
 
-  late StreamSubscription<double> streamSubscription;
-  StreamController<double> localStreamController = StreamController();
-
   double appBarHeight = 0;
   double bottomBarHeight = 0;
   double offset = 0.0;
