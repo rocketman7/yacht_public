@@ -59,14 +59,10 @@ class QuestView extends StatelessWidget {
           children: [
             Obx(() {
               double offset = stockInfoViewModel.offset.value;
-              double initialHeight = 200;
+              double initialHeight = getProportionateScreenHeight(200);
               appBarHeight = initialHeight - offset < kToolbarHeight + 50
                   ? kToolbarHeight + 50
                   : initialHeight - offset;
-
-              // print(offset);
-              // print(200 - appBarHeight);
-              // print(snapshot.data);
               return Container(
                 padding: EdgeInsets.only(top: kToolbarHeight),
                 decoration: BoxDecoration(
@@ -85,7 +81,7 @@ class QuestView extends StatelessWidget {
                     init: QuestViewModel(),
                     builder: (questViewModel) {
                       return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           // Text(
                           //   "리그 포인트 ${questViewModel.tempQuestModel.pointReward}점",
