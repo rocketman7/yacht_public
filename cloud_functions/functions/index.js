@@ -24,7 +24,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   const adminRef = db.collection("admin");
   const votesRef = db.collection("votes");
   const usersRef = db.collection("users");
-  const ranksRef = db.collection("ranks");
+  // const ranksRef = db.collection("ranks");
 
   const openSeasonSnapshot = await adminRef.doc("openSeason").get();
   const category = openSeasonSnapshot.data().category;
@@ -35,7 +35,7 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // today -> string으로 변환
   // var today = Date();
   var today = dateFormat(Date(), "yyyymmdd");
-  // var today = '20210108';
+  // var today = '20210603';
   console.log(today);
   // const today = "20201005";
   // today의 실제 결과 가져오기 (이전에 넣어야함)
@@ -86,15 +86,15 @@ exports.scoreVote = functions.region('asia-northeast3').https.onRequest(async (r
   // let todayResult = [2,2,2];
   // user의 vote 선택 가져오기
   console.log(todayResult);
-  let userCurrentCombo = {};
+  // let userCurrentCombo = {};
   let userVotes = {};
   let userScores = {};
 
   let allUsers = {};
   let allUserUid = [];
 
-  let prevRanks = {};
-  let userPrevWinPoint = {};
+  // let prevRanks = {};
+  // let userPrevWinPoint = {};
   var userSnapshot = await usersRef.get();
   userSnapshot.forEach((doc) => {
     allUsers[doc.id] = doc.data();
@@ -360,7 +360,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
 
   // const today = "20210108";
   var today = dateFormat(Date(), "yyyymmdd");
-  // const yesterday = "20210503";
+  const yesterday = "20210614";
   // todayRankRef
 
   const seasonInfoRef = votesRef
@@ -499,7 +499,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
     );
   }
   // 주석 풀 곳 
-  // await updateTodayRank(participatedUserSortedCurrentWinPoint, prevRankDocs);
+  await updateTodayRank(participatedUserSortedCurrentWinPoint, prevRankDocs);
 
 
 

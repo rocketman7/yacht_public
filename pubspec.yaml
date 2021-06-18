@@ -18,75 +18,75 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.3.0+34
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  align_positioned: ^1.2.8
-  amplitude_flutter: ^2.2.2
+  align_positioned: ^2.0.1
+  amplitude_flutter: ^3.1.0
+  animated_text_kit: ^4.2.1
   app_tracking_transparency: ^2.0.0
   apple_sign_in: ^0.1.0
-  auto_size_text: ^2.1.0
-  back_button_interceptor: ^4.4.0
+  auto_size_text: ^3.0.0-nullsafety.0
+  back_button_interceptor: ^5.0.0
   blobs: ^1.2.0
   bubble: ^1.1.9+1
-  cached_network_image: ^2.3.1
-  carousel_slider: ^3.0.0
-  charts_flutter: ^0.9.0
+  cached_network_image: ^3.1.0-alpha.1
+  carousel_slider: ^4.0.0-nullsafety.0
+  charts_flutter: ^0.10.0
   circular_check_box: ^1.0.4
-  cloud_firestore: ^0.14.1+3
-  cloud_functions: ^0.6.0+1
-  confetti: ^0.5.4+1
+  cloud_firestore: ^2.2.0
+  cloud_functions: ^1.1.0
+  confetti: ^0.6.0-nullsafety
   countup: ^0.1.3
-  cupertino_icons: ^0.1.3
+  cupertino_icons: ^1.0.3
   data_connection_checker: ^0.3.4
-  firebase_admob: ^0.10.2
-  firebase_analytics: ^6.0.0
-  firebase_auth: ^0.18.0+1
-  firebase_core: ^0.5.0+1
-  firebase_in_app_messaging: ^0.2.0+3
-  firebase_messaging: ^7.0.3
-  firebase_remote_config: ^0.4.2
-  firebase_storage: ^4.0.0
-  flare_flutter: ^2.0.6
-  flutter_cache_manager: ^2.1.2
+  firebase_analytics: ^8.1.0
+  firebase_auth: ^1.2.0
+  firebase_core: ^1.2.0
+  firebase_in_app_messaging: ^0.5.0+4
+  firebase_messaging: ^10.0.0
+  firebase_remote_config: ^0.10.0-dev.4
+  firebase_storage: ^8.1.0
+  flare_flutter: ^3.0.0
+  flutter_cache_manager: ^3.0.2
   flutter_chat_bubble: ^1.0.2
   flutter_launcher_icons: ^0.9.0
-  flutter_screenutil: ^3.1.1
-  flutter_svg: ^0.20.0-nullsafety.3
-  fluttertoast: ^7.1.1
-  font_awesome_flutter: ^8.11.0
-  flare_checkbox: ^1.0.4
-  get: ^3.23.1
-  get_it: ^4.0.2
-  http: ^0.12.2
-  intl: ^0.16.1
-  kakao_flutter_sdk: ^0.5.2
-  like_button: ^1.0.3
-  ntp: ^1.0.7
-  package_info: ^0.4.3+2
-  path: ^1.7.0
-  path_provider: ^1.6.1
-  preload_page_view: ^0.1.4
-  provider: ^4.1.2
-  random_string: ^2.1.0
-  rflutter_alert: ^1.0.3
-  rxdart: ^0.24.1
-  shared_preferences: ^0.5.10
-  stacked: ^1.7.6
-  syncfusion_flutter_charts: ^18.3.42
-  timezone: ^0.6.1
-  toggle_switch: ^0.1.8
-  tutorial_coach_mark: ^0.5.2
-  url_launcher: ^5.7.10
-  vibration: ^1.7.1
-  sliding_switch: ^0.0.3
-  lite_rolling_switch: ^0.1.1
-  flutter_native_admob: ^2.1.0+3
-  webview_flutter: ^1.0.7
-  mixpanel_flutter: ^1.0.0
+  flutter_screenutil: ^5.0.0+2
   flutter_segment: ^3.0.0
+  flutter_svg: ^0.22.0
+  fluttertoast: ^8.0.7
+  font_awesome_flutter: ^9.0.0
+  get: ^4.1.4
+  get_it: ^6.1.1
+  google_mobile_ads: ^0.13.0
+  http: ^0.13.3
+  intl: ^0.17.0
+  kakao_flutter_sdk: ^0.6.3
+  like_button: ^2.0.2
+  lite_rolling_switch: ^0.1.1
+  mixpanel_flutter: ^1.0.0
+  ntp: ^2.0.0
+  package_info: ^2.0.0
+  path: ^1.7.0
+  path_provider: ^2.0.1
+  preload_page_view: ^0.1.4
+  provider: ^5.0.0
+  quiver: ^3.0.1
+  random_string: ^2.2.0-nullsafety
+  rflutter_alert: ^2.0.2
+  rxdart: ^0.27.0
+  shared_preferences: ^2.0.5
+  stacked: ^2.1.6
+  syncfusion_flutter_charts: ^19.1.64
+  timezone: ^0.7.0
+  toggle_switch: ^0.1.8
+  tutorial_coach_mark: ^1.0.0
+  universal_io: ^2.0.4
+  url_launcher: ^6.0.4
+  vibration: ^1.7.4-nullsafety.0
+  webview_flutter: ^2.0.7
 
 flutter_icons:
   android: "launcher_icon"
@@ -134,6 +134,19 @@ flutter:
     - family: Arkhip
       fonts:
         - asset: assets/fonts/arkhip_regular.ttf
+    - family: NotoSansKR
+      fonts:
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Regular.otf
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Thin.otf
+          weight: 200
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Light.otf
+          weight: 300
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Medium.otf
+          weight: 500
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Bold.otf
+          weight: 700
+        - asset: assets/fonts/noto_sans_kr/NotoSansKR-Black.otf
+          weight: 900
     - family: DmSans
       fonts:
         - asset: assets/fonts/dm_sans/DMSans-Regular.ttf
@@ -141,21 +154,25 @@ flutter:
           weight: 500
         - asset: assets/fonts/dm_sans/DMSans-Bold.ttf
           weight: 700
-    - family: AppleSDL
+    - family: AppleSDGothicNeo
       fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoL.ttf
-    - family: AppleSDM
-      fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoM.ttf
-    - family: AppleSDB
-      fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoB.ttf
-    - family: AppleSDEB
-      fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoEB.ttf
-    - family: AppleSDH
-      fonts:
-        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoH.ttf
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoR.otf
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoUL.otf
+          weight: 100
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoT.otf
+          weight: 200
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoL.otf
+          weight: 300
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoM.otf
+          weight: 500
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoSB.otf
+          weight: 600
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoB.otf
+          weight: 700
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoEB.otf
+          weight: 800
+        - asset: assets/fonts/apple_sd_gothic_neo/AppleSDGothicNeoH.otf
+          weight: 900
         # - asset: assets/fonts/advent_pro/AdventPro-SemiBold.ttf
   #   - family: Trajan Pro
   #     fonts:
