@@ -39,12 +39,14 @@ const verticalSpaceExtraLarge = SizedBox(height: 32);
 const verticalSpaceLarge = SizedBox(height: 24);
 const verticalSpaceMedium = SizedBox(height: 16);
 const verticalSpaceSmall = SizedBox(height: 8);
+const verticalSpaceExtraSmall = SizedBox(height: 4);
 const horizontalSpaceExtraLarge = SizedBox(width: 32);
 const horizontalSpaceLarge = SizedBox(width: 24);
 const horizontalSpaceMedium = SizedBox(width: 16);
 const horizontalSpaceSmall = SizedBox(width: 8);
 const kHorizontalPadding = EdgeInsets.symmetric(horizontal: 16);
 const kSymmetricPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16);
+const dialogPadding = EdgeInsets.symmetric(horizontal: 32, vertical: 20);
 
 // Font Style
 final headingStyleEN = TextStyle(
@@ -56,7 +58,7 @@ final headingStyleEN = TextStyle(
   height: 1.1,
 );
 
-final bigTitleStyle = TextStyle(
+final bigHeadingStyle = TextStyle(
   fontSize: getProportionateScreenHeight(34),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
@@ -89,12 +91,21 @@ final subtitleStyle = TextStyle(
   height: 1.1,
 );
 
+final confirmStyle = TextStyle(
+  fontSize: getProportionateScreenHeight(18),
+  fontWeight: FontWeight.w700,
+  fontFamily: 'NotoSansKR',
+  color: Color(0xff212121),
+  letterSpacing: -1,
+  height: 1.1,
+);
 final contentStyle = TextStyle(
     fontSize: getProportionateScreenHeight(16),
     fontWeight: FontWeight.w500,
     fontFamily: 'NotoSansKR',
     letterSpacing: -.5,
     height: 1.1);
+
 final detailStyle = TextStyle(
     fontSize: getProportionateScreenHeight(14),
     fontWeight: FontWeight.w500,

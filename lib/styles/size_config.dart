@@ -4,6 +4,8 @@ class SizeConfig {
   static late MediaQueryData _mediaQueryData;
   static late double screenWidth;
   static late double screenHeight;
+  static late double safeAreaTop;
+  static late double safeAreaBottom;
   static double? defaultSize;
   static Orientation? orientation;
 
@@ -12,6 +14,8 @@ class SizeConfig {
     screenWidth = _mediaQueryData.size.width;
     screenHeight = _mediaQueryData.size.height;
     orientation = _mediaQueryData.orientation;
+    safeAreaTop = _mediaQueryData.padding.top;
+    safeAreaBottom = _mediaQueryData.padding.bottom;
   }
 }
 

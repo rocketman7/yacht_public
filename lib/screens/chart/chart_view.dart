@@ -6,6 +6,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
+import 'package:yachtOne/models/stock_model.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import '../../styles/style_constants.dart';
 import '../../handlers/date_time_handler.dart';
@@ -13,12 +14,12 @@ import '../../models/price_chart_model.dart';
 import 'chart_view_model.dart';
 
 class ChartView extends StatelessWidget {
-  final String? issueCode;
+  final StockModel stockModel;
   // onTrackballPositionChanging에서 X Position이 변했는지 체크하기 위해 직전 X Position을 저장
 
   ChartView({
     Key? key,
-    required this.issueCode,
+    required this.stockModel,
   }) : super(key: key);
 
   double previousXPosition = 0;

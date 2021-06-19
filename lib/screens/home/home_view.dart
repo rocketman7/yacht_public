@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/screens/chart/chart_view.dart';
+import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 
 class HomeView extends StatefulWidget {
@@ -9,6 +10,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  HomeViewModel homeViewModel = Get.put(HomeViewModel());
   @override
   Widget build(BuildContext context) {
     return Scaffold(

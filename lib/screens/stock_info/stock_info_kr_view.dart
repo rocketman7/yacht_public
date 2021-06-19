@@ -1,16 +1,25 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:yachtOne/models/stock_model.dart';
 
 import 'package:yachtOne/screens/chart/chart_view.dart';
 import 'package:yachtOne/screens/stats/stats_view.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
-import 'package:get/get.dart';
 
 import 'stock_info_kr_view_model.dart';
 
 class StockInfoKRView extends StatelessWidget {
+  final StockModel stockModel;
+  final double bottomPadding;
+
+  StockInfoKRView({
+    Key? key,
+    this.bottomPadding = 0.0,
+    required this.stockModel,
+  }) : super(key: key);
   // static StreamController<double> streamController =
   //     StreamController(onListen: () {
   //   print("Listening");
@@ -44,7 +53,7 @@ class StockInfoKRView extends StatelessWidget {
     // print(scrollController.offset);
     print("stock info view rebuilt");
 
-    String _issueCode = "005930";
+    // String _issueCode = "005930";
     SizeConfig().init(context);
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
@@ -69,7 +78,9 @@ class StockInfoKRView extends StatelessWidget {
                 width: double.infinity,
                 // height: 250,
                 // color: Colors.grey,
-                child: ChartView(issueCode: _issueCode),
+                child: ChartView(
+                  stockModel: stockModel,
+                ),
               ),
               verticalSpaceExtraLarge,
               Padding(
@@ -110,13 +121,16 @@ class StockInfoKRView extends StatelessWidget {
               Container(
                 width: double.infinity,
                 // color: Colors.grey,
-                child: StatsView(),
+                child: StatsView(stockModel: stockModel),
               ),
               Obx(
                 () => Container(
                   height: additionalHeight.value,
                   color: Colors.red,
                 ),
+              ),
+              Container(
+                height: bottomPadding,
               )
             ],
           ),

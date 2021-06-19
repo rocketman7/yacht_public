@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:yachtOne/styles/size_config.dart';
@@ -274,7 +275,218 @@ class YachtDesignSystem extends StatelessWidget {
             QuestCard01(),
             verticalSpaceSmall,
             QuestCard02(),
+            verticalSpaceMedium,
+            Divider(),
 
+            verticalSpaceMedium,
+            Text(
+              "다이얼로그 스타일",
+              style: headingStyle,
+            ),
+            verticalSpaceMedium,
+            Text(
+              "퀘스트 최종 선택",
+              style: contentStyle,
+            ),
+            Container(
+              height: 500,
+              color: Colors.grey,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      padding: dialogPadding,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      height: 200,
+                      width: 300,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          AutoSizeText(
+                            "7/4 종목 상승 하락 대결",
+                            maxLines: 2,
+                            style: contentStyle,
+                          ),
+                          // verticalSpaceSmall,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset(
+                                'assets/images/secLogo/hana.png',
+                                height: getProportionateScreenHeight(60),
+                                width: getProportionateScreenHeight(60),
+                              ),
+                              horizontalSpaceMedium,
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  AutoSizeText(
+                                    "삼성바이오로직스",
+                                    style: subtitleStyle,
+                                  ),
+                                  verticalSpaceExtraSmall,
+                                  Text(
+                                    "선택을 확정하시겠어요?",
+                                    maxLines: 2,
+                                    style: contentStyle,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 12),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: bullColorKR.withOpacity(.4),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "취소",
+                                        style: subtitleStyle.copyWith(
+                                            color:
+                                                Colors.white.withOpacity(.8)),
+                                      ),
+                                    )),
+                              ),
+                              horizontalSpaceMedium,
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: bullColorKR,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black.withOpacity(.1),
+                                            offset: Offset(3, 3),
+                                            blurRadius: 5,
+                                            spreadRadius: 2)
+                                      ]),
+                                  child: Center(
+                                    child: Text(
+                                      "확인",
+                                      style: subtitleStyle.copyWith(
+                                          color: Colors.white.withOpacity(.9)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: dialogPadding,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      height: 250,
+                      width: 300,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          // Container(),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                AutoSizeText(
+                                  "7/5 ~ 7/9 주간 수익률 킹 대결",
+                                  maxLines: 2,
+                                  style: contentStyle,
+                                ),
+                                Image.asset(
+                                  'assets/images/secLogo/hana.png',
+                                  height: getProportionateScreenHeight(60),
+                                  width: getProportionateScreenHeight(60),
+                                ),
+                                // verticalSpaceSmall,
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  // crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "삼성바이오로직스",
+                                      style: subtitleStyle,
+                                    ),
+                                    verticalSpaceExtraSmall,
+                                    Text(
+                                      "선택을 확정하시겠어요?",
+                                      maxLines: 2,
+                                      style: contentStyle,
+                                    ),
+                                    verticalSpaceMedium,
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 12),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: bullColorKR.withOpacity(.4),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "취소",
+                                        style: subtitleStyle.copyWith(
+                                            color:
+                                                Colors.white.withOpacity(.8)),
+                                      ),
+                                    )),
+                              ),
+                              horizontalSpaceMedium,
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(40),
+                                      color: bullColorKR,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black.withOpacity(.1),
+                                            offset: Offset(3, 3),
+                                            blurRadius: 5,
+                                            spreadRadius: 2)
+                                      ]),
+                                  child: Center(
+                                    child: Text(
+                                      "확인",
+                                      style: subtitleStyle.copyWith(
+                                          color: Colors.white.withOpacity(.9)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ]),
+            ),
             SizedBox(
               height: 100,
             )

@@ -17,6 +17,7 @@ import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/services_binding.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
+import 'models/stock_model.dart';
 import 'screens/chart/chart_view.dart';
 import 'screens/test_view.dart';
 import 'styles/size_config.dart';
@@ -79,7 +80,10 @@ class _MyAppState extends State<MyApp> {
           GetPage(
               name: 'stockInfo',
               // settings: RouteSettings(arguments: ),
-              page: () => StockInfoKRView(),
+              page: () => StockInfoKRView(
+                    bottomPadding: 0,
+                    stockModel: StockModel(),
+                  ),
               transition: Transition.zoom),
           GetPage(
               name: 'designSystem',

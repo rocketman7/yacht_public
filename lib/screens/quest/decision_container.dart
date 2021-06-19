@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -33,18 +34,19 @@ class _DecisionContainerState extends State<DecisionContainer> {
     super.initState();
   }
 
-  double selectedOpaticy = 0.3;
-  double unselectedOpacity = 0.1;
+  double selectedOpaticy = 0;
+  double unselectedOpacity = .5;
 
   @override
   Widget build(BuildContext context) {
-    QuestModel questModel = widget.questViewModel.tempQuestModel;
+    // QuestModel questModel = widget.questViewModel.tempQuestModel;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
+              padding: kHorizontalPadding,
               decoration: BoxDecoration(
                 // borderRadius: BorderRadius.circular(40),
                 color: Color(0xFFA8C6D2).withOpacity(.7),
@@ -55,11 +57,13 @@ class _DecisionContainerState extends State<DecisionContainer> {
                 builder: (questViewModel) => Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      questViewModel.tempQuestModel.title,
+                    AutoSizeText(
+                      questViewModel.tempQuestModel!.title,
                       style: contentStyle.copyWith(
-                          fontSize: getProportionateScreenHeight(18),
-                          color: Colors.black87),
+                        fontSize: getProportionateScreenHeight(18),
+                        color: Colors.black.withOpacity(.75),
+                      ),
+                      maxLines: 1,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -72,11 +76,35 @@ class _DecisionContainerState extends State<DecisionContainer> {
                                 if (i != index) isSelected[i] = false;
                               }
                             });
+                            HapticFeedback.mediumImpact();
+                            Navigator.push(
+                              context,
+                              HeroDialogRoute(
+                                builder: (BuildContext context) {
+                                  return FinalDecisionDialog(
+                                      questViewModel: questViewModel,
+                                      index: index);
+                                },
+                              ),
+                            );
+                            // Get.defaultDialog(
+                            //     title: "TITlE",
+                            //     content: Container(
+                            //       child: Hero(
+                            //         tag: "select",
+                            //         child: Image.asset(
+                            //           'assets/images/secLogo/hana.png',
+                            //           height: getProportionateScreenHeight(60),
+                            //           width: getProportionateScreenHeight(60),
+                            //         ),
+                            //       ),
+                            //     ));
                           },
                           child: Column(
                             children: [
-                              ClipRRect(
-                                child: Container(
+                              GetBuilder(
+                                init: QuestViewModel(),
+                                builder: (_) => Container(
                                   // padding: EdgeInsets.symmetric(
                                   //     horizontal: 16, vertical: 8),
                                   // decoration: BoxDecoration(
@@ -85,20 +113,40 @@ class _DecisionContainerState extends State<DecisionContainer> {
                                   //           ? selectedOpaticy
                                   // : unselectedOpacity),
                                   // borderRadius: BorderRadius.circular(60),
-                                  child: Image.asset(
-                                    'assets/images/secLogo/hana.png',
-                                    height: getProportionateScreenHeight(60),
-                                    width: getProportionateScreenHeight(60),
+                                  child: Hero(
+                                    tag: index.toString(),
+                                    child: questViewModel.logoImage[index],
                                   ),
                                 ),
                               ),
+                              // ClipRRect(
+                              //   borderRadius: BorderRadius.circular(60),
+                              //   child: Container(
+                              //     height: getProportionateScreenHeight(60),
+                              //     width: getProportionateScreenHeight(60),
+                              //     color: Colors.black.withOpacity(
+                              //         isSelected[index]
+                              //             ? selectedOpaticy
+                              //             : unselectedOpacity),
+                              //   ),
+                              // ),
+
                               verticalSpaceSmall,
-                              Text(
-                                "삼성전자",
-                                style: subtitleStyle.copyWith(
-                                    color: isSelected[index]
-                                        ? bullColorKR
-                                        : Colors.grey),
+                              Hero(
+                                tag: '${index}_name',
+                                child: Material(
+                                  type: MaterialType.transparency,
+                                  child: AutoSizeText(
+                                    questViewModel
+                                        .tempQuestModel!.choices![index],
+                                    style: subtitleStyle.copyWith(
+                                        color: Colors.black.withOpacity(.75)
+                                        // isSelected[index]
+                                        // ? bullColorKR
+                                        // : Colors.grey
+                                        ),
+                                  ),
+                                ),
                               )
                             ],
                           ),
@@ -121,4 +169,186 @@ class _DecisionContainerState extends State<DecisionContainer> {
               ))),
     );
   }
+}
+
+class FinalDecisionDialog extends StatelessWidget {
+  final QuestViewModel questViewModel;
+  final int index;
+  const FinalDecisionDialog({
+    Key? key,
+    required this.index,
+    required this.questViewModel,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0))),
+      // title: Text('You are my hero.'),
+      child: Container(
+        padding: dialogPadding,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: Colors.white,
+        ),
+        height: 200,
+        width: 300,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            AutoSizeText(
+              questViewModel.tempQuestModel!.subtitle,
+              maxLines: 2,
+              style: subtitleStyle.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black.withOpacity(.7)),
+            ),
+            // verticalSpaceSmall,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Hero(
+                  tag: index.toString(),
+                  child: questViewModel.logoImage[index],
+                ),
+                horizontalSpaceMedium,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Hero(
+                      tag: '${index}_name',
+                      child: Material(
+                        type: MaterialType.transparency,
+                        child: AutoSizeText(
+                          questViewModel.tempQuestModel!.choices![index],
+                          style: subtitleStyle,
+                        ),
+                      ),
+                    ),
+                    verticalSpaceExtraSmall,
+                    Text(
+                      "선택을 확정하시겠어요?",
+                      maxLines: 2,
+                      style: contentStyle,
+                    ),
+                  ],
+                )
+              ],
+            ),
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: bullColorKR.withOpacity(.4),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "취소",
+                          style: confirmStyle.copyWith(
+                              color: Colors.white.withOpacity(.8)),
+                        ),
+                      )),
+                ),
+                horizontalSpaceMedium,
+                Expanded(
+                  flex: 2,
+                  child: InkWell(
+                    onTap: () {
+                      Get.toNamed('/');
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: bullColorKR,
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(.1),
+                                offset: Offset(3, 3),
+                                blurRadius: 5,
+                                spreadRadius: 2)
+                          ]),
+                      child: Center(
+                        child: Text(
+                          "확인",
+                          style: confirmStyle.copyWith(
+                              color: Colors.white.withOpacity(.9)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+
+      // Container(
+      //   child: Hero(
+      //     tag: index.toString(),
+      //     child: Image.asset(
+      //       'assets/images/secLogo/hana.png',
+      //       height:
+      //           getProportionateScreenHeight(
+      //               60),
+      //       width: getProportionateScreenHeight(
+      //           60),
+      //     ),
+      //   ),
+      // ),
+      // actions: <Widget>[
+      //   ElevatedButton(
+      //     child: new Text('RAD!'),
+      //     onPressed: Navigator.of(context).pop,
+      //   ),
+      // ],
+    );
+  }
+}
+
+class HeroDialogRoute<T> extends PageRoute<T> {
+  HeroDialogRoute({required this.builder}) : super();
+
+  final WidgetBuilder builder;
+
+  @override
+  bool get opaque => false;
+
+  @override
+  bool get barrierDismissible => true;
+
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 550);
+
+  @override
+  bool get maintainState => true;
+
+  @override
+  Color get barrierColor => Colors.black54;
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return FadeTransition(
+        opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+        child: child);
+  }
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    return builder(context);
+  }
+
+  @override
+  // TODO: implement barrierLabel
+  String? get barrierLabel => null;
 }

@@ -91,23 +91,34 @@ class FirestoreService extends GetxService {
     // 3) (KR이면) stocksKR collection 들어가서 get -> StockModel 생성 : async step n (퀘스트 종목 갯수)
     // 4) StockModel에서 logoURL -> Storage 접근, 이미지 get
     // 5) stocksKR -> stats -> StatsModel 생성 : async step n
+    final QuestModel tempQuestModel = await _firestoreService
+        .collection('leagues')
+        .doc('league001')
+        .collection('quests')
+        .doc('quest001')
+        .get()
+        .then((value) {
+      print(value.data());
+      return QuestModel.fromMap(value.data()!);
+    });
 
-    final QuestModel tempQuestModel = QuestModel(
-        category: "one",
-        title: "수익률이 더 높을 종목은?",
-        country: "KR",
-        pointReward: 3,
-        cashReward: 50000,
-        exp: 300,
-        candidates: [
-          {"stocks": "005930"},
-          {"stocks": "326030"}
-        ],
-        count: [300, 450],
-        result: [1, 0],
-        startDateTime: DateTime(2021, 6, 12, 08, 50, 00),
-        endDateTime: DateTime(2021, 6, 20, 08, 50),
-        resultDateTime: DateTime(2021, 6, 14, 16, 00));
+    // final QuestModel tempQuestModel = QuestModel(
+    //     category: "one",
+    //     title: "7월 1일 수익률이 더 높을 종목은?",
+    //     subtitle: "7월 1일 수익률 대결",
+    //     country: "KR",
+    //     pointReward: 3,
+    //     cashReward: 50000,
+    //     exp: 300,
+    //     candidates: [
+    //       {"stocks": "005930"},
+    //       {"stocks": "326030"}
+    //     ],
+    //     counts: [300, 450],
+    //     results: [1, 0],
+    //     startDateTime: DateTime(2021, 6, 12, 08, 50, 00),
+    //     endDateTime: DateTime(2021, 6, 20, 08, 50),
+    //     resultDateTime: DateTime(2021, 6, 14, 16, 00));
 
     return tempQuestModel;
   }
