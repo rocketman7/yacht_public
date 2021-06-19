@@ -101,6 +101,18 @@ class AwardViewModel extends GetxController {
   // 어워드 종류가 몇 개냐에 따라 아래 List들의 length가 결정
   List<AwardModel> awardModels = [];
 
+  /////////////////////////////////////////////////////////////////
+  String appBarTitle = '';
+  String totalAwardValueStr = '';
+
+  void updateAppBarTitle(int page) {
+    appBarTitle = awardModels[page].awardTitle;
+    totalAwardValueStr = awardModels[page].totalAwardValue.toString();
+
+    update();
+  }
+  /////////////////////////////////////////////////////////////////
+
   @override
   void onInit() {
     super.onInit();

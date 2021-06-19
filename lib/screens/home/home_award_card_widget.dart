@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../screens/award/award_view_model.dart';
+import '../../screens/award/award_view.dart';
 
 class HomeAwardCardWidget extends StatelessWidget {
   const HomeAwardCardWidget({Key? key}) : super(key: key);
@@ -18,9 +19,13 @@ class HomeAwardCardWidget extends StatelessWidget {
         Column(
           children: [
             ElevatedButton(
-              child: Text('${awardViewModel.awardModels[0].awardTitle}'),
+              child: Text(
+                '${awardViewModel.awardModels[0].awardTitle}',
+                style: TextStyle(fontSize: 10),
+              ),
               onPressed: () {
-                Get.toNamed('award');
+                // Get.toNamed('award');
+                Get.to(() => AwardView(initialPage: 0));
               },
             ),
             Text('${awardViewModel.awardModels[0].totalAwardValue}'),
@@ -30,12 +35,32 @@ class HomeAwardCardWidget extends StatelessWidget {
         Column(
           children: [
             ElevatedButton(
-              child: Text('${awardViewModel.awardModels[1].awardTitle}'),
+              child: Text(
+                '${awardViewModel.awardModels[1].awardTitle}',
+                style: TextStyle(fontSize: 10),
+              ),
               onPressed: () {
-                Get.toNamed('award');
+                // Get.toNamed('award');
+                Get.to(() => AwardView(initialPage: 1));
               },
             ),
             Text('${awardViewModel.awardModels[1].totalAwardValue}'),
+          ],
+        ),
+        Spacer(),
+        Column(
+          children: [
+            ElevatedButton(
+              child: Text(
+                '${awardViewModel.awardModels[2].awardTitle}',
+                style: TextStyle(fontSize: 10),
+              ),
+              onPressed: () {
+                // Get.toNamed('award');
+                Get.to(() => AwardView(initialPage: 2));
+              },
+            ),
+            Text('${awardViewModel.awardModels[2].totalAwardValue}'),
           ],
         ),
         Spacer(),

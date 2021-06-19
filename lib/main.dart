@@ -95,10 +95,10 @@ class _MyAppState extends State<MyApp> {
               name: 'quest',
               page: () => QuestView(),
               transition: Transition.zoom),
-          GetPage(
-              name: 'award',
-              page: () => AwardView(),
-              transition: Transition.rightToLeft),
+          // GetPage(
+          //     name: 'award',
+          //     page: () => AwardView(),
+          //     transition: Transition.rightToLeft),
           GetPage(
               name: 'awardold',
               page: () => AwardOldView(),
