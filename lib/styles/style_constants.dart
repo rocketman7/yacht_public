@@ -99,12 +99,14 @@ final confirmStyle = TextStyle(
   letterSpacing: -1,
   height: 1.1,
 );
+
 final contentStyle = TextStyle(
     fontSize: getProportionateScreenHeight(16),
     fontWeight: FontWeight.w500,
     fontFamily: 'NotoSansKR',
     letterSpacing: -.5,
     height: 1.1);
+
 final detailStyle = TextStyle(
     fontSize: getProportionateScreenHeight(14),
     fontWeight: FontWeight.w500,

@@ -1,11 +1,20 @@
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/services/firestore_service.dart';
 
 class HomeViewModel extends GetxController {
+  FirestoreService _firestoreService = FirestoreService();
+  QuestModel? tempQuestModel;
+  List<QuestModel>? allQuests;
   late String globalString;
+  bool isLoading = true;
   @override
-  void onInit() {
+  void onInit() async {
     // TODO: implement onInit
-    getTodayData();
+    await getTodayData();
+    await getAllQuests();
+    isLoading = false;
+    update();
     super.onInit();
   }
 
@@ -17,5 +26,13 @@ class HomeViewModel extends GetxController {
       print("3 secs passed");
       globalString = "All data Fetchd";
     });
+  }
+
+  Future getTodayAwards() async {}
+
+  Future getAllQuests() async {
+    allQuests = await _firestoreService.getAllQuests();
+    print(allQuests);
+    // tempQuestModel = await _firestoreService.getQuest();
   }
 }

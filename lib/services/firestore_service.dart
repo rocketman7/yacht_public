@@ -36,6 +36,7 @@ class FirestoreService extends GetxService {
     }
   }
 
+  // Stat 가져오기
   Future<List<StatsModel>> getStats() async {
     CollectionReference _samsungElectronic =
         _firestoreService.collection('stocksKR/005930/stats');
@@ -98,7 +99,7 @@ class FirestoreService extends GetxService {
         .doc('quest001')
         .get()
         .then((value) {
-      print(value.data());
+      // print(value.data());
       return QuestModel.fromMap(value.data()!);
     });
 
@@ -121,5 +122,22 @@ class FirestoreService extends GetxService {
     //     resultDateTime: DateTime(2021, 6, 14, 16, 00));
 
     return tempQuestModel;
+  }
+
+  // 홈에서 띄울 모든 Quest 가져오기
+  Future<List<QuestModel>> getAllQuests() async {
+    final List<QuestModel> allQuests = [];
+    await _firestoreService
+        .collection('leagues')
+        .doc('league001')
+        .collection('quests')
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        allQuests.add(QuestModel.fromMap(element.data()));
+      });
+    });
+
+    return allQuests;
   }
 }

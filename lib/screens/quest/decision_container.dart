@@ -58,7 +58,7 @@ class _DecisionContainerState extends State<DecisionContainer> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     AutoSizeText(
-                      questViewModel.tempQuestModel!.title,
+                      questViewModel.questModel.title,
                       style: contentStyle.copyWith(
                         fontSize: getProportionateScreenHeight(18),
                         color: Colors.black.withOpacity(.75),
@@ -103,7 +103,7 @@ class _DecisionContainerState extends State<DecisionContainer> {
                           child: Column(
                             children: [
                               GetBuilder(
-                                init: QuestViewModel(),
+                                init: QuestViewModel(questViewModel.questModel),
                                 builder: (_) => Container(
                                   // padding: EdgeInsets.symmetric(
                                   //     horizontal: 16, vertical: 8),
@@ -137,8 +137,7 @@ class _DecisionContainerState extends State<DecisionContainer> {
                                 child: Material(
                                   type: MaterialType.transparency,
                                   child: AutoSizeText(
-                                    questViewModel
-                                        .tempQuestModel!.choices![index],
+                                    questViewModel.questModel.choices![index],
                                     style: subtitleStyle.copyWith(
                                         color: Colors.black.withOpacity(.75)
                                         // isSelected[index]
@@ -198,7 +197,7 @@ class FinalDecisionDialog extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             AutoSizeText(
-              questViewModel.tempQuestModel!.subtitle,
+              questViewModel.questModel.subtitle,
               maxLines: 2,
               style: subtitleStyle.copyWith(
                   fontWeight: FontWeight.w700,
@@ -222,7 +221,7 @@ class FinalDecisionDialog extends StatelessWidget {
                       child: Material(
                         type: MaterialType.transparency,
                         child: AutoSizeText(
-                          questViewModel.tempQuestModel!.choices![index],
+                          questViewModel.questModel.choices![index],
                           style: subtitleStyle,
                         ),
                       ),

@@ -13,7 +13,7 @@ import 'package:yachtOne/screens/quest/quest_view_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/styles/size_config.dart';
-import 'package:get/get.dart';
+
 import 'package:yachtOne/styles/style_constants.dart';
 
 import 'decision_container.dart';
@@ -25,20 +25,26 @@ const Color sliverAppBarColor = Color(0xFFD9D9D9);
 const Color backgroundColor = Colors.white;
 
 class QuestView extends StatelessWidget {
+  // final QuestModel questModel;
+  // QuestView({Key? key, required this.questModel}) : super(key: key);
   // const QuestView({Key? key}) : super(key: key);
 
   // final ScrollController _scrollController =
   //     ScrollController(initialScrollOffset: 0.0);
 
+  QuestModel questModel = Get.arguments;
   final stockInfoViewModel = Get.put(StockInfoKRViewModel());
-  final questViewModel = Get.put(QuestViewModel());
 
+  //  init(questModel);
   double appBarHeight = 0;
   double bottomBarHeight = 0;
   double offset = 0.0;
 
   @override
   Widget build(BuildContext context) {
+    // 뷰 모델에 퀘스트 데이터 모델 넣어주기
+    QuestViewModel questViewModel = Get.put(QuestViewModel(questModel));
+    // questViewModel.init(questModel);
     // streamSubscription =
     //     StockInfoKRView.streamController.stream.listen((event) {
     //   offset = event;
@@ -62,7 +68,7 @@ class QuestView extends StatelessWidget {
                 ? SizeConfig.safeAreaTop + 50
                 : initialHeight - offset;
             return GetBuilder<QuestViewModel>(
-                init: QuestViewModel(),
+                init: QuestViewModel(questModel),
                 builder: (questViewModel) {
                   // print(offset);
                   return Stack(
@@ -106,11 +112,9 @@ class QuestView extends StatelessWidget {
                                                 textSizeGet("txt", headingStyle)
                                                     .height))
                                     : List.generate(
-                                        questViewModel.tempQuestModel!
-                                            .candidates.length, (index) {
+                                        questModel.candidates.length, (index) {
                                         return Text(
-                                          questViewModel.tempQuestModel!
-                                              .candidates[index].values
+                                          questModel.candidates[index].values
                                               .toString(),
                                           style: headingStyle.copyWith(
                                               color: Color(0xFFDBE9EE)),
@@ -134,7 +138,7 @@ class QuestView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 // Text(
-                                //   "리그 포인트 ${questViewModel.tempQuestModel.pointReward}점",
+                                //   "리그 포인트 ${questModel.pointReward}점",
                                 //   style: headingStyle,
                                 // ),
                                 // SizedBox(
@@ -155,7 +159,7 @@ class QuestView extends StatelessWidget {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "${toPriceKRW(questViewModel.tempQuestModel!.cashReward)}원 + ${toPriceKRW(questViewModel.tempQuestModel!.pointReward)}점",
+                                            "${toPriceKRW(questModel.cashReward)}원 + ${toPriceKRW(questModel.pointReward)}점",
                                             style: bigHeadingStyle.copyWith(
                                                 color: Color(0xFFDBE9EE)),
                                           ),
@@ -201,7 +205,7 @@ class QuestView extends StatelessWidget {
                                                 ),
                                                 horizontalSpaceSmall,
                                                 Text(
-                                                  "${questViewModel.tempQuestModel!.counts![0] + questViewModel.tempQuestModel!.counts![1]}명 참여",
+                                                  "${questModel.counts![0] + questModel.counts![1]}명 참여",
                                                   style: subtitleStyle.copyWith(
                                                       color: Color(0xFFDBE9EE)),
                                                 ),
