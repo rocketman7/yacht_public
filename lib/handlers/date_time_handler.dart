@@ -70,3 +70,10 @@ String countDown(Duration duration) {
     return "${duration.inHours}시간 ${duration.inMinutes.remainder(60)}분 ${duration.inSeconds.remainder(60)}초";
   }
 }
+
+// Duration timeLeftFromNow(DateTime dateTime) {
+//     // Duration timeLeft = tempQuestModel!.endDateTime.toDate().difference(now);
+//     Duration timeLeft = dateTime.difference(now);
+//     timeToEnd(countDown(timeLeft));
+//     // return countDown(timeLeft);
+//   }

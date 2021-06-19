@@ -32,3 +32,14 @@ double getProportionateScreenWidth(double inputWidth) {
   // 375 is the layout width that designer use
   return (inputWidth / 375.0) * screenWidth;
 }
+
+// text size get 함수. 공통적으로 쓸 수 있으므로 나중에 다른 폴더 / 다른 파일에 넣고 활용
+// text 와 textStyle 을 넣으면 Text Widget의 크기가 얼마일지 Size 형식으로 반환해준다.
+Size textSizeGet(String txt, TextStyle txtStyle) {
+  return (TextPainter(
+          text: TextSpan(text: txt, style: txtStyle),
+          maxLines: 1,
+          textDirection: TextDirection.ltr)
+        ..layout())
+      .size;
+}

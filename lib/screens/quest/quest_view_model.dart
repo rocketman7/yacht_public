@@ -10,25 +10,46 @@ import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 
 class QuestViewModel extends GetxController {
+  final QuestModel questModel;
+
+  Timer? _everySecond;
   RxString timeToEnd = "".obs;
   DateTime now = DateTime.now();
   FirestoreService _firestoreService = FirestoreService();
   FirebaseStorageService _storageService = FirebaseStorageService();
-  QuestModel? tempQuestModel;
   String? imageUrl;
   List logoImage = [];
   late bool isLoading;
 
+  QuestViewModel(this.questModel);
+
+  // init(QuestModel model) {
+  //   questModel = model;
+  //   // update();
+  // }
+
+  @override
+  void onClose() {
+    // 컨트롤러 없어질 때 타이머 끄기
+
+    _everySecond!.cancel();
+    super.onClose();
+  }
+
   @override
   void onInit() async {
     isLoading = true;
-    Timer.periodic(Duration(seconds: 1), (timer) {
+
+    // getThisQuest();
+    // update();
+
+    // await getQuest();
+    _everySecond = Timer.periodic(Duration(seconds: 1), (timer) {
+      print("questTimerTicking");
       now = DateTime.now();
       timeLeft();
     });
-    // getThisQuest();
-    // update();
-    await getQuest();
+
     await getImages();
     // getLogoImage(tempQuestModel!.logoUrl[0]);
     isLoading = false;
@@ -37,15 +58,14 @@ class QuestViewModel extends GetxController {
     // return
   }
 
-  Future<void> getQuest() async {
-    tempQuestModel = await _firestoreService.getQuest();
-    // update();
-  }
+  // Future<void> getQuest() async {
+  //   tempQuestModel = await _firestoreService.getQuest();
+  //   // update();
+  // }
 
   Future getImages() async {
-    for (int i = 0; i < tempQuestModel!.logoUrl!.length; i++) {
-      imageUrl =
-          await _storageService.downloadImageURL(tempQuestModel!.logoUrl![i]);
+    for (int i = 0; i < questModel.logoUrl!.length; i++) {
+      imageUrl = await _storageService.downloadImageURL(questModel.logoUrl![i]);
       logoImage.add(Image.network(
         imageUrl!,
         fit: BoxFit.cover,
@@ -91,7 +111,7 @@ class QuestViewModel extends GetxController {
   // Duration? timeLeft;
 
   void timeLeft() {
-    Duration timeLeft = tempQuestModel!.endDateTime.toDate().difference(now);
+    Duration timeLeft = questModel.endDateTime.toDate().difference(now);
     timeToEnd(countDown(timeLeft));
     // return countDown(timeLeft);
   }
