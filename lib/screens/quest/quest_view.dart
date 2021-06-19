@@ -67,6 +67,7 @@ class QuestView extends StatelessWidget {
                   // print(offset);
                   return Stack(
                     children: [
+                      // 탑 바 배경
                       Container(
                         padding: EdgeInsets.only(top: kToolbarHeight),
                         decoration: BoxDecoration(
@@ -82,6 +83,7 @@ class QuestView extends StatelessWidget {
                         width: double.infinity,
                         height: appBarHeight,
                       ),
+                      // 스크롤 올렸을 때 상단에 뜨는 앱바
                       Positioned.fill(
                         // top: SizeConfig.safeAreaHeight,
                         child: Align(
@@ -96,20 +98,28 @@ class QuestView extends StatelessWidget {
                                   child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: List.generate(
-                                    questViewModel.tempQuestModel!.candidates
-                                        .length, (index) {
-                                  return Text(
-                                    questViewModel.tempQuestModel!
-                                        .candidates[index].values
-                                        .toString(),
-                                    style: headingStyle.copyWith(
-                                        color: Color(0xFFDBE9EE)),
-                                  );
-                                }),
+                                children: questViewModel.isLoading
+                                    ? List.generate(
+                                        1,
+                                        (index) => Container(
+                                            height:
+                                                textSizeGet("txt", headingStyle)
+                                                    .height))
+                                    : List.generate(
+                                        questViewModel.tempQuestModel!
+                                            .candidates.length, (index) {
+                                        return Text(
+                                          questViewModel.tempQuestModel!
+                                              .candidates[index].values
+                                              .toString(),
+                                          style: headingStyle.copyWith(
+                                              color: Color(0xFFDBE9EE)),
+                                        );
+                                      }),
                               ))),
                         ),
                       ),
+                      // 앱바 안에 Content
                       Positioned.fill(
                         top: -offset < -200 ? -200 : -offset,
                         child: Opacity(
@@ -169,11 +179,7 @@ class QuestView extends StatelessWidget {
                                           )
                                         ],
                                       ),
-                                // verticalSpaceLarge,
-                                // Text(
-                                //   "${questViewModel.tempQuestModel.title}",
-                                //   style: subtitleStyle,
-                                // ),
+
                                 verticalSpaceSmall,
                                 questViewModel.isLoading
                                     ? Container(

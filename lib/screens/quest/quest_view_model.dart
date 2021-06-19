@@ -22,13 +22,15 @@ class QuestViewModel extends GetxController {
   @override
   void onInit() async {
     isLoading = true;
+
+    // getThisQuest();
+    // update();
+
+    await getQuest();
     Timer.periodic(Duration(seconds: 1), (timer) {
       now = DateTime.now();
       timeLeft();
     });
-    // getThisQuest();
-    // update();
-    await getQuest();
     await getImages();
     // getLogoImage(tempQuestModel!.logoUrl[0]);
     isLoading = false;
