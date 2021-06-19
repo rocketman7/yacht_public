@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yachtOne/screens/chart/chart_view.dart';
+
+import 'home_award_card_widget.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -33,6 +34,13 @@ class _HomeViewState extends State<HomeView> {
                 Get.toNamed('quest');
               },
             ),
+            ElevatedButton(
+              child: Text("Go To Award View (Old)"),
+              onPressed: () {
+                Get.toNamed('awardold');
+              },
+            ),
+            HomeAwardCardWidget(),
           ],
         ),
       ),
