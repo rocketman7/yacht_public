@@ -4,6 +4,8 @@ import 'package:yachtOne/screens/chart/chart_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 
+import 'home_award_card_widget.dart';
+
 class HomeView extends StatefulWidget {
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -43,6 +45,13 @@ class _HomeViewState extends State<HomeView> {
                 FirestoreService().countTest(0);
               },
             ),
+            ElevatedButton(
+              child: Text("Go To Award View (Old)"),
+              onPressed: () {
+                Get.toNamed('awardold');
+              },
+            ),
+            HomeAwardCardWidget(),
           ],
         ),
       ),

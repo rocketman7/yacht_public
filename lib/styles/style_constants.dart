@@ -105,7 +105,6 @@ final contentStyle = TextStyle(
     fontFamily: 'NotoSansKR',
     letterSpacing: -.5,
     height: 1.1);
-
 final detailStyle = TextStyle(
     fontSize: getProportionateScreenHeight(14),
     fontWeight: FontWeight.w500,

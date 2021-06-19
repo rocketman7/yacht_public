@@ -18,6 +18,8 @@ import 'package:yachtOne/services_binding.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import 'models/stock_model.dart';
+import 'screens/award/award_view.dart';
+import 'screens/award_old/award_viewOld.dart';
 import 'screens/chart/chart_view.dart';
 import 'screens/test_view.dart';
 import 'styles/size_config.dart';
@@ -92,7 +94,15 @@ class _MyAppState extends State<MyApp> {
           GetPage(
               name: 'quest',
               page: () => QuestView(),
-              transition: Transition.zoom)
+              transition: Transition.zoom),
+          GetPage(
+              name: 'award',
+              page: () => AwardView(),
+              transition: Transition.rightToLeft),
+          GetPage(
+              name: 'awardold',
+              page: () => AwardOldView(),
+              transition: Transition.rightToLeft),
         ],
         builder: (context, child) {
           return MediaQuery(
