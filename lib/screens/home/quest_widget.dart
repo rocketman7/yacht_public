@@ -85,7 +85,7 @@ class QuestWidget extends StatelessWidget {
                     Text(
                       "${toPriceKRW(questModel.cashReward)}원",
                       style: titleStyle.copyWith(
-                          color: Colors.black.withOpacity(.85)),
+                          color: Colors.black.withOpacity(.75)),
                     ),
                   ],
                 ),

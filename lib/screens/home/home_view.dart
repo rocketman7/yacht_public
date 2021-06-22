@@ -79,7 +79,7 @@ class _HomeViewState extends State<HomeView> {
                       // height: 60,
                       padding: dialogPadding,
                       decoration: BoxDecoration(
-                        color: Colors.amber,
+                        color: Color(0xFF01A1DF),
                       ),
                       // borderRadius: BorderRadius.circular(5)),
                       child: Row(
@@ -87,14 +87,15 @@ class _HomeViewState extends State<HomeView> {
                         children: [
                           Text(
                             "총 10,000,000원",
-                            style: titleStyle,
+                            style:
+                                titleStyle.copyWith(color: Color(0xffe6f2f2)),
                           ),
                           SizedBox(
                             width: 16,
                           ),
                           SvgPicture.asset(
                             'assets/icons/bottom_rank2.svg',
-                            color: Colors.white54,
+                            color: Color(0xffe6f2f2),
                             height: 32,
                           ),
                         ],
@@ -189,7 +190,7 @@ class _HomeViewState extends State<HomeView> {
             SliverToBoxAdapter(
               child: Container(
                 height: 200,
-                color: Colors.lime,
+                color: Colors.grey,
               ),
             ),
             SliverToBoxAdapter(
