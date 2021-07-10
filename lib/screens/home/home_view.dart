@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/screens/chart/chart_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
+import 'package:yachtOne/screens/subLeague/temp_home_view.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -231,6 +232,15 @@ class _HomeViewState extends State<HomeView> {
                       },
                     ),
                     HomeAwardCardWidget(),
+                    ElevatedButton(
+                      child: Text("Go To Temp Home for Sub League View"),
+                      onPressed: () {
+                        // Get.toNamed('tempHome');
+                        Get.to(() => TempHomeView(
+                              leagueName: '7월',
+                            ));
+                      },
+                    ),
                   ],
                 ),
               ),

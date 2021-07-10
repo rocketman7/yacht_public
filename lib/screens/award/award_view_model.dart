@@ -125,32 +125,32 @@ class AwardViewModel extends GetxController {
     // temp 변수들. 나중에 DB랑 연동시키면 없어져도 될 듯?
     List<AwardStockModel> awardStockModels = [
       AwardStockModel(
-        stockName: '하이트진로',
+        stockName: '하이트진로', // 000080
         sharesNum: 12,
         currentPrice: 39900,
       ),
       AwardStockModel(
-        stockName: 'JYP Ent',
+        stockName: 'JYP Ent', // 035900 코스닥
         sharesNum: 6,
         currentPrice: 39950,
       ),
       AwardStockModel(
-        stockName: 'LG화학',
+        stockName: 'LG화학', // 051910
         sharesNum: 1,
         currentPrice: 850000,
       ),
       AwardStockModel(
-        stockName: '한국타이어앤테크놀로지',
+        stockName: '한국타이어앤테크놀로지', // 161390
         sharesNum: 104,
         currentPrice: 53600,
       ),
       AwardStockModel(
-        stockName: 'NHN한국사이버결제',
+        stockName: 'NHN한국사이버결제', // 060250 코스닥
         sharesNum: 56,
         currentPrice: 53900,
       ),
       AwardStockModel(
-        stockName: '삼성전자',
+        stockName: '삼성전자', // 005930
         sharesNum: 24,
         currentPrice: 81000,
       ),

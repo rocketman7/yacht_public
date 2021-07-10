@@ -4,6 +4,8 @@ import 'package:yachtOne/models/price_chart_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 
+import '../models/subLeague_model.dart';
+
 class FirestoreService extends GetxService {
   final FirebaseFirestore _firestoreService = FirebaseFirestore.instance;
   FirebaseFirestore get firestoreService => _firestoreService;
@@ -139,5 +141,24 @@ class FirestoreService extends GetxService {
     });
 
     return allQuests;
+  }
+
+  // 홈 및 서브리그세부 페이지에서 쓸 현재의 모든 서브리그 가져오기.
+  // 현재 league를 가져오는 경우도 있을것이고(ex. league001), 다음 달 리그의 모든 세부리그를 가져올 수도 있음.
+  Future<List<SubLeagueModel>> getAllSubLeague() async {
+    final List<SubLeagueModel> allSubLeagues = [];
+
+    await _firestoreService
+        .collection('leagues') // 변하지 않음
+        .doc('league001') // 변함. 현재 리그를 가져올지, 다음 리그를 가져올지 등에 따라. 값 자체도 변수로 줘야
+        .collection('subLeagues') // 변하지 않음
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        allSubLeagues.add(SubLeagueModel.fromMap(element.data()));
+      });
+    });
+
+    return allSubLeagues;
   }
 }

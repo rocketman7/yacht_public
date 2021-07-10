@@ -91,7 +91,7 @@ class AwardPageView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '4월 한 달간\n가장 많은 요트 점수를 얻으신 세분,\n상금 주식 받아가세요!',
+                              '4월 한 달간 가장 많은 요트 점수를 얻으신 세분, 상금 주식 받아가세요!',
                               style: descriptionTxtStyle,
                             ),
                             SizedBox(

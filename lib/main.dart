@@ -21,6 +21,8 @@ import 'models/stock_model.dart';
 import 'screens/award/award_view.dart';
 import 'screens/award_old/award_viewOld.dart';
 import 'screens/chart/chart_view.dart';
+import 'screens/subLeague/subLeague_view.dart';
+import 'screens/subLeague/temp_home_view.dart';
 import 'screens/test_view.dart';
 import 'styles/size_config.dart';
 
@@ -102,6 +104,14 @@ class _MyAppState extends State<MyApp> {
           GetPage(
               name: 'awardold',
               page: () => AwardOldView(),
+              transition: Transition.rightToLeft),
+          // GetPage(
+          //     name: 'tempHome',
+          //     page: () => TempHomeView(leagueName: '7월',),
+          //     transition: Transition.rightToLeft),
+          GetPage(
+              name: 'subLeague',
+              page: () => SubLeagueView(),
               transition: Transition.rightToLeft),
         ],
         builder: (context, child) {
