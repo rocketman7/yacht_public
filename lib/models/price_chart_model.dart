@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class PriceChartModel {
+class ChartPriceModel {
   final String?
       dateTime; // Firebase에서 String으로 받아온 뒤 차트에서 String -> DateTime으로 처리하기 위함
   final String? cycle;
@@ -10,7 +10,7 @@ class PriceChartModel {
   final num? close;
   final num? tradeVolume;
   final num? tradeAmount;
-  PriceChartModel({
+  ChartPriceModel({
     this.dateTime,
     this.cycle,
     this.open,
@@ -21,7 +21,7 @@ class PriceChartModel {
     this.tradeAmount,
   });
 
-  PriceChartModel copyWith({
+  ChartPriceModel copyWith({
     String? dateTime,
     String? cycle,
     num? open,
@@ -31,7 +31,7 @@ class PriceChartModel {
     num? tradeVolume,
     num? tradeAmount,
   }) {
-    return PriceChartModel(
+    return ChartPriceModel(
       dateTime: dateTime ?? this.dateTime,
       cycle: cycle ?? this.cycle,
       open: open ?? this.open,
@@ -56,8 +56,8 @@ class PriceChartModel {
     };
   }
 
-  factory PriceChartModel.fromMap(Map<String, dynamic> map) {
-    return PriceChartModel(
+  factory ChartPriceModel.fromMap(Map<String, dynamic> map) {
+    return ChartPriceModel(
       dateTime: map['dateTime'],
       cycle: map['cycle'],
       open: map['open'],
@@ -71,8 +71,8 @@ class PriceChartModel {
 
   String toJson() => json.encode(toMap());
 
-  factory PriceChartModel.fromJson(String source) =>
-      PriceChartModel.fromMap(json.decode(source));
+  factory ChartPriceModel.fromJson(String source) =>
+      ChartPriceModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -83,7 +83,7 @@ class PriceChartModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is PriceChartModel &&
+    return other is ChartPriceModel &&
         other.dateTime == dateTime &&
         other.cycle == cycle &&
         other.open == open &&

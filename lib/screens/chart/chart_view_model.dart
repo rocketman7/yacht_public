@@ -9,24 +9,46 @@ import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/price_chart_model.dart';
+import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/repositories/quest_repository.dart';
+import 'package:yachtOne/screens/quest/quest_view_model.dart';
+import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:quiver/iterables.dart' as quiver;
+import 'package:yachtOne/styles/size_config.dart';
 
 class ChartViewModel extends GetxController {
+  StockAddressModel stockAddressModel;
+
+  ChartViewModel({
+    Key? key,
+    required this.stockAddressModel,
+  });
+
   FirestoreService _firestoreService = FirestoreService();
+  PriceRepository _priceRepository = PriceRepository();
   // Rx<List<PriceChartModel>> priceList = Rx<List<PriceChartModel>>();
   // List<PriceChartModel> get prices => priceList.value;
 
-  List<PriceChartModel>? prices;
-  List<PriceChartModel> dailyPrices = [];
-  List<PriceChartModel> intradayPrices = [];
-  List<PriceChartModel>? chartPrices; //차트에 쓰일 최종 가격 데이터
-  List<String> cycles = ["1일", "1주", "1개월", "3개월", "1년", "5년"];
+  List<ChartPriceModel>? prices;
+  List<ChartPriceModel> dailyPrices = [];
+  List<ChartPriceModel> intradayPrices = [];
+
+  RxList<ChartPriceModel>? chartPrices =
+      RxList<ChartPriceModel>(); //차트에 쓰일 최종 가격 데이터
+
   // 차트 전환 토글
   RxBool showingCandleChart = true.obs;
 
+  // 로딩중
+  RxBool isLoading = true.obs;
+
+  // View에서 바라볼 Address
+  // Rx<StockAddressModel>? newStockAddress;
+
   // 차트 주기 선택
-  int selectedCycle = 0;
+  RxInt selectedCycle = 0.obs;
+  List<String> cycles = ["1일", "1주", "1개월", "3개월", "1년", "5년"];
   //차트 그리기 위한 가격 Max, Min, 볼륨 Max, Min 변수
   double? _maxPrice;
   double? _minPrice;
@@ -53,7 +75,21 @@ class ChartViewModel extends GetxController {
   @override
   onInit() {
     super.onInit();
-    return getPrices();
+    newStockAddress = stockAddressModel.obs;
+
+    // StockInfoKRViewModel().newStockAddress.listen(() { })
+
+    newStockAddress!.listen((value) {
+      print("value change from stockinfoview $value");
+      getPrices(value);
+    });
+    getPrices(stockAddressModel);
+  }
+
+  void changeStockAddressModel(StockAddressModel stockAddress) {
+    newStockAddress!(stockAddress);
+    // print('name: ${newStockAddress!.value.name}');
+    // update();
   }
 
   void toggleChartType() {
@@ -115,9 +151,12 @@ class ChartViewModel extends GetxController {
   // subList를 기간 별로 만들어주는 로직 필요
 
 // update()는 notifyListeners() 처럼 쓰면 되고 그 전에 Future에서 받아온 데이터 넣으면 됨.
-  void getPrices() async {
-    // print("get Called");
-    prices = await _firestoreService.getPrices();
+  void getPrices(StockAddressModel stockAddressModel) async {
+    isLoading(true);
+    prices = null;
+    print("get Price Called");
+    print(stockAddressModel.issueCode);
+    prices = await _priceRepository.getStock(stockAddressModel);
     // subList 기본값 만들어줘야 함
 
     // 선택된 기간에 따라 priceList 다루기
@@ -132,6 +171,8 @@ class ChartViewModel extends GetxController {
     // print(today.subtract(Duration(days: 7)));
 
     // 가져오는 PriceList는 최신이 first로, 오래된 것이 last로 정렬된다
+    dailyPrices = [];
+    intradayPrices = [];
     prices!.forEach((e) {
       if (e.cycle == "D") {
         dailyPrices.add(e);
@@ -168,20 +209,24 @@ class ChartViewModel extends GetxController {
     changeCycle();
 
     // combineCandles(subList!);
-    calculateMaxMin();
-    update();
+    // calculateMaxMin();
+    // print('getting Price: $prices');
+    isLoading(false);
+    // update();
   }
 
   // 차트 아래 주기 버튼 누르면 차트에 그릴 list 새로 만들기
   // 1) 먼저 받아온 차트 데이터에서 기간 별로 나눠주는 로직 구현하고,
   // 2) 데이터가 충분하지 않을 때 어떻게 처리할지 구현해야 함. (빅히트로)
   void changeCycle() {
-    switch (cycles[selectedCycle]) {
+    switch (cycles[selectedCycle.value]) {
       case "1일":
+
         // 임시 price chart model list를 만들고
-        List<PriceChartModel> temp = [];
+        List<ChartPriceModel> temp = [];
         // intraday price list를 처음(현재로부터 가장 최신)부터 loop
         // print(i);
+        // print('intradays: $intradayPrices');
         for (int i = 0; i < intradayPrices.length; i++) {
           // intradayPriceList.first, 즉 가장 최신의 intraday 데이터에서
           // dateTime을 string으로 변환.
@@ -194,13 +239,14 @@ class ChartViewModel extends GetxController {
           }
         }
 
-        chartPrices = temp;
+        chartPrices!(temp);
+        print('chartPrice intraday: $chartPrices');
         calculateMaxMin();
-        update();
+        // update();
         break;
 
       case "1주":
-        List<PriceChartModel> subdataForThisInterval = [];
+        List<ChartPriceModel> subdataForThisInterval = [];
         // subList = [];
         int interval = 3;
 
@@ -219,14 +265,14 @@ class ChartViewModel extends GetxController {
         subdataForThisInterval
             .sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
 
-        chartPrices = loopByCycle(subdataForThisInterval, interval);
+        chartPrices!(loopByCycle(subdataForThisInterval, interval));
 
         calculateMaxMin();
-        update();
+        // update();
         break;
 
       case "1개월":
-        List<PriceChartModel> subdataForThisInterval;
+        List<ChartPriceModel> subdataForThisInterval;
 
         int interval = 12;
         Set<String> days = Set<String>();
@@ -244,13 +290,13 @@ class ChartViewModel extends GetxController {
         subdataForThisInterval
             .sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
 
-        chartPrices = loopByCycle(subdataForThisInterval, interval);
+        chartPrices!(loopByCycle(subdataForThisInterval, interval));
         calculateMaxMin();
-        update();
+        // update();
         break;
 
       case "3개월":
-        List<PriceChartModel> temp = [];
+        List<ChartPriceModel> temp = [];
 
         String? latestDate = dailyPrices.first.dateTime!.substring(0, 8);
         // print(latestDate);
@@ -264,16 +310,16 @@ class ChartViewModel extends GetxController {
           i++;
           if (i > dailyPrices.length - 1) break;
         }
-        chartPrices = temp;
+        chartPrices!(temp);
 
         calculateMaxMin();
-        update();
+        // update();
         break;
 
       case "1년":
-        List<PriceChartModel> subdataForThisInterval = [];
+        List<ChartPriceModel> subdataForThisInterval = [];
 
-        chartPrices = [];
+        chartPrices!([]);
         int interval = 5;
 
         String? latestDate = dailyPrices.first.dateTime!.substring(0, 8);
@@ -291,8 +337,8 @@ class ChartViewModel extends GetxController {
             .sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
 
         int j = 0;
-        List<PriceChartModel> temp = [];
-        chartPrices = [];
+        List<ChartPriceModel> temp = [];
+        chartPrices!([]);
 
         for (int i = 0; i < subdataForThisInterval.length - 1; i++) {
           //weekday 1~5만
@@ -311,7 +357,7 @@ class ChartViewModel extends GetxController {
                           .difference(stringToDateTime(temp[0].dateTime!)!) >
                       Duration(days: 5))) {
             temp.add(subdataForThisInterval[i]);
-            PriceChartModel combinedModel = combineCandles(temp);
+            ChartPriceModel combinedModel = combineCandles(temp);
             // temp에 있는 가격들의 OHLC 합쳐서 새 모델 만들어야 함.
             chartPrices!.add(combinedModel);
             temp = [];
@@ -319,7 +365,7 @@ class ChartViewModel extends GetxController {
             temp.add(subdataForThisInterval[i]);
             if (i + 1 == subdataForThisInterval.length - 1) {
               temp.add(subdataForThisInterval[i + 1]);
-              PriceChartModel combinedModel = combineCandles(temp);
+              ChartPriceModel combinedModel = combineCandles(temp);
               chartPrices!.add(combinedModel);
               temp = [];
             }
@@ -329,13 +375,12 @@ class ChartViewModel extends GetxController {
         chartPrices!.sort((b, a) => a.dateTime!.compareTo(b.dateTime!));
 
         calculateMaxMin();
-        update();
+        // update();
         break;
 
       case "5년":
-        List<PriceChartModel> subdataForThisInterval = [];
-
-        chartPrices = [];
+        List<ChartPriceModel> subdataForThisInterval = [];
+        chartPrices!([]);
         int interval = 5;
 
         String? latestDate = dailyPrices.first.dateTime!.substring(0, 8);
@@ -382,8 +427,8 @@ class ChartViewModel extends GetxController {
             .sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
 
         int j = 0;
-        List<PriceChartModel> temp = [];
-        chartPrices = [];
+        List<ChartPriceModel> temp = [];
+        chartPrices!([]);
 
         for (int i = 0; i < subdataForThisInterval.length - 1; i++) {
           //weekday 1~5만
@@ -392,7 +437,7 @@ class ChartViewModel extends GetxController {
               stringToDateTime(subdataForThisInterval[i + 1].dateTime!)!
                   .month) {
             temp.add(subdataForThisInterval[i]);
-            PriceChartModel combinedModel = combineCandles(temp);
+            ChartPriceModel combinedModel = combineCandles(temp);
             // temp에 있는 가격들의 OHLC 합쳐서 새 모델 만들어야 함.
             chartPrices!.add(combinedModel);
             temp = [];
@@ -400,7 +445,7 @@ class ChartViewModel extends GetxController {
             temp.add(subdataForThisInterval[i]);
             if (i + 1 == subdataForThisInterval.length - 1) {
               temp.add(subdataForThisInterval[i + 1]);
-              PriceChartModel combinedModel = combineCandles(temp);
+              ChartPriceModel combinedModel = combineCandles(temp);
               chartPrices!.add(combinedModel);
               temp = [];
             }
@@ -408,19 +453,19 @@ class ChartViewModel extends GetxController {
         }
         chartPrices!.sort((b, a) => a.dateTime!.compareTo(b.dateTime!));
         calculateMaxMin();
-        update();
+        // update();
         break;
 
       default:
     }
   }
 
-  List<PriceChartModel> loopByCycle(
-      List<PriceChartModel> subdataForThisInterval, int interval) {
+  List<ChartPriceModel> loopByCycle(
+      List<ChartPriceModel> subdataForThisInterval, int interval) {
     // loop에서 쓸 데이터들 초기화 해주고
     int j = 0;
-    List<PriceChartModel> temp = [];
-    List<PriceChartModel> arrangedList = [];
+    List<ChartPriceModel> temp = [];
+    List<ChartPriceModel> arrangedList = [];
     for (int i = 0; i < subdataForThisInterval.length - 1; i++) {
       if (((j + 1) % interval == 0) ||
           (subdataForThisInterval[i].dateTime!.substring(0, 8) !=
@@ -433,7 +478,7 @@ class ChartViewModel extends GetxController {
         // subList!.add(temp[0]);
         // print(temp.length);
 
-        PriceChartModel combinedModel = combineCandles(temp);
+        ChartPriceModel combinedModel = combineCandles(temp);
         // temp에 있는 가격들의 OHLC 합쳐서 새 모델 만들어야 함.
 
         arrangedList.add(combinedModel);
@@ -447,7 +492,7 @@ class ChartViewModel extends GetxController {
           // print(subdataForThisInterval[i + 1]);
           temp.add(subdataForThisInterval[i + 1]);
 
-          PriceChartModel combinedModel = combineCandles(temp);
+          ChartPriceModel combinedModel = combineCandles(temp);
           arrangedList.add(combinedModel);
           temp = [];
         }
@@ -461,7 +506,7 @@ class ChartViewModel extends GetxController {
   }
 
   // PriceChartModel의 리스트를 받아서 그것들을 하나의 PriceChartModel로 합쳐서 return
-  PriceChartModel combineCandles(List<PriceChartModel> temp) {
+  ChartPriceModel combineCandles(List<ChartPriceModel> temp) {
     num tempLow = temp[0].low!;
     num tempHigh = temp[0].high!;
     num tempOpen = temp[0].open!;
@@ -479,7 +524,7 @@ class ChartViewModel extends GetxController {
       tempTradeAmount += temp[k].tradeAmount!;
     }
 
-    PriceChartModel newModel = PriceChartModel(
+    ChartPriceModel newModel = ChartPriceModel(
         dateTime: temp[temp.length - 1].dateTime,
         open: tempOpen,
         close: tempClose,

@@ -5,23 +5,34 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/models/stock_model.dart';
+import 'package:yachtOne/screens/chart/chart_view_model.dart';
+import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 
+import '../../locator.dart';
+
 class QuestViewModel extends GetxController {
   final QuestModel questModel;
+  QuestViewModel(this.questModel);
 
+  FirestoreService _firestoreService = locator<FirestoreService>();
+  FirebaseStorageService _storageService = FirebaseStorageService();
+
+  // quest의 선택 종목 중에서 몇 번째 인덱스인지
+  int stockInfoIndex = 0;
+  // 타이머 1초마다 작동
   Timer? _everySecond;
+  // 남은 시간 보여줌
   RxString timeToEnd = "".obs;
   DateTime now = DateTime.now();
-  FirestoreService _firestoreService = FirestoreService();
-  FirebaseStorageService _storageService = FirebaseStorageService();
+
   String? imageUrl;
   List logoImage = [];
-  late bool isLoading;
-
-  QuestViewModel(this.questModel);
+  StockModel? stockModel;
+  RxBool isLoading = false.obs;
 
   // init(QuestModel model) {
   //   questModel = model;
@@ -38,34 +49,35 @@ class QuestViewModel extends GetxController {
 
   @override
   void onInit() async {
-    isLoading = true;
-
-    // getThisQuest();
-    // update();
-
-    // await getQuest();
+    isLoading(true);
     _everySecond = Timer.periodic(Duration(seconds: 1), (timer) {
       print("questTimerTicking");
       now = DateTime.now();
       timeLeft();
     });
 
+    // logo 이미지 가져오기
     await getImages();
-    // getLogoImage(tempQuestModel!.logoUrl[0]);
-    isLoading = false;
+
+    isLoading(false);
     update();
     super.onInit();
     // return
   }
 
+  void changeIndex(int index) {
+    stockInfoIndex = index;
+    update();
+  }
   // Future<void> getQuest() async {
   //   tempQuestModel = await _firestoreService.getQuest();
   //   // update();
   // }
 
   Future getImages() async {
-    for (int i = 0; i < questModel.logoUrl!.length; i++) {
-      imageUrl = await _storageService.downloadImageURL(questModel.logoUrl![i]);
+    for (int i = 0; i < questModel.stockAddress.length; i++) {
+      imageUrl = await _storageService
+          .downloadImageURL(questModel.stockAddress[i].logoUrl);
       logoImage.add(Image.network(
         imageUrl!,
         fit: BoxFit.cover,

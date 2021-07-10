@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/models/price_chart_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
+import 'package:yachtOne/models/stock_model.dart';
 
 import '../models/subLeague_model.dart';
 
@@ -14,21 +15,34 @@ class FirestoreService extends GetxService {
       _firestoreService.collection('temp');
   CollectionReference get tempCollectionReference => _tempCollectionReference;
 
+  // Stock Model 가져오기
+  // Future<StockModel> getStockModel(String country, String issueCode) async {
+  //   CollectionReference _stockRef;
+  //   if (country == "KR") {
+  //     _stockRef = _firestoreService.collection('stocksKR/$issueCode');
+  //   }
+
+  // }
+
   // 차트 그리기 위한 Historical Price
-  Future<List<PriceChartModel>> getPrices() async {
+  Future<List<ChartPriceModel>> getPrices(
+      StockAddressModel stockAddress) async {
+    print('getting ${stockAddress.issueCode} prices');
     CollectionReference _samsungElectronic =
         _firestoreService.collection('stocksKR/005930/historicalPrices');
     CollectionReference _skBioPharm =
         _firestoreService.collection('stocksKR/326030/historicalPrices');
-    List<PriceChartModel> _priceChartModelList = [];
+    CollectionReference _historicalPriceRef = _firestoreService
+        .collection('stocksKR/${stockAddress.issueCode}/historicalPrices');
+    List<ChartPriceModel> _priceChartModelList = [];
 
     try {
-      await _samsungElectronic
+      await _historicalPriceRef
           .orderBy('dateTime', descending: true)
           .get()
           .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
                 // print(doc.id);  // document id 출력
-                _priceChartModelList.add(PriceChartModel.fromMap(
+                _priceChartModelList.add(ChartPriceModel.fromMap(
                     doc.data() as Map<String, dynamic>));
               }));
       // print(_priceChartModelList);
@@ -88,47 +102,48 @@ class FirestoreService extends GetxService {
     // print(temp.data()!['count']);
   }
 
-  Future<QuestModel> getQuest() async {
-    // 1) get quest -> QuestModel 생성 : async step 1
-    // 2) 여기에서 퀘스트의 자산 종류, 국가, 코드 get
-    // 3) (KR이면) stocksKR collection 들어가서 get -> StockModel 생성 : async step n (퀘스트 종목 갯수)
-    // 4) StockModel에서 logoURL -> Storage 접근, 이미지 get
-    // 5) stocksKR -> stats -> StatsModel 생성 : async step n
-    final QuestModel tempQuestModel = await _firestoreService
-        .collection('leagues')
-        .doc('league001')
-        .collection('quests')
-        .doc('quest001')
-        .get()
-        .then((value) {
-      // print(value.data());
-      return QuestModel.fromMap(value.data()!);
-    });
+  // Future<QuestModel> getQuest() async {
+  //   // 1) get quest -> QuestModel 생성 : async step 1
+  //   // 2) 여기에서 퀘스트의 자산 종류, 국가, 코드 get
+  //   // 3) (KR이면) stocksKR collection 들어가서 get -> StockModel 생성 : async step n (퀘스트 종목 갯수)
+  //   // 4) StockModel에서 logoURL -> Storage 접근, 이미지 get
+  //   // 5) stocksKR -> stats -> StatsModel 생성 : async step n
+  //   final QuestModel tempQuestModel = await _firestoreService
+  //       .collection('leagues')
+  //       .doc('league001')
+  //       .collection('quests')
+  //       .doc('quest001')
+  //       .get()
+  //       .then((value) {
+  //     // print(value.data());
+  //     return QuestModel.fromMap(value.data()!);
+  //   });
 
-    // final QuestModel tempQuestModel = QuestModel(
-    //     category: "one",
-    //     title: "7월 1일 수익률이 더 높을 종목은?",
-    //     subtitle: "7월 1일 수익률 대결",
-    //     country: "KR",
-    //     pointReward: 3,
-    //     cashReward: 50000,
-    //     exp: 300,
-    //     candidates: [
-    //       {"stocks": "005930"},
-    //       {"stocks": "326030"}
-    //     ],
-    //     counts: [300, 450],
-    //     results: [1, 0],
-    //     startDateTime: DateTime(2021, 6, 12, 08, 50, 00),
-    //     endDateTime: DateTime(2021, 6, 20, 08, 50),
-    //     resultDateTime: DateTime(2021, 6, 14, 16, 00));
+  //   // final QuestModel tempQuestModel = QuestModel(
+  //   //     category: "one",
+  //   //     title: "7월 1일 수익률이 더 높을 종목은?",
+  //   //     subtitle: "7월 1일 수익률 대결",
+  //   //     country: "KR",
+  //   //     pointReward: 3,
+  //   //     cashReward: 50000,
+  //   //     exp: 300,
+  //   //     candidates: [
+  //   //       {"stocks": "005930"},
+  //   //       {"stocks": "326030"}
+  //   //     ],
+  //   //     counts: [300, 450],
+  //   //     results: [1, 0],
+  //   //     startDateTime: DateTime(2021, 6, 12, 08, 50, 00),
+  //   //     endDateTime: DateTime(2021, 6, 20, 08, 50),
+  //   //     resultDateTime: DateTime(2021, 6, 14, 16, 00));
 
-    return tempQuestModel;
-  }
+  //   return tempQuestModel;
+  // }
 
   // 홈에서 띄울 모든 Quest 가져오기
   Future<List<QuestModel>> getAllQuests() async {
     final List<QuestModel> allQuests = [];
+    final List<StockAddressModel> options = [];
     await _firestoreService
         .collection('leagues')
         .doc('league001')
@@ -136,7 +151,14 @@ class FirestoreService extends GetxService {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        allQuests.add(QuestModel.fromMap(element.data()));
+        // options 필드의 List of Object를 아래와 같이 처리
+        element.data()['options'].toList().forEach((option) {
+          options.add(StockAddressModel.fromMap(option));
+        });
+
+        // print('questmodel options from db: $options');
+        allQuests.add(QuestModel.fromMap(element.data(), options));
+        // print(allQuests);
       });
     });
 

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
+import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/stock_model.dart';
@@ -11,9 +12,11 @@ import 'package:yachtOne/screens/stats/stats_view_model.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
 class StatsView extends StatelessWidget {
-  final StockModel stockModel;
-
-  const StatsView({Key? key, required this.stockModel}) : super(key: key);
+  final StockAddressModel stockAddressModel;
+  const StatsView({
+    Key? key,
+    required this.stockAddressModel,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/stock_model.dart';
 
 import 'package:yachtOne/screens/chart/chart_view.dart';
+import 'package:yachtOne/screens/chart/chart_view_model.dart';
 import 'package:yachtOne/screens/stats/stats_view.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -12,49 +14,33 @@ import 'package:yachtOne/styles/style_constants.dart';
 import 'stock_info_kr_view_model.dart';
 
 class StockInfoKRView extends StatelessWidget {
-  final StockModel stockModel;
-  final double bottomPadding;
+  StockAddressModel stockAddressModel;
+  double bottomPadding;
 
   StockInfoKRView({
     Key? key,
     this.bottomPadding = 0.0,
-    required this.stockModel,
+    required this.stockAddressModel,
   }) : super(key: key);
-  // static StreamController<double> streamController =
-  //     StreamController(onListen: () {
-  //   print("Listening");
-  // });
-  // final ScrollController scrollController;
-  // const StockInfoKRView(
-  //   this.scrollController,
-  //   // required this._issueCode,
-  // );
-  // static StreamController<double> streamController =
-  //     StreamController.broadcast();
 
-  final stockInfoViewModel = Get.put(StockInfoKRViewModel());
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = ScrollController(initialScrollOffset: 0);
   RxDouble additionalHeight = 0.0.obs;
 
   @override
   Widget build(BuildContext context) {
+    ChartViewModel chartViewModel =
+        Get.put(ChartViewModel(stockAddressModel: stockAddressModel));
+    print('new issueCode: ${stockAddressModel.issueCode}');
+    final stockInfoViewModel =
+        Get.put(StockInfoKRViewModel(stockAddressModel: stockAddressModel));
     // StreamController streamController = StockInfoKRView.streamController;
-    _scrollController = ScrollController(initialScrollOffset: 0);
+    // _scrollController = ScrollController(initialScrollOffset: 0);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
     _scrollController.addListener(() {
-      // print(_scrollController.offset);
-      // streamController.add(_scrollController.offset);
+      // offset obs 값에 scroll controller offset 넣어주기
       stockInfoViewModel.offset(_scrollController.offset);
-
-      // stockInfoViewModel.testOffset(_scrollController.offset);
-      // stockInfoViewModel.streamController.add(_scrollController.offset);
     });
-
-    // print(scrollController.offset);
-    print("stock info view rebuilt");
-
-    // String _issueCode = "005930";
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     return Scaffold(
       body: NotificationListener<ScrollNotification>(
         onNotification: (scrollNotification) {
@@ -79,25 +65,58 @@ class StockInfoKRView extends StatelessWidget {
                 // height: 250,
                 // color: Colors.grey,
                 child: ChartView(
-                  stockModel: stockModel,
+                  stockAddressModel: stockAddressModel,
+                  chartViewModel: chartViewModel,
                 ),
               ),
               verticalSpaceExtraLarge,
               Padding(
                 padding: kHorizontalPadding,
-                child: Text(
-                  "삼성전자는?",
-                  style: subtitleStyle.copyWith(color: Colors.black),
+                child: Obx(
+                  () => Text(
+                    newStockAddress!.value.name,
+                    style: subtitleStyle.copyWith(color: Colors.black),
+                  ),
                 ),
               ),
               SizedBox(
                 height: 8,
               ),
+              // Row(
+              //   children: [
+              //     TextButton(
+              //         onPressed: () {
+              //           // chartViewModel.getPrices(
+              //           //     stockAddressModel.copyWith(issueCode: "005930"));
+              //           stockInfoViewModel.changeStockAddressModel(
+              //               stockAddressModel.copyWith(issueCode: "005930"));
+              //           // chartViewModel.stockAddressModel =
+              //           //     stockAddressModel.copyWith(issueCode: "005930");
+              //           // chartViewModel
+              //           //     .getPrices(chartViewModel.newStockAddress!.value);
+              //         },
+              //         child: Text("0번")),
+              //     TextButton(
+              //         onPressed: () {
+              //           // chartViewModel.getPrices(
+              //           //     stockAddressModel.copyWith(issueCode: "326030"));
+              //           stockInfoViewModel.changeStockAddressModel(
+              //               stockAddressModel.copyWith(issueCode: "326030"));
+              //           // chartViewModel.stockAddressModel =
+              //           // stockAddressModel.copyWith(issueCode: "326030");
+              //           // chartViewModel
+              //           //     .getPrices(chartViewModel.newStockAddress!.value);
+              //         },
+              //         child: Text("1번")),
+              //   ],
+              // ),
               Container(
                 width: double.infinity,
                 height: 150,
-                // color: Colors.grey,
-                child: Center(child: Text("Space for Description")),
+                color: Colors.grey,
+                child: Center(
+                  child: Text("Space for Description"),
+                ),
               ),
               verticalSpaceExtraLarge,
               Padding(
@@ -121,7 +140,9 @@ class StockInfoKRView extends StatelessWidget {
               Container(
                 width: double.infinity,
                 // color: Colors.grey,
-                child: StatsView(stockModel: stockModel),
+                child: StatsView(
+                  stockAddressModel: stockAddressModel,
+                ),
               ),
               Obx(
                 () => Container(
