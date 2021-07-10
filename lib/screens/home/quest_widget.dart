@@ -21,6 +21,128 @@ class QuestWidget extends StatelessWidget {
     double _headerHeight = getProportionateScreenHeight(40);
     double _thickness = getProportionateScreenHeight(7);
 
+    return
+        //  SquareQuestWidget(
+        //   side: _side,
+        //   headerHeight: _headerHeight,
+        //   questModel: questModel,
+        // );
+
+        CircleQuestWidget(
+      side: _side,
+      thickness: _thickness,
+      headerHeight: _headerHeight,
+      questModel: questModel,
+    );
+  }
+}
+
+class SquareQuestWidget extends StatelessWidget {
+  const SquareQuestWidget({
+    Key? key,
+    required double side,
+    required double headerHeight,
+    required this.questModel,
+  })  : _side = side,
+        _headerHeight = headerHeight,
+        super(key: key);
+
+  final double _side;
+  final double _headerHeight;
+  final QuestModel questModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            // 테두리 포함한 서클
+            Container(
+              width: _side,
+              height: _side,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+
+                // shape: BoxShape.circle,
+                color: Color(0xFF01C8E5),
+              ),
+            ),
+
+            // 타이틀 내용 표시하는 부분
+            Container(
+              // color: Colors.pink.withOpacity(.5),
+              height: _headerHeight,
+              width: _side,
+
+              decoration: BoxDecoration(
+                  color: Color(0xff5399E0),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))),
+              child: Center(
+                child: Text(
+                  questModel.category,
+                  style: contentStyle.copyWith(
+                      color: Colors.white.withOpacity(.9),
+                      fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
+            Container(
+              height: _side,
+              width: _side,
+              child: Padding(
+                padding: EdgeInsets.only(top: _headerHeight),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      "${toPriceKRW(questModel.cashReward)}원",
+                      style: titleStyle.copyWith(
+                          color: Colors.black.withOpacity(.75)),
+                    ),
+                    Divider(
+                      color: Colors.white,
+                    ),
+                    Text(
+                      "${toPriceKRW(questModel.pointReward)}점 ",
+                      style: titleStyle.copyWith(
+                          color: Colors.black.withOpacity(.75)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        verticalSpaceMedium,
+        QuestTimer(questModel: questModel)
+      ],
+    );
+  }
+}
+
+class CircleQuestWidget extends StatelessWidget {
+  const CircleQuestWidget({
+    Key? key,
+    required double side,
+    required double thickness,
+    required double headerHeight,
+    required this.questModel,
+  })  : _side = side,
+        _thickness = thickness,
+        _headerHeight = headerHeight,
+        super(key: key);
+
+  final double _side;
+  final double _thickness;
+  final double _headerHeight;
+  final QuestModel questModel;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Stack(
@@ -66,6 +188,7 @@ class QuestWidget extends StatelessWidget {
               height: _headerHeight,
               width: _side,
               child: Center(
+                // heightFactor: _headerHeight,
                 child: Text(
                   questModel.category,
                   style: contentStyle.copyWith(
@@ -78,7 +201,7 @@ class QuestWidget extends StatelessWidget {
               height: _side,
               width: _side,
               child: Padding(
-                padding: EdgeInsets.only(top: getProportionateScreenHeight(6)),
+                padding: EdgeInsets.only(top: getProportionateScreenHeight(20)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -100,6 +223,7 @@ class QuestWidget extends StatelessWidget {
   }
 }
 
+// 퀘스트 남은 시간 표기하는 Stateful Widget
 class QuestTimer extends StatefulWidget {
   final QuestModel questModel;
   const QuestTimer({

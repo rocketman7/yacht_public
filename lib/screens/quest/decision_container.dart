@@ -67,7 +67,9 @@ class _DecisionContainerState extends State<DecisionContainer> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(2, (index) {
+                      children: List.generate(
+                          questViewModel.questModel.stockAddress.length,
+                          (index) {
                         return InkWell(
                           onTap: () {
                             setState(() {
@@ -137,7 +139,10 @@ class _DecisionContainerState extends State<DecisionContainer> {
                                 child: Material(
                                   type: MaterialType.transparency,
                                   child: AutoSizeText(
-                                    questViewModel.questModel.choices![index],
+                                    questViewModel.questModel.choices == null
+                                        ? questViewModel
+                                            .questModel.stockAddress[index].name
+                                        : "상승",
                                     style: subtitleStyle.copyWith(
                                         color: Colors.black.withOpacity(.75)
                                         // isSelected[index]
@@ -221,7 +226,10 @@ class FinalDecisionDialog extends StatelessWidget {
                       child: Material(
                         type: MaterialType.transparency,
                         child: AutoSizeText(
-                          questViewModel.questModel.choices![index],
+                          questViewModel.questModel.choices == null
+                              ? questViewModel
+                                  .questModel.stockAddress[index].name
+                              : "상승",
                           style: subtitleStyle,
                         ),
                       ),

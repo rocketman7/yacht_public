@@ -13,10 +13,12 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/screens/home/home_view.dart';
 import 'package:yachtOne/screens/quest/quest_view.dart';
+import 'package:yachtOne/screens/startup/startup_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/services_binding.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
+import 'locator.dart';
 import 'models/stock_model.dart';
 import 'screens/award/award_view.dart';
 import 'screens/award_old/award_viewOld.dart';
@@ -26,6 +28,7 @@ import 'styles/size_config.dart';
 
 void main() async {
   tz.initializeTimeZones();
+  setupLocator();
 
   KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,16 +80,16 @@ class _MyAppState extends State<MyApp> {
         getPages: [
           GetPage(
             name: '/',
-            page: () => HomeView(),
+            page: () => StartupView(),
           ),
-          GetPage(
-              name: 'stockInfo',
-              // settings: RouteSettings(arguments: ),
-              page: () => StockInfoKRView(
-                    bottomPadding: 0,
-                    stockModel: StockModel(),
-                  ),
-              transition: Transition.zoom),
+          // GetPage(
+          //     name: 'stockInfo',
+          //     // settings: RouteSettings(arguments: ),
+          //     page: () => StockInfoKRView(
+          //           bottomPadding: 0,
+          //         field: f,
+          //         ),
+          //     transition: Transition.zoom),
           GetPage(
               name: 'designSystem',
               page: () => YachtDesignSystem(),
