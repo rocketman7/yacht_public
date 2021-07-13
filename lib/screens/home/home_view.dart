@@ -138,27 +138,27 @@ class _HomeViewState extends State<HomeView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "오늘의 퀘스트",
+                            "새로 나온 퀘스트",
                             style: subtitleStyle,
                           ),
-                          verticalSpaceSmall,
-                          Text(
-                            "마감시간 전에 퀘스트에 참여하세요!",
-                            style: contentStyle.copyWith(
-                                color: Colors.black.withOpacity(.7)),
-                          ),
+                          // verticalSpaceSmall,
+                          // Text(
+                          //   "마감시간 전에 퀘스트에 참여하세요!",
+                          //   style: contentStyle.copyWith(
+                          //       color: Colors.black.withOpacity(.7)),
+                          // ),
                         ],
                       ),
                     ),
                     verticalSpaceMedium,
                     Container(
                       // color: Colors.amber.withOpacity(.3),
-                      height: getProportionateScreenHeight(220),
+                      height: getProportionateScreenHeight(360),
                       child: Obx(() {
                         return homeViewModel.allQuests.length == 0
                             ? Container(
                                 color: Colors.yellow,
-                                height: getProportionateScreenHeight(220),
+                                height: getProportionateScreenHeight(360),
                               )
                             : ListView.builder(
                                 scrollDirection: Axis.horizontal,

@@ -28,9 +28,9 @@ class QuestWidget extends StatelessWidget {
         //   questModel: questModel,
         // );
 
-        CircleQuestWidget(
+        SquareQuestWidget(
       side: _side,
-      thickness: _thickness,
+      // thickness: _thickness,
       headerHeight: _headerHeight,
       questModel: questModel,
     );
@@ -53,72 +53,90 @@ class SquareQuestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        Stack(
-          children: [
-            // 테두리 포함한 서클
-            Container(
-              width: _side,
-              height: _side,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+        // 테두리 포함한 서클
+        // Container(
+        //   width: _side,
+        //   height: _side,
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(10),
 
-                // shape: BoxShape.circle,
-                color: Color(0xFF01C8E5),
-              ),
-            ),
+        //     // shape: BoxShape.circle,
+        //     color: Color(0xFF01C8E5),
+        //   ),
+        // ),
 
-            // 타이틀 내용 표시하는 부분
-            Container(
-              // color: Colors.pink.withOpacity(.5),
-              height: _headerHeight,
-              width: _side,
+        // 타이틀 내용 표시하는 부분
+        Container(
+          padding: EdgeInsets.all(16),
+          // color: Colors.pink.withOpacity(.5),
+          height: getProportionateScreenHeight(340),
+          width: getProportionateScreenHeight(290),
 
-              decoration: BoxDecoration(
-                  color: Color(0xff5399E0),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))),
-              child: Center(
-                child: Text(
-                  questModel.category,
-                  style: contentStyle.copyWith(
-                      color: Colors.white.withOpacity(.9),
-                      fontWeight: FontWeight.w700),
-                ),
-              ),
+          decoration: BoxDecoration(
+              color: Color(0xffFFFFFF),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 7)]),
+
+          child: Center(
+            child: Text(
+              questModel.category,
+              style: contentStyle.copyWith(
+                  color: Colors.black, fontWeight: FontWeight.w700),
             ),
-            Container(
-              height: _side,
-              width: _side,
-              child: Padding(
-                padding: EdgeInsets.only(top: _headerHeight),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  // mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      "${toPriceKRW(questModel.cashReward)}원",
-                      style: titleStyle.copyWith(
-                          color: Colors.black.withOpacity(.75)),
-                    ),
-                    Divider(
-                      color: Colors.white,
-                    ),
-                    Text(
-                      "${toPriceKRW(questModel.pointReward)}점 ",
-                      style: titleStyle.copyWith(
-                          color: Colors.black.withOpacity(.75)),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
-        verticalSpaceMedium,
-        QuestTimer(questModel: questModel)
+        Container(
+          height: getProportionateScreenHeight(340),
+          width: getProportionateScreenHeight(290),
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: Text("${questModel.category} 퀘스트")),
+                  Container(
+                    // width: 80,
+                    // color: Colors.green,
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 18,
+                          width: 18,
+                          color: Colors.yellow,
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Text("5개 소모")
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Text(
+                "${questModel.title}",
+                // style:
+                //     // TextStyle(),
+              ),
+              Text(
+                "${toPriceKRW(questModel.cashReward)}원",
+                style:
+                    titleStyle.copyWith(color: Colors.black.withOpacity(.75)),
+              ),
+              Text(
+                "${toPriceKRW(questModel.pointReward)}점 ",
+                style:
+                    titleStyle.copyWith(color: Colors.black.withOpacity(.75)),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
