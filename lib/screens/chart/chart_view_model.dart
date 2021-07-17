@@ -313,7 +313,6 @@ class ChartViewModel extends GetxController {
         chartPrices!(temp);
 
         calculateMaxMin();
-        // update();
         break;
 
       case "1년":
