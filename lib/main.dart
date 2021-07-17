@@ -28,6 +28,8 @@ import 'screens/subLeague/temp_home_view.dart';
 import 'screens/test_view.dart';
 import 'styles/size_config.dart';
 
+import 'screens/subLeague/subLeague_controller.dart';
+
 void main() async {
   tz.initializeTimeZones();
   setupLocator();
@@ -113,9 +115,15 @@ class _MyAppState extends State<MyApp> {
           //     page: () => TempHomeView(leagueName: '7월',),
           //     transition: Transition.rightToLeft),
           GetPage(
-              name: 'subLeague',
-              page: () => SubLeagueView(),
-              transition: Transition.rightToLeft),
+            name: 'subLeague',
+            page: () => SubLeagueView(),
+            transition: Transition.rightToLeft,
+            binding: BindingsBuilder(() {
+              // Get.lazyPut<SubLeagueController>(() => SubLeagueController());
+              // Get.put(SubLeagueController());
+              Get.put(HomeRepository());
+            }),
+          ),
         ],
         builder: (context, child) {
           return MediaQuery(

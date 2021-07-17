@@ -183,4 +183,22 @@ class FirestoreService extends GetxService {
 
     return allSubLeagues;
   }
+
+  // state stream test용
+  Stream<String> getStateStream1() {
+    return _firestoreService
+        .collection('leagues')
+        .doc('league001')
+        .snapshots()
+        .map((snapshot) => snapshot.data()!['stateStream1']);
+  }
+
+  // state stream test용
+  Stream<String> getStateStream2() {
+    return _firestoreService
+        .collection('leagues')
+        .doc('league001')
+        .snapshots()
+        .map((snapshot) => snapshot.data()!['stateStream2']);
+  }
 }

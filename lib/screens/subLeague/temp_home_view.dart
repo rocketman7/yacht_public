@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../styles/style_constants.dart';
+import '../../handlers/numbers_handler.dart' as NumbersHandler;
 
 import 'subLeague_controller.dart';
 import 'subLeague_view.dart';
@@ -34,6 +35,7 @@ class TempHomeView extends StatelessWidget {
                 height: 0.0,
               ),
               GetBuilder<SubLeagueController>(
+                // 여기서 init 을 해주니까 위에서 굳이 put 안해줘도 됨
                 init: SubLeagueController(),
                 builder: (controller) {
                   if (controller.isAllSubLeaguesLoaded) {
@@ -108,8 +110,9 @@ class HomeSubLeagueCardCarouselSliderWidget extends StatelessWidget {
                     SizedBox(
                       height: 22.0,
                     ),
-                    Text('12,105,300원',
-                        // Text('${controller.allSubLeagues[0].totalValue}',
+                    //원인지 달러인지 등도 나중에는 구분해줘야할 듯
+                    Text(
+                        '${NumbersHandler.toPriceKRW(_subLeagueController.allSubLeagues[index].totalValue)}원',
                         style: titleStyle.copyWith(
                             color: Color(0xFFEE5076),
                             fontSize: 30.0,
