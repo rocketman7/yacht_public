@@ -187,7 +187,7 @@ class ChartView extends StatelessWidget {
                     if (index == chartViewModel.cycles.length) {
                       chartViewModel.toggleChartType();
                     } else {
-                      if (chartViewModel.selectedCycle != index) {
+                      if (chartViewModel.selectedCycle.value != index) {
                         chartViewModel.selectedCycle(index);
                         chartViewModel.changeCycle();
                       }
