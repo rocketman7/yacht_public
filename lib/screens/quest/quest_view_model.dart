@@ -81,8 +81,8 @@ class QuestViewModel extends GetxController {
       logoImage.add(Image.network(
         imageUrl!,
         fit: BoxFit.cover,
-        height: getProportionateScreenHeight(60),
-        width: getProportionateScreenHeight(60),
+        height: reactiveHeight(60),
+        width: reactiveHeight(60),
       ));
     }
   }

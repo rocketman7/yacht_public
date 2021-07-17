@@ -1,26 +1,309 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'size_config.dart';
 
-const kPrimaryBackGroundColorLight = Colors.white;
-// Color(0xFFF1FFE9);
-const kPrimaryColor = Color(0xFFFF7643);
-const kPrimaryLightColor = Color(0xFFFFECDF);
-const kPrimaryGradientColor = LinearGradient(
-  begin: Alignment.topLeft,
-  end: Alignment.bottomRight,
-  colors: [Color(0xFFFFA53E), Color(0xFFFF7643)],
+//// 라이트버전
+/// 색
+// 색상표
+const Color seaBlue = Color(0xFF489EDD);
+const Color yachtRed = Color(0xFFEE5076);
+// 백그라운드
+const primaryBackgroundColor = Color(0xFFFBFAFD);
+// 앱 바 백그라운드
+Color primaryAppbarBackgroundColor = Color(0xFFFBFAFD).withOpacity(.7);
+// 불투명 Glassmorphism 백그라운드
+Color glassmorphismBackgroundColor = Color(0xFFFBFAFD).withOpacity(.4);
+// 기본 폰트 색
+const primaryFontColor = Color(0xFF123A5F);
+// 강조하는 핑크색
+const primaryPointFontColor = yachtRed;
+// 흰 바탕에 쓸 약한 폰트 색
+const primaryLightFontColor = Color(0xFF789EC1);
+// 활성화된 버튼 색
+const activatedButtonColor = Color(0xFF196AB4);
+// 홈모듈박스 바탕색
+const homeModuleBoxBackgroundColor = Colors.white;
+// 버튼 글씨색
+const buttonTextColor = Colors.white;
+// 모듈박스 그림자 색
+Color boxShadowColor = Color(0xFF38204B).withOpacity(.08);
+// k-Bull & Bear & Volume Color
+const bullColorKR = seaBlue;
+const bearColorKR = yachtRed;
+const volumeColor = Color(0xFF789EC1);
+
+/// 패딩
+// 텍스트 탑일 때 텍스트 사이즈에 따른 패딩
+
+double reducedPaddingWhenTextIsBelow(double padding, double textSize) {
+  return padding - (textSize * 0.2).round().toDouble();
+}
+
+double reducePaddingOneSide(double textSize) {
+  return (textSize * 0.2).round().toDouble();
+}
+
+double reducePaddingBothSide(double topTextSize, double bottomTextSize) {
+  return ((topTextSize * 0.2).round() + (bottomTextSize * 0.2).round())
+      .toDouble();
+}
+
+EdgeInsets textTopPadding(double textSize) {
+  // print(textSize);
+  // print((textSize * 0.2).round());
+  // print((-(textSize * 0.2).round() + 14).h);
+  // print(17.h);
+  return EdgeInsets.fromLTRB(
+      14.w, (-(textSize * 0.2).round() + 30).w, 14.w, 14.w);
+}
+
+EdgeInsets textTopOpenHorizontalPadding(double textSize) {
+  // print(textSize);
+  // print((textSize * 0.2).round());
+  // print((-(textSize * 0.2).round() + 14).h);
+  // print(17.h);
+  return EdgeInsets.fromLTRB(0, (-(textSize * 0.2).round() + 14).w, 0, 8.w);
+}
+
+EdgeInsets priamryHorizontalPadding = EdgeInsets.symmetric(
+  horizontal: 14.w,
 );
+
+EdgeInsets moduleBoxPadding(double moduleUpperTextSize) {
+  return EdgeInsets.fromLTRB(
+    14.w,
+    (14 - reducePaddingOneSide(moduleUpperTextSize)).w,
+    14.w,
+    14.w,
+  );
+}
+
+/// 사이즈드 박스
+// 홈-모듈 사이
+SizedBox btwHomeModule = SizedBox(
+  height: 50.w - reducePaddingOneSide(homeModuleTitleTextStyle.fontSize!),
+);
+
+// 홈-모듈-타이틀과 슬라이더 사이
+SizedBox btwHomeModuleTitleBox = SizedBox(
+  height: 20.w - reducePaddingOneSide(homeModuleTitleTextStyle.fontSize!),
+);
+
+// 텍스트 사이
+SizedBox btwText(double topTextSize, double bottomTextSize) {
+  return SizedBox(
+    height: 10.w - reducePaddingBothSide(topTextSize, bottomTextSize),
+  );
+}
+
+// 홈-모듈-박스 아래 간격
+SizedBox belowHomeModule = SizedBox(height: 10.w);
+
+/// 컨테이너 데코레이션
+// 홈-모듈박스 데코레이션
+BoxDecoration primaryBoxDecoration = BoxDecoration(
+  color: Colors.white,
+  borderRadius: BorderRadius.circular(10),
+);
+// 모듈박스 그림자
+BoxShadow primaryBoxShadow = BoxShadow(
+  color: boxShadowColor,
+  blurRadius: 12,
+  offset: Offset(0, 0),
+);
+// 불투명 Glassmorphism Container
+
+// var glassMorphismDecoration =
+ClipRect glassmorphismContainer({required Widget child}) {
+  return ClipRect(
+    child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+        child: Container(
+          padding: EdgeInsets.all(6.w),
+          decoration: BoxDecoration(
+              color: glassmorphismBackgroundColor,
+              borderRadius: BorderRadius.circular(10.w)),
+          child: child,
+        )),
+  );
+}
+
+//// 폰트
+/// 홈
+// 홈-헤더-닉네임
+TextStyle homeHeaderName = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 20.w,
+  fontWeight: FontWeight.w700,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+// 홈-헤더-닉네임뒤에
+TextStyle homeHeaderAfterName = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 20.w,
+  fontWeight: FontWeight.w300,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+// 홈-섹션박스-헤더
+TextStyle homeModuleTitleTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 20.w,
+  fontWeight: FontWeight.w600,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+// 홈-상금박스-상금헤더
+TextStyle awardModuleSliderTitleTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 16.w,
+  fontWeight: FontWeight.w700,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-퀘스트박스-기간헤더
+TextStyle questTermTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: primaryLightFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+// 홈-퀘스트모듈-퀘스트박스-타이틀
+TextStyle questTitleTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-퀘스트모듈-퀘스트박스-남은시간
+TextStyle questTimeLeftTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w600,
+  color: primaryPointFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-퀘스트모듈-퀘스트박스-리워드
+TextStyle questRewardTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 16.w,
+  fontWeight: FontWeight.w500,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+// 홈-퀘스트모듈-퀘스트박스-참여자수
+TextStyle questCountTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w700,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 버튼 안에 들어가는 텍스트
+TextStyle buttonTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 16.w,
+  fontWeight: FontWeight.w600,
+  color: buttonTextColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 자세한 내용 쓰는 텍스트
+TextStyle detailedContentTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 16.w,
+  fontWeight: FontWeight.w300,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+/// 기업 정보
+// 기업 이름
+TextStyle stockInfoNameTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 22.w,
+  fontWeight: FontWeight.w500,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+// 차트 메인 가격
+TextStyle stockPriceTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 30.w,
+  fontWeight: FontWeight.w600,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+//
+TextStyle stockPriceChangeTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+//// 버튼 컴포넌트들
+// 기본 버튼
+Container primaryButtonContainer(Text buttonText) {
+  return Container(
+    height: 42.w,
+    width: double.infinity,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(50.w),
+      color: activatedButtonColor,
+    ),
+    child: Center(child: buttonText),
+  );
+}
+
+//
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
 const kSecondaryColor = Color(0xFF979797);
-const kTextColor = Colors.black;
 
 const kAnimationDuration = Duration(milliseconds: 200);
-
-// k-Bull & Bear Color
-const bullColorKR = Color(0xFFEB3A4F);
-const bearColorKR = Color(0xFF0091D5);
-
-// Volume Color
-Color volumeColor = Color(0xFF607D8B).withOpacity(.5);
 
 // Income Statement Bar Chart & Line Chart Color
 Color barColor1 = Color(0xFF607D8B).withOpacity(.3);
@@ -50,7 +333,7 @@ const dialogPadding = EdgeInsets.symmetric(horizontal: 32, vertical: 20);
 
 // Font Style
 final headingStyleEN = TextStyle(
-  fontSize: getProportionateScreenHeight(27.5),
+  fontSize: reactiveHeight(27.5),
   fontWeight: FontWeight.w700,
   fontFamily: 'DmSans',
   color: Colors.black,
@@ -59,7 +342,7 @@ final headingStyleEN = TextStyle(
 );
 
 final bigHeadingStyle = TextStyle(
-  fontSize: getProportionateScreenHeight(34),
+  fontSize: reactiveHeight(34),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
   letterSpacing: -0.5,
@@ -67,7 +350,7 @@ final bigHeadingStyle = TextStyle(
 );
 
 final headingStyle = TextStyle(
-  fontSize: getProportionateScreenHeight(26),
+  fontSize: reactiveHeight(26),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
   letterSpacing: -0.5,
@@ -75,7 +358,7 @@ final headingStyle = TextStyle(
 );
 
 final titleStyle = TextStyle(
-  fontSize: getProportionateScreenHeight(24),
+  fontSize: reactiveHeight(24),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
   letterSpacing: -1,
@@ -83,7 +366,7 @@ final titleStyle = TextStyle(
 );
 
 final subtitleStyle = TextStyle(
-  fontSize: getProportionateScreenHeight(20),
+  fontSize: reactiveHeight(20),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
   color: Color(0xff212121),
@@ -92,7 +375,7 @@ final subtitleStyle = TextStyle(
 );
 
 final confirmStyle = TextStyle(
-  fontSize: getProportionateScreenHeight(18),
+  fontSize: reactiveHeight(18),
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
   color: Color(0xff212121),
@@ -101,14 +384,14 @@ final confirmStyle = TextStyle(
 );
 
 final contentStyle = TextStyle(
-    fontSize: getProportionateScreenHeight(16),
+    fontSize: reactiveHeight(16),
     fontWeight: FontWeight.w500,
     fontFamily: 'NotoSansKR',
     letterSpacing: -.5,
     height: 1.1);
 
 final detailStyle = TextStyle(
-    fontSize: getProportionateScreenHeight(14),
+    fontSize: reactiveHeight(14),
     fontWeight: FontWeight.w500,
     fontFamily: 'NotoSansKR',
     letterSpacing: -.5,
@@ -116,21 +399,21 @@ final detailStyle = TextStyle(
 
 // 숫자 스타일
 final ohlcInfoStyle = TextStyle(
-    fontSize: getProportionateScreenHeight(16),
+    fontSize: reactiveHeight(16),
     fontWeight: FontWeight.w400,
     fontFamily: 'NotoSansKR',
     letterSpacing: -0.5,
     height: 1.1);
 
 final ohlcPriceStyle = TextStyle(
-    fontSize: getProportionateScreenHeight(18),
+    fontSize: reactiveHeight(18),
     fontWeight: FontWeight.w500,
     fontFamily: 'DmSans',
     letterSpacing: -0.5,
     height: 1.1);
 
 final detailPriceStyle = TextStyle(
-    fontSize: getProportionateScreenHeight(16),
+    fontSize: reactiveHeight(16),
     fontWeight: FontWeight.w700,
     fontFamily: 'DmSans',
     letterSpacing: -0.5,
@@ -160,17 +443,17 @@ const String kNamelNullError = "Please Enter your name";
 const String kPhoneNumberNullError = "Please Enter your phone number";
 const String kAddressNullError = "Please Enter your address";
 
-final otpInputDecoration = InputDecoration(
-  contentPadding:
-      EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),
-  border: outlineInputBorder(),
-  focusedBorder: outlineInputBorder(),
-  enabledBorder: outlineInputBorder(),
-);
+// final otpInputDecoration = InputDecoration(
+//   contentPadding:
+//       EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),
+//   border: outlineInputBorder(),
+//   focusedBorder: outlineInputBorder(),
+//   enabledBorder: outlineInputBorder(),
+// );
 
-OutlineInputBorder outlineInputBorder() {
-  return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(getProportionateScreenWidth(15)),
-    borderSide: BorderSide(color: kTextColor),
-  );
-}
+// OutlineInputBorder outlineInputBorder() {
+//   return OutlineInputBorder(
+//     borderRadius: BorderRadius.circular(getProportionateScreenWidth(15)),
+//     borderSide: BorderSide(color: kTextColor),
+//   );
+// }

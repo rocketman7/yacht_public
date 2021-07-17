@@ -5,13 +5,13 @@ import 'style_constants.dart';
 ThemeData theme() {
   return ThemeData(
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: kPrimaryBackGroundColorLight,
+        backgroundColor: primaryBackgroundColor,
         elevation: 0.0,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
-        unselectedLabelStyle: TextStyle(color: kTextColor)),
-    scaffoldBackgroundColor: kPrimaryBackGroundColorLight,
-    fontFamily: "AppleSD",
+        unselectedLabelStyle: TextStyle(color: primaryFontColor)),
+    scaffoldBackgroundColor: primaryBackgroundColor,
+    fontFamily: "SCore",
     appBarTheme: appBarTheme(),
     textTheme: textTheme(),
     inputDecorationTheme: inputDecorationTheme(),
@@ -22,7 +22,7 @@ ThemeData theme() {
 InputDecorationTheme inputDecorationTheme() {
   OutlineInputBorder outlineInputBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(28),
-    borderSide: BorderSide(color: kTextColor),
+    borderSide: BorderSide(color: primaryFontColor),
     gapPadding: 10,
   );
   return InputDecorationTheme(
@@ -41,21 +41,21 @@ TextTheme textTheme() {
   return TextTheme(
     headline3: TextStyle(
         fontFamily: "AppleSD",
-        color: kTextColor,
+        color: primaryFontColor,
         fontSize: 26,
         fontWeight: FontWeight.w700),
     headline5: TextStyle(
         fontFamily: "AppleSD",
-        color: kTextColor,
+        color: primaryFontColor,
         fontSize: 24,
         fontWeight: FontWeight.w700),
     headline6: TextStyle(
         fontFamily: "AppleSD",
-        color: kTextColor,
+        color: primaryFontColor,
         fontSize: 20,
         fontWeight: FontWeight.w700),
-    bodyText1: TextStyle(fontFamily: "AppleSD", color: kTextColor),
-    bodyText2: TextStyle(fontFamily: "AppleSD", color: kTextColor),
+    bodyText1: TextStyle(fontFamily: "AppleSD", color: primaryFontColor),
+    bodyText2: TextStyle(fontFamily: "AppleSD", color: primaryFontColor),
   );
 }
 

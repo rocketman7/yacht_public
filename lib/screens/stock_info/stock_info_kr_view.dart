@@ -42,6 +42,7 @@ class StockInfoKRView extends StatelessWidget {
     });
     // SizeConfig().init(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: NotificationListener<ScrollNotification>(
         onNotification: (scrollNotification) {
           if (scrollNotification is ScrollEndNotification) {
@@ -52,109 +53,104 @@ class StockInfoKRView extends StatelessWidget {
           }
           return true;
         },
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 8),
-              // 차트 공간
-              Container(
-                width: double.infinity,
-                // height: 250,
-                // color: Colors.grey,
-                child: ChartView(
-                  stockAddressModel: stockAddressModel,
-                  chartViewModel: chartViewModel,
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              // height: 250,
+              // color: Colors.grey,
+              child: ChartView(
+                stockAddressModel: stockAddressModel,
+                chartViewModel: chartViewModel,
               ),
-              verticalSpaceExtraLarge,
-              Padding(
-                padding: kHorizontalPadding,
-                child: Obx(
-                  () => Text(
-                    newStockAddress!.value.name,
-                    style: subtitleStyle.copyWith(color: Colors.black),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              // Row(
-              //   children: [
-              //     TextButton(
-              //         onPressed: () {
-              //           // chartViewModel.getPrices(
-              //           //     stockAddressModel.copyWith(issueCode: "005930"));
-              //           stockInfoViewModel.changeStockAddressModel(
-              //               stockAddressModel.copyWith(issueCode: "005930"));
-              //           // chartViewModel.stockAddressModel =
-              //           //     stockAddressModel.copyWith(issueCode: "005930");
-              //           // chartViewModel
-              //           //     .getPrices(chartViewModel.newStockAddress!.value);
-              //         },
-              //         child: Text("0번")),
-              //     TextButton(
-              //         onPressed: () {
-              //           // chartViewModel.getPrices(
-              //           //     stockAddressModel.copyWith(issueCode: "326030"));
-              //           stockInfoViewModel.changeStockAddressModel(
-              //               stockAddressModel.copyWith(issueCode: "326030"));
-              //           // chartViewModel.stockAddressModel =
-              //           // stockAddressModel.copyWith(issueCode: "326030");
-              //           // chartViewModel
-              //           //     .getPrices(chartViewModel.newStockAddress!.value);
-              //         },
-              //         child: Text("1번")),
-              //   ],
-              // ),
-              Container(
-                width: double.infinity,
-                height: 150,
-                color: Colors.grey,
-                child: Center(
-                  child: Text("Space for Description"),
-                ),
-              ),
-              verticalSpaceExtraLarge,
-              Padding(
-                padding: kHorizontalPadding,
-                child: Text(
-                  "뉴스",
+            ),
+            verticalSpaceExtraLarge,
+            Padding(
+              padding: kHorizontalPadding,
+              child: Obx(
+                () => Text(
+                  newStockAddress!.value.name,
                   style: subtitleStyle.copyWith(color: Colors.black),
                 ),
               ),
-              SizedBox(
-                height: 8,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            // Row(
+            //   children: [
+            //     TextButton(
+            //         onPressed: () {
+            //           // chartViewModel.getPrices(
+            //           //     stockAddressModel.copyWith(issueCode: "005930"));
+            //           stockInfoViewModel.changeStockAddressModel(
+            //               stockAddressModel.copyWith(issueCode: "005930"));
+            //           // chartViewModel.stockAddressModel =
+            //           //     stockAddressModel.copyWith(issueCode: "005930");
+            //           // chartViewModel
+            //           //     .getPrices(chartViewModel.newStockAddress!.value);
+            //         },
+            //         child: Text("0번")),
+            //     TextButton(
+            //         onPressed: () {
+            //           // chartViewModel.getPrices(
+            //           //     stockAddressModel.copyWith(issueCode: "326030"));
+            //           stockInfoViewModel.changeStockAddressModel(
+            //               stockAddressModel.copyWith(issueCode: "326030"));
+            //           // chartViewModel.stockAddressModel =
+            //           // stockAddressModel.copyWith(issueCode: "326030");
+            //           // chartViewModel
+            //           //     .getPrices(chartViewModel.newStockAddress!.value);
+            //         },
+            //         child: Text("1번")),
+            //   ],
+            // ),
+            Container(
+              width: double.infinity,
+              height: 150,
+              color: Colors.grey,
+              child: Center(
+                child: Text("Space for Description"),
               ),
-              Container(
-                width: double.infinity,
-                height: 150,
-                // color: Colors.grey,
-                child: Center(child: Text("Space for News")),
+            ),
+            verticalSpaceExtraLarge,
+            Padding(
+              padding: kHorizontalPadding,
+              child: Text(
+                "뉴스",
+                style: subtitleStyle.copyWith(color: Colors.black),
               ),
-              verticalSpaceExtraLarge,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+              width: double.infinity,
+              height: 150,
+              // color: Colors.grey,
+              child: Center(child: Text("Space for News")),
+            ),
+            verticalSpaceExtraLarge,
 
-              Container(
-                width: double.infinity,
-                // color: Colors.grey,
-                child: StatsView(
-                  stockAddressModel: stockAddressModel,
-                ),
+            Container(
+              width: double.infinity,
+              // color: Colors.grey,
+              child: StatsView(
+                stockAddressModel: stockAddressModel,
               ),
-              Obx(
-                () => Container(
-                  height: additionalHeight.value,
-                  color: Colors.red,
-                ),
+            ),
+            Obx(
+              () => Container(
+                height: additionalHeight.value,
+                color: Colors.red,
               ),
-              Container(
-                height: bottomPadding,
-              )
-            ],
-          ),
+            ),
+            Container(
+              height: bottomPadding,
+            )
+          ],
         ),
       ),
     );

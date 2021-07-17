@@ -11,7 +11,7 @@ class LiveWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _side = getProportionateScreenHeight(280);
+    double _side = reactiveHeight(280);
     return Column(
       children: [
         Container(

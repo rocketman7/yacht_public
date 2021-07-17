@@ -52,7 +52,7 @@ class _DecisionContainerState extends State<DecisionContainer> {
                 color: Color(0xFFA8C6D2).withOpacity(.7),
               ),
               width: SizeConfig.screenWidth - 50,
-              height: getProportionateScreenHeight(140),
+              height: reactiveHeight(140),
               child: GetBuilder<QuestViewModel>(
                 builder: (questViewModel) => Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -60,7 +60,7 @@ class _DecisionContainerState extends State<DecisionContainer> {
                     AutoSizeText(
                       questViewModel.questModel.title,
                       style: contentStyle.copyWith(
-                        fontSize: getProportionateScreenHeight(18),
+                        fontSize: reactiveHeight(18),
                         color: Colors.black.withOpacity(.75),
                       ),
                       maxLines: 1,
