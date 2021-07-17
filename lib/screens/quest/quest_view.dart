@@ -10,11 +10,13 @@ import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/stock_model.dart';
 import 'package:yachtOne/screens/chart/chart_view.dart';
 import 'package:yachtOne/screens/chart/chart_view_model.dart';
+import 'package:yachtOne/screens/home/quest_widget.dart';
 import 'package:yachtOne/screens/quest/quest_view_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/styles/size_config.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../home/quest_widget.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
 import 'decision_container.dart';
@@ -62,299 +64,431 @@ class QuestView extends StatelessWidget {
     // ));
 
     return Scaffold(
-      body: Column(
-        children: [
-          Obx(() {
-            double offset = stockInfoViewModel.offset.value;
-            double initialHeight = getProportionateScreenHeight(200);
-            appBarHeight = initialHeight - offset < SizeConfig.safeAreaTop + 50
-                ? SizeConfig.safeAreaTop + 50
-                : initialHeight - offset;
-            return Stack(
-              children: [
-                // 탑 바 배경
-                Container(
-                  padding: EdgeInsets.only(top: kToolbarHeight),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                        Color(0xFF0099C2),
-                        Color(0xFF01A1DF),
-                        Color(0xFF01C8E5)
-                      ])),
-                  // color: Colors.amber.withOpacity(.2),
-                  width: double.infinity,
-                  height: appBarHeight,
-                ),
-                // 스크롤 올렸을 때 상단에 뜨는 앱바
-                Positioned.fill(
-                  // top: SizeConfig.safeAreaHeight,
-                  child: Align(
-                    alignment: Alignment(0, 0.5),
-                    child: Opacity(
-                        opacity: offset < 0
-                            ? 0
-                            : offset < 100
-                                ? offset / 100
-                                : 1,
-                        child: Container(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: questViewModel.isLoading.value
-                              ? List.generate(
-                                  1,
-                                  (index) => Container(
-                                      height: textSizeGet("txt", headingStyle)
-                                          .height))
-                              : List.generate(questModel.stockAddress.length,
-                                  (index) {
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 8),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: Color(0xff334361)),
-                                    child: Text(
-                                      questModel.stockAddress[index].name
-                                          .toString(),
-                                      style: titleStyle.copyWith(
-                                          color: Color(0xFFDBE9EE)),
-                                    ),
-                                  );
-                                }),
-                        ))),
-                  ),
-                ),
-                // 앱바 안에 Content
-                Positioned.fill(
-                  top: -offset < -200 ? -200 : -offset,
-                  child: Opacity(
-                    opacity: (offset < 30) ? 1 : 30 / offset,
-                    child: Container(
-                      padding: EdgeInsets.only(top: SizeConfig.safeAreaTop),
-                      // color: Colors.red,
-                      height: initialHeight,
-                      width: SizeConfig.screenWidth,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Text(
-                          //   "리그 포인트 ${questModel.pointReward}점",
-                          //   style: headingStyle,
-                          // ),
-                          // SizedBox(
-                          //   child: Text(
-                          //     "+",
-                          //     style: subtitleStyle,
-                          //   ),
-                          //   // height: verticalSpaceSmall.height,
-                          // ),
-                          questViewModel.isLoading.value
-                              ? Container(
-                                  width: double.infinity,
-                                  height: bigHeadingStyle.height,
-                                  color: Colors.blue,
-                                )
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/won_button.svg',
-                                      width: 30,
-                                      height: 30,
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      "${toPriceKRW(questModel.cashReward)}",
-                                      style: bigHeadingStyle.copyWith(
-                                          color: Color(0xFFDBE9EE)),
-                                    ),
-                                    horizontalSpaceMedium,
-                                    Container(
-                                      width: 30,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFF9E9E9E),
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      child: Center(
-                                        child: Text("LP",
-                                            style: subtitleStyle.copyWith(
-                                                color: Colors.white)),
-                                      ),
-                                    ),
-                                    // horizontalSpaceSmall,
-                                    SizedBox(width: 4),
-                                    Text(
-                                      "${toPriceKRW(questModel.pointReward)}P",
-                                      style: bigHeadingStyle.copyWith(
-                                          color: Color(0xFFDBE9EE)),
-                                    ),
-                                    horizontalSpaceSmall,
-                                    Container(
-                                      height: 20,
-                                      width: 20,
-                                      // padding: EdgeInsets.all(15),
-                                      decoration: BoxDecoration(
-                                        color: Colors.blueGrey[700],
-                                        borderRadius: BorderRadius.circular(50),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "?",
-                                          style: contentStyle.copyWith(
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+      // ClipRect(
+      //     child: BackdropFilter(
+      //   filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+      //   child: Opacity(
+      //       opacity: 0.8,
+      //       child: Container(
+      //         // Don't wrap this in any SafeArea widgets, use padding instead
+      //         // padding: EdgeInsets.only(top: safeAreaPadding.top),
+      //         // height: maxExtent,
+      //         color: primaryBackgroundColor,
+      //         child: Padding(
+      //           padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+      //           child: Center(
+      //               child: Row(
+      //             crossAxisAlignment: CrossAxisAlignment.end,
+      //             mainAxisAlignment: MainAxisAlignment.center,
+      //             children: [
+      //               Container(
+      //                 child: Text(
+      //                   "장한나",
+      //                   style: homeHeaderName,
+      //                 ),
+      //               ),
+      //               Container(
+      //                 // color: Colors.blue,
+      //                 child: Text(" 님의 요트", style: homeHeaderAfterName),
+      //               ),
+      //             ],
+      //           )),
+      //         ),
+      //         // Use Stack and Positioned to create the toolbar slide up effect when scrolled up
+      //         // child: Stack(
+      //         //   clipBehavior: Clip.none,
+      //         //   children: <Widget>[
+      //         //     Positioned(
+      //         //       bottom: 0,
+      //         //       left: 0,
+      //         //       right: 0,
+      //         //       child: AppBar(
+      //         //         primary: true,
+      //         //         elevation: 0,
+      //         //         backgroundColor: Colors.transparent,
+      //         //         title: Text("Translucent App Bar"),
+      //         //       ),
+      //         //     )
+      //         // ],
+      //         // ),
+      //       )),
+      // )),
 
-                          verticalSpaceSmall,
-                          questViewModel.isLoading.value
-                              ? Container(
-                                  height: subtitleStyle.height,
-                                  color: Colors.blue,
-                                )
-                              : Obx(
-                                  () => Column(
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.people,
-                                            color: Color(0xFFDBE9EE),
-                                          ),
-                                          horizontalSpaceSmall,
-                                          Text(
-                                            "${questModel.counts![0] + questModel.counts![1]}명 참여",
-                                            style: subtitleStyle.copyWith(
-                                                color: Color(0xFFDBE9EE)),
-                                          ),
-                                        ],
-                                      ),
-                                      verticalSpaceMedium,
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "예측 마감까지",
-                                            style: contentStyle.copyWith(
-                                                color: Color(0xFFDBE9EE)),
-                                          ),
-                                          horizontalSpaceSmall,
-                                          Text(
-                                            "${questViewModel.timeToEnd.value}",
-                                            style: subtitleStyle.copyWith(
-                                                color: Color(0xFFDBE9EE)),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                          Row(
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    // chartViewModel.getPrices(
-                                    //     stockAddressModel.copyWith(issueCode: "005930"));
-                                    stockInfoViewModel.changeStockAddressModel(
-                                        questModel.stockAddress[0]);
-                                    // chartViewModel.stockAddressModel =
-                                    //     stockAddressModel.copyWith(issueCode: "005930");
-                                    // chartViewModel
-                                    //     .getPrices(chartViewModel.newStockAddress!.value);
-                                  },
-                                  child: Text("0번")),
-                              TextButton(
-                                  onPressed: () {
-                                    // chartViewModel.getPrices(
-                                    //     stockAddressModel.copyWith(issueCode: "326030"));
-                                    stockInfoViewModel.changeStockAddressModel(
-                                        questModel.stockAddress[1]);
-                                    // chartViewModel.stockAddressModel =
-                                    // stockAddressModel.copyWith(issueCode: "326030");
-                                    // chartViewModel
-                                    //     .getPrices(chartViewModel.newStockAddress!.value);
-                                  },
-                                  child: Text("1번")),
-                            ],
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(),
+          SliverToBoxAdapter(
+            child: Container(
+              padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "퀘스트 정보",
+                    style: homeModuleTitleTextStyle,
+                  ),
+                  btwHomeModuleTitleBox,
+                  Container(
+                      padding: moduleBoxPadding(questTermTextStyle.fontSize!),
+                      decoration: primaryBoxDecoration.copyWith(
+                          boxShadow: [primaryBoxShadow],
+                          color: homeModuleBoxBackgroundColor),
+                      child: Column(
+                        children: [
+                          QuestCardHeader(
+                            questModel: questModel,
                           ),
+                          btwHomeModuleTitleBox,
+                          QuestCardRewards(questModel: questModel),
+                          Divider(color: primaryFontColor),
+                          Text(
+                            "대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다.",
+                            style: detailedContentTextStyle,
+                          ) //temp
                         ],
-                      ),
-                    ),
+                      )),
+                  // btwHomeModule,
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+              child: Container(
+            padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "기업 정보",
+                  style: homeModuleTitleTextStyle,
+                ),
+                btwHomeModuleTitleBox,
+                // 퀘스트 종목간 선택 row
+                Row(
+                    children: List.generate(
+                  questModel.stockAddress.length,
+                  (index) => TextButton(
+                      onPressed: () {
+                        stockInfoViewModel.changeStockAddressModel(
+                            questModel.stockAddress[index]);
+                      },
+                      child: Text(questModel.stockAddress[index].name)),
+                )),
+                Container(
+                  height: 1500, // temp
+                  padding: moduleBoxPadding(questTermTextStyle.fontSize!),
+                  decoration: primaryBoxDecoration.copyWith(
+                      boxShadow: [primaryBoxShadow],
+                      color: homeModuleBoxBackgroundColor),
+                  child: GetBuilder<QuestViewModel>(
+                    builder: (questViewModel) {
+                      return StockInfoKRView(
+                          stockAddressModel: questModel
+                              .stockAddress[questViewModel.stockInfoIndex]);
+                    },
                   ),
                 ),
               ],
-            );
-          }),
-          // 종목 정보 화면
-          Expanded(
-              child: Stack(
-            children: [
-              Container(
-                // color: Colors.amber.withOpacity(.2),
-                child: ClipRRect(
-                  // borderRadius: BorderRadius.only(
-                  //     topLeft: Radius.circular(50),
-                  //     topRight: Radius.circular(50)),
-                  child: Column(
-                    children: [
-                      Expanded(child: Container(
-                        child: GetBuilder<QuestViewModel>(
-                            builder: (questViewModel) {
-                          return StockInfoKRView(
-                            bottomPadding: getProportionateScreenHeight(140) +
-                                SizeConfig.safeAreaBottom,
-                            stockAddressModel: questModel
-                                .stockAddress[questViewModel.stockInfoIndex],
-                          );
-                        }),
-                      )),
-                      // Container(
-                      //   height: 100,
-                      //   color: Colors.yellow,
-                      // )
-                    ],
-                  ),
-                ),
-              ),
-              Obx(() {
-                double bottomPosition = 0.0;
-                double offset = stockInfoViewModel.offset.value;
-
-                bottomPosition =
-                    (-120 + (offset * 2.5)) > 25 ? 25 : -120 + (offset * 2.5);
-                // print(offset);
-                return Positioned(
-                  bottom: bottomPosition,
-                  left: 25,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: questViewModel.isLoading.value
-                        ? Container(
-                            width: SizeConfig.screenWidth - 50,
-                            height: bigHeadingStyle.height,
-                            color: Colors.blue,
-                          )
-                        : DecisionContainer(questViewModel),
-                  ),
-                );
-              }),
-            ],
+            ),
           )),
         ],
       ),
+
+      //  Column(
+      //   children: [
+      //     Obx(() {
+      //       double offset = stockInfoViewModel.offset.value;
+      //       double initialHeight = reactiveHeight(200);
+      //       appBarHeight = initialHeight - offset < SizeConfig.safeAreaTop + 50
+      //           ? SizeConfig.safeAreaTop + 50
+      //           : initialHeight - offset;
+      //       return Stack(
+      //         children: [
+      //           // 탑 바 배경
+      //           Container(
+      //             padding: EdgeInsets.only(top: kToolbarHeight),
+      //             decoration: BoxDecoration(
+      //                 gradient: LinearGradient(
+      //                     begin: Alignment.topCenter,
+      //                     end: Alignment.bottomCenter,
+      //                     colors: [
+      //                   Color(0xFF0099C2),
+      //                   Color(0xFF01A1DF),
+      //                   Color(0xFF01C8E5)
+      //                 ])),
+      //             // color: Colors.amber.withOpacity(.2),
+      //             width: double.infinity,
+      //             height: appBarHeight,
+      //           ),
+      //           // 스크롤 올렸을 때 상단에 뜨는 앱바
+      //           Positioned.fill(
+      //             // top: SizeConfig.safeAreaHeight,
+      //             child: Align(
+      //               alignment: Alignment(0, 0.5),
+      //               child: Opacity(
+      //                   opacity: offset < 0
+      //                       ? 0
+      //                       : offset < 100
+      //                           ? offset / 100
+      //                           : 1,
+      //                   child: Container(
+      //                       child: Row(
+      //                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //                     children: questViewModel.isLoading.value
+      //                         ? List.generate(
+      //                             1,
+      //                             (index) => Container(
+      //                                 height: textSizeGet("txt", headingStyle)
+      //                                     .height))
+      //                         : List.generate(questModel.stockAddress.length,
+      //                             (index) {
+      //                             return Container(
+      //                               padding: EdgeInsets.symmetric(
+      //                                   horizontal: 20, vertical: 8),
+      //                               decoration: BoxDecoration(
+      //                                   borderRadius: BorderRadius.circular(30),
+      //                                   color: Color(0xff334361)),
+      //                               child: Text(
+      //                                 questModel.stockAddress[index].name
+      //                                     .toString(),
+      //                                 style: titleStyle.copyWith(
+      //                                     color: Color(0xFFDBE9EE)),
+      //                               ),
+      //                             );
+      //                           }),
+      //                   ))),
+      //             ),
+      //           ),
+      //           // 앱바 안에 Content
+      //           Positioned.fill(
+      //             top: -offset < -200 ? -200 : -offset,
+      //             child: Opacity(
+      //               opacity: (offset < 30) ? 1 : 30 / offset,
+      //               child: Container(
+      //                 padding: EdgeInsets.only(top: SizeConfig.safeAreaTop),
+      //                 // color: Colors.red,
+      //                 height: initialHeight,
+      //                 width: SizeConfig.screenWidth,
+      //                 child: Column(
+      //                   mainAxisAlignment: MainAxisAlignment.center,
+      //                   children: [
+      //                     // Text(
+      //                     //   "리그 포인트 ${questModel.pointReward}점",
+      //                     //   style: headingStyle,
+      //                     // ),
+      //                     // SizedBox(
+      //                     //   child: Text(
+      //                     //     "+",
+      //                     //     style: subtitleStyle,
+      //                     //   ),
+      //                     //   // height: verticalSpaceSmall.height,
+      //                     // ),
+      //                     questViewModel.isLoading.value
+      //                         ? Container(
+      //                             width: double.infinity,
+      //                             height: bigHeadingStyle.height,
+      //                             color: Colors.blue,
+      //                           )
+      //                         : Row(
+      //                             mainAxisAlignment: MainAxisAlignment.center,
+      //                             children: [
+      //                               SvgPicture.asset(
+      //                                 'assets/icons/won_button.svg',
+      //                                 width: 30,
+      //                                 height: 30,
+      //                               ),
+      //                               SizedBox(width: 4),
+      //                               Text(
+      //                                 "${toPriceKRW(questModel.cashReward)}",
+      //                                 style: bigHeadingStyle.copyWith(
+      //                                     color: Color(0xFFDBE9EE)),
+      //                               ),
+      //                               horizontalSpaceMedium,
+      //                               Container(
+      //                                 width: 30,
+      //                                 height: 30,
+      //                                 decoration: BoxDecoration(
+      //                                     color: Color(0xFF9E9E9E),
+      //                                     borderRadius:
+      //                                         BorderRadius.circular(5)),
+      //                                 child: Center(
+      //                                   child: Text("LP",
+      //                                       style: subtitleStyle.copyWith(
+      //                                           color: Colors.white)),
+      //                                 ),
+      //                               ),
+      //                               // horizontalSpaceSmall,
+      //                               SizedBox(width: 4),
+      //                               Text(
+      //                                 "${toPriceKRW(questModel.pointReward)}P",
+      //                                 style: bigHeadingStyle.copyWith(
+      //                                     color: Color(0xFFDBE9EE)),
+      //                               ),
+      //                               horizontalSpaceSmall,
+      //                               Container(
+      //                                 height: 20,
+      //                                 width: 20,
+      //                                 // padding: EdgeInsets.all(15),
+      //                                 decoration: BoxDecoration(
+      //                                   color: Colors.blueGrey[700],
+      //                                   borderRadius: BorderRadius.circular(50),
+      //                                 ),
+      //                                 child: Center(
+      //                                   child: Text(
+      //                                     "?",
+      //                                     style: contentStyle.copyWith(
+      //                                         color: Colors.white),
+      //                                   ),
+      //                                 ),
+      //                               )
+      //                             ],
+      //                           ),
+
+      //                     verticalSpaceSmall,
+      //                     questViewModel.isLoading.value
+      //                         ? Container(
+      //                             height: subtitleStyle.height,
+      //                             color: Colors.blue,
+      //                           )
+      //                         : Obx(
+      //                             () => Column(
+      //                               children: [
+      //                                 Row(
+      //                                   crossAxisAlignment:
+      //                                       CrossAxisAlignment.end,
+      //                                   mainAxisAlignment:
+      //                                       MainAxisAlignment.center,
+      //                                   children: [
+      //                                     Icon(
+      //                                       Icons.people,
+      //                                       color: Color(0xFFDBE9EE),
+      //                                     ),
+      //                                     horizontalSpaceSmall,
+      //                                     Text(
+      //                                       "${questModel.counts![0] + questModel.counts![1]}명 참여",
+      //                                       style: subtitleStyle.copyWith(
+      //                                           color: Color(0xFFDBE9EE)),
+      //                                     ),
+      //                                   ],
+      //                                 ),
+      //                                 verticalSpaceMedium,
+      //                                 Row(
+      //                                   crossAxisAlignment:
+      //                                       CrossAxisAlignment.end,
+      //                                   mainAxisAlignment:
+      //                                       MainAxisAlignment.center,
+      //                                   children: [
+      //                                     Text(
+      //                                       "예측 마감까지",
+      //                                       style: contentStyle.copyWith(
+      //                                           color: Color(0xFFDBE9EE)),
+      //                                     ),
+      //                                     horizontalSpaceSmall,
+      //                                     Text(
+      //                                       "${questViewModel.timeToEnd.value}",
+      //                                       style: subtitleStyle.copyWith(
+      //                                           color: Color(0xFFDBE9EE)),
+      //                                     ),
+      //                                   ],
+      //                                 ),
+      //                               ],
+      //                             ),
+      //                           ),
+      // Row(
+      //   children: [
+      //     TextButton(
+      //         onPressed: () {
+      //           // chartViewModel.getPrices(
+      //           //     stockAddressModel.copyWith(issueCode: "005930"));
+      //           stockInfoViewModel.changeStockAddressModel(
+      //               questModel.stockAddress[0]);
+      //           // chartViewModel.stockAddressModel =
+      //           //     stockAddressModel.copyWith(issueCode: "005930");
+      //           // chartViewModel
+      //           //     .getPrices(chartViewModel.newStockAddress!.value);
+      //         },
+      //         child: Text("0번")),
+      //     TextButton(
+      //         onPressed: () {
+      //           // chartViewModel.getPrices(
+      //           //     stockAddressModel.copyWith(issueCode: "326030"));
+      //           stockInfoViewModel.changeStockAddressModel(
+      //               questModel.stockAddress[1]);
+      //           // chartViewModel.stockAddressModel =
+      //           // stockAddressModel.copyWith(issueCode: "326030");
+      //           // chartViewModel
+      //           //     .getPrices(chartViewModel.newStockAddress!.value);
+      //         },
+      //         child: Text("1번")),
+      //   ],
+      // ),
+      //                   ],
+      //                 ),
+      //               ),
+      //             ),
+      //           ),
+      //         ],
+      //       );
+      //     }),
+      //     // 종목 정보 화면
+      //     Expanded(
+      //         child: Stack(
+      //       children: [
+      //         Container(
+      //           // color: Colors.amber.withOpacity(.2),
+      //           child: ClipRRect(
+      //             // borderRadius: BorderRadius.only(
+      //             //     topLeft: Radius.circular(50),
+      //             //     topRight: Radius.circular(50)),
+      //             child: Column(
+      //               children: [
+      //                 Expanded(child: Container(
+      //                   child: GetBuilder<QuestViewModel>(
+      //                       builder: (questViewModel) {
+      //                     return StockInfoKRView(
+      //                       bottomPadding:
+      //                           reactiveHeight(140) + SizeConfig.safeAreaBottom,
+      //                       stockAddressModel: questModel
+      //                           .stockAddress[questViewModel.stockInfoIndex],
+      //                     );
+      //                   }),
+      //                 )),
+      //                 // Container(
+      //                 //   height: 100,
+      //                 //   color: Colors.yellow,
+      //                 // )
+      //               ],
+      //             ),
+      //           ),
+      //         ),
+      //         Obx(() {
+      //           double bottomPosition = 0.0;
+      //           double offset = stockInfoViewModel.offset.value;
+
+      //           bottomPosition =
+      //               (-120 + (offset * 2.5)) > 25 ? 25 : -120 + (offset * 2.5);
+      //           // print(offset);
+      //           return Positioned(
+      //             bottom: bottomPosition,
+      //             left: 25,
+      //             child: Align(
+      //               alignment: Alignment.center,
+      //               child: questViewModel.isLoading.value
+      //                   ? Container(
+      //                       width: SizeConfig.screenWidth - 50,
+      //                       height: bigHeadingStyle.height,
+      //                       color: Colors.blue,
+      //                     )
+      //                   : DecisionContainer(questViewModel),
+      //             ),
+      //           );
+      //         }),
+      //       ],
+      //     )),
+      //   ],
+      // ),
 
       // () => CustomScrollView(
       //   controller: stockInfoViewModel.scrollController.value,
@@ -614,5 +748,79 @@ class QuestView extends StatelessWidget {
       //   ],
       // ),
     );
+  }
+}
+
+class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final EdgeInsets safeAreaPadding;
+
+  _GlassmorphismAppBarDelegate(this.safeAreaPadding);
+
+  @override
+  double get minExtent => 60.h + ScreenUtil().statusBarHeight;
+
+  @override
+  double get maxExtent => minExtent + kToolbarHeight;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return ClipRect(
+        child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+      child: Opacity(
+          opacity: 0.8,
+          child: Container(
+            // Don't wrap this in any SafeArea widgets, use padding instead
+            // padding: EdgeInsets.only(top: safeAreaPadding.top),
+            height: maxExtent,
+            color: primaryBackgroundColor,
+            child: Padding(
+              padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+              child: Center(
+                  child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Text(
+                      "장한나",
+                      style: homeHeaderName,
+                    ),
+                  ),
+                  Container(
+                    // color: Colors.blue,
+                    child: Text(" 님의 요트", style: homeHeaderAfterName),
+                  ),
+                ],
+              )),
+            ),
+            // Use Stack and Positioned to create the toolbar slide up effect when scrolled up
+            // child: Stack(
+            //   clipBehavior: Clip.none,
+            //   children: <Widget>[
+            //     Positioned(
+            //       bottom: 0,
+            //       left: 0,
+            //       right: 0,
+            //       child: AppBar(
+            //         primary: true,
+            //         elevation: 0,
+            //         backgroundColor: Colors.transparent,
+            //         title: Text("Translucent App Bar"),
+            //       ),
+            //     )
+            // ],
+            // ),
+          )),
+    ));
+  }
+
+  @override
+  bool shouldRebuild(_GlassmorphismAppBarDelegate oldDelegate) {
+    // TODO: implement shouldRebuild
+    return maxExtent != oldDelegate.maxExtent ||
+        minExtent != oldDelegate.minExtent ||
+        safeAreaPadding != oldDelegate.safeAreaPadding;
   }
 }

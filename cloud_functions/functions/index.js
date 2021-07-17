@@ -358,9 +358,9 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
   const category = openSeasonSnapshot.data().category;
   const season = openSeasonSnapshot.data().season;
 
-  // const today = "20210108";
+  // const today = "20210714";
   var today = dateFormat(Date(), "yyyymmdd");
-  // const yesterday = "20210712";
+  const yesterday = "20210715";
   // todayRankRef
 
   const seasonInfoRef = votesRef

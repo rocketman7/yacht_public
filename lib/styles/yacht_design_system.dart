@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class YachtDesignSystem extends StatelessWidget {
   @override
@@ -29,398 +30,305 @@ class YachtDesignSystem extends StatelessWidget {
       FontWeight.w900,
     ];
 
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     return SafeArea(
       child: Scaffold(
-        body: ListView(
+        body: SingleChildScrollView(
           padding: kSymmetricPadding,
-          children: [
-            Text(
-              "Design System",
-              style: headingStyleEN,
-            ),
-            Divider(),
-            Text("디자인 시스템", style: headingStyle.copyWith(color: Colors.blue)),
-            Divider(),
-            verticalSpaceMedium,
-            Text(
-              "한글 폰트",
-              style: headingStyle,
-            ),
-            verticalSpaceMedium,
-            // _testingFonts(
-            //     '노토산스고딕한글', 30, 'AppleSDGothicNeo', _appleSDFontWeightList),
-            _testingFonts(
-                '노토산스고딕한글', 28, 'NotoSansKR', _notoSansFontWeightList),
-            verticalSpaceMedium,
-            Divider(),
-            verticalSpaceMedium,
-            Text(
-              "글씨 스타일",
-              style: headingStyle,
-            ),
-            verticalSpaceMedium,
-            // Text("헤드 1"),
-            // verticalSpaceSmall,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                "Design System",
+                style: headingStyleEN,
+              ),
+              Divider(),
+              Text("디자인 시스템", style: headingStyle.copyWith(color: Colors.blue)),
+              Divider(),
+              verticalSpaceMedium,
+              Text(
+                "한글 폰트",
+                style: headingStyle,
+              ),
+              verticalSpaceMedium,
+              // _testingFonts(
+              //     '노토산스고딕한글', 30, 'AppleSDGothicNeo', _appleSDFontWeightList),
+              _testingFonts(
+                  '노토산스고딕한글', 28, 'NotoSansKR', _notoSansFontWeightList),
+              verticalSpaceMedium,
+              Divider(),
+              verticalSpaceMedium,
+              Text(
+                "글씨 스타일",
+                style: headingStyle,
+              ),
+              verticalSpaceMedium,
+              // Text("헤드 1"),
+              // verticalSpaceSmall,
 
-            // Text("헤드 2"),
-            // verticalSpaceSmall,
-            // Text("헤드 3"),
-            verticalSpaceSmall,
-            Text("메뉴 타이틀", style: titleStyle),
-            verticalSpaceSmall,
-            Text("서브 타이틀 ", style: subtitleStyle),
-            verticalSpaceSmall,
-            Text("컨텐트 스타일은 일반적인 본문 내용을 ", style: contentStyle),
-            verticalSpaceSmall,
-            Text("자세한 내용을 기술할 때 ", style: detailStyle),
-            verticalSpaceSmall,
-            verticalSpaceMedium,
-            Divider(),
-            verticalSpaceMedium,
-            Text(
-              "숫자 스타일",
-              style: headingStyle,
-            ),
-            verticalSpaceMedium,
-            Row(
-              children: [
-                Text(
-                  "￦54,750",
-                  style: headingStyleEN,
-                ),
-                SizedBox(width: 16),
-                Text("시장 관련 숫자는 DmSans",
-                    style: contentStyle.copyWith(fontFamily: 'DmSans')),
-              ],
-            ),
-            verticalSpaceSmall,
-            Text(
-              "+1,750 (+7.1%)",
-              style: detailPriceStyle.copyWith(color: bullColorKR),
-            ),
-            verticalSpaceSmall,
-            Text(
-              "-1,750 (-7.1%)",
-              style: detailPriceStyle.copyWith(color: bearColorKR),
-            ),
-            verticalSpaceSmall,
-            Padding(
-              padding: kHorizontalPadding,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // Text("헤드 2"),
+              // verticalSpaceSmall,
+              // Text("헤드 3"),
+              verticalSpaceSmall,
+              Text("메뉴 타이틀", style: titleStyle),
+              verticalSpaceSmall,
+              Text("서브 타이틀 ", style: subtitleStyle),
+              verticalSpaceSmall,
+              Text("컨텐트 스타일은 일반적인 본문 내용을 ", style: contentStyle),
+              verticalSpaceSmall,
+              Text("자세한 내용을 기술할 때 ", style: detailStyle),
+              verticalSpaceSmall,
+              verticalSpaceMedium,
+              Divider(),
+              verticalSpaceMedium,
+              Text(
+                "숫자 스타일",
+                style: headingStyle,
+              ),
+              verticalSpaceMedium,
+              Row(
                 children: [
-                  Expanded(
-                      child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("시가",
-                              style: ohlcInfoStyle.copyWith(
-                                  color: Colors.grey[600])),
-                          Text("72,500", style: ohlcPriceStyle)
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("고가",
-                              style: ohlcInfoStyle.copyWith(
-                                  color: Colors.grey[600])),
-                          Text("72,500", style: ohlcPriceStyle)
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("거래량",
-                              style: ohlcInfoStyle.copyWith(
-                                  color: Colors.grey[600])),
-                          Text("72,500", style: ohlcPriceStyle)
-                        ],
-                      )
-                    ],
-                  )),
-                  horizontalSpaceExtraLarge,
-                  Expanded(
-                      child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("종가",
-                              style: ohlcInfoStyle.copyWith(
-                                  color: Colors.grey[600])),
-                          Text("72,500", style: ohlcPriceStyle)
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("저가",
-                              style: ohlcInfoStyle.copyWith(
-                                  color: Colors.grey[600])),
-                          Text("72,500", style: ohlcPriceStyle)
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("변동",
-                              style: ohlcInfoStyle.copyWith(
-                                  color: Colors.grey[600])),
-                          Text("-2.24%", style: ohlcPriceStyle)
-                        ],
-                      )
-                    ],
-                  ))
+                  Text(
+                    "￦54,750",
+                    style: headingStyleEN,
+                  ),
+                  SizedBox(width: 16),
+                  Text("시장 관련 숫자는 DmSans",
+                      style: contentStyle.copyWith(fontFamily: 'DmSans')),
                 ],
               ),
-            ),
-            verticalSpaceMedium,
-            Divider(),
-            verticalSpaceMedium,
-            Text(
-              "버튼 스타일",
-              style: headingStyle,
-            ),
-            verticalSpaceMedium,
-            // verticalSpaceExtraLarge
-            Text(
-              "토글 버튼",
-              style: subtitleStyle,
-            ),
-            verticalSpaceMedium,
-            Row(
-              children: [
-                Container(
+              verticalSpaceSmall,
+              Text(
+                "+1,750 (+7.1%)",
+                style: detailPriceStyle.copyWith(color: bullColorKR),
+              ),
+              verticalSpaceSmall,
+              Text(
+                "-1,750 (-7.1%)",
+                style: detailPriceStyle.copyWith(color: bearColorKR),
+              ),
+              verticalSpaceSmall,
+              Padding(
+                padding: kHorizontalPadding,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("시가",
+                                style: ohlcInfoStyle.copyWith(
+                                    color: Colors.grey[600])),
+                            Text("72,500", style: ohlcPriceStyle)
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("고가",
+                                style: ohlcInfoStyle.copyWith(
+                                    color: Colors.grey[600])),
+                            Text("72,500", style: ohlcPriceStyle)
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("거래량",
+                                style: ohlcInfoStyle.copyWith(
+                                    color: Colors.grey[600])),
+                            Text("72,500", style: ohlcPriceStyle)
+                          ],
+                        )
+                      ],
+                    )),
+                    horizontalSpaceExtraLarge,
+                    Expanded(
+                        child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("종가",
+                                style: ohlcInfoStyle.copyWith(
+                                    color: Colors.grey[600])),
+                            Text("72,500", style: ohlcPriceStyle)
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("저가",
+                                style: ohlcInfoStyle.copyWith(
+                                    color: Colors.grey[600])),
+                            Text("72,500", style: ohlcPriceStyle)
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("변동",
+                                style: ohlcInfoStyle.copyWith(
+                                    color: Colors.grey[600])),
+                            Text("-2.24%", style: ohlcPriceStyle)
+                          ],
+                        )
+                      ],
+                    ))
+                  ],
+                ),
+              ),
+              verticalSpaceMedium,
+              Divider(),
+              verticalSpaceMedium,
+              Text(
+                "버튼 스타일",
+                style: headingStyle,
+              ),
+              verticalSpaceMedium,
+              // verticalSpaceExtraLarge
+              Text(
+                "토글 버튼",
+                style: subtitleStyle,
+              ),
+              verticalSpaceMedium,
+              Row(
+                children: [
+                  Container(
+                      decoration: BoxDecoration(
+                        color: toggleButtonColor,
+                        borderRadius: BorderRadius.circular(70),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
+                      child: Icon(
+                        Icons.auto_graph,
+                        size: 18,
+                      )),
+                  horizontalSpaceSmall,
+                  Container(
                     decoration: BoxDecoration(
                       color: toggleButtonColor,
                       borderRadius: BorderRadius.circular(70),
                     ),
+                    // color: Colors.blueGrey.shade100,
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    child: Icon(
-                      Icons.auto_graph,
-                      size: 18,
-                    )),
-                horizontalSpaceSmall,
-                Container(
-                  decoration: BoxDecoration(
-                    color: toggleButtonColor,
-                    borderRadius: BorderRadius.circular(70),
-                  ),
-                  // color: Colors.blueGrey.shade100,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  child: Text(
-                    "1주일",
-                    style: detailStyle,
-                  ),
-                ),
-                horizontalSpaceSmall,
-                Container(
-                  decoration: BoxDecoration(
-                    // color: toggleButton,
-                    borderRadius: BorderRadius.circular(70),
-                  ),
-                  // color: Colors.blueGrey.shade100,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  child: Text(
-                    "분기",
-                    style: detailStyle,
-                  ),
-                ),
-                horizontalSpaceSmall,
-                Container(
-                  decoration: BoxDecoration(
-                    color: toggleButtonColor,
-                    borderRadius: BorderRadius.circular(70),
-                  ),
-                  // color: Colors.blueGrey.shade100,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  child: Text(
-                    "연간",
-                    style: detailStyle,
-                  ),
-                ),
-              ],
-            ),
-            verticalSpaceMedium,
-            Divider(),
-            // Divider(),
-            verticalSpaceMedium,
-            Text(
-              "컨테이너 스타일",
-              style: headingStyle,
-            ),
-            verticalSpaceMedium,
-            Text(
-              "퀘스트 카드 선택 컨테이너",
-              style: subtitleStyle,
-            ),
-            verticalSpaceMedium,
-            Text(
-              "종목 1개 상하",
-              style: contentStyle,
-            ),
-            verticalSpaceSmall,
-            QuestCard01(),
-            verticalSpaceSmall,
-            QuestCard02(),
-            verticalSpaceMedium,
-            Divider(),
-
-            verticalSpaceMedium,
-            Text(
-              "다이얼로그 스타일",
-              style: headingStyle,
-            ),
-            verticalSpaceMedium,
-            Text(
-              "퀘스트 최종 선택",
-              style: contentStyle,
-            ),
-            Container(
-              height: 500,
-              color: Colors.grey,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      padding: dialogPadding,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      height: 200,
-                      width: 300,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          AutoSizeText(
-                            "7/4 종목 상승 하락 대결",
-                            maxLines: 2,
-                            style: contentStyle,
-                          ),
-                          // verticalSpaceSmall,
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Image.asset(
-                                'assets/images/secLogo/hana.png',
-                                height: getProportionateScreenHeight(60),
-                                width: getProportionateScreenHeight(60),
-                              ),
-                              horizontalSpaceMedium,
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  AutoSizeText(
-                                    "삼성바이오로직스",
-                                    style: subtitleStyle,
-                                  ),
-                                  verticalSpaceExtraSmall,
-                                  Text(
-                                    "선택을 확정하시겠어요?",
-                                    maxLines: 2,
-                                    style: contentStyle,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Row(
-                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                    padding: EdgeInsets.symmetric(vertical: 12),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(40),
-                                      color: bullColorKR.withOpacity(.4),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "취소",
-                                        style: subtitleStyle.copyWith(
-                                            color:
-                                                Colors.white.withOpacity(.8)),
-                                      ),
-                                    )),
-                              ),
-                              horizontalSpaceMedium,
-                              Expanded(
-                                flex: 2,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 12),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(40),
-                                      color: bullColorKR,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.black.withOpacity(.1),
-                                            offset: Offset(3, 3),
-                                            blurRadius: 5,
-                                            spreadRadius: 2)
-                                      ]),
-                                  child: Center(
-                                    child: Text(
-                                      "확인",
-                                      style: subtitleStyle.copyWith(
-                                          color: Colors.white.withOpacity(.9)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
+                    child: Text(
+                      "1주일",
+                      style: detailStyle,
                     ),
-                    Container(
-                      padding: dialogPadding,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                      ),
-                      height: 250,
-                      width: 300,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          // Container(),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  horizontalSpaceSmall,
+                  Container(
+                    decoration: BoxDecoration(
+                      // color: toggleButton,
+                      borderRadius: BorderRadius.circular(70),
+                    ),
+                    // color: Colors.blueGrey.shade100,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    child: Text(
+                      "분기",
+                      style: detailStyle,
+                    ),
+                  ),
+                  horizontalSpaceSmall,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: toggleButtonColor,
+                      borderRadius: BorderRadius.circular(70),
+                    ),
+                    // color: Colors.blueGrey.shade100,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    child: Text(
+                      "연간",
+                      style: detailStyle,
+                    ),
+                  ),
+                ],
+              ),
+              verticalSpaceMedium,
+              Divider(),
+              // Divider(),
+              verticalSpaceMedium,
+              Text(
+                "컨테이너 스타일",
+                style: headingStyle,
+              ),
+              verticalSpaceMedium,
+              Text(
+                "퀘스트 카드 선택 컨테이너",
+                style: subtitleStyle,
+              ),
+              verticalSpaceMedium,
+              Text(
+                "종목 1개 상하",
+                style: contentStyle,
+              ),
+              verticalSpaceSmall,
+              QuestCard01(),
+              verticalSpaceSmall,
+              QuestCard02(),
+              verticalSpaceMedium,
+              Divider(),
+
+              verticalSpaceMedium,
+              Text(
+                "다이얼로그 스타일",
+                style: headingStyle,
+              ),
+              verticalSpaceMedium,
+              Text(
+                "퀘스트 최종 선택",
+                style: contentStyle,
+              ),
+              Container(
+                height: 500,
+                color: Colors.grey,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        padding: dialogPadding,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        height: 200,
+                        width: 300,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            AutoSizeText(
+                              "7/4 종목 상승 하락 대결",
+                              maxLines: 2,
+                              style: contentStyle,
+                            ),
+                            // verticalSpaceSmall,
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                AutoSizeText(
-                                  "7/5 ~ 7/9 주간 수익률 킹 대결",
-                                  maxLines: 2,
-                                  style: contentStyle,
-                                ),
                                 Image.asset(
                                   'assets/images/secLogo/hana.png',
-                                  height: getProportionateScreenHeight(60),
-                                  width: getProportionateScreenHeight(60),
+                                  height: reactiveHeight(60),
+                                  width: reactiveHeight(60),
                                 ),
-                                // verticalSpaceSmall,
+                                horizontalSpaceMedium,
                                 Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  // crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    AutoSizeText(
                                       "삼성바이오로직스",
                                       style: subtitleStyle,
                                     ),
@@ -430,67 +338,229 @@ class YachtDesignSystem extends StatelessWidget {
                                       maxLines: 2,
                                       style: contentStyle,
                                     ),
-                                    verticalSpaceMedium,
                                   ],
                                 )
                               ],
                             ),
-                          ),
-                          Row(
-                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Expanded(
-                                flex: 1,
-                                child: Container(
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 12),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(40),
+                                        color: bullColorKR.withOpacity(.4),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "취소",
+                                          style: subtitleStyle.copyWith(
+                                              color:
+                                                  Colors.white.withOpacity(.8)),
+                                        ),
+                                      )),
+                                ),
+                                horizontalSpaceMedium,
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
                                     padding: EdgeInsets.symmetric(vertical: 12),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(40),
-                                      color: bullColorKR.withOpacity(.4),
-                                    ),
+                                        borderRadius: BorderRadius.circular(40),
+                                        color: bullColorKR,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(.1),
+                                              offset: Offset(3, 3),
+                                              blurRadius: 5,
+                                              spreadRadius: 2)
+                                        ]),
                                     child: Center(
                                       child: Text(
-                                        "취소",
+                                        "확인",
                                         style: subtitleStyle.copyWith(
                                             color:
-                                                Colors.white.withOpacity(.8)),
+                                                Colors.white.withOpacity(.9)),
                                       ),
-                                    )),
-                              ),
-                              horizontalSpaceMedium,
-                              Expanded(
-                                flex: 2,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 12),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(40),
-                                      color: bullColorKR,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.black.withOpacity(.1),
-                                            offset: Offset(3, 3),
-                                            blurRadius: 5,
-                                            spreadRadius: 2)
-                                      ]),
-                                  child: Center(
-                                    child: Text(
-                                      "확인",
-                                      style: subtitleStyle.copyWith(
-                                          color: Colors.white.withOpacity(.9)),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          )
-                        ],
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ]),
-            ),
-            SizedBox(
-              height: 100,
-            )
-          ],
+                      Container(
+                        padding: dialogPadding,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        height: 250,
+                        width: 300,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            // Container(),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  AutoSizeText(
+                                    "7/5 ~ 7/9 주간 수익률 킹 대결",
+                                    maxLines: 2,
+                                    style: contentStyle,
+                                  ),
+                                  Image.asset(
+                                    'assets/images/secLogo/hana.png',
+                                    height: reactiveHeight(60),
+                                    width: reactiveHeight(60),
+                                  ),
+                                  // verticalSpaceSmall,
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    // crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "삼성바이오로직스",
+                                        style: subtitleStyle,
+                                      ),
+                                      verticalSpaceExtraSmall,
+                                      Text(
+                                        "선택을 확정하시겠어요?",
+                                        maxLines: 2,
+                                        style: contentStyle,
+                                      ),
+                                      verticalSpaceMedium,
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 12),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(40),
+                                        color: bullColorKR.withOpacity(.4),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "취소",
+                                          style: subtitleStyle.copyWith(
+                                              color:
+                                                  Colors.white.withOpacity(.8)),
+                                        ),
+                                      )),
+                                ),
+                                horizontalSpaceMedium,
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 12),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(40),
+                                        color: bullColorKR,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(.1),
+                                              offset: Offset(3, 3),
+                                              blurRadius: 5,
+                                              spreadRadius: 2)
+                                        ]),
+                                    child: Center(
+                                      child: Text(
+                                        "확인",
+                                        style: subtitleStyle.copyWith(
+                                            color:
+                                                Colors.white.withOpacity(.9)),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ]),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 240,
+                    color: Colors.blueAccent,
+                    // decoration: primaryBoxDecoration.copyWith(
+                    //     color: Colors.blueAccent, boxShadow: [primaryBoxShadow]),
+                    child: Center(
+                        child: Text(
+                      "test",
+                      style: TextStyle(fontSize: 26),
+                    )),
+                  ),
+                  SizedBox(width: 8),
+                  Container(
+                    width: 100.w,
+                    height: 240.h,
+                    color: Colors.blueAccent,
+                    // decoration: primaryBoxDecoration.copyWith(
+                    //     color: Colors.blueAccent, boxShadow: [primaryBoxShadow]),
+                    child: Center(
+                        child: Text(
+                      "test",
+                      style: TextStyle(fontSize: 26.sp),
+                    )),
+                  ),
+                  SizedBox(width: 8),
+                  Container(
+                    width: reactiveWidth(100),
+                    height: reactiveHeight(240),
+                    color: Colors.blueAccent,
+                    // decoration: primaryBoxDecoration.copyWith(
+                    //     color: Colors.blueAccent, boxShadow: [primaryBoxShadow]),
+                    child: Center(
+                        child: Text(
+                      "test",
+                      style: TextStyle(fontSize: 26),
+                    )),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Container(
+                width: 100.w,
+                height: 240.h,
+                color: Colors.blueAccent,
+                // decoration: primaryBoxDecoration.copyWith(
+                //     color: Colors.blueAccent, boxShadow: [primaryBoxShadow]),
+                child: Center(
+                    child: Text(
+                  "test",
+                  style: TextStyle(fontSize: 26.sp),
+                )),
+              ),
+              SizedBox(
+                height: 100,
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -185,6 +185,8 @@ flutter:
     - assets/images/secLogo/
     - assets/documents/
     - assets/icons/
+    - assets/illusts/
+    - assets/illusts/quest/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -199,15 +201,15 @@ flutter:
     # - family: PostNoBills
     #   fonts:
     #     - asset: assets/fonts/postnobillscolombo-semibold.ttf
-    - family: NanumHandWriting
-      fonts:
-        - asset: assets/fonts/nanum_handwriting_goding.ttf
-    - family: AdventPro
-      fonts:
-        - asset: assets/fonts/advent_pro/AdventPro-Regular.ttf
-    - family: Arkhip
-      fonts:
-        - asset: assets/fonts/arkhip_regular.ttf
+    # - family: NanumHandWriting
+    #   fonts:
+    #     - asset: assets/fonts/nanum_handwriting_goding.ttf
+    # - family: AdventPro
+    #   fonts:
+    #     - asset: assets/fonts/advent_pro/AdventPro-Regular.ttf
+    # - family: Arkhip
+    #   fonts:
+    #     - asset: assets/fonts/arkhip_regular.ttf
     - family: NotoSansKR
       fonts:
         - asset: assets/fonts/noto_sans_kr/NotoSansKR-Regular.otf
@@ -220,6 +222,25 @@ flutter:
         - asset: assets/fonts/noto_sans_kr/NotoSansKR-Bold.otf
           weight: 700
         - asset: assets/fonts/noto_sans_kr/NotoSansKR-Black.otf
+          weight: 900
+    - family: SCore
+      fonts:
+        - asset: assets/fonts/s-core/SCDream4.otf
+        - asset: assets/fonts/s-core/SCDream1.otf
+          weight: 100
+        - asset: assets/fonts/s-core/SCDream2.otf
+          weight: 200
+        - asset: assets/fonts/s-core/SCDream3.otf
+          weight: 300
+        - asset: assets/fonts/s-core/SCDream5.otf
+          weight: 500
+        - asset: assets/fonts/s-core/SCDream6.otf
+          weight: 600
+        - asset: assets/fonts/s-core/SCDream7.otf
+          weight: 700
+        - asset: assets/fonts/s-core/SCDream8.otf
+          weight: 800
+        - asset: assets/fonts/s-core/SCDream8.otf
           weight: 900
     - family: DmSans
       fonts:

@@ -15,6 +15,7 @@ import '../../styles/style_constants.dart';
 import '../../handlers/date_time_handler.dart';
 import '../../models/price_chart_model.dart';
 import 'chart_view_model.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChartView extends StatelessWidget {
   final StockAddressModel stockAddressModel;
@@ -44,51 +45,46 @@ class ChartView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Obx(
+          // 캔들 차트에서 트래킹할 때 보여주는 화면 구현
           () => Stack(children: [
             (chartViewModel.isTracking.value == true &&
                     chartViewModel.showingCandleChart.value)
-                ? Padding(
-                    padding: kHorizontalPadding,
-                    child: Opacity(
-                      opacity: 1 - chartViewModel.opacity.value < 0
-                          ? 0
-                          : 1 - chartViewModel.opacity.value,
-                      child: DetailedPriceDisplayVer2(
-                          chartViewModel: chartViewModel),
-                    ),
+                ? Opacity(
+                    opacity: 1 - chartViewModel.opacity.value < 0
+                        ? 0
+                        : 1 - chartViewModel.opacity.value,
+                    child: DetailedPriceDisplayVer2(
+                        chartViewModel: chartViewModel),
                   )
                 : Container(),
-            Padding(
-              padding: kHorizontalPadding,
-              child: Opacity(
-                opacity: !chartViewModel.showingCandleChart.value
-                    ? 1
-                    : chartViewModel.opacity.value > 0.2
-                        ? chartViewModel.opacity.value
-                        : 0,
-                child: (chartViewModel.isLoading.value)
-                    ? Container(
-                        height: 120,
-                        width: double.infinity,
-                        // color: Colors.blueGrey.withOpacity(.1),
-                      )
-                    : Container(
-                        height: 120,
-                        width: double.infinity,
-                        // color: Colors.blueGrey.withOpacity(.1),
-                        child:
-                            MainPriceDisplay(chartViewModel: chartViewModel)),
-              ),
+            // 트래킹 안할 때 기본 차트 뷰 헤더
+            Opacity(
+              opacity: !chartViewModel.showingCandleChart.value
+                  ? 1
+                  : chartViewModel.opacity.value > 0.2
+                      ? chartViewModel.opacity.value
+                      : 0,
+              child: (chartViewModel.isLoading.value) // 로딩 중이면 빈 화면
+                  ? Container(
+                      height: 120.w,
+                      width: double.infinity,
+                      // color: Colors.blueGrey.withOpacity(.1),
+                    )
+                  : Container(
+                      height: 120.w,
+                      width: double.infinity,
+                      // color: Colors.blueGrey.withOpacity(.1),
+                      child: MainPriceDisplay(chartViewModel: chartViewModel)),
             ),
           ]),
         ),
         Obx(
           () => (chartViewModel.isLoading.value == true)
-              ? Container(height: 200, color: Colors.blue)
+              ? Container(height: 200.w, color: Colors.blue)
               : Obx(() {
-                  print(chartViewModel.chartPrices![0].close);
+                  // print(chartViewModel.chartPrices![0].close);
                   return Container(
-                    height: 200,
+                    height: 200.w,
                     // color: Colors.white,
                     child: SfCartesianChart(
                       // Trackball과 관련된 것들
@@ -181,63 +177,60 @@ class ChartView extends StatelessWidget {
                   );
                 }),
         ),
-        Padding(
-          padding: kHorizontalPadding,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(chartViewModel.cycles.length + 1, (index) {
-              return Obx(
-                () => InkWell(
-                    onTap: () {
-                      HapticFeedback.mediumImpact();
-                      if (index == chartViewModel.cycles.length) {
-                        chartViewModel.toggleChartType();
-                      } else {
-                        if (chartViewModel.selectedCycle != index) {
-                          chartViewModel.selectedCycle(index);
-                          chartViewModel.changeCycle();
-                        }
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: List.generate(chartViewModel.cycles.length + 1, (index) {
+            return Obx(
+              () => InkWell(
+                  onTap: () {
+                    HapticFeedback.mediumImpact();
+                    if (index == chartViewModel.cycles.length) {
+                      chartViewModel.toggleChartType();
+                    } else {
+                      if (chartViewModel.selectedCycle != index) {
+                        chartViewModel.selectedCycle(index);
+                        chartViewModel.changeCycle();
                       }
-                    },
-                    child: toggleButton(
-                      (index == chartViewModel.cycles.length)
-                          ? Icon(
-                              Icons.auto_graph,
-                              size: 18,
-                            )
-                          : Text(
-                              chartViewModel.cycles[index],
-                              style: detailStyle,
-                            ),
-                      (chartViewModel.selectedCycle.value == index)
-                          ? toggleButtonColor
-                          : Colors.transparent,
-                    )
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //     color: (chartViewModel.selectedCycle == index)
-                    //         ? Color(0xFFE8EAF6)
-                    //         : Colors.transparent,
-                    //     borderRadius: BorderRadius.circular(70),
-                    //   ),
-                    //   // color: Colors.blueGrey.shade100,
-                    //   padding: const EdgeInsets.symmetric(
-                    //       horizontal: 10, vertical: 6),
-                    //   child: (index == chartViewModel.cycleList.length)
-                    //       ? Icon(
-                    //           Icons.auto_graph,
-                    //           size: 18,
-                    //         )
-                    //       : Text(
-                    //           chartViewModel.cycleList[index],
-                    //           style: detailStyle,
-                    //         ),
-                    // ),
-                    ),
-              );
-            }),
-            //
-          ),
+                    }
+                  },
+                  child: toggleButton(
+                    (index == chartViewModel.cycles.length)
+                        ? Icon(
+                            Icons.auto_graph,
+                            size: 18,
+                          )
+                        : Text(
+                            chartViewModel.cycles[index],
+                            style: detailStyle,
+                          ),
+                    (chartViewModel.selectedCycle.value == index)
+                        ? toggleButtonColor
+                        : Colors.transparent,
+                  )
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     color: (chartViewModel.selectedCycle == index)
+                  //         ? Color(0xFFE8EAF6)
+                  //         : Colors.transparent,
+                  //     borderRadius: BorderRadius.circular(70),
+                  //   ),
+                  //   // color: Colors.blueGrey.shade100,
+                  //   padding: const EdgeInsets.symmetric(
+                  //       horizontal: 10, vertical: 6),
+                  //   child: (index == chartViewModel.cycleList.length)
+                  //       ? Icon(
+                  //           Icons.auto_graph,
+                  //           size: 18,
+                  //         )
+                  //       : Text(
+                  //           chartViewModel.cycleList[index],
+                  //           style: detailStyle,
+                  //         ),
+                  // ),
+                  ),
+            );
+          }),
+          //
         ),
         // Row(
         //   children: [
@@ -437,57 +430,54 @@ class DetailedPriceDisplayVer2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
-        // color: Colors.black12,
-        height: 120,
+        height: 120.w,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(child: MainPriceDisplay(chartViewModel: chartViewModel)),
+            Expanded(
+                child:
+                    MainPriceTrackingDisplay(chartViewModel: chartViewModel)),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("시가",
-                          style:
-                              ohlcInfoStyle.copyWith(color: Colors.grey[600])),
-                      Text(toPriceKRW(chartViewModel.open.value),
-                          style: ohlcPriceStyle)
+                      Text("시가", style: questTermTextStyle),
+                      Text('${toPriceKRW(chartViewModel.open.value)}원',
+                          style: questTermTextStyle.copyWith(
+                              color: primaryFontColor))
                     ],
                   ),
                   SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("고가",
-                          style:
-                              ohlcInfoStyle.copyWith(color: Colors.grey[600])),
-                      Text(toPriceKRW(chartViewModel.high.value),
-                          style: ohlcPriceStyle)
+                      Text("고가", style: questTermTextStyle),
+                      Text('${toPriceKRW(chartViewModel.high.value)}원',
+                          style: questTermTextStyle.copyWith(
+                              color: primaryFontColor))
                     ],
                   ),
                   SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("저가",
-                          style:
-                              ohlcInfoStyle.copyWith(color: Colors.grey[600])),
-                      Text(toPriceKRW(chartViewModel.low.value),
-                          style: ohlcPriceStyle)
+                      Text("저가", style: questTermTextStyle),
+                      Text('${toPriceKRW(chartViewModel.low.value)}원',
+                          style: questTermTextStyle.copyWith(
+                              color: primaryFontColor))
                     ],
                   ),
                   SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("거래량",
-                          style:
-                              ohlcInfoStyle.copyWith(color: Colors.grey[600])),
-                      Text(toPriceKRW(chartViewModel.volume.value),
-                          style: ohlcPriceStyle)
+                      Text("거래량", style: questTermTextStyle),
+                      Text('${toPriceKRW(chartViewModel.volume.value)}주',
+                          style: questTermTextStyle.copyWith(
+                              color: primaryFontColor))
                     ],
                   )
                 ],
@@ -510,56 +500,51 @@ class MainPriceDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("main price display rebuilt");
-    return Obx(() => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              // color: Colors.blueGrey[200],
+    return Obx(() => Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                // color: Colors.blueGrey[200],
 
-              // TODO: parent에서 받아오는 것 구현
-              child: Obx(
-                () => Text(
-                  newStockAddress!.value.name,
-                  style: headingStyle,
+                // TODO: parent에서 받아오는 것 구현
+                child: Obx(
+                  () => Text(
+                    newStockAddress!.value.name,
+                    style: stockInfoNameTextStyle,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Container(
-              // color: Colors.blueGrey[200],
-
-              child: Column(
+              // SizedBox(
+              //   height: reducedPaddingWhenTextIsBelow(
+              //       6.w, questTermTextStyle.fontSize!),
+              // ),
+              SizedBox(
+                height: 6.w,
+              ),
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // AnimatedTextKit(
-                  //   isRepeatingAnimation: false,
-                  //   pause: Duration(milliseconds: 50),
-                  //   animatedTexts: [
-                  //     TyperAnimatedText(
-                  //       chartViewModel.isTracking.value == true
-                  //           ? "${toPriceKRW(chartViewModel.close.value)}"
-                  //           : "${toPriceKRW(chartViewModel.chartPrices!.first.close!)}",
-                  //       textStyle: headingStyleEN,
-                  //     )
-                  //   ],
-                  // ),
+                  Text(
+                    "현재 주가",
+                    style: questTermTextStyle,
+                  ),
                   Text(
                     chartViewModel.isTracking.value == true
                         ? "${toPriceKRW(chartViewModel.close.value)}"
                         : "${toPriceKRW(chartViewModel.chartPrices!.first.close!)}",
-                    style: headingStyleEN,
+                    style: stockPriceTextStyle.copyWith(height: 1.4),
                   ),
-                  SizedBox(height: 4),
+                  // SizedBox(height: 4),
                   Row(
                     children: [
                       Text(
                         chartViewModel.isTracking.value == true
                             ? "${toPriceChangeKRW(chartViewModel.close.value - chartViewModel.chartPrices!.last.close!)}"
                             : "${toPriceChangeKRW(chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!)}",
-                        style: detailPriceStyle.copyWith(
+                        style: stockPriceChangeTextStyle.copyWith(
+                            height: 1.2,
                             color: chartViewModel.isTracking.value == true
                                 ? (chartViewModel.close.value /
                                                 chartViewModel
@@ -626,11 +611,136 @@ class MainPriceDisplay extends StatelessWidget {
                                           ? bearColorKR
                                           : Colors.black))
                     ],
-                  )
+                  ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
+        ));
+  }
+}
+
+class MainPriceTrackingDisplay extends StatelessWidget {
+  final ChartViewModel chartViewModel;
+  const MainPriceTrackingDisplay({
+    Key? key,
+    required this.chartViewModel,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    print("main price display rebuilt");
+    return Obx(() => Container(
+          height: 120.w,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "기간",
+                    style: questTermTextStyle,
+                  ),
+                  Text(
+                    "20/07/01 14:00\n~20/07/01 15:00",
+                    style: questTermTextStyle.copyWith(color: primaryFontColor),
+                  ),
+                ],
+              ),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    chartViewModel.isTracking.value == true
+                        ? "${toPriceKRW(chartViewModel.close.value)}"
+                        : "${toPriceKRW(chartViewModel.chartPrices!.first.close!)}",
+                    style: stockPriceTextStyle.copyWith(
+                        fontSize: 26.w, height: 1.4),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        chartViewModel.isTracking.value == true
+                            ? "${toPriceChangeKRW(chartViewModel.close.value - chartViewModel.chartPrices!.last.close!)}"
+                            : "${toPriceChangeKRW(chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!)}",
+                        style: stockPriceChangeTextStyle.copyWith(
+                            height: 1.2,
+                            color: chartViewModel.isTracking.value == true
+                                ? (chartViewModel.close.value /
+                                                chartViewModel
+                                                    .chartPrices!.last.close! -
+                                            1) >
+                                        0
+                                    ? bullColorKR
+                                    : (chartViewModel.close.value /
+                                                    chartViewModel.chartPrices!
+                                                        .last.close! -
+                                                1) <
+                                            0
+                                        ? bearColorKR
+                                        : Colors.black
+                                : (chartViewModel.chartPrices!.first.close! -
+                                            chartViewModel
+                                                .chartPrices!.last.close!) >
+                                        0
+                                    ? bullColorKR
+                                    : (chartViewModel
+                                                    .chartPrices!.first.close! -
+                                                chartViewModel
+                                                    .chartPrices!.last.close!) <
+                                            0
+                                        ? bearColorKR
+                                        : Colors.black),
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                          chartViewModel.isTracking.value == true
+                              ? "(${toPercentageChange(chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1)})"
+                              : "(${toPercentageChange(chartViewModel.chartPrices!.first.close! / chartViewModel.chartPrices!.last.close! - 1)})",
+                          style: detailPriceStyle.copyWith(
+                              color: chartViewModel.isTracking.value == true
+                                  ? (chartViewModel.close.value /
+                                                  chartViewModel.chartPrices!
+                                                      .last.close! -
+                                              1) >
+                                          0
+                                      ? bullColorKR
+                                      : (chartViewModel.close.value /
+                                                      chartViewModel
+                                                          .chartPrices!
+                                                          .last
+                                                          .close! -
+                                                  1) <
+                                              0
+                                          ? bearColorKR
+                                          : Colors.black
+                                  : (chartViewModel.chartPrices!.first.close! /
+                                                  chartViewModel.chartPrices!
+                                                      .last.close! -
+                                              1) >
+                                          0
+                                      ? bullColorKR
+                                      : (chartViewModel.chartPrices!.first
+                                                          .close! /
+                                                      chartViewModel
+                                                          .chartPrices!
+                                                          .last
+                                                          .close! -
+                                                  1) <
+                                              0
+                                          ? bearColorKR
+                                          : Colors.black))
+                    ],
+                  ),
+                ],
+              ),
+              // SizedBox(height: 4),
+            ],
+          ),
         ));
   }
 }
