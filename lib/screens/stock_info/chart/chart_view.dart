@@ -7,15 +7,39 @@ import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
-import 'package:yachtOne/models/stock_model.dart';
+import 'package:yachtOne/models/corporation_model.dart';
 import 'package:yachtOne/screens/quest/quest_view_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/styles/style_constants.dart';
-import '../../styles/style_constants.dart';
-import '../../handlers/date_time_handler.dart';
-import '../../models/price_chart_model.dart';
+import '../../../styles/style_constants.dart';
+import '../../../handlers/date_time_handler.dart';
+import '../../../models/price_chart_model.dart';
 import 'chart_view_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+Color chartTrackingColor(ChartViewModel chartViewModel) {
+  return (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! -
+              1) >
+          0
+      ? bullColorKR
+      : (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! -
+                  1) <
+              0
+          ? bearColorKR
+          : Colors.black;
+}
+
+Color chartClosePriceColor(ChartViewModel chartViewModel) {
+  return (chartViewModel.chartPrices!.first.close! -
+              chartViewModel.chartPrices!.last.close!) >
+          0
+      ? bullColorKR
+      : (chartViewModel.chartPrices!.first.close! -
+                  chartViewModel.chartPrices!.last.close!) <
+              0
+          ? bearColorKR
+          : Colors.black;
+}
 
 class ChartView extends StatelessWidget {
   final StockAddressModel stockAddressModel;
@@ -78,156 +102,155 @@ class ChartView extends StatelessWidget {
             ),
           ]),
         ),
-        Obx(
-          () => (chartViewModel.isLoading.value == true)
-              ? Container(height: 200.w, color: Colors.blue)
-              : Obx(() {
-                  // print(chartViewModel.chartPrices![0].close);
-                  return Container(
-                    height: 200.w,
-                    // color: Colors.white,
-                    child: SfCartesianChart(
-                      // Trackball과 관련된 것들
-                      onChartTouchInteractionDown: (_) {
-                        chartViewModel.opacityDown();
-                      },
-                      onTrackballPositionChanging: (TrackballArgs args) {
-                        // trackball의 X Position이 변하지 않으면 아무것도 하지 않음
-                        // trackball의 X Position이 변했으면 햅틱을 주고 직전 X Position을 업데이트함
-                        // if (previousXPosition !=
-                        //     args.chartPointInfo.xPosition) {
-                        // print(args.chartPointInfo.seriesIndex);
-                        if (args.chartPointInfo.seriesIndex == 0 &&
-                            previousXPosition !=
-                                args.chartPointInfo.xPosition) {
-                          // Printing Coordinate intersect point of first line
-                          HapticFeedback.lightImpact();
-                          print(args.chartPointInfo.chartDataPoint!.x);
-                          chartViewModel.onTrackballChanging(args);
-                        }
-                        if (args.chartPointInfo.seriesIndex == 1) {
-                          // Printing Coordinate intersect point of second line
-                          // print("second series");
-                          chartViewModel.onTrackballChanging(args);
-                        }
+        Obx(() => (chartViewModel.isLoading.value == true)
+            ? Container(height: 200.w, color: Colors.blue)
+            : Container(
+                height: 200.w,
+                // color: Colors.white,
+                child: Obx(() {
+                  // 아래 프린트를 해야 dataSource에 반영되네;;
+                  // dataSource에서 분기되는 지점을 method로 따로 빼서 Obx가 제대로 obs value 구독을 못하는 듯
+                  print(chartViewModel.chartPrices![0].close);
+                  return SfCartesianChart(
+                    // Trackball과 관련된 것들
+                    onChartTouchInteractionDown: (_) {
+                      chartViewModel.opacityDown();
+                    },
+                    onTrackballPositionChanging: (TrackballArgs args) {
+                      // trackball의 X Position이 변하지 않으면 아무것도 하지 않음
+                      // trackball의 X Position이 변했으면 햅틱을 주고 직전 X Position을 업데이트함
+                      // if (previousXPosition !=
+                      //     args.chartPointInfo.xPosition) {
+                      // print(args.chartPointInfo.seriesIndex);
+                      if (args.chartPointInfo.seriesIndex == 0 &&
+                          previousXPosition != args.chartPointInfo.xPosition) {
+                        // Printing Coordinate intersect point of first line
+                        HapticFeedback.lightImpact();
+                        print(args.chartPointInfo.chartDataPoint!.x);
+                        chartViewModel.onTrackballChanging(args);
+                      }
+                      if (args.chartPointInfo.seriesIndex == 1) {
+                        // Printing Coordinate intersect point of second line
+                        // print("second series");
+                        chartViewModel.onTrackballChanging(args);
+                      }
 
-                        // }
-                        previousXPosition = args.chartPointInfo.xPosition!;
+                      // }
+                      previousXPosition = args.chartPointInfo.xPosition!;
 
-                        // if (args.chartPointInfo.seriesIndex == 0) {
-                        //   // Printing Coordinate intersect point of first line
-                        //   print('x:' +
-                        //       args.chartPointInfo.xPosition.toString());
-                        //   print('y:' +
-                        //       args.chartPointInfo.yPosition.toString());
-                        // }
-                        // if (args.chartPointInfo.seriesIndex == 1) {
-                        //   // Printing Coordinate intersect point of second line
-                        //   print('x:' +
-                        //       args.chartPointInfo.xPosition.toString());
-                        //   print('y:' +
-                        //       args.chartPointInfo.yPosition.toString());
-                        // }
-                      },
-                      onChartTouchInteractionUp: (_) {
-                        chartViewModel.onTracballEnds();
-                        // print("차트에서 손 뗌");
-                      },
+                      // if (args.chartPointInfo.seriesIndex == 0) {
+                      //   // Printing Coordinate intersect point of first line
+                      //   print('x:' +
+                      //       args.chartPointInfo.xPosition.toString());
+                      //   print('y:' +
+                      //       args.chartPointInfo.yPosition.toString());
+                      // }
+                      // if (args.chartPointInfo.seriesIndex == 1) {
+                      //   // Printing Coordinate intersect point of second line
+                      //   print('x:' +
+                      //       args.chartPointInfo.xPosition.toString());
+                      //   print('y:' +
+                      //       args.chartPointInfo.yPosition.toString());
+                      // }
+                    },
+                    onChartTouchInteractionUp: (_) {
+                      chartViewModel.onTracballEnds();
+                      // print("차트에서 손 뗌");
+                    },
 
-                      trackballBehavior: TrackballBehavior(
-                        enable: true,
-                        activationMode: ActivationMode.singleTap,
-                        tooltipSettings: InteractiveTooltip(
-                          enable: false,
-                          // Formatting trackball tooltip text
-                          // format: ''
-                        ),
+                    trackballBehavior: TrackballBehavior(
+                      enable: true,
+                      activationMode: ActivationMode.singleTap,
+                      tooltipSettings: InteractiveTooltip(
+                        enable: false,
+                        // Formatting trackball tooltip text
+                        // format: ''
                       ),
-                      plotAreaBorderWidth: 0,
-                      // enableAxisAnimation: true,
-
-                      series: chartViewModel.showingCandleChart.value
-                          ? _candleChart(chartViewModel.chartPrices!)
-                          : _lineChart(chartViewModel.chartPrices!),
-                      primaryXAxis: DateTimeCategoryAxis(
-                          majorGridLines: MajorGridLines(
-                            width: 0,
-                          ),
-                          isVisible: false),
-                      primaryYAxis: NumericAxis(
-                          maximum: chartViewModel.maxPrice!,
-                          minimum: (5 * chartViewModel.minPrice! -
-                                  chartViewModel.maxPrice!) /
-                              4,
-                          // chartViewModel.minPrice! *
-                          //     0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
-                          majorGridLines: MajorGridLines(width: 0),
-                          isVisible: false),
-                      axes: [
-                        NumericAxis(
-                            // 차트에 그려지는 PriceChartModel의 volume들 중 max값 받아서 영역의 1/5에만 그려지도록 maximum 값 설정
-                            maximum: chartViewModel.maxVolume! * 4.5,
-                            minimum: 0,
-                            majorGridLines: MajorGridLines(width: 0),
-                            isVisible: false,
-                            name: 'volume'),
-                      ],
-                      enableSideBySideSeriesPlacement: false,
                     ),
+                    plotAreaBorderWidth: 0,
+                    // enableAxisAnimation: true,
+
+                    series: chartViewModel.showingCandleChart.value
+                        ? _candleChart(chartViewModel.chartPrices!)
+                        : _lineChart(chartViewModel.chartPrices!),
+                    primaryXAxis: DateTimeCategoryAxis(
+                        majorGridLines: MajorGridLines(
+                          width: 0,
+                        ),
+                        isVisible: false),
+                    primaryYAxis: NumericAxis(
+                        maximum: chartViewModel.maxPrice!,
+                        minimum: (5 * chartViewModel.minPrice! -
+                                chartViewModel.maxPrice!) /
+                            4,
+                        // chartViewModel.minPrice! *
+                        //     0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
+                        majorGridLines: MajorGridLines(width: 0),
+                        isVisible: false),
+                    axes: [
+                      NumericAxis(
+                          // 차트에 그려지는 PriceChartModel의 volume들 중 max값 받아서 영역의 1/5에만 그려지도록 maximum 값 설정
+                          maximum: chartViewModel.maxVolume! * 4.5,
+                          minimum: 0,
+                          majorGridLines: MajorGridLines(width: 0),
+                          isVisible: false,
+                          name: 'volume'),
+                    ],
+                    enableSideBySideSeriesPlacement: false,
                   );
                 }),
-        ),
+              )),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(chartViewModel.cycles.length + 1, (index) {
-            return Obx(
-              () => InkWell(
-                  onTap: () {
-                    HapticFeedback.mediumImpact();
-                    if (index == chartViewModel.cycles.length) {
-                      chartViewModel.toggleChartType();
-                    } else {
-                      if (chartViewModel.selectedCycle.value != index) {
-                        chartViewModel.selectedCycle(index);
-                        chartViewModel.changeCycle();
-                      }
-                    }
-                  },
-                  child: toggleButton(
-                    (index == chartViewModel.cycles.length)
-                        ? Icon(
-                            Icons.auto_graph,
-                            size: 18,
-                          )
-                        : Text(
-                            chartViewModel.cycles[index],
-                            style: detailStyle,
-                          ),
-                    (chartViewModel.selectedCycle.value == index)
-                        ? toggleButtonColor
-                        : Colors.transparent,
-                  )
-                  // Container(
-                  //   decoration: BoxDecoration(
-                  //     color: (chartViewModel.selectedCycle == index)
-                  //         ? Color(0xFFE8EAF6)
-                  //         : Colors.transparent,
-                  //     borderRadius: BorderRadius.circular(70),
-                  //   ),
-                  //   // color: Colors.blueGrey.shade100,
-                  //   padding: const EdgeInsets.symmetric(
-                  //       horizontal: 10, vertical: 6),
-                  //   child: (index == chartViewModel.cycleList.length)
-                  //       ? Icon(
-                  //           Icons.auto_graph,
-                  //           size: 18,
-                  //         )
-                  //       : Text(
-                  //           chartViewModel.cycleList[index],
-                  //           style: detailStyle,
-                  //         ),
-                  // ),
-                  ),
+            return InkWell(
+              onTap: () {
+                HapticFeedback.mediumImpact();
+                if (index == chartViewModel.cycles.length) {
+                  chartViewModel.toggleChartType();
+                } else {
+                  if (chartViewModel.selectedCycle.value != index) {
+                    chartViewModel.selectedCycle(index);
+                    chartViewModel.changeCycle();
+                  }
+                }
+              },
+              child: Obx(() {
+                bool isSelected = chartViewModel.selectedCycle.value == index;
+                // print('$index isSelected: $isSelected');
+                return chartToggleButton(
+                  child: (index == chartViewModel.cycles.length)
+                      ? Icon(
+                          Icons.auto_graph,
+                          size: 18,
+                        )
+                      : Text(
+                          chartViewModel.cycles[index],
+                          style: stockPriceChangeTextStyle.copyWith(
+                              color: chartViewModel.selectedCycle.value == index
+                                  ? Colors.white
+                                  : primaryFontColor),
+                        ),
+                  isSelected: isSelected,
+                  color: (chartViewModel.isLoading.value && isSelected)
+                      ? Colors.black54
+                      : chartViewModel.isLoading.value
+                          ? primaryBackgroundColor
+                          : isSelected
+                              ? (chartViewModel.chartPrices!.first.close! -
+                                          chartViewModel
+                                              .chartPrices!.last.close!) >
+                                      0
+                                  ? bullColorKR
+                                  : (chartViewModel.chartPrices!.first.close! -
+                                              chartViewModel
+                                                  .chartPrices!.last.close!) <
+                                          0
+                                      ? bearColorKR
+                                      : Colors.black54
+                              : primaryBackgroundColor,
+                );
+              }),
             );
           }),
           //
@@ -530,48 +553,26 @@ class MainPriceDisplay extends StatelessWidget {
                     "현재 주가",
                     style: questTermTextStyle,
                   ),
-                  Text(
-                    chartViewModel.isTracking.value == true
-                        ? "${toPriceKRW(chartViewModel.close.value)}"
-                        : "${toPriceKRW(chartViewModel.chartPrices!.first.close!)}",
-                    style: stockPriceTextStyle.copyWith(height: 1.4),
+                  Obx(
+                    () => Text(
+                      chartViewModel.isTracking.value == true
+                          ? "${toPriceKRW(chartViewModel.close.value)}"
+                          : "${toPriceKRW(chartViewModel.chartPrices!.first.close!)}",
+                      style: stockPriceTextStyle.copyWith(height: 1.4),
+                    ),
                   ),
                   // SizedBox(height: 4),
                   Row(
                     children: [
                       Text(
-                        chartViewModel.isTracking.value == true
-                            ? "${toPriceChangeKRW(chartViewModel.close.value - chartViewModel.chartPrices!.last.close!)}"
-                            : "${toPriceChangeKRW(chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!)}",
-                        style: stockPriceChangeTextStyle.copyWith(
-                            height: 1.2,
-                            color: chartViewModel.isTracking.value == true
-                                ? (chartViewModel.close.value /
-                                                chartViewModel
-                                                    .chartPrices!.last.close! -
-                                            1) >
-                                        0
-                                    ? bullColorKR
-                                    : (chartViewModel.close.value /
-                                                    chartViewModel.chartPrices!
-                                                        .last.close! -
-                                                1) <
-                                            0
-                                        ? bearColorKR
-                                        : Colors.black
-                                : (chartViewModel.chartPrices!.first.close! -
-                                            chartViewModel
-                                                .chartPrices!.last.close!) >
-                                        0
-                                    ? bullColorKR
-                                    : (chartViewModel
-                                                    .chartPrices!.first.close! -
-                                                chartViewModel
-                                                    .chartPrices!.last.close!) <
-                                            0
-                                        ? bearColorKR
-                                        : Colors.black),
-                      ),
+                          chartViewModel.isTracking.value == true
+                              ? "${toPriceChangeKRW(chartViewModel.close.value - chartViewModel.chartPrices!.last.close!)}"
+                              : "${toPriceChangeKRW(chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!)}",
+                          style: stockPriceChangeTextStyle.copyWith(
+                              height: 1.2,
+                              color: chartViewModel.isTracking.value == true
+                                  ? chartTrackingColor(chartViewModel)
+                                  : chartClosePriceColor(chartViewModel))),
                       SizedBox(width: 4),
                       Text(
                           chartViewModel.isTracking.value == true
@@ -579,37 +580,8 @@ class MainPriceDisplay extends StatelessWidget {
                               : "(${toPercentageChange(chartViewModel.chartPrices!.first.close! / chartViewModel.chartPrices!.last.close! - 1)})",
                           style: detailPriceStyle.copyWith(
                               color: chartViewModel.isTracking.value == true
-                                  ? (chartViewModel.close.value /
-                                                  chartViewModel.chartPrices!
-                                                      .last.close! -
-                                              1) >
-                                          0
-                                      ? bullColorKR
-                                      : (chartViewModel.close.value /
-                                                      chartViewModel
-                                                          .chartPrices!
-                                                          .last
-                                                          .close! -
-                                                  1) <
-                                              0
-                                          ? bearColorKR
-                                          : Colors.black
-                                  : (chartViewModel.chartPrices!.first.close! /
-                                                  chartViewModel.chartPrices!
-                                                      .last.close! -
-                                              1) >
-                                          0
-                                      ? bullColorKR
-                                      : (chartViewModel.chartPrices!.first
-                                                          .close! /
-                                                      chartViewModel
-                                                          .chartPrices!
-                                                          .last
-                                                          .close! -
-                                                  1) <
-                                              0
-                                          ? bearColorKR
-                                          : Colors.black))
+                                  ? chartTrackingColor(chartViewModel)
+                                  : chartClosePriceColor(chartViewModel)))
                     ],
                   ),
                 ],

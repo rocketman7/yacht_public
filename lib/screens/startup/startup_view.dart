@@ -11,14 +11,17 @@ class StartupView extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        body: TabBarView(
-          // 기존 방식으로 바꿔야 함
-          physics: NeverScrollableScrollPhysics(),
-          children: [
-            HomeView(),
-            Container(color: Colors.blue),
-            Container(color: Colors.red)
-          ],
+        body: Container(
+          // height: 200,
+          child: TabBarView(
+            // 기존 방식으로 바꿔야 함
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              HomeView(),
+              Container(color: Colors.blue),
+              Container(color: Colors.red)
+            ],
+          ),
         ),
         bottomNavigationBar: Container(
           // height: _screenUtil.bottomBarHeight + 50,

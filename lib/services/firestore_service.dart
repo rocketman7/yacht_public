@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/price_chart_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
-import 'package:yachtOne/models/stock_model.dart';
+import 'package:yachtOne/models/corporation_model.dart';
 
 import '../models/subLeague_model.dart';
 
@@ -53,17 +54,19 @@ class FirestoreService extends GetxService {
   }
 
   // Stat 가져오기
-  Future<List<StatsModel>> getStats() async {
-    CollectionReference _samsungElectronic =
-        _firestoreService.collection('stocksKR/005930/stats');
-    CollectionReference _skBioPharm =
-        _firestoreService.collection('stocksKR/326030/stats');
-    CollectionReference _abKo =
-        _firestoreService.collection('stocksKR/129890/stats');
+  Future<List<StatsModel>> getStats(StockAddressModel stockAddress) async {
+    // CollectionReference _samsungElectronic =
+    //     _firestoreService.collection('stocksKR/005930/stats');
+    // CollectionReference _skBioPharm =
+    //     _firestoreService.collection('stocksKR/326030/stats');
+    // CollectionReference _abKo =
+    //     _firestoreService.collection('stocksKR/129890/stats');
+    CollectionReference _statsRef = _firestoreService
+        .collection('stocksKR/${stockAddress.issueCode}/stats');
     List<StatsModel> _statstModelList = [];
 
     try {
-      await _samsungElectronic
+      await _statsRef
           .orderBy('dateTime', descending: true)
           .get()
           .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
@@ -163,6 +166,31 @@ class FirestoreService extends GetxService {
     });
 
     return allQuests;
+  }
+
+  // 기업 세부 정보 가져오기
+  Future<CorporationModel> getCorporationInfo(
+      StockAddressModel stockAddressModel) async {
+    return await _firestoreService
+        .collection('stocksKR')
+        .doc('${stockAddressModel.issueCode}')
+        .get()
+        .then((value) => CorporationModel.fromMap(value.data()!));
+  }
+
+  Future<List<NewsModel>> getNews(StockAddressModel stockAddressModel) async {
+    final List<NewsModel> allNews = [];
+    await _firestoreService
+        .collection('stocksKR')
+        .doc('${stockAddressModel.issueCode}')
+        .collection('news')
+        .orderBy('dateTime', descending: true)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              allNews.add(NewsModel.fromMap(element.data()));
+            }));
+    print('${stockAddressModel.name} news: $allNews');
+    return allNews;
   }
 
   // 홈 및 서브리그세부 페이지에서 쓸 현재의 모든 서브리그 가져오기.

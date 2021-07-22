@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:yachtOne/screens/chart/chart_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/screens/subLeague/temp_home_view.dart';
 import 'package:yachtOne/screens/home/live_widget.dart';
@@ -14,15 +13,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'home_award_card_widget.dart';
 import 'quest_widget.dart';
 
-class HomeView extends StatefulWidget {
-  @override
-  _HomeViewState createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
+class HomeView extends StatelessWidget {
   HomeViewModel homeViewModel = Get.put(HomeViewModel());
 
   ScrollController _scrollController = ScrollController();
+  RxDouble offset = 0.0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +27,32 @@ class _HomeViewState extends State<HomeView> {
             fontSize: 18,
             fontWeight: FontWeight.w500,
             color: Color(0xFF789EC1)));
+    _scrollController = ScrollController(initialScrollOffset: 0);
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
+    _scrollController.addListener(() {
+      // offset obs 값에 scroll controller offset 넣어주기
+      _scrollController.offset < 0
+          ? offset(0)
+          : offset(_scrollController.offset);
+      print(offset);
+    });
+
     print(
         'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight}');
     print('20.w is ${20.w}');
     print('20.sp is ${20.sp}');
-    _scrollController = ScrollController(initialScrollOffset: 0);
+
     return Scaffold(
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          SliverPersistentHeader(
-              floating: false,
-              pinned: true,
-              delegate: _GlassmorphismAppBarDelegate(
-                MediaQuery.of(context).padding,
-              )),
+          Obx(
+            () => SliverPersistentHeader(
+                floating: false,
+                pinned: true,
+                delegate: _GlassmorphismAppBarDelegate(
+                    MediaQuery.of(context).padding, offset.value)),
+          ),
           // SliverAppBar(
           //   elevation: 0.0, // 스크롤했을 때 SliverAppbar 아래 shadow.
           //   // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -332,14 +338,15 @@ class _HomeViewState extends State<HomeView> {
 
 class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   final EdgeInsets safeAreaPadding;
+  final double offset;
 
-  _GlassmorphismAppBarDelegate(this.safeAreaPadding);
+  _GlassmorphismAppBarDelegate(this.safeAreaPadding, this.offset);
 
   @override
   double get minExtent => 60.h + ScreenUtil().statusBarHeight;
 
   @override
-  double get maxExtent => minExtent + kToolbarHeight;
+  double get maxExtent => minExtent + kToolbarHeight + 100.w;
 
   @override
   Widget build(
@@ -357,19 +364,34 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
             child: Padding(
               padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
               child: Center(
-                  child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
                 children: [
                   Container(
-                    child: Text(
-                      "장한나",
-                      style: homeHeaderName,
+                    padding: EdgeInsets.symmetric(
+                        vertical: offset.w > 18.w ? 6.w : 18.w - offset.w),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          child: Text(
+                            "장한나",
+                            style: homeHeaderName,
+                          ),
+                        ),
+                        Container(
+                          // color: Colors.blue,
+                          child: Text(
+                            " 님의 요트",
+                            style: homeHeaderAfterName,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Container(
-                    // color: Colors.blue,
-                    child: Text(" 님의 요트", style: homeHeaderAfterName),
+                    height: offset.w > 100.w ? 0 : 100.w - offset.w,
+                    color: Colors.blue,
                   ),
                 ],
               )),

@@ -9,6 +9,10 @@ import 'size_config.dart';
 // 색상표
 const Color seaBlue = Color(0xFF489EDD);
 const Color yachtRed = Color(0xFFEE5076);
+const Color blueGrey = Color(0xFF789EC1);
+const Color deepBlue = Color(0xFF196AB4);
+
+Color backgroundWhenPopup = Color(0xFF343434).withOpacity(.3);
 // 백그라운드
 const primaryBackgroundColor = Color(0xFFFBFAFD);
 // 앱 바 백그라운드
@@ -29,9 +33,11 @@ const homeModuleBoxBackgroundColor = Colors.white;
 const buttonTextColor = Colors.white;
 // 모듈박스 그림자 색
 Color boxShadowColor = Color(0xFF38204B).withOpacity(.08);
+// 디바이더
+Color dividerColor = Color(0xFF789EC1).withOpacity(.4);
 // k-Bull & Bear & Volume Color
-const bullColorKR = seaBlue;
-const bearColorKR = yachtRed;
+const bullColorKR = yachtRed;
+const bearColorKR = seaBlue;
 const volumeColor = Color(0xFF789EC1);
 
 /// 패딩
@@ -257,10 +263,29 @@ TextStyle stockPriceTextStyle = TextStyle(
   height: 1.4,
 );
 
-//
+// 차트 세부 가격 변동 텍스트 // 차트 토글 버튼 텍스트
 TextStyle stockPriceChangeTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle stockInfoStatsTitle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 가장 작은 텍스트 스타일
+TextStyle mostDetailedContentTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 10.w,
   fontWeight: FontWeight.w500,
   color: primaryFontColor,
   letterSpacing: -1.0,
@@ -279,6 +304,19 @@ Container primaryButtonContainer(Text buttonText) {
     ),
     child: Center(child: buttonText),
   );
+}
+
+// 차트 토글 버튼
+Container chartToggleButton(
+    {required Widget child, required bool isSelected, required Color color}) {
+  return Container(
+      // width: 50.w,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(7.w),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.w),
+      child: child);
 }
 
 //

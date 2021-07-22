@@ -379,6 +379,13 @@ PODS:
   - Flutter (1.0.0)
   - flutter_chat_bubble (0.0.1):
     - Flutter
+  - flutter_inappwebview (0.0.1):
+    - Flutter
+    - flutter_inappwebview/Core (= 0.0.1)
+    - OrderedSet (~> 5.0)
+  - flutter_inappwebview/Core (0.0.1):
+    - Flutter
+    - OrderedSet (~> 5.0)
   - flutter_segment (0.0.1):
     - Analytics (= 3.7.0)
     - Flutter
@@ -471,6 +478,7 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - OrderedSet (5.0.0)
   - package_info (0.0.1):
     - Flutter
   - path_provider (0.0.1):
@@ -507,6 +515,7 @@ DEPENDENCIES:
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_chat_bubble (from `.symlinks/plugins/flutter_chat_bubble/ios`)
+  - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_segment (from `.symlinks/plugins/flutter_segment/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
@@ -552,6 +561,7 @@ SPEC REPOS:
     - leveldb-library
     - Mixpanel-swift
     - nanopb
+    - OrderedSet
     - PromisesObjC
     - Segment-Amplitude
     - Toast
@@ -585,6 +595,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_chat_bubble:
     :path: ".symlinks/plugins/flutter_chat_bubble/ios"
+  flutter_inappwebview:
+    :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_segment:
     :path: ".symlinks/plugins/flutter_segment/ios"
   fluttertoast:
@@ -643,6 +655,7 @@ SPEC CHECKSUMS:
   FirebaseStorage: 61bcd27880fa17362f68be67d3683d04bfd7b1c7
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_chat_bubble: cad6265ec611ba0f7bede70eabc26fdfce9bf2b0
+  flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_segment: f20a38d465030de0f1b2aa9325cef9c1442b0721
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -660,6 +673,7 @@ SPEC CHECKSUMS:
   Mixpanel-swift: 947354668bf7dcaff5aaf9c64232fb5bea6ff0c7
   mixpanel_flutter: 2b151def495bd86f2a6cbd83e58acf47a70cbb79
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
@@ -671,6 +685,6 @@ SPEC CHECKSUMS:
   vibration: 1ec279c4a1a7a646627b54039d812334b3f1114a
   webview_flutter: 9f491a9b5a66f2573946a389b2677987b0ff8c0b
 
-PODFILE CHECKSUM: 0661a8b4d2adb53671731a5c90a8e5964fc4bf1f
+PODFILE CHECKSUM: b74cda28efb3a78df1eca6760f82c15bd4a3fa39
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.0

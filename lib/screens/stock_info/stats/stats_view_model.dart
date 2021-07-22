@@ -1,19 +1,29 @@
 import 'package:get/get.dart';
+import 'package:yachtOne/models/quest_model.dart';
+
 import 'package:yachtOne/models/stats_model.dart';
+import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:quiver/iterables.dart' as quiver;
 
 class StatsViewModel extends GetxController {
+  StockAddressModel stockAddressModel;
+
+  StatsViewModel({
+    required this.stockAddressModel,
+  });
+
   FirestoreService _firestoreService = FirestoreService();
+
   List<StatsModel>? _stats;
   List<StatsModel> _quarterStats = [];
   List<StatsModel> _yearStats = [];
-  List<StatsModel> _chartStats = [];
+  RxList<StatsModel>? chartStats = RxList<StatsModel>();
 
   List<StatsModel>? get stats => _stats;
   List<StatsModel>? get quarterStats => _quarterStats;
   List<StatsModel> get yearStats => _yearStats;
-  List<StatsModel> get chartStats => _chartStats;
+  // List<StatsModel> get chartStats => chartStats;
 
   double? _maxSales,
       _minSales,
@@ -36,19 +46,36 @@ class StatsViewModel extends GetxController {
   // Bar Chart 가로폭
   double width = .7;
   double spacing = 0;
-  bool isLoading = true;
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    return getStats();
+  RxBool isLoading = true.obs;
+
+  void changeStockAddressModel(StockAddressModel stockAddress) {
+    newStockAddress!(stockAddress);
+    // print('name: ${newStockAddress!.value.name}');
+    // update();
   }
 
-  void getStats() async {
+  @override
+  onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    // newStockAddress = stockAddressModel.obs;
+
+    // StockInfoKRViewModel().newStockAddress.listen(() { })
+
+    newStockAddress!.listen((value) {
+      print("Stats view value change from stockinfoview $value");
+      getStats(value);
+    });
+    getStats(stockAddressModel);
+  }
+
+  Future getStats(StockAddressModel stockAddressModel) async {
+    isLoading(true);
     List<int> toBeRemoved = [];
     // TODO: 분기, 연간을 토글 스위치로 (캔들차트처럼) 바꿔서 볼 수 있게. 10,11월엔 어떻게 할지?
     // TODO: 막대그래프  스케일 조정
-    _stats = await _firestoreService.getStats();
+    _stats = null;
+    _stats = await _firestoreService.getStats(stockAddressModel);
     // print(_statsList);
     // term이 Y이면 같은 year의 Q들의 합을 Y에서 빼주어야 함.
     // 만약 중간에 상장한 기업은 어떻게 처리하나?
@@ -75,6 +102,8 @@ class StatsViewModel extends GetxController {
     _stats!.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
     // print(_statsList![0]);
     // 사업 보고서에서 같은 해 3분기까지 누적치 빼서 4분기 IS data로 생성
+    _yearStats = [];
+    _quarterStats = [];
     for (int i = 0; i < _stats!.length; i++) {
       // if 사업보고서,
       if (_stats![i].term == "Y") {
@@ -104,9 +133,9 @@ class StatsViewModel extends GetxController {
     // print(_yearStatsList[0].toJson());
     // var a = _yearStats[0].toMap();
     // print(a['salesIS']);
-    isLoading = false;
+    isLoading(false);
     changeTerm();
-    // print(_chartStats);
+    // print(chartStats);
     update();
   }
 
@@ -114,10 +143,10 @@ class StatsViewModel extends GetxController {
     print(toggleTerms[selectedTerm.value]);
     switch (toggleTerms[selectedTerm.value]) {
       case "분기":
-        _chartStats = _quarterStats;
-        // print(_chartStats);
+        chartStats!(_quarterStats);
+        // print(chartStats);
         Set<String> temp = Set();
-        for (StatsModel chartStat in _chartStats) {
+        for (StatsModel chartStat in chartStats!) {
           temp.add(chartStat.year!);
         }
         print(temp.length);
@@ -146,8 +175,8 @@ class StatsViewModel extends GetxController {
         update();
         break;
       case "연간":
-        _chartStats = _yearStats;
-        switch (_chartStats.length) {
+        chartStats!(_yearStats);
+        switch (chartStats!.length) {
           case 5:
             width = .5;
             break;
@@ -175,22 +204,22 @@ class StatsViewModel extends GetxController {
 
   void calculateMaxMin() {
     _maxSales = quiver.max(List.generate(
-            _chartStats.length, (index) => _chartStats[index].salesIS))! *
+            chartStats!.length, (index) => chartStats![index].salesIS))! *
         1.00;
     _minSales = quiver.min(List.generate(
-            _chartStats.length, (index) => _chartStats[index].salesIS))! *
+            chartStats!.length, (index) => chartStats![index].salesIS))! *
         1.00;
-    _maxOperatingIncome = quiver.max(List.generate(_chartStats.length,
-            (index) => _chartStats[index].operatingIncomeIS))! *
+    _maxOperatingIncome = quiver.max(List.generate(chartStats!.length,
+            (index) => chartStats![index].operatingIncomeIS))! *
         1.00;
-    _minOperatingIncome = quiver.min(List.generate(_chartStats.length,
-            (index) => _chartStats[index].operatingIncomeIS))! *
+    _minOperatingIncome = quiver.min(List.generate(chartStats!.length,
+            (index) => chartStats![index].operatingIncomeIS))! *
         1.00;
     _maxNetIncome = quiver.max(List.generate(
-            _chartStats.length, (index) => _chartStats[index].netIncomeIS))! *
+            chartStats!.length, (index) => chartStats![index].netIncomeIS))! *
         1.00;
     _minNetIncome = quiver.min(List.generate(
-            _chartStats.length, (index) => _chartStats[index].netIncomeIS))! *
+            chartStats!.length, (index) => chartStats![index].netIncomeIS))! *
         1.00;
   }
 

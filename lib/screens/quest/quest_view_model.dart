@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
-import 'package:yachtOne/models/stock_model.dart';
-import 'package:yachtOne/screens/chart/chart_view_model.dart';
+import 'package:yachtOne/models/corporation_model.dart';
+import 'package:yachtOne/screens/stock_info/chart/chart_view_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
@@ -31,9 +31,11 @@ class QuestViewModel extends GetxController {
 
   String? imageUrl;
   List logoImage = [];
-  StockModel? stockModel;
+
   RxBool isLoading = false.obs;
 
+  // 예측 최종 확정 중일 때 true로
+  RxBool isSelectingSheetShowing = false.obs;
   // init(QuestModel model) {
   //   questModel = model;
   //   // update();

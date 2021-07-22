@@ -15,7 +15,6 @@ import 'package:yachtOne/screens/quest/quest_view_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:quiver/iterables.dart' as quiver;
-import 'package:yachtOne/styles/size_config.dart';
 
 class ChartViewModel extends GetxController {
   StockAddressModel stockAddressModel;
@@ -48,7 +47,7 @@ class ChartViewModel extends GetxController {
 
   // 차트 주기 선택
   RxInt selectedCycle = 0.obs;
-  List<String> cycles = ["1일", "1주", "1개월", "3개월", "1년", "5년"];
+  RxList<String> cycles = ["1일", "1주", "1개월", "3개월", "1년", "5년"].obs;
   //차트 그리기 위한 가격 Max, Min, 볼륨 Max, Min 변수
   double? _maxPrice;
   double? _minPrice;
@@ -71,6 +70,8 @@ class ChartViewModel extends GetxController {
 
   RxDouble opacity = 1.0.obs;
 
+  // Rx<StockAddressModel> newStockAddress;
+
   // 이 뷰모델을 불러오면 onInit 실행.
   @override
   onInit() {
@@ -80,7 +81,7 @@ class ChartViewModel extends GetxController {
     // StockInfoKRViewModel().newStockAddress.listen(() { })
 
     newStockAddress!.listen((value) {
-      print("value change from stockinfoview $value");
+      print("Chart view value change from stockinfoview $value");
       getPrices(value);
     });
     getPrices(stockAddressModel);
@@ -154,8 +155,7 @@ class ChartViewModel extends GetxController {
   void getPrices(StockAddressModel stockAddressModel) async {
     isLoading(true);
     prices = null;
-    print("get Price Called");
-    print(stockAddressModel.issueCode);
+
     prices = await _priceRepository.getStock(stockAddressModel);
     // subList 기본값 만들어줘야 함
 
@@ -219,6 +219,7 @@ class ChartViewModel extends GetxController {
   // 1) 먼저 받아온 차트 데이터에서 기간 별로 나눠주는 로직 구현하고,
   // 2) 데이터가 충분하지 않을 때 어떻게 처리할지 구현해야 함. (빅히트로)
   void changeCycle() {
+    print('new cycle: ${cycles[selectedCycle.value]}');
     switch (cycles[selectedCycle.value]) {
       case "1일":
 

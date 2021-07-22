@@ -21,10 +21,10 @@ import 'package:yachtOne/styles/theme.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import 'locator.dart';
-import 'models/stock_model.dart';
+import 'models/corporation_model.dart';
 import 'screens/award/award_view.dart';
 import 'screens/award_old/award_viewOld.dart';
-import 'screens/chart/chart_view.dart';
+import 'screens/stock_info/chart/chart_view.dart';
 import 'screens/subLeague/subLeague_view.dart';
 import 'screens/subLeague/temp_home_view.dart';
 import 'screens/test_view.dart';

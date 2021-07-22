@@ -7,11 +7,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
-import 'package:yachtOne/models/stock_model.dart';
-import 'package:yachtOne/screens/chart/chart_view.dart';
-import 'package:yachtOne/screens/chart/chart_view_model.dart';
+import 'package:yachtOne/models/corporation_model.dart';
+import 'package:yachtOne/screens/stock_info/chart/chart_view.dart';
+import 'package:yachtOne/screens/stock_info/chart/chart_view_model.dart';
 import 'package:yachtOne/screens/home/quest_widget.dart';
 import 'package:yachtOne/screens/quest/quest_view_model.dart';
+import 'package:yachtOne/screens/stock_info/stats/stats_view_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/styles/size_config.dart';
@@ -46,6 +47,7 @@ class QuestView extends StatelessWidget {
     print('quest view로 전달된 quest model: $questModel');
     // 뷰 모델에 퀘스트 데이터 모델 넣어주기
     final QuestViewModel questViewModel = Get.put(QuestViewModel(questModel));
+
     final stockInfoViewModel = Get.put(StockInfoKRViewModel(
         stockAddressModel:
             questModel.stockAddress[questViewModel.stockInfoIndex]));
@@ -114,70 +116,96 @@ class QuestView extends StatelessWidget {
       //       )),
       // )),
 
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(),
-          SliverToBoxAdapter(
-            child: Container(
-              padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "퀘스트 정보",
-                    style: homeModuleTitleTextStyle,
-                  ),
-                  btwHomeModuleTitleBox,
-                  Container(
-                      padding: moduleBoxPadding(questTermTextStyle.fontSize!),
-                      decoration: primaryBoxDecoration.copyWith(
-                          boxShadow: [primaryBoxShadow],
-                          color: homeModuleBoxBackgroundColor),
-                      child: Column(
-                        children: [
-                          QuestCardHeader(
-                            questModel: questModel,
-                          ),
-                          btwHomeModuleTitleBox,
-                          QuestCardRewards(questModel: questModel),
-                          Divider(color: primaryFontColor),
-                          Text(
-                            "대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다.",
-                            style: detailedContentTextStyle,
-                          ) //temp
-                        ],
-                      )),
-                  // btwHomeModule,
-                ],
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                backgroundColor: primaryBackgroundColor,
+                pinned: true,
+                title: Text(
+                  "퀘스트 참여하기",
+                  style: homeHeaderAfterName,
+                ),
               ),
-            ),
-          ),
-          SliverToBoxAdapter(
-              child: Container(
-            padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "퀘스트 정보",
+                        style: homeModuleTitleTextStyle,
+                      ),
+                      btwHomeModuleTitleBox,
+                      Container(
+                          padding:
+                              moduleBoxPadding(questTermTextStyle.fontSize!),
+                          decoration: primaryBoxDecoration.copyWith(
+                              boxShadow: [primaryBoxShadow],
+                              color: homeModuleBoxBackgroundColor),
+                          child: Column(
+                            children: [
+                              QuestCardHeader(
+                                questModel: questModel,
+                              ),
+                              btwHomeModuleTitleBox,
+                              QuestCardRewards(questModel: questModel),
+                              Divider(color: primaryFontColor),
+                              Text(
+                                "대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다.",
+                                style: detailedContentTextStyle,
+                              ) //temp
+                            ],
+                          )),
+                      // btwHomeModule,
+                    ],
+                  ),
+                ),
+              ),
+              // SliverPersistentHeader(
+              //   delegate: SectionHeaderDelegate("Section B"),
+              //   pinned: true,
+              // ),
+
+              SliverToBoxAdapter(
+                  child: Container(
+                padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
+                child: Text(
                   "기업 정보",
                   style: homeModuleTitleTextStyle,
                 ),
-                btwHomeModuleTitleBox,
-                // 퀘스트 종목간 선택 row
-                Row(
-                    children: List.generate(
-                  questModel.stockAddress.length,
-                  (index) => TextButton(
-                      onPressed: () {
-                        stockInfoViewModel.changeStockAddressModel(
-                            questModel.stockAddress[index]);
-                      },
-                      child: Text(questModel.stockAddress[index].name)),
-                )),
-                Container(
-                  height: 1500, // temp
+              )),
+              // 스크롤 내리면 위에 붙을 퀘스트 선택지 기업 목록
+              SliverPersistentHeader(
+                delegate: SectionHeaderDelegate(
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: List.generate(
+                        questModel.stockAddress.length,
+                        (index) => TextButton(
+                            onPressed: () {
+                              stockInfoViewModel.changeStockAddressModel(
+                                  questModel.stockAddress[index]);
+                            },
+                            child: Text(questModel.stockAddress[index].name)),
+                      )),
+                ),
+                pinned: true,
+              ),
+              SliverToBoxAdapter(
+                child: btwHomeModuleTitleBox,
+              ),
+              SliverToBoxAdapter(
+                  child: Container(
+                padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
+                child:
+                    // 퀘스트 종목간 선택 row
+
+                    Container(
+                  // height: 1800, // temp
                   padding: moduleBoxPadding(questTermTextStyle.fontSize!),
                   decoration: primaryBoxDecoration.copyWith(
                       boxShadow: [primaryBoxShadow],
@@ -190,9 +218,150 @@ class QuestView extends StatelessWidget {
                     },
                   ),
                 ),
-              ],
-            ),
-          )),
+              )),
+              SliverToBoxAdapter(
+                  child: SizedBox(
+                height: 88.w,
+              )),
+            ],
+          ),
+          // 선택 확정하기 눌렀을 때 배경 회색처리, 그 때 배경 아무데나 눌러도 원래 퀘스트뷰 화면으로 복귀
+          Obx(() => questViewModel.isSelectingSheetShowing.value
+              ? GestureDetector(
+                  onTap: () {
+                    questViewModel.isSelectingSheetShowing(false);
+                  },
+                  child: Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color: backgroundWhenPopup,
+                  ),
+                )
+              : Container()),
+          // 최종선택하기 위한 custom bottom sheet
+          Obx(() => questViewModel.isSelectingSheetShowing.value
+              ? Positioned(
+                  left: 14.w,
+                  right: 14.w,
+                  bottom: 20.w + 60.w + 20.w,
+                  child: Container(
+                    // color: Colors.white,
+                    width: double.infinity,
+                    // height: 100,
+                    padding: EdgeInsets.all(14.w),
+                    decoration: (primaryBoxDecoration
+                        .copyWith(boxShadow: [primaryBoxShadow])),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            onTap: () =>
+                                questViewModel.isSelectingSheetShowing(false),
+                            child: Container(
+                              alignment: Alignment.centerRight,
+                              width: 50.w,
+                              color: Colors.yellow.withOpacity(.2),
+                              child: Icon(
+                                Icons.close,
+                                color: primaryFontColor,
+                                size: 30.w,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                            height: reducedPaddingWhenTextIsBelow(
+                                8.w, questTitleTextStyle.fontSize!)),
+                        Padding(
+                          padding: EdgeInsets.all(16.0.w),
+                          child: Text("마감기한까지 주가가 가장 많이 상승할 것 같은 기업을 골라주세요",
+                              style: questTitleTextStyle,
+                              textAlign: TextAlign.center),
+                        ),
+                        SizedBox(
+                            height: reducedPaddingWhenTextIsBelow(
+                                16.w, questTitleTextStyle.fontSize!)),
+                        Divider(color: primaryFontColor.withOpacity(.4)),
+                        Column(
+                          children: List.generate(
+                              questModel.stockAddress.length,
+                              (index) => Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(8.0.w),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/buttons/radio_active.svg',
+                                              width: 34.w,
+                                              height: 34.w,
+                                            ),
+                                            SizedBox(width: 8.w),
+                                            Text(
+                                              questModel
+                                                  .stockAddress[index].name,
+                                              style: detailedContentTextStyle
+                                                  .copyWith(fontSize: 18.w),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Divider(
+                                          color:
+                                              primaryFontColor.withOpacity(.4)),
+                                    ],
+                                  )),
+                        ),
+                        SizedBox(height: 12.w)
+                      ],
+                    ),
+                  ))
+              : Container()),
+          Obx(
+            () => Positioned(
+                left: 14.w,
+                right: 14.w,
+                bottom: 20.w,
+                child: GestureDetector(
+                  onTap: () {
+                    questViewModel.isSelectingSheetShowing(true);
+                  },
+                  child: ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                      child: Container(
+                        height: 60.w,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.w),
+                          color: activatedButtonColor.withOpacity(.85),
+                        ),
+                        child: Center(
+                            child: Text(
+                          questViewModel.isSelectingSheetShowing.value
+                              ? "나의 예측 저장"
+                              : "예측 확정하기",
+                          style: buttonTextStyle.copyWith(fontSize: 24.w),
+                        )),
+                      ),
+                    ),
+                  ),
+                )
+
+                //  primaryButtonContainer(Text(
+                //   "예측 확정하기",
+                //   style: buttonTextStyle,
+                // )),
+                ),
+          ),
         ],
       ),
 
@@ -823,4 +992,29 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
         minExtent != oldDelegate.minExtent ||
         safeAreaPadding != oldDelegate.safeAreaPadding;
   }
+}
+
+class SectionHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double height;
+
+  SectionHeaderDelegate(this.child, [this.height = 50]);
+
+  @override
+  Widget build(context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: primaryBackgroundColor,
+      alignment: Alignment.center,
+      child: child,
+    );
+  }
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => false;
 }

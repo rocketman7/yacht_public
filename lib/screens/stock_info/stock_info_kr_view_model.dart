@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/quest_model.dart';
 
-import 'package:yachtOne/models/stock_model.dart';
+import 'package:yachtOne/models/corporation_model.dart';
 import 'package:yachtOne/screens/quest/quest_view_model.dart';
 
 Rx<StockAddressModel>? newStockAddress;
@@ -39,7 +39,8 @@ class StockInfoKRViewModel extends GetxController {
 
   void changeStockAddressModel(StockAddressModel stockAddress) {
     newStockAddress!(stockAddress);
-    // print('name: ${newStockAddress!.value.name}');
+    print(
+        'change address from stockinfoviewmodel name: ${newStockAddress!.value.name}');
     // update();
   }
 }
