@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/screens/home/home_view.dart';
+import 'package:yachtOne/screens/home/performance_test_home_view.dart';
 
 class StartupView extends StatelessWidget {
   const StartupView({Key? key}) : super(key: key);

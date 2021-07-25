@@ -22,7 +22,7 @@ class QuestViewModel extends GetxController {
   FirebaseStorageService _storageService = FirebaseStorageService();
 
   // quest의 선택 종목 중에서 몇 번째 인덱스인지
-  int stockInfoIndex = 0;
+  RxInt stockInfoIndex = 0.obs;
   // 타이머 1초마다 작동
   Timer? _everySecond;
   // 남은 시간 보여줌
@@ -53,7 +53,6 @@ class QuestViewModel extends GetxController {
   void onInit() async {
     isLoading(true);
     _everySecond = Timer.periodic(Duration(seconds: 1), (timer) {
-      print("questTimerTicking");
       now = DateTime.now();
       timeLeft();
     });
@@ -68,8 +67,7 @@ class QuestViewModel extends GetxController {
   }
 
   void changeIndex(int index) {
-    stockInfoIndex = index;
-    update();
+    stockInfoIndex(index);
   }
   // Future<void> getQuest() async {
   //   tempQuestModel = await _firestoreService.getQuest();

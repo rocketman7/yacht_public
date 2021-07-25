@@ -63,7 +63,6 @@ class StatsViewModel extends GetxController {
     // StockInfoKRViewModel().newStockAddress.listen(() { })
 
     newStockAddress!.listen((value) {
-      print("Stats view value change from stockinfoview $value");
       getStats(value);
     });
     getStats(stockAddressModel);
@@ -140,7 +139,6 @@ class StatsViewModel extends GetxController {
   }
 
   void changeTerm() {
-    print(toggleTerms[selectedTerm.value]);
     switch (toggleTerms[selectedTerm.value]) {
       case "분기":
         chartStats!(_quarterStats);
@@ -149,7 +147,6 @@ class StatsViewModel extends GetxController {
         for (StatsModel chartStat in chartStats!) {
           temp.add(chartStat.year!);
         }
-        print(temp.length);
 
         switch (temp.length) {
           case 5:

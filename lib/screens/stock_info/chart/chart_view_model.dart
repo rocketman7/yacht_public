@@ -81,7 +81,6 @@ class ChartViewModel extends GetxController {
     // StockInfoKRViewModel().newStockAddress.listen(() { })
 
     newStockAddress!.listen((value) {
-      print("Chart view value change from stockinfoview $value");
       getPrices(value);
     });
     getPrices(stockAddressModel);
@@ -121,7 +120,6 @@ class ChartViewModel extends GetxController {
     }
     // Future.delayed(Duration(seconds: 1), () {
     if (showingCandleChart.value) {
-      print("candle tracking");
       if (trackballArgs.chartPointInfo.seriesIndex == 0) {
         open(trackballArgs.chartPointInfo.chartDataPoint!.open as int);
         close(trackballArgs.chartPointInfo.chartDataPoint!.close as int);
@@ -131,7 +129,6 @@ class ChartViewModel extends GetxController {
         volume(trackballArgs.chartPointInfo.chartDataPoint!.yValue);
       }
     } else {
-      print("line tracking");
       // // print(trackballArgs.chartPointInfo.chartDataPoint!.y);
       close(trackballArgs.chartPointInfo.chartDataPoint!.y as int);
     }
@@ -219,7 +216,6 @@ class ChartViewModel extends GetxController {
   // 1) 먼저 받아온 차트 데이터에서 기간 별로 나눠주는 로직 구현하고,
   // 2) 데이터가 충분하지 않을 때 어떻게 처리할지 구현해야 함. (빅히트로)
   void changeCycle() {
-    print('new cycle: ${cycles[selectedCycle.value]}');
     switch (cycles[selectedCycle.value]) {
       case "1일":
 
@@ -241,7 +237,6 @@ class ChartViewModel extends GetxController {
         }
 
         chartPrices!(temp);
-        print('chartPrice intraday: $chartPrices');
         calculateMaxMin();
         // update();
         break;
@@ -391,7 +386,6 @@ class ChartViewModel extends GetxController {
           subdataForThisInterval.add(dailyPrices[i]);
           i++;
           if (i > dailyPrices.length - 1) {
-            print(i);
             break;
             // subdataForThisInterval.add(PriceChartModel(
             //   dateTime: dateTimeToString(

@@ -522,7 +522,6 @@ class MainPriceDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("main price display rebuilt");
     return Obx(() => Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -601,7 +600,6 @@ class MainPriceTrackingDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("main price display rebuilt");
     return Obx(() => Container(
           height: 120.w,
           child: Column(

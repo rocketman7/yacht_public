@@ -453,7 +453,6 @@ class _QuestTimerState extends State<QuestTimer> {
 
   @override
   Widget build(BuildContext context) {
-    print("timer rebuilt");
     // print(widget.questModel);
     return Obx(() => Row(
           mainAxisAlignment: MainAxisAlignment.center,

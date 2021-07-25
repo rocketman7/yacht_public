@@ -57,10 +57,6 @@ double reducePaddingBothSide(double topTextSize, double bottomTextSize) {
 }
 
 EdgeInsets textTopPadding(double textSize) {
-  // print(textSize);
-  // print((textSize * 0.2).round());
-  // print((-(textSize * 0.2).round() + 14).h);
-  // print(17.h);
   return EdgeInsets.fromLTRB(
       14.w, (-(textSize * 0.2).round() + 30).w, 14.w, 14.w);
 }

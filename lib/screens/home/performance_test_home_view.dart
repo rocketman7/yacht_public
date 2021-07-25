@@ -4,22 +4,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/screens/subLeague/temp_home_view.dart';
 import 'package:yachtOne/screens/home/live_widget.dart';
-import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../locator.dart';
 import 'home_award_card_widget.dart';
 import 'quest_widget.dart';
 
-class HomeView extends StatelessWidget {
+class PerformanceTestHomeView extends StatelessWidget {
   HomeViewModel homeViewModel = Get.put(HomeViewModel());
-  AuthService _authService = locator<AuthService>();
 
   ScrollController _scrollController = ScrollController();
   RxDouble offset = 0.0.obs;
@@ -30,30 +26,26 @@ class HomeView extends StatelessWidget {
       MyAssets(),
 
       // 이달의 상금 주식
-      // GestureDetector(
-      //   onTap: () {
-      //     _authService.auth.signOut();
-      //     // homeViewModel.dispose();
-      //     Get.reset();
-      //     print("signout");
-      //   },
-      //   child: Container(
-      //       color: Colors.blue,
-      //       width: 300.w,
-      //       height: reducedPaddingWhenTextIsBelow(
-      //           30.w, homeModuleTitleTextStyle.fontSize!)),
-      // ),
-      // Awards(),
-      // btwHomeModule,
-      // NewQuests(homeViewModel: homeViewModel),
-      // btwHomeModule,
-      // LiveQuests(),
-      // // SliverToBoxAdapter(child: SizedBox(height: 100)),
-      // OldLiveQuests(homeViewModel: homeViewModel),
+      SizedBox(
+          height: reducedPaddingWhenTextIsBelow(
+              30.w, homeModuleTitleTextStyle.fontSize!)),
+      Awards(),
+      btwHomeModule,
+      NewQuests(homeViewModel: homeViewModel),
+      btwHomeModule,
+      LiveQuests(),
+      // SliverToBoxAdapter(child: SizedBox(height: 100)),
+      OldLiveQuests(homeViewModel: homeViewModel),
       // SliverToBoxAdapter(child: Container(height: 200, color: Colors.grey)),
-      // Admins(homeViewModel: homeViewModel),
+      Admins(homeViewModel: homeViewModel),
     ];
 
+    Size temp = textSizeGet(
+        "기간  퀘스트",
+        homeHeaderName.copyWith(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF789EC1)));
     _scrollController = ScrollController(initialScrollOffset: 0);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
     _scrollController.addListener(() {
@@ -63,11 +55,6 @@ class HomeView extends StatelessWidget {
           : offset(_scrollController.offset);
       // print(offset);
     });
-
-    print(
-        'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight}');
-    print('20.w is ${20.w}');
-    print('20.sp is ${20.sp}');
 
     return Scaffold(
       body: CustomScrollView(
@@ -80,9 +67,7 @@ class HomeView extends StatelessWidget {
                 floating: false,
                 pinned: true,
                 delegate: _GlassmorphismAppBarDelegate(
-                    MediaQuery.of(context).padding,
-                    offset.value,
-                    homeViewModel)),
+                    MediaQuery.of(context).padding, offset.value)),
           ),
           SliverList(
             delegate:
@@ -121,7 +106,6 @@ class Admins extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("admin view built");
     return Container(
       height: 1150,
       child: Column(
@@ -148,6 +132,7 @@ class Admins extends StatelessWidget {
           ElevatedButton(
             child: Text("Count Test"),
             onPressed: () {
+              print(DateTime.now());
               FirestoreService().countTest(0);
             },
           ),
@@ -157,7 +142,7 @@ class Admins extends StatelessWidget {
               Get.toNamed('awardold');
             },
           ),
-          // HomeAwardCardWidget(),
+          HomeAwardCardWidget(),
           ElevatedButton(
             child: Text("Go To Temp Home for Sub League View"),
             onPressed: () {
@@ -273,7 +258,6 @@ class LiveQuests extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("live quest view built");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -358,7 +342,6 @@ class Awards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('award view built');
     return Container(
       // color: Colors.blueGrey,
       child: Column(
@@ -405,6 +388,7 @@ class MyAssets extends StatelessWidget {
     return Container(
       // height: offset.w > 100.w ? 0 : 100.w - offset.w,
       height: 100.w,
+      color: Colors.blue.withOpacity(.2),
       child: Row(
         children: [
           Expanded(
@@ -497,10 +481,8 @@ class MyAssets extends StatelessWidget {
 class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   final EdgeInsets safeAreaPadding;
   final double offset;
-  final HomeViewModel homeViewModel;
 
-  _GlassmorphismAppBarDelegate(
-      this.safeAreaPadding, this.offset, this.homeViewModel);
+  _GlassmorphismAppBarDelegate(this.safeAreaPadding, this.offset);
 
   @override
   double get minExtent => 60.h + ScreenUtil().statusBarHeight;
@@ -529,14 +511,11 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                      child: Obx(
-                    () => Text(
-                      homeViewModel.userModel.value == null
-                          ? ""
-                          : homeViewModel.userModel.value!.userName,
+                    child: Text(
+                      "장한나",
                       style: homeHeaderName,
                     ),
-                  )),
+                  ),
                   Container(
                     // color: Colors.blue,
                     child: Text(

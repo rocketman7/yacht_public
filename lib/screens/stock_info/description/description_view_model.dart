@@ -17,7 +17,6 @@ class DescriptionViewModel extends GetxController {
     // TODO: implement onInit
     // newStockAddress = stockAddressModel.obs;
     newStockAddress!.listen((value) {
-      print("Description view value change from stockinfoview $value");
       getCorporationInfo(value);
     });
     getCorporationInfo(stockAddressModel);
@@ -32,6 +31,5 @@ class DescriptionViewModel extends GetxController {
   Future getCorporationInfo(StockAddressModel stockAddressModel) async {
     corporationModel(
         await _firestoreService.getCorporationInfo(stockAddressModel));
-    print(corporationModel.value);
   }
 }

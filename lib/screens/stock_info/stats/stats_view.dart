@@ -76,7 +76,6 @@ class StatsView extends StatelessWidget {
                                   onTap: () {
                                     HapticFeedback.lightImpact();
                                     statsViewModel.selectedTerm(index);
-                                    print(statsViewModel.selectedTerm.value);
                                     statsViewModel.changeTerm();
                                   },
                                   child: Container(

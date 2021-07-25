@@ -37,7 +37,6 @@ class StockInfoKRView extends StatelessWidget {
         Get.put(ChartViewModel(stockAddressModel: stockAddressModel));
     StatsViewModel statsViewModel =
         Get.put(StatsViewModel(stockAddressModel: stockAddressModel));
-    print('new issueCode: ${stockAddressModel.issueCode}');
     // StreamController streamController = StockInfoKRView.streamController;
     // _scrollController = ScrollController(initialScrollOffset: 0);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});

@@ -202,7 +202,7 @@ class FinalDecisionDialog extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             AutoSizeText(
-              questViewModel.questModel.subtitle,
+              questViewModel.questModel.selectInstruction,
               maxLines: 2,
               style: subtitleStyle.copyWith(
                   fontWeight: FontWeight.w700,

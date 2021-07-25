@@ -1,12 +1,16 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 // enum Category { ONE, TWO, THREE }
 
 class QuestModel {
+  final String questName;
   final String title;
-  final String subtitle;
+  final String questDescription;
+  final String rewardDescription;
+  final String selectInstruction;
 
   final String category; // daily, weekly
   final num pointReward;
@@ -21,8 +25,11 @@ class QuestModel {
   final List<int>? results;
   List<StockAddressModel> stockAddress;
   QuestModel({
+    required this.questName,
     required this.title,
-    required this.subtitle,
+    required this.questDescription,
+    required this.rewardDescription,
+    required this.selectInstruction,
     required this.category,
     required this.pointReward,
     required this.cashReward,
@@ -37,9 +44,11 @@ class QuestModel {
   });
 
   QuestModel copyWith({
+    String? questName,
     String? title,
-    String? subtitle,
-    String? country,
+    String? questDescription,
+    String? rewardDescription,
+    String? selectInstruction,
     String? category,
     num? pointReward,
     num? cashReward,
@@ -50,11 +59,14 @@ class QuestModel {
     List<String>? choices,
     List<int>? counts,
     List<int>? results,
-    List<StockAddressModel>? options,
+    List<StockAddressModel>? stockAddress,
   }) {
     return QuestModel(
+      questName: questName ?? this.questName,
       title: title ?? this.title,
-      subtitle: subtitle ?? this.subtitle,
+      questDescription: questDescription ?? this.questDescription,
+      rewardDescription: rewardDescription ?? this.rewardDescription,
+      selectInstruction: selectInstruction ?? this.selectInstruction,
       category: category ?? this.category,
       pointReward: pointReward ?? this.pointReward,
       cashReward: cashReward ?? this.cashReward,
@@ -65,14 +77,17 @@ class QuestModel {
       choices: choices ?? this.choices,
       counts: counts ?? this.counts,
       results: results ?? this.results,
-      stockAddress: options ?? this.stockAddress,
+      stockAddress: stockAddress ?? this.stockAddress,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'questName': questName,
       'title': title,
-      'subtitle': subtitle,
+      'questDescription': questDescription,
+      'rewardDescription': rewardDescription,
+      'selectInstruction': selectInstruction,
       'category': category,
       'pointReward': pointReward,
       'cashReward': cashReward,
@@ -83,46 +98,54 @@ class QuestModel {
       'choices': choices,
       'counts': counts,
       'results': results,
-      'options': stockAddress,
+      'stockAddress': stockAddress,
     };
   }
 
-  factory QuestModel.fromMap(
-      Map<String, dynamic> map, List<StockAddressModel> options) {
+  factory QuestModel.fromMap(String questName, Map<String, dynamic> map,
+      List<StockAddressModel> options) {
     return QuestModel(
-        title: map['title'],
-        subtitle: map['subtitle'],
-        category: map['category'],
-        pointReward: map['pointReward'],
-        cashReward: map['cashReward'],
-        exp: map['exp'],
-        startDateTime: map['startDateTime'],
-        endDateTime: map['endDateTime'],
-        resultDateTime: map['resultDateTime'],
-        choices:
-            map['choices'] == null ? null : List<String>.from(map['choices']),
-        counts: List<int>.from(map['counts']),
-        results: map['results'] == null ? null : List<int>.from(map['results']),
-        stockAddress: options);
+      questName: questName,
+      title: map['title'],
+      questDescription: map['questDescription'],
+      rewardDescription: map['rewardDescription'],
+      selectInstruction: map['selectInstruction'],
+      category: map['category'],
+      pointReward: map['pointReward'],
+      cashReward: map['cashReward'],
+      exp: map['exp'],
+      startDateTime: map['startDateTime'],
+      endDateTime: map['endDateTime'],
+      resultDateTime: map['resultDateTime'],
+      choices:
+          map['choices'] == null ? null : List<String>.from(map['choices']),
+      counts: List<int>.from(map['counts']),
+      results: map['results'] == null ? null : List<int>.from(map['results']),
+      stockAddress: options,
+    );
   }
 
   String toJson() => json.encode(toMap());
 
-  // factory QuestModel.fromJson(String source, OptionModel options) =>
-  //     QuestModel.fromMap(json.decode(source), json.decode(options));
+  // factory QuestModel.fromJson(String source) =>
+  //     QuestModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'QuestModel(title: $title, subtitle: $subtitle,  category: $category, pointReward: $pointReward, cashReward: $cashReward, exp: $exp, startDateTime: $startDateTime, endDateTime: $endDateTime, resultDateTime: $resultDateTime, choices: $choices, counts: $counts, results: $results, options: $stockAddress)';
+    return 'QuestModel(questName: $questName, title: $title, questDescription: $questDescription, rewardDescription: $rewardDescription, selectInstruction: $selectInstruction, category: $category, pointReward: $pointReward, cashReward: $cashReward, exp: $exp, startDateTime: $startDateTime, endDateTime: $endDateTime, resultDateTime: $resultDateTime, choices: $choices, counts: $counts, results: $results, stockAddress: $stockAddress)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
 
     return other is QuestModel &&
+        other.questName == questName &&
         other.title == title &&
-        other.subtitle == subtitle &&
+        other.questDescription == questDescription &&
+        other.rewardDescription == rewardDescription &&
+        other.selectInstruction == selectInstruction &&
         other.category == category &&
         other.pointReward == pointReward &&
         other.cashReward == cashReward &&
@@ -133,13 +156,16 @@ class QuestModel {
         listEquals(other.choices, choices) &&
         listEquals(other.counts, counts) &&
         listEquals(other.results, results) &&
-        other.stockAddress == stockAddress;
+        listEquals(other.stockAddress, stockAddress);
   }
 
   @override
   int get hashCode {
-    return title.hashCode ^
-        subtitle.hashCode ^
+    return questName.hashCode ^
+        title.hashCode ^
+        questDescription.hashCode ^
+        rewardDescription.hashCode ^
+        selectInstruction.hashCode ^
         category.hashCode ^
         pointReward.hashCode ^
         cashReward.hashCode ^

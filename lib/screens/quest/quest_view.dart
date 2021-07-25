@@ -44,21 +44,18 @@ class QuestView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('quest view로 전달된 quest model: $questModel');
     // 뷰 모델에 퀘스트 데이터 모델 넣어주기
     final QuestViewModel questViewModel = Get.put(QuestViewModel(questModel));
 
     final stockInfoViewModel = Get.put(StockInfoKRViewModel(
         stockAddressModel:
-            questModel.stockAddress[questViewModel.stockInfoIndex]));
+            questModel.stockAddress[questViewModel.stockInfoIndex.value]));
     // questViewModel.init(questModel);
     // streamSubscription =
     //     StockInfoKRView.streamController.stream.listen((event) {
     //   offset = event;
     //   localStreamController.add(offset);
     // });
-
-    print("quest view rebuilt");
 
     // StreamController controller = StockInfoKRView
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -155,7 +152,7 @@ class QuestView extends StatelessWidget {
                               QuestCardRewards(questModel: questModel),
                               Divider(color: primaryFontColor),
                               Text(
-                                "대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다. 대결 상세 description이 오는 자리입니다.",
+                                questModel.questDescription,
                                 style: detailedContentTextStyle,
                               ) //temp
                             ],
@@ -181,23 +178,56 @@ class QuestView extends StatelessWidget {
               // 스크롤 내리면 위에 붙을 퀘스트 선택지 기업 목록
               SliverPersistentHeader(
                 delegate: SectionHeaderDelegate(
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: List.generate(
-                        questModel.stockAddress.length,
-                        (index) => TextButton(
-                            onPressed: () {
-                              stockInfoViewModel.changeStockAddressModel(
-                                  questModel.stockAddress[index]);
-                            },
-                            child: Text(questModel.stockAddress[index].name)),
-                      )),
-                ),
+                    ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: questModel.stockAddress.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  questViewModel.changeIndex(index);
+                                  stockInfoViewModel.changeStockAddressModel(
+                                      questModel.stockAddress[index]);
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(14.w, 0, 4.w, 0),
+                                  child: Obx(
+                                    () => Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 6.w),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: questViewModel
+                                                          .stockInfoIndex
+                                                          .value ==
+                                                      index
+                                                  ? BorderSide(
+                                                      width: 3.w,
+                                                      color: seaBlue)
+                                                  : BorderSide.none)),
+                                      child: Obx(() => Text(
+                                          questModel.stockAddress[index].name,
+                                          style: buttonTextStyle.copyWith(
+                                              color: questViewModel
+                                                          .stockInfoIndex
+                                                          .value ==
+                                                      index
+                                                  ? seaBlue
+                                                  : seaBlue.withOpacity(.4)))),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                    40.w),
                 pinned: true,
               ),
-              SliverToBoxAdapter(
-                child: btwHomeModuleTitleBox,
-              ),
+              // SliverToBoxAdapter(
+              //   child: btwHomeModuleTitleBox,
+              // ),
               SliverToBoxAdapter(
                   child: Container(
                 padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
@@ -213,8 +243,8 @@ class QuestView extends StatelessWidget {
                   child: GetBuilder<QuestViewModel>(
                     builder: (questViewModel) {
                       return StockInfoKRView(
-                          stockAddressModel: questModel
-                              .stockAddress[questViewModel.stockInfoIndex]);
+                          stockAddressModel: questModel.stockAddress[
+                              questViewModel.stockInfoIndex.value]);
                     },
                   ),
                 ),
@@ -275,7 +305,7 @@ class QuestView extends StatelessWidget {
                                 8.w, questTitleTextStyle.fontSize!)),
                         Padding(
                           padding: EdgeInsets.all(16.0.w),
-                          child: Text("마감기한까지 주가가 가장 많이 상승할 것 같은 기업을 골라주세요",
+                          child: Text(questModel.selectInstruction,
                               style: questTitleTextStyle,
                               textAlign: TextAlign.center),
                         ),

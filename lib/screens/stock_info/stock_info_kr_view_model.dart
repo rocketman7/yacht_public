@@ -21,10 +21,8 @@ class StockInfoKRViewModel extends GetxController {
 
   @override
   void onInit() {
-    print('when stockinfo opened $newStockAddress');
     // TODO: implement onInit
     newStockAddress = stockAddressModel.obs;
-    print('when stockinfo assigned $newStockAddress');
 
     // 1) get general info of the stock
     super.onInit();
@@ -39,8 +37,6 @@ class StockInfoKRViewModel extends GetxController {
 
   void changeStockAddressModel(StockAddressModel stockAddress) {
     newStockAddress!(stockAddress);
-    print(
-        'change address from stockinfoviewmodel name: ${newStockAddress!.value.name}');
     // update();
   }
 }

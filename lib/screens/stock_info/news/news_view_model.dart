@@ -18,7 +18,6 @@ class NewsViewModel extends GetxController {
     // TODO: implement onInit
     corporationName(stockAddressModel.name);
     newStockAddress!.listen((value) {
-      print("Description view value change from stockinfoview $value");
       getNews(value);
     });
     getNews(stockAddressModel);
@@ -35,7 +34,6 @@ class NewsViewModel extends GetxController {
     isLoading(true);
     corporationName(stockAddressModel.name);
     newsList(await _firestoreService.getNews(stockAddressModel));
-    print('corporation name: $corporationName');
     isLoading(false);
   }
 }
