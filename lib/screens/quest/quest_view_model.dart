@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
+import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/corporation_model.dart';
+import 'package:yachtOne/models/users/user_quest_model.dart';
+import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/stock_info/chart/chart_view_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
@@ -31,7 +34,7 @@ class QuestViewModel extends GetxController {
 
   String? imageUrl;
   List logoImage = [];
-
+  String? uid;
   RxBool isLoading = false.obs;
 
   // 예측 최종 확정 중일 때 true로
@@ -40,6 +43,11 @@ class QuestViewModel extends GetxController {
   //   questModel = model;
   //   // update();
   // }
+  // 이 위젯에 해당하는 userQuestModel을 확인하고 userQuestModel에 넣어준다
+  final Rxn<UserQuestModel> userQuestModel = Rxn<UserQuestModel>();
+
+  // toggle에 쓰일 bool list
+  RxList<bool> toggleList = <bool>[].obs;
 
   @override
   void onClose() {
@@ -51,11 +59,28 @@ class QuestViewModel extends GetxController {
 
   @override
   void onInit() async {
+    print('userquestmodel value check: ${userQuestModel.value}');
+    // print(
+    // 'userquestmodel selectDatetime value check: ${userQuestModel.value!.selectDateTime}');
     isLoading(true);
     _everySecond = Timer.periodic(Duration(seconds: 1), (timer) {
       now = DateTime.now();
       timeLeft();
     });
+    if (userQuestModel.value == null) {
+      userQuestModel((userQuestModelRx
+          .where((i) => i.questId == questModel.questId)).first);
+    }
+    userQuestModelRx.listen((value) {
+      print('userQuestModel changed');
+      print(value);
+      if (value.isNotEmpty) {
+        UserQuestModel thisUserQuestModel =
+            value.where((i) => i.questId == questModel.questId).first;
+        userQuestModel(thisUserQuestModel);
+      }
+    });
+    syncUserSelect();
 
     // logo 이미지 가져오기
     await getImages();
@@ -64,6 +89,15 @@ class QuestViewModel extends GetxController {
     update();
     super.onInit();
     // return
+  }
+
+  void syncUserSelect() {
+    toggleList = List.generate(
+        questModel.stockAddress.length,
+        (index) => (userQuestModel.value == null ||
+                userQuestModel.value!.selection == null)
+            ? false
+            : userQuestModel.value!.selection![0] == index).obs;
   }
 
   void changeIndex(int index) {
@@ -85,6 +119,31 @@ class QuestViewModel extends GetxController {
         width: reactiveHeight(60),
       ));
     }
+  }
+
+  // toggle user 선택
+  // selectMode에 따라 토글/다수선택/순위선정 함수가 필요
+  toggleUserSelect(int index) {
+    for (int i = 0; i < toggleList.length; i++) {
+      toggleList[i] = false;
+    }
+    toggleList[index] = true;
+  }
+
+  // userQuest에 user가 선택한 정답 업데이트하는 함수
+  Future updateUserQuest(
+      // String uid,
+      // LeagueAddressModel leagueAddressModel,
+      // QuestModel questModel,
+      // List answers,
+
+      ) async {
+    List<num> answers = [];
+    for (int i = 0; i < toggleList.length; i++) {
+      if (toggleList[i] == true) answers.add(i);
+    }
+    print(answers);
+    await _firestoreService.updateUserQuest(questModel, answers);
   }
 
   // Future<Image> getLogoImage(String imageName) async {

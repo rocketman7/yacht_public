@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/models/users/user_quest_model.dart';
+import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,9 +21,10 @@ class QuestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _width = 290.w;
-    double _height = 340.w;
+    double _width = 232.w;
+    double _height = 338.w;
 
+    // print('this user: $userQuestModel');
     return SquareQuestWidget(
       width: _width,
       height: _height,
@@ -34,32 +37,35 @@ class SquareQuestWidget extends StatelessWidget {
   final double width;
   final double height;
   final QuestModel questModel;
+  final UserQuestModel? userQuestModel;
 
   const SquareQuestWidget(
       {Key? key,
       required this.width,
       required this.height,
-      required this.questModel})
+      required this.questModel,
+      this.userQuestModel})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // 이 위젯에 해당하는 userQuestModel을 확인하고 userQuestModel에 넣어준다
+    final Rxn<UserQuestModel> userQuestModel = Rxn<UserQuestModel>();
+    // RxBool isUserQuestDone = false.obs;
+    userQuestModelRx.listen((value) {
+      // print('userQuestModelRx listening: $value');
+      // print(value == null);
+      if (value.isNotEmpty) {
+        var temp = value.where((i) => i.questId == questModel.questId).first;
+        userQuestModel(temp);
+        // print('userQuestModel $userQuestModel');
+      }
+    });
     return Stack(
       children: [
-        // 테두리 포함한 서클
-        // Container(
-        //   width: _side,
-        //   height: _side,
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(10),
-
-        //     // shape: BoxShape.circle,
-        //     color: Color(0xFF01C8E5),
-        //   ),
-        // ),
         // 퀘스트 카드 배경 일러스트
         Container(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           // color: Colors.pink.withOpacity(.5),
           height: height,
           width: width,
@@ -67,22 +73,19 @@ class SquareQuestWidget extends StatelessWidget {
             boxShadow: [primaryBoxShadow],
             color: homeModuleBoxBackgroundColor,
           ),
-          // decoration: primaryBoxDecoration.copyWith(
-          //   boxShadow: [primaryBoxShadow],
-          // ),
           child: Stack(
             alignment: Alignment(0, 0.3),
             children: [
-              SvgPicture.asset(
-                'assets/illusts/quest/updown01.svg',
-                width: 175.w,
-                height: 160.w,
-              ),
-              SvgPicture.asset(
-                'assets/illusts/quest/updown02.svg',
-                width: 200.w,
-                height: 106.w,
-              ),
+              // SvgPicture.asset(
+              //   'assets/illusts/quest/updown01.svg',
+              //   width: 175.w,
+              //   height: 160.w,
+              // ),
+              // SvgPicture.asset(
+              //   'assets/illusts/quest/updown02.svg',
+              //   width: 200.w,
+              //   height: 106.w,
+              // ),
             ],
           ),
         ),
@@ -97,71 +100,46 @@ class SquareQuestWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-                Column(
-                  children: [
-                    QuestCardRewards(questModel: questModel),
-                    SizedBox(
-                      height: 6.w,
-                    ),
-                    primaryButtonContainer(Text(
-                      "퀘스트 참여하기",
-                      style: buttonTextStyle,
-                    ))
-                  ],
-                )
               ],
             )),
-
-        // Container(
-        //   height: height,
-        //   width: width,
-        //   padding: EdgeInsets.all(16),
-        //   child: Column(
-        //     mainAxisAlignment: MainAxisAlignment.start,
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     // mainAxisSize: MainAxisSize.max,
-        //     children: [
-        //       Row(
-        //         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //         children: [
-        //           Expanded(child: Text("${questModel.category} 퀘스트")),
-        //           Container(
-        //             // width: 80,
-        //             // color: Colors.green,
-        //             child: Row(
-        //               children: [
-        //                 Container(
-        //                   height: 18,
-        //                   width: 18,
-        //                   color: Colors.yellow,
-        //                 ),
-        //                 SizedBox(
-        //                   width: 4,
-        //                 ),
-        //                 Text("5개 소모")
-        //               ],
-        //             ),
-        //           )
-        //         ],
-        //       ),
-        //       Text(
-        //         "${questModel.title}",
-        //         // style:
-        //         //     // TextStyle(),
-        //       ),
-        //       Text(
-        //         "${toPriceKRW(questModel.cashReward)}원",
-        //         style:
-        //             titleStyle.copyWith(color: Colors.black.withOpacity(.75)),
-        //       ),
-        //       Text(
-        //         "${toPriceKRW(questModel.pointReward)}점 ",
-        //         style:
-        //             titleStyle.copyWith(color: Colors.black.withOpacity(.75)),
-        //       ),
-        //     ],
-        //   ),
-        // ),
+        Positioned(
+          bottom: 0,
+          child: Container(
+            // color: Colors.blue,
+            height: height,
+            width: width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: priamryHorizontalPadding,
+                  child: QuestCardRewards(questModel: questModel),
+                ),
+                SizedBox(
+                  height: 20.w,
+                ),
+                Obx(() => Container(
+                    height: 40.w,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Color(0xFFDCE9F4),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(12.w),
+                            bottomRight: Radius.circular(12.w))),
+                    child: Center(
+                      child: Text(
+                        (userQuestModel.value == null || // 유저퀘스트모델 자체가 없거나
+                                userQuestModel.value!.selectDateTime ==
+                                    null) // 유저퀘스트모델 참여 기록이 없으면
+                            ? "퀘스트 참여하기"
+                            : "이미 참여한 퀘스트",
+                        style: cardButtonTextStyle,
+                      ),
+                    )))
+              ],
+            ),
+          ),
+        )
       ],
     );
   }
@@ -188,7 +166,23 @@ class QuestCardRewards extends StatelessWidget {
               Row(
                 children: [
                   SvgPicture.asset(
-                    'assets/icons/cash_questcard.svg',
+                    'assets/icons/manypeople.svg',
+                    width: 20.w,
+                  ),
+                  SizedBox(width: 4.w),
+                  Text(
+                    '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
+                    style: questRewardTextStyle,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 6.w,
+              ),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    'assets/icons/yacht_point.svg',
                     width: 24.w,
                     height: 24.w,
                   ),
@@ -205,7 +199,7 @@ class QuestCardRewards extends StatelessWidget {
               Row(
                 children: [
                   SvgPicture.asset(
-                    'assets/icons/trophy_questcard.svg',
+                    'assets/icons/league_point.svg',
                     width: 24.w,
                     height: 24.w,
                   ),
@@ -215,24 +209,10 @@ class QuestCardRewards extends StatelessWidget {
                     style: questRewardTextStyle,
                   )
                 ],
-              )
+              ),
             ],
           ),
         ),
-        glassmorphismContainer(
-            child: Row(
-          children: [
-            SvgPicture.asset(
-              'assets/icons/manypeople.svg',
-              width: 20.w,
-            ),
-            SizedBox(width: 4.w),
-            Text(
-              '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
-              style: questRewardTextStyle,
-            )
-          ],
-        )),
       ],
     );
   }
@@ -252,47 +232,50 @@ class QuestCardHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
+        Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              // flex: 4,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    // '${questModel.category} 퀘스트',
-                    '일간 퀘스트',
-                    style: questTermTextStyle,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  // '${questModel.category} 퀘스트',
+                  '일간 퀘스트',
+                  style: questTermTextStyle,
+                ),
+                Container(
+                  width: textSizeGet("5개 소모", questTermTextStyle).width +
+                      18.w +
+                      4.w,
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/jogabi.svg',
+                        height: 18.w,
+                        width: 18.w,
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Text(
+                        "5개 소모", // 퀘스트 모델 데이터랑 연동 되어야 함
+                        style: questTermTextStyle.copyWith(
+                            color: primaryFontColor),
+                      )
+                    ],
                   ),
-                  Text(
-                    '${questModel.title}',
-                    style: questTitleTextStyle,
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
-            Container(
-              width:
-                  textSizeGet("5개 소모", questTermTextStyle).width + 18.w + 4.w,
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/icons/jogabi.svg',
-                    height: 18.w,
-                    width: 18.w,
-                  ),
-                  SizedBox(
-                    width: 4.w,
-                  ),
-                  Text(
-                    "5개 소모", // 퀘스트 모델 데이터랑 연동 되어야 함
-                    style: questTermTextStyle.copyWith(color: primaryFontColor),
-                  )
-                ],
-              ),
+            SizedBox(
+                height: reducedPaddingWhenTextIsBothSide(
+                    18.w,
+                    questTermTextStyle.fontSize!,
+                    questTitleTextStyle.fontSize!)),
+            Text(
+              '${questModel.title}',
+              style: questTitleTextStyle,
             )
           ],
         ),

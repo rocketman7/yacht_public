@@ -31,9 +31,9 @@ class KakaoFirebaseAuthApi implements BaseAuthAPI {
     try {
       print("KaKao Sign in started");
       final String token = await _retrieveToken();
-      print(token);
+      // print(token);
       final String verifiedToken = await _verifyToken(token);
-      print(verifiedToken);
+      // print(verifiedToken);
       // await _sharedPreferencesService.setSharedPreferencesValue(
       //     'twoFactor', true);
       final authResult =

@@ -1,21 +1,21 @@
 import 'dart:convert';
 
-class AddressModel {
+class LeagueAddressModel {
   final String uid;
   final String league;
   final String date;
-  AddressModel({
+  LeagueAddressModel({
     required this.uid,
     required this.league,
     required this.date,
   });
 
-  AddressModel copyWith({
+  LeagueAddressModel copyWith({
     String? uid,
     String? league,
     String? date,
   }) {
-    return AddressModel(
+    return LeagueAddressModel(
       uid: uid ?? this.uid,
       league: league ?? this.league,
       date: date ?? this.date,
@@ -30,8 +30,8 @@ class AddressModel {
     };
   }
 
-  factory AddressModel.fromMap(Map<String, dynamic> map) {
-    return AddressModel(
+  factory LeagueAddressModel.fromMap(Map<String, dynamic> map) {
+    return LeagueAddressModel(
       uid: map['uid'],
       league: map['league'],
       date: map['date'],
@@ -40,8 +40,8 @@ class AddressModel {
 
   String toJson() => json.encode(toMap());
 
-  factory AddressModel.fromJson(String source) =>
-      AddressModel.fromMap(json.decode(source));
+  factory LeagueAddressModel.fromJson(String source) =>
+      LeagueAddressModel.fromMap(json.decode(source));
 
   @override
   String toString() => 'AddressModel(uid: $uid, league: $league, date: $date)';
@@ -50,7 +50,7 @@ class AddressModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is AddressModel &&
+    return other is LeagueAddressModel &&
         other.uid == uid &&
         other.league == league &&
         other.date == date;

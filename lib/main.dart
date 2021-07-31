@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     // 아이폰 프로 같은애들 기존에 지가 다크테마 쓰고있어서 스테이터스바 글씨색 하얀색일 경우를 위해
-    print("MyApp built");
+    // print("MyApp built");
     // var lang = Localizations.localeOf(context).languageCode;
     // print("MAINLanguage is " + lang);
     return GestureDetector(
@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
         getPages: [
           GetPage(
             name: '/',
-            page: () => Container(),
+            page: () => AuthCheckView(),
           ),
           // GetPage(
           //     name: 'stockInfo',

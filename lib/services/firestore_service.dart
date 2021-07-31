@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/price_chart_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 import 'package:yachtOne/models/corporation_model.dart';
+import 'package:yachtOne/models/temp_realtime_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 
@@ -20,10 +22,15 @@ class FirestoreService extends GetxService {
   CollectionReference get tempCollectionReference => _tempCollectionReference;
 
   // CollectionReference userCollectionReference = _firestoreService.collection('users');
+  @override
+  void onInit() {
+    print('firestore service initiated');
+    super.onInit();
+  }
 
+  //// USER 정보
   // User Model 가져오기
   Future<UserModel> getUserModel(String uid) async {
-    User _user;
     return await _firestoreService
         .collection('users')
         .doc(uid)
@@ -31,13 +38,53 @@ class FirestoreService extends GetxService {
         .then((value) => UserModel.fromMap(value.data()!));
   }
 
+  // User Model 스트림
+  Stream<UserModel> getUserStream(String uid) {
+    return _firestoreService
+        .collection('users')
+        .doc(uid)
+        .snapshots()
+        .map((snapshot) {
+      // print('user model snapshot: ${snapshot.data()}');
+      return UserModel.fromMap(snapshot.data()!);
+    });
+  }
+
+  // User Quest Model 스트림
+  Stream<List<UserQuestModel>> getUserQuestStream(
+    String uid,
+  ) {
+    print('stream starting');
+    return _firestoreService
+        .collection('users')
+        .doc(uid)
+        .collection('userVote')
+        .doc('202109')
+        .collection('quests')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+              return UserQuestModel.fromMap(doc.id, doc.data());
+            }).toList());
+  }
+
+  // user가 선택한 정답 UserQuest에 넣기
+  Future updateUserQuest(
+    // String uid,
+    // LeagueAddressModel leagueAddressModel,
+    QuestModel questModel,
+    List answers,
+  ) async {
+    await _firestoreService
+        .collection('users/kakao:1513684681/userVote')
+        .doc('202109')
+        .collection('quests')
+        .doc(questModel.questId)
+        .update({'selection': answers});
+  }
+
   // 차트 그리기 위한 Historical Price
   Future<List<ChartPriceModel>> getPrices(
       StockAddressModel stockAddress) async {
-    CollectionReference _samsungElectronic =
-        _firestoreService.collection('stocksKR/005930/historicalPrices');
-    CollectionReference _skBioPharm =
-        _firestoreService.collection('stocksKR/326030/historicalPrices');
     CollectionReference _historicalPriceRef = _firestoreService
         .collection('stocksKR/${stockAddress.issueCode}/historicalPrices');
     List<ChartPriceModel> _priceChartModelList = [];
@@ -199,5 +246,34 @@ class FirestoreService extends GetxService {
         .doc('league001')
         .snapshots()
         .map((snapshot) => snapshot.data()!['stateStream2']);
+  }
+
+  // 라이브 스트림 가격차트 테스트용
+  Stream<List<TempRealtimeModel>> getTempRealtimePrice() {
+    return _firestoreService
+        .collection('realtimePrice/KR/20210729')
+        .where('issueCode', isEqualTo: '300720')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((element) {
+        // print(element.data());
+        return TempRealtimeModel.fromMap(element.data());
+      }).toList();
+    });
+  }
+
+  Stream<List<TempRealtimeModel>> getTempRealtimePrice0() {
+    return _firestoreService
+        .collection('realtimePrice/KR/20210729')
+        .where('issueCode', isEqualTo: '196170')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((element) {
+        // print(element.data());
+        return TempRealtimeModel.fromMap(element.data());
+      }).toList();
+    });
   }
 }

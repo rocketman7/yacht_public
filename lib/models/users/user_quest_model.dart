@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 
 class UserQuestModel {
-  final String? questName; //quest001
+  final String? questId; //quest001
   final dynamic selectDateTime;
   final List<num>? selection;
 
   UserQuestModel({
-    required this.questName,
+    required this.questId,
     required this.selectDateTime,
     required this.selection,
   });
@@ -19,7 +19,7 @@ class UserQuestModel {
     List<num>? selection,
   }) {
     return UserQuestModel(
-      questName: questName ?? this.questName,
+      questId: questName ?? this.questId,
       selectDateTime: selectDateTime ?? this.selectDateTime,
       selection: selection ?? this.selection,
     );
@@ -27,28 +27,29 @@ class UserQuestModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'questName': questName,
+      'questName': questId,
       'selectDateTime': selectDateTime,
       'selection': selection,
     };
   }
 
-  factory UserQuestModel.fromMap(Map<String, dynamic> map) {
+  factory UserQuestModel.fromMap(String questId, Map<String, dynamic> map) {
     return UserQuestModel(
-      questName: map['questName'],
+      questId: questId,
       selectDateTime: map['selectDateTime'],
-      selection: List<num>.from(map['selection']),
+      selection:
+          map['selection'] == null ? null : List<num>.from(map['selection']),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserQuestModel.fromJson(String source) =>
-      UserQuestModel.fromMap(json.decode(source));
+  // factory UserQuestModel.fromJson(String source) =>
+  //     UserQuestModel.fromMap(json.decode(source));
 
   @override
   String toString() =>
-      'UserQuestModel(questName: $questName, selectDateTime: $selectDateTime, selection: $selection)';
+      'UserQuestModel(questName: $questId, selectDateTime: $selectDateTime, selection: $selection)';
 
   @override
   bool operator ==(Object other) {
@@ -56,12 +57,12 @@ class UserQuestModel {
     final listEquals = const DeepCollectionEquality().equals;
 
     return other is UserQuestModel &&
-        other.questName == questName &&
+        other.questId == questId &&
         other.selectDateTime == selectDateTime &&
         listEquals(other.selection, selection);
   }
 
   @override
   int get hashCode =>
-      questName.hashCode ^ selectDateTime.hashCode ^ selection.hashCode;
+      questId.hashCode ^ selectDateTime.hashCode ^ selection.hashCode;
 }

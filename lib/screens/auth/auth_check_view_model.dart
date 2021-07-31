@@ -1,12 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/repositories/user_repository.dart';
 import 'package:yachtOne/services/auth_service.dart';
+import 'package:yachtOne/services/firestore_service.dart';
 
 import '../../locator.dart';
 
 class AuthCheckViewModel extends GetxController {
   AuthService _authService = locator<AuthService>();
-
+  FirestoreService _firestoreService = locator<FirestoreService>();
+  UserRepository _userRepository = UserRepository();
   // User currentUser;
   Rxn<User>? currentUser = Rxn<User>();
 
@@ -14,6 +18,15 @@ class AuthCheckViewModel extends GetxController {
   void onInit() {
     // TODO: implement onInit
     currentUser!.bindStream(_authService.auth.authStateChanges());
+    currentUser!.listen((user) async {
+      print('listening');
+      if (user != null) {
+        // userModelRx.value = await _firestoreService.getUserModel(user.uid);
+        userModelRx.bindStream(_userRepository.getUserStream(user.uid));
+        userQuestModelRx
+            .bindStream(_userRepository.getUserQuestStream(user.uid));
+      }
+    });
     // _authService.auth.signOut();
     // _authService.auth.authStateChanges().listen((event) {
     //   print(event == null);

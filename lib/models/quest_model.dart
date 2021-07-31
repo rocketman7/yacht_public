@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 // enum Category { ONE, TWO, THREE }
 
 class QuestModel {
-  final String questName;
+  final String questId;
   final String title;
   final String questDescription;
   final String rewardDescription;
@@ -19,13 +19,16 @@ class QuestModel {
   final dynamic startDateTime;
   final dynamic endDateTime;
   final dynamic resultDateTime;
+  // 선택모드
+  final String selectMode; // one, many, order 로 나눠서
+
 // 상승, 하락 등 명시되어있으면 그걸 쓰고 null이면 OptionModel의 name을 쓰도록.
   final List<String>? choices;
   final List<int>? counts;
   final List<int>? results;
   List<StockAddressModel> stockAddress;
   QuestModel({
-    required this.questName,
+    required this.questId,
     required this.title,
     required this.questDescription,
     required this.rewardDescription,
@@ -37,6 +40,7 @@ class QuestModel {
     required this.startDateTime,
     required this.endDateTime,
     required this.resultDateTime,
+    required this.selectMode,
     this.choices,
     this.counts,
     this.results,
@@ -44,7 +48,7 @@ class QuestModel {
   });
 
   QuestModel copyWith({
-    String? questName,
+    String? questId,
     String? title,
     String? questDescription,
     String? rewardDescription,
@@ -56,13 +60,14 @@ class QuestModel {
     dynamic? startDateTime,
     dynamic? endDateTime,
     dynamic? resultDateTime,
+    String? selectMode,
     List<String>? choices,
     List<int>? counts,
     List<int>? results,
     List<StockAddressModel>? stockAddress,
   }) {
     return QuestModel(
-      questName: questName ?? this.questName,
+      questId: questId ?? this.questId,
       title: title ?? this.title,
       questDescription: questDescription ?? this.questDescription,
       rewardDescription: rewardDescription ?? this.rewardDescription,
@@ -74,6 +79,7 @@ class QuestModel {
       startDateTime: startDateTime ?? this.startDateTime,
       endDateTime: endDateTime ?? this.endDateTime,
       resultDateTime: resultDateTime ?? this.resultDateTime,
+      selectMode: selectMode ?? this.selectMode,
       choices: choices ?? this.choices,
       counts: counts ?? this.counts,
       results: results ?? this.results,
@@ -83,7 +89,7 @@ class QuestModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'questName': questName,
+      'questId': questId,
       'title': title,
       'questDescription': questDescription,
       'rewardDescription': rewardDescription,
@@ -95,17 +101,18 @@ class QuestModel {
       'startDateTime': startDateTime,
       'endDateTime': endDateTime,
       'resultDateTime': resultDateTime,
+      'selectMode': selectMode,
       'choices': choices,
       'counts': counts,
       'results': results,
-      'stockAddress': stockAddress,
+      'stockAddress': stockAddress.map((x) => x.toMap()).toList(),
     };
   }
 
   factory QuestModel.fromMap(String questName, Map<String, dynamic> map,
       List<StockAddressModel> options) {
     return QuestModel(
-      questName: questName,
+      questId: questName,
       title: map['title'],
       questDescription: map['questDescription'],
       rewardDescription: map['rewardDescription'],
@@ -117,6 +124,7 @@ class QuestModel {
       startDateTime: map['startDateTime'],
       endDateTime: map['endDateTime'],
       resultDateTime: map['resultDateTime'],
+      selectMode: map['selectMode'],
       choices:
           map['choices'] == null ? null : List<String>.from(map['choices']),
       counts: List<int>.from(map['counts']),
@@ -124,24 +132,21 @@ class QuestModel {
       stockAddress: options,
     );
   }
-
   String toJson() => json.encode(toMap());
 
-  // factory QuestModel.fromJson(String source) =>
-  //     QuestModel.fromMap(json.decode(source));
+  // factory QuestModel.fromJson(String source) => QuestModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'QuestModel(questName: $questName, title: $title, questDescription: $questDescription, rewardDescription: $rewardDescription, selectInstruction: $selectInstruction, category: $category, pointReward: $pointReward, cashReward: $cashReward, exp: $exp, startDateTime: $startDateTime, endDateTime: $endDateTime, resultDateTime: $resultDateTime, choices: $choices, counts: $counts, results: $results, stockAddress: $stockAddress)';
+    return 'QuestModel(questId: $questId, title: $title, questDescription: $questDescription, rewardDescription: $rewardDescription, selectInstruction: $selectInstruction, category: $category, pointReward: $pointReward, cashReward: $cashReward, exp: $exp, startDateTime: $startDateTime, endDateTime: $endDateTime, resultDateTime: $resultDateTime, selectMode: $selectMode, choices: $choices, counts: $counts, results: $results, stockAddress: $stockAddress)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    final listEquals = const DeepCollectionEquality().equals;
 
     return other is QuestModel &&
-        other.questName == questName &&
+        other.questId == questId &&
         other.title == title &&
         other.questDescription == questDescription &&
         other.rewardDescription == rewardDescription &&
@@ -153,6 +158,7 @@ class QuestModel {
         other.startDateTime == startDateTime &&
         other.endDateTime == endDateTime &&
         other.resultDateTime == resultDateTime &&
+        other.selectMode == selectMode &&
         listEquals(other.choices, choices) &&
         listEquals(other.counts, counts) &&
         listEquals(other.results, results) &&
@@ -161,7 +167,7 @@ class QuestModel {
 
   @override
   int get hashCode {
-    return questName.hashCode ^
+    return questId.hashCode ^
         title.hashCode ^
         questDescription.hashCode ^
         rewardDescription.hashCode ^
@@ -173,6 +179,7 @@ class QuestModel {
         startDateTime.hashCode ^
         endDateTime.hashCode ^
         resultDateTime.hashCode ^
+        selectMode.hashCode ^
         choices.hashCode ^
         counts.hashCode ^
         results.hashCode ^

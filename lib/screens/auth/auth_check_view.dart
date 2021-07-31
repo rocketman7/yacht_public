@@ -6,7 +6,7 @@ import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import '../../services/auth_service.dart';
 import 'login_view.dart';
 
-class AuthCheckView extends GetWidget<AuthCheckViewModel> {
+class AuthCheckView extends GetView<AuthCheckViewModel> {
   const AuthCheckView({Key? key}) : super(key: key);
 
   @override

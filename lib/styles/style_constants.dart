@@ -47,6 +47,11 @@ double reducedPaddingWhenTextIsBelow(double padding, double textSize) {
   return padding - (textSize * 0.2).round().toDouble();
 }
 
+double reducedPaddingWhenTextIsBothSide(
+    double padding, double topTextSize, double bottomTextSize) {
+  return padding - reducePaddingBothSide(topTextSize, bottomTextSize);
+}
+
 double reducePaddingOneSide(double textSize) {
   return (textSize * 0.2).round().toDouble();
 }
@@ -107,7 +112,7 @@ SizedBox belowHomeModule = SizedBox(height: 10.w);
 // 홈-모듈박스 데코레이션
 BoxDecoration primaryBoxDecoration = BoxDecoration(
   color: Colors.white,
-  borderRadius: BorderRadius.circular(10),
+  borderRadius: BorderRadius.circular(12.w),
 );
 // 모듈박스 그림자
 BoxShadow primaryBoxShadow = BoxShadow(
@@ -155,8 +160,17 @@ TextStyle homeHeaderAfterName = TextStyle(
 // 홈-섹션박스-헤더
 TextStyle homeModuleTitleTextStyle = TextStyle(
   fontFamily: 'SCore',
-  fontSize: 20.w,
+  fontSize: 18.w,
   fontWeight: FontWeight.w600,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle smallSubtitleTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w400,
   color: primaryFontColor,
   letterSpacing: -1.0,
   height: 1.4,
@@ -174,9 +188,9 @@ TextStyle awardModuleSliderTitleTextStyle = TextStyle(
 // 홈-퀘스트박스-기간헤더
 TextStyle questTermTextStyle = TextStyle(
   fontFamily: 'SCore',
-  fontSize: 14.w,
-  fontWeight: FontWeight.w500,
-  color: primaryLightFontColor,
+  fontSize: 16.w,
+  fontWeight: FontWeight.w300,
+  color: primaryFontColor,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -225,6 +239,16 @@ TextStyle buttonTextStyle = TextStyle(
   fontSize: 16.w,
   fontWeight: FontWeight.w600,
   color: buttonTextColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 납작한 버튼 텍스트
+TextStyle cardButtonTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: Color(0xFF335B80),
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -315,7 +339,12 @@ Container chartToggleButton(
       child: child);
 }
 
-//
+// 조가비 아이템 버튼 박스 Decoration
+BoxDecoration jogabiButtonBoxDecoration = BoxDecoration(
+  color: Colors.white,
+  borderRadius: BorderRadius.circular(20.w),
+);
+
 ///
 ///
 ///

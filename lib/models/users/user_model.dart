@@ -19,6 +19,8 @@ class UserModel {
 
   final int rewardedCnt; // 아이템 리워드 받은 횟수
 
+  final int exp;
+
   final bool? membership; // 멤버쉽 가입 여부
   final dynamic membershipStartAt; // 멤버쉽 시작일
   final dynamic membershipEndAt; // 멤버쉽 종료일
@@ -35,6 +37,7 @@ class UserModel {
     required this.insertedFriendsCode,
     required this.blockList,
     required this.rewardedCnt,
+    required this.exp,
     required this.membership,
     required this.membershipStartAt,
     required this.membershipEndAt,
@@ -53,6 +56,7 @@ class UserModel {
     List<String>? insertedFriendsCode,
     List<String>? blockList,
     int? rewardedCnt,
+    int? exp,
     bool? membership,
     dynamic membershipStartAt,
     dynamic membershipEndAt,
@@ -70,6 +74,7 @@ class UserModel {
       insertedFriendsCode: insertedFriendsCode ?? this.insertedFriendsCode,
       blockList: blockList ?? this.blockList,
       rewardedCnt: rewardedCnt ?? this.rewardedCnt,
+      exp: exp ?? this.exp,
       membership: membership ?? this.membership,
       membershipStartAt: membershipStartAt ?? this.membershipStartAt,
       membershipEndAt: membershipEndAt ?? this.membershipEndAt,
@@ -90,6 +95,7 @@ class UserModel {
       'insertedFriendsCode': insertedFriendsCode,
       'blockList': blockList,
       'rewardedCnt': rewardedCnt,
+      'exp': exp,
       'membership': membership,
       'membershipStartAt': membershipStartAt,
       'membershipEndAt': membershipEndAt,
@@ -113,6 +119,7 @@ class UserModel {
       blockList:
           map['blockList'] == null ? null : List<String>.from(map['blockList']),
       rewardedCnt: map['rewardedCnt'],
+      exp: map['exp'] ?? 0,
       membership: map['membership'],
       membershipStartAt: map['membershipStartAt'],
       membershipEndAt: map['membershipEndAt'],
@@ -126,7 +133,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt)';
+    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt)';
   }
 
   @override
@@ -146,6 +153,7 @@ class UserModel {
         listEquals(other.insertedFriendsCode, insertedFriendsCode) &&
         listEquals(other.blockList, blockList) &&
         other.rewardedCnt == rewardedCnt &&
+        other.exp == exp &&
         other.membership == membership &&
         other.membershipStartAt == membershipStartAt &&
         other.membershipEndAt == membershipEndAt;
@@ -165,6 +173,7 @@ class UserModel {
         insertedFriendsCode.hashCode ^
         blockList.hashCode ^
         rewardedCnt.hashCode ^
+        exp.hashCode ^
         membership.hashCode ^
         membershipStartAt.hashCode ^
         membershipEndAt.hashCode;
