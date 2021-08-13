@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/users/user_model.dart';
@@ -128,7 +129,7 @@ class QuestResults extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: priamryHorizontalPadding,
+          padding: primaryHorizontalPadding,
           // color: Colors.red,
           child: Text("퀘스트 결과보기", style: homeModuleTitleTextStyle),
         ),
@@ -503,7 +504,7 @@ class LiveQuests extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: priamryHorizontalPadding,
+          padding: primaryHorizontalPadding,
           // color: Colors.red,
           child: Text("라이브", style: homeModuleTitleTextStyle),
         ),
@@ -568,7 +569,7 @@ class NewQuests extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: priamryHorizontalPadding,
+          padding: primaryHorizontalPadding,
           // color: Colors.red,
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -593,14 +594,17 @@ class NewQuests extends StatelessWidget {
                         SizedBox(
                           width: 4.w,
                         ),
-                        Obx(() => Text(
-                              userModelRx.value == null
-                                  ? 0.toString()
-                                  : userModelRx.value!.item.toString(),
-                              style: questTermTextStyle.copyWith(
-                                  color: Color(0xFF4D6A87),
-                                  fontWeight: FontWeight.w600),
-                            ))
+                        Obx(() {
+                          print("item changed");
+                          return Text(
+                            userModelRx.value == null
+                                ? 0.toString()
+                                : userModelRx.value!.item.toString(),
+                            style: questTermTextStyle.copyWith(
+                                color: Color(0xFF4D6A87),
+                                fontWeight: FontWeight.w600),
+                          );
+                        })
                       ],
                     ),
                   ),
@@ -689,7 +693,7 @@ class Awards extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            padding: priamryHorizontalPadding,
+            padding: primaryHorizontalPadding,
             // color: Colors.red,
             child: Text("이 달의 상금 주식", style: homeModuleTitleTextStyle),
           ),
@@ -745,9 +749,12 @@ class MyAssets extends StatelessWidget {
                         height: 20.w,
                       ),
                       SizedBox(width: 4.w),
-                      Text(
-                        "주식 잔고",
-                        style: detailedContentTextStyle,
+                      Container(
+                        color: Colors.blue,
+                        child: Text(
+                          "주식 잔고",
+                          style: detailedContentTextStyle,
+                        ),
                       ),
                     ],
                   ),

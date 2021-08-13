@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/screens/community/community_view.dart';
+import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/screens/home/home_view.dart';
 import 'package:yachtOne/screens/home/performance_test_home_view.dart';
 
@@ -10,6 +11,7 @@ class StartupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => CommunityViewModel());
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -21,6 +23,7 @@ class StartupView extends StatelessWidget {
             children: [
               HomeView(),
               CommunityView(),
+              // Container(color: Colors.red),
               Container(color: Colors.red),
             ],
           ),

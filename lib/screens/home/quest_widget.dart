@@ -112,7 +112,7 @@ class SquareQuestWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: priamryHorizontalPadding,
+                  padding: primaryHorizontalPadding,
                   child: QuestCardRewards(questModel: questModel),
                 ),
                 SizedBox(
@@ -186,7 +186,7 @@ class QuestCardRewards extends StatelessWidget {
                     width: 24.w,
                     height: 24.w,
                   ),
-                  SizedBox(width: 4.w),
+                  SizedBox(width: 6.w),
                   Text(
                     '${toPriceKRW(questModel.cashReward)}원',
                     style: questRewardTextStyle,
@@ -203,7 +203,7 @@ class QuestCardRewards extends StatelessWidget {
                     width: 24.w,
                     height: 24.w,
                   ),
-                  SizedBox(width: 4.w),
+                  SizedBox(width: 6.w),
                   Text(
                     '${questModel.pointReward}점',
                     style: questRewardTextStyle,

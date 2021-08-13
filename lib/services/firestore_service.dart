@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/price_chart_model.dart';
@@ -45,6 +46,7 @@ class FirestoreService extends GetxService {
         .doc(uid)
         .snapshots()
         .map((snapshot) {
+      print('user data stream changed');
       // print('user model snapshot: ${snapshot.data()}');
       return UserModel.fromMap(snapshot.data()!);
     });
@@ -275,5 +277,35 @@ class FirestoreService extends GetxService {
         return TempRealtimeModel.fromMap(element.data());
       }).toList();
     });
+  }
+
+  //// 커뮤니티 관련
+  // 포스트 올리기
+  Future uploadNewPost(PostModel newPost) async {
+    String docUid = _firestoreService.collection('posts').doc().id;
+    Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
+    print(docUid);
+
+    await _firestoreService.collection('posts').doc(docUid).set(newPost
+        .copyWith(
+          postId: docUid,
+          writtenDateTime: timestampNow,
+        )
+        .toMap());
+  }
+
+  // 포스트 받아오기
+  Future getPosts() async {
+    List<PostModel> posts = [];
+    await _firestoreService
+        .collection('posts')
+        .orderBy('writtenDateTime', descending: true)
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        posts.add(PostModel.fromMap(element.data()));
+      });
+    });
+    return posts;
   }
 }

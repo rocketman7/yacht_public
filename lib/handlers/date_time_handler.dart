@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 DateFormat dateInString = DateFormat("yyyyMMdd");
 DateFormat dateTimeInString = DateFormat("yyyyMMddHHmmSS");
+DateFormat feedDateTimeInString = DateFormat("yyyy.MM.dd HH:mm");
 
 DateTime? stringToDateTime(String dateTimeInString) {
   int length = dateTimeInString.length;
@@ -70,6 +71,25 @@ String countDown(Duration duration) {
     return "${duration.inHours}시간 ${duration.inMinutes.remainder(60)}분 ${duration.inSeconds.remainder(60)}초";
   }
 }
+
+String feedTimeHandler(DateTime writtenDateTime) {
+  Duration _writtenDateTimeFromNow = DateTime.now().difference(writtenDateTime);
+
+  if (_writtenDateTimeFromNow < Duration(minutes: 1)) {
+    return "방금 전";
+  } else if (_writtenDateTimeFromNow < Duration(hours: 1)) {
+    return "${_writtenDateTimeFromNow.inMinutes}분 전";
+  } else if (_writtenDateTimeFromNow < Duration(hours: 24)) {
+    return "${_writtenDateTimeFromNow.inHours}시간 전";
+  } else if (_writtenDateTimeFromNow < Duration(days: 7)) {
+    return "${_writtenDateTimeFromNow.inDays}일 전";
+  } else {
+    return feedDateTimeInString.format(writtenDateTime);
+  }
+}
+
+  // return "Now";
+ 
 
 // Duration timeLeftFromNow(DateTime dateTime) {
 //     // Duration timeLeft = tempQuestModel!.endDateTime.toDate().difference(now);

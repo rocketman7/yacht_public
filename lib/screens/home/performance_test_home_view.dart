@@ -263,7 +263,7 @@ class LiveQuests extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: priamryHorizontalPadding,
+          padding: primaryHorizontalPadding,
           // color: Colors.red,
           child: Text("라이브", style: homeModuleTitleTextStyle),
         ),
@@ -287,7 +287,7 @@ class NewQuests extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: priamryHorizontalPadding,
+          padding: primaryHorizontalPadding,
           // color: Colors.red,
           child: Text("새로 나온 퀘스트", style: homeModuleTitleTextStyle),
         ),
@@ -349,7 +349,7 @@ class Awards extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            padding: priamryHorizontalPadding,
+            padding: primaryHorizontalPadding,
             // color: Colors.red,
             child: Text("이 달의 상금 주식", style: homeModuleTitleTextStyle),
           ),

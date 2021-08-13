@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/widgets/appbar_back_button.dart';
 import 'size_config.dart';
 
 //// 라이트버전
@@ -74,7 +75,7 @@ EdgeInsets textTopOpenHorizontalPadding(double textSize) {
   return EdgeInsets.fromLTRB(0, (-(textSize * 0.2).round() + 14).w, 0, 8.w);
 }
 
-EdgeInsets priamryHorizontalPadding = EdgeInsets.symmetric(
+EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(
   horizontal: 14.w,
 );
 
@@ -312,6 +313,66 @@ TextStyle mostDetailedContentTextStyle = TextStyle(
   height: 1.4,
 );
 
+//// 커뮤니티
+/// 피드 박스
+// 날짜 표시
+TextStyle feedDateTime = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 10.w,
+  fontWeight: FontWeight.w300,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle feedTitle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle feedContent = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w300,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle feedHashTag = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 12.w,
+  fontWeight: FontWeight.w300,
+  color: blueGrey,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle feedUserName = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 12.w,
+  fontWeight: FontWeight.w400,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 해쉬태그 컨테이너
+Container feedHashTagContainer(String hashTag) => Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
+      decoration: BoxDecoration(
+        color: Color(0xFFE8EDEF),
+        borderRadius: BorderRadius.circular(4.w),
+      ),
+      child: Text(
+        hashTag,
+        style: feedHashTag,
+      ),
+    );
+
 //// 버튼 컴포넌트들
 // 기본 버튼
 Container primaryButtonContainer(Text buttonText) {
@@ -374,6 +435,26 @@ Color barColor2 = Color(0xFF607D8B).withOpacity(.5);
 Color barColor3 = Color(0xFF607D8B).withOpacity(.7);
 Color barColor4 = Color(0xFF607D8B).withOpacity(.9);
 // Color accLineColor = Color(0xFFFAAC00).withOpacity(.8);
+
+// 기본 앱 바
+AppBar primaryAppBar(String title) => AppBar(
+      backgroundColor: primaryBackgroundColor,
+      // leading: AppBarBackButton(),
+      title: Text(
+        title,
+        style: homeHeaderAfterName,
+      ),
+      toolbarHeight: 60.w,
+      elevation: 0,
+      // bottom: PreferredSize(
+      //     child: Container(
+      //       color: Color(0xFF94BDE0).withOpacity(0.3),
+      //       // 피그마에서는 opacity 0.5 인데 0.5로하면 너무 진한 느낌이 나서..
+      //       // color: Color(0xFF94BDE0).withOpacity(0.5),
+      //       height: 1.0,
+      //     ),
+      //     preferredSize: Size.fromHeight(1.0)),
+    );
 
 // Button Color
 const toggleButtonColor = Color(0xFFE8EAF6);

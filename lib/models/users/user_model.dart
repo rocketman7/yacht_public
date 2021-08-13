@@ -9,7 +9,7 @@ class UserModel {
   final String email;
   final String? phoneNumber;
   final dynamic account; // 증권계좌
-  final String? avatarImage; // 아바타 이미지 url
+  final String? avatarUrl; // 아바타 이미지 url
 
   final num item;
 
@@ -31,7 +31,7 @@ class UserModel {
     required this.email,
     required this.phoneNumber,
     required this.account,
-    required this.avatarImage,
+    required this.avatarUrl,
     required this.item,
     required this.friendsCode,
     required this.insertedFriendsCode,
@@ -50,7 +50,7 @@ class UserModel {
     String? email,
     String? phoneNumber,
     dynamic account,
-    String? avatarImage,
+    String? avatarUrl,
     num? item,
     String? friendsCode,
     List<String>? insertedFriendsCode,
@@ -68,7 +68,7 @@ class UserModel {
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       account: account ?? this.account,
-      avatarImage: avatarImage ?? this.avatarImage,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
       item: item ?? this.item,
       friendsCode: friendsCode ?? this.friendsCode,
       insertedFriendsCode: insertedFriendsCode ?? this.insertedFriendsCode,
@@ -89,7 +89,7 @@ class UserModel {
       'email': email,
       'phoneNumber': phoneNumber,
       'account': account,
-      'avatarImage': avatarImage,
+      'avatarUrl': avatarUrl,
       'item': item,
       'friendsCode': friendsCode,
       'insertedFriendsCode': insertedFriendsCode,
@@ -110,7 +110,7 @@ class UserModel {
       email: map['email'],
       phoneNumber: map['phoneNumber'],
       account: map['account'],
-      avatarImage: map['avatarImage'],
+      avatarUrl: map['avatarUrl'],
       item: map['item'],
       friendsCode: map['friendsCode'],
       insertedFriendsCode: map['insertedFriendsCode'] == null
@@ -133,7 +133,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt)';
+    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarUrl: $avatarUrl, item: $item, friendsCode: $friendsCode, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt)';
   }
 
   @override
@@ -147,7 +147,7 @@ class UserModel {
         other.email == email &&
         other.phoneNumber == phoneNumber &&
         other.account == account &&
-        other.avatarImage == avatarImage &&
+        other.avatarUrl == avatarUrl &&
         other.item == item &&
         other.friendsCode == friendsCode &&
         listEquals(other.insertedFriendsCode, insertedFriendsCode) &&
@@ -167,7 +167,7 @@ class UserModel {
         email.hashCode ^
         phoneNumber.hashCode ^
         account.hashCode ^
-        avatarImage.hashCode ^
+        avatarUrl.hashCode ^
         item.hashCode ^
         friendsCode.hashCode ^
         insertedFriendsCode.hashCode ^
