@@ -19,7 +19,7 @@ import 'package:yachtOne/screens/startup/startup_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/services_binding.dart';
 import 'package:yachtOne/styles/theme.dart';
-import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/styles/yacht_design_system_sample_view.dart';
 
 import 'locator.dart';
 import 'models/corporation_model.dart';
@@ -112,7 +112,7 @@ class _MyAppState extends State<MyApp> {
           //     transition: Transition.zoom),
           GetPage(
               name: 'designSystem',
-              page: () => YachtDesignSystem(),
+              page: () => YachtDesignSystemSampleView(),
               transition: Transition.zoom),
           GetPage(
               name: 'quest',

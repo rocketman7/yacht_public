@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:yachtOne/models/community/comment_model.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/news_model.dart';
@@ -307,5 +308,46 @@ class FirestoreService extends GetxService {
       });
     });
     return posts;
+  }
+
+  // 코멘트 올리기
+  Future uploadNewComment(CommentModel newComment) async {
+    String docUid = _firestoreService
+        .collection('posts')
+        .doc(newComment.commentToPostId)
+        .collection('comments')
+        .doc()
+        .id;
+    Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
+    print(docUid);
+
+    await _firestoreService
+        .collection('posts')
+        .doc(newComment.commentToPostId)
+        .collection('comments')
+        .doc(docUid)
+        .set(newComment
+            .copyWith(
+              commentId: docUid,
+              writtenDateTime: timestampNow,
+            )
+            .toMap());
+  }
+
+  // 코멘트 받아오기
+  Future getComments(PostModel post) async {
+    List<CommentModel> comments = [];
+    await _firestoreService
+        .collection('posts')
+        .doc(post.postId)
+        .collection('comments')
+        .orderBy('writtenDateTime', descending: false)
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        comments.add(CommentModel.fromMap(element.data()));
+      });
+    });
+    return comments;
   }
 }

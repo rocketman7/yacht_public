@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:yachtOne/models/community/comment_model.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/services/auth_service.dart';
@@ -51,6 +52,7 @@ class CommunityViewModel extends GetxController {
     print('after adding img: $images');
   }
 
+  // 피드 내용으로 Post Model 만들기
   PostModel convertFeedtoPostModel(String content) {
     // Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
     // String docUid;
@@ -61,8 +63,6 @@ class CommunityViewModel extends GetxController {
       writerUid: userModelRx.value!.uid,
       writerUserName: userModelRx.value!.userName,
     );
-
-    // return;
   }
 
   // 게시글 올리기 버튼
@@ -91,12 +91,4 @@ class CommunityViewModel extends GetxController {
     //
     PostModel oldPost;
   }
-
-  // 스토리지에 올리기
-  Future uploadImageToFirebase() async {
-    //
-  }
-
-  // 올리기 버튼 누르면 resize
-
 }

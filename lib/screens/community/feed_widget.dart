@@ -23,7 +23,9 @@ class FeedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(DetailPostView(post: post)),
+      onTap: () => Get.to(
+        () => DetailPostView(post),
+      ),
       child: Container(
         padding: moduleBoxPadding(feedDateTime.fontSize!),
         decoration:

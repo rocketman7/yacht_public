@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/screens/auth/auth_check_view_model.dart';
+import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/screens/startup/startup_view.dart';
 import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import '../../services/auth_service.dart';
@@ -15,6 +16,7 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => CommunityViewModel());
     Get.put(AuthCheckViewModel());
     return Scaffold(
       body: Obx(() {

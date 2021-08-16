@@ -11,9 +11,9 @@ class PostModel {
   final String content;
   final List<String>? imageUrlList;
   final bool isPro; // 프로 글인지 체크
+  final List<String>? commentedBy; // commentId List
 
   final List<String>? hashTags;
-  final List<String>? commentedBy; // commentId List
   final List<String>? likedBy;
   final List<String>? reportedBy;
   final List<String>? sharedBy;

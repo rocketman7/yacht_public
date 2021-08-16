@@ -11,7 +11,8 @@ class StartupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut(() => CommunityViewModel());
+    print('startup rebuild');
+    // Get.lazyPut(() => CommunityViewModel());
     return DefaultTabController(
       length: 3,
       child: Scaffold(

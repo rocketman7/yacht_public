@@ -1,29 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
+import 'package:yachtOne/models/community/comment_model.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
 import '../../locator.dart';
+import 'community_view_model.dart';
+import 'detail_post_view_model.dart';
 
-class DetailPostView extends StatelessWidget {
+class DetailPostView extends GetView {
   final PostModel post;
 
-  DetailPostView({Key? key, required this.post}) : super(key: key);
+  // DetailPostView({
+  //   Key? key,
+  // }) : super(key: key);
 
   final FirebaseStorageService _firebaseStorageService =
       locator<FirebaseStorageService>();
-  final GlobalKey<FormState> _commentFormKey = GlobalKey<FormState>();
-  final _commentController = TextEditingController();
+
+  DetailPostView(this.post);
+  // final GlobalKey<FormState> _commentFormKey = GlobalKey<FormState>();
+  // final _commentController = TextEditingController();
+
+  // CommunityView에서 argument로 넘긴 PostModel을 바로 viewModel로 보냄.
+
+  // CommunityViewModel communityViewModel = Get.put(CommunityViewModel());
 
   @override
   Widget build(BuildContext context) {
+    DetailPostViewModel detailPostViewModel =
+        Get.put(DetailPostViewModel(post));
     return Scaffold(
       body: SafeArea(
-        child: Stack(children: [
+        child: Stack(fit: StackFit.expand, children: [
           SingleChildScrollView(
             child: Column(
               children: [
@@ -64,7 +79,8 @@ class DetailPostView extends StatelessWidget {
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          post.writerUserName,
+                                          detailPostViewModel
+                                              .post.writerUserName,
                                           style: feedUserName,
                                         ),
                                         SizedBox(
@@ -80,8 +96,9 @@ class DetailPostView extends StatelessWidget {
                                         ),
                                         Spacer(),
                                         Text(
-                                          feedTimeHandler(
-                                              post.writtenDateTime.toDate()),
+                                          feedTimeHandler(detailPostViewModel
+                                              .post.writtenDateTime
+                                              .toDate()),
                                           // x초전, x분 전, 일정 이후면 날짜로
                                           style: feedDateTime,
                                         ),
@@ -98,10 +115,10 @@ class DetailPostView extends StatelessWidget {
                                                 6.w,
                                                 feedUserName.fontSize!,
                                                 feedTitle.fontSize!)),
-                                    post.title == null
+                                    detailPostViewModel.post.title == null
                                         ? Container()
                                         : Text(
-                                            post.title!,
+                                            detailPostViewModel.post.title!,
                                             style: feedTitle,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
@@ -110,7 +127,7 @@ class DetailPostView extends StatelessWidget {
                                       height: 6.w,
                                     ),
                                     Text(
-                                      post.content,
+                                      detailPostViewModel.post.content,
                                       style: feedContent,
                                       maxLines: 3,
                                       overflow: TextOverflow.ellipsis,
@@ -119,16 +136,19 @@ class DetailPostView extends StatelessWidget {
                                     SizedBox(
                                       height: 10.w,
                                     ),
-                                    (post.imageUrlList == null ||
-                                            post.imageUrlList!.length == 0)
+                                    (detailPostViewModel.post.imageUrlList ==
+                                                null ||
+                                            detailPostViewModel.post
+                                                    .imageUrlList!.length ==
+                                                0)
                                         ? Container()
                                         : Container(
                                             height: 140.w,
                                             child: ListView.builder(
                                                 scrollDirection:
                                                     Axis.horizontal,
-                                                itemCount:
-                                                    post.imageUrlList!.length,
+                                                itemCount: detailPostViewModel
+                                                    .post.imageUrlList!.length,
                                                 itemBuilder: (_, index) {
                                                   return Row(
                                                     children: [
@@ -140,7 +160,9 @@ class DetailPostView extends StatelessWidget {
                                                           child: FutureBuilder<
                                                                   String>(
                                                               future: getImageUrlFromStorage(
-                                                                  post.imageUrlList![
+                                                                  detailPostViewModel
+                                                                          .post
+                                                                          .imageUrlList![
                                                                       index]),
                                                               builder: (context,
                                                                   snapshot) {
@@ -202,15 +224,21 @@ class DetailPostView extends StatelessWidget {
                                               SizedBox(
                                                 width: 4.w,
                                               ),
-                                              Text(post.likedBy == null
+                                              Text(detailPostViewModel
+                                                          .post.likedBy ==
+                                                      null
                                                   ? 0.toString()
-                                                  : post.commentedBy!.length
+                                                  : detailPostViewModel
+                                                      .post.commentedBy!.length
                                                       .toString()),
                                               SvgPicture.asset(
                                                   'assets/icons/likes.svg'),
-                                              Text(post.likedBy == null
+                                              Text(detailPostViewModel
+                                                          .post.likedBy ==
+                                                      null
                                                   ? 0.toString()
-                                                  : post.likedBy!.length
+                                                  : detailPostViewModel
+                                                      .post.likedBy!.length
                                                       .toString()),
                                               SvgPicture.asset(
                                                   'assets/icons/share.svg'),
@@ -225,23 +253,127 @@ class DetailPostView extends StatelessWidget {
                             ],
                           ),
                         ),
-                        // if (post.commentedBy != null &&
-                        //     post.commentedBy!.length > 0)
-                        ...List.generate(50, (index) {
-                          return Column(
-                            children: [
-                              Container(
-                                height: 1,
-                                width: double.infinity,
-                                color: Colors.yellow,
-                              ),
-                              Container(
-                                padding:
-                                    moduleBoxPadding(feedDateTime.fontSize!),
-                              )
-                            ],
-                          );
-                        }),
+                        FutureBuilder<List<CommentModel>>(
+                            future: detailPostViewModel
+                                .getComments(detailPostViewModel.post),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return CircularProgressIndicator();
+                              } else {
+                                if (snapshot.data!.length == 0) {
+                                  return Container(
+                                      // child: Text("댓글이 없습니다"),
+                                      );
+                                }
+                                List<CommentModel> comments = snapshot.data!;
+                                return ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: comments.length,
+                                    itemBuilder: (_, index) {
+                                      // 코멘트 컨테이너
+                                      return InkWell(
+                                        onTap: () {
+                                          detailPostViewModel.mentionTo(
+                                              "@${comments[index].writerUserName}");
+                                          print(detailPostViewModel
+                                              .mentionTo.value.length);
+                                        },
+                                        child: Container(
+                                          color: Color(0xFFFCFCFC),
+                                          padding: moduleBoxPadding(
+                                              feedDateTime.fontSize!),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: yachtRed),
+                                                width: 36.w,
+                                                height: 36.w,
+                                              ),
+                                              SizedBox(
+                                                width: 6.w,
+                                              ),
+                                              Expanded(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          comments[index]
+                                                              .writerUserName,
+                                                          style: feedUserName,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 4.w,
+                                                        ),
+                                                        Container(
+                                                          height: 16.w,
+                                                          width: 60.w,
+                                                          decoration: BoxDecoration(
+                                                              color: Color(
+                                                                  0xFFfce4a8),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20.w)),
+                                                        ),
+                                                        Spacer(),
+                                                        Text(
+                                                          feedTimeHandler(
+                                                              comments[index]
+                                                                  .writtenDateTime
+                                                                  .toDate()),
+                                                          // x초전, x분 전, 일정 이후면 날짜로
+                                                          style: feedDateTime,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 4.w,
+                                                        ),
+                                                        SvgPicture.asset(
+                                                            'assets/icons/show_more.svg')
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                        height:
+                                                            reducedPaddingWhenTextIsBothSide(
+                                                                6.w,
+                                                                feedUserName
+                                                                    .fontSize!,
+                                                                feedTitle
+                                                                    .fontSize!)),
+                                                    SizedBox(
+                                                      height: 6.w,
+                                                    ),
+                                                    Text(
+                                                      comments[index].content,
+                                                      style: feedContent,
+                                                      maxLines: 3,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              }
+                            }),
                       ],
                     ),
                   ),
@@ -253,14 +385,88 @@ class DetailPostView extends StatelessWidget {
             ),
           ),
           // 답글 다는 곳
-          Positioned(
-            bottom: 0,
-            child: Container(
-              height: 76.w,
-              width: ScreenUtil().screenWidth,
-              child: Padding(
-                padding: primaryHorizontalPadding,
-                child: Row(
+
+          CommentInput(
+            post: detailPostViewModel.post,
+            detailPostViewModel: detailPostViewModel,
+            // commentController: commentController,
+
+            // commentFormKey: _commentFormKey,
+          )
+        ]),
+      ),
+    );
+  }
+
+  Future<String> getImageUrlFromStorage(String imageUrl) async {
+    return await _firebaseStorageService.downloadImageURL(imageUrl);
+  }
+}
+
+class CommentInput extends StatefulWidget {
+  CommentInput({
+    Key? key,
+    required PostModel post,
+    required DetailPostViewModel detailPostViewModel,
+  })  : post = post,
+        detailPostViewModel = detailPostViewModel,
+        super(key: key);
+
+  final DetailPostViewModel detailPostViewModel;
+  final PostModel post;
+
+  @override
+  _CommentInputState createState() => _CommentInputState();
+}
+
+class _CommentInputState extends State<CommentInput> {
+  late final FocusNode _focusNode;
+  late final TextEditingController commentController;
+  RxBool isFocused = false.obs;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    _focusNode = FocusNode();
+    commentController = TextEditingController();
+    _focusNode.addListener(() {
+      isFocused(_focusNode.hasFocus);
+      print(isFocused);
+    });
+    // commentController.addListener(() {
+    //   print('baseoffset: ${commentController.selection.baseOffset}');
+    // });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  final GlobalKey<FormState> commentFormKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    // FocusScope.of(context).requestFocus(_focusNode);
+
+    return Form(
+      key: commentFormKey,
+      child: Positioned(
+        bottom: 0,
+        child: Container(
+          // height: 76.w,
+          color: Colors.blue.withOpacity(.12),
+          width: ScreenUtil().screenWidth,
+          child: Padding(
+            padding: primaryHorizontalPadding.copyWith(top: 14.w, bottom: 14.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
                   children: [
                     Container(
                       height: 36.w,
@@ -274,42 +480,76 @@ class DetailPostView extends StatelessWidget {
                       width: 4.w,
                     ),
                     Expanded(
-                      child: Container(
-                        height: 36.w,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [primaryBoxShadow],
-                          borderRadius: BorderRadius.circular(5.w),
-                        ),
-                        // border: Border.all(width: 1, color: Colors.black)),
-                        child: TextFormField(
-                          onTap: () {
-                            print("text field tapped");
-                          },
-                          controller: _commentController,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: EdgeInsets.all(14.w),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none),
-                              hintText: '답글달기',
-                              hintStyle: feedContent),
+                      child: Obx(
+                        () => Container(
+                          height: isFocused.value ? 90.w : 36.w,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [primaryBoxShadow],
+                            borderRadius: BorderRadius.circular(5.w),
+                          ),
+                          // border: Border.all(width: 1, color: Colors.black)),
+                          child: TextFormField(
+                            focusNode: _focusNode,
+                            controller: commentController,
+                            validator: (value) {
+                              if (value!.length < 4) {
+                                return '4자 이상 글을 올려주세요.';
+                              } else {
+                                return null;
+                              }
+                            },
+                            onChanged: (value) {
+                              // commentController.
+                            },
+                            decoration: InputDecoration(
+                                prefixIcon: Text(
+                                    '${widget.detailPostViewModel.mentionTo.value} '),
+                                prefixIconConstraints:
+                                    BoxConstraints(minWidth: 0, minHeight: 0),
+                                isDense: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 14.w, vertical: 8.w),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none),
+                                hintText: widget.detailPostViewModel.mentionTo
+                                            .value.length >
+                                        0
+                                    ? ""
+                                    : widget.detailPostViewModel.hintText.value,
+                                hintStyle: feedContent),
+                          ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
-              ),
+                Obx(() => isFocused.value
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          SizedBox(height: 4.w),
+                          GestureDetector(
+                              onTap: () async {
+                                if (commentFormKey.currentState!.validate()) {
+                                  await widget.detailPostViewModel
+                                      .uploadComment(widget.post,
+                                          commentController.value.text);
+                                  commentController.clear();
+                                  _focusNode.unfocus();
+                                }
+                              },
+                              child: Text("답글 달기")),
+                        ],
+                      )
+                    : Container())
+              ],
             ),
-          )
-        ]),
+          ),
+        ),
       ),
     );
-  }
-
-  Future<String> getImageUrlFromStorage(String imageUrl) async {
-    return await _firebaseStorageService.downloadImageURL(imageUrl);
   }
 }

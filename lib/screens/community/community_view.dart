@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/screens/community/feed_widget.dart';
 import 'package:yachtOne/styles/style_constants.dart';
