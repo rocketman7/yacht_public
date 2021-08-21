@@ -12,6 +12,7 @@ class UserRepository extends Repository<UserModel> {
   Future<UserModel> getUserData(String uid) async {
     if (userModel == null) {
       userModel = await _firestoreService.getUserModel(uid);
+      print('getting user: $userModel');
       return userModel!;
     } else {
       return userModel!;

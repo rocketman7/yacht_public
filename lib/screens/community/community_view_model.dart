@@ -14,31 +14,32 @@ import 'package:yachtOne/services/storage_service.dart';
 import '../../locator.dart';
 
 class CommunityViewModel extends GetxController {
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthService _authService = locator<AuthService>();
   final ImagePicker _imagePicker = ImagePicker();
 
   RxList<XFile>? images = RxList<XFile>();
   List<String> filePaths = [];
+  RxList<PostModel> posts = RxList<PostModel>();
 
   @override
-  void onInit() {
+  void onInit() async {
     // TODO: implement onInit
+    await getPost();
     super.onInit();
   }
 
-  Future<List<PostModel>> getPost() async {
-    return await _firestoreService.getPosts();
+  Future getPost() async {
+    posts(await _firestoreService.getPosts());
   }
 
   // 기기에서 사진 고르기. 여러개 고를 수 있음.
   // TODO: max length 처리는 필요
   Future getImageFromDevice() async {
     // 유저한테 권한 요청하고 사진 픽
-    final result =
-        await _imagePicker.pickMultiImage(maxHeight: 1024, maxWidth: 1024);
+    // 사진은 XFile 형태로 저장된다 => RxList<XFile> images에 저장
+    final result = await _imagePicker.pickMultiImage(maxHeight: 1024, maxWidth: 1024);
     if (result != null) {
       //Most people just handle here. So it never returns anything upon cancel (iOS)
       images = images! + result.map((e) => e);
@@ -46,6 +47,8 @@ class CommunityViewModel extends GetxController {
       //User canceled the picker. You need do something here, or just add return
       return;
     }
+    // XFile 형태로 되어있는 이미지들의 filePaths를 찾아서 List<String> filePaths에 넣어준다.
+    // 이 path들은 업로드할 때 파일 위치를 찾아 storage에 저장할 때 쓰인다.
     images!.forEach((element) {
       filePaths.add(element.path);
     });
@@ -56,6 +59,8 @@ class CommunityViewModel extends GetxController {
   PostModel convertFeedtoPostModel(String content) {
     // Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
     // String docUid;
+    print(userModelRx.value!.uid);
+    print(userModelRx.value!.userName);
     //   docUid = address.postsSeasonCollection().doc().id;
     return PostModel(
       isPro: false,
@@ -73,10 +78,12 @@ class CommunityViewModel extends GetxController {
       String fileName = basename(element);
       imageUrlList.add('posts/$fileName');
     });
-    // 포스트 모델로 변환
-    PostModel _newPost =
-        convertFeedtoPostModel(content).copyWith(imageUrlList: imageUrlList);
 
+    print(userModelRx.value!.uid);
+    print(userModelRx.value!.userName);
+    // 포스트 모델로 변환
+    PostModel _newPost = convertFeedtoPostModel(content).copyWith(imageUrlList: imageUrlList);
+    print(_newPost);
     // 포스트 모델 업로드
     await _firestoreService.uploadNewPost(_newPost);
 
@@ -86,9 +93,8 @@ class CommunityViewModel extends GetxController {
     filePaths = [];
   }
 
-  // 내가 올린 게시글 수정
-  Future editPost(String content) async {
-    //
-    PostModel oldPost;
+  Future editPost(PostModel post, String content) async {
+    PostModel _newPost = convertFeedtoPostModel(content);
+    await _firestoreService.editMyPost(post.postId!, _newPost);
   }
 }

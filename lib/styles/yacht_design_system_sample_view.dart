@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 
 class YachtDesignSystemSampleView extends StatelessWidget {
   @override

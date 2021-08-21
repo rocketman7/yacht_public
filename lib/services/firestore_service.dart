@@ -7,9 +7,11 @@ import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/price_chart_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 import 'package:yachtOne/models/corporation_model.dart';
 import 'package:yachtOne/models/temp_realtime_model.dart';
+import 'package:yachtOne/models/today_market_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 
@@ -19,8 +21,7 @@ class FirestoreService extends GetxService {
   final FirebaseFirestore _firestoreService = FirebaseFirestore.instance;
   FirebaseFirestore get firestoreService => _firestoreService;
 
-  CollectionReference get _tempCollectionReference =>
-      _firestoreService.collection('temp');
+  CollectionReference get _tempCollectionReference => _firestoreService.collection('temp');
   CollectionReference get tempCollectionReference => _tempCollectionReference;
 
   // CollectionReference userCollectionReference = _firestoreService.collection('users');
@@ -33,22 +34,14 @@ class FirestoreService extends GetxService {
   //// USER 정보
   // User Model 가져오기
   Future<UserModel> getUserModel(String uid) async {
-    return await _firestoreService
-        .collection('users')
-        .doc(uid)
-        .get()
-        .then((value) => UserModel.fromMap(value.data()!));
+    return await _firestoreService.collection('users').doc(uid).get().then((value) => UserModel.fromMap(value.data()!));
   }
 
   // User Model 스트림
   Stream<UserModel> getUserStream(String uid) {
-    return _firestoreService
-        .collection('users')
-        .doc(uid)
-        .snapshots()
-        .map((snapshot) {
+    return _firestoreService.collection('users').doc(uid).snapshots().map((snapshot) {
       print('user data stream changed');
-      // print('user model snapshot: ${snapshot.data()}');
+      print('user model snapshot: ${snapshot.data()}');
       return UserModel.fromMap(snapshot.data()!);
     });
   }
@@ -86,10 +79,9 @@ class FirestoreService extends GetxService {
   }
 
   // 차트 그리기 위한 Historical Price
-  Future<List<ChartPriceModel>> getPrices(
-      StockAddressModel stockAddress) async {
-    CollectionReference _historicalPriceRef = _firestoreService
-        .collection('stocksKR/${stockAddress.issueCode}/historicalPrices');
+  Future<List<ChartPriceModel>> getPrices(StockAddressModel stockAddress) async {
+    CollectionReference _historicalPriceRef =
+        _firestoreService.collection('stocksKR/${stockAddress.issueCode}/historicalPrices');
     List<ChartPriceModel> _priceChartModelList = [];
 
     try {
@@ -98,8 +90,7 @@ class FirestoreService extends GetxService {
           .get()
           .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
                 // print(doc.id);  // document id 출력
-                _priceChartModelList.add(ChartPriceModel.fromMap(
-                    doc.data() as Map<String, dynamic>));
+                _priceChartModelList.add(ChartPriceModel.fromMap(doc.data() as Map<String, dynamic>));
               }));
       // print(_priceChartModelList);
       return _priceChartModelList;
@@ -116,8 +107,7 @@ class FirestoreService extends GetxService {
     //     _firestoreService.collection('stocksKR/326030/stats');
     // CollectionReference _abKo =
     //     _firestoreService.collection('stocksKR/129890/stats');
-    CollectionReference _statsRef = _firestoreService
-        .collection('stocksKR/${stockAddress.issueCode}/stats');
+    CollectionReference _statsRef = _firestoreService.collection('stocksKR/${stockAddress.issueCode}/stats');
     List<StatsModel> _statstModelList = [];
 
     try {
@@ -126,8 +116,7 @@ class FirestoreService extends GetxService {
           .get()
           .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
                 // print(doc.id);  // document id 출력
-                _statstModelList.add(
-                    StatsModel.fromMap(doc.data() as Map<String, dynamic>));
+                _statstModelList.add(StatsModel.fromMap(doc.data() as Map<String, dynamic>));
               }));
       // print(_statstModelList);
 
@@ -145,10 +134,7 @@ class FirestoreService extends GetxService {
         if (index == i) {
           temp[i] = temp[i] + 1;
         }
-        _firestoreService
-            .collection('temp')
-            .doc('count')
-            .update({'count': temp});
+        _firestoreService.collection('temp').doc('count').update({'count': temp});
       }
     });
     // await _firestoreService.collection('temp').doc('count').update({
@@ -162,12 +148,7 @@ class FirestoreService extends GetxService {
   Future<List<QuestModel>> getAllQuests() async {
     final List<QuestModel> allQuests = [];
     final List<StockAddressModel> options = [];
-    await _firestoreService
-        .collection('leagues')
-        .doc('league001')
-        .collection('quests')
-        .get()
-        .then((value) {
+    await _firestoreService.collection('leagues').doc('league001').collection('quests').get().then((value) {
       value.docs.forEach((element) {
         // options 필드의 List of Object를 아래와 같이 처리
         element.data()['options'].toList().forEach((option) {
@@ -191,8 +172,7 @@ class FirestoreService extends GetxService {
   // User QuestModel 업데이트
 
   // 기업 세부 정보 가져오기
-  Future<CorporationModel> getCorporationInfo(
-      StockAddressModel stockAddressModel) async {
+  Future<CorporationModel> getCorporationInfo(StockAddressModel stockAddressModel) async {
     return await _firestoreService
         .collection('stocksKR')
         .doc('${stockAddressModel.issueCode}')
@@ -295,14 +275,22 @@ class FirestoreService extends GetxService {
         .toMap());
   }
 
+  // 포스트 수정하기
+  Future editMyPost(String postId, PostModel newPost) async {
+    // String docUid = _firestoreService.collection('posts').doc().id;
+    Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
+    // print(docUid);
+
+    await _firestoreService
+        .collection('posts')
+        .doc(postId)
+        .update({'content': newPost.content, 'editedDateTime': timestampNow});
+  }
+
   // 포스트 받아오기
   Future getPosts() async {
     List<PostModel> posts = [];
-    await _firestoreService
-        .collection('posts')
-        .orderBy('writtenDateTime', descending: true)
-        .get()
-        .then((value) {
+    await _firestoreService.collection('posts').orderBy('writtenDateTime', descending: true).get().then((value) {
       value.docs.forEach((element) {
         posts.add(PostModel.fromMap(element.data()));
       });
@@ -312,12 +300,8 @@ class FirestoreService extends GetxService {
 
   // 코멘트 올리기
   Future uploadNewComment(CommentModel newComment) async {
-    String docUid = _firestoreService
-        .collection('posts')
-        .doc(newComment.commentToPostId)
-        .collection('comments')
-        .doc()
-        .id;
+    String docUid =
+        _firestoreService.collection('posts').doc(newComment.commentToPostId).collection('comments').doc().id;
     Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
     print(docUid);
 
@@ -349,5 +333,33 @@ class FirestoreService extends GetxService {
       });
     });
     return comments;
+  }
+
+  // 컨텐츠 관련
+  // 읽을 거리 가져오기
+  Future<List<ReadingContentModel>> getReadingContents() async {
+    List<ReadingContentModel> readingContents = [];
+    await _firestoreService
+        .collection('readingContents')
+        .orderBy('updatedDateTime', descending: true)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              readingContents.add(ReadingContentModel.fromMap(element.data()));
+            }));
+    return readingContents;
+  }
+
+  // 오늘의 시장 가져오기
+  Future<List<TodayMarketModel>> getTodayMarkets() async {
+    List<TodayMarketModel> todayMarketModel = [];
+    await _firestoreService
+        .collection('todayMarkets')
+        .orderBy('dateTime', descending: true)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              print(element.data());
+              todayMarketModel.add(TodayMarketModel.fromMap(element.data()));
+            }));
+    return todayMarketModel;
   }
 }

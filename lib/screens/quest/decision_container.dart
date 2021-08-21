@@ -10,6 +10,7 @@ import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/screens/quest/quest_view_model.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 
 class DecisionContainer extends StatefulWidget {
   final QuestViewModel questViewModel;

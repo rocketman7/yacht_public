@@ -360,7 +360,7 @@ exports.sortRank = functions.region('asia-northeast3').https.onRequest(async (re
 
   // const today = "20210714";
   var today = dateFormat(Date(), "yyyymmdd");
-  const yesterday = "20210812";
+  const yesterday = "20210819";
   // todayRankRef
 
   const seasonInfoRef = votesRef

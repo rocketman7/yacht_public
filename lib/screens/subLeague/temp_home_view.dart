@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../styles/style_constants.dart';
 import '../../handlers/numbers_handler.dart' as NumbersHandler;

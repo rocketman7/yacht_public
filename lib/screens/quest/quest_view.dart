@@ -14,6 +14,7 @@ import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 import '../home/quest_widget.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 

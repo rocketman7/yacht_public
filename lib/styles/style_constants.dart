@@ -9,13 +9,13 @@ import 'size_config.dart';
 /// 색
 // 색상표
 const Color seaBlue = Color(0xFF489EDD);
-const Color yachtRed = Color(0xFFEE5076);
+// const Color yachtRed = Color(0xFFEE5076);
 const Color blueGrey = Color(0xFF789EC1);
 const Color deepBlue = Color(0xFF196AB4);
 
 Color backgroundWhenPopup = Color(0xFF343434).withOpacity(.3);
 // 백그라운드
-const primaryBackgroundColor = Color(0xFFFBFAFD);
+// const primaryBackgroundColor = Color(0xFFFBFAFD);
 // 앱 바 백그라운드
 Color primaryAppbarBackgroundColor = Color(0xFFFBFAFD).withOpacity(.7);
 // 불투명 Glassmorphism 백그라운드
@@ -23,7 +23,7 @@ Color glassmorphismBackgroundColor = Color(0xFFFBFAFD).withOpacity(.4);
 // 기본 폰트 색
 const primaryFontColor = Color(0xFF123A5F);
 // 강조하는 핑크색
-const primaryPointFontColor = yachtRed;
+const primaryPointFontColor = Colors.red;
 // 흰 바탕에 쓸 약한 폰트 색
 const primaryLightFontColor = Color(0xFF789EC1);
 // 활성화된 버튼 색
@@ -37,9 +37,13 @@ Color boxShadowColor = Color(0xFF38204B).withOpacity(.08);
 // 디바이더
 Color dividerColor = Color(0xFF789EC1).withOpacity(.4);
 // k-Bull & Bear & Volume Color
-const bullColorKR = yachtRed;
+const bullColorKR = Colors.red;
 const bearColorKR = seaBlue;
 const volumeColor = Color(0xFF789EC1);
+
+Color hexToColorCode(String colorCode) {
+  return Color(int.parse(colorCode, radix: 16) + 0xFF000000);
+}
 
 /// 패딩
 // 텍스트 탑일 때 텍스트 사이즈에 따른 패딩
@@ -48,8 +52,7 @@ double reducedPaddingWhenTextIsBelow(double padding, double textSize) {
   return padding - (textSize * 0.2).round().toDouble();
 }
 
-double reducedPaddingWhenTextIsBothSide(
-    double padding, double topTextSize, double bottomTextSize) {
+double reducedPaddingWhenTextIsBothSide(double padding, double topTextSize, double bottomTextSize) {
   return padding - reducePaddingBothSide(topTextSize, bottomTextSize);
 }
 
@@ -58,13 +61,11 @@ double reducePaddingOneSide(double textSize) {
 }
 
 double reducePaddingBothSide(double topTextSize, double bottomTextSize) {
-  return ((topTextSize * 0.2).round() + (bottomTextSize * 0.2).round())
-      .toDouble();
+  return ((topTextSize * 0.2).round() + (bottomTextSize * 0.2).round()).toDouble();
 }
 
 EdgeInsets textTopPadding(double textSize) {
-  return EdgeInsets.fromLTRB(
-      14.w, (-(textSize * 0.2).round() + 30).w, 14.w, 14.w);
+  return EdgeInsets.fromLTRB(14.w, (-(textSize * 0.2).round() + 30).w, 14.w, 14.w);
 }
 
 EdgeInsets textTopOpenHorizontalPadding(double textSize) {
@@ -75,9 +76,9 @@ EdgeInsets textTopOpenHorizontalPadding(double textSize) {
   return EdgeInsets.fromLTRB(0, (-(textSize * 0.2).round() + 14).w, 0, 8.w);
 }
 
-EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(
-  horizontal: 14.w,
-);
+// EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(
+//   horizontal: 14.w,
+// );
 
 EdgeInsets moduleBoxPadding(double moduleUpperTextSize) {
   return EdgeInsets.fromLTRB(
@@ -124,19 +125,19 @@ BoxShadow primaryBoxShadow = BoxShadow(
 // 불투명 Glassmorphism Container
 
 // var glassMorphismDecoration =
-ClipRect glassmorphismContainer({required Widget child}) {
-  return ClipRect(
-    child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-        child: Container(
-          padding: EdgeInsets.all(6.w),
-          decoration: BoxDecoration(
-              color: glassmorphismBackgroundColor,
-              borderRadius: BorderRadius.circular(10.w)),
-          child: child,
-        )),
-  );
-}
+// ClipRect glassmorphismContainer({required Widget child}) {
+//   return ClipRect(
+//     child: BackdropFilter(
+//         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+//         child: Container(
+//           padding: EdgeInsets.all(6.w),
+//           decoration: BoxDecoration(
+//               color: glassmorphismBackgroundColor,
+//               borderRadius: BorderRadius.circular(10.w)),
+//           child: child,
+//         )),
+//   );
+// }
 
 //// 폰트
 /// 홈
@@ -325,32 +326,24 @@ TextStyle feedDateTime = TextStyle(
   height: 1.4,
 );
 
-TextStyle feedTitle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 14.w,
-  fontWeight: FontWeight.w500,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
+// TextStyle feedTitle = TextStyle(
+//   fontFamily: 'SCore',
+//   fontSize: 14.w,
+//   fontWeight: FontWeight.w500,
+//   color: primaryFontColor,
+//   letterSpacing: -1.0,
+//   height: 1.4,
+// );
 
-TextStyle feedContent = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 14.w,
-  fontWeight: FontWeight.w300,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
+// TextStyle feedContent = TextStyle(
+//   fontFamily: 'SCore',
+//   fontSize: 14.w,
+//   fontWeight: FontWeight.w300,
+//   color: primaryFontColor,
+//   letterSpacing: -1.0,
+//   height: 1.4,
+// );
 
-TextStyle feedHashTag = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 12.w,
-  fontWeight: FontWeight.w300,
-  color: blueGrey,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
 TextStyle feedUserName = TextStyle(
   fontFamily: 'SCore',
   fontSize: 12.w,
@@ -359,19 +352,6 @@ TextStyle feedUserName = TextStyle(
   letterSpacing: -1.0,
   height: 1.4,
 );
-
-// 해쉬태그 컨테이너
-Container feedHashTagContainer(String hashTag) => Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
-      decoration: BoxDecoration(
-        color: Color(0xFFE8EDEF),
-        borderRadius: BorderRadius.circular(4.w),
-      ),
-      child: Text(
-        hashTag,
-        style: feedHashTag,
-      ),
-    );
 
 //// 버튼 컴포넌트들
 // 기본 버튼
@@ -388,8 +368,7 @@ Container primaryButtonContainer(Text buttonText) {
 }
 
 // 차트 토글 버튼
-Container chartToggleButton(
-    {required Widget child, required bool isSelected, required Color color}) {
+Container chartToggleButton({required Widget child, required bool isSelected, required Color color}) {
   return Container(
       // width: 50.w,
       decoration: BoxDecoration(
@@ -437,24 +416,24 @@ Color barColor4 = Color(0xFF607D8B).withOpacity(.9);
 // Color accLineColor = Color(0xFFFAAC00).withOpacity(.8);
 
 // 기본 앱 바
-AppBar primaryAppBar(String title) => AppBar(
-      backgroundColor: primaryBackgroundColor,
-      // leading: AppBarBackButton(),
-      title: Text(
-        title,
-        style: homeHeaderAfterName,
-      ),
-      toolbarHeight: 60.w,
-      elevation: 0,
-      // bottom: PreferredSize(
-      //     child: Container(
-      //       color: Color(0xFF94BDE0).withOpacity(0.3),
-      //       // 피그마에서는 opacity 0.5 인데 0.5로하면 너무 진한 느낌이 나서..
-      //       // color: Color(0xFF94BDE0).withOpacity(0.5),
-      //       height: 1.0,
-      //     ),
-      //     preferredSize: Size.fromHeight(1.0)),
-    );
+// AppBar primaryAppBar(String title) => AppBar(
+//       // backgroundColor: primaryBackgroundColor,
+//       // leading: AppBarBackButton(),
+//       title: Text(
+//         title,
+//         style: homeHeaderAfterName,
+//       ),
+//       toolbarHeight: 60.w,
+//       elevation: 0,
+//       // bottom: PreferredSize(
+//       //     child: Container(
+//       //       color: Color(0xFF94BDE0).withOpacity(0.3),
+//       //       // 피그마에서는 opacity 0.5 인데 0.5로하면 너무 진한 느낌이 나서..
+//       //       // color: Color(0xFF94BDE0).withOpacity(0.5),
+//       //       height: 1.0,
+//       //     ),
+//       //     preferredSize: Size.fromHeight(1.0)),
+//     );
 
 // Button Color
 const toggleButtonColor = Color(0xFFE8EAF6);
@@ -527,12 +506,12 @@ final confirmStyle = TextStyle(
   height: 1.1,
 );
 
-final contentStyle = TextStyle(
-    fontSize: reactiveHeight(16),
-    fontWeight: FontWeight.w500,
-    fontFamily: 'NotoSansKR',
-    letterSpacing: -.5,
-    height: 1.1);
+// final contentStyle = TextStyle(
+//     fontSize: reactiveHeight(16),
+//     fontWeight: FontWeight.w500,
+//     fontFamily: 'NotoSansKR',
+//     letterSpacing: -.5,
+//     height: 1.1);
 
 final detailStyle = TextStyle(
     fontSize: reactiveHeight(14),
@@ -550,18 +529,10 @@ final ohlcInfoStyle = TextStyle(
     height: 1.1);
 
 final ohlcPriceStyle = TextStyle(
-    fontSize: reactiveHeight(18),
-    fontWeight: FontWeight.w500,
-    fontFamily: 'DmSans',
-    letterSpacing: -0.5,
-    height: 1.1);
+    fontSize: reactiveHeight(18), fontWeight: FontWeight.w500, fontFamily: 'DmSans', letterSpacing: -0.5, height: 1.1);
 
 final detailPriceStyle = TextStyle(
-    fontSize: reactiveHeight(16),
-    fontWeight: FontWeight.w700,
-    fontFamily: 'DmSans',
-    letterSpacing: -0.5,
-    height: 1.1);
+    fontSize: reactiveHeight(16), fontWeight: FontWeight.w700, fontFamily: 'DmSans', letterSpacing: -0.5, height: 1.1);
 
 Container toggleButton(Widget child, Color color) {
   return Container(
@@ -576,8 +547,7 @@ Container toggleButton(Widget child, Color color) {
 const defaultDuration = Duration(milliseconds: 250);
 
 // Form Error
-final RegExp emailValidatorRegExp =
-    RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+final RegExp emailValidatorRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 const String kEmailNullError = "Please Enter your email";
 const String kInvalidEmailError = "Please Enter Valid Email";
 const String kPassNullError = "Please Enter your password";
@@ -601,3 +571,119 @@ const String kAddressNullError = "Please Enter your address";
 //     borderSide: BorderSide(color: kTextColor),
 //   );
 // }
+
+// 홈-상금-상금상세-상금타이틀
+TextStyle subLeagueTitleTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 20.w,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-상금액수
+TextStyle subLeagueAwardTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 36.w,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+  letterSpacing: -0.25,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-설명
+TextStyle subLeagueAwardDescriptionStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-룰
+TextStyle subLeagueAwardRulesStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 12.w,
+  fontWeight: FontWeight.w500,
+  color: primaryLightFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-포트폴리오포션텍스트
+TextStyle subLeagueAwardPortionStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 22.w,
+  fontWeight: FontWeight.w600,
+  color: primaryFontColor,
+  letterSpacing: 0.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-포트폴리오네임텍스트
+TextStyle subLeagueAwardStockNameStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: primaryFontColor,
+  letterSpacing: 0.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-포트폴리오라벨 텍스트
+TextStyle subLeagueAwardLabelStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-포트폴리오코멘트 텍스트
+TextStyle subLeagueAwardCommentStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w300,
+  color: primaryFontColor,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-상금박스-상금액수
+TextStyle awardModuleSliderAmountTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 30.w,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+  letterSpacing: -0.25,
+  height: 1.4,
+);
+// 홈-상금박스-상금액수한글
+TextStyle awardModuleSliderAmountKoreanTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w300,
+  color: Colors.white,
+  letterSpacing: 5.75,
+  height: 1.4,
+);
+// 홈-상금박스-상금기한
+TextStyle awardModuleSliderEndDateTimeTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 12.w,
+  fontWeight: FontWeight.w300,
+  color: Colors.white,
+  letterSpacing: -0.25,
+  height: 1.4,
+);
+
+// 상금박스의 색깔.
+const List<Color> awardColors = [
+  Color(0xFF87C7EC),
+  Color(0xFF489EDD),
+  Color(0xFF196AB4),
+  // Color(0xFF084176)
+];

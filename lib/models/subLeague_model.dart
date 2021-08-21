@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 class SubLeagueModel {
   final String name;
   final String description;
+  final String comment;
   final List<String> rules;
   final List<SubLeagueStocksModel> stocks;
   final num totalValue;
@@ -15,6 +16,7 @@ class SubLeagueModel {
   SubLeagueModel({
     required this.name,
     required this.description,
+    required this.comment,
     required this.rules,
     required this.stocks,
     required this.totalValue,
@@ -23,6 +25,7 @@ class SubLeagueModel {
   SubLeagueModel copyWith({
     String? name,
     String? description,
+    String? comment,
     List<String>? rules,
     List<SubLeagueStocksModel>? stocks,
     num? totalValue,
@@ -30,6 +33,7 @@ class SubLeagueModel {
     return SubLeagueModel(
       name: name ?? this.name,
       description: description ?? this.description,
+      comment: comment ?? this.comment,
       rules: rules ?? this.rules,
       stocks: stocks ?? this.stocks,
       totalValue: totalValue ?? this.totalValue,
@@ -40,6 +44,7 @@ class SubLeagueModel {
     return {
       'name': name,
       'description': description,
+      'comment': comment,
       'rules': rules,
       'stocks': stocks.map((x) => x.toMap()).toList(),
       'totalValue': totalValue,
@@ -50,21 +55,20 @@ class SubLeagueModel {
     return SubLeagueModel(
       name: map['name'],
       description: map['description'],
+      comment: map['comment'],
       rules: List<String>.from(map['rules']),
-      stocks: List<SubLeagueStocksModel>.from(
-          map['stocks']?.map((x) => SubLeagueStocksModel.fromMap(x))),
+      stocks: List<SubLeagueStocksModel>.from(map['stocks']?.map((x) => SubLeagueStocksModel.fromMap(x))),
       totalValue: map['totalValue'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory SubLeagueModel.fromJson(String source) =>
-      SubLeagueModel.fromMap(json.decode(source));
+  factory SubLeagueModel.fromJson(String source) => SubLeagueModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'SubLeagueModel(name: $name, description: $description, rules: $rules, stocks: $stocks, totalValue: $totalValue)';
+    return 'SubLeagueModel(name: $name, description: $description, comment: $comment, rules: $rules, stocks: $stocks, totalValue: $totalValue)';
   }
 
   @override
@@ -74,6 +78,7 @@ class SubLeagueModel {
     return other is SubLeagueModel &&
         other.name == name &&
         other.description == description &&
+        other.comment == comment &&
         listEquals(other.rules, rules) &&
         listEquals(other.stocks, stocks) &&
         other.totalValue == totalValue;
@@ -83,6 +88,7 @@ class SubLeagueModel {
   int get hashCode {
     return name.hashCode ^
         description.hashCode ^
+        comment.hashCode ^
         rules.hashCode ^
         stocks.hashCode ^
         totalValue.hashCode;
@@ -149,8 +155,7 @@ class SubLeagueStocksModel {
 
   String toJson() => json.encode(toMap());
 
-  factory SubLeagueStocksModel.fromJson(String source) =>
-      SubLeagueStocksModel.fromMap(json.decode(source));
+  factory SubLeagueStocksModel.fromJson(String source) => SubLeagueStocksModel.fromMap(json.decode(source));
 
   @override
   String toString() {

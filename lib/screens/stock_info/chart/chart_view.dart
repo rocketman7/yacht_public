@@ -11,6 +11,7 @@ import 'package:yachtOne/models/corporation_model.dart';
 import 'package:yachtOne/screens/quest/quest_view_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/styles/style_constants.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 import '../../../styles/style_constants.dart';
 import '../../../handlers/date_time_handler.dart';
 import '../../../models/price_chart_model.dart';

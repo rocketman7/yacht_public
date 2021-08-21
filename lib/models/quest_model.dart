@@ -8,6 +8,8 @@ import 'package:flutter/foundation.dart';
 class QuestModel {
   final String questId;
   final String title;
+  final String? themeColor;
+  final String? imageUrl;
   final String questDescription;
   final String rewardDescription;
   final String selectInstruction;
@@ -30,6 +32,8 @@ class QuestModel {
   QuestModel({
     required this.questId,
     required this.title,
+    required this.themeColor,
+    required this.imageUrl,
     required this.questDescription,
     required this.rewardDescription,
     required this.selectInstruction,
@@ -50,6 +54,8 @@ class QuestModel {
   QuestModel copyWith({
     String? questId,
     String? title,
+    String? themeColor,
+    String? imageUrl,
     String? questDescription,
     String? rewardDescription,
     String? selectInstruction,
@@ -69,6 +75,8 @@ class QuestModel {
     return QuestModel(
       questId: questId ?? this.questId,
       title: title ?? this.title,
+      themeColor: themeColor ?? this.themeColor,
+      imageUrl: imageUrl ?? this.imageUrl,
       questDescription: questDescription ?? this.questDescription,
       rewardDescription: rewardDescription ?? this.rewardDescription,
       selectInstruction: selectInstruction ?? this.selectInstruction,
@@ -91,6 +99,8 @@ class QuestModel {
     return {
       'questId': questId,
       'title': title,
+      'themeColor': themeColor,
+      'imageUrl': imageUrl,
       'questDescription': questDescription,
       'rewardDescription': rewardDescription,
       'selectInstruction': selectInstruction,
@@ -114,6 +124,8 @@ class QuestModel {
     return QuestModel(
       questId: questName,
       title: map['title'],
+      themeColor: map['themeColor'] ?? null,
+      imageUrl: map['imageUrl'] ?? null,
       questDescription: map['questDescription'],
       rewardDescription: map['rewardDescription'],
       selectInstruction: map['selectInstruction'],
@@ -132,22 +144,27 @@ class QuestModel {
       stockAddress: options,
     );
   }
+
   String toJson() => json.encode(toMap());
 
-  // factory QuestModel.fromJson(String source) => QuestModel.fromMap(json.decode(source));
+  // factory QuestModel.fromJson(String source) =>
+  //     QuestModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'QuestModel(questId: $questId, title: $title, questDescription: $questDescription, rewardDescription: $rewardDescription, selectInstruction: $selectInstruction, category: $category, pointReward: $pointReward, cashReward: $cashReward, exp: $exp, startDateTime: $startDateTime, endDateTime: $endDateTime, resultDateTime: $resultDateTime, selectMode: $selectMode, choices: $choices, counts: $counts, results: $results, stockAddress: $stockAddress)';
+    return 'QuestModel(questId: $questId, title: $title, themeColor: $themeColor, imageUrl: $imageUrl, questDescription: $questDescription, rewardDescription: $rewardDescription, selectInstruction: $selectInstruction, category: $category, pointReward: $pointReward, cashReward: $cashReward, exp: $exp, startDateTime: $startDateTime, endDateTime: $endDateTime, resultDateTime: $resultDateTime, selectMode: $selectMode, choices: $choices, counts: $counts, results: $results, stockAddress: $stockAddress)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
 
     return other is QuestModel &&
         other.questId == questId &&
         other.title == title &&
+        other.themeColor == themeColor &&
+        other.imageUrl == imageUrl &&
         other.questDescription == questDescription &&
         other.rewardDescription == rewardDescription &&
         other.selectInstruction == selectInstruction &&
@@ -169,6 +186,8 @@ class QuestModel {
   int get hashCode {
     return questId.hashCode ^
         title.hashCode ^
+        themeColor.hashCode ^
+        imageUrl.hashCode ^
         questDescription.hashCode ^
         rewardDescription.hashCode ^
         selectInstruction.hashCode ^

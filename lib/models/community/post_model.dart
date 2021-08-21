@@ -45,8 +45,8 @@ class PostModel {
 
   PostModel copyWith({
     String? postId,
-    dynamic? writtenDateTime,
-    dynamic? editedDateTime,
+    dynamic writtenDateTime,
+    dynamic editedDateTime,
     String? title,
     String? content,
     List<String>? imageUrlList,
@@ -109,22 +109,13 @@ class PostModel {
       editedDateTime: map['editedDateTime'],
       title: map['title'],
       content: map['content'],
-      imageUrlList: map['imageUrlList'] == null
-          ? null
-          : List<String>.from(map['imageUrlList']),
+      imageUrlList: map['imageUrlList'] == null ? null : List<String>.from(map['imageUrlList']),
       isPro: map['isPro'],
-      hashTags:
-          map['hashTags'] == null ? null : List<String>.from(map['hashTags']),
-      commentedBy: map['commentedBy'] == null
-          ? null
-          : List<String>.from(map['commentedBy']),
-      likedBy:
-          map['likedBy'] == null ? null : List<String>.from(map['likedBy']),
-      reportedBy: map['reportedBy'] == null
-          ? null
-          : List<String>.from(map['reportedBy']),
-      sharedBy:
-          map['sharedBy'] == null ? null : List<String>.from(map['sharedBy']),
+      hashTags: map['hashTags'] == null ? null : List<String>.from(map['hashTags']),
+      commentedBy: map['commentedBy'] == null ? null : List<String>.from(map['commentedBy']),
+      likedBy: map['likedBy'] == null ? null : List<String>.from(map['likedBy']),
+      reportedBy: map['reportedBy'] == null ? null : List<String>.from(map['reportedBy']),
+      sharedBy: map['sharedBy'] == null ? null : List<String>.from(map['sharedBy']),
       writerUid: map['writerUid'],
       writerUserName: map['writerUserName'],
       writerExp: map['writerExp'],
@@ -134,8 +125,7 @@ class PostModel {
 
   String toJson() => json.encode(toMap());
 
-  factory PostModel.fromJson(String source) =>
-      PostModel.fromMap(json.decode(source));
+  factory PostModel.fromJson(String source) => PostModel.fromMap(json.decode(source));
 
   @override
   String toString() {

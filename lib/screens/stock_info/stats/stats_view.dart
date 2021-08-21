@@ -11,6 +11,7 @@ import 'package:yachtOne/models/corporation_model.dart';
 import 'package:yachtOne/screens/stock_info/stats/stats_view_model.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 
 class StatsView extends StatelessWidget {
   final StockAddressModel stockAddressModel;

@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 class UserModel {
   final String uid;
   final String userName;
-  final bool isNameUpdated; // 기준에 맞게 유저네임 변경했는지 체크
-  final String email;
+  final bool? isNameUpdated; // 기준에 맞게 유저네임 변경했는지 체크
+  final String? email;
   final String? phoneNumber;
   final dynamic account; // 증권계좌
   final String? avatarUrl; // 아바타 이미지 url
@@ -113,11 +113,8 @@ class UserModel {
       avatarUrl: map['avatarUrl'],
       item: map['item'],
       friendsCode: map['friendsCode'],
-      insertedFriendsCode: map['insertedFriendsCode'] == null
-          ? null
-          : List<String>.from(map['insertedFriendsCode']),
-      blockList:
-          map['blockList'] == null ? null : List<String>.from(map['blockList']),
+      insertedFriendsCode: map['insertedFriendsCode'] == null ? null : List<String>.from(map['insertedFriendsCode']),
+      blockList: map['blockList'] == null ? null : List<String>.from(map['blockList']),
       rewardedCnt: map['rewardedCnt'],
       exp: map['exp'] ?? 0,
       membership: map['membership'],
@@ -128,8 +125,7 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -178,4 +174,30 @@ class UserModel {
         membershipStartAt.hashCode ^
         membershipEndAt.hashCode;
   }
+}
+
+// 유저가 없을 때 초기 유저모델
+UserModel newUserModel(
+  String uid,
+  String userName,
+  String? email,
+  String? phoneNumber,
+) {
+  return UserModel(
+      uid: uid,
+      userName: userName,
+      email: email,
+      avatarUrl: "avatar001",
+      account: null,
+      item: 10,
+      friendsCode: null,
+      isNameUpdated: false,
+      rewardedCnt: 0,
+      phoneNumber: phoneNumber,
+      blockList: null,
+      exp: 0,
+      insertedFriendsCode: null,
+      membership: false,
+      membershipEndAt: null,
+      membershipStartAt: null);
 }

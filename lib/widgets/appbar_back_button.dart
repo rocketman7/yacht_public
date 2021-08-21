@@ -15,8 +15,8 @@ class AppBarBackButton extends StatelessWidget {
       child: Container(
         // color: Colors.grey,
         child: Center(
-          child: SvgPicture.asset(
-            'assets/icons/navigate_back_arrow.svg',
+          child: Image.asset(
+            'assets/icons/navigate_back_button.png',
             height: 30.w,
             width: 30.w,
           ),
