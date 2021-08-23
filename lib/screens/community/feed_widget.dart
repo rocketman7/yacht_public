@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
@@ -16,6 +17,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import '../../locator.dart';
 import 'detail_post_view.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 class FeedWidget extends StatelessWidget {
   final CommunityViewModel communityViewModel;
@@ -76,21 +78,73 @@ class FeedWidget extends StatelessWidget {
                         Container(
                           width: 14.w,
                           height: 16.w,
-                          color: Colors.blue[50],
-                          child: SvgPicture.asset('assets/icons/show_more.svg'),
+                          // color: Colors.blue[50],
+                          child: SvgPicture.asset(
+                            'assets/icons/show_more.svg',
+                            color: yachtBlack,
+                          ),
                         ),
                       ]),
                       onSelected: (value) {
-                        Get.bottomSheet(
-                            EditingMyPost(
-                              // contentFormKey: _contentFormKey,
-                              // contentController: _contentController,
-                              communityViewModel: communityViewModel,
-                              post: post,
-                            ),
-                            isScrollControlled: true,
-                            ignoreSafeArea: false, // add this
-                            enterBottomSheetDuration: Duration(seconds: 3));
+                        switch (value) {
+                          case 'edit':
+                            Get.bottomSheet(
+                                EditingMyPost(
+                                  // contentFormKey: _contentFormKey,
+                                  // contentController: _contentController,
+                                  communityViewModel: communityViewModel,
+                                  post: post,
+                                ),
+                                isScrollControlled: true,
+                                ignoreSafeArea: false, // add this
+                                enterBottomSheetDuration: Duration(seconds: 3));
+                            break;
+                          case 'delete':
+                            Get.dialog(Dialog(
+                                insetPadding: primaryHorizontalPadding,
+                                child: Container(
+                                    padding: EdgeInsets.fromLTRB(
+                                        14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text("알림", style: dialogTitle),
+                                        SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                        SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                        Text("정말 삭제하시겠습니까?", style: dialogContent),
+                                        Text(
+                                          "삭제 후 되돌릴 수 없습니다.",
+                                          style: dialogWarning,
+                                        ),
+                                        SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: GestureDetector(
+                                                  onTap: () {},
+                                                  child: textContainerButtonWithOptions(
+                                                    text: "예",
+                                                    isDarkBackground: true,
+                                                    height: 44.w,
+                                                  )),
+                                            ),
+                                            SizedBox(width: 8.w),
+                                            Expanded(
+                                              child: InkWell(
+                                                  onTap: () {
+                                                    Get.back(canPop: true);
+                                                  },
+                                                  child: textContainerButtonWithOptions(
+                                                      text: "아니오", isDarkBackground: false, height: 44.w)),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ))));
+                            break;
+                          default:
+                        }
                       },
                       itemBuilder: (context) {
                         return post.writerUid == userModelRx.value!.uid ? communityMyShowMore : communityShowMore;
@@ -114,9 +168,17 @@ class FeedWidget extends StatelessWidget {
                   onTap: () => Get.to(
                     () => DetailPostView(post),
                   ),
-                  child: Text(
-                    post.content,
+                  child: Linkify(
+                    onOpen: (link) async {
+                      if (await canLaunch(link.url)) {
+                        await launch(link.url);
+                      } else {
+                        throw 'Could not launch $link';
+                      }
+                    },
+                    text: post.content,
                     style: feedContent,
+                    linkStyle: feedContent.copyWith(color: yachtViolet),
                     maxLines: (post.imageUrlList == null || post.imageUrlList!.length == 0) ? 3 : 4,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -206,11 +268,14 @@ class FeedWidget extends StatelessWidget {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    SvgPicture.asset('assets/icons/comment.svg'),
+                                    SvgPicture.asset('assets/icons/comment.svg', color: yachtBlack),
                                     SizedBox(
                                       width: 8.w,
                                     ),
-                                    Text(post.likedBy == null ? 0.toString() : post.commentedBy!.length.toString()),
+                                    Text(
+                                      post.commentedBy == null ? 0.toString() : post.commentedBy!.length.toString(),
+                                      style: feedCommentLikeCount,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -219,15 +284,18 @@ class FeedWidget extends StatelessWidget {
                           Flexible(
                             child: Row(
                               children: [
-                                SvgPicture.asset('assets/icons/likes.svg'),
+                                SvgPicture.asset('assets/icons/likes.svg', color: yachtBlack),
                                 SizedBox(
                                   width: 8.w,
                                 ),
-                                Text(post.likedBy == null ? 0.toString() : post.likedBy!.length.toString()),
+                                Text(
+                                  post.likedBy == null ? 0.toString() : post.likedBy!.length.toString(),
+                                  style: feedCommentLikeCount,
+                                ),
                               ],
                             ),
                           ),
-                          Flexible(child: SvgPicture.asset('assets/icons/share.svg')),
+                          Flexible(child: SvgPicture.asset('assets/icons/share.svg', color: yachtBlack)),
                           Container(
                             width: 3,
                           )

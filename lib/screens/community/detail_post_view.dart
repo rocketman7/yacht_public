@@ -1,10 +1,14 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/community/comment_model.dart';
 import 'package:yachtOne/models/community/post_model.dart';
@@ -32,7 +36,7 @@ class DetailPostView extends GetView {
 
   // CommunityView에서 argument로 넘긴 PostModel을 바로 viewModel로 보냄.
 
-  // CommunityViewModel communityViewModel = Get.put(CommunityViewModel());
+  CommunityViewModel communityViewModel = Get.find<CommunityViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +67,8 @@ class DetailPostView extends GetView {
                                   width: 36.w,
                                   height: 36.w,
                                   child: CachedNetworkImage(
-                                    imageUrl: "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+                                    imageUrl:
+                                        "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
                                   )),
                               SizedBox(
                                 width: 6.w,
@@ -97,7 +102,9 @@ class DetailPostView extends GetView {
                                         SvgPicture.asset('assets/icons/show_more.svg')
                                       ],
                                     ),
-                                    SizedBox(height: reducedPaddingWhenTextIsBothSide(6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
+                                    SizedBox(
+                                        height: reducedPaddingWhenTextIsBothSide(
+                                            6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
                                     detailPostViewModel.post.title == null
                                         ? Container()
                                         : Text(
@@ -109,17 +116,25 @@ class DetailPostView extends GetView {
                                     SizedBox(
                                       height: 2.w,
                                     ),
-                                    Text(
-                                      detailPostViewModel.post.content,
+                                    Linkify(
+                                      onOpen: (link) async {
+                                        if (await canLaunch(link.url)) {
+                                          await launch(link.url);
+                                        } else {
+                                          throw 'Could not launch $link';
+                                        }
+                                      },
+                                      text: detailPostViewModel.post.content,
                                       style: feedContent,
+                                      linkStyle: feedContent.copyWith(color: yachtViolet),
                                       maxLines: 5,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-
                                     SizedBox(
                                       height: 8.w,
                                     ),
-                                    (detailPostViewModel.post.imageUrlList == null || detailPostViewModel.post.imageUrlList!.length == 0)
+                                    (detailPostViewModel.post.imageUrlList == null ||
+                                            detailPostViewModel.post.imageUrlList!.length == 0)
                                         ? Container()
                                         : Column(
                                             children: [
@@ -134,7 +149,8 @@ class DetailPostView extends GetView {
                                                           ClipRRect(
                                                               borderRadius: BorderRadius.circular(5.w),
                                                               child: FutureBuilder<String>(
-                                                                  future: getImageUrlFromStorage(detailPostViewModel.post.imageUrlList![index]),
+                                                                  future: getImageUrlFromStorage(
+                                                                      detailPostViewModel.post.imageUrlList![index]),
                                                                   builder: (context, snapshot) {
                                                                     if (!snapshot.hasData) {
                                                                       return Container(
@@ -147,7 +163,8 @@ class DetailPostView extends GetView {
                                                                       return InkWell(
                                                                         onTap: () {
                                                                           print(imageUrls);
-                                                                          Get.dialog(buildPhotoPageView(index, imageUrls));
+                                                                          Get.dialog(
+                                                                              buildPhotoPageView(index, imageUrls));
                                                                         },
                                                                         child: CachedNetworkImage(
                                                                           imageUrl: imageUrls[index],
@@ -168,7 +185,8 @@ class DetailPostView extends GetView {
                                               SizedBox(height: 8.w),
                                             ],
                                           ),
-                                    (detailPostViewModel.post.hashTags == null || detailPostViewModel.post.hashTags!.length == 0)
+                                    (detailPostViewModel.post.hashTags == null ||
+                                            detailPostViewModel.post.hashTags!.length == 0)
                                         ? Container()
                                         : Wrap(
                                             spacing: 4.w,
@@ -199,9 +217,13 @@ class DetailPostView extends GetView {
                                               SizedBox(
                                                 width: 4.w,
                                               ),
-                                              Text(detailPostViewModel.post.likedBy == null ? 0.toString() : detailPostViewModel.post.commentedBy!.length.toString()),
+                                              Text(detailPostViewModel.post.likedBy == null
+                                                  ? 0.toString()
+                                                  : detailPostViewModel.post.commentedBy!.length.toString()),
                                               SvgPicture.asset('assets/icons/likes.svg'),
-                                              Text(detailPostViewModel.post.likedBy == null ? 0.toString() : detailPostViewModel.post.likedBy!.length.toString()),
+                                              Text(detailPostViewModel.post.likedBy == null
+                                                  ? 0.toString()
+                                                  : detailPostViewModel.post.likedBy!.length.toString()),
                                               SvgPicture.asset('assets/icons/share.svg'),
                                             ],
                                           )
@@ -225,9 +247,12 @@ class DetailPostView extends GetView {
                                     // 코멘트 컨테이너
                                     return InkWell(
                                       onTap: () {
-                                        detailPostViewModel.replyToCommentId("${detailPostViewModel.comments[index].commentId}");
-                                        detailPostViewModel.replyToUserUid("${detailPostViewModel.comments[index].writerUid}");
-                                        detailPostViewModel.replyToUserName("${detailPostViewModel.comments[index].writerUserName}");
+                                        detailPostViewModel
+                                            .replyToCommentId("${detailPostViewModel.comments[index].commentId}");
+                                        detailPostViewModel
+                                            .replyToUserUid("${detailPostViewModel.comments[index].writerUid}");
+                                        detailPostViewModel
+                                            .replyToUserName("${detailPostViewModel.comments[index].writerUserName}");
                                       },
                                       child: Container(
                                         color: primaryBackgroundColor,
@@ -240,7 +265,8 @@ class DetailPostView extends GetView {
                                                 width: 36.w,
                                                 height: 36.w,
                                                 child: CachedNetworkImage(
-                                                  imageUrl: "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+                                                  imageUrl:
+                                                      "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
                                                 )),
                                             SizedBox(
                                               width: 6.w,
@@ -263,7 +289,9 @@ class DetailPostView extends GetView {
                                                       simpleTierRRectBox(tier: "newbie"),
                                                       Spacer(),
                                                       Text(
-                                                        feedTimeHandler(detailPostViewModel.comments[index].writtenDateTime.toDate()),
+                                                        feedTimeHandler(detailPostViewModel
+                                                            .comments[index].writtenDateTime
+                                                            .toDate()),
                                                         // x초전, x분 전, 일정 이후면 날짜로
                                                         style: feedDateTime,
                                                       ),
@@ -273,7 +301,9 @@ class DetailPostView extends GetView {
                                                       SvgPicture.asset('assets/icons/show_more.svg')
                                                     ],
                                                   ),
-                                                  SizedBox(height: reducedPaddingWhenTextIsBothSide(6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
+                                                  SizedBox(
+                                                      height: reducedPaddingWhenTextIsBothSide(
+                                                          6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
                                                   SizedBox(
                                                     height: 2.w,
                                                   ),
@@ -291,9 +321,15 @@ class DetailPostView extends GetView {
                                                   // ),
                                                   RichText(
                                                       text: TextSpan(
-                                                          text: (detailPostViewModel.comments[index].isReply) ? "@${detailPostViewModel.comments[index].replyToUserName} " : "",
-                                                          style: feedContent.copyWith(color: Colors.blue),
-                                                          children: [TextSpan(text: detailPostViewModel.comments[index].content, style: feedContent)]))
+                                                          text: (detailPostViewModel.comments[index].isReply)
+                                                              ? "@${detailPostViewModel.comments[index].replyToUserName} "
+                                                              : "",
+                                                          style: feedContent.copyWith(color: yachtViolet),
+                                                          children: [
+                                                        TextSpan(
+                                                            text: detailPostViewModel.comments[index].content,
+                                                            style: feedContent)
+                                                      ]))
                                                 ],
                                               ),
                                             ),
@@ -318,6 +354,7 @@ class DetailPostView extends GetView {
           CommentInput(
             post: detailPostViewModel.post,
             detailPostViewModel: detailPostViewModel,
+            communityViewModel: communityViewModel,
             // commentController: commentController,
 
             // commentFormKey: _commentFormKey,
@@ -409,11 +446,14 @@ class CommentInput extends StatefulWidget {
     Key? key,
     required PostModel post,
     required DetailPostViewModel detailPostViewModel,
+    required CommunityViewModel communityViewModel,
   })  : post = post,
         detailPostViewModel = detailPostViewModel,
+        communityViewModel = communityViewModel,
         super(key: key);
 
   final DetailPostViewModel detailPostViewModel;
+  final CommunityViewModel communityViewModel;
   final PostModel post;
 
   @override
@@ -458,83 +498,160 @@ class _CommentInputState extends State<CommentInput> {
       key: commentFormKey,
       child: Positioned(
         bottom: 0,
-        child: Container(
-          // height: 76.w,
-          color: Colors.blue.withOpacity(.12),
-          width: ScreenUtil().screenWidth,
-          child: Padding(
-            padding: primaryHorizontalPadding.copyWith(top: 14.w, bottom: 14.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      height: 36.w,
-                      width: 36.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 4.w,
-                    ),
-                    Expanded(
-                      child: Obx(
-                        () => Container(
-                          height: isFocused.value ? 90.w : 36.w,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [primaryBoxShadow],
-                            borderRadius: BorderRadius.circular(5.w),
-                          ),
-                          // border: Border.all(width: 1, color: Colors.black)),
-                          child: TextFormField(
-                            focusNode: _focusNode,
-                            controller: commentController,
-                            validator: (value) {
-                              if (value!.length < 4) {
-                                return '4자 이상 글을 올려주세요.';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                                prefixIcon: widget.detailPostViewModel.replyToUserName.value.length > 0 ? Text('@${widget.detailPostViewModel.replyToUserName.value} ') : Text(" "),
-                                prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
-                                isDense: true,
-                                contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.w),
-                                focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                                enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                                hintText: widget.detailPostViewModel.replyToUserName.value.length > 0 ? "" : widget.detailPostViewModel.hintText.value,
-                                hintStyle: feedContent),
-                          ),
+        child: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+            child: Container(
+                // height: 76.w,
+                color: Colors.white.withOpacity(.50),
+                width: ScreenUtil().screenWidth,
+                child: Obx(
+                  () => Padding(
+                    padding: primaryHorizontalPadding.copyWith(
+                        top: widget.detailPostViewModel.replyToUserName.value.length > 0 ? 0 : 14.w, bottom: 14.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        widget.detailPostViewModel.replyToUserName.value.length > 0
+                            ? Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 36.w + 4.w, vertical: 4.w),
+                                    child: InkWell(
+                                        onTap: () {
+                                          widget.detailPostViewModel.replyToCommentId("");
+                                          widget.detailPostViewModel.replyToUserUid("");
+                                          widget.detailPostViewModel.replyToUserName("");
+                                        },
+                                        child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                ' ${widget.detailPostViewModel.replyToUserName.value} 님에게 답글',
+                                                style: feedContent.copyWith(color: yachtViolet, fontSize: 14.w),
+                                              ),
+                                              SizedBox(
+                                                width: 4.w,
+                                              ),
+                                              Image.asset(
+                                                'assets/icons/delete_in_textfield_outline.png',
+                                                width: 14.w,
+                                              ),
+                                              SizedBox(
+                                                width: 6.w,
+                                              )
+                                            ]))),
+                              )
+                            : Container(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 36.w,
+                              width: 36.w,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            Expanded(
+                              child: Obx(
+                                () => Container(
+                                  // height: isFocused.value ? 36.w : 36.w,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [primaryBoxShadow],
+                                    borderRadius: BorderRadius.circular(5.w),
+                                  ),
+                                  // border: Border.all(width: 1, color: Colors.black)),
+                                  child: TextFormField(
+                                    focusNode: _focusNode,
+                                    controller: commentController,
+                                    validator: (value) {
+                                      if (value!.length < 4) {
+                                        return '4자 이상 글을 올려주세요.';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                    maxLines: null,
+                                    keyboardType: TextInputType.multiline,
+                                    decoration: InputDecoration(
+                                        // prefixIcon: widget.detailPostViewModel.replyToUserName.value.length > 0
+                                        //     ? InkWell(
+                                        //         onTap: () {
+                                        //           widget.detailPostViewModel.replyToCommentId("");
+                                        //           widget.detailPostViewModel.replyToUserUid("");
+                                        //           widget.detailPostViewModel.replyToUserName("");
+                                        //         },
+                                        //         child: Row(
+                                        //             mainAxisSize: MainAxisSize.min,
+                                        //             crossAxisAlignment: CrossAxisAlignment.center,
+                                        //             children: [
+                                        //               Text(
+                                        //                 ' @${widget.detailPostViewModel.replyToUserName.value}',
+                                        //                 style: feedContent.copyWith(color: yachtViolet),
+                                        //               ),
+                                        //               SizedBox(
+                                        //                 width: 4.w,
+                                        //               ),
+                                        //               Image.asset(
+                                        //                 'assets/icons/delete_in_textfield.png',
+                                        //                 width: 20.w,
+                                        //               ),
+                                        //               SizedBox(
+                                        //                 width: 6.w,
+                                        //               )
+                                        //             ]))
+                                        //     : Text(" "),
+                                        prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                                        isDense: true,
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.w),
+                                        focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                        enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                        hintText:
+                                            // widget.detailPostViewModel.replyToUserName.value.length > 0
+                                            //     ? ""
+                                            //     :
+                                            widget.detailPostViewModel.hintText.value,
+                                        hintStyle: feedContent),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                        SizedBox(
+                          height: 4.w,
+                        ),
+                        Obx(() => isFocused.value
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  SizedBox(height: 4.w),
+                                  GestureDetector(
+                                      onTap: () async {
+                                        if (commentFormKey.currentState!.validate()) {
+                                          await widget.detailPostViewModel
+                                              .uploadComment(widget.post, commentController.value.text);
+                                          await widget.detailPostViewModel.getComments(widget.post);
+                                          commentController.clear();
+                                          _focusNode.unfocus();
+                                          await widget.communityViewModel.getPost();
+                                        }
+                                      },
+                                      child: simpleTextContainerButton("답글 달기")),
+                                ],
+                              )
+                            : Container())
+                      ],
                     ),
-                  ],
-                ),
-                Obx(() => isFocused.value
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          SizedBox(height: 4.w),
-                          GestureDetector(
-                              onTap: () async {
-                                if (commentFormKey.currentState!.validate()) {
-                                  await widget.detailPostViewModel.uploadComment(widget.post, commentController.value.text);
-                                  await widget.detailPostViewModel.getComments(widget.post);
-                                  commentController.clear();
-                                  _focusNode.unfocus();
-                                }
-                              },
-                              child: Text("답글 달기")),
-                        ],
-                      )
-                    : Container())
-              ],
-            ),
+                  ),
+                )),
           ),
         ),
       ),

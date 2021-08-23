@@ -52,7 +52,6 @@ class HomeView extends StatelessWidget {
       // 이달의 상금 주식
       AwardView(leagueName: "9월 리그", leagueEndDateTime: "20210930"),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-
       NewQuests(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       LiveQuests(homeViewModel: homeViewModel),
@@ -62,6 +61,7 @@ class HomeView extends StatelessWidget {
       ReadingContentView(homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       TodayMarketView(homeViewModel: homeViewModel),
+      SizedBox(height: correctHeight(150.w, 0.0, sectionTitle.fontSize)),
       // SliverToBoxAdapter(child: SizedBox(height: 100)),
       // OldLiveQuests(homeViewModel: homeViewModel),
       // SliverToBoxAdapter(child: Container(height: 200, color: Colors.grey)),
@@ -82,7 +82,6 @@ class HomeView extends StatelessWidget {
 
     return Scaffold(
       body: CustomScrollView(
-        semanticChildCount: 3,
         controller: _scrollController,
         slivers: [
           // 앱바

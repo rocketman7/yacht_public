@@ -317,14 +317,6 @@ TextStyle mostDetailedContentTextStyle = TextStyle(
 //// 커뮤니티
 /// 피드 박스
 // 날짜 표시
-TextStyle feedDateTime = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 10.w,
-  fontWeight: FontWeight.w300,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
 
 // TextStyle feedTitle = TextStyle(
 //   fontFamily: 'SCore',

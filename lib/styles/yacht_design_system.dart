@@ -223,6 +223,33 @@ TextStyle feedHashTag = TextStyle(
   height: 1.4,
 );
 
+TextStyle feedDateTime = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 10.w,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle feedCommentLikeCount = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 12.w,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle socialLogin = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
 /// 세부 포스트 페이지
 // 세부 포스트에서 사이즈 1픽셀 확대
 TextStyle feedTitleDetail = feedTitle.copyWith(fontSize: 15.w);
@@ -241,25 +268,80 @@ TextStyle simpleTierStyle = TextStyle(
 TextStyle snackBarStyle = TextStyle(
   fontSize: bodyBigSize,
   fontFamily: krFont,
-  fontWeight: FontWeight.w600,
+  fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -0.5,
   height: 1.4,
 );
 
+// 다이얼로그
+// 제목
+TextStyle dialogTitle = TextStyle(
+  fontSize: bodyBigSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -0.5,
+  height: 1.4,
+);
+
+TextStyle dialogContent = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -0.5,
+  height: 1.4,
+);
+
+TextStyle dialogWarning = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtRed,
+  letterSpacing: -0.5,
+  height: 1.4,
+);
 // ICONS
 
 // BUTTONS
-Container simpleTextContainerButton(String text) {
+Container simpleTextContainerButton(
+  String text,
+) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
       color: buttonBackgroundPurple,
       borderRadius: BorderRadius.circular(50),
     ),
-    child: Text(
-      text,
-      style: simpleTextButtonStyle,
+    child: Center(
+      child: Text(
+        text,
+        style: simpleTextButtonStyle,
+      ),
+    ),
+  );
+}
+
+Container textContainerButtonWithOptions({
+  required String text,
+  required bool isDarkBackground,
+  double? height,
+}) {
+  return Container(
+    height: height,
+    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+    decoration: BoxDecoration(
+      color: isDarkBackground ? buttonTextPurple : buttonBackgroundPurple,
+      borderRadius: BorderRadius.circular(50),
+    ),
+    child: Center(
+      child: Text(
+        text,
+        style: isDarkBackground
+            ? simpleTextButtonStyle.copyWith(color: buttonBackgroundPurple, fontSize: bodyBigSize)
+            : simpleTextButtonStyle.copyWith(fontSize: bodyBigSize),
+      ),
     ),
   );
 }
@@ -413,22 +495,44 @@ Container feedHashTagContainer(String hashTag) => Container(
       ),
     );
 
+Container socialLoginContainer({
+  required Widget logo,
+  required Widget title,
+  required Color loginBackgroundColor,
+}) {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 44.w),
+    height: 60.w,
+    width: double.infinity,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(50.w),
+      color: loginBackgroundColor,
+    ),
+    child: Row(
+      children: [logo, Expanded(child: Center(child: title))],
+    ),
+  );
+}
+
 yachtSnackBar(String title) {
   return Get.rawSnackbar(
     messageText: Center(
       child: Text(
         title,
-        style: snackBarStyle,
+        style: snackBarStyle.copyWith(fontWeight: FontWeight.w500),
       ),
     ),
     snackPosition: SnackPosition.TOP,
     backgroundColor: white.withOpacity(.5),
     barBlur: 2,
     margin: EdgeInsets.only(top: 60.w),
-    duration: const Duration(seconds: 1, milliseconds: 100),
+    duration: const Duration(seconds: 1, milliseconds: 300),
     // animationDuration: const Duration(microseconds: 1000),
   );
 }
+
+// 다이얼로그
+// yachtDialog(String title)
 
 List<PopupMenuItem> communityShowMore = [
   PopupMenuItem(
@@ -460,9 +564,7 @@ List<PopupMenuItem> communityMyShowMore = [
     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     // value: index,
     height: 20.w,
-    value: Container(
-      color: Colors.red,
-    ),
+    value: 'edit',
     child: Container(
         child: Center(
             child: Text(

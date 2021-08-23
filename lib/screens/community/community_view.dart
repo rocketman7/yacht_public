@@ -21,17 +21,18 @@ class CommunityView extends StatelessWidget {
   void _onRefresh() async {
     // monitor network fetch
     // await Future.delayed(Duration(milliseconds: 1200));
-
+    await _communityViewModel.getPost();
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
 
-  void _onLoading() async {
-    // monitor network fetch
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    // await _communityViewModel.getPost();
-    _refreshController.loadComplete();
-  }
+  // void _onLoading() async {
+  //   // monitor network fetch
+  //   // if failed,use loadFailed(),if no data return,use LoadNodata()
+  //   print('loading');
+
+  //   _refreshController.loadComplete();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +51,13 @@ class CommunityView extends StatelessWidget {
               enterBottomSheetDuration: Duration(seconds: 3));
         },
         child: Container(
+          decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+            BoxShadow(
+              color: yachtShadow,
+              blurRadius: 8.w,
+              spreadRadius: 1.w,
+            )
+          ]),
           height: 54,
           width: 54,
           child: Image.asset('assets/icons/writing.png'),
@@ -63,7 +71,7 @@ class CommunityView extends StatelessWidget {
           // physics: AlwaysScrollableScrollPhysics(),
           controller: _refreshController,
           onRefresh: _onRefresh,
-          onLoading: _onLoading,
+          // onLoading: _onLoading,
           child: SingleChildScrollView(
             // physics: NeverScrollableScrollPhysics(),
             child: Padding(

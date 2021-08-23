@@ -316,6 +316,10 @@ class FirestoreService extends GetxService {
               writtenDateTime: timestampNow,
             )
             .toMap());
+
+    await _firestoreService.collection('posts').doc(newComment.commentToPostId).update({
+      'commentedBy': FieldValue.arrayUnion([docUid])
+    });
   }
 
   // 코멘트 받아오기
