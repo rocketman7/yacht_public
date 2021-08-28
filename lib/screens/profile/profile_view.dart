@@ -11,6 +11,7 @@ import '../../handlers/numbers_handler.dart';
 import '../../styles/size_config.dart';
 
 import 'asset_view.dart';
+import 'asset_view_model.dart';
 import 'profile_controller.dart';
 import 'stocks_delivery_view.dart';
 
@@ -308,10 +309,27 @@ class ProfileView extends StatelessWidget {
                             height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize),
                           ),
                           // *보유자산
-                          Text(
-                            '467,532원',
-                            style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
-                          ),
+                          GetBuilder<ProfileController>(
+                              id: 'profile',
+                              builder: (controller) {
+                                if (controller.isMe && controller.isUserModelLoaded) {
+                                  return GetBuilder<AssetViewModel>(
+                                      id: 'holdingStocks',
+                                      builder: (assetController) {
+                                        if (assetController.isHoldingStocksFutureLoad) {
+                                          return Text(
+                                            '${toPriceKRW(assetController.totalHoldingStocksValue + assetController.totalYachtPoint)}원',
+                                            style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                                          );
+                                        } else {
+                                          return Text('',
+                                              style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01));
+                                        }
+                                      });
+                                } else {
+                                  return Text('???', style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01));
+                                }
+                              }),
                         ],
                       ),
                     ),

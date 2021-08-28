@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 
 // XX * update 필요부분
 // XX 자산의 종가가 나오면 (ex, 한국시장 15:30 종가), 모든 user 의 userAsset 콜렉션의
@@ -119,7 +121,13 @@ class AssetViewModel extends GetxController {
   Future<List<AssetModel>> getAllAssets(String uid) async {
     final List<AssetModel> allAssets = [];
 
-    await firestoreService.collection('users').doc(uid).collection('userAsset').get().then((value) {
+    await firestoreService
+        .collection('users')
+        .doc(uid)
+        .collection('userAsset')
+        .orderBy('tradeDate', descending: true)
+        .get()
+        .then((value) {
       value.docs.forEach((element) {
         // print(element.data());
 
@@ -159,6 +167,8 @@ class AssetViewModel extends GetxController {
   }
 
   ///////////////////////// 실제 Controller 부분 /////////////////////////
+  static AssetViewModel get to => Get.find();
+
   late final List<AssetModel> allAssets;
   //현재 잔고 보여주기 위한 변수들
   Map<String, String> stocksNameMap = {};
@@ -169,13 +179,19 @@ class AssetViewModel extends GetxController {
   bool isHoldingStocksFutureLoad = false;
   int totalYachtPoint = 0;
   double totalHoldingStocksValue = 0.0;
+  double totalDeliveriedValue = 0.0;
   //주식 잔고 출고 페이지에서 사용자가 값을 바꾸는 obs 변수들
   List<RxInt> stocksDeliveryNum = [0.obs];
   RxDouble totalDeliveryValue = 0.0.obs;
+  //상금 히스토리 더보기 화면 전 최대 보여줄 갯수
+  int maxHistoryVisibleNum = 3;
 
   @override
   void onInit() async {
-    allAssets = await getAllAssets('kakao:1518231402');
+    // allAssets = await getAllAssets('kakao:1518231402');
+    allAssets = await getAllAssets('kakao:1513684681');
+
+    update(['assets']);
 
     calcHoldingStocksAndYachtPoint();
 
@@ -217,6 +233,8 @@ class AssetViewModel extends GetxController {
           } else {
             stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] = -allAssets[i].awards![j].sharesNum.toInt();
           }
+
+          totalDeliveriedValue += allAssets[i].awards![j].priceAtTrade * allAssets[i].awards![j].sharesNum;
         }
       } else if (allAssets[i].assetCategory == "Ing") {
         for (int j = 0; j < allAssets[i].awards!.length; j++) {
@@ -230,11 +248,14 @@ class AssetViewModel extends GetxController {
           } else {
             stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] = -allAssets[i].awards![j].sharesNum.toInt();
           }
+
+          totalDeliveriedValue += allAssets[i].awards![j].priceAtTrade * allAssets[i].awards![j].sharesNum;
         }
       } else if (allAssets[i].assetCategory == "YachtPoint") {
         totalYachtPoint += allAssets[i].yachtPoint!.toInt();
       } else if (allAssets[i].assetCategory == "UseYachtPoint") {
         totalYachtPoint -= allAssets[i].yachtPoint!.toInt();
+        totalDeliveriedValue += allAssets[i].yachtPoint!;
       }
     }
 
@@ -262,27 +283,7 @@ class AssetViewModel extends GetxController {
   }
 
   Future<void> calcAllHoldingStocks() async {
-    // Future.forEach(stocksSharesNumMap.keys, (element) async {
-    //   double currentPrice = await getCurrentStocksPrice(element.toString());
-
-    //   if (stocksSharesNumMap[element.toString()] != 0) {
-    //     allHoldingStocks.add(HoldingAwardModel(
-    //         issueCode: element.toString(),
-    //         name: stocksNameMap[element.toString()]!,
-    //         priceAtAward: stocksAveragePriceAtAwardMap[element.toString()]!,
-    //         sharesNum: stocksSharesNumMap[element.toString()]!,
-    //         currentPrice: currentPrice));
-
-    //     stocksDeliveryNum.add(0.obs);
-
-    //     totalHoldingStocksValue +=
-    //         currentPrice * stocksSharesNumMap[element.toString()]!;
-    //   }
-    // });
-
-    ////// FOREACH의 경우 await를 해도 그 한 줄 한 줄을 기다리는게 아니기 때문에
-    ////// 아래 코드는 잘못된 것임. 고치는 중 (시차를 두고 하면 되지만 바로 계산이 안되기때매)
-    stocksSharesNumMap.forEach((key, value) async {
+    for (var key in stocksSharesNumMap.keys) {
       double currentPrice = await getCurrentStocksPrice(key);
 
       if (stocksSharesNumMap[key] != 0) {
@@ -297,14 +298,12 @@ class AssetViewModel extends GetxController {
 
         totalHoldingStocksValue += currentPrice * stocksSharesNumMap[key]!;
       }
-    });
+    }
 
-    // await Future.delayed(Duration(seconds: 2), () {
     isHoldingStocksFutureLoad = true;
     update(['holdingStocks']);
 
-    print('total value ' + totalHoldingStocksValue.toString());
-    // });
+    // print('total value ' + totalHoldingStocksValue.toString());
   }
 
   void tapPlusButton(int index) {
@@ -354,6 +353,85 @@ class AssetViewModel extends GetxController {
   }
 
   void deliveryToFRIEND() {
-    print('deliveryToFRIEND');
+    // print('deliveryToFRIEND');
+  }
+
+  // 출고대기중/완료/요트포인트 획득 등의 문자를 생성하여 리턴해준다
+  String getStringTradeDetail(int index) {
+    switch (allAssets[index].assetCategory) {
+      case "Award":
+        String temp = (allAssets[index].awards!.length > 1) ? " 외 ${allAssets[index].awards!.length - 1}건" : "";
+        return "${allAssets[index].awards![0].name} ${allAssets[index].awards![0].sharesNum}주" + temp;
+      case "Ing":
+        return "출고 대기중";
+      case "Delivery":
+        return "출고 완료";
+      case "YachtPoint":
+        return "요트 포인트 획득";
+      case "UseYachtPoint":
+        return "요트 포인트 사용";
+      default:
+        return "";
+    }
+  }
+
+  //
+  String plusSymbolReturn(int index) {
+    switch (allAssets[index].assetCategory) {
+      case "Award":
+        return "+";
+      case "YachtPoint":
+        return "+";
+      default:
+        return "";
+    }
+  }
+
+  // 금액 문자를 생성하여 리턴해준다.
+  num getNumTotalAwardsOrYachtPoint(int index) {
+    switch (allAssets[index].assetCategory) {
+      case "Award":
+        double totalValue = 0.0;
+        for (var items in allAssets[index].awards!) {
+          totalValue += items.priceAtTrade * items.sharesNum;
+        }
+        return totalValue;
+      case "Ing":
+        double totalValue = 0.0;
+        for (var items in allAssets[index].awards!) {
+          totalValue -= items.priceAtTrade * items.sharesNum;
+        }
+        return totalValue;
+      case "Delivery":
+        double totalValue = 0.0;
+        for (var items in allAssets[index].awards!) {
+          totalValue -= items.priceAtTrade * items.sharesNum;
+        }
+        return totalValue;
+      case "YachtPoint":
+        return allAssets[index].yachtPoint!;
+      case "UseYachtPoint":
+        return -allAssets[index].yachtPoint!;
+      default:
+        return 0;
+    }
+  }
+
+  // 색깔 결정
+  Color getColorTotalAwardsOrYachtPointNum(int index) {
+    switch (allAssets[index].assetCategory) {
+      case "Award":
+        return yachtRed;
+      case "Ing":
+        return seaBlue;
+      case "Delivery":
+        return seaBlue;
+      case "YachtPoint":
+        return yachtRed;
+      case "UseYachtPoint":
+        return seaBlue;
+      default:
+        return yachtBlack;
+    }
   }
 }

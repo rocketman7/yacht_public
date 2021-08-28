@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/profile/asset_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 
@@ -195,6 +196,11 @@ class ProfileController extends GetxController {
     }
     isUserModelLoaded = true;
     update(['profile']);
+
+    if (isMe) {
+      // 내 프로필 보는 거라면 잔고 불러와야 하니까 미리 풋 해놓는다.
+      Get.put(AssetViewModel());
+    }
 
     stockModels = await loadFavoriteStocks();
     stockHistoricalPriceModels = await loadFavoriteStocksPrices();

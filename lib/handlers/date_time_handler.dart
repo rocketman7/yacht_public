@@ -1,5 +1,6 @@
 // String 형식의 DateTime을 DateTime으로 변환
 // 타임존 처리 필요
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 DateFormat dateInString = DateFormat("yyyyMMdd");
@@ -44,23 +45,13 @@ String? dateTimeToString(DateTime dateTime, int digit) {
 
 DateTime marketStartKR(String date) {
   DateTime marketStart = DateTime(
-      int.parse(date.substring(0, 4)),
-      int.parse(date.substring(4, 6)),
-      int.parse(date.substring(6, 8)),
-      09,
-      00,
-      00);
+      int.parse(date.substring(0, 4)), int.parse(date.substring(4, 6)), int.parse(date.substring(6, 8)), 09, 00, 00);
   return marketStart;
 }
 
 DateTime marketEndKR(String date) {
   DateTime marketStart = DateTime(
-      int.parse(date.substring(0, 4)),
-      int.parse(date.substring(4, 6)),
-      int.parse(date.substring(6, 8)),
-      15,
-      30,
-      00);
+      int.parse(date.substring(0, 4)), int.parse(date.substring(4, 6)), int.parse(date.substring(6, 8)), 15, 30, 00);
   return marketStart;
 }
 
@@ -86,6 +77,11 @@ String feedTimeHandler(DateTime writtenDateTime) {
   } else {
     return feedDateTimeInString.format(writtenDateTime);
   }
+}
+
+// DB timeStamp형식을 xxxx년 0x월 0x일 형식으로 (상금 히스토리에서 쓰이는)
+String timeStampToString(Timestamp time) {
+  return '${time.toDate().year}년 ${time.toDate().month}월 ${time.toDate().day}일';
 }
 
   // return "Now";

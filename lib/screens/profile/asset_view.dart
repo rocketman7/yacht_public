@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/screens/profile/award_history_view.dart';
 import 'package:yachtOne/screens/profile/stocks_delivery_view.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
@@ -53,7 +54,7 @@ TextStyle assetViewTextStyle5 = TextStyle(
 );
 
 class AssetView extends StatelessWidget {
-  final AssetViewModel assetViewModel = Get.put(AssetViewModel());
+  final AssetViewModel assetViewModel = Get.find<AssetViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -97,10 +98,16 @@ class AssetView extends StatelessWidget {
                         GetBuilder<AssetViewModel>(
                             id: 'holdingStocks',
                             builder: (controller) {
-                              return Text(
-                                '${toPriceKRW(controller.totalYachtPoint + controller.totalHoldingStocksValue)}',
-                                style: assetViewTextStyle3,
-                              );
+                              if (controller.isHoldingStocksFutureLoad)
+                                return Text(
+                                  '${toPriceKRW(controller.totalYachtPoint + controller.totalHoldingStocksValue)}',
+                                  style: assetViewTextStyle3,
+                                );
+                              else
+                                return Text(
+                                  '',
+                                  style: assetViewTextStyle3,
+                                );
                             }),
                         Text(
                           ' 원',
@@ -146,7 +153,18 @@ class AssetView extends StatelessWidget {
                                   style: assetViewTextStyle2.copyWith(fontWeight: FontWeight.w300),
                                 ),
                                 Spacer(),
-                                Text('132,200 원', style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300)),
+                                GetBuilder<AssetViewModel>(
+                                    id: 'holdingStocks',
+                                    builder: (controller) {
+                                      if (controller.isHoldingStocksFutureLoad)
+                                        return Text(
+                                          '${toPriceKRW(controller.totalHoldingStocksValue)} 원',
+                                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
+                                        );
+                                      else
+                                        return Text('',
+                                            style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300));
+                                    }),
                               ],
                             ),
                           ),
@@ -170,7 +188,20 @@ class AssetView extends StatelessWidget {
                                   style: assetViewTextStyle2.copyWith(fontWeight: FontWeight.w300),
                                 ),
                                 Spacer(),
-                                Text('743,121 원', style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300)),
+                                GetBuilder<AssetViewModel>(
+                                    id: 'holdingStocks',
+                                    builder: (controller) {
+                                      if (controller.isHoldingStocksFutureLoad)
+                                        return Text(
+                                          '${toPriceKRW(controller.totalYachtPoint)} 원',
+                                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
+                                        );
+                                      else
+                                        return Text(
+                                          '',
+                                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
+                                        );
+                                    }),
                               ],
                             ),
                           ),
@@ -193,21 +224,14 @@ class AssetView extends StatelessWidget {
                           style: assetViewTextStyle2,
                         ),
                         Spacer(),
-                        Text(
-                          '1,422,021',
-                          style: assetViewTextStyle3,
-                        ),
-                        // GetBuilder<AssetViewModel>(
-                        //   id: 'holdingStocks',
-                        //   builder: (controller) {
-                        //     if (controller.isHoldingStocksFutureLoad) {
-                        //       return Text(
-                        //           '${assetViewModel.allHoldingStocks[0].currentPrice}');
-                        //     } else {
-                        //       return Text('');
-                        //     }
-                        //   },
-                        // ),
+                        GetBuilder<AssetViewModel>(
+                            id: 'assets',
+                            builder: (controller) {
+                              return Text(
+                                '${toPriceKRW(controller.totalDeliveriedValue)}',
+                                style: assetViewTextStyle3,
+                              );
+                            }),
                         Text(
                           ' 원',
                           style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
@@ -235,10 +259,20 @@ class AssetView extends StatelessWidget {
                           style: assetViewTextStyle2,
                         ),
                         Spacer(),
-                        Text(
-                          '2,278,342',
-                          style: assetViewTextStyle3,
-                        ),
+                        GetBuilder<AssetViewModel>(
+                            id: 'holdingStocks',
+                            builder: (controller) {
+                              if (controller.isHoldingStocksFutureLoad)
+                                return Text(
+                                  '${toPriceKRW(controller.totalDeliveriedValue + controller.totalHoldingStocksValue + controller.totalYachtPoint)}',
+                                  style: assetViewTextStyle3,
+                                );
+                              else
+                                return Text(
+                                  '',
+                                  style: assetViewTextStyle3,
+                                );
+                            }),
                         Text(
                           ' 원',
                           style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
@@ -341,22 +375,39 @@ class AssetView extends StatelessWidget {
                   style: assetViewTextStyle1,
                 ),
                 Spacer(),
-                Text(
-                  '더 보기',
-                  style: assetViewTextStyle5,
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    Get.to(() => AwardHistoryView());
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        '더 보기',
+                        style: assetViewTextStyle5,
+                      ),
+                      SizedBox(
+                        width: 3.w,
+                      ),
+                      Image.asset(
+                        'assets/icons/navigate_foward_arrow.png',
+                        height: 10.w,
+                        width: 5.w,
+                        color: yachtGrey,
+                      )
+                    ],
+                  ),
                 ),
-                SizedBox(
-                  width: 3.w,
-                ),
-                Image.asset(
-                  'assets/icons/navigate_foward_arrow.png',
-                  height: 10.w,
-                  width: 5.w,
-                  color: yachtGrey,
-                )
               ],
             ),
           ),
+          SizedBox(
+            height: 18.w,
+          ),
+          AwardHistoryColumnWidget(isFullHistory: false),
+          SizedBox(
+            height: 30.w,
+          )
         ]));
   }
 }
