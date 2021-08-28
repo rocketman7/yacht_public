@@ -5,7 +5,12 @@ import 'yacht_design_system.dart';
 
 ThemeData theme() {
   return ThemeData(
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: white, elevation: 0.0, selectedItemColor: Colors.black, unselectedItemColor: Colors.grey, unselectedLabelStyle: TextStyle(color: primaryFontColor)),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: white,
+        elevation: 0.0,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        unselectedLabelStyle: TextStyle(color: primaryFontColor)),
     scaffoldBackgroundColor: white,
     fontFamily: "SCore",
     appBarTheme: appBarTheme(),

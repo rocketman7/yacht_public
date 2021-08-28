@@ -19,12 +19,16 @@ class AuthCheckViewModel extends GetxController {
     // TODO: implement onInit
     currentUser!.bindStream(_authService.auth.authStateChanges());
     currentUser!.listen((user) async {
-      print('listening');
+      // print('listening');
       if (user != null) {
         // userModelRx.value = await _firestoreService.getUserModel(user.uid);
         userModelRx.bindStream(_userRepository.getUserStream(user.uid));
-        userQuestModelRx
-            .bindStream(_userRepository.getUserQuestStream(user.uid));
+        userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
+
+        // print('this user: ${userModelRx.value}.');
+        userModelRx.listen((user) {
+          print('this user: $user');
+        });
       }
     });
     // _authService.auth.signOut();

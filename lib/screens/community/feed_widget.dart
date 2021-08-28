@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,6 +11,7 @@ import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/community_view.dart';
 import 'package:yachtOne/screens/community/community_view_model.dart';
+import 'package:yachtOne/screens/community/community_widgets.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +20,7 @@ import 'package:expandable_page_view/expandable_page_view.dart';
 import '../../locator.dart';
 import 'detail_post_view.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:styled_widget/styled_widget.dart';
 
 class FeedWidget extends StatelessWidget {
   final CommunityViewModel communityViewModel;
@@ -89,59 +92,70 @@ class FeedWidget extends StatelessWidget {
                         switch (value) {
                           case 'edit':
                             Get.bottomSheet(
-                                EditingMyPost(
-                                  // contentFormKey: _contentFormKey,
-                                  // contentController: _contentController,
-                                  communityViewModel: communityViewModel,
-                                  post: post,
-                                ),
-                                isScrollControlled: true,
-                                ignoreSafeArea: false, // add this
-                                enterBottomSheetDuration: Duration(seconds: 3));
+                              EditingMyPost(
+                                // contentFormKey: _contentFormKey,
+                                // contentController: _contentController,
+                                communityViewModel: communityViewModel,
+                                post: post,
+                              ),
+                              isScrollControlled: true,
+                              ignoreSafeArea: false, // add this
+                            );
                             break;
                           case 'delete':
-                            Get.dialog(Dialog(
-                                insetPadding: primaryHorizontalPadding,
-                                child: Container(
-                                    padding: EdgeInsets.fromLTRB(
-                                        14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text("알림", style: dialogTitle),
-                                        SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                        SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                        Text("정말 삭제하시겠습니까?", style: dialogContent),
-                                        Text(
-                                          "삭제 후 되돌릴 수 없습니다.",
-                                          style: dialogWarning,
-                                        ),
-                                        SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: GestureDetector(
-                                                  onTap: () {},
-                                                  child: textContainerButtonWithOptions(
-                                                    text: "예",
-                                                    isDarkBackground: true,
-                                                    height: 44.w,
-                                                  )),
-                                            ),
-                                            SizedBox(width: 8.w),
-                                            Expanded(
-                                              child: InkWell(
-                                                  onTap: () {
-                                                    Get.back(canPop: true);
-                                                  },
-                                                  child: textContainerButtonWithOptions(
-                                                      text: "아니오", isDarkBackground: false, height: 44.w)),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ))));
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                      insetPadding: primaryHorizontalPadding,
+                                      child: Container(
+                                          padding: EdgeInsets.fromLTRB(
+                                              14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text("알림", style: dialogTitle),
+                                              SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                              SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                              Text("정말 삭제하시겠습니까?", style: dialogContent),
+                                              Text(
+                                                "삭제 후 되돌릴 수 없습니다.",
+                                                style: dialogWarning,
+                                              ),
+                                              SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: GestureDetector(
+                                                        onTap: () async {
+                                                          HapticFeedback.lightImpact();
+                                                          await communityViewModel.deletePost(post);
+                                                          await communityViewModel.getPost();
+                                                          Navigator.of(context).pop();
+                                                          yachtSnackBar("피드가 삭제되었습니다");
+                                                        },
+                                                        child: textContainerButtonWithOptions(
+                                                          text: "예",
+                                                          isDarkBackground: true,
+                                                          height: 44.w,
+                                                        )),
+                                                  ),
+                                                  SizedBox(width: 8.w),
+                                                  Expanded(
+                                                    child: InkWell(
+                                                        onTap: () {
+                                                          Navigator.of(context).pop();
+                                                          // Get.back(closeOverlays: true);
+                                                        },
+                                                        child: textContainerButtonWithOptions(
+                                                            text: "아니오", isDarkBackground: false, height: 44.w)),
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          )));
+                                });
                             break;
                           default:
                         }
@@ -446,6 +460,7 @@ class EditingMyPost extends StatelessWidget {
                           print(_contentController.value.text);
                           await _communityViewModel.editPost(post, _contentController.value.text);
                           await _communityViewModel.getPost();
+
                           Get.back();
                           yachtSnackBar("성공적으로 수정 되었어요.");
                         }

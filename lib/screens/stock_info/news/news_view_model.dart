@@ -8,19 +8,19 @@ import '../../../locator.dart';
 import '../stock_info_kr_view_model.dart';
 
 class NewsViewModel extends GetxController {
-  final StockAddressModel stockAddressModel;
+  final InvestAddressModel investAddressModel;
 
-  NewsViewModel(this.stockAddressModel);
+  NewsViewModel(this.investAddressModel);
   RxBool isLoading = true.obs;
   final RxString corporationName = RxString("");
   @override
   void onInit() {
     // TODO: implement onInit
-    corporationName(stockAddressModel.name);
+    corporationName(investAddressModel.name);
     newStockAddress!.listen((value) {
       getNews(value);
     });
-    getNews(stockAddressModel);
+    getNews(investAddressModel);
 
     super.onInit();
   }
@@ -30,10 +30,10 @@ class NewsViewModel extends GetxController {
 
   RxList<NewsModel> newsList = <NewsModel>[].obs;
 
-  Future getNews(StockAddressModel stockAddressModel) async {
+  Future getNews(InvestAddressModel investAddressModel) async {
     isLoading(true);
-    corporationName(stockAddressModel.name);
-    newsList(await _firestoreService.getNews(stockAddressModel));
+    corporationName(investAddressModel.name);
+    newsList(await _firestoreService.getNews(investAddressModel));
     isLoading(false);
   }
 }

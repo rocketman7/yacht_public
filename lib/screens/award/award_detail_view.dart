@@ -84,14 +84,14 @@ class AwardDetailView extends StatelessWidget {
                                     ),
                                     Container(
                                       child: Center(
-                                        child: Obx(() => Image.asset(
-                                              'assets/icons/award_left_arrow.png',
-                                              height: 30.w,
-                                              width: 30.w,
-                                              color: _awardViewModel.pageIndexForUI.value == 0
-                                                  ? Colors.transparent
-                                                  : primaryFontColor,
-                                            )),
+                                        child: Image.asset(
+                                          'assets/icons/award_left_arrow.png',
+                                          height: 30.w,
+                                          width: 30.w,
+                                          // color: _awardViewModel.pageIndexForUI.value == 0
+                                          //     ? Colors.transparent
+                                          //     : primaryFontColor,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -122,15 +122,15 @@ class AwardDetailView extends StatelessWidget {
                                     ),
                                     Container(
                                       child: Center(
-                                        child: Obx(() => Image.asset(
-                                              'assets/icons/award_right_arrow.png',
-                                              height: 30.w,
-                                              width: 30.w,
-                                              color: _awardViewModel.pageIndexForUI.value ==
-                                                      _awardViewModel.allSubLeagues.length - 1
-                                                  ? Colors.transparent
-                                                  : primaryFontColor,
-                                            )),
+                                        child: Image.asset(
+                                          'assets/icons/award_right_arrow.png',
+                                          height: 30.w,
+                                          width: 30.w,
+                                          // color: _awardViewModel.pageIndexForUI.value ==
+                                          //         _awardViewModel.allSubLeagues.length - 1
+                                          //     ? Colors.transparent
+                                          //     : primaryFontColor,
+                                        ),
                                       ),
                                     ),
                                   ],

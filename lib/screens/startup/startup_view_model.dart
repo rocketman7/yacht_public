@@ -5,12 +5,13 @@ import 'package:yachtOne/screens/community/community_view_model.dart';
 
 class StartupViewModel extends GetxController {
   late LeagueAddressModel addressModel;
-  late RxInt selectedPage;
+  RxInt selectedPage = 0.obs;
   @override
   void onInit() {
-    selectedPage = 0.obs;
+    // selectedPage = 0.obs;
     // get league Address
-    Future.delayed(Duration(seconds: 1)).then((value) => addressModel = LeagueAddressModel(league: "league001", date: "20210706", uid: "uid"));
+    Future.delayed(Duration(seconds: 1))
+        .then((value) => addressModel = LeagueAddressModel(league: "league001", date: "20210706", uid: "uid"));
     super.onInit();
   }
 }

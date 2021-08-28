@@ -19,44 +19,34 @@ import 'chart_view_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Color chartTrackingColor(ChartViewModel chartViewModel) {
-  return (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! -
-              1) >
-          0
+  return (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1) > 0
       ? bullColorKR
-      : (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! -
-                  1) <
-              0
+      : (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1) < 0
           ? bearColorKR
           : Colors.black;
 }
 
 Color chartClosePriceColor(ChartViewModel chartViewModel) {
-  return (chartViewModel.chartPrices!.first.close! -
-              chartViewModel.chartPrices!.last.close!) >
-          0
+  return (chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!) > 0
       ? bullColorKR
-      : (chartViewModel.chartPrices!.first.close! -
-                  chartViewModel.chartPrices!.last.close!) <
-              0
+      : (chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!) < 0
           ? bearColorKR
           : Colors.black;
 }
 
 class ChartView extends StatelessWidget {
-  final StockAddressModel stockAddressModel;
+  final InvestAddressModel investAddressModel;
   final ChartViewModel chartViewModel;
   // onTrackballPositionChanging에서 X Position이 변했는지 체크하기 위해 직전 X Position을 저장
 
-  ChartView(
-      {Key? key, required this.stockAddressModel, required this.chartViewModel})
-      : super(key: key);
+  ChartView({Key? key, required this.investAddressModel, required this.chartViewModel}) : super(key: key);
 
   double previousXPosition = 0;
 
   @override
   Widget build(BuildContext context) {
     // ChartViewModel chartViewModel =
-    //     Get.put(ChartViewModel(stockAddressModel: stockAddressModel));
+    //     Get.put(ChartViewModel(investAddressModel: investAddressModel));
 
     // Get.put(ChartViewModel(field: field, market: market, issueCode: issueCode));
     // Mixin Builder로 하니까 차트 onTap마다 차트가 다시 그려졌음.
@@ -72,14 +62,10 @@ class ChartView extends StatelessWidget {
         Obx(
           // 캔들 차트에서 트래킹할 때 보여주는 화면 구현
           () => Stack(children: [
-            (chartViewModel.isTracking.value == true &&
-                    chartViewModel.showingCandleChart.value)
+            (chartViewModel.isTracking.value == true && chartViewModel.showingCandleChart.value)
                 ? Opacity(
-                    opacity: 1 - chartViewModel.opacity.value < 0
-                        ? 0
-                        : 1 - chartViewModel.opacity.value,
-                    child: DetailedPriceDisplayVer2(
-                        chartViewModel: chartViewModel),
+                    opacity: 1 - chartViewModel.opacity.value < 0 ? 0 : 1 - chartViewModel.opacity.value,
+                    child: DetailedPriceDisplayVer2(chartViewModel: chartViewModel),
                   )
                 : Container(),
             // 트래킹 안할 때 기본 차트 뷰 헤더
@@ -104,7 +90,7 @@ class ChartView extends StatelessWidget {
           ]),
         ),
         Obx(() => (chartViewModel.isLoading.value == true)
-            ? Container(height: 200.w, color: Colors.blue)
+            ? Container(height: 200.w, color: Colors.transparent)
             : Container(
                 height: 200.w,
                 // color: Colors.white,
@@ -123,8 +109,7 @@ class ChartView extends StatelessWidget {
                       // if (previousXPosition !=
                       //     args.chartPointInfo.xPosition) {
                       // print(args.chartPointInfo.seriesIndex);
-                      if (args.chartPointInfo.seriesIndex == 0 &&
-                          previousXPosition != args.chartPointInfo.xPosition) {
+                      if (args.chartPointInfo.seriesIndex == 0 && previousXPosition != args.chartPointInfo.xPosition) {
                         // Printing Coordinate intersect point of first line
                         HapticFeedback.lightImpact();
                         print(args.chartPointInfo.chartDataPoint!.x);
@@ -181,9 +166,7 @@ class ChartView extends StatelessWidget {
                         isVisible: false),
                     primaryYAxis: NumericAxis(
                         maximum: chartViewModel.maxPrice!,
-                        minimum: (5 * chartViewModel.minPrice! -
-                                chartViewModel.maxPrice!) /
-                            4,
+                        minimum: (5 * chartViewModel.minPrice! - chartViewModel.maxPrice!) / 4,
                         // chartViewModel.minPrice! *
                         //     0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
                         majorGridLines: MajorGridLines(width: 0),
@@ -228,9 +211,7 @@ class ChartView extends StatelessWidget {
                       : Text(
                           chartViewModel.cycles[index],
                           style: stockPriceChangeTextStyle.copyWith(
-                              color: chartViewModel.selectedCycle.value == index
-                                  ? Colors.white
-                                  : primaryFontColor),
+                              color: chartViewModel.selectedCycle.value == index ? Colors.white : primaryFontColor),
                         ),
                   isSelected: isSelected,
                   color: (chartViewModel.isLoading.value && isSelected)
@@ -238,14 +219,10 @@ class ChartView extends StatelessWidget {
                       : chartViewModel.isLoading.value
                           ? primaryBackgroundColor
                           : isSelected
-                              ? (chartViewModel.chartPrices!.first.close! -
-                                          chartViewModel
-                                              .chartPrices!.last.close!) >
-                                      0
+                              ? (chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!) > 0
                                   ? bullColorKR
                                   : (chartViewModel.chartPrices!.first.close! -
-                                              chartViewModel
-                                                  .chartPrices!.last.close!) <
+                                              chartViewModel.chartPrices!.last.close!) <
                                           0
                                       ? bearColorKR
                                       : Colors.black54
@@ -261,22 +238,22 @@ class ChartView extends StatelessWidget {
         //     TextButton(
         //         onPressed: () {
         //           // chartViewModel.getPrices(
-        //           //     stockAddressModel.copyWith(issueCode: "005930"));
+        //           //     investAddressModel.copyWith(issueCode: "005930"));
         //           chartViewModel.changeStockAddressModel(
-        //               stockAddressModel.copyWith(issueCode: "005930"));
-        //           // chartViewModel.stockAddressModel =
-        //           //     stockAddressModel.copyWith(issueCode: "005930");
+        //               investAddressModel.copyWith(issueCode: "005930"));
+        //           // chartViewModel.investAddressModel =
+        //           //     investAddressModel.copyWith(issueCode: "005930");
         //           chartViewModel.getPrices(newStockAddress!.value);
         //         },
         //         child: Text("0번")),
         //     TextButton(
         //         onPressed: () {
         //           // chartViewModel.getPrices(
-        //           //     stockAddressModel.copyWith(issueCode: "326030"));
+        //           //     investAddressModel.copyWith(issueCode: "326030"));
         //           chartViewModel.changeStockAddressModel(
-        //               stockAddressModel.copyWith(issueCode: "326030"));
-        //           // chartViewModel.stockAddressModel =
-        //           // stockAddressModel.copyWith(issueCode: "326030");
+        //               investAddressModel.copyWith(issueCode: "326030"));
+        //           // chartViewModel.investAddressModel =
+        //           // investAddressModel.copyWith(issueCode: "326030");
         //           chartViewModel.getPrices(newStockAddress!.value);
         //         },
         //         child: Text("1번")),
@@ -301,14 +278,12 @@ class ChartView extends StatelessWidget {
           highValueMapper: (ChartPriceModel chart, _) => chart.high,
           openValueMapper: (ChartPriceModel chart, _) => chart.open,
           closeValueMapper: (ChartPriceModel chart, _) => chart.close,
-          xValueMapper: (ChartPriceModel chart, _) =>
-              stringToDateTime(chart.dateTime!),
+          xValueMapper: (ChartPriceModel chart, _) => stringToDateTime(chart.dateTime!),
           showIndicationForSameValues: true,
         ),
         ColumnSeries<ChartPriceModel, DateTime>(
             dataSource: chartPrices,
-            xValueMapper: (ChartPriceModel chart, _) =>
-                stringToDateTime(chart.dateTime!),
+            xValueMapper: (ChartPriceModel chart, _) => stringToDateTime(chart.dateTime!),
             yValueMapper: (ChartPriceModel chart, _) => chart.tradeVolume!,
             yAxisName: 'volume',
             color: volumeColor)
@@ -343,8 +318,7 @@ class ChartView extends StatelessWidget {
           enableTooltip: true,
           // <ChartModel>[
 
-          xValueMapper: (ChartPriceModel chart, _) =>
-              stringToDateTime(chart.dateTime!),
+          xValueMapper: (ChartPriceModel chart, _) => stringToDateTime(chart.dateTime!),
           yValueMapper: (ChartPriceModel chart, _) => chart.close,
           // animationDuration: 1000,
         )
@@ -373,30 +347,24 @@ class DetailedPriceDisplay extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("시가",
-                      style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
-                  Text(toPriceKRW(chartViewModel.open.value),
-                      style: ohlcPriceStyle)
+                  Text("시가", style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
+                  Text(toPriceKRW(chartViewModel.open.value), style: ohlcPriceStyle)
                 ],
               ),
               SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("고가",
-                      style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
-                  Text(toPriceKRW(chartViewModel.high.value),
-                      style: ohlcPriceStyle)
+                  Text("고가", style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
+                  Text(toPriceKRW(chartViewModel.high.value), style: ohlcPriceStyle)
                 ],
               ),
               SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("거래량",
-                      style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
-                  Text(toPriceKRW(chartViewModel.volume.value),
-                      style: ohlcPriceStyle)
+                  Text("거래량", style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
+                  Text(toPriceKRW(chartViewModel.volume.value), style: ohlcPriceStyle)
                 ],
               )
             ],
@@ -409,20 +377,16 @@ class DetailedPriceDisplay extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("종가",
-                      style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
-                  Text(toPriceKRW(chartViewModel.close.value),
-                      style: ohlcPriceStyle)
+                  Text("종가", style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
+                  Text(toPriceKRW(chartViewModel.close.value), style: ohlcPriceStyle)
                 ],
               ),
               SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("저가",
-                      style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
-                  Text(toPriceKRW(chartViewModel.low.value),
-                      style: ohlcPriceStyle)
+                  Text("저가", style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
+                  Text(toPriceKRW(chartViewModel.low.value), style: ohlcPriceStyle)
                 ],
               ),
               SizedBox(height: 8),
@@ -430,8 +394,7 @@ class DetailedPriceDisplay extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(" ",
-                      style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
+                  Text(" ", style: ohlcInfoStyle.copyWith(color: Colors.grey[600])),
                   Text("", style: ohlcPriceStyle)
                 ],
               )
@@ -458,9 +421,7 @@ class DetailedPriceDisplayVer2 extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-                child:
-                    MainPriceTrackingDisplay(chartViewModel: chartViewModel)),
+            Expanded(child: MainPriceTrackingDisplay(chartViewModel: chartViewModel)),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -470,8 +431,7 @@ class DetailedPriceDisplayVer2 extends StatelessWidget {
                     children: [
                       Text("시가", style: questTermTextStyle),
                       Text('${toPriceKRW(chartViewModel.open.value)}원',
-                          style: questTermTextStyle.copyWith(
-                              color: primaryFontColor))
+                          style: questTermTextStyle.copyWith(color: primaryFontColor))
                     ],
                   ),
                   SizedBox(height: 8),
@@ -480,8 +440,7 @@ class DetailedPriceDisplayVer2 extends StatelessWidget {
                     children: [
                       Text("고가", style: questTermTextStyle),
                       Text('${toPriceKRW(chartViewModel.high.value)}원',
-                          style: questTermTextStyle.copyWith(
-                              color: primaryFontColor))
+                          style: questTermTextStyle.copyWith(color: primaryFontColor))
                     ],
                   ),
                   SizedBox(height: 8),
@@ -490,8 +449,7 @@ class DetailedPriceDisplayVer2 extends StatelessWidget {
                     children: [
                       Text("저가", style: questTermTextStyle),
                       Text('${toPriceKRW(chartViewModel.low.value)}원',
-                          style: questTermTextStyle.copyWith(
-                              color: primaryFontColor))
+                          style: questTermTextStyle.copyWith(color: primaryFontColor))
                     ],
                   ),
                   SizedBox(height: 8),
@@ -500,8 +458,7 @@ class DetailedPriceDisplayVer2 extends StatelessWidget {
                     children: [
                       Text("거래량", style: questTermTextStyle),
                       Text('${toPriceKRW(chartViewModel.volume.value)}주',
-                          style: questTermTextStyle.copyWith(
-                              color: primaryFontColor))
+                          style: questTermTextStyle.copyWith(color: primaryFontColor))
                     ],
                   )
                 ],
@@ -629,8 +586,7 @@ class MainPriceTrackingDisplay extends StatelessWidget {
                     chartViewModel.isTracking.value == true
                         ? "${toPriceKRW(chartViewModel.close.value)}"
                         : "${toPriceKRW(chartViewModel.chartPrices!.first.close!)}",
-                    style: stockPriceTextStyle.copyWith(
-                        fontSize: 26.w, height: 1.4),
+                    style: stockPriceTextStyle.copyWith(fontSize: 26.w, height: 1.4),
                   ),
                   Row(
                     children: [
@@ -641,28 +597,16 @@ class MainPriceTrackingDisplay extends StatelessWidget {
                         style: stockPriceChangeTextStyle.copyWith(
                             height: 1.2,
                             color: chartViewModel.isTracking.value == true
-                                ? (chartViewModel.close.value /
-                                                chartViewModel
-                                                    .chartPrices!.last.close! -
-                                            1) >
-                                        0
+                                ? (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1) > 0
                                     ? bullColorKR
-                                    : (chartViewModel.close.value /
-                                                    chartViewModel.chartPrices!
-                                                        .last.close! -
-                                                1) <
-                                            0
+                                    : (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1) < 0
                                         ? bearColorKR
                                         : Colors.black
-                                : (chartViewModel.chartPrices!.first.close! -
-                                            chartViewModel
-                                                .chartPrices!.last.close!) >
+                                : (chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!) >
                                         0
                                     ? bullColorKR
-                                    : (chartViewModel
-                                                    .chartPrices!.first.close! -
-                                                chartViewModel
-                                                    .chartPrices!.last.close!) <
+                                    : (chartViewModel.chartPrices!.first.close! -
+                                                chartViewModel.chartPrices!.last.close!) <
                                             0
                                         ? bearColorKR
                                         : Colors.black),
@@ -674,33 +618,18 @@ class MainPriceTrackingDisplay extends StatelessWidget {
                               : "(${toPercentageChange(chartViewModel.chartPrices!.first.close! / chartViewModel.chartPrices!.last.close! - 1)})",
                           style: detailPriceStyle.copyWith(
                               color: chartViewModel.isTracking.value == true
-                                  ? (chartViewModel.close.value /
-                                                  chartViewModel.chartPrices!
-                                                      .last.close! -
-                                              1) >
-                                          0
+                                  ? (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1) > 0
                                       ? bullColorKR
-                                      : (chartViewModel.close.value /
-                                                      chartViewModel
-                                                          .chartPrices!
-                                                          .last
-                                                          .close! -
-                                                  1) <
-                                              0
+                                      : (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1) < 0
                                           ? bearColorKR
                                           : Colors.black
                                   : (chartViewModel.chartPrices!.first.close! /
-                                                  chartViewModel.chartPrices!
-                                                      .last.close! -
+                                                  chartViewModel.chartPrices!.last.close! -
                                               1) >
                                           0
                                       ? bullColorKR
-                                      : (chartViewModel.chartPrices!.first
-                                                          .close! /
-                                                      chartViewModel
-                                                          .chartPrices!
-                                                          .last
-                                                          .close! -
+                                      : (chartViewModel.chartPrices!.first.close! /
+                                                      chartViewModel.chartPrices!.last.close! -
                                                   1) <
                                               0
                                           ? bearColorKR

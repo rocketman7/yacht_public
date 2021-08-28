@@ -6,14 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/screens/subLeague/temp_home_view.dart';
-import 'package:yachtOne/screens/home/live_widget.dart';
+import 'package:yachtOne/screens/live/live_widget.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
-import 'quest_widget.dart';
+import '../quest/quest_widget.dart';
 
 class PerformanceTestHomeView extends StatelessWidget {
   HomeViewModel homeViewModel = Get.put(HomeViewModel());
@@ -204,7 +204,7 @@ class OldLiveQuests extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
                       itemBuilder: (context, index) {
-                        if (homeViewModel.allQuests[0].startDateTime.toDate().isBefore(DateTime.now())) {
+                        if (homeViewModel.allQuests[0].liveStartDateTime.toDate().isBefore(DateTime.now())) {
                           return Row(
                             children: [
                               index == 0
@@ -216,7 +216,7 @@ class OldLiveQuests extends StatelessWidget {
                                 onTap: () {
                                   Get.toNamed('quest', arguments: homeViewModel.allQuests[0]);
                                 },
-                                child: LiveWidget(questModel: homeViewModel.allQuests[0]),
+                                // child: LiveWidget(questModel: homeViewModel.allQuests[0]),
                               ),
                               horizontalSpaceLarge
                             ],

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 class UserModel {
@@ -9,7 +10,7 @@ class UserModel {
   final String? email;
   final String? phoneNumber;
   final dynamic account; // 증권계좌
-  final String? avatarUrl; // 아바타 이미지 url
+  final String? avatarImage; // 아바타 이미지 url
 
   final num item;
 
@@ -19,7 +20,17 @@ class UserModel {
 
   final int rewardedCnt; // 아이템 리워드 받은 횟수
 
-  final int exp;
+  final num? exp;
+  final String? tier;
+
+  // final num? followersNum;
+  final List<String>? followers;
+  // final num? followingNum;
+  final List<String>? followings;
+
+  final String? intro;
+  final List<String>? favoriteStocks;
+  final List<String>? badges;
 
   final bool? membership; // 멤버쉽 가입 여부
   final dynamic membershipStartAt; // 멤버쉽 시작일
@@ -27,18 +38,26 @@ class UserModel {
   UserModel({
     required this.uid,
     required this.userName,
-    required this.isNameUpdated,
-    required this.email,
-    required this.phoneNumber,
+    this.isNameUpdated,
+    this.email,
+    this.phoneNumber,
     required this.account,
-    required this.avatarUrl,
+    this.avatarImage,
     required this.item,
-    required this.friendsCode,
-    required this.insertedFriendsCode,
-    required this.blockList,
+    this.friendsCode,
+    this.insertedFriendsCode,
+    this.blockList,
     required this.rewardedCnt,
-    required this.exp,
-    required this.membership,
+    this.exp,
+    this.tier,
+    // this.followersNum,
+    this.followers,
+    // this.followingNum,
+    this.followings,
+    this.intro,
+    this.favoriteStocks,
+    this.badges,
+    this.membership,
     required this.membershipStartAt,
     required this.membershipEndAt,
   });
@@ -49,17 +68,25 @@ class UserModel {
     bool? isNameUpdated,
     String? email,
     String? phoneNumber,
-    dynamic account,
-    String? avatarUrl,
+    dynamic? account,
+    String? avatarImage,
     num? item,
     String? friendsCode,
     List<String>? insertedFriendsCode,
     List<String>? blockList,
     int? rewardedCnt,
-    int? exp,
+    num? exp,
+    String? tier,
+    // num? followersNum,
+    List<String>? followers,
+    // num? followingNum,
+    List<String>? followings,
+    String? intro,
+    List<String>? favoriteStocks,
+    List<String>? badges,
     bool? membership,
-    dynamic membershipStartAt,
-    dynamic membershipEndAt,
+    dynamic? membershipStartAt,
+    dynamic? membershipEndAt,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -68,13 +95,21 @@ class UserModel {
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       account: account ?? this.account,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
+      avatarImage: avatarImage ?? this.avatarImage,
       item: item ?? this.item,
       friendsCode: friendsCode ?? this.friendsCode,
       insertedFriendsCode: insertedFriendsCode ?? this.insertedFriendsCode,
       blockList: blockList ?? this.blockList,
       rewardedCnt: rewardedCnt ?? this.rewardedCnt,
       exp: exp ?? this.exp,
+      tier: tier ?? this.tier,
+      // followersNum: followersNum ?? this.followersNum,
+      followers: followers ?? this.followers,
+      // followingNum: followingNum ?? this.followingNum,
+      followings: followings ?? this.followings,
+      intro: intro ?? this.intro,
+      favoriteStocks: favoriteStocks ?? this.favoriteStocks,
+      badges: badges ?? this.badges,
       membership: membership ?? this.membership,
       membershipStartAt: membershipStartAt ?? this.membershipStartAt,
       membershipEndAt: membershipEndAt ?? this.membershipEndAt,
@@ -89,13 +124,21 @@ class UserModel {
       'email': email,
       'phoneNumber': phoneNumber,
       'account': account,
-      'avatarUrl': avatarUrl,
+      'avatarImage': avatarImage,
       'item': item,
       'friendsCode': friendsCode,
       'insertedFriendsCode': insertedFriendsCode,
       'blockList': blockList,
       'rewardedCnt': rewardedCnt,
       'exp': exp,
+      'tier': tier,
+      // 'followersNum': followersNum,
+      'followers': followers,
+      // 'followingNum': followingNum,
+      'followings': followings,
+      'intro': intro,
+      'favoriteStocks': favoriteStocks,
+      'badges': badges,
       'membership': membership,
       'membershipStartAt': membershipStartAt,
       'membershipEndAt': membershipEndAt,
@@ -110,13 +153,21 @@ class UserModel {
       email: map['email'],
       phoneNumber: map['phoneNumber'],
       account: map['account'],
-      avatarUrl: map['avatarUrl'],
+      avatarImage: map['avatarImage'],
       item: map['item'],
       friendsCode: map['friendsCode'],
-      insertedFriendsCode: map['insertedFriendsCode'] == null ? null : List<String>.from(map['insertedFriendsCode']),
+      // insertedFriendsCode: map['insertedFriendsCode'] == null ? null : List<String>.from(map['insertedFriendsCode']),
       blockList: map['blockList'] == null ? null : List<String>.from(map['blockList']),
       rewardedCnt: map['rewardedCnt'],
       exp: map['exp'] ?? 0,
+      tier: map['tier'],
+      // followersNum: map['followersNum'],
+      followers: map['followers'] == null ? null : List<String>.from(map['followers']),
+      // followingNum: map['followingNum'],
+      followings: map['followings'] == null ? null : List<String>.from(map['followings']),
+      intro: map['intro'],
+      favoriteStocks: map['favoriteStocks'] == null ? null : List<String>.from(map['favoriteStocks']),
+      badges: map['badges'] == null ? null : List<String>.from(map['badges']),
       membership: map['membership'],
       membershipStartAt: map['membershipStartAt'],
       membershipEndAt: map['membershipEndAt'],
@@ -129,12 +180,13 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarUrl: $avatarUrl, item: $item, friendsCode: $friendsCode, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt)';
+    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, tier: $tier, followers: $followers, followings: $followings, intro: $intro, favoriteStocks: $favoriteStocks, badges: $badges, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
+    final listEquals = const DeepCollectionEquality().equals;
 
     return other is UserModel &&
         other.uid == uid &&
@@ -143,13 +195,21 @@ class UserModel {
         other.email == email &&
         other.phoneNumber == phoneNumber &&
         other.account == account &&
-        other.avatarUrl == avatarUrl &&
+        other.avatarImage == avatarImage &&
         other.item == item &&
         other.friendsCode == friendsCode &&
         listEquals(other.insertedFriendsCode, insertedFriendsCode) &&
         listEquals(other.blockList, blockList) &&
         other.rewardedCnt == rewardedCnt &&
         other.exp == exp &&
+        other.tier == tier &&
+        // other.followersNum == followersNum &&
+        listEquals(other.followers, followers) &&
+        // other.followingNum == followingNum &&
+        listEquals(other.followings, followings) &&
+        other.intro == intro &&
+        listEquals(other.favoriteStocks, favoriteStocks) &&
+        listEquals(other.badges, badges) &&
         other.membership == membership &&
         other.membershipStartAt == membershipStartAt &&
         other.membershipEndAt == membershipEndAt;
@@ -163,13 +223,21 @@ class UserModel {
         email.hashCode ^
         phoneNumber.hashCode ^
         account.hashCode ^
-        avatarUrl.hashCode ^
+        avatarImage.hashCode ^
         item.hashCode ^
         friendsCode.hashCode ^
         insertedFriendsCode.hashCode ^
         blockList.hashCode ^
         rewardedCnt.hashCode ^
         exp.hashCode ^
+        tier.hashCode ^
+        // followersNum.hashCode ^
+        followers.hashCode ^
+        // followingNum.hashCode ^
+        followings.hashCode ^
+        intro.hashCode ^
+        favoriteStocks.hashCode ^
+        badges.hashCode ^
         membership.hashCode ^
         membershipStartAt.hashCode ^
         membershipEndAt.hashCode;
@@ -187,7 +255,7 @@ UserModel newUserModel(
       uid: uid,
       userName: userName,
       email: email,
-      avatarUrl: "avatar001",
+      avatarImage: "avatar001",
       account: null,
       item: 10,
       friendsCode: null,

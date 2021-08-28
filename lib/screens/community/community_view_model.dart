@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
@@ -10,6 +11,7 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../locator.dart';
 
@@ -59,8 +61,8 @@ class CommunityViewModel extends GetxController {
   PostModel convertFeedtoPostModel(String content) {
     // Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
     // String docUid;
-    print(userModelRx.value!.uid);
-    print(userModelRx.value!.userName);
+    // print(userModelRx.value!.uid);
+    // print(userModelRx.value!.userName);
     //   docUid = address.postsSeasonCollection().doc().id;
     return PostModel(
       isPro: false,
@@ -79,8 +81,6 @@ class CommunityViewModel extends GetxController {
       imageUrlList.add('posts/$fileName');
     });
 
-    print(userModelRx.value!.uid);
-    print(userModelRx.value!.userName);
     // 포스트 모델로 변환
     PostModel _newPost = convertFeedtoPostModel(content).copyWith(imageUrlList: imageUrlList);
     print(_newPost);
@@ -96,5 +96,10 @@ class CommunityViewModel extends GetxController {
   Future editPost(PostModel post, String content) async {
     PostModel _newPost = convertFeedtoPostModel(content);
     await _firestoreService.editMyPost(post.postId!, _newPost);
+  }
+
+  Future deletePost(PostModel post) async {
+    // PostModel _newPost = convertFeedtoPostModel(content);
+    await _firestoreService.deletePost(post.postId!);
   }
 }

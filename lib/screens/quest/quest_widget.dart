@@ -45,15 +45,10 @@ class SquareQuestWidget extends StatelessWidget {
   final UserQuestModel? userQuestModel;
 
   SquareQuestWidget(
-      {Key? key,
-      required this.width,
-      required this.height,
-      required this.questModel,
-      this.userQuestModel})
+      {Key? key, required this.width, required this.height, required this.questModel, this.userQuestModel})
       : super(key: key);
 
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +74,7 @@ class SquareQuestWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-          QuestImage(
-              questModel: questModel,
-              firebaseStorageService: _firebaseStorageService),
+          QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
           QuestCardRewards(questModel: questModel),
         ],
       ),
@@ -191,21 +184,18 @@ class QuestImage extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.w),
-          color: questModel.themeColor == null
-              ? Color(0xFFFFF3D3)
-              : hexToColorCode(questModel.themeColor!)),
+          color: questModel.themeColor == null ? Color(0xFFFFF3D3) : hexToColorCode(questModel.themeColor!)),
       // QuestModel 데이터가 imageUrl을 가지고 있으면 이미지 다운 받아서 표시
       child: Center(
         child: questModel.imageUrl == null
             ? Container()
             : FutureBuilder<String>(
-                future: _firebaseStorageService
-                    .downloadImageURL(questModel.imageUrl!),
+                future: _firebaseStorageService.downloadImageURL(questModel.imageUrl!),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     String imageUrl = snapshot.data!;
-                    return CachedNetworkImage(
-                      imageUrl: imageUrl,
+                    return Image.network(
+                      imageUrl,
                       height: 70.w,
                       // width: 50.w,
                       // fit: BoxFit.fitHeight,
@@ -243,8 +233,8 @@ class QuestCardHeader extends StatelessWidget {
               children: [
                 Text(
                   // '${questModel.category} 퀘스트',
-                  '일간 퀘스트',
-                  style: subheadingStyle,
+                  questModel.term,
+                  style: questTerm,
                 ),
                 Row(
                   children: [
@@ -267,21 +257,19 @@ class QuestCardHeader extends StatelessWidget {
             SizedBox(height: 6.w),
             Text(
               '${questModel.title}',
-              style: sectionTitle,
+              style: questTitle,
             )
           ],
         ),
         SizedBox(
-          height: correctHeight(
-              10.w, sectionTitle.fontSize, questTimerStyle.fontSize),
+          height: correctHeight(10.w, sectionTitle.fontSize, questTimerStyle.fontSize),
         ),
         Text(
           "01시간 24분 뒤 마감", // temp
           style: questTimerStyle,
         ),
         SizedBox(
-          height: correctHeight(
-              10.w, questTimerStyle.fontSize, questRewardTextStyle.fontSize),
+          height: correctHeight(10.w, questTimerStyle.fontSize, questRewardTextStyle.fontSize),
         ),
         Row(
           children: [
@@ -291,10 +279,15 @@ class QuestCardHeader extends StatelessWidget {
               color: yachtBlack,
             ),
             SizedBox(width: 4.w),
-            Text(
-              '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
-              style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
-            )
+            questModel.counts == null
+                ? Text(
+                    '0',
+                    style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                  )
+                : Text(
+                    '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
+                    style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                  )
           ],
         ),
       ],
@@ -323,19 +316,21 @@ class QuestCardRewards extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SvgPicture.asset(
-                'assets/icons/yacht_point.svg',
+              Image.asset(
+                'assets/icons/yacht_point_circle.png',
                 width: 24.w,
                 height: 24.w,
               ),
               SizedBox(width: 6.w),
-              Container(
-                // color: Colors.red[50],
-                child: Text(
-                  '${toPriceKRW(questModel.cashReward)}원',
-                  style: questRewardAmoutStyle.copyWith(height: 1.35),
-                ),
-              )
+              questModel.yachtPointReward == null
+                  ? Container()
+                  : Container(
+                      // color: Colors.red[50],
+                      child: Text(
+                        '${toPriceKRW(questModel.yachtPointReward!)}원',
+                        style: questRewardAmoutStyle.copyWith(height: 1.35),
+                      ),
+                    )
             ],
           ),
         ),
@@ -355,7 +350,7 @@ class QuestCardRewards extends StatelessWidget {
               Container(
                 // color: Colors.red[50],
                 child: Text(
-                  '${questModel.pointReward}점',
+                  '${questModel.leaguePointReward}점',
                   style: questRewardAmoutStyle.copyWith(height: 1.35),
                 ),
               )
@@ -398,7 +393,7 @@ class _QuestTimerState extends State<QuestTimer> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    timeLeft(widget.questModel.endDateTime.toDate());
+    timeLeft(widget.questModel.questEndDateTime.toDate());
   }
 
   @override

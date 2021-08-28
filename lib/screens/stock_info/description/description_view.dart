@@ -9,15 +9,14 @@ import 'description_view_model.dart';
 
 // GetView 테스트
 class DescriptionView extends GetView<DescriptionViewModel> {
-  final StockAddressModel stockAddressModel;
+  final InvestAddressModel investAddressModel;
   DescriptionView({
-    required this.stockAddressModel,
+    required this.investAddressModel,
   });
 
   @override
   // controller에서 Get.put으로 initialize
-  DescriptionViewModel get controller =>
-      Get.put(DescriptionViewModel(stockAddressModel));
+  DescriptionViewModel get controller => Get.put(DescriptionViewModel(investAddressModel));
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +29,7 @@ class DescriptionView extends GetView<DescriptionViewModel> {
           style: questTitleTextStyle,
         ),
         SizedBox(
-          height: reducedPaddingWhenTextIsBelow(
-              20.w, detailedContentTextStyle.fontSize!),
+          height: reducedPaddingWhenTextIsBelow(20.w, detailedContentTextStyle.fontSize!),
         ),
         Obx(() => Text(
               controller.corporationModel.value.description ?? "기업 소개가 없습니다",

@@ -3,20 +3,22 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/screens/stock_info/news/news_view_model.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 
 class NewsView extends GetView<NewsViewModel> {
-  final StockAddressModel stockAddressModel;
+  final InvestAddressModel investAddressModel;
   NewsView({
-    required this.stockAddressModel,
+    required this.investAddressModel,
   });
 
   @override
   // TODO: implement controller
-  NewsViewModel get controller => Get.put(NewsViewModel(stockAddressModel));
+  NewsViewModel get controller => Get.put(NewsViewModel(investAddressModel));
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,7 @@ class NewsView extends GetView<NewsViewModel> {
                 ),
                 SizedBox(
                   height: controller.newsList.length == 0
-                      ? reducedPaddingWhenTextIsBelow(
-                          20.w, detailedContentTextStyle.fontSize!)
+                      ? reducedPaddingWhenTextIsBelow(20.w, detailedContentTextStyle.fontSize!)
                       : 20.w,
                 ),
                 controller.newsList.length == 0
@@ -53,9 +54,7 @@ class NewsView extends GetView<NewsViewModel> {
                           () => Text(
                             "${controller.corporationName} 뉴스 더보기",
                             style: detailedContentTextStyle.copyWith(
-                                color: deepBlue,
-                                fontSize: 14.w,
-                                fontWeight: FontWeight.w600),
+                                color: deepBlue, fontSize: 14.w, fontWeight: FontWeight.w600),
                           ),
                         ))
                     : Container()
@@ -70,7 +69,8 @@ class NewsView extends GetView<NewsViewModel> {
         GestureDetector(
           onTap: () {
             Get.to(() => NewsWebView(
-                  url: controller.newsList[index].newsUrl,
+                  news: controller.newsList[index],
+                  // url: controller.newsList[index].newsUrl,
                 ));
           },
           child: Container(
@@ -91,29 +91,22 @@ class NewsView extends GetView<NewsViewModel> {
                           children: [
                             Text(
                               controller.newsList[index].title,
-                              style: detailedContentTextStyle.copyWith(
-                                  fontWeight: FontWeight.w500),
+                              style: detailedContentTextStyle.copyWith(fontWeight: FontWeight.w500),
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
                             Row(
                               children: [
                                 Text(
-                                  controller.newsList[index].dateTime
-                                      .toDate()
-                                      .toString(),
-                                  style: detailedContentTextStyle.copyWith(
-                                      fontSize: 12.w,
-                                      fontWeight: FontWeight.w300),
+                                  controller.newsList[index].dateTime.toDate().toString(),
+                                  style: detailedContentTextStyle.copyWith(fontSize: 12.w, fontWeight: FontWeight.w300),
                                 ),
                                 SizedBox(
                                   width: 6.w,
                                 ),
                                 Text(
                                   controller.newsList[index].newspaper,
-                                  style: detailedContentTextStyle.copyWith(
-                                      fontSize: 12.w,
-                                      fontWeight: FontWeight.w300),
+                                  style: detailedContentTextStyle.copyWith(fontSize: 12.w, fontWeight: FontWeight.w300),
                                 ),
                               ],
                             ),
@@ -152,9 +145,9 @@ class NewsView extends GetView<NewsViewModel> {
 }
 
 class NewsWebView extends StatefulWidget {
-  final String url;
+  final NewsModel news;
 
-  const NewsWebView({Key? key, required this.url}) : super(key: key);
+  const NewsWebView({Key? key, required this.news}) : super(key: key);
 
   @override
   _NewsWebViewState createState() => _NewsWebViewState();
@@ -162,6 +155,7 @@ class NewsWebView extends StatefulWidget {
 
 class _NewsWebViewState extends State<NewsWebView> {
   final GlobalKey webViewKey = GlobalKey();
+
   InAppWebViewController? webViewController;
   InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
       crossPlatform: InAppWebViewOptions(
@@ -177,70 +171,74 @@ class _NewsWebViewState extends State<NewsWebView> {
 
   @override
   Widget build(BuildContext context) {
-    return InAppWebView(
-      key: webViewKey,
-      initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),
-      initialOptions: options,
+    return Scaffold(
+      appBar: primaryAppBar(widget.news.title),
+      backgroundColor: primaryBackgroundColor,
+      body: SafeArea(
+        child: InAppWebView(
+          key: webViewKey,
+          initialUrlRequest: URLRequest(url: Uri.parse(widget.news.newsUrl)),
+          initialOptions: options,
 
-      onWebViewCreated: (controller) {
-        webViewController = controller;
-      },
-      // onLoadStart: (controller, url) {
-      //   setState(() {
-      //     this.url = url.toString();
-      //     urlController.text = this.url;
-      //   });
-      // },
-      androidOnPermissionRequest: (controller, origin, resources) async {
-        return PermissionRequestResponse(
-            resources: resources,
-            action: PermissionRequestResponseAction.GRANT);
-      },
-      // shouldOverrideUrlLoading: (controller, navigationAction) async {
-      //   var uri = navigationAction.request.url!;
+          onWebViewCreated: (controller) {
+            webViewController = controller;
+          },
+          // onLoadStart: (controller, url) {
+          //   setState(() {
+          //     this.url = url.toString();
+          //     urlController.text = this.url;
+          //   });
+          // },
+          androidOnPermissionRequest: (controller, origin, resources) async {
+            return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
+          },
+          // shouldOverrideUrlLoading: (controller, navigationAction) async {
+          //   var uri = navigationAction.request.url!;
 
-      //   if (!["http", "https", "file", "chrome", "data", "javascript", "about"]
-      //       .contains(uri.scheme)) {
-      //     if (await canLaunch(url)) {
-      //       // Launch the App
-      //       await launch(
-      //         url,
-      //       );
-      //       // and cancel the request
-      //       return NavigationActionPolicy.CANCEL;
-      //     }
-      //   }
+          //   if (!["http", "https", "file", "chrome", "data", "javascript", "about"]
+          //       .contains(uri.scheme)) {
+          //     if (await canLaunch(url)) {
+          //       // Launch the App
+          //       await launch(
+          //         url,
+          //       );
+          //       // and cancel the request
+          //       return NavigationActionPolicy.CANCEL;
+          //     }
+          //   }
 
-      //   return NavigationActionPolicy.ALLOW;
-      // },
-      // onLoadStop: (controller, url) async {
-      //   pullToRefreshController.endRefreshing();
-      //   setState(() {
-      //     this.url = url.toString();
-      //     urlController.text = this.url;
-      //   });
-      // },
-      // onLoadError: (controller, url, code, message) {
-      //   pullToRefreshController.endRefreshing();
-      // },
-      // onProgressChanged: (controller, progress) {
-      //   if (progress == 100) {
-      //     pullToRefreshController.endRefreshing();
-      //   }
-      //   setState(() {
-      //     this.progress = progress / 100;
-      //     urlController.text = this.url;
-      //   });
-      // },
-      // onUpdateVisitedHistory: (controller, url, androidIsReload) {
-      //   setState(() {
-      //     this.url = url.toString();
-      //     urlController.text = this.url;
-      //   });
-      // },
-      onConsoleMessage: (controller, consoleMessage) {
-        print(consoleMessage);
-      },
+          //   return NavigationActionPolicy.ALLOW;
+          // },
+          // onLoadStop: (controller, url) async {
+          //   pullToRefreshController.endRefreshing();
+          //   setState(() {
+          //     this.url = url.toString();
+          //     urlController.text = this.url;
+          //   });
+          // },
+          // onLoadError: (controller, url, code, message) {
+          //   pullToRefreshController.endRefreshing();
+          // },
+          // onProgressChanged: (controller, progress) {
+          //   if (progress == 100) {
+          //     pullToRefreshController.endRefreshing();
+          //   }
+          //   setState(() {
+          //     this.progress = progress / 100;
+          //     urlController.text = this.url;
+          //   });
+          // },
+          // onUpdateVisitedHistory: (controller, url, androidIsReload) {
+          //   setState(() {
+          //     this.url = url.toString();
+          //     urlController.text = this.url;
+          //   });
+          // },
+          onConsoleMessage: (controller, consoleMessage) {
+            print(consoleMessage);
+          },
+        ),
+      ),
     );
   }
 }

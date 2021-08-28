@@ -7,12 +7,12 @@ import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/corporation_model.dart';
 import 'package:yachtOne/screens/quest/quest_view_model.dart';
 
-Rx<StockAddressModel>? newStockAddress;
+Rx<InvestAddressModel>? newStockAddress;
 
 class StockInfoKRViewModel extends GetxController {
-  final StockAddressModel stockAddressModel;
+  final InvestAddressModel investAddressModel;
   StockInfoKRViewModel({
-    required this.stockAddressModel,
+    required this.investAddressModel,
   });
 
   // StockInfoView에서 offset에 scrollController Offset값 넣어줌
@@ -22,7 +22,7 @@ class StockInfoKRViewModel extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-    newStockAddress = stockAddressModel.obs;
+    newStockAddress = investAddressModel.obs;
 
     // 1) get general info of the stock
     super.onInit();
@@ -35,8 +35,8 @@ class StockInfoKRViewModel extends GetxController {
     super.onClose();
   }
 
-  void changeStockAddressModel(StockAddressModel stockAddress) {
-    newStockAddress!(stockAddress);
+  void changeInvestAddressModel(InvestAddressModel investAddresses) {
+    newStockAddress!(investAddresses);
     // update();
   }
 }

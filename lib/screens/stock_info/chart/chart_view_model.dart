@@ -17,11 +17,11 @@ import 'package:yachtOne/services/firestore_service.dart';
 import 'package:quiver/iterables.dart' as quiver;
 
 class ChartViewModel extends GetxController {
-  StockAddressModel stockAddressModel;
+  InvestAddressModel investAddressModel;
 
   ChartViewModel({
     Key? key,
-    required this.stockAddressModel,
+    required this.investAddressModel,
   });
 
   FirestoreService _firestoreService = FirestoreService();
@@ -33,8 +33,7 @@ class ChartViewModel extends GetxController {
   List<ChartPriceModel> dailyPrices = [];
   List<ChartPriceModel> intradayPrices = [];
 
-  RxList<ChartPriceModel>? chartPrices =
-      RxList<ChartPriceModel>(); //차트에 쓰일 최종 가격 데이터
+  RxList<ChartPriceModel>? chartPrices = RxList<ChartPriceModel>(); //차트에 쓰일 최종 가격 데이터
 
   // 차트 전환 토글
   RxBool showingCandleChart = true.obs;
@@ -76,18 +75,18 @@ class ChartViewModel extends GetxController {
   @override
   onInit() {
     super.onInit();
-    newStockAddress = stockAddressModel.obs;
+    newStockAddress = investAddressModel.obs;
 
     // StockInfoKRViewModel().newStockAddress.listen(() { })
 
     newStockAddress!.listen((value) {
       getPrices(value);
     });
-    getPrices(stockAddressModel);
+    getPrices(investAddressModel);
   }
 
-  void changeStockAddressModel(StockAddressModel stockAddress) {
-    newStockAddress!(stockAddress);
+  void changeInvestAddressModel(InvestAddressModel investAddresses) {
+    newStockAddress!(investAddresses);
     // print('name: ${newStockAddress!.value.name}');
     // update();
   }
@@ -149,11 +148,11 @@ class ChartViewModel extends GetxController {
   // subList를 기간 별로 만들어주는 로직 필요
 
 // update()는 notifyListeners() 처럼 쓰면 되고 그 전에 Future에서 받아온 데이터 넣으면 됨.
-  void getPrices(StockAddressModel stockAddressModel) async {
+  void getPrices(InvestAddressModel investAddressModel) async {
     isLoading(true);
     prices = null;
 
-    prices = await _priceRepository.getStock(stockAddressModel);
+    prices = await _priceRepository.getStock(investAddressModel);
     // subList 기본값 만들어줘야 함
 
     // 선택된 기간에 따라 priceList 다루기
@@ -258,8 +257,7 @@ class ChartViewModel extends GetxController {
         // 차트에 쓸 데이터들만
         subdataForThisInterval = intradayPrices.sublist(0, i - 1);
         // dateTime 오름차순으로 정렬
-        subdataForThisInterval
-            .sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
+        subdataForThisInterval.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
 
         chartPrices!(loopByCycle(subdataForThisInterval, interval));
 
@@ -283,8 +281,7 @@ class ChartViewModel extends GetxController {
         // 차트에 쓸 데이터들만
         subdataForThisInterval = intradayPrices.sublist(0, i - 1);
         // dateTime 오름차순으로 정렬
-        subdataForThisInterval
-            .sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
+        subdataForThisInterval.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
 
         chartPrices!(loopByCycle(subdataForThisInterval, interval));
         calculateMaxMin();
@@ -300,8 +297,8 @@ class ChartViewModel extends GetxController {
         int i = 0;
         // loop 조건이 끝나면 바로 나갈 수 있게 if 대신 while로
         // 현재로부터 90일 이전 날짜까지 포함시키기
-        while (stringToDateTime(dailyPrices[i].dateTime!)!.isAfter(
-            stringToDateTime(latestDate)!.subtract(Duration(days: 91)))) {
+        while (stringToDateTime(dailyPrices[i].dateTime!)!
+            .isAfter(stringToDateTime(latestDate)!.subtract(Duration(days: 91)))) {
           temp.add(dailyPrices[i]);
           i++;
           if (i > dailyPrices.length - 1) break;
@@ -320,16 +317,15 @@ class ChartViewModel extends GetxController {
         String? latestDate = dailyPrices.first.dateTime!.substring(0, 8);
         int i = 0;
         // 1년 전 데이터부터 오늘까지
-        while (stringToDateTime(dailyPrices[i].dateTime!)!.isAfter(
-            stringToDateTime(latestDate)!.subtract(Duration(days: 366)))) {
+        while (stringToDateTime(dailyPrices[i].dateTime!)!
+            .isAfter(stringToDateTime(latestDate)!.subtract(Duration(days: 366)))) {
           subdataForThisInterval.add(dailyPrices[i]);
           i++;
           if (i > dailyPrices.length - 1) break;
         }
 
         // dateTime 오름차순으로 정렬
-        subdataForThisInterval
-            .sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
+        subdataForThisInterval.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
 
         int j = 0;
         List<ChartPriceModel> temp = [];
@@ -338,8 +334,7 @@ class ChartViewModel extends GetxController {
         for (int i = 0; i < subdataForThisInterval.length - 1; i++) {
           //weekday 1~5만
 
-          if ((stringToDateTime(subdataForThisInterval[i].dateTime!)!.weekday ==
-                  5) ||
+          if ((stringToDateTime(subdataForThisInterval[i].dateTime!)!.weekday == 5) ||
               // 금요일이 휴일일 경우에
               // 이번 주의 temp 리스트의 첫 날과
               // 현재 보고 있는 subDataForThisInterval의 다음 날이
@@ -381,8 +376,8 @@ class ChartViewModel extends GetxController {
         String? latestDate = dailyPrices.first.dateTime!.substring(0, 8);
         int i = 0;
         // 1년 전 데이터부터 오늘까지
-        while (stringToDateTime(dailyPrices[i].dateTime!)!.isAfter(
-            stringToDateTime(latestDate)!.subtract(Duration(days: 1825)))) {
+        while (stringToDateTime(dailyPrices[i].dateTime!)!
+            .isAfter(stringToDateTime(latestDate)!.subtract(Duration(days: 1825)))) {
           subdataForThisInterval.add(dailyPrices[i]);
           i++;
           if (i > dailyPrices.length - 1) {
@@ -417,8 +412,7 @@ class ChartViewModel extends GetxController {
         }
 
         // dateTime 오름차순으로 정렬
-        subdataForThisInterval
-            .sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
+        subdataForThisInterval.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
 
         int j = 0;
         List<ChartPriceModel> temp = [];
@@ -428,8 +422,7 @@ class ChartViewModel extends GetxController {
           //weekday 1~5만
 
           if (stringToDateTime(subdataForThisInterval[i].dateTime!)!.month !=
-              stringToDateTime(subdataForThisInterval[i + 1].dateTime!)!
-                  .month) {
+              stringToDateTime(subdataForThisInterval[i + 1].dateTime!)!.month) {
             temp.add(subdataForThisInterval[i]);
             ChartPriceModel combinedModel = combineCandles(temp);
             // temp에 있는 가격들의 OHLC 합쳐서 새 모델 만들어야 함.
@@ -454,8 +447,7 @@ class ChartViewModel extends GetxController {
     }
   }
 
-  List<ChartPriceModel> loopByCycle(
-      List<ChartPriceModel> subdataForThisInterval, int interval) {
+  List<ChartPriceModel> loopByCycle(List<ChartPriceModel> subdataForThisInterval, int interval) {
     // loop에서 쓸 데이터들 초기화 해주고
     int j = 0;
     List<ChartPriceModel> temp = [];
@@ -535,15 +527,9 @@ class ChartViewModel extends GetxController {
   void calculateMaxMin() {
     DateTime start, end;
     start = DateTime.now();
-    _maxPrice = quiver.max(List.generate(
-            chartPrices!.length, (index) => chartPrices![index].high))! *
-        1.00;
-    _minPrice = quiver.min(List.generate(
-            chartPrices!.length, (index) => chartPrices![index].low))! *
-        1.00;
-    _maxVolume = quiver.max(List.generate(
-            chartPrices!.length, (index) => chartPrices![index].tradeVolume))! *
-        1.00;
+    _maxPrice = quiver.max(List.generate(chartPrices!.length, (index) => chartPrices![index].high))! * 1.00;
+    _minPrice = quiver.min(List.generate(chartPrices!.length, (index) => chartPrices![index].low))! * 1.00;
+    _maxVolume = quiver.max(List.generate(chartPrices!.length, (index) => chartPrices![index].tradeVolume))! * 1.00;
     // _minVolume = quiver.min(List.generate(
     //         subList!.length, (index) => subList![index].tradeVolume))! *
     //     1.00;

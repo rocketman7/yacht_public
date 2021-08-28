@@ -7,10 +7,10 @@ import 'package:yachtOne/services/firestore_service.dart';
 import 'package:quiver/iterables.dart' as quiver;
 
 class StatsViewModel extends GetxController {
-  StockAddressModel stockAddressModel;
+  InvestAddressModel investAddressModel;
 
   StatsViewModel({
-    required this.stockAddressModel,
+    required this.investAddressModel,
   });
 
   FirestoreService _firestoreService = FirestoreService();
@@ -25,12 +25,7 @@ class StatsViewModel extends GetxController {
   List<StatsModel> get yearStats => _yearStats;
   // List<StatsModel> get chartStats => chartStats;
 
-  double? _maxSales,
-      _minSales,
-      _maxOperatingIncome,
-      _minOperatingIncome,
-      _maxNetIncome,
-      _minNetIncome;
+  double? _maxSales, _minSales, _maxOperatingIncome, _minOperatingIncome, _maxNetIncome, _minNetIncome;
 
   double? get maxSales => _maxSales;
   double? get minSales => _minSales;
@@ -48,8 +43,8 @@ class StatsViewModel extends GetxController {
   double spacing = 0;
   RxBool isLoading = true.obs;
 
-  void changeStockAddressModel(StockAddressModel stockAddress) {
-    newStockAddress!(stockAddress);
+  void changeInvestAddressModel(InvestAddressModel investAddresses) {
+    newStockAddress!(investAddresses);
     // print('name: ${newStockAddress!.value.name}');
     // update();
   }
@@ -58,23 +53,23 @@ class StatsViewModel extends GetxController {
   onInit() {
     // TODO: implement onInit
     super.onInit();
-    // newStockAddress = stockAddressModel.obs;
+    // newStockAddress = investAddressModel.obs;
 
     // StockInfoKRViewModel().newStockAddress.listen(() { })
 
     newStockAddress!.listen((value) {
       getStats(value);
     });
-    getStats(stockAddressModel);
+    getStats(investAddressModel);
   }
 
-  Future getStats(StockAddressModel stockAddressModel) async {
+  Future getStats(InvestAddressModel investAddressModel) async {
     isLoading(true);
     List<int> toBeRemoved = [];
     // TODO: 분기, 연간을 토글 스위치로 (캔들차트처럼) 바꿔서 볼 수 있게. 10,11월엔 어떻게 할지?
     // TODO: 막대그래프  스케일 조정
     _stats = null;
-    _stats = await _firestoreService.getStats(stockAddressModel);
+    _stats = await _firestoreService.getStats(investAddressModel);
     // print(_statsList);
     // term이 Y이면 같은 year의 Q들의 합을 Y에서 빼주어야 함.
     // 만약 중간에 상장한 기업은 어떻게 처리하나?
@@ -95,8 +90,7 @@ class StatsViewModel extends GetxController {
 
     // print(toBeRemoved);
     // 3) 데이터에서 필요 없는 연도 데이터를 지워준다
-    if (toBeRemoved.length > 0)
-      _stats!.removeRange(toBeRemoved[0], toBeRemoved.last + 1);
+    if (toBeRemoved.length > 0) _stats!.removeRange(toBeRemoved[0], toBeRemoved.last + 1);
     // dateTime 오름차순으로 정렬
     _stats!.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
     // print(_statsList![0]);
@@ -113,14 +107,12 @@ class StatsViewModel extends GetxController {
         if (i == 0) {
           _quarterStats.add(_stats![i]);
         } else {
+          print('stats check: ${_stats![i]}');
           StatsModel temp = _stats![i].copyWith(
               salesIS: _stats![i].salesIS! - _stats![i - 1].salesAccIS!,
-              operatingIncomeIS: _stats![i].operatingIncomeIS! -
-                  _stats![i - 1].operatingIncomeAccIS!,
-              incomeBeforeTaxesIS: _stats![i].incomeBeforeTaxesIS! -
-                  _stats![i - 1].incomeBeforeTaxesAccIS!,
-              netIncomeIS:
-                  _stats![i].netIncomeIS! - _stats![i - 1].netIncomeAccIS!,
+              operatingIncomeIS: _stats![i].operatingIncomeIS! - _stats![i - 1].operatingIncomeAccIS!,
+              incomeBeforeTaxesIS: _stats![i].incomeBeforeTaxesIS! - _stats![i - 1].incomeBeforeTaxesAccIS!,
+              netIncomeIS: _stats![i].netIncomeIS! - _stats![i - 1].netIncomeAccIS!,
               term: "Q",
               dateTime: _stats![i].year! + "1231");
           _quarterStats.add(temp);
@@ -200,24 +192,14 @@ class StatsViewModel extends GetxController {
   }
 
   void calculateMaxMin() {
-    _maxSales = quiver.max(List.generate(
-            chartStats!.length, (index) => chartStats![index].salesIS))! *
-        1.00;
-    _minSales = quiver.min(List.generate(
-            chartStats!.length, (index) => chartStats![index].salesIS))! *
-        1.00;
-    _maxOperatingIncome = quiver.max(List.generate(chartStats!.length,
-            (index) => chartStats![index].operatingIncomeIS))! *
-        1.00;
-    _minOperatingIncome = quiver.min(List.generate(chartStats!.length,
-            (index) => chartStats![index].operatingIncomeIS))! *
-        1.00;
-    _maxNetIncome = quiver.max(List.generate(
-            chartStats!.length, (index) => chartStats![index].netIncomeIS))! *
-        1.00;
-    _minNetIncome = quiver.min(List.generate(
-            chartStats!.length, (index) => chartStats![index].netIncomeIS))! *
-        1.00;
+    _maxSales = quiver.max(List.generate(chartStats!.length, (index) => chartStats![index].salesIS))! * 1.00;
+    _minSales = quiver.min(List.generate(chartStats!.length, (index) => chartStats![index].salesIS))! * 1.00;
+    _maxOperatingIncome =
+        quiver.max(List.generate(chartStats!.length, (index) => chartStats![index].operatingIncomeIS))! * 1.00;
+    _minOperatingIncome =
+        quiver.min(List.generate(chartStats!.length, (index) => chartStats![index].operatingIncomeIS))! * 1.00;
+    _maxNetIncome = quiver.max(List.generate(chartStats!.length, (index) => chartStats![index].netIncomeIS))! * 1.00;
+    _minNetIncome = quiver.min(List.generate(chartStats!.length, (index) => chartStats![index].netIncomeIS))! * 1.00;
   }
 
   // 연간 width;

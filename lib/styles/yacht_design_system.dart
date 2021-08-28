@@ -10,6 +10,7 @@ const Color yachtViolet = const Color(0xFF798AE6);
 const Color yachtDarkGrey = const Color(0xFF5B6A87);
 const Color yachtGrey = const Color(0xFF879098);
 const Color yachtRed = const Color(0xFFEE5076);
+const Color seaBlue = Color(0xFF489EDD);
 const Color buttonBackgroundPurple = const Color(0xFFEFF2FA);
 const Color buttonTextPurple = const Color(0xFF6073B4);
 Color yachtShadow = Color(0xFFCEC4DA).withOpacity(.3);
@@ -23,6 +24,9 @@ const Color tierPro = Color(0xFFC3C2FF);
 const Color tierMaster = Color(0xFFE1BFFC);
 const Color tierGrandMaster = Color(0xFFFEB8B8);
 Color tierName = yachtBlack.withOpacity(.8);
+
+const activatedButtonColor = Color(0xFF196AB4);
+Color dividerColor = Color(0xFF94BDE0).withOpacity(0.3);
 
 const primaryBackgroundColor = white;
 
@@ -56,7 +60,7 @@ double contentFontHeight = 1.5;
 
 double heading1Size = 34.w;
 double heading2Size = 30.w;
-double heading3Size = 22.w;
+double heading3Size = 24.w;
 double heading4Size = 20.w;
 double heading5Size = 18.w; // 섹션 타이틀
 
@@ -67,26 +71,244 @@ double captionSize = 12.w;
 
 double smallestSize = 9.w;
 
-// TextStyle heading5Style = TextStyle(
-//   fontSize: 18.w,
-//   fontWeight: FontWeight.w500,
-// );
+//// 온보딩
+// 타이틀
+TextStyle onboardingTitle = TextStyle(
+  fontFamily: krFont,
+  fontSize: heading3Size,
+  fontWeight: FontWeight.w500,
+  color: buttonTextPurple,
+  height: primaryFontHeight,
+  letterSpacing: -1.0,
+);
+// 컨텐트
+TextStyle onboardingContent = TextStyle(
+  fontFamily: krFont,
+  fontSize: heading4Size,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  height: 1.5,
+  letterSpacing: -1.0,
+);
+// 다음
+TextStyle nextPage = TextStyle(
+  fontFamily: krFont,
+  fontSize: bodySmallSize,
+  fontWeight: FontWeight.w500,
+  color: yachtRed,
+  height: primaryFontHeight,
+  letterSpacing: -1.0,
+);
+// 스킵
+TextStyle skipOnboarding = TextStyle(
+  fontFamily: krFont,
+  fontSize: bodySmallSize,
+  fontWeight: FontWeight.w300,
+  color: yachtGrey.withOpacity(.5),
+  height: primaryFontHeight,
+  letterSpacing: -1.0,
+);
 
-// TextStyle headlineStyle = TextStyle(
-//   fontSize: 30.w,
-//   fontWeight: FontWeight.w700,
-// );
+// 소셜로그인 타이틀
+TextStyle socialLogin = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
 
-// TextStyle bodyStyle = TextStyle(
-//   fontSize: 16.w,
-//   fontWeight: FontWeight.w400,
-// );
+//// 프로필 페이지
+// 닉네임
+TextStyle profileUserNameStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 20.w,
+  fontWeight: FontWeight.w700,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
 
-// TextStyle captionStyle = TextStyle(
-//   fontSize: 12.w,
-//   fontWeight: FontWeight.w400,
-// );
+// 팔로워, 팔로잉 숫자
+TextStyle profileFollowNumberStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 12.w,
+  fontWeight: FontWeight.w700,
+  color: yachtBlack,
+  letterSpacing: -0.01,
+  height: primaryFontHeight,
+);
 
+// 팔로워,팔로잉 글자
+TextStyle profileFollowTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 12.w,
+  fontWeight: FontWeight.w400,
+  color: yachtBlack,
+  letterSpacing: -0.01,
+  height: primaryFontHeight,
+);
+
+// 버튼글자
+TextStyle profileButtonTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: activatedButtonColor,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+//헤더
+TextStyle profileHeaderTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+// 즐겨찾기종목 종목명
+TextStyle profileFavoritesNameTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 16.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+//즐겨찾기종목 종목명
+TextStyle profileFavoritesNumberTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+//// 상금
+// 상금 액수
+// 홈-상금-상금상세-상금타이틀
+TextStyle subLeagueTitleTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 20.w,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-상금액수
+TextStyle subLeagueAwardTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 36.w,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+  letterSpacing: -0.25,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-설명
+TextStyle subLeagueAwardDescriptionStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-룰
+TextStyle subLeagueAwardRulesStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 12.w,
+  fontWeight: FontWeight.w500,
+  color: yachtGrey,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-포트폴리오포션텍스트
+TextStyle subLeagueAwardPortionStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 22.w,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: 0.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-포트폴리오네임텍스트
+TextStyle subLeagueAwardStockNameStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: 0.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-포트폴리오라벨 텍스트
+TextStyle subLeagueAwardLabelStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-상금-상금상세-포트폴리오코멘트 텍스트
+TextStyle subLeagueAwardCommentStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 홈-상금박스-상금액수
+TextStyle awardModuleSliderAmountTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 30.w,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+  letterSpacing: -0.25,
+  height: 1.4,
+);
+// 홈-상금박스-상금액수한글
+TextStyle awardModuleSliderAmountKoreanTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w300,
+  color: Colors.white,
+  letterSpacing: 5.75,
+  height: 1.4,
+);
+// 홈-상금박스-상금기한
+TextStyle awardModuleSliderEndDateTimeTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 12.w,
+  fontWeight: FontWeight.w300,
+  color: Colors.white,
+  letterSpacing: -0.25,
+  height: 1.4,
+);
+
+// 상금박스의 색깔.
+const List<Color> awardColors = [
+  Color(0xFF87C7EC),
+  Color(0xFF489EDD),
+  Color(0xFF196AB4),
+  // Color(0xFF084176)
+];
+
+//// 홈
 // 앱 바 페이지 타이틀
 TextStyle appBarTitle = TextStyle(
   fontFamily: krFont,
@@ -241,9 +463,10 @@ TextStyle feedCommentLikeCount = TextStyle(
   height: 1.4,
 );
 
-TextStyle socialLogin = TextStyle(
+// 금융백과사전
+TextStyle dictionaryKeyword = TextStyle(
   fontFamily: 'SCore',
-  fontSize: 18.w,
+  fontSize: heading5Size,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
@@ -274,7 +497,7 @@ TextStyle snackBarStyle = TextStyle(
   height: 1.4,
 );
 
-// 다이얼로그
+//// 다이얼로그
 // 제목
 TextStyle dialogTitle = TextStyle(
   fontSize: bodyBigSize,
@@ -302,6 +525,35 @@ TextStyle dialogWarning = TextStyle(
   letterSpacing: -0.5,
   height: 1.4,
 );
+
+// 퀘스트카드 및 퀘스트 세부 페이지
+TextStyle questDescription = TextStyle(
+  fontSize: bodyBigSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle questTerm = TextStyle(
+  fontSize: bodyBigSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle questTitle = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
 // ICONS
 
 // BUTTONS
@@ -309,16 +561,16 @@ Container simpleTextContainerButton(
   String text,
 ) {
   return Container(
+    // alignment: Alignment.center,
     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
       color: buttonBackgroundPurple,
       borderRadius: BorderRadius.circular(50),
     ),
-    child: Center(
-      child: Text(
-        text,
-        style: simpleTextButtonStyle,
-      ),
+    child: Text(
+      text,
+      textAlign: TextAlign.center,
+      style: simpleTextButtonStyle,
     ),
   );
 }
@@ -368,6 +620,15 @@ Container sectionBox({
     child: child,
   );
 }
+
+// 기본 박스 데코레이션
+BoxDecoration yachtBoxDecoration = BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -533,55 +794,3 @@ yachtSnackBar(String title) {
 
 // 다이얼로그
 // yachtDialog(String title)
-
-List<PopupMenuItem> communityShowMore = [
-  PopupMenuItem(
-    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    // value: index,
-    height: 20.w,
-    child: Container(
-        child: Center(
-            child: Text(
-      '차단',
-      style: contentStyle,
-    ))),
-  ),
-  PopupMenuItem(
-    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    // value: index,
-    height: 20.w,
-    child: Container(
-        child: Center(
-            child: Text(
-      '신고',
-      style: contentStyle,
-    ))),
-  ),
-];
-
-List<PopupMenuItem> communityMyShowMore = [
-  PopupMenuItem(
-    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    // value: index,
-    height: 20.w,
-    value: 'edit',
-    child: Container(
-        child: Center(
-            child: Text(
-      '수정',
-      style: contentStyle,
-    ))),
-  ),
-  PopupMenuItem(
-    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    // value: index,
-    height: 20.w,
-    value: 'delete',
-    child: Container(
-        child: Center(
-            child: Text(
-      '삭제',
-      style: contentStyle,
-    ))),
-  ),
-];

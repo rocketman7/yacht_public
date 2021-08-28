@@ -14,11 +14,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 class StatsView extends StatelessWidget {
-  final StockAddressModel stockAddressModel;
+  final InvestAddressModel investAddressModel;
   final StatsViewModel statsViewModel;
   const StatsView({
     Key? key,
-    required this.stockAddressModel,
+    required this.investAddressModel,
     required this.statsViewModel,
   }) : super(key: key);
 
@@ -80,16 +80,11 @@ class StatsView extends StatelessWidget {
                                     statsViewModel.changeTerm();
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 8.w, vertical: 6.w),
-                                    child: Text(
-                                        statsViewModel.toggleTerms[index],
+                                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.w),
+                                    child: Text(statsViewModel.toggleTerms[index],
                                         style: questTermTextStyle.copyWith(
-                                          color: statsViewModel
-                                                      .selectedTerm.value ==
-                                                  index
-                                              ? primaryFontColor
-                                              : blueGrey,
+                                          color:
+                                              statsViewModel.selectedTerm.value == index ? primaryFontColor : blueGrey,
                                         )
                                         // contentStyle.copyWith(
                                         //     color: statsViewModel
@@ -100,8 +95,7 @@ class StatsView extends StatelessWidget {
                                         ),
                                   ),
                                 ),
-                                if (index <
-                                    statsViewModel.toggleTerms.length - 1)
+                                if (index < statsViewModel.toggleTerms.length - 1)
                                   Container(
                                     width: 2.w,
                                     height: questTermTextStyle.fontSize,
@@ -114,20 +108,11 @@ class StatsView extends StatelessWidget {
                   ],
                 ),
                 verticalSpaceSmall,
-                IncomeStatementChart(
-                    statsViewModel: statsViewModel,
-                    fieldName: 'salesIS',
-                    title: "매출액"),
+                IncomeStatementChart(statsViewModel: statsViewModel, fieldName: 'salesIS', title: "매출액"),
                 verticalSpaceExtraLarge,
-                IncomeStatementChart(
-                    statsViewModel: statsViewModel,
-                    fieldName: 'operatingIncomeIS',
-                    title: "영업이익"),
+                IncomeStatementChart(statsViewModel: statsViewModel, fieldName: 'operatingIncomeIS', title: "영업이익"),
                 verticalSpaceExtraLarge,
-                IncomeStatementChart(
-                    statsViewModel: statsViewModel,
-                    fieldName: 'netIncomeIS',
-                    title: "당기순이익"),
+                IncomeStatementChart(statsViewModel: statsViewModel, fieldName: 'netIncomeIS', title: "당기순이익"),
               ],
             ),
     );
@@ -182,14 +167,12 @@ class IncomeStatementChart extends StatelessWidget {
               trackballBehavior: TrackballBehavior(enable: true),
               series: statsViewModel!.selectedTerm.value == 0
                   // 연간일 때
-                  ? _columnSeries(statsViewModel!, fieldName!, title!)
-                      .sublist(3)
+                  ? _columnSeries(statsViewModel!, fieldName!, title!).sublist(3)
                   // 분기일 때
                   : _columnSeries(statsViewModel!, fieldName!, title!),
 
               primaryXAxis: CategoryAxis(
-                  labelStyle:
-                      mostDetailedContentTextStyle.copyWith(fontSize: 14.w),
+                  labelStyle: mostDetailedContentTextStyle.copyWith(fontSize: 14.w),
                   labelAlignment: LabelAlignment.center,
                   // edgeLabelPlacement: EdgeLabelPlacement.shift,
                   // labelPlacement: LabelPlacement.betweenTicks,
@@ -252,9 +235,7 @@ class IncomeStatementChart extends StatelessWidget {
     );
   }
 
-  List<ColumnSeries> _columnSeries(
-          StatsViewModel statsViewModel, String fieldName, String title) =>
-      [
+  List<ColumnSeries> _columnSeries(StatsViewModel statsViewModel, String fieldName, String title) => [
         ColumnSeries<StatsModel, String>(
           dataLabelMapper: (stats, index) {
             // if (index == statsViewModel.chartStats.length - 1)

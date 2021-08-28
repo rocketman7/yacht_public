@@ -21,7 +21,7 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
     return Scaffold(
       body: Obx(() {
         bool isUserNull = controller.currentUser!.value == null;
-        print('isUserNull? : $isUserNull');
+        // print('isUserNull? : $isUserNull');
         print('current User: ${controller.currentUser!.value}');
         return isUserNull == true ? LoginView() : StartupView();
       }),

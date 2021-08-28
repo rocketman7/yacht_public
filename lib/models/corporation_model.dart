@@ -11,7 +11,7 @@ class CorporationModel {
   // final String name;
   // final String engName;
   // final String logoUrl;
-  // final StockAddressModel stockAddressModel;
+  // final StockAddressModel investAddressModel;
   final String? ceo;
   final num? employees;
   final num? avrSalary;
@@ -63,8 +63,7 @@ class CorporationModel {
 
   String toJson() => json.encode(toMap());
 
-  factory CorporationModel.fromJson(String source) =>
-      CorporationModel.fromMap(json.decode(source));
+  factory CorporationModel.fromJson(String source) => CorporationModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -84,9 +83,6 @@ class CorporationModel {
 
   @override
   int get hashCode {
-    return ceo.hashCode ^
-        employees.hashCode ^
-        avrSalary.hashCode ^
-        description.hashCode;
+    return ceo.hashCode ^ employees.hashCode ^ avrSalary.hashCode ^ description.hashCode;
   }
 }

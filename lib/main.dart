@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
         getPages: [
           GetPage(
             name: '/',
-            page: () => AuthCheckView(),
+            page: () => OnboardingView(),
           ),
           // GetPage(
           //     name: 'stockInfo',
@@ -110,9 +110,9 @@ class _MyAppState extends State<MyApp> {
           //         field: f,
           //         ),
           //     transition: Transition.zoom),
-          GetPage(name: 'designSystem', page: () => YachtDesignSystemSampleView(), transition: Transition.zoom),
+          GetPage(name: '/designSystem', page: () => YachtDesignSystemSampleView(), transition: Transition.zoom),
           GetPage(
-            name: 'quest',
+            name: '/quest',
             page: () => QuestView(),
             // transition: Transition.zoom
           ),
@@ -120,13 +120,13 @@ class _MyAppState extends State<MyApp> {
           //     name: 'award',
           //     page: () => AwardView(),
           //     transition: Transition.rightToLeft),
-          GetPage(name: 'awardold', page: () => AwardOldView(), transition: Transition.rightToLeft),
+          GetPage(name: '/awardold', page: () => AwardOldView(), transition: Transition.rightToLeft),
           // GetPage(
           //     name: 'tempHome',
           //     page: () => TempHomeView(leagueName: '7월',),
           //     transition: Transition.rightToLeft),
           GetPage(
-            name: 'subLeague',
+            name: '/subLeague',
             page: () => AwardDetailView(),
             // transition: Transition.rightToLeft,
             binding: HomeRepositoryBinding(),

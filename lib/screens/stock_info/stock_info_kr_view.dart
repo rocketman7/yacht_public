@@ -17,13 +17,13 @@ import 'description/description_view.dart';
 import 'stock_info_kr_view_model.dart';
 
 class StockInfoKRView extends StatelessWidget {
-  StockAddressModel stockAddressModel;
+  InvestAddressModel investAddressModel;
   double bottomPadding;
 
   StockInfoKRView({
     Key? key,
     this.bottomPadding = 0.0,
-    required this.stockAddressModel,
+    required this.investAddressModel,
   }) : super(key: key);
 
   ScrollController _scrollController = ScrollController(initialScrollOffset: 0);
@@ -31,12 +31,9 @@ class StockInfoKRView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stockInfoViewModel =
-        Get.put(StockInfoKRViewModel(stockAddressModel: stockAddressModel));
-    ChartViewModel chartViewModel =
-        Get.put(ChartViewModel(stockAddressModel: stockAddressModel));
-    StatsViewModel statsViewModel =
-        Get.put(StatsViewModel(stockAddressModel: stockAddressModel));
+    final stockInfoViewModel = Get.put(StockInfoKRViewModel(investAddressModel: investAddressModel));
+    ChartViewModel chartViewModel = Get.put(ChartViewModel(investAddressModel: investAddressModel));
+    StatsViewModel statsViewModel = Get.put(StatsViewModel(investAddressModel: investAddressModel));
     // StreamController streamController = StockInfoKRView.streamController;
     // _scrollController = ScrollController(initialScrollOffset: 0);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
@@ -50,16 +47,16 @@ class StockInfoKRView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ChartView(
-          stockAddressModel: stockAddressModel,
+          investAddressModel: investAddressModel,
           chartViewModel: chartViewModel,
         ),
         btwHomeModule,
-        DescriptionView(stockAddressModel: stockAddressModel),
+        DescriptionView(investAddressModel: investAddressModel),
         btwHomeModule,
-        NewsView(stockAddressModel: stockAddressModel),
+        NewsView(investAddressModel: investAddressModel),
         btwHomeModule,
         StatsView(
-          stockAddressModel: stockAddressModel,
+          investAddressModel: investAddressModel,
           statsViewModel: statsViewModel,
         ),
         // btwHomeModule

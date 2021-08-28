@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/models/community/comment_model.dart';
 import 'package:yachtOne/models/community/post_model.dart';
+import 'package:yachtOne/models/dictionary_model.dart';
 import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/price_chart_model.dart';
@@ -14,6 +15,7 @@ import 'package:yachtOne/models/temp_realtime_model.dart';
 import 'package:yachtOne/models/today_market_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
+import 'package:yachtOne/repositories/repository.dart';
 
 import '../models/subLeague_model.dart';
 
@@ -40,8 +42,7 @@ class FirestoreService extends GetxService {
   // User Model 스트림
   Stream<UserModel> getUserStream(String uid) {
     return _firestoreService.collection('users').doc(uid).snapshots().map((snapshot) {
-      print('user data stream changed');
-      print('user model snapshot: ${snapshot.data()}');
+      print('user data stream changed, user model snapshot: ${snapshot.data()}');
       return UserModel.fromMap(snapshot.data()!);
     });
   }
@@ -59,6 +60,7 @@ class FirestoreService extends GetxService {
         .collection('quests')
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
+              print('user quest: ${doc.data()}');
               return UserQuestModel.fromMap(doc.id, doc.data());
             }).toList());
   }
@@ -71,17 +73,21 @@ class FirestoreService extends GetxService {
     List answers,
   ) async {
     await _firestoreService
-        .collection('users/kakao:1513684681/userVote')
+        .collection('users/${userModelRx.value!.uid}/userVote')
         .doc('202109')
         .collection('quests')
         .doc(questModel.questId)
-        .update({'selection': answers});
+        .set(
+            {'selection': answers, 'selectDateTime': FieldValue.serverTimestamp()},
+            SetOptions(
+              merge: true,
+            ));
   }
 
   // 차트 그리기 위한 Historical Price
-  Future<List<ChartPriceModel>> getPrices(StockAddressModel stockAddress) async {
+  Future<List<ChartPriceModel>> getPrices(InvestAddressModel investAddresses) async {
     CollectionReference _historicalPriceRef =
-        _firestoreService.collection('stocksKR/${stockAddress.issueCode}/historicalPrices');
+        _firestoreService.collection('stocksKR/${investAddresses.issueCode}/historicalPrices');
     List<ChartPriceModel> _priceChartModelList = [];
 
     try {
@@ -100,14 +106,14 @@ class FirestoreService extends GetxService {
   }
 
   // Stat 가져오기
-  Future<List<StatsModel>> getStats(StockAddressModel stockAddress) async {
+  Future<List<StatsModel>> getStats(InvestAddressModel investAddresses) async {
     // CollectionReference _samsungElectronic =
     //     _firestoreService.collection('stocksKR/005930/stats');
     // CollectionReference _skBioPharm =
     //     _firestoreService.collection('stocksKR/326030/stats');
     // CollectionReference _abKo =
     //     _firestoreService.collection('stocksKR/129890/stats');
-    CollectionReference _statsRef = _firestoreService.collection('stocksKR/${stockAddress.issueCode}/stats');
+    CollectionReference _statsRef = _firestoreService.collection('stocksKR/${investAddresses.issueCode}/stats');
     List<StatsModel> _statstModelList = [];
 
     try {
@@ -147,17 +153,18 @@ class FirestoreService extends GetxService {
   // 홈에서 띄울 모든 Quest 가져오기
   Future<List<QuestModel>> getAllQuests() async {
     final List<QuestModel> allQuests = [];
-    final List<StockAddressModel> options = [];
+    List<InvestAddressModel> invetAddresses = [];
     await _firestoreService.collection('leagues').doc('league001').collection('quests').get().then((value) {
       value.docs.forEach((element) {
+        // print(element.data());
         // options 필드의 List of Object를 아래와 같이 처리
-        element.data()['options'].toList().forEach((option) {
-          options.add(StockAddressModel.fromMap(option));
+        element.data()['investAddresses'].toList().forEach((option) {
+          invetAddresses.add(InvestAddressModel.fromMap(option));
         });
 
         // print('questmodel options from db: $options');
-        allQuests.add(QuestModel.fromMap(element.id, element.data(), options));
-        // print(allQuests);
+        allQuests.add(QuestModel.fromMap(element.id, element.data(), invetAddresses));
+        invetAddresses = [];
       });
     });
     return allQuests;
@@ -172,19 +179,18 @@ class FirestoreService extends GetxService {
   // User QuestModel 업데이트
 
   // 기업 세부 정보 가져오기
-  Future<CorporationModel> getCorporationInfo(StockAddressModel stockAddressModel) async {
-    return await _firestoreService
-        .collection('stocksKR')
-        .doc('${stockAddressModel.issueCode}')
-        .get()
-        .then((value) => CorporationModel.fromMap(value.data()!));
+  Future<CorporationModel> getCorporationInfo(InvestAddressModel investAddressModel) async {
+    return await _firestoreService.collection('stocksKR').doc('${investAddressModel.issueCode}').get().then((value) {
+      print('copr data: ${value.data()}');
+      return CorporationModel.fromMap(value.data()!);
+    });
   }
 
-  Future<List<NewsModel>> getNews(StockAddressModel stockAddressModel) async {
+  Future<List<NewsModel>> getNews(InvestAddressModel investAddressModel) async {
     final List<NewsModel> allNews = [];
     await _firestoreService
         .collection('stocksKR')
-        .doc('${stockAddressModel.issueCode}')
+        .doc('${investAddressModel.issueCode}')
         .collection('news')
         .orderBy('dateTime', descending: true)
         .get()
@@ -287,6 +293,22 @@ class FirestoreService extends GetxService {
         .update({'content': newPost.content, 'editedDateTime': timestampNow});
   }
 
+  // 포스트 수정하기
+  Future deletePost(
+    String postId,
+  ) async {
+    // String docUid = _firestoreService.collection('posts').doc().id;
+    Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
+    // print(docUid);
+
+    await _firestoreService
+        .collection('posts')
+        .doc(postId)
+        .delete()
+        .then((value) => print("user delete"))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
+
   // 포스트 받아오기
   Future getPosts() async {
     List<PostModel> posts = [];
@@ -298,12 +320,20 @@ class FirestoreService extends GetxService {
     return posts;
   }
 
+  // 한 포스트 다시 받아오기
+  Future getThisPost(PostModel post) async {
+    return await _firestoreService
+        .collection('posts')
+        .doc(post.postId)
+        .get()
+        .then((value) => PostModel.fromMap(value.data()!));
+  }
+
   // 코멘트 올리기
   Future uploadNewComment(CommentModel newComment) async {
     String docUid =
         _firestoreService.collection('posts').doc(newComment.commentToPostId).collection('comments').doc().id;
     Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
-    print(docUid);
 
     await _firestoreService
         .collection('posts')
@@ -339,13 +369,32 @@ class FirestoreService extends GetxService {
     return comments;
   }
 
+  // 코멘트 삭제하기
+  Future deleteComment(
+    String postId,
+    String commentId,
+  ) async {
+    // String docUid = _firestoreService.collection('posts').doc().id;
+    Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
+    // print(docUid);
+
+    await _firestoreService
+        .collection('posts')
+        .doc(postId)
+        .collection('comments')
+        .doc(commentId)
+        .delete()
+        .then((value) => print("user delete"))
+        .catchError((error) => print("Failed to delete user: $error"));
+  }
+
   // 컨텐츠 관련
   // 읽을 거리 가져오기
   Future<List<ReadingContentModel>> getReadingContents() async {
     List<ReadingContentModel> readingContents = [];
     await _firestoreService
         .collection('readingContents')
-        .orderBy('updatedDateTime', descending: true)
+        .orderBy('updateDateTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
               readingContents.add(ReadingContentModel.fromMap(element.data()));
@@ -361,9 +410,21 @@ class FirestoreService extends GetxService {
         .orderBy('dateTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
-              print(element.data());
               todayMarketModel.add(TodayMarketModel.fromMap(element.data()));
             }));
     return todayMarketModel;
+  }
+
+  // 금융백과사전 가져오기
+  Future<List<DictionaryModel>> getDictionaries() async {
+    List<DictionaryModel> dictionaries = [];
+    await _firestoreService
+        .collection('dictionaries')
+        .orderBy('updateDateTime', descending: true)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              dictionaries.add(DictionaryModel.fromMap(element.data()));
+            }));
+    return dictionaries;
   }
 }

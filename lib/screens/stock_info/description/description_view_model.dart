@@ -7,29 +7,28 @@ import 'package:yachtOne/services/firestore_service.dart';
 import '../../../locator.dart';
 
 class DescriptionViewModel extends GetxController {
-  final StockAddressModel stockAddressModel;
+  final InvestAddressModel investAddressModel;
 
-  DescriptionViewModel(this.stockAddressModel);
+  DescriptionViewModel(this.investAddressModel);
 
   @override
   void onInit() {
     super.onInit();
     // TODO: implement onInit
-    // newStockAddress = stockAddressModel.obs;
+    // newStockAddress = investAddressModel.obs;
     newStockAddress!.listen((value) {
       getCorporationInfo(value);
     });
-    getCorporationInfo(stockAddressModel);
+    getCorporationInfo(investAddressModel);
   }
 
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final String title = "기업 소개";
 
-  Rx<CorporationModel> corporationModel = Rx<CorporationModel>(
-      CorporationModel(ceo: "", avrSalary: 0, description: "", employees: 0));
+  Rx<CorporationModel> corporationModel =
+      Rx<CorporationModel>(CorporationModel(ceo: "", avrSalary: 0, description: "", employees: 0));
 
-  Future getCorporationInfo(StockAddressModel stockAddressModel) async {
-    corporationModel(
-        await _firestoreService.getCorporationInfo(stockAddressModel));
+  Future getCorporationInfo(InvestAddressModel investAddressModel) async {
+    corporationModel(await _firestoreService.getCorporationInfo(investAddressModel));
   }
 }

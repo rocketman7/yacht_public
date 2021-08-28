@@ -9,7 +9,7 @@ class QuestRepository extends Repository<List<QuestModel>> {
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
   @override
-  Future<List<QuestModel>> getFromFirestore() async {
+  Future<List<QuestModel>> getQuestForHomeView() async {
     if (todayQuests == null) {
       todayQuests = await _firestoreService.getAllQuests();
       return todayQuests!;
@@ -25,24 +25,22 @@ class PriceRepository implements Repository<List<ChartPriceModel>> {
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
   @override
-  Future<List<ChartPriceModel>> getStock(StockAddressModel stockAddress) async {
+  Future<List<ChartPriceModel>> getStock(InvestAddressModel investAddresses) async {
     // check if the map has it
     if (chartPriceMapping == null) {
-      chartPriceMapping![stockAddress] =
-          await _firestoreService.getPrices(stockAddress);
-      return chartPriceMapping![stockAddress]!;
+      chartPriceMapping![investAddresses] = await _firestoreService.getPrices(investAddresses);
+      return chartPriceMapping![investAddresses]!;
     } else {
-      if (chartPriceMapping!.containsKey(stockAddress)) {
-        return chartPriceMapping![stockAddress]!;
+      if (chartPriceMapping!.containsKey(investAddresses)) {
+        return chartPriceMapping![investAddresses]!;
       } else {
-        chartPriceMapping![stockAddress] =
-            await _firestoreService.getPrices(stockAddress);
-        return chartPriceMapping![stockAddress]!;
+        chartPriceMapping![investAddresses] = await _firestoreService.getPrices(investAddresses);
+        return chartPriceMapping![investAddresses]!;
       }
     }
 
     // // if (chartPriceModel == null) {
-    // chartPriceModel = await _firestoreService.getPrices(stockAddress);
+    // chartPriceModel = await _firestoreService.getPrices(investAddresses);
     // return chartPriceModel!;
     // } else {
     //   return chartPriceModel!;

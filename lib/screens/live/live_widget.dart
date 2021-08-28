@@ -5,7 +5,7 @@ import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/price_chart_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/temp_realtime_model.dart';
-import 'package:yachtOne/screens/home/quest_widget.dart';
+import 'package:yachtOne/screens/quest/quest_widget.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,16 +15,15 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import '../../locator.dart';
 
 class LiveWidget extends StatelessWidget {
+  final int liveQuestIndex;
   final QuestModel questModel;
-  const LiveWidget({
-    Key? key,
-    required this.questModel,
-  }) : super(key: key);
+  LiveWidget({Key? key, required this.questModel, required this.liveQuestIndex}) : super(key: key);
+
+  final FirestoreService _firestoreService = locator<FirestoreService>();
 
   @override
   Widget build(BuildContext context) {
     // stream 차트 테스트용 임시
-    FirestoreService _firestoreService = locator<FirestoreService>();
     // double _side = reactiveHeight(280);
     return sectionBox(
         height: 250.w,
@@ -34,8 +33,7 @@ class LiveWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                  padding: EdgeInsets.fromLTRB(primaryPaddingSize,
-                      primaryPaddingSize, primaryPaddingSize, 0),
+                  padding: EdgeInsets.fromLTRB(primaryPaddingSize, primaryPaddingSize, primaryPaddingSize, 0),
                   child: LiveCardHeader(questModel: questModel)),
               Container(
                 height: 110.w,
@@ -55,8 +53,7 @@ class LiveWidget extends StatelessWidget {
                                 // color: Colors.yellow,
                                 )
                             : StreamBuilder<List<TempRealtimeModel>>(
-                                stream:
-                                    _firestoreService.getTempRealtimePrice(),
+                                stream: _firestoreService.getTempRealtimePrice(),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return Container(
@@ -78,15 +75,13 @@ class LiveWidget extends StatelessWidget {
                                     stops.add(0.5);
                                     stops.add(1.0);
 
-                                    final LinearGradient gradientColors =
-                                        LinearGradient(
+                                    final LinearGradient gradientColors = LinearGradient(
                                       colors: color,
                                       begin: Alignment(0, 0),
                                       end: Alignment.bottomCenter,
                                     );
 
-                                    final LinearGradient gradientColors0 =
-                                        LinearGradient(
+                                    final LinearGradient gradientColors0 = LinearGradient(
                                       colors: color0,
                                       begin: Alignment(0, 0),
                                       end: Alignment.bottomCenter,
@@ -96,10 +91,8 @@ class LiveWidget extends StatelessWidget {
                                         borderWidth: 0,
                                         plotAreaBorderWidth: 0,
                                         primaryXAxis: DateTimeAxis(
-                                            minimum: DateTime(
-                                                2021, 7, 29, 08, 40, 00),
-                                            maximum: DateTime(
-                                                2021, 7, 29, 15, 40, 00),
+                                            minimum: DateTime(2021, 7, 29, 08, 40, 00),
+                                            maximum: DateTime(2021, 7, 29, 15, 40, 00),
                                             majorGridLines: MajorGridLines(
                                               width: 0,
                                             ),
@@ -113,42 +106,32 @@ class LiveWidget extends StatelessWidget {
                                             //     4,
                                             // chartViewModel.minPrice! *
                                             //     0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
-                                            majorGridLines:
-                                                MajorGridLines(width: 0),
+                                            majorGridLines: MajorGridLines(width: 0),
                                             isVisible: false),
                                         axes: [
                                           NumericAxis(
                                               name: 'second',
                                               maximum: 82600,
                                               minimum: 80000,
-                                              majorGridLines:
-                                                  MajorGridLines(width: 0),
+                                              majorGridLines: MajorGridLines(width: 0),
                                               isVisible: false)
                                         ],
                                         series: [
-                                          AreaSeries<TempRealtimeModel,
-                                              DateTime>(
+                                          AreaSeries<TempRealtimeModel, DateTime>(
                                             dataSource: snapshot.data!,
-                                            xValueMapper:
-                                                (TempRealtimeModel chart, _) {
+                                            xValueMapper: (TempRealtimeModel chart, _) {
                                               return chart.createdAt!.toDate();
                                             },
-                                            yValueMapper:
-                                                (TempRealtimeModel chart, _) =>
-                                                    chart.price,
+                                            yValueMapper: (TempRealtimeModel chart, _) => chart.price,
                                             gradient: gradientColors,
                                           ),
-                                          AreaSeries<TempRealtimeModel,
-                                              DateTime>(
+                                          AreaSeries<TempRealtimeModel, DateTime>(
                                             dataSource: snapshot0.data!,
-                                            xValueMapper:
-                                                (TempRealtimeModel chart, _) {
+                                            xValueMapper: (TempRealtimeModel chart, _) {
                                               return chart.createdAt!.toDate();
                                             },
                                             yAxisName: 'second',
-                                            yValueMapper:
-                                                (TempRealtimeModel chart, _) =>
-                                                    chart.price,
+                                            yValueMapper: (TempRealtimeModel chart, _) => chart.price,
                                             gradient: gradientColors0,
                                           ),
                                         ]);
@@ -174,8 +157,7 @@ class LiveWidget extends StatelessWidget {
                             ),
                             Text(
                               "상승",
-                              style: questTermTextStyle.copyWith(
-                                  fontSize: 12.w, fontWeight: FontWeight.w700),
+                              style: questTermTextStyle.copyWith(fontSize: 12.w, fontWeight: FontWeight.w700),
                             ),
                           ],
                         ),
@@ -415,16 +397,14 @@ class LiveCardHeader extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: correctHeight(
-              10.w, sectionTitle.fontSize, questTimerStyle.fontSize),
+          height: correctHeight(10.w, sectionTitle.fontSize, questTimerStyle.fontSize),
         ),
         Text(
           "01시간 24분 뒤 마감", // temp
           style: questTimerStyle,
         ),
         SizedBox(
-          height: correctHeight(
-              10.w, questTimerStyle.fontSize, questRewardTextStyle.fontSize),
+          height: correctHeight(10.w, questTimerStyle.fontSize, questRewardTextStyle.fontSize),
         ),
         Row(
           children: [
@@ -434,10 +414,15 @@ class LiveCardHeader extends StatelessWidget {
               color: yachtBlack,
             ),
             SizedBox(width: 4.w),
-            Text(
-              '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
-              style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
-            )
+            questModel.counts == null
+                ? Text(
+                    '0',
+                    style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                  )
+                : Text(
+                    '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
+                    style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                  )
           ],
         ),
       ],

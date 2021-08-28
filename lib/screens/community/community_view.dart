@@ -41,14 +41,14 @@ class CommunityView extends StatelessWidget {
       floatingActionButton: GestureDetector(
         onTap: () {
           Get.bottomSheet(
-              WritingNewPost(
-                // contentFormKey: _contentFormKey,
-                // contentController: _contentController,
-                communityViewModel: _communityViewModel,
-              ),
-              isScrollControlled: true,
-              ignoreSafeArea: false, // add this
-              enterBottomSheetDuration: Duration(seconds: 3));
+            WritingNewPost(
+              // contentFormKey: _contentFormKey,
+              // contentController: _contentController,
+              communityViewModel: _communityViewModel,
+            ),
+            isScrollControlled: true,
+            ignoreSafeArea: false, // add this
+          );
         },
         child: Container(
           decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [

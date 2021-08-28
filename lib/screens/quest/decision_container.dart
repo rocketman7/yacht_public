@@ -68,9 +68,7 @@ class _DecisionContainerState extends State<DecisionContainer> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                          questViewModel.questModel.stockAddress.length,
-                          (index) {
+                      children: List.generate(questViewModel.questModel.investAddresses.length, (index) {
                         return InkWell(
                           onTap: () {
                             setState(() {
@@ -84,9 +82,7 @@ class _DecisionContainerState extends State<DecisionContainer> {
                               context,
                               HeroDialogRoute(
                                 builder: (BuildContext context) {
-                                  return FinalDecisionDialog(
-                                      questViewModel: questViewModel,
-                                      index: index);
+                                  return FinalDecisionDialog(questViewModel: questViewModel, index: index);
                                 },
                               ),
                             );
@@ -141,11 +137,9 @@ class _DecisionContainerState extends State<DecisionContainer> {
                                   type: MaterialType.transparency,
                                   child: AutoSizeText(
                                     questViewModel.questModel.choices == null
-                                        ? questViewModel
-                                            .questModel.stockAddress[index].name
+                                        ? questViewModel.questModel.investAddresses[index].name
                                         : "상승",
-                                    style: subtitleStyle.copyWith(
-                                        color: Colors.black.withOpacity(.75)
+                                    style: subtitleStyle.copyWith(color: Colors.black.withOpacity(.75)
                                         // isSelected[index]
                                         // ? bullColorKR
                                         // : Colors.grey
@@ -188,8 +182,7 @@ class FinalDecisionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
       // title: Text('You are my hero.'),
       child: Container(
         padding: dialogPadding,
@@ -205,9 +198,7 @@ class FinalDecisionDialog extends StatelessWidget {
             AutoSizeText(
               questViewModel.questModel.selectInstruction,
               maxLines: 2,
-              style: subtitleStyle.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black.withOpacity(.7)),
+              style: subtitleStyle.copyWith(fontWeight: FontWeight.w700, color: Colors.black.withOpacity(.7)),
             ),
             // verticalSpaceSmall,
             Row(
@@ -228,8 +219,7 @@ class FinalDecisionDialog extends StatelessWidget {
                         type: MaterialType.transparency,
                         child: AutoSizeText(
                           questViewModel.questModel.choices == null
-                              ? questViewModel
-                                  .questModel.stockAddress[index].name
+                              ? questViewModel.questModel.investAddresses[index].name
                               : "상승",
                           style: subtitleStyle,
                         ),
@@ -259,8 +249,7 @@ class FinalDecisionDialog extends StatelessWidget {
                       child: Center(
                         child: Text(
                           "취소",
-                          style: confirmStyle.copyWith(
-                              color: Colors.white.withOpacity(.8)),
+                          style: confirmStyle.copyWith(color: Colors.white.withOpacity(.8)),
                         ),
                       )),
                 ),
@@ -286,8 +275,7 @@ class FinalDecisionDialog extends StatelessWidget {
                       child: Center(
                         child: Text(
                           "확인",
-                          style: confirmStyle.copyWith(
-                              color: Colors.white.withOpacity(.9)),
+                          style: confirmStyle.copyWith(color: Colors.white.withOpacity(.9)),
                         ),
                       ),
                     ),
@@ -343,16 +331,13 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   Color get barrierColor => Colors.black54;
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
-    return FadeTransition(
-        opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
-        child: child);
+  Widget buildTransitions(
+      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+    return FadeTransition(opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut), child: child);
   }
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     return builder(context);
   }
 

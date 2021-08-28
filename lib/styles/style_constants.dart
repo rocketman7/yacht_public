@@ -2,13 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/widgets/appbar_back_button.dart';
 import 'size_config.dart';
 
 //// 라이트버전
 /// 색
 // 색상표
-const Color seaBlue = Color(0xFF489EDD);
+
 // const Color yachtRed = Color(0xFFEE5076);
 const Color blueGrey = Color(0xFF789EC1);
 const Color deepBlue = Color(0xFF196AB4);
@@ -27,15 +28,14 @@ const primaryPointFontColor = Colors.red;
 // 흰 바탕에 쓸 약한 폰트 색
 const primaryLightFontColor = Color(0xFF789EC1);
 // 활성화된 버튼 색
-const activatedButtonColor = Color(0xFF196AB4);
+// const activatedButtonColor = Color(0xFF196AB4);
 // 홈모듈박스 바탕색
 const homeModuleBoxBackgroundColor = Colors.white;
 // 버튼 글씨색
 const buttonTextColor = Colors.white;
 // 모듈박스 그림자 색
 Color boxShadowColor = Color(0xFF38204B).withOpacity(.08);
-// 디바이더
-Color dividerColor = Color(0xFF789EC1).withOpacity(.4);
+
 // k-Bull & Bear & Volume Color
 const bullColorKR = Colors.red;
 const bearColorKR = seaBlue;
@@ -347,17 +347,17 @@ TextStyle feedUserName = TextStyle(
 
 //// 버튼 컴포넌트들
 // 기본 버튼
-Container primaryButtonContainer(Text buttonText) {
-  return Container(
-    height: 42.w,
-    width: double.infinity,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(50.w),
-      color: activatedButtonColor,
-    ),
-    child: Center(child: buttonText),
-  );
-}
+// Container primaryButtonContainer(Text buttonText) {
+//   return Container(
+//     height: 42.w,
+//     width: double.infinity,
+//     decoration: BoxDecoration(
+//       borderRadius: BorderRadius.circular(50.w),
+//       color: activatedButtonColor,
+//     ),
+//     child: Center(child: buttonText),
+//   );
+// }
 
 // 차트 토글 버튼
 Container chartToggleButton({required Widget child, required bool isSelected, required Color color}) {
@@ -564,118 +564,4 @@ const String kAddressNullError = "Please Enter your address";
 //   );
 // }
 
-// 홈-상금-상금상세-상금타이틀
-TextStyle subLeagueTitleTextStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 20.w,
-  fontWeight: FontWeight.w700,
-  color: Colors.white,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
 
-// 홈-상금-상금상세-상금액수
-TextStyle subLeagueAwardTextStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 36.w,
-  fontWeight: FontWeight.w700,
-  color: Colors.white,
-  letterSpacing: -0.25,
-  height: 1.4,
-);
-
-// 홈-상금-상금상세-설명
-TextStyle subLeagueAwardDescriptionStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 18.w,
-  fontWeight: FontWeight.w500,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
-
-// 홈-상금-상금상세-룰
-TextStyle subLeagueAwardRulesStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 12.w,
-  fontWeight: FontWeight.w500,
-  color: primaryLightFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
-
-// 홈-상금-상금상세-포트폴리오포션텍스트
-TextStyle subLeagueAwardPortionStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 22.w,
-  fontWeight: FontWeight.w600,
-  color: primaryFontColor,
-  letterSpacing: 0.0,
-  height: 1.4,
-);
-
-// 홈-상금-상금상세-포트폴리오네임텍스트
-TextStyle subLeagueAwardStockNameStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 14.w,
-  fontWeight: FontWeight.w500,
-  color: primaryFontColor,
-  letterSpacing: 0.0,
-  height: 1.4,
-);
-
-// 홈-상금-상금상세-포트폴리오라벨 텍스트
-TextStyle subLeagueAwardLabelStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 14.w,
-  fontWeight: FontWeight.w500,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
-
-// 홈-상금-상금상세-포트폴리오코멘트 텍스트
-TextStyle subLeagueAwardCommentStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 14.w,
-  fontWeight: FontWeight.w300,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
-
-// 홈-상금박스-상금액수
-TextStyle awardModuleSliderAmountTextStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 30.w,
-  fontWeight: FontWeight.w700,
-  color: Colors.white,
-  letterSpacing: -0.25,
-  height: 1.4,
-);
-// 홈-상금박스-상금액수한글
-TextStyle awardModuleSliderAmountKoreanTextStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 18.w,
-  fontWeight: FontWeight.w300,
-  color: Colors.white,
-  letterSpacing: 5.75,
-  height: 1.4,
-);
-// 홈-상금박스-상금기한
-TextStyle awardModuleSliderEndDateTimeTextStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 12.w,
-  fontWeight: FontWeight.w300,
-  color: Colors.white,
-  letterSpacing: -0.25,
-  height: 1.4,
-);
-
-// 상금박스의 색깔.
-const List<Color> awardColors = [
-  Color(0xFF87C7EC),
-  Color(0xFF489EDD),
-  Color(0xFF196AB4),
-  // Color(0xFF084176)
-];

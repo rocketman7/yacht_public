@@ -6,14 +6,16 @@ class ReadingContentModel {
   final String summary;
   final String contentUrl;
   final String thumbnailUrl;
-  final dynamic updatedDateTime;
+  final dynamic updateDateTime;
+  final bool? showHomeView;
   ReadingContentModel({
     required this.title,
     required this.category,
     required this.summary,
     required this.contentUrl,
     required this.thumbnailUrl,
-    required this.updatedDateTime,
+    required this.updateDateTime,
+    this.showHomeView,
   });
 
   ReadingContentModel copyWith({
@@ -22,7 +24,8 @@ class ReadingContentModel {
     String? summary,
     String? contentUrl,
     String? thumbnailUrl,
-    dynamic? updatedDateTime,
+    dynamic? updateDateTime,
+    bool? showHomeView,
   }) {
     return ReadingContentModel(
       title: title ?? this.title,
@@ -30,7 +33,8 @@ class ReadingContentModel {
       summary: summary ?? this.summary,
       contentUrl: contentUrl ?? this.contentUrl,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
-      updatedDateTime: updatedDateTime ?? this.updatedDateTime,
+      updateDateTime: updateDateTime ?? this.updateDateTime,
+      showHomeView: showHomeView ?? this.showHomeView,
     );
   }
 
@@ -41,7 +45,8 @@ class ReadingContentModel {
       'summary': summary,
       'contentUrl': contentUrl,
       'thumbnailUrl': thumbnailUrl,
-      'updatedDateTime': updatedDateTime,
+      'updateDateTime': updateDateTime,
+      'showHomeView': showHomeView,
     };
   }
 
@@ -52,18 +57,18 @@ class ReadingContentModel {
       summary: map['summary'],
       contentUrl: map['contentUrl'],
       thumbnailUrl: map['thumbnailUrl'],
-      updatedDateTime: map['updatedDateTime'],
+      updateDateTime: map['updateDateTime'],
+      showHomeView: map['showHomeView'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory ReadingContentModel.fromJson(String source) =>
-      ReadingContentModel.fromMap(json.decode(source));
+  factory ReadingContentModel.fromJson(String source) => ReadingContentModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'ReadingContentModel(title: $title, category: $category, summary: $summary, contentUrl: $contentUrl, thumbnailUrl: $thumbnailUrl, updatedDateTime: $updatedDateTime)';
+    return 'ReadingContentModel(title: $title, category: $category, summary: $summary, contentUrl: $contentUrl, thumbnailUrl: $thumbnailUrl, updateDateTime: $updateDateTime, showHomeView: $showHomeView)';
   }
 
   @override
@@ -76,7 +81,8 @@ class ReadingContentModel {
         other.summary == summary &&
         other.contentUrl == contentUrl &&
         other.thumbnailUrl == thumbnailUrl &&
-        other.updatedDateTime == updatedDateTime;
+        other.updateDateTime == updateDateTime &&
+        other.showHomeView == showHomeView;
   }
 
   @override
@@ -86,6 +92,7 @@ class ReadingContentModel {
         summary.hashCode ^
         contentUrl.hashCode ^
         thumbnailUrl.hashCode ^
-        updatedDateTime.hashCode;
+        updateDateTime.hashCode ^
+        showHomeView.hashCode;
   }
 }

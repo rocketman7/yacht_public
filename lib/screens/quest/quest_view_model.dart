@@ -68,15 +68,14 @@ class QuestViewModel extends GetxController {
       timeLeft();
     });
     if (userQuestModel.value == null) {
-      userQuestModel((userQuestModelRx
-          .where((i) => i.questId == questModel.questId)).first);
+      userQuestModel((userQuestModelRx.where((i) => i.questId == questModel.questId)).first);
+      print('userquest ${userQuestModel.value}');
     }
     userQuestModelRx.listen((value) {
       print('userQuestModel changed');
       print(value);
       if (value.isNotEmpty) {
-        UserQuestModel thisUserQuestModel =
-            value.where((i) => i.questId == questModel.questId).first;
+        UserQuestModel thisUserQuestModel = value.where((i) => i.questId == questModel.questId).first;
         userQuestModel(thisUserQuestModel);
       }
     });
@@ -93,9 +92,8 @@ class QuestViewModel extends GetxController {
 
   void syncUserSelect() {
     toggleList = List.generate(
-        questModel.stockAddress.length,
-        (index) => (userQuestModel.value == null ||
-                userQuestModel.value!.selection == null)
+        questModel.investAddresses.length,
+        (index) => (userQuestModel.value == null || userQuestModel.value!.selection == null)
             ? false
             : userQuestModel.value!.selection![0] == index).obs;
   }
@@ -109,9 +107,8 @@ class QuestViewModel extends GetxController {
   // }
 
   Future getImages() async {
-    for (int i = 0; i < questModel.stockAddress.length; i++) {
-      imageUrl = await _storageService
-          .downloadImageURL(questModel.stockAddress[i].logoUrl);
+    for (int i = 0; i < questModel.investAddresses.length; i++) {
+      imageUrl = await _storageService.downloadImageURL(questModel.investAddresses[i].logoUrl!);
       logoImage.add(Image.network(
         imageUrl!,
         fit: BoxFit.cover,
@@ -182,7 +179,7 @@ class QuestViewModel extends GetxController {
   // Duration? timeLeft;
 
   void timeLeft() {
-    Duration timeLeft = questModel.endDateTime.toDate().difference(now);
+    Duration timeLeft = questModel.questEndDateTime.toDate().difference(now);
     timeToEnd(countDown(timeLeft));
     // return countDown(timeLeft);
   }

@@ -1,0 +1,359 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+
+// XX * update 필요부분
+// XX 자산의 종가가 나오면 (ex, 한국시장 15:30 종가), 모든 user 의 userAsset 콜렉션의
+// XX 모든 다큐먼트들의 자산 가격들(currentPrice)을 업데이트
+// ==> 어차피 다른 사람들의 잔고는 ???로 표시할 것이므로 그냥 update 하지 않고 하나하나 불러오자.
+
+// assetCategory { Award, Delivery, YachtPoint, UseYachtPoint }
+// Award: 주식으로 상금을 받았을 때
+// Ing: 주식을 딜리버리 중일 때
+// Delivery: 주식을 출고했을 때
+// YachtPoint: 요트포인트 받았을 때
+// UseYachtPoint: 요트포인트 사용했을 때
+// ==>  나의 현재 주식 잔고 = 모든 Award - 모든 Delivery - 모든 Ing
+// ==>  나의 현재 요트 포인트 = 모든 YachtPoint - 모든 UseYachtPoint
+// ==>  현재 찾아갈 수 있는 상금 = 모든 Award + 모든 YachtPoint
+// ==>  출고 완료한 상금 = 모든 Delivery + 모든 UseYachtPoint
+// ==>  요트와 함께 획득한 총 상금 = 모든 Award + 모든 Delivery + 모든 Ing + 모든 YachtPoint + 모든 UseYachtPoint
+
+class AssetModel {
+  final String assetCategory;
+  final Timestamp tradeDate;
+  final String tradeTitle;
+  List<AwardModel>? awards;
+  num? yachtPoint;
+
+  AssetModel({
+    required this.assetCategory,
+    required this.tradeDate,
+    required this.tradeTitle,
+    this.awards,
+    this.yachtPoint,
+  });
+
+  factory AssetModel.fromMap(Map<String, dynamic> map) {
+    if (map['assetCategory'] == "Award" || map['assetCategory'] == "Delivery" || map['assetCategory'] == "Ing")
+      return AssetModel(
+        assetCategory: map['assetCategory'],
+        tradeDate: map['tradeDate'],
+        tradeTitle: map['tradeTitle'],
+        awards: List<AwardModel>.from(map['awards']?.map((x) => AwardModel.fromMap(x))),
+      );
+    else
+      return AssetModel(
+        assetCategory: map['assetCategory'],
+        tradeDate: map['tradeDate'],
+        tradeTitle: map['tradeTitle'],
+        yachtPoint: map['yachtPoint'],
+      );
+  }
+
+  Map<String, dynamic> toMapAwards() {
+    return {
+      'assetCategory': assetCategory,
+      'tradeDate': tradeDate,
+      'tradeTitle': tradeTitle,
+      'awards': awards!.map((x) => x.toMap()).toList(),
+    };
+  }
+}
+
+class AwardModel {
+  final String issueCode;
+  final String name;
+  final num priceAtTrade;
+  final num sharesNum;
+
+  AwardModel({
+    required this.issueCode,
+    required this.name,
+    required this.priceAtTrade,
+    required this.sharesNum,
+  });
+
+  factory AwardModel.fromMap(Map<String, dynamic> map) {
+    return AwardModel(
+      issueCode: map['issueCode'],
+      name: map['name'],
+      priceAtTrade: map['priceAtTrade'],
+      sharesNum: map['sharesNum'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'issueCode': issueCode,
+      'name': name,
+      'priceAtTrade': priceAtTrade,
+      'sharesNum': sharesNum,
+    };
+  }
+}
+
+// 보유자산, 주식 잔고 출고 화면 등 공통적으로 쓰이는 view모델이고 아래 모델도
+// 공통적으로 써야하기 때문에 매번 퓨쳐로 해주는거보다 이렇게 따로 빼는게 나은거 같음.
+class HoldingAwardModel {
+  final String issueCode;
+  final String name;
+  final double currentPrice;
+  final double priceAtAward;
+  final num sharesNum;
+
+  HoldingAwardModel(
+      {required this.issueCode,
+      required this.name,
+      required this.currentPrice,
+      required this.priceAtAward,
+      required this.sharesNum});
+}
+
+class AssetViewModel extends GetxController {
+  //////////////////////// database service 부분 ////////////////////////
+  final FirebaseFirestore firestoreService = FirebaseFirestore.instance;
+
+  Future<List<AssetModel>> getAllAssets(String uid) async {
+    final List<AssetModel> allAssets = [];
+
+    await firestoreService.collection('users').doc(uid).collection('userAsset').get().then((value) {
+      value.docs.forEach((element) {
+        // print(element.data());
+
+        allAssets.add(AssetModel.fromMap(element.data()));
+      });
+    });
+
+    return allAssets;
+  }
+
+  Future<double> getCurrentStocksPrice(String issueCode) async {
+    late double currentStocksPrice;
+
+    await firestoreService
+        .collection('stocksKR')
+        .doc(issueCode)
+        .collection('historicalPrices')
+        .where('cycle', isEqualTo: 'D')
+        .orderBy('dateTime', descending: true)
+        .limit(1)
+        .get()
+        .then((value) {
+      currentStocksPrice = value.docs[0].data()['close'].toDouble();
+    });
+
+    return currentStocksPrice;
+  }
+
+  Future<bool> updateUserAsset(String uid, AssetModel ingAssetModel) async {
+    try {
+      await firestoreService.collection('users').doc(uid).collection('userAsset').add(ingAssetModel.toMapAwards());
+    } catch (e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  ///////////////////////// 실제 Controller 부분 /////////////////////////
+  late final List<AssetModel> allAssets;
+  //현재 잔고 보여주기 위한 변수들
+  Map<String, String> stocksNameMap = {};
+  Map<String, int> stocksSharesNumMap = {};
+  Map<String, double> stocksAveragePriceAtAwardMap = {};
+  //위 세 맵들을 모으자.
+  late final List<HoldingAwardModel> allHoldingStocks = [];
+  bool isHoldingStocksFutureLoad = false;
+  int totalYachtPoint = 0;
+  double totalHoldingStocksValue = 0.0;
+  //주식 잔고 출고 페이지에서 사용자가 값을 바꾸는 obs 변수들
+  List<RxInt> stocksDeliveryNum = [0.obs];
+  RxDouble totalDeliveryValue = 0.0.obs;
+
+  @override
+  void onInit() async {
+    allAssets = await getAllAssets('kakao:1518231402');
+
+    calcHoldingStocksAndYachtPoint();
+
+    stocksDeliveryNum.clear();
+
+    await calcAllHoldingStocks();
+
+    super.onInit();
+  }
+
+  // 현재 보유 중인 주식을 계산해준다.
+  // 만약 같은 주식을 n번에 걸쳐 받았다면 평단도 계산해줘야 함.
+  // 그리고 0인 경우는 보유 주식이라고 볼 수 없음
+  void calcHoldingStocksAndYachtPoint() {
+    // Award - Delivery => 현재 보유 주식 계산, YachtPoint - UseYachtPoint => 현재 보유 요트 포인트 계산
+    for (int i = 0; i < allAssets.length; i++) {
+      if (allAssets[i].assetCategory == "Award") {
+        for (int j = 0; j < allAssets[i].awards!.length; j++) {
+          if (!stocksNameMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksNameMap['${allAssets[i].awards![j].issueCode}'] = allAssets[i].awards![j].name;
+          }
+
+          if (stocksSharesNumMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksSharesNumMap.update(
+                '${allAssets[i].awards![j].issueCode}', (value) => (value + allAssets[i].awards![j].sharesNum.toInt()));
+          } else {
+            stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] = allAssets[i].awards![j].sharesNum.toInt();
+          }
+        }
+      } else if (allAssets[i].assetCategory == "Delivery") {
+        for (int j = 0; j < allAssets[i].awards!.length; j++) {
+          if (!stocksNameMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksNameMap['${allAssets[i].awards![j].issueCode}'] = allAssets[i].awards![j].name;
+          }
+
+          if (stocksSharesNumMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksSharesNumMap.update(
+                '${allAssets[i].awards![j].issueCode}', (value) => (value - allAssets[i].awards![j].sharesNum.toInt()));
+          } else {
+            stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] = -allAssets[i].awards![j].sharesNum.toInt();
+          }
+        }
+      } else if (allAssets[i].assetCategory == "Ing") {
+        for (int j = 0; j < allAssets[i].awards!.length; j++) {
+          if (!stocksNameMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksNameMap['${allAssets[i].awards![j].issueCode}'] = allAssets[i].awards![j].name;
+          }
+
+          if (stocksSharesNumMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksSharesNumMap.update(
+                '${allAssets[i].awards![j].issueCode}', (value) => (value - allAssets[i].awards![j].sharesNum.toInt()));
+          } else {
+            stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] = -allAssets[i].awards![j].sharesNum.toInt();
+          }
+        }
+      } else if (allAssets[i].assetCategory == "YachtPoint") {
+        totalYachtPoint += allAssets[i].yachtPoint!.toInt();
+      } else if (allAssets[i].assetCategory == "UseYachtPoint") {
+        totalYachtPoint -= allAssets[i].yachtPoint!.toInt();
+      }
+    }
+
+    // Award 당시 평단 계산
+    Map<String, double> stocksAccumPrice = {};
+    Map<String, int> stocksSharesNum = {};
+    stocksNameMap.forEach((key, value) {
+      stocksAveragePriceAtAwardMap['$key'] = 0.0;
+      stocksAccumPrice['$key'] = 0.0;
+      stocksSharesNum['$key'] = 0;
+    });
+    for (int i = 0; i < allAssets.length; i++) {
+      if (allAssets[i].assetCategory == "Award") {
+        for (int j = 0; j < allAssets[i].awards!.length; j++) {
+          stocksAccumPrice.update('${allAssets[i].awards![j].issueCode}',
+              (value) => (value + allAssets[i].awards![j].priceAtTrade * allAssets[i].awards![j].sharesNum.toInt()));
+          stocksSharesNum.update(
+              '${allAssets[i].awards![j].issueCode}', (value) => (value + allAssets[i].awards![j].sharesNum.toInt()));
+        }
+      }
+    }
+    stocksAveragePriceAtAwardMap.forEach((key, value) {
+      stocksAveragePriceAtAwardMap.update(key, (value) => (stocksAccumPrice[key]! / (stocksSharesNum[key]!.toInt())));
+    });
+  }
+
+  Future<void> calcAllHoldingStocks() async {
+    // Future.forEach(stocksSharesNumMap.keys, (element) async {
+    //   double currentPrice = await getCurrentStocksPrice(element.toString());
+
+    //   if (stocksSharesNumMap[element.toString()] != 0) {
+    //     allHoldingStocks.add(HoldingAwardModel(
+    //         issueCode: element.toString(),
+    //         name: stocksNameMap[element.toString()]!,
+    //         priceAtAward: stocksAveragePriceAtAwardMap[element.toString()]!,
+    //         sharesNum: stocksSharesNumMap[element.toString()]!,
+    //         currentPrice: currentPrice));
+
+    //     stocksDeliveryNum.add(0.obs);
+
+    //     totalHoldingStocksValue +=
+    //         currentPrice * stocksSharesNumMap[element.toString()]!;
+    //   }
+    // });
+
+    ////// FOREACH의 경우 await를 해도 그 한 줄 한 줄을 기다리는게 아니기 때문에
+    ////// 아래 코드는 잘못된 것임. 고치는 중 (시차를 두고 하면 되지만 바로 계산이 안되기때매)
+    stocksSharesNumMap.forEach((key, value) async {
+      double currentPrice = await getCurrentStocksPrice(key);
+
+      if (stocksSharesNumMap[key] != 0) {
+        allHoldingStocks.add(HoldingAwardModel(
+            issueCode: key,
+            name: stocksNameMap[key]!,
+            priceAtAward: stocksAveragePriceAtAwardMap[key]!,
+            sharesNum: stocksSharesNumMap[key]!,
+            currentPrice: currentPrice));
+
+        stocksDeliveryNum.add(0.obs);
+
+        totalHoldingStocksValue += currentPrice * stocksSharesNumMap[key]!;
+      }
+    });
+
+    // await Future.delayed(Duration(seconds: 2), () {
+    isHoldingStocksFutureLoad = true;
+    update(['holdingStocks']);
+
+    print('total value ' + totalHoldingStocksValue.toString());
+    // });
+  }
+
+  void tapPlusButton(int index) {
+    stocksDeliveryNum[index](stocksDeliveryNum[index].value < allHoldingStocks[index].sharesNum
+        ? stocksDeliveryNum[index].value + 1
+        : stocksDeliveryNum[index].value);
+
+    calcTotalDeliveryValue();
+  }
+
+  void tapMinusButton(int index) {
+    stocksDeliveryNum[index](
+        stocksDeliveryNum[index].value > 0 ? stocksDeliveryNum[index].value - 1 : stocksDeliveryNum[index].value);
+
+    calcTotalDeliveryValue();
+  }
+
+  void calcTotalDeliveryValue() {
+    totalDeliveryValue(0);
+
+    for (int i = 0; i < allHoldingStocks.length; i++) {
+      totalDeliveryValue(totalDeliveryValue.value + allHoldingStocks[i].currentPrice * stocksDeliveryNum[i].value);
+    }
+  }
+
+  void deliveryToME() {
+    // print('deliveryToME');
+
+    for (int i = 0; i < allHoldingStocks.length; i++) {
+      if (stocksDeliveryNum[i].value != 0) {
+        AssetModel ingAssetModel = AssetModel(
+            assetCategory: 'Ing',
+            tradeDate: Timestamp.fromDate(DateTime.now()),
+            tradeTitle: '${allHoldingStocks[i].name} ${stocksDeliveryNum[i].value}주 출고',
+            awards: [
+              AwardModel(
+                issueCode: '${allHoldingStocks[i].issueCode}',
+                name: '${allHoldingStocks[i].name}',
+                sharesNum: stocksDeliveryNum[i].value,
+                priceAtTrade: allHoldingStocks[i].currentPrice,
+              )
+            ]);
+
+        updateUserAsset('kakao:1518231402', ingAssetModel);
+      }
+    }
+  }
+
+  void deliveryToFRIEND() {
+    print('deliveryToFRIEND');
+  }
+}

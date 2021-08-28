@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,8 +14,9 @@ import 'package:yachtOne/screens/award/award_view.dart';
 import 'package:yachtOne/screens/contents/reading_content/reading_content_view.dart';
 import 'package:yachtOne/screens/contents/today_market/today_market_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
+import 'package:yachtOne/screens/live/live_quest_view.dart';
 import 'package:yachtOne/screens/subLeague/temp_home_view.dart';
-import 'package:yachtOne/screens/home/live_widget.dart';
+import 'package:yachtOne/screens/live/live_widget.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
@@ -23,7 +25,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import '../../locator.dart';
 
-import 'quest_widget.dart';
+import '../quest/quest_widget.dart';
 
 class HomeView extends StatelessWidget {
   HomeViewModel homeViewModel = Get.put(HomeViewModel());
@@ -50,22 +52,24 @@ class HomeView extends StatelessWidget {
             height: correctHeight(30.w, sectionTitle.fontSize!, 0.0)),
       ),
       // 이달의 상금 주식
-      AwardView(leagueName: "9월 리그", leagueEndDateTime: "20210930"),
+      AwardView(leagueName: "9월 리그", leagueEndDateTime: "2021년 9월 30일까지"),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       NewQuests(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      LiveQuests(homeViewModel: homeViewModel),
+      LiveQuestView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       QuestResults(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       ReadingContentView(homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       TodayMarketView(homeViewModel: homeViewModel),
-      SizedBox(height: correctHeight(150.w, 0.0, sectionTitle.fontSize)),
+      SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
+      DictionaryView(homeViewModel: homeViewModel),
+      SizedBox(height: correctHeight(80.w, 0.0, sectionTitle.fontSize)),
       // SliverToBoxAdapter(child: SizedBox(height: 100)),
       // OldLiveQuests(homeViewModel: homeViewModel),
       // SliverToBoxAdapter(child: Container(height: 200, color: Colors.grey)),
-      Admins(homeViewModel: homeViewModel),
+      // Admins(homeViewModel: homeViewModel),
     ];
 
     _scrollController = ScrollController(initialScrollOffset: 0);
@@ -76,7 +80,8 @@ class HomeView extends StatelessWidget {
       // print(offset);
     });
 
-    print('screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight}');
+    print(
+        'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
     if (userQuestModelRx.length != 0) print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
 
@@ -118,6 +123,79 @@ class HomeView extends StatelessWidget {
   }
 }
 
+class DictionaryView extends StatelessWidget {
+  final HomeViewModel homeViewModel;
+  const DictionaryView({Key? key, required this.homeViewModel}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          padding: primaryHorizontalPadding,
+          // color: Colors.red,
+          child: Text("금융 백과사전", style: sectionTitle),
+        ),
+        SizedBox(
+          height: heightSectionTitleAndBox,
+        ),
+        Padding(
+          padding: primaryAllPadding,
+          child: sectionBox(
+              padding: primaryAllPadding,
+              child: Column(
+                children: List.generate(
+                    homeViewModel.dictionaries.length,
+                    (index) => InkWell(
+                          onTap: () {},
+                          child: Container(
+                            padding: primaryAllPadding,
+                            child: Row(
+                              children: [
+                                FutureBuilder<String>(
+                                    future: homeViewModel
+                                        .getImageUrlFromStorage(homeViewModel.dictionaries[index].imageUrl),
+                                    builder: (context, snapshot) {
+                                      return !snapshot.hasData
+                                          ? Container(
+                                              height: 50.w,
+                                              width: 50.w,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(5.w),
+                                                color: yachtRed,
+                                              ),
+                                            )
+                                          : Container(
+                                              height: 50.w,
+                                              width: 50.w,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(5.w),
+                                                // color: yachtRed,
+                                              ),
+                                              child: Image.network(
+                                                snapshot.data!,
+                                              ),
+                                            );
+                                    }),
+                                SizedBox(width: 14.w),
+                                Text(homeViewModel.dictionaries[index].title,
+                                    style: dictionaryKeyword.copyWith(
+                                      fontFamily: 'Default',
+                                      // fontWeight: FontWeight.w400,
+                                    ))
+                              ],
+                            ),
+                          ),
+                        )),
+              )),
+        ),
+      ],
+    );
+  }
+}
+
 class QuestResults extends StatelessWidget {
   final HomeViewModel homeViewModel;
   const QuestResults({Key? key, required this.homeViewModel}) : super(key: key);
@@ -140,17 +218,21 @@ class QuestResults extends StatelessWidget {
           // color: Colors.amber.withOpacity(.3),
           // height: 340.w,
           child: Obx(() {
-            return (homeViewModel.allQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
+            return (homeViewModel.resultQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
                 ? Container(
-                    color: Colors.yellow,
-                    // height: 340.w,
+                    child: Image.asset(
+                    'assets/illusts/not_exists/no_result.png',
+                    width: 232.w,
+                    height: 170.w,
                   )
+                    // height: 340.w,
+                    )
                 : SingleChildScrollView(
                     clipBehavior: Clip.none,
                     scrollDirection: Axis.horizontal,
                     child: Row(
                         children: List.generate(
-                      5,
+                      homeViewModel.resultQuests.length,
                       (index) => Row(
                         children: [
                           index == 0
@@ -159,247 +241,239 @@ class QuestResults extends StatelessWidget {
                                 )
                               : Container(),
                           InkWell(
-                              onTap: () {
-                                Get.toNamed('quest', arguments: homeViewModel.allQuests[0]);
-                              },
-                              child: Container(
-                                height: 180.w,
-                                width: 232.w,
-                                decoration: primaryBoxDecoration.copyWith(
-                                  boxShadow: [primaryBoxShadow],
-                                  color: homeModuleBoxBackgroundColor,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      padding: moduleBoxPadding(questTermTextStyle.fontSize!),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            // '${questModel.category} 퀘스트',
-                                            '일간 퀘스트',
-                                            style: subheadingStyle,
-                                          ),
-                                          SizedBox(height: 6.w),
-                                          Text(
-                                            '${homeViewModel.allQuests[0].title}',
-                                            style: sectionTitle,
-                                          ),
-                                        ],
-                                      ),
+                            onTap: () {
+                              Get.dialog(Dialog(
+                                  backgroundColor: Colors.transparent,
+                                  insetPadding: EdgeInsets.all(16.w),
+                                  child: Container(
+                                    // height: 400.w,
+                                    decoration: primaryBoxDecoration.copyWith(
+                                      color: homeModuleBoxBackgroundColor,
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        Get.dialog(Dialog(
-                                            backgroundColor: Colors.transparent,
-                                            insetPadding: EdgeInsets.all(16.w),
-                                            child: Container(
-                                              // height: 400.w,
-                                              decoration: primaryBoxDecoration.copyWith(
-                                                color: homeModuleBoxBackgroundColor,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        SizedBox(
+                                          height: 60.w,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              // Text("x"),
+                                              Text(
+                                                "퀘스트 결과보기",
+                                                style: questTitleTextStyle,
                                               ),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
+                                              // Text("x"),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 1.w,
+                                          width: double.infinity,
+                                          color: Color(0xFF94BDE0).withOpacity(.5),
+                                        ),
+                                        Container(
+                                          padding: moduleBoxPadding(questTermTextStyle.fontSize!),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
                                                 children: [
-                                                  SizedBox(
-                                                    height: 60.w,
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        // Text("x"),
-                                                        Text(
-                                                          "퀘스트 결과보기",
-                                                          style: questTitleTextStyle,
-                                                        ),
-                                                        // Text("x"),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    height: 1.w,
-                                                    width: double.infinity,
-                                                    color: Color(0xFF94BDE0).withOpacity(.5),
-                                                  ),
-                                                  Container(
-                                                    padding: moduleBoxPadding(questTermTextStyle.fontSize!),
+                                                  Expanded(
                                                     child: Column(
+                                                      mainAxisSize: MainAxisSize.max,
                                                       mainAxisAlignment: MainAxisAlignment.start,
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Row(
-                                                          children: [
-                                                            Expanded(
-                                                              child: Column(
-                                                                mainAxisSize: MainAxisSize.max,
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                children: [
-                                                                  Text(
-                                                                    // '${questModel.category} 퀘스트',
-                                                                    '일간 퀘스트',
-                                                                    style: questTermTextStyle,
-                                                                  ),
-                                                                  SizedBox(
-                                                                      height: reducedPaddingWhenTextIsBothSide(
-                                                                          18.w,
-                                                                          questTermTextStyle.fontSize!,
-                                                                          questTitleTextStyle.fontSize!)),
-                                                                  Text(
-                                                                    '${homeViewModel.allQuests[0].title}',
-                                                                    style: questTitleTextStyle,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            SvgPicture.asset(
-                                                              'assets/icons/quest_success.svg',
-                                                              width: 72.w,
-                                                              height: 72.w,
-                                                            ),
-                                                          ],
+                                                        Text(
+                                                          // '${questModel.category} 퀘스트',
+                                                          '일간 퀘스트',
+                                                          style: questTermTextStyle,
                                                         ),
                                                         SizedBox(
-                                                          height: 20.w,
+                                                            height: reducedPaddingWhenTextIsBothSide(
+                                                                18.w,
+                                                                questTermTextStyle.fontSize!,
+                                                                questTitleTextStyle.fontSize!)),
+                                                        Text(
+                                                          '${homeViewModel.resultQuests[index].title}',
+                                                          style: questTitleTextStyle,
                                                         ),
-                                                        Container(
-                                                          height: 66.w,
-                                                          child: Row(
-                                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                                            // mainAxisAlignment:
-                                                            //     MainAxisAlignment
-                                                            //         .spaceBetween,
-                                                            children: [
-                                                              Expanded(
-                                                                child: Column(
-                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                    mainAxisSize: MainAxisSize.max,
-                                                                    children: [
-                                                                      Text("나의 선택",
-                                                                          style: smallSubtitleTextStyle.copyWith(
-                                                                              fontWeight: FontWeight.w300)),
-                                                                      Text(
-                                                                        "상승",
-                                                                        style: questTitleTextStyle.copyWith(
-                                                                            fontSize: 24.w),
-                                                                      )
-                                                                    ]),
-                                                              ),
-                                                              VerticalDivider(
-                                                                thickness: 1.w,
-                                                                color: Color(0xFF94BDE0).withOpacity(.5),
-                                                              ),
-                                                              Expanded(
-                                                                child: Column(
-                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                    mainAxisSize: MainAxisSize.max,
-                                                                    children: [
-                                                                      Text("결과",
-                                                                          style: smallSubtitleTextStyle.copyWith(
-                                                                              fontWeight: FontWeight.w300)),
-                                                                      Text(
-                                                                        "상승",
-                                                                        style: questTitleTextStyle.copyWith(
-                                                                            fontSize: 24.w),
-                                                                      )
-                                                                    ]),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                            height: reducedPaddingWhenTextIsBelow(
-                                                                30.w, smallSubtitleTextStyle.fontSize!)),
-                                                        Text("퀘스트 성공 보상", style: smallSubtitleTextStyle),
-                                                        SizedBox(
-                                                          height: reducedPaddingWhenTextIsBothSide(
-                                                              20.w, smallSubtitleTextStyle.fontSize!, 0),
-                                                        ),
-                                                        Column(
-                                                          children: [
-                                                            Row(children: [
-                                                              Row(children: [
-                                                                SvgPicture.asset(
-                                                                  'assets/icons/league_point.svg',
-                                                                  width: 27.w,
-                                                                  height: 27.w,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 6.w,
-                                                                ),
-                                                                Text("승점", style: questRewardTextStyle)
-                                                              ])
-                                                            ]),
-                                                            SizedBox(
-                                                              height: 14.w,
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-                                                                    SvgPicture.asset(
-                                                                      'assets/icons/yacht_point.svg',
-                                                                      width: 27.w,
-                                                                      height: 27.w,
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 6.w,
-                                                                    ),
-                                                                    Text("요트 포인트", style: questRewardTextStyle),
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            SizedBox(
-                                                              height: 14.w,
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                Obx(() => Text(
-                                                                    'exp testing ${userModelRx.value!.exp.toString()}',
-                                                                    style: questRewardTextStyle)),
-                                                              ],
-                                                            )
-                                                          ],
-                                                        )
                                                       ],
                                                     ),
                                                   ),
+                                                  SvgPicture.asset(
+                                                    'assets/icons/quest_success.svg',
+                                                    width: 72.w,
+                                                    height: 72.w,
+                                                  ),
                                                 ],
                                               ),
-                                            )));
-                                        // Get.defaultDialog(
-                                        //     title: '',
-                                        //     titleStyle:
-                                        //         TextStyle(fontSize: 0),
-                                        //     content: Container(
-                                        //       height: 40.w,
-                                        //       width: 40.w,
-                                        //       color: Colors.blue,
-                                        //     ));
-                                      },
-                                      child: Container(
-                                          height: 40.w,
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                              color: Color(0xFFDCE9F4),
-                                              borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(12.w),
-                                                  bottomRight: Radius.circular(12.w))),
-                                          child: Center(
-                                            child: Text(
-                                              "결과 보기",
-                                              style: cardButtonTextStyle,
-                                            ),
-                                          )),
+                                              SizedBox(
+                                                height: 20.w,
+                                              ),
+                                              Container(
+                                                height: 66.w,
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  // mainAxisAlignment:
+                                                  //     MainAxisAlignment
+                                                  //         .spaceBetween,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          mainAxisSize: MainAxisSize.max,
+                                                          children: [
+                                                            Text("나의 선택",
+                                                                style: smallSubtitleTextStyle.copyWith(
+                                                                    fontWeight: FontWeight.w300)),
+                                                            Text(
+                                                              "상승",
+                                                              style: questTitleTextStyle.copyWith(fontSize: 24.w),
+                                                            )
+                                                          ]),
+                                                    ),
+                                                    VerticalDivider(
+                                                      thickness: 1.w,
+                                                      color: Color(0xFF94BDE0).withOpacity(.5),
+                                                    ),
+                                                    Expanded(
+                                                      child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          mainAxisSize: MainAxisSize.max,
+                                                          children: [
+                                                            Text("결과",
+                                                                style: smallSubtitleTextStyle.copyWith(
+                                                                    fontWeight: FontWeight.w300)),
+                                                            Text(
+                                                              "상승",
+                                                              style: questTitleTextStyle.copyWith(fontSize: 24.w),
+                                                            )
+                                                          ]),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                  height: reducedPaddingWhenTextIsBelow(
+                                                      30.w, smallSubtitleTextStyle.fontSize!)),
+                                              Text("퀘스트 성공 보상", style: smallSubtitleTextStyle),
+                                              SizedBox(
+                                                height: reducedPaddingWhenTextIsBothSide(
+                                                    20.w, smallSubtitleTextStyle.fontSize!, 0),
+                                              ),
+                                              Column(
+                                                children: [
+                                                  Row(children: [
+                                                    Row(children: [
+                                                      SvgPicture.asset(
+                                                        'assets/icons/league_point.svg',
+                                                        width: 27.w,
+                                                        height: 27.w,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 6.w,
+                                                      ),
+                                                      Text("승점", style: questRewardTextStyle)
+                                                    ])
+                                                  ]),
+                                                  SizedBox(
+                                                    height: 14.w,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Image.asset(
+                                                            'assets/icons/yacht_point_circle.png',
+                                                            width: 27.w,
+                                                            height: 27.w,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 6.w,
+                                                          ),
+                                                          Text("요트 포인트", style: questRewardTextStyle),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 14.w,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Obx(() => Text('exp testing ${userModelRx.value!.exp.toString()}',
+                                                          style: questRewardTextStyle)),
+                                                    ],
+                                                  )
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              )),
+                                  )));
+                              // Get.defaultDialog(
+                              //     title: '',
+                              //     titleStyle:
+                              //         TextStyle(fontSize: 0),
+                              //     content: Container(
+                              //       height: 40.w,
+                              //       width: 40.w,
+                              //       color: Colors.blue,
+                              //     ));
+                            },
+                            child: Container(
+                              height: 180.w,
+                              width: 232.w,
+                              decoration: primaryBoxDecoration.copyWith(
+                                boxShadow: [primaryBoxShadow],
+                                color: homeModuleBoxBackgroundColor,
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: moduleBoxPadding(questTermTextStyle.fontSize!),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          // '${questModel.category} 퀘스트',
+                                          '일간 퀘스트',
+                                          style: subheadingStyle,
+                                        ),
+                                        SizedBox(height: 6.w),
+                                        Text(
+                                          '${homeViewModel.resultQuests[index].title}',
+                                          style: sectionTitle,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                      height: 40.w,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFDCE9F4),
+                                          borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
+                                      child: Center(
+                                        child: Text(
+                                          "결과 보기",
+                                          style: cardButtonTextStyle,
+                                        ),
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
                           horizontalSpaceLarge
                         ],
                       ),
@@ -407,68 +481,6 @@ class QuestResults extends StatelessWidget {
                   );
           }),
         )
-      ],
-    );
-  }
-}
-
-class LiveQuests extends StatelessWidget {
-  final HomeViewModel homeViewModel;
-  const LiveQuests({
-    Key? key,
-    required this.homeViewModel,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    print("live quest view built");
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: primaryPaddingSize),
-          // color: Colors.red,
-          child: Text("퀘스트 생중계", style: sectionTitle),
-        ),
-        SizedBox(
-          height: heightSectionTitleAndBox,
-        ),
-        Obx(() {
-          return (homeViewModel.allQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
-              ? Container(
-                  color: Colors.yellow,
-                  // height: 340.w,
-                )
-              : SingleChildScrollView(
-                  clipBehavior: Clip.none,
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                      children: List.generate(
-                          5,
-                          (index) => Row(
-                                children: [
-                                  index == 0
-                                      ? SizedBox(
-                                          width: kHorizontalPadding.left,
-                                        )
-                                      : Container(),
-                                  InkWell(
-                                    onTap: () {
-                                      Get.toNamed('quest', arguments: homeViewModel.allQuests[0]);
-                                    },
-                                    child: LiveWidget(
-                                      questModel: homeViewModel.allQuests[0],
-                                    ),
-                                  ),
-                                  horizontalSpaceLarge
-                                ],
-                              )))
-
-                  //     'user quest model length: ${userQuestModelRx == null}');
-
-                  );
-        })
       ],
     );
   }
@@ -552,7 +564,7 @@ class NewQuests extends StatelessWidget {
         ),
         // btwHomeModuleTitleSlider,
         Obx(() {
-          return (homeViewModel.allQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
+          return (homeViewModel.newQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
               ? Container(
                   color: Colors.yellow,
                   // height: 340.w,
@@ -562,7 +574,7 @@ class NewQuests extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                       children: List.generate(
-                          5,
+                          homeViewModel.newQuests.length,
                           (index) => Row(
                                 children: [
                                   index == 0
@@ -572,39 +584,13 @@ class NewQuests extends StatelessWidget {
                                       : Container(),
                                   InkWell(
                                     onTap: () {
-                                      Get.toNamed('quest', arguments: homeViewModel.allQuests[0]);
+                                      Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
                                     },
-                                    child: QuestWidget(questModel: homeViewModel.allQuests[0]),
+                                    child: QuestWidget(questModel: homeViewModel.newQuests[index]),
                                   ),
                                   SizedBox(width: primaryPaddingSize),
                                 ],
                               ))));
-          // ListView.builder(
-          //     scrollDirection: Axis.horizontal,
-          //     itemCount: 5, //homeViewModel.allQuests.length
-          //     itemBuilder: (context, index) {
-          //       // print(
-          //       //     'user quest model length: ${userQuestModelRx == null}');
-
-          //       return Row(
-          //         children: [
-          //           index == 0
-          //               ? SizedBox(
-          //                   width: kHorizontalPadding.left,
-          //                 )
-          //               : Container(),
-          //           InkWell(
-          //             onTap: () {
-          //               Get.toNamed('quest',
-          //                   arguments: homeViewModel.allQuests[0]);
-          //             },
-          //             child: QuestWidget(
-          //                 questModel: homeViewModel.allQuests[0]),
-          //           ),
-          //           horizontalSpaceLarge
-          //         ],
-          //       );
-          //     });
         })
       ],
     );
@@ -709,8 +695,8 @@ class MyAssets extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(
-                      'assets/icons/yacht_point.svg',
+                    Image.asset(
+                      'assets/icons/yacht_point_circle.png',
                       width: 20.w,
                       height: 20.w,
                     ),
@@ -758,7 +744,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
         // Don't wrap this in any SafeArea widgets, use padding instead
         // padding: EdgeInsets.only(top: safeAreaPadding.top),
         height: maxExtent,
-        color: primaryBackgroundColor.withOpacity(.8),
+        color: primaryBackgroundColor.withOpacity(.65),
         child: Padding(
           padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
           child: Center(

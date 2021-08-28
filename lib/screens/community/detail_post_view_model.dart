@@ -12,12 +12,13 @@ class DetailPostViewModel extends GetxController {
   final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final PostModel post;
-
   final RxList<CommentModel> comments = RxList<CommentModel>();
+  late final Rx<PostModel> thisPost;
 
   DetailPostViewModel(this.post);
   @override
   void onInit() async {
+    thisPost = Rx<PostModel>(post);
     await getComments(post);
     // TODO: implement onInit
     super.onInit();
@@ -33,11 +34,18 @@ class DetailPostViewModel extends GetxController {
     comments(await _firestoreService.getComments(post));
   }
 
+  Future getThisPost(PostModel post) async {
+    thisPost(await _firestoreService.getThisPost(post));
+  }
+
   // 코멘트 올리기
   Future uploadComment(PostModel post, String content) async {
     late CommentModel newComment;
     if (replyToUserName.value.length > 0) {
-      newComment = convertCommentToCommmentModel(post.postId!, content, true, replyToUserName: replyToUserName.value, replyToUserUid: replyToUserUid.value, replyToCommentId: replyToCommentId.value);
+      newComment = convertCommentToCommmentModel(post.postId!, content, true,
+          replyToUserName: replyToUserName.value,
+          replyToUserUid: replyToUserUid.value,
+          replyToCommentId: replyToCommentId.value);
     } else {
       newComment = convertCommentToCommmentModel(post.postId!, content, false);
     }
@@ -46,8 +54,13 @@ class DetailPostViewModel extends GetxController {
     _firestoreService.uploadNewComment(newComment);
   }
 
+  Future deleteComment(CommentModel comment) async {
+    await _firestoreService.deleteComment(comment.commentToPostId, comment.commentId!);
+  }
+
   // 댓글 내용으로 Comment Model 만들기
-  CommentModel convertCommentToCommmentModel(String commentToPostId, String content, bool isReply, {String? replyToUserName, String? replyToUserUid, String? replyToCommentId}) {
+  CommentModel convertCommentToCommmentModel(String commentToPostId, String content, bool isReply,
+      {String? replyToUserName, String? replyToUserUid, String? replyToCommentId}) {
     return CommentModel(
       commentToPostId: commentToPostId,
       content: content,

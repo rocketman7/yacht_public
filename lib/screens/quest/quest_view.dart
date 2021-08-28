@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import 'package:yachtOne/models/quest_model.dart';
 
-import 'package:yachtOne/screens/home/quest_widget.dart';
+import 'package:yachtOne/screens/quest/quest_widget.dart';
 import 'package:yachtOne/screens/quest/quest_view_model.dart';
 
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
@@ -15,7 +15,7 @@ import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
-import '../home/quest_widget.dart';
+import 'quest_widget.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
 // const double heightForSliverFlexibleSpace =
@@ -43,9 +43,8 @@ class QuestView extends StatelessWidget {
     // 뷰 모델에 퀘스트 데이터 모델 넣어주기
     final QuestViewModel questViewModel = Get.put(QuestViewModel(questModel));
 
-    final stockInfoViewModel = Get.put(StockInfoKRViewModel(
-        stockAddressModel:
-            questModel.stockAddress[questViewModel.stockInfoIndex.value]));
+    final stockInfoViewModel = Get.put(
+        StockInfoKRViewModel(investAddressModel: questModel.investAddresses[questViewModel.stockInfoIndex.value]));
     // questViewModel.init(questModel);
     // streamSubscription =
     //     StockInfoKRView.streamController.stream.listen((event) {
@@ -57,58 +56,7 @@ class QuestView extends StatelessWidget {
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //   statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
     // ));
-
     return Scaffold(
-      // ClipRect(
-      //     child: BackdropFilter(
-      //   filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-      //   child: Opacity(
-      //       opacity: 0.8,
-      //       child: Container(
-      //         // Don't wrap this in any SafeArea widgets, use padding instead
-      //         // padding: EdgeInsets.only(top: safeAreaPadding.top),
-      //         // height: maxExtent,
-      //         color: primaryBackgroundColor,
-      //         child: Padding(
-      //           padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
-      //           child: Center(
-      //               child: Row(
-      //             crossAxisAlignment: CrossAxisAlignment.end,
-      //             mainAxisAlignment: MainAxisAlignment.center,
-      //             children: [
-      //               Container(
-      //                 child: Text(
-      //                   "장한나",
-      //                   style: homeHeaderName,
-      //                 ),
-      //               ),
-      //               Container(
-      //                 // color: Colors.blue,
-      //                 child: Text(" 님의 요트", style: homeHeaderAfterName),
-      //               ),
-      //             ],
-      //           )),
-      //         ),
-      //         // Use Stack and Positioned to create the toolbar slide up effect when scrolled up
-      //         // child: Stack(
-      //         //   clipBehavior: Clip.none,
-      //         //   children: <Widget>[
-      //         //     Positioned(
-      //         //       bottom: 0,
-      //         //       left: 0,
-      //         //       right: 0,
-      //         //       child: AppBar(
-      //         //         primary: true,
-      //         //         elevation: 0,
-      //         //         backgroundColor: Colors.transparent,
-      //         //         title: Text("Translucent App Bar"),
-      //         //       ),
-      //         //     )
-      //         // ],
-      //         // ),
-      //       )),
-      // )),
-
       body: Stack(
         children: [
           CustomScrollView(
@@ -118,7 +66,7 @@ class QuestView extends StatelessWidget {
                 pinned: true,
                 title: Text(
                   "퀘스트 참여하기",
-                  style: homeHeaderAfterName,
+                  style: appBarTitle,
                 ),
               ),
               SliverToBoxAdapter(
@@ -130,15 +78,13 @@ class QuestView extends StatelessWidget {
                     children: [
                       Text(
                         "퀘스트 정보",
-                        style: homeModuleTitleTextStyle,
+                        style: sectionTitle,
                       ),
                       btwHomeModuleTitleBox,
                       Container(
-                          padding:
-                              moduleBoxPadding(questTermTextStyle.fontSize!),
-                          decoration: primaryBoxDecoration.copyWith(
-                              boxShadow: [primaryBoxShadow],
-                              color: homeModuleBoxBackgroundColor),
+                          padding: moduleBoxPadding(questTermTextStyle.fontSize!),
+                          decoration: primaryBoxDecoration
+                              .copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
                           child: Column(
                             children: [
                               QuestCardHeader(
@@ -146,10 +92,12 @@ class QuestView extends StatelessWidget {
                               ),
                               btwHomeModuleTitleBox,
                               QuestCardRewards(questModel: questModel),
-                              Divider(color: primaryFontColor),
+                              SizedBox(
+                                height: correctHeight(30.w, 0.0, detailedContentTextStyle.fontSize),
+                              ),
                               Text(
                                 questModel.questDescription,
-                                style: detailedContentTextStyle,
+                                style: questDescription,
                               ) //temp
                             ],
                           )),
@@ -168,7 +116,7 @@ class QuestView extends StatelessWidget {
                 padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
                 child: Text(
                   "기업 정보",
-                  style: homeModuleTitleTextStyle,
+                  style: sectionTitle,
                 ),
               )),
               // 스크롤 내리면 위에 붙을 퀘스트 선택지 기업 목록
@@ -176,39 +124,28 @@ class QuestView extends StatelessWidget {
                 delegate: SectionHeaderDelegate(
                     ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: questModel.stockAddress.length,
+                        itemCount: questModel.investAddresses.length,
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
                               GestureDetector(
                                 onTap: () {
                                   questViewModel.changeIndex(index);
-                                  stockInfoViewModel.changeStockAddressModel(
-                                      questModel.stockAddress[index]);
+                                  stockInfoViewModel.changeInvestAddressModel(questModel.investAddresses[index]);
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(14.w, 0, 4.w, 0),
                                   child: Obx(
                                     () => Container(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 6.w),
+                                      padding: EdgeInsets.symmetric(vertical: 6.w),
                                       decoration: BoxDecoration(
                                           border: Border(
-                                              bottom: questViewModel
-                                                          .stockInfoIndex
-                                                          .value ==
-                                                      index
-                                                  ? BorderSide(
-                                                      width: 3.w,
-                                                      color: seaBlue)
+                                              bottom: questViewModel.stockInfoIndex.value == index
+                                                  ? BorderSide(width: 3.w, color: seaBlue)
                                                   : BorderSide.none)),
-                                      child: Obx(() => Text(
-                                          questModel.stockAddress[index].name,
+                                      child: Obx(() => Text(questModel.investAddresses[index].name,
                                           style: buttonTextStyle.copyWith(
-                                              color: questViewModel
-                                                          .stockInfoIndex
-                                                          .value ==
-                                                      index
+                                              color: questViewModel.stockInfoIndex.value == index
                                                   ? seaBlue
                                                   : seaBlue.withOpacity(.4)))),
                                     ),
@@ -233,14 +170,12 @@ class QuestView extends StatelessWidget {
                     Container(
                   // height: 1800, // temp
                   padding: moduleBoxPadding(questTermTextStyle.fontSize!),
-                  decoration: primaryBoxDecoration.copyWith(
-                      boxShadow: [primaryBoxShadow],
-                      color: homeModuleBoxBackgroundColor),
+                  decoration:
+                      primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
                   child: GetBuilder<QuestViewModel>(
                     builder: (questViewModel) {
                       return StockInfoKRView(
-                          stockAddressModel: questModel.stockAddress[
-                              questViewModel.stockInfoIndex.value]);
+                          investAddressModel: questModel.investAddresses[questViewModel.stockInfoIndex.value]);
                     },
                   ),
                 ),
@@ -271,7 +206,7 @@ class QuestView extends StatelessWidget {
 
             // }
 
-            List<num>? answers = questViewModel.userQuestModel.value!.selection;
+            // List<num>? answers = questViewModel.userQuestModel.value!.selection;
             // print('answers from server: $toggleList');
             return questViewModel.isSelectingSheetShowing.value
                 ? Positioned(
@@ -283,15 +218,13 @@ class QuestView extends StatelessWidget {
                       width: double.infinity,
                       // height: 100,
                       padding: EdgeInsets.all(14.w),
-                      decoration: (primaryBoxDecoration
-                          .copyWith(boxShadow: [primaryBoxShadow])),
+                      decoration: (primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow])),
                       child: Column(
                         children: [
                           Align(
                             alignment: Alignment.centerRight,
                             child: GestureDetector(
-                              onTap: () =>
-                                  questViewModel.isSelectingSheetShowing(false),
+                              onTap: () => questViewModel.isSelectingSheetShowing(false),
                               child: Container(
                                 alignment: Alignment.centerRight,
                                 width: 50.w,
@@ -304,48 +237,35 @@ class QuestView extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(
-                              height: reducedPaddingWhenTextIsBelow(
-                                  8.w, questTitleTextStyle.fontSize!)),
+                          SizedBox(height: reducedPaddingWhenTextIsBelow(8.w, questTitleTextStyle.fontSize!)),
                           Padding(
                             padding: EdgeInsets.all(16.0.w),
                             child: Text(questModel.selectInstruction,
-                                style: questTitleTextStyle,
-                                textAlign: TextAlign.center),
+                                style: questTitleTextStyle, textAlign: TextAlign.center),
                           ),
-                          SizedBox(
-                              height: reducedPaddingWhenTextIsBelow(
-                                  16.w, questTitleTextStyle.fontSize!)),
+                          SizedBox(height: reducedPaddingWhenTextIsBelow(16.w, questTitleTextStyle.fontSize!)),
                           Divider(color: primaryFontColor.withOpacity(.4)),
                           Column(
                             children: List.generate(
-                                questModel.stockAddress.length,
+                                questModel.investAddresses.length,
                                 (index) => Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Obx(
                                           () => InkWell(
                                             onTap: () {
-                                              questViewModel
-                                                  .toggleUserSelect(index);
-                                              print(
-                                                  '$index is change to ${questViewModel.toggleList}');
+                                              questViewModel.toggleUserSelect(index);
+                                              print('$index is change to ${questViewModel.toggleList}');
                                             },
                                             child: Container(
                                               padding: EdgeInsets.all(8.0.w),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   Image.asset(
-                                                    questViewModel.toggleList[
-                                                                index] ==
-                                                            false
+                                                    questViewModel.toggleList[index] == false
                                                         ? 'assets/buttons/radio_inactive.png'
                                                         : 'assets/buttons/radio_active.png',
                                                     width: 34.w,
@@ -353,22 +273,15 @@ class QuestView extends StatelessWidget {
                                                   ),
                                                   SizedBox(width: 8.w),
                                                   Text(
-                                                    questModel
-                                                        .stockAddress[index]
-                                                        .name,
-                                                    style:
-                                                        detailedContentTextStyle
-                                                            .copyWith(
-                                                                fontSize: 18.w),
+                                                    questModel.investAddresses[index].name,
+                                                    style: detailedContentTextStyle.copyWith(fontSize: 18.w),
                                                   ),
                                                 ],
                                               ),
                                             ),
                                           ),
                                         ),
-                                        Divider(
-                                            color: primaryFontColor
-                                                .withOpacity(.4)),
+                                        Divider(color: primaryFontColor.withOpacity(.4)),
                                       ],
                                     )),
                           ),
@@ -391,8 +304,7 @@ class QuestView extends StatelessWidget {
                       ;
                     } else {
                       questViewModel.updateUserQuest();
-                      Get.snackbar(" ", "저장되었습니다.",
-                          snackPosition: SnackPosition.BOTTOM);
+                      yachtSnackBar("저장되었습니다.");
                     }
                     ;
                   },
@@ -411,9 +323,7 @@ class QuestView extends StatelessWidget {
                           questViewModel.isSelectingSheetShowing.value
                               ? "나의 예측 저장"
                               : (questViewModel.userQuestModel.value == null ||
-                                      questViewModel.userQuestModel.value!
-                                              .selectDateTime ==
-                                          null)
+                                      questViewModel.userQuestModel.value!.selectDateTime == null)
                                   ? "예측 확정하기"
                                   : "예측 변경하기",
                           style: buttonTextStyle.copyWith(fontSize: 24.w),
