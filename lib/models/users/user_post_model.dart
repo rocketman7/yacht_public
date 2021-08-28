@@ -1,12 +1,12 @@
-class UserPostModel {
-  final String postId;
-  final dynamic writtenDateTime;
-  final dynamic modifiedDateTime;
-}
+// class UserPostModel {
+//   final String postId;
+//   final dynamic writtenDateTime;
+//   final dynamic modifiedDateTime;
+// }
 
-class UserCommentModel {}
+// class UserCommentModel {}
 
-class OtherUserModel {
-  final String uid;
-  final String avatarUrl;
-}
+// class OtherUserModel {
+//   final String uid;
+//   final String avatarUrl;
+// }
