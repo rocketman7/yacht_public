@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 import 'package:kakao_flutter_sdk/auth.dart';
-
+import 'package:get_storage/get_storage.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -36,10 +36,12 @@ import 'styles/size_config.dart';
 import 'screens/subLeague/subLeague_controller.dart';
 
 void main() async {
+  await GetStorage.init();
   tz.initializeTimeZones();
   setupLocator();
 
   KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
@@ -56,8 +58,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final box = GetStorage();
+  bool hasSeenOnboarding = false;
   @override
   void initState() {
+    // GetStorage 지울 때 erase
+    // box.erase();
+    hasSeenOnboarding = box.read('hasSeenOnboarding') ?? false;
+    print('hasSeenOnboarding:' + hasSeenOnboarding.toString());
+
     super.initState();
     // initMixpanel();
     // _connectionCheckService.checkConnection(context);
@@ -100,7 +109,7 @@ class _MyAppState extends State<MyApp> {
         getPages: [
           GetPage(
             name: '/',
-            page: () => OnboardingView(),
+            page: () => hasSeenOnboarding ? AuthCheckView() : OnboardingView(),
           ),
           // GetPage(
           //     name: 'stockInfo',

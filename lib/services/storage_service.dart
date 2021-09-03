@@ -8,18 +8,17 @@ abstract class StorageService {
 }
 
 class FirebaseStorageService extends StorageService {
-  late String downloadAddress;
-
   Reference _storageReference = FirebaseStorage.instance.ref();
 
   // 이미지 다운로드
   Future<String> downloadImageURL(String storageAddress) async {
+    String downloadAddress = "";
     try {
-      downloadAddress = await _storageReference
-          .child(storageAddress.toString())
-          .getDownloadURL();
+      downloadAddress = await _storageReference.child(storageAddress.toString()).getDownloadURL();
     } catch (e) {
       print('downloadImagURL error : ${e.toString()}');
+      downloadAddress =
+          "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F001.png?alt=media&token=3035b5da-debe-465d-b3be-57ce73c68ec7";
     }
     return downloadAddress;
   }

@@ -14,7 +14,7 @@ import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import '../../../styles/style_constants.dart';
 import '../../../handlers/date_time_handler.dart';
-import '../../../models/price_chart_model.dart';
+import '../../../models/chart_price_model.dart';
 import 'chart_view_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -38,6 +38,21 @@ class ChartView extends StatelessWidget {
   final InvestAddressModel investAddressModel;
   final ChartViewModel chartViewModel;
   // onTrackballPositionChanging에서 X Position이 변했는지 체크하기 위해 직전 X Position을 저장
+  Color chartTrackingColor(ChartViewModel chartViewModel) {
+    return (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1) > 0
+        ? bullColorKR
+        : (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1) < 0
+            ? bearColorKR
+            : Colors.black;
+  }
+
+  Color chartClosePriceColor(ChartViewModel chartViewModel) {
+    return (chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!) > 0
+        ? bullColorKR
+        : (chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!) < 0
+            ? bearColorKR
+            : Colors.black;
+  }
 
   ChartView({Key? key, required this.investAddressModel, required this.chartViewModel}) : super(key: key);
 

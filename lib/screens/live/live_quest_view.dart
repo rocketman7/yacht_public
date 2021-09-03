@@ -4,6 +4,7 @@ import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/screens/live/live_quest_view_model.dart';
 import 'package:yachtOne/screens/live/live_widget.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LiveQuestView extends StatelessWidget {
   final HomeViewModel homeViewModel;
@@ -28,35 +29,46 @@ class LiveQuestView extends StatelessWidget {
           height: heightSectionTitleAndBox,
         ),
         Obx(() {
-          return (homeViewModel.liveQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
-              ? Container(
-                  color: Colors.yellow,
-                  // height: 340.w,
-                )
-              : SingleChildScrollView(
-                  clipBehavior: Clip.none,
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                      children: List.generate(
-                          homeViewModel.liveQuests.length,
-                          (index) => Row(
-                                children: [
-                                  index == 0
-                                      ? SizedBox(
-                                          width: primaryHorizontalPadding.left,
-                                        )
-                                      : Container(),
-                                  LiveWidget(
-                                    liveQuestIndex: 0,
-                                    questModel: homeViewModel.liveQuests[index],
-                                  ),
-                                  SizedBox(height: 24),
-                                ],
-                              )))
+          // print(homeViewModel.liveQuests.length);
+          if (homeViewModel.liveQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
+          {
+            return Container(
+              height: 250.w,
+              width: 232.w,
+              child: Image.asset('assets/illusts/not_exists/no_live.png'),
+              // height: 340.w,
+            );
+          } else {
+            // print(homeViewModel.liveQuests);
+            liveQuestViewModel.getListStreamPriceModel(homeViewModel.liveQuests);
+            // });
 
-                  //     'user quest model length: ${userQuestModelRx == null}');
+            return SingleChildScrollView(
+                clipBehavior: Clip.none,
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                    children: List.generate(
+                        homeViewModel.liveQuests.length,
+                        // 1,
+                        (index) => Row(
+                              children: [
+                                index == 0
+                                    ? SizedBox(
+                                        width: primaryHorizontalPadding.left,
+                                      )
+                                    : Container(),
+                                LiveWidget(
+                                  liveQuestIndex: index,
+                                  homeViewModel: homeViewModel,
+                                ),
+                                SizedBox(width: widthHorizontalListView),
+                              ],
+                            )))
 
-                  );
+                //     'user quest model length: ${userQuestModelRx == null}');
+
+                );
+          }
         })
       ],
     );

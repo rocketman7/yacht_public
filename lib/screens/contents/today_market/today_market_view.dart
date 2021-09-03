@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'today_market_view_model.dart';
 
-class TodayMarketView extends GetView {
+class TodayMarketView extends GetView<TodayMarketViewModel> {
   final HomeViewModel homeViewModel;
   TodayMarketView({Key? key, required this.homeViewModel}) : super(key: key);
 
@@ -71,7 +71,7 @@ class TodayMarketView extends GetView {
                                       height: correctHeight(14.w, sectionTitle.fontSize, contentStyle.fontSize),
                                     ),
                                     Text(
-                                      controller.todayIssues[index].summary,
+                                      controller.todayIssues[index].summary ?? "",
                                       style: contentStyle,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,

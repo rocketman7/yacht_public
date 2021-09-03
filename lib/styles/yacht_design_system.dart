@@ -25,6 +25,13 @@ const Color tierMaster = Color(0xFFE1BFFC);
 const Color tierGrandMaster = Color(0xFFFEB8B8);
 Color tierName = yachtBlack.withOpacity(.8);
 
+// Area graph Color
+Color graph0 = Color(0xFF5568CF).withOpacity(.55);
+Color graph1 = Color(0xFF55C0CF).withOpacity(.55);
+Color graph2 = Color(0xFF9255CF).withOpacity(.55);
+Color graph3 = Color(0xFF55CF69).withOpacity(.55);
+Color graph4 = Color(0xFF558DCF).withOpacity(.55);
+
 const activatedButtonColor = Color(0xFF196AB4);
 Color dividerColor = Color(0xFF94BDE0).withOpacity(0.3);
 

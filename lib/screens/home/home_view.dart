@@ -42,6 +42,7 @@ class HomeView extends StatelessWidget {
       InkWell(
         onTap: () {
           _authService.auth.signOut();
+          userModelRx.value = null;
           // homeViewModel.dispose();
           Get.reset();
           print("signout");
@@ -566,7 +567,9 @@ class NewQuests extends StatelessWidget {
         Obx(() {
           return (homeViewModel.newQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
               ? Container(
-                  color: Colors.yellow,
+                  width: 232.w,
+                  height: 344.w,
+                  child: Image.asset('assets/illusts/not_exists/no_quest.png'),
                   // height: 340.w,
                 )
               : SingleChildScrollView(

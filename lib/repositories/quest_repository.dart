@@ -1,4 +1,4 @@
-import 'package:yachtOne/models/price_chart_model.dart';
+import 'package:yachtOne/models/chart_price_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/services/firestore_service.dart';

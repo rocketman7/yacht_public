@@ -29,6 +29,7 @@ class CommunityViewModel extends GetxController {
   void onInit() async {
     // TODO: implement onInit
     await getPost();
+
     super.onInit();
   }
 

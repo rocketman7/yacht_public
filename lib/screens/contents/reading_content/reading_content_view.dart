@@ -8,7 +8,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class ReadingContentView extends GetView {
+class ReadingContentView extends GetView<ReadingContentViewModel> {
   final HomeViewModel homeViewModel;
   ReadingContentView({Key? key, required this.homeViewModel}) : super(key: key);
 

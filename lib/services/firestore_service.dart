@@ -6,12 +6,12 @@ import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/models/dictionary_model.dart';
 import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/news_model.dart';
-import 'package:yachtOne/models/price_chart_model.dart';
+import 'package:yachtOne/models/chart_price_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 import 'package:yachtOne/models/corporation_model.dart';
-import 'package:yachtOne/models/temp_realtime_model.dart';
+import 'package:yachtOne/models/live_quest_price_model.dart';
 import 'package:yachtOne/models/today_market_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
@@ -238,31 +238,105 @@ class FirestoreService extends GetxService {
   }
 
   // 라이브 스트림 가격차트 테스트용
-  Stream<List<TempRealtimeModel>> getTempRealtimePrice() {
-    return _firestoreService
-        .collection('realtimePrice/KR/20210729')
-        .where('issueCode', isEqualTo: '300720')
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((element) {
-        // print(element.data());
-        return TempRealtimeModel.fromMap(element.data());
+  // Stream<List<RealtimePriceModel>> getTempRealtimePrice(InvestAddressModel investAddressModel) {
+  //   return _firestoreService
+  //       .collection('stocks${investAddressModel.country}/${investAddressModel.issueCode}/realtimePrices')
+  //       .where('issueCode', isEqualTo: '300720')
+  //       .orderBy('createdAt', descending: true)
+  //       .snapshots()
+  //       .map((snapshot) {
+  //     return snapshot.docs.map((element) {
+  //       // print(element.data());
+  //       return RealtimePriceModel.fromMap(element.data());
+  //     }).toList();
+  //   });
+  // }
+
+  // Stream<List<RealtimePriceModel>> getTempRealtimePrice0() {
+  //   return _firestoreService
+  //       .collection('realtimePrice/KR/20210729')
+  //       .where('issueCode', isEqualTo: '196170')
+  //       .orderBy('createdAt', descending: true)
+  //       .snapshots()
+  //       .map((snapshot) {
+  //     return snapshot.docs.map((element) {
+  //
+  //       return RealtimePriceModel.fromMap(element.data());
+  //     }).toList();
+  //   });
+  // }
+
+  // 라이브 스트림 가격차트
+  Stream<List<LiveQuestPriceModel>> getLiveQuestPrices(List<InvestAddressModel> investAddressModels) {
+    Stream<List<LiveQuestPriceModel>> realtimePrices;
+
+    final snapshot = _firestoreService
+        .collection('stocksKR/005930/historicalPrices')
+        .where('dateTime', isGreaterThan: '20210901080000')
+        .snapshots();
+
+    var temp = investAddressModels.map((investAddress) {
+      final snapshot = _firestoreService
+          .collection('stocksKR/${investAddress.issueCode}/historicalPrices')
+          .where('dateTime', isGreaterThan: '20210901080000')
+          .snapshots();
+      return snapshot.map((event) => event.docs.map((e) => e.data()).toList());
+    });
+
+    return snapshot.map((element) {
+      //element는 다큐모음
+      return element.docs.map((e) {
+        // e는 하나의 다큐
+        return LiveQuestPriceModel.fromMap(
+            '005930', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
       }).toList();
     });
+
+    // investAddressModels.forEach((element) {
+    //   return _firestoreService
+    //       // .collection('stocks${element.country}/${element.issueCode}/realtimePrices')
+    //       // .where('date', isEqualTo: '20210827')
+    //       .collection('stocksKR/005930/historicalPrices')
+    //       .where('dateTime', isGreaterThan: '20210901080000')
+    //       .snapshots()
+    //       .forEach((snapshot) {
+    //     // print(snapshot.size);
+    //     {
+    //       // var tempList = snapshot.docs.map((e) {
+    //       //   // print('stream snapshot: ${e.data()}');
+    //       //   return ChartPriceModel.fromMap(e.data());
+    //       // }).toList();
+    //       // print('tempLIst: $tempList');
+
+    //       // var tempLivePrice = LiveQuestPriceModel.fromMap('${element.issueCode}', tempList);
+    //       // // print('tempLive' + tempLivePrice.toString());
+    //       // realtimePrices.add(tempLivePrice);
+
+    //       return LiveQuestPriceModel.fromMap(
+    //           '${element.issueCode}',
+    //           snapshot.docs.map((e) {
+    //             print('stream snapshot: $e');
+    //             return ChartPriceModel.fromMap(e.data());
+    //           }).toList());
+    //       // print('real' + realtimePrices.toString());
+    //     }
+    //   });
+    // }).toList();
+
+    // print('real' + realtimePrices.toString());
   }
 
-  Stream<List<TempRealtimeModel>> getTempRealtimePrice0() {
+  Stream<LiveQuestPriceModel> getStreamLiveQuestPrice(InvestAddressModel investAddress) {
     return _firestoreService
-        .collection('realtimePrice/KR/20210729')
-        .where('issueCode', isEqualTo: '196170')
-        .orderBy('createdAt', descending: true)
+        .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
+        .where('dateTime', isGreaterThan: '20210902080000')
         .snapshots()
-        .map((snapshot) {
-      return snapshot.docs.map((element) {
-        // print(element.data());
-        return TempRealtimeModel.fromMap(element.data());
-      }).toList();
+        .map((element) {
+      //element는 다큐모음
+      // print('${investAddress.issueCode}');
+      // print('snapshot: ${element.docs.last.data()}');
+      return LiveQuestPriceModel.fromMap(
+          '${investAddress.issueCode}', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
     });
   }
 

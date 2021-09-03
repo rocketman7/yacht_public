@@ -26,7 +26,7 @@ import 'community_view_model.dart';
 import 'detail_post_view_model.dart';
 import 'package:render_metrics/render_metrics.dart';
 
-class DetailPostView extends GetView {
+class DetailPostView extends GetView<DetailPostViewModel> {
   final PostModel post;
 
   // DetailPostView({

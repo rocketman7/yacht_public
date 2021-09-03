@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/community_view.dart';
 import 'package:yachtOne/screens/community/community_view_model.dart';
@@ -13,16 +15,9 @@ import 'package:yachtOne/screens/profile/profile_view.dart';
 import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
-class StartupView extends GetView {
+class StartupView extends GetView<StartupViewModel> {
   // const StartupView({Key? key}) : super(key: key);
-
-  List<Widget> pageList = [
-    HomeView(),
-    CommunityView(),
-    // Container(color: Colors.red),
-    // Container(color: yachtViolet),
-    ProfileView(uid: userModelRx.value!.uid)
-  ];
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   final double iconSize = 30.w;
 
@@ -32,7 +27,23 @@ class StartupView extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    print('startup rebuild');
+    List<Widget> pageList = [
+      HomeView(),
+      CommunityView(),
+      // Container(color: Colors.red),
+      // Container(color: yachtViolet),
+      // ProfileView(uid: _auth.currentUser.uid) //, null value error
+      ProfileView(uid: userModelRx.value!.uid) //
+    ];
+    // print('startup rebuild');
+
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      // executes after build
+      if (!controller.isNameUpdated) {
+        Get.defaultDialog(content: Text("you need to update name"));
+        print("need to update userName");
+      }
+    });
 
     return Scaffold(
       extendBody: true,

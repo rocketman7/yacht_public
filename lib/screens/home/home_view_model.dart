@@ -73,20 +73,25 @@ class HomeViewModel extends GetxController {
 
   Future getTodayAwards() async {}
 
+  // 현재 홈 뷰에 올려야 하는 퀘스트를 모두 가져온 뒤, 각 섹션에 맞게 분류
   Future getAllQuests() async {
     allQuests.assignAll(await _questRepository.getQuestForHomeView());
     // 분리작업
     DateTime now = DateTime.now();
     allQuests.forEach((element) {
       if (element.showHomeDateTime.toDate().isBefore(now) && element.liveStartDateTime.toDate().isAfter(now)) {
+        // showHome ~ liveStart: 새로나온 퀘스트
         newQuests.add(element);
       } else if (element.liveStartDateTime.toDate().isBefore(now) && element.liveEndDateTime.toDate().isAfter(now)) {
+        // liveStart ~ liveEnd: 퀘스트 생중계
         liveQuests.add(element);
       } else if (element.resultDateTime.toDate().isBefore(now) && element.closeHomeDateTime.toDate().isAfter(now)) {
+        // result ~ closeHome: 퀘스트 결과보기
         resultQuests.add(element);
       } else {
         print("포함 안 된 quest: $element");
       }
     });
+    // print('liveQuests: ${liveQuests[1]}');
   }
 }

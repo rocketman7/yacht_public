@@ -8,7 +8,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:stacked/stacked.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
-import 'package:yachtOne/models/price_chart_model.dart';
+import 'package:yachtOne/models/chart_price_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/repositories/quest_repository.dart';
 import 'package:yachtOne/screens/quest/quest_view_model.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:yachtOne/screens/auth/auth_check_view.dart';
@@ -335,6 +336,7 @@ class OnboardingView extends StatelessWidget {
     return IntroductionScreen(
       pages: screenRatio > 1.8 ? onboardingWidePages : onboardingPages,
       onDone: () {
+        GetStorage().write('hasSeenOnboarding', true);
         Get.off(() => AuthCheckView());
       },
       showSkipButton: true,
