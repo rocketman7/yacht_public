@@ -26,10 +26,49 @@ class AwardView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
+        Padding(
           padding: primaryHorizontalPadding,
-          // color: Colors.red,
-          child: Text("이 달의 상금 주식", style: sectionTitle),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text("이 달의 상금 주식", style: sectionTitle),
+              InkWell(
+                onTap: () {
+                  Get.dialog(
+                    Dialog(
+                      // backgroundColor: Colors.transparent,
+                      insetPadding: EdgeInsets.all(16.w),
+                      clipBehavior: Clip.hardEdge,
+                      child: Container(
+                        width: ScreenUtil().screenWidth * .12,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("요트 설명서"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 40.w,
+                  // height: 30.w,
+                  // color: Colors.blue,
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Image.asset(
+                      'assets/icons/question_mark.png',
+                      width: 24.w,
+                      height: 24.w,
+                      color: yachtGrey,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
         GetBuilder<AwardViewModel>(
           // 여기서 init 을 해주니까 위에서 굳이 Get.put 안해줘도 됨

@@ -13,6 +13,8 @@ const Color yachtRed = const Color(0xFFEE5076);
 const Color seaBlue = Color(0xFF489EDD);
 const Color buttonBackgroundPurple = const Color(0xFFEFF2FA);
 const Color buttonTextPurple = const Color(0xFF6073B4);
+const Color buttonDisabled = const Color(0xFFE6E6E6);
+const Color buttonNormal = const Color(0xFFEFF2FA);
 Color yachtShadow = Color(0xFFCEC4DA).withOpacity(.3);
 const yachtLineColor = Color(0xFFE6EAF1);
 const Color white = Colors.white;
@@ -78,6 +80,22 @@ double captionSize = 12.w;
 
 double smallestSize = 9.w;
 
+//// TextField InputDecoration
+// 이메일 가입 데코레이션
+InputDecoration emailRegisterInputDecoration = InputDecoration(
+  isDense: true,
+  // isCollapsed: true,
+  contentPadding: EdgeInsets.symmetric(vertical: 14.w),
+  focusedBorder: UnderlineInputBorder(
+    borderSide: BorderSide(color: yachtGrey),
+  ),
+  enabledBorder: UnderlineInputBorder(
+    borderSide: BorderSide(color: yachtGrey),
+  ),
+  hintText: "이메일 입력하기",
+  hintStyle: emailRegisterFieldHint,
+);
+
 //// 온보딩
 // 타이틀
 TextStyle onboardingTitle = TextStyle(
@@ -122,6 +140,46 @@ TextStyle socialLogin = TextStyle(
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 이메일 가입
+// 타이틀
+TextStyle emailRegisterTitle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 24.w,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+// 필드 이름
+TextStyle emailRegisterFieldName = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 12.w,
+  fontWeight: FontWeight.w500,
+  color: yachtViolet,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 필드 힌트
+TextStyle emailRegisterFieldHint = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 16.w,
+  fontWeight: FontWeight.w300,
+  color: yachtGrey,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 필드 힌트
+TextStyle emailRegisterFieldInstruction = TextStyle(
+  fontFamily: 'Default',
+  fontSize: 14.w,
+  // fontWeight: FontWeight.w300,
+  color: yachtGrey,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -420,7 +478,7 @@ TextStyle simpleTextButtonStyle = TextStyle(
 // 피드 작성자
 TextStyle feedWriterName = TextStyle(
   fontSize: 14.w,
-  fontWeight: FontWeight.w200,
+  fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -0.5,
   height: primaryFontHeight,
@@ -463,10 +521,10 @@ TextStyle feedDateTime = TextStyle(
 
 TextStyle feedCommentLikeCount = TextStyle(
   fontFamily: 'SCore',
-  fontSize: 12.w,
+  fontSize: 14.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
-  letterSpacing: -1.0,
+  letterSpacing: -.5,
   height: 1.4,
 );
 
@@ -605,6 +663,29 @@ Container textContainerButtonWithOptions({
   );
 }
 
+Container bigTextContainerButton({
+  required String text,
+  required bool isDisabled,
+  double? height,
+}) {
+  return Container(
+    height: height,
+    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+    decoration: BoxDecoration(
+      color: isDisabled ? buttonDisabled : buttonNormal,
+      borderRadius: BorderRadius.circular(50),
+    ),
+    child: Center(
+      child: Text(
+        text,
+        style: isDisabled
+            ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
+            : simpleTextButtonStyle.copyWith(fontSize: heading5Size),
+      ),
+    ),
+  );
+}
+
 // CONTAINERS
 // 기본 섹션 박스
 Container sectionBox({
@@ -685,7 +766,7 @@ Container sectionBoxWithBottomButton({
   );
 }
 
-Container simpleTierRRectBox({required String tier, double width = 70}) {
+Container simpleTierRRectBox({String tier = "newbie", double width = 70}) {
   late Color tierColor;
   late String tierName;
   switch (tier) {

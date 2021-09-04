@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:yachtOne/screens/auth/email_register_view.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'kakao_firebase_auth_api.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -104,9 +106,14 @@ class LoginView extends StatelessWidget {
                   bottom: BorderSide(width: 1.w, color: white),
                 ),
               ),
-              child: Text(
-                " 이메일로 시작하기 ",
-                style: socialLogin.copyWith(color: white),
+              child: InkWell(
+                onTap: () {
+                  Get.to(() => EmailRegisterView());
+                },
+                child: Text(
+                  " 이메일로 시작하기 ",
+                  style: socialLogin.copyWith(color: white),
+                ),
               ),
             ),
             SizedBox(
