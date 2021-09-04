@@ -5,12 +5,14 @@ import 'package:flutter/foundation.dart';
 
 class UserModel {
   final String uid;
-  final String userName;
+  String userName;
+  // final String userName;
   final bool? isNameUpdated; // 기준에 맞게 유저네임 변경했는지 체크
   final String? email;
   final String? phoneNumber;
   final dynamic account; // 증권계좌
-  final String? avatarImage; // 아바타 이미지 url
+  String? avatarImage; // 아바타 이미지 url
+  // final String? avatarImage; // 아바타 이미지 url
 
   final num item;
 
@@ -28,7 +30,8 @@ class UserModel {
   // final num? followingNum;
   final List<String>? followings;
 
-  final String? intro;
+  String? intro;
+  // final String? intro;
   final List<String>? favoriteStocks;
   final List<String>? badges;
 
@@ -157,16 +160,22 @@ class UserModel {
       item: map['item'],
       friendsCode: map['friendsCode'],
       // insertedFriendsCode: map['insertedFriendsCode'] == null ? null : List<String>.from(map['insertedFriendsCode']),
-      blockList: map['blockList'] == null ? null : List<String>.from(map['blockList']),
+      blockList:
+          map['blockList'] == null ? null : List<String>.from(map['blockList']),
       rewardedCnt: map['rewardedCnt'],
       exp: map['exp'] ?? 0,
       tier: map['tier'],
       // followersNum: map['followersNum'],
-      followers: map['followers'] == null ? null : List<String>.from(map['followers']),
+      followers:
+          map['followers'] == null ? null : List<String>.from(map['followers']),
       // followingNum: map['followingNum'],
-      followings: map['followings'] == null ? null : List<String>.from(map['followings']),
+      followings: map['followings'] == null
+          ? null
+          : List<String>.from(map['followings']),
       intro: map['intro'],
-      favoriteStocks: map['favoriteStocks'] == null ? null : List<String>.from(map['favoriteStocks']),
+      favoriteStocks: map['favoriteStocks'] == null
+          ? null
+          : List<String>.from(map['favoriteStocks']),
       badges: map['badges'] == null ? null : List<String>.from(map['badges']),
       membership: map['membership'],
       membershipStartAt: map['membershipStartAt'],
@@ -176,7 +185,8 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {

@@ -49,7 +49,8 @@ double correctHeight(double originalPadding, upperTextSize, lowerTextSize) {
 }
 
 double offsetTextHeight(double upperTextSize, double lowerTextSize) {
-  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round()).toDouble();
+  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round())
+      .toDouble();
 }
 
 // 섹션 타이틀과 박스 사이
@@ -59,7 +60,8 @@ double widthHorizontalListView = 14.w;
 // 첫 섹션과 앱바 사이
 // 섹션 안에 패딩
 double primaryPaddingSize = 14.w;
-EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(horizontal: primaryPaddingSize);
+EdgeInsets primaryHorizontalPadding =
+    EdgeInsets.symmetric(horizontal: primaryPaddingSize);
 EdgeInsets primaryAllPadding = EdgeInsets.all(primaryPaddingSize);
 // FONTS
 
@@ -186,6 +188,16 @@ TextStyle emailRegisterFieldInstruction = TextStyle(
 
 //// 프로필 페이지
 // 닉네임
+TextStyle profileTierNameStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 9.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -0.01,
+  height: primaryFontHeight,
+);
+
+// 닉네임
 TextStyle profileUserNameStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 20.w,
@@ -220,7 +232,7 @@ TextStyle profileButtonTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: activatedButtonColor,
+  color: buttonTextPurple,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -252,6 +264,40 @@ TextStyle profileFavoritesNumberTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+// 수정 페이지
+TextStyle profileChangeTitleTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+TextStyle profileChangeContentTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 16.w,
+  fontWeight: FontWeight.w400,
+  color: yachtBlack,
+  letterSpacing: -0.01,
+  height: primaryFontHeight,
+);
+TextStyle profileChangeButtonTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 20.w,
+  fontWeight: FontWeight.w500,
+  color: buttonTextPurple,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+TextStyle profileAvatarChangeTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: 0,
   height: primaryFontHeight,
 );
 
@@ -656,7 +702,8 @@ Container textContainerButtonWithOptions({
       child: Text(
         text,
         style: isDarkBackground
-            ? simpleTextButtonStyle.copyWith(color: buttonBackgroundPurple, fontSize: bodyBigSize)
+            ? simpleTextButtonStyle.copyWith(
+                color: buttonBackgroundPurple, fontSize: bodyBigSize)
             : simpleTextButtonStyle.copyWith(fontSize: bodyBigSize),
       ),
     ),
@@ -698,25 +745,31 @@ Container sectionBox({
     height: height,
     width: width,
     padding: padding ?? EdgeInsets.all(0),
-    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]),
+    decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(12.w),
+        boxShadow: [
+          BoxShadow(
+            color: yachtShadow,
+            blurRadius: 8.w,
+            spreadRadius: 1.w,
+          )
+        ]),
     child: child,
   );
 }
 
 // 기본 박스 데코레이션
-BoxDecoration yachtBoxDecoration = BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-  BoxShadow(
-    color: yachtShadow,
-    blurRadius: 8.w,
-    spreadRadius: 1.w,
-  )
-]);
+BoxDecoration yachtBoxDecoration = BoxDecoration(
+    color: white,
+    borderRadius: BorderRadius.circular(12.w),
+    boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]);
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -731,13 +784,16 @@ Container sectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]),
+    decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(12.w),
+        boxShadow: [
+          BoxShadow(
+            color: yachtShadow,
+            blurRadius: 8.w,
+            spreadRadius: 1.w,
+          )
+        ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -753,7 +809,9 @@ Container sectionBoxWithBottomButton({
           width: double.infinity,
           decoration: BoxDecoration(
               color: buttonBackgroundPurple,
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(12.w),
+                  bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -800,7 +858,8 @@ Container simpleTierRRectBox({String tier = "newbie", double width = 70}) {
   return Container(
     width: width.w,
     height: (width / 3.75).w,
-    decoration: BoxDecoration(color: tierColor, borderRadius: BorderRadius.circular(50)),
+    decoration: BoxDecoration(
+        color: tierColor, borderRadius: BorderRadius.circular(50)),
     child: Center(
       child: Text(
         '$tierName 3',
@@ -816,7 +875,9 @@ ClipRect glassmorphismContainer({required Widget child}) {
         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
         child: Container(
           padding: EdgeInsets.all(6.w),
-          decoration: BoxDecoration(color: glassmorphismBackgroundColor, borderRadius: BorderRadius.circular(10.w)),
+          decoration: BoxDecoration(
+              color: glassmorphismBackgroundColor,
+              borderRadius: BorderRadius.circular(10.w)),
           child: child,
         )),
   );
