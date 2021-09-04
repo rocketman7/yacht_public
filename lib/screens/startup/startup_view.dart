@@ -21,7 +21,8 @@ class StartupView extends GetView {
     CommunityView(),
     // Container(color: Colors.red),
     // Container(color: yachtViolet),
-    ProfileView(uid: userModelRx.value!.uid)
+    ProfileView(uid: 'kakao:1513684681')
+    // ProfileView(uid: userModelRx.value!.uid)
   ];
 
   final double iconSize = 30.w;

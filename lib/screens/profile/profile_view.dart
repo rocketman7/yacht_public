@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../handlers/numbers_handler.dart';
@@ -12,8 +12,8 @@ import '../../styles/size_config.dart';
 
 import 'asset_view.dart';
 import 'asset_view_model.dart';
+import 'profile_change_view.dart';
 import 'profile_controller.dart';
-import 'stocks_delivery_view.dart';
 
 class ProfileView extends StatelessWidget {
   final String uid;
@@ -31,60 +31,144 @@ class ProfileView extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // *아바타이미지, *티어정보
-                  Stack(
-                    children: [
-                      Container(
-                        height: 79.5.w,
-                        width: 79.5.w,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              width: 1.w,
-                              // *티어정보
-                              color: Color(0xFF8A64A8),
-                            )),
-                      ),
-                      GetBuilder<ProfileController>(
-                          id: 'profile',
-                          init: ProfileController(uid: uid),
-                          builder: (controller) {
-                            return Positioned(
-                                left: 5.w,
-                                top: 5.w,
+                  GetBuilder<ProfileController>(
+                      id: 'profile',
+                      init: ProfileController(uid: uid),
+                      builder: (controller) {
+                        return Container(
+                          width: 79.w,
+                          height: 90.w,
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: 79.w,
+                                width: 79.w,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: LinearGradient(
+                                        begin: Alignment(0.0, 0.0),
+                                        end: Alignment(0.0, 1.0),
+                                        colors: [
+                                          (controller.isUserModelLoaded)
+                                              ? controller.user.tier != null
+                                                  ? tierColor[
+                                                      controller.user.tier]!
+                                                  : tierColor['newbie']!
+                                              : tierColor['newbie']!,
+                                          primaryBackgroundColor
+                                        ])),
+                              ),
+                              Positioned(
+                                left: 1.w,
+                                top: 1.w,
                                 child: Container(
-                                    height: 69.5.w,
-                                    width: 69.5.w,
+                                    height: 77.w,
+                                    width: 77.w,
                                     decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      // color: Colors.blueGrey.withOpacity(0.4),
-                                    ),
-                                    child: (controller.isUserModelLoaded)
-                                        ? controller.user.avatarImage != null
-                                            ? FutureBuilder<String>(
-                                                future: controller.getImageUrlFromStorage(controller.user.avatarImage!),
-                                                builder: (context, snapshot) {
-                                                  return snapshot.hasData
-                                                      ? CachedNetworkImage(
-                                                          imageUrl: snapshot.data!,
-                                                        )
-                                                      : Container();
-                                                })
-                                            : Container()
-                                        : Container()));
-                          }),
-                    ],
-                  ),
+                                        shape: BoxShape.circle,
+                                        color: primaryBackgroundColor)),
+                              ),
+                              Positioned(
+                                  left: 5.w,
+                                  top: 5.w,
+                                  child: controller.isMe
+                                      ? Obx(() => Container(
+                                          height: 69.w,
+                                          width: 69.w,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: userModelRx
+                                                      .value!.avatarImage !=
+                                                  null
+                                              ? FutureBuilder<String>(
+                                                  future: controller
+                                                      .getImageUrlFromStorage(
+                                                          'avatars/${userModelRx.value!.avatarImage!}.png'),
+                                                  builder: (context, snapshot) {
+                                                    return snapshot.hasData
+                                                        ? CachedNetworkImage(
+                                                            imageUrl:
+                                                                snapshot.data!,
+                                                          )
+                                                        : Container();
+                                                  })
+                                              : Container()))
+                                      : Container(
+                                          height: 69.w,
+                                          width: 69.w,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: (controller.isUserModelLoaded)
+                                              ? controller.user.avatarImage !=
+                                                      null
+                                                  ? FutureBuilder<String>(
+                                                      future: controller
+                                                          .getImageUrlFromStorage(
+                                                              'avatars/${controller.user.avatarImage}.png'),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        return snapshot.hasData
+                                                            ? CachedNetworkImage(
+                                                                imageUrl:
+                                                                    snapshot
+                                                                        .data!,
+                                                              )
+                                                            : Container();
+                                                      })
+                                                  : Container()
+                                              : Container())),
+                              Positioned(
+                                  top: 58.w,
+                                  child: (controller.isUserModelLoaded)
+                                      ? controller.user.tier != null
+                                          ? FutureBuilder<String>(
+                                              future: controller
+                                                  .getImageUrlFromStorage(
+                                                      tierJellyBeanURL[
+                                                          controller
+                                                              .user.tier]!),
+                                              builder: (context, snapshot) {
+                                                return snapshot.hasData
+                                                    ? Stack(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        children: [
+                                                          Container(
+                                                            width: 78.w,
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl: snapshot
+                                                                  .data!,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            '${tierKRWName[controller.user.tier]}',
+                                                            style:
+                                                                profileTierNameStyle,
+                                                          ),
+                                                        ],
+                                                      )
+                                                    : Container();
+                                              })
+                                          : Container()
+                                      : Container()),
+                            ],
+                          ),
+                        );
+                      }),
                   SizedBox(
                     width: 16.w,
                   ),
                   Container(
-                    width: SizeConfig.screenWidth - 14.w - 14.w - 79.5.w - 16.w,
+                    width: SizeConfig.screenWidth - 14.w - 14.w - 79.w - 16.w,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: correctHeight(5.w, 0.0, profileUserNameStyle.fontSize),
+                          height: correctHeight(
+                              5.w, 0.0, profileUserNameStyle.fontSize),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,10 +181,15 @@ class ProfileView extends StatelessWidget {
                                   id: 'profile',
                                   builder: (controller) {
                                     if (controller.isUserModelLoaded) {
-                                      return Text(
-                                        '${controller.user.userName}',
-                                        style: profileUserNameStyle,
-                                      );
+                                      return controller.isMe
+                                          ? Obx(() => Text(
+                                                '${userModelRx.value!.userName}',
+                                                style: profileUserNameStyle,
+                                              ))
+                                          : Text(
+                                              '${controller.user.userName}',
+                                              style: profileUserNameStyle,
+                                            );
                                     } else {
                                       return Text(
                                         '',
@@ -111,7 +200,9 @@ class ProfileView extends StatelessWidget {
                                 ),
                                 SizedBox(
                                   height: correctHeight(
-                                      10.w, profileUserNameStyle.fontSize, profileFollowTextStyle.fontSize),
+                                      10.w,
+                                      profileUserNameStyle.fontSize,
+                                      profileFollowTextStyle.fontSize),
                                 ),
                                 // 팔로워 숫자 / 팔로잉 숫자
                                 Row(
@@ -120,12 +211,24 @@ class ProfileView extends StatelessWidget {
                                       id: 'profile',
                                       builder: (controller) {
                                         if (controller.isUserModelLoaded) {
-                                          return Text(
-                                            controller.user.followers == null
-                                                ? '0'
-                                                : '${controller.user.followers!.length}',
-                                            style: profileFollowNumberStyle,
-                                          );
+                                          return controller.isMe
+                                              ? Obx(() => Text(
+                                                    userModelRx.value!
+                                                                .followers ==
+                                                            null
+                                                        ? '0'
+                                                        : '${userModelRx.value!.followers!.length}',
+                                                    style:
+                                                        profileFollowNumberStyle,
+                                                  ))
+                                              : Text(
+                                                  controller.user.followers ==
+                                                          null
+                                                      ? '0'
+                                                      : '${controller.user.followers!.length}',
+                                                  style:
+                                                      profileFollowNumberStyle,
+                                                );
                                         } else {
                                           return Text(
                                             '',
@@ -134,7 +237,6 @@ class ProfileView extends StatelessWidget {
                                         }
                                       },
                                     ),
-                                    SizedBox(width: 4.w),
                                     Text(
                                       '팔로워',
                                       style: profileFollowTextStyle,
@@ -146,12 +248,24 @@ class ProfileView extends StatelessWidget {
                                       id: 'profile',
                                       builder: (controller) {
                                         if (controller.isUserModelLoaded) {
-                                          return Text(
-                                            controller.user.followings == null
-                                                ? '0'
-                                                : '${controller.user.followings!.length}',
-                                            style: profileFollowNumberStyle,
-                                          );
+                                          return controller.isMe
+                                              ? Obx(() => Text(
+                                                    userModelRx.value!
+                                                                .followings ==
+                                                            null
+                                                        ? '0'
+                                                        : '${userModelRx.value!.followings!.length}',
+                                                    style:
+                                                        profileFollowNumberStyle,
+                                                  ))
+                                              : Text(
+                                                  controller.user.followings ==
+                                                          null
+                                                      ? '0'
+                                                      : '${controller.user.followings!.length}',
+                                                  style:
+                                                      profileFollowNumberStyle,
+                                                );
                                         } else {
                                           return Text(
                                             '',
@@ -172,26 +286,56 @@ class ProfileView extends StatelessWidget {
                             // *(내 프로필이 아닌 남의 프로필일 경우) 팔로우 버튼
                             GestureDetector(
                               onTap: () {
-                                print('click');
-                                // Get.to(() => AssetView());
-                                Get.to(() => StocksDeliveryView());
+                                if (Get.find<ProfileController>().isMe) {
+                                  Get.to(() => ProfileChangeView());
+                                } else {
+                                  // 팔로우기능
+                                  Get.find<ProfileController>()
+                                      .followSomeoneMethod();
+                                }
                               },
                               child: Container(
                                 height: 30.w,
                                 width: 100.w,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(70.0),
-                                  border: Border.all(color: activatedButtonColor, width: 1.5.w),
+                                  border: Border.all(
+                                      color: buttonTextPurple, width: 1.5.w),
                                 ),
                                 child: Center(
                                   child: GetBuilder<ProfileController>(
                                     id: 'profile',
                                     builder: (controller) {
                                       if (controller.isUserModelLoaded) {
-                                        return Text(
-                                          controller.isMe ? '프로필 수정' : '팔로우',
-                                          style: profileButtonTextStyle,
-                                        );
+                                        if (controller.isMe) {
+                                          return Text(
+                                            '프로필 수정',
+                                            style: profileButtonTextStyle,
+                                          );
+                                        } else {
+                                          return Text(
+                                            '팔로우',
+                                            style: profileButtonTextStyle,
+                                          );
+                                          // controller.user.followers != null
+                                          // if (controller.user.followers!
+                                          //     .contains(
+                                          //         userModelRx.value!.uid)) {
+                                          //   return Text(
+                                          //     '팔로우 중',
+                                          //     style: profileButtonTextStyle,
+                                          //   );
+                                          // } else {
+                                          //   return Text(
+                                          //     '팔로우',
+                                          //     style: profileButtonTextStyle,
+                                          //   );
+                                          // }
+                                        }
+                                        // return Text(
+                                        //   controller.isMe ? '프로필 수정' : '팔로우',
+                                        //   style: profileButtonTextStyle,
+                                        // );
                                       } else {
                                         return Text(
                                           '',
@@ -207,22 +351,36 @@ class ProfileView extends StatelessWidget {
                         ),
                         SizedBox(
                             height: correctHeight(
-                                14.w, profileFollowTextStyle.fontSize, subLeagueAwardCommentStyle.fontSize)),
+                                14.w,
+                                profileFollowTextStyle.fontSize,
+                                subLeagueAwardCommentStyle.fontSize)),
                         // 유저소개글
                         GetBuilder<ProfileController>(
                           id: 'profile',
                           builder: (controller) {
                             if (controller.isUserModelLoaded) {
-                              return Text(
-                                controller.user.intro == null
-                                    ? '소개글이 없습니다.'
-                                    : '${controller.user.intro}'.replaceAll('\\n', '\n'),
-                                style: subLeagueAwardCommentStyle.copyWith(letterSpacing: -0.01),
-                              );
+                              return controller.isMe
+                                  ? Obx(() => Text(
+                                        userModelRx.value!.intro == null
+                                            ? '소개글이 없습니다.'
+                                            : '${userModelRx.value!.intro}'
+                                                .replaceAll('\\n', '\n'),
+                                        style: subLeagueAwardCommentStyle
+                                            .copyWith(letterSpacing: -0.01),
+                                      ))
+                                  : Text(
+                                      controller.user.intro == null
+                                          ? '소개글이 없습니다.'
+                                          : '${controller.user.intro}'
+                                              .replaceAll('\\n', '\n'),
+                                      style: subLeagueAwardCommentStyle
+                                          .copyWith(letterSpacing: -0.01),
+                                    );
                             } else {
                               return Text(
                                 '',
-                                style: subLeagueAwardCommentStyle.copyWith(letterSpacing: -0.01),
+                                style: subLeagueAwardCommentStyle.copyWith(
+                                    letterSpacing: -0.01),
                               );
                             }
                           },
@@ -232,7 +390,9 @@ class ProfileView extends StatelessWidget {
                   ),
                 ],
               )),
-          SizedBox(height: correctHeight(35.w, subLeagueAwardCommentStyle.fontSize, profileButtonTextStyle.fontSize)),
+          SizedBox(
+              height: correctHeight(35.w, subLeagueAwardCommentStyle.fontSize,
+                  profileButtonTextStyle.fontSize)),
           Row(
             children: [
               Flexible(
@@ -241,7 +401,9 @@ class ProfileView extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '피드/프로',
-                    style: profileButtonTextStyle.copyWith(color: 0 == 1 ? profileButtonTextStyle.color : yachtGrey),
+                    style: profileButtonTextStyle.copyWith(
+                        color:
+                            0 == 1 ? profileButtonTextStyle.color : yachtGrey),
                   ),
                 ),
               )),
@@ -251,7 +413,9 @@ class ProfileView extends StatelessWidget {
                 child: Center(
                   child: Text(
                     '리그',
-                    style: profileButtonTextStyle.copyWith(color: 1 == 1 ? profileButtonTextStyle.color : yachtGrey),
+                    style: profileButtonTextStyle.copyWith(
+                        color:
+                            1 == 1 ? profileButtonTextStyle.color : yachtGrey),
                   ),
                 ),
               )),
@@ -275,7 +439,7 @@ class ProfileView extends StatelessWidget {
                   child: Container(
                     height: 3.w,
                     width: SizeConfig.screenWidth / 2,
-                    color: 0 == 1 ? activatedButtonColor : Colors.transparent,
+                    color: 0 == 1 ? buttonTextPurple : Colors.transparent,
                   ),
                 ),
                 Positioned(
@@ -284,7 +448,7 @@ class ProfileView extends StatelessWidget {
                   child: Container(
                     height: 3.w,
                     width: SizeConfig.screenWidth / 2,
-                    color: 1 == 1 ? activatedButtonColor : Colors.transparent,
+                    color: 1 == 1 ? buttonTextPurple : Colors.transparent,
                   ),
                 ),
               ],
@@ -304,30 +468,40 @@ class ProfileView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('보유 자산', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
+                          Text('보유 자산',
+                              style: subLeagueAwardCommentStyle.copyWith(
+                                  fontSize: 16.w)),
                           SizedBox(
-                            height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize),
+                            height: correctHeight(
+                                10.w, 16.w, subLeagueAwardLabelStyle.fontSize),
                           ),
                           // *보유자산
                           GetBuilder<ProfileController>(
                               id: 'profile',
                               builder: (controller) {
-                                if (controller.isMe && controller.isUserModelLoaded) {
+                                if (controller.isMe &&
+                                    controller.isUserModelLoaded) {
                                   return GetBuilder<AssetViewModel>(
                                       id: 'holdingStocks',
                                       builder: (assetController) {
-                                        if (assetController.isHoldingStocksFutureLoad) {
+                                        if (assetController
+                                            .isHoldingStocksFutureLoad) {
                                           return Text(
                                             '${toPriceKRW(assetController.totalHoldingStocksValue + assetController.totalYachtPoint)}원',
-                                            style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                                            style: subLeagueAwardLabelStyle
+                                                .copyWith(letterSpacing: -0.01),
                                           );
                                         } else {
                                           return Text('',
-                                              style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01));
+                                              style: subLeagueAwardLabelStyle
+                                                  .copyWith(
+                                                      letterSpacing: -0.01));
                                         }
                                       });
                                 } else {
-                                  return Text('???', style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01));
+                                  return Text('???',
+                                      style: subLeagueAwardLabelStyle.copyWith(
+                                          letterSpacing: -0.01));
                                 }
                               }),
                         ],
@@ -349,12 +523,17 @@ class ProfileView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('순위', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
-                        SizedBox(height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize)),
+                        Text('순위',
+                            style: subLeagueAwardCommentStyle.copyWith(
+                                fontSize: 16.w)),
+                        SizedBox(
+                            height: correctHeight(
+                                10.w, 16.w, subLeagueAwardLabelStyle.fontSize)),
                         // *현재 리그 순위 및 승점
                         Text(
                           '7143위 | 42점',
-                          style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                          style: subLeagueAwardLabelStyle.copyWith(
+                              letterSpacing: -0.01),
                         ),
                       ],
                     ),
@@ -391,7 +570,8 @@ class ProfileView extends StatelessWidget {
           GetBuilder<ProfileController>(
             id: 'favorites',
             builder: (controller) {
-              if (controller.isUserModelLoaded && controller.isFavoritesLoaded) {
+              if (controller.isUserModelLoaded &&
+                  controller.isFavoritesLoaded) {
                 // 굳이 이렇게 조건을 중첩한 이유는 그냥 혹시 먼저 뜨게되면 부자연스러울 것 같아서.
                 return ProfileViewFavoritesCardWidget();
               } else {
@@ -411,7 +591,10 @@ class ProfileViewFavoritesCardWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: profileController.stockModels
-          .sublist(0, min(profileController.maxNumOfFavoriteStocks, profileController.stockModels.length))
+          .sublist(
+              0,
+              min(profileController.maxNumOfFavoriteStocks,
+                  profileController.stockModels.length))
           .asMap()
           .map((i, element) => MapEntry(
               i,
@@ -429,7 +612,8 @@ class ProfileViewFavoritesCardWidget extends StatelessWidget {
                           height: 50.w,
                           width: 50.w,
                           child: FutureBuilder<String>(
-                            future: profileController.getLogoUrl(profileController.stockModels[i].logoUrl),
+                            future: profileController.getLogoUrl(
+                                profileController.stockModels[i].logoUrl),
                             builder: (_, snapshot) {
                               if (snapshot.hasData) {
                                 return Image.network(snapshot.data.toString());
@@ -448,14 +632,22 @@ class ProfileViewFavoritesCardWidget extends StatelessWidget {
                             style: profileFavoritesNameTextStyle,
                           ),
                           SizedBox(
-                              height: correctHeight(6.w, profileFavoritesNameTextStyle.fontSize,
+                              height: correctHeight(
+                                  6.w,
+                                  profileFavoritesNameTextStyle.fontSize,
                                   profileFavoritesNumberTextStyle.fontSize)),
                           Text(
                               '${toPriceKRW(profileController.stockHistoricalPriceModels[i].close)} (${toPercentageChange((profileController.stockHistoricalPriceModels[i].close - profileController.stockHistoricalPriceModels[i].prevClose) / profileController.stockHistoricalPriceModels[i].prevClose)})',
-                              style: profileController.stockHistoricalPriceModels[i].close >=
-                                      profileController.stockHistoricalPriceModels[i].prevClose
-                                  ? profileFavoritesNumberTextStyle.copyWith(color: yachtRed)
-                                  : profileFavoritesNumberTextStyle.copyWith(color: seaBlue)),
+                              style: profileController
+                                          .stockHistoricalPriceModels[i]
+                                          .close >=
+                                      profileController
+                                          .stockHistoricalPriceModels[i]
+                                          .prevClose
+                                  ? profileFavoritesNumberTextStyle.copyWith(
+                                      color: yachtRed)
+                                  : profileFavoritesNumberTextStyle.copyWith(
+                                      color: seaBlue)),
                         ],
                       ),
                       Spacer(),
