@@ -35,11 +35,13 @@ class HomeViewModel extends GetxController {
   late String globalString;
   bool isLoading = true;
   RxBool isQuestDataLoading = true.obs;
+  RxBool checkIfFirstTime = false.obs;
 
   @override
   void onInit() async {
     // TODO: implement onInit
     // await getTodayData();
+
     await getAllQuests();
     await getDictionaries();
     // await getUser();

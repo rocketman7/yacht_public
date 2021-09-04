@@ -600,49 +600,6 @@ class NewQuests extends StatelessWidget {
   }
 }
 
-class Awards extends StatelessWidget {
-  const Awards({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    print('award view built');
-    return Container(
-      // color: Colors.blueGrey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            padding: primaryHorizontalPadding,
-            // color: Colors.red,
-            child: Text("이 달의 상금 주식", style: sectionTitle),
-          ),
-          btwHomeModuleTitleBox,
-          Center(
-            child: Container(
-              height: 150.w,
-              width: 275.w,
-              padding: moduleBoxPadding(20.w), // temp
-              decoration:
-                  primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
-              child: Container(
-                // color: Colors.blue,
-                child: Text(
-                  "기간 퀘스트 퀘스트 퀘",
-                  style: questTermTextStyle,
-                ),
-              ),
-            ),
-          ),
-          belowHomeModule
-        ],
-      ),
-    );
-  }
-}
-
 class MyAssets extends StatelessWidget {
   const MyAssets({
     Key? key,

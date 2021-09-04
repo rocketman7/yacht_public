@@ -37,13 +37,13 @@ class StartupView extends GetView<StartupViewModel> {
     ];
     // print('startup rebuild');
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      // executes after build
-      if (!controller.isNameUpdated) {
-        Get.defaultDialog(content: Text("you need to update name"));
-        print("need to update userName");
-      }
-    });
+    // WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //   // executes after build
+    //   if (!controller.isNameUpdated) {
+    //     Get.defaultDialog(content: Text("you need to update name"));
+    //     print("need to update userName");
+    //   }
+    // });
 
     return Scaffold(
       extendBody: true,
