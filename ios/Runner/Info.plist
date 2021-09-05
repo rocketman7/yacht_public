@@ -49,6 +49,13 @@
 		<string>$(CURRENT_PROJECT_VERSION)</string>
 		<key>GADApplicationIdentifier</key>
 		<string>ca-app-pub-3726614606720353~1848726570</string>
+		<key>SKAdNetworkItems</key>
+			<array>
+				<dict>
+				<key>SKAdNetworkIdentifier</key>
+				<string>cstr6suwn9.skadnetwork</string>
+				</dict>
+			</array>
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
 			<string>kakaokompassauth</string>

@@ -62,7 +62,7 @@ dependencies:
   get: ^4.3.8
   get_it: ^6.1.1
   get_storage:
-  google_mobile_ads: ^0.13.0
+  google_mobile_ads: ^0.13.4
   http: ^0.13.3
   image_picker: ^0.8.3
   intl: ^0.17.0

@@ -665,6 +665,31 @@ TextStyle questTitle = TextStyle(
   height: 1.4,
 );
 
+TextStyle adsWarningTitle = TextStyle(
+  fontSize: 16.w,
+  fontFamily: 'SCore',
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: 0.0,
+  height: 1.4,
+);
+TextStyle adsWarningText = TextStyle(
+  fontSize: 18.w,
+  fontFamily: 'SCore',
+  fontWeight: FontWeight.w400,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle adsWarningButton = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 20.w,
+  fontWeight: FontWeight.w500,
+  color: Color(0xFFEFF2FA),
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
 // ICONS
 
 // BUTTONS
@@ -726,7 +751,8 @@ Container bigTextContainerButton({
       child: Text(
         text,
         style: isDisabled
-            ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
+            ? simpleTextButtonStyle.copyWith(
+                color: yachtGrey, fontSize: heading5Size)
             : simpleTextButtonStyle.copyWith(fontSize: heading5Size),
       ),
     ),

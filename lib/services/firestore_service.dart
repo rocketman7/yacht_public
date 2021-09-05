@@ -299,7 +299,8 @@ class FirestoreService extends GetxService {
   // }
 
   // 라이브 스트림 가격차트
-  Stream<List<LiveQuestPriceModel>> getLiveQuestPrices(List<InvestAddressModel> investAddressModels) {
+  Stream<List<LiveQuestPriceModel>> getLiveQuestPrices(
+      List<InvestAddressModel> investAddressModels) {
     Stream<List<LiveQuestPriceModel>> realtimePrices;
 
     final snapshot = _firestoreService
@@ -320,7 +321,10 @@ class FirestoreService extends GetxService {
       return element.docs.map((e) {
         // e는 하나의 다큐
         return LiveQuestPriceModel.fromMap(
-            '005930', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
+            '005930',
+            element.docs
+                .map((t) => ChartPriceModel.fromMap(t.data()))
+                .toList());
       }).toList();
     });
 
@@ -358,7 +362,8 @@ class FirestoreService extends GetxService {
     // print('real' + realtimePrices.toString());
   }
 
-  Stream<LiveQuestPriceModel> getStreamLiveQuestPrice(InvestAddressModel investAddress) {
+  Stream<LiveQuestPriceModel> getStreamLiveQuestPrice(
+      InvestAddressModel investAddress) {
     return _firestoreService
         .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
         .where('dateTime', isGreaterThan: '20210902080000')
@@ -367,8 +372,8 @@ class FirestoreService extends GetxService {
       //element는 다큐모음
       // print('${investAddress.issueCode}');
       // print('snapshot: ${element.docs.last.data()}');
-      return LiveQuestPriceModel.fromMap(
-          '${investAddress.issueCode}', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
+      return LiveQuestPriceModel.fromMap('${investAddress.issueCode}',
+          element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
     });
   }
 
@@ -558,5 +563,23 @@ class FirestoreService extends GetxService {
     });
 
     return adminStandardsModel;
+  }
+
+  // 유저가 광고를 보면 아이템을 올려주거나, 퀘스트 참여시 아이템을 차감해준다.
+  Future updateUserItem(int itemChange) async {
+    if (userModelRx.value != null)
+      await _firestoreService
+          .collection('users')
+          .doc('${userModelRx.value!.uid}')
+          .update({'item': FieldValue.increment(itemChange)});
+  }
+
+  // 유저가 광고를 보면 오늘 본 광고갯수를 올려준다
+  Future updateUserRewardedCnt() async {
+    if (userModelRx.value != null)
+      await _firestoreService
+          .collection('users')
+          .doc('${userModelRx.value!.uid}')
+          .update({'rewardedCnt': FieldValue.increment(1)});
   }
 }
