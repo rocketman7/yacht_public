@@ -155,66 +155,7 @@ class HomeViewModel extends GetxController {
     if (_rewardedAd == null) {
       print('Warning: attempt to show rewarded before loaded.');
       Get.dialog(
-        Dialog(
-          backgroundColor: primaryBackgroundColor,
-          insetPadding: EdgeInsets.all(16.w),
-          clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          child: Padding(
-            padding: EdgeInsets.only(left: 14.w, right: 14.w),
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 14.w,
-                  ),
-                  Text(
-                    '알림',
-                    style: adsWarningTitle,
-                  ),
-                  SizedBox(
-                    height: 24.w,
-                  ),
-                  Text(
-                    "광고가 아직 로딩되지 않았어요.\n잠시 후 다시 시도해주세요!",
-                    textAlign: TextAlign.center,
-                    style: adsWarningText,
-                  ),
-                  SizedBox(
-                    height: 24.w,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 14.w, right: 14.w),
-                    child: GestureDetector(
-                      onTap: () {
-                        print('aaaaaa');
-                        Get.back();
-                      },
-                      child: Container(
-                        height: 44.w,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(70.0),
-                            color: Color(0xFF6073B4)),
-                        width: double.infinity,
-                        child: Center(
-                          child: Text(
-                            '확인',
-                            style: adsWarningButton,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 14.w,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        rewardedNotLoadDialog(),
       );
       return;
     }
@@ -242,4 +183,67 @@ class HomeViewModel extends GetxController {
     });
     _rewardedAd = null;
   }
+}
+
+// 홈뷰에서 광고 5개 다 봤다는 다이얼로그도 그렇고 아래 다이얼로그도 그렇고 확인버튼이 먹지 않는 상태 (Get.back땜시)
+Widget rewardedNotLoadDialog() {
+  return Dialog(
+    backgroundColor: primaryBackgroundColor,
+    insetPadding: EdgeInsets.all(16.w),
+    clipBehavior: Clip.hardEdge,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    child: Padding(
+      padding: EdgeInsets.only(left: 14.w, right: 14.w),
+      child: Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 14.w,
+            ),
+            Text(
+              '알림',
+              style: adsWarningTitle,
+            ),
+            SizedBox(
+              height: 24.w,
+            ),
+            Text(
+              "광고가 아직 로딩되지 않았어요.\n잠시 후 다시 시도해주세요!",
+              textAlign: TextAlign.center,
+              style: adsWarningText,
+            ),
+            SizedBox(
+              height: 24.w,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 14.w, right: 14.w),
+              child: GestureDetector(
+                onTap: () {
+                  print('aaaaaa');
+                  Get.back();
+                },
+                child: Container(
+                  height: 44.w,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(70.0),
+                      color: Color(0xFF6073B4)),
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      '확인',
+                      style: adsWarningButton,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 14.w,
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }

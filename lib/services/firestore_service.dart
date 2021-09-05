@@ -582,4 +582,12 @@ class FirestoreService extends GetxService {
           .doc('${userModelRx.value!.uid}')
           .update({'rewardedCnt': FieldValue.increment(1)});
   }
+
+  // fcm token이 없는 유저들(처음 들어온 유저들)은 토큰을 업데이트
+  Future updateUserFCMToken(String token) async {
+    await _firestoreService
+        .collection('users')
+        .doc('${userModelRx.value!.uid}')
+        .update({'token': token});
+  }
 }

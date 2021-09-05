@@ -38,6 +38,9 @@ class UserModel {
   final bool? membership; // 멤버쉽 가입 여부
   final dynamic membershipStartAt; // 멤버쉽 시작일
   final dynamic membershipEndAt; // 멤버쉽 종료일
+
+  final String? token;
+
   UserModel({
     required this.uid,
     required this.userName,
@@ -63,34 +66,35 @@ class UserModel {
     this.membership,
     required this.membershipStartAt,
     required this.membershipEndAt,
+    this.token,
   });
 
-  UserModel copyWith({
-    String? uid,
-    String? userName,
-    bool? isNameUpdated,
-    String? email,
-    String? phoneNumber,
-    dynamic? account,
-    String? avatarImage,
-    num? item,
-    String? friendsCode,
-    List<String>? insertedFriendsCode,
-    List<String>? blockList,
-    int? rewardedCnt,
-    num? exp,
-    String? tier,
-    // num? followersNum,
-    List<String>? followers,
-    // num? followingNum,
-    List<String>? followings,
-    String? intro,
-    List<String>? favoriteStocks,
-    List<String>? badges,
-    bool? membership,
-    dynamic? membershipStartAt,
-    dynamic? membershipEndAt,
-  }) {
+  UserModel copyWith(
+      {String? uid,
+      String? userName,
+      bool? isNameUpdated,
+      String? email,
+      String? phoneNumber,
+      dynamic? account,
+      String? avatarImage,
+      num? item,
+      String? friendsCode,
+      List<String>? insertedFriendsCode,
+      List<String>? blockList,
+      int? rewardedCnt,
+      num? exp,
+      String? tier,
+      // num? followersNum,
+      List<String>? followers,
+      // num? followingNum,
+      List<String>? followings,
+      String? intro,
+      List<String>? favoriteStocks,
+      List<String>? badges,
+      bool? membership,
+      dynamic? membershipStartAt,
+      dynamic? membershipEndAt,
+      String? token}) {
     return UserModel(
       uid: uid ?? this.uid,
       userName: userName ?? this.userName,
@@ -116,6 +120,7 @@ class UserModel {
       membership: membership ?? this.membership,
       membershipStartAt: membershipStartAt ?? this.membershipStartAt,
       membershipEndAt: membershipEndAt ?? this.membershipEndAt,
+      token: token ?? this.token,
     );
   }
 
@@ -145,6 +150,7 @@ class UserModel {
       'membership': membership,
       'membershipStartAt': membershipStartAt,
       'membershipEndAt': membershipEndAt,
+      'token': token,
     };
   }
 
@@ -180,6 +186,7 @@ class UserModel {
       membership: map['membership'],
       membershipStartAt: map['membershipStartAt'],
       membershipEndAt: map['membershipEndAt'],
+      token: map['token'],
     );
   }
 
@@ -190,7 +197,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, tier: $tier, followers: $followers, followings: $followings, intro: $intro, favoriteStocks: $favoriteStocks, badges: $badges, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt)';
+    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, tier: $tier, followers: $followers, followings: $followings, intro: $intro, favoriteStocks: $favoriteStocks, badges: $badges, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt), token: $token';
   }
 
   @override
@@ -222,7 +229,8 @@ class UserModel {
         listEquals(other.badges, badges) &&
         other.membership == membership &&
         other.membershipStartAt == membershipStartAt &&
-        other.membershipEndAt == membershipEndAt;
+        other.membershipEndAt == membershipEndAt &&
+        other.token == token;
   }
 
   @override
@@ -250,7 +258,8 @@ class UserModel {
         badges.hashCode ^
         membership.hashCode ^
         membershipStartAt.hashCode ^
-        membershipEndAt.hashCode;
+        membershipEndAt.hashCode ^
+        token.hashCode;
   }
 }
 
@@ -277,5 +286,6 @@ UserModel newUserModel(
       insertedFriendsCode: null,
       membership: false,
       membershipEndAt: null,
-      membershipStartAt: null);
+      membershipStartAt: null,
+      token: null);
 }
