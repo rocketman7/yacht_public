@@ -590,4 +590,14 @@ class FirestoreService extends GetxService {
         .doc('${userModelRx.value!.uid}')
         .update({'token': token});
   }
+
+  // 유저 계좌정보 넣기
+  Future setAccInformations(
+      String accNumber, String accName, String secName, String uid) async {
+    await _firestoreService.collection('users').doc(uid).update({
+      'account.accNumber': accNumber,
+      'account.accName': accName,
+      'account.secName': secName,
+    });
+  }
 }

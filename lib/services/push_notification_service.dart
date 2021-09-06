@@ -70,9 +70,12 @@ class PushNotificationService {
   Future subOrUnscribeToTopic(int i, bool value) async {
     GetStorage().write('pushAlarm' + topics[i], value);
 
-    if (value)
+    if (value) {
+      print('subscribe to topic $i');
       await FirebaseMessaging.instance.subscribeToTopic(topics[i]);
-    else
+    } else {
+      print('unsubscribe from topic $i');
       await FirebaseMessaging.instance.unsubscribeFromTopic(topics[i]);
+    }
   }
 }

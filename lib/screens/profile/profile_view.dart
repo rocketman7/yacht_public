@@ -14,6 +14,7 @@ import 'asset_view.dart';
 import 'asset_view_model.dart';
 import 'profile_change_view.dart';
 import 'profile_controller.dart';
+import '../settings/setting_view.dart';
 
 class ProfileView extends StatelessWidget {
   final String uid;
@@ -24,7 +25,33 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: primaryBackgroundColor,
-        appBar: primaryAppBar('프로필'),
+        // appBar: primaryAppBar('프로필'),
+        appBar: AppBar(
+          backgroundColor: white,
+          toolbarHeight: 60.w,
+          title: Text('프로필', style: appBarTitle),
+          actions: [
+            userModelRx.value!.uid == uid
+                ? Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => SettingView());
+                        },
+                        child: Image.asset(
+                          'assets/buttons/settings.png',
+                          width: 30.w,
+                          height: 30.w,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 14.w,
+                      )
+                    ],
+                  )
+                : Container(),
+          ],
+        ),
         body: ListView(children: [
           Padding(
               padding: EdgeInsets.only(left: 14.w, right: 14.w, top: 11.w),

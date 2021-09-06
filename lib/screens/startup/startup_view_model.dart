@@ -12,7 +12,8 @@ import '../../locator.dart';
 
 class StartupViewModel extends GetxController {
   AuthService _authService = locator<AuthService>();
-  PushNotificationService _pushNotificationService = PushNotificationService();
+  PushNotificationService _pushNotificationService =
+      locator<PushNotificationService>();
   late LeagueAddressModel addressModel;
   RxInt selectedPage = 0.obs;
   late User currentUser;
