@@ -689,6 +689,30 @@ TextStyle adsWarningButton = TextStyle(
   letterSpacing: -1.0,
   height: 1.4,
 );
+TextStyle settingTitle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle settingContent = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle accountWarning = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w400,
+  color: buttonTextPurple,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
 
 // ICONS
 
