@@ -67,6 +67,7 @@ class QuestViewModel extends GetxController {
       now = DateTime.now();
       timeLeft();
     });
+    print('userquestmodelrx: $userQuestModelRx');
     if (userQuestModel.value == null) {
       userQuestModel((userQuestModelRx.where((i) => i.questId == questModel.questId)).first);
       print('userquest ${userQuestModel.value}');
@@ -91,11 +92,17 @@ class QuestViewModel extends GetxController {
   }
 
   void syncUserSelect() {
-    toggleList = List.generate(
-        questModel.investAddresses.length,
-        (index) => (userQuestModel.value == null || userQuestModel.value!.selection == null)
-            ? false
-            : userQuestModel.value!.selection![0] == index).obs;
+    toggleList = questModel.selectMode == 'updown'
+        ? List.generate(
+            questModel.choices!.length,
+            (index) => (userQuestModel.value == null || userQuestModel.value!.selection == null)
+                ? false
+                : userQuestModel.value!.selection![0] == index).obs
+        : List.generate(
+            questModel.investAddresses.length,
+            (index) => (userQuestModel.value == null || userQuestModel.value!.selection == null)
+                ? false
+                : userQuestModel.value!.selection![0] == index).obs;
   }
 
   void changeIndex(int index) {
@@ -128,13 +135,8 @@ class QuestViewModel extends GetxController {
   }
 
   // userQuest에 user가 선택한 정답 업데이트하는 함수
-  Future updateUserQuest(
-      // String uid,
-      // LeagueAddressModel leagueAddressModel,
-      // QuestModel questModel,
-      // List answers,
-
-      ) async {
+  Future updateUserQuest() async {
+    // [2], [2,3], 이런식으로 넣게 됨.
     List<num> answers = [];
     for (int i = 0; i < toggleList.length; i++) {
       if (toggleList[i] == true) answers.add(i);
