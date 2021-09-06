@@ -220,10 +220,10 @@ class QuestView extends StatelessWidget {
                     if (questViewModel.isSelectingSheetShowing.value == false) {
                       questViewModel.isSelectingSheetShowing(true);
                       questViewModel.syncUserSelect();
-                      ;
                     } else {
                       questViewModel.updateUserQuest();
-                      yachtSnackBar("저장되었습니다.");
+                      // questViewModel.isSelectingSheetShowing(false);
+                      yachtSnackBarFromBottom("저장되었습니다.");
                     }
                     ;
                   },
@@ -241,8 +241,8 @@ class QuestView extends StatelessWidget {
                             child: Text(
                           questViewModel.isSelectingSheetShowing.value
                               ? "나의 예측 저장"
-                              : (questViewModel.userQuestModel.value == null ||
-                                      questViewModel.userQuestModel.value!.selectDateTime == null)
+                              : (questViewModel.thisUserQuestModel.value == null ||
+                                      questViewModel.thisUserQuestModel.value!.selectDateTime == null)
                                   ? "예측 확정하기"
                                   : "예측 변경하기",
                           style: buttonTextStyle.copyWith(fontSize: 24.w),
@@ -402,13 +402,17 @@ class QuestView extends StatelessWidget {
                                   children: [
                                     Align(
                                       alignment: Alignment.centerRight,
-                                      child: Container(
-                                        width: 38.w,
-                                        height: 38.w,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: yachtDarkGrey,
-                                        ),
+                                      child: Obx(
+                                        () => Container(
+                                            width: 38.w,
+                                            height: 38.w,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: yachtGrey,
+                                            ),
+                                            child: questViewModel.logoImage.length > 0
+                                                ? questViewModel.logoImage[index]
+                                                : Container()),
                                       ),
                                     ),
                                     Text(
@@ -453,13 +457,17 @@ class QuestView extends StatelessWidget {
                                         Align(
                                           alignment: Alignment.centerRight,
                                           child: Container(
-                                            width: 38.w,
-                                            height: 38.w,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: yachtDarkGrey,
-                                            ),
-                                          ),
+                                              width: 38.w,
+                                              height: 38.w,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                // color: yachtDarkGrey,
+                                              ),
+                                              child: index == 0
+                                                  ? Image.asset('assets/icons/quest_select_up.png',
+                                                      color: questViewModel.toggleList[0] ? white : yachtRed)
+                                                  : Image.asset('assets/icons/quest_select_down.png',
+                                                      color: questViewModel.toggleList[1] ? white : seaBlue)),
                                         ),
                                         Text(
                                           questModel.choices![index],
@@ -475,7 +483,102 @@ class QuestView extends StatelessWidget {
                             ],
                           );
                         }))
-                      : Container(),
+                      : questModel.selectMode == 'order'
+                          ? Row(
+                              children: [
+                                Container(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: List.generate(
+                                        questModel.investAddresses.length,
+                                        (index) => Container(
+                                              margin: EdgeInsets.only(
+                                                  bottom: index != questModel.investAddresses.length ? 10.w : 0.0),
+                                              height: 50.w,
+                                              child: Center(
+                                                child: Text(
+                                                  (index + 1).toString(),
+                                                  style: yachtChoiceReOrderableListTitle.copyWith(
+                                                      fontWeight: FontWeight.w600),
+                                                ),
+                                              ),
+                                            )),
+                                  ),
+                                ),
+                                SizedBox(width: 8.w),
+                                Expanded(
+                                  child: Container(
+                                    // height: 200.w,
+                                    child: Theme(
+                                      data: ThemeData(
+                                        canvasColor: Colors.transparent,
+                                        shadowColor: Colors.transparent,
+                                        backgroundColor: Colors.transparent,
+                                        dialogBackgroundColor: Colors.transparent,
+                                      ),
+                                      child: ReorderableListView(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        onReorder: (oldIndex, newIndex) {
+                                          questViewModel.reorderUserSelect(oldIndex, newIndex);
+                                          print('old' + oldIndex.toString());
+                                          print('new' + newIndex.toString());
+                                        },
+                                        children: List.generate(questModel.investAddresses.length, (index) {
+                                          return Container(
+                                            key: ValueKey(index),
+                                            margin: EdgeInsets.only(
+                                                bottom: index != questModel.investAddresses.length ? 10.w : 0.0),
+                                            clipBehavior: Clip.hardEdge,
+                                            padding: primaryHorizontalPadding,
+                                            height: 50.w,
+                                            decoration: yachtBoxDecoration,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Obx(
+                                                      () => Container(
+                                                          width: 24.w,
+                                                          height: 24.w,
+                                                          decoration: BoxDecoration(
+                                                            shape: BoxShape.circle,
+                                                            color: yachtGrey,
+                                                          ),
+                                                          child: questViewModel.logoImage.length > 0
+                                                              ? questViewModel
+                                                                  .logoImage[questViewModel.orderList[index]]
+                                                              : Container()),
+                                                    ),
+                                                    SizedBox(width: 8.w),
+                                                    // orderList 없을 때 처리 필요
+                                                    Obx(() => Text(
+                                                          questModel
+                                                              .investAddresses[questViewModel.orderList[index]].name,
+                                                          style: yachtChoiceReOrderableListTitle,
+                                                        )),
+                                                    Spacer(),
+                                                    Image.asset(
+                                                      'assets/icons/three_lines.png',
+                                                      width: 14.w,
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          //   ],
+                          // )
+                          : Container(),
 
               SizedBox(height: 12.w)
             ],

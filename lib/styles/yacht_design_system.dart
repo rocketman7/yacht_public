@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/styles/size_config.dart';
 
 // BASIC COLORS CODE
 const Color yachtBlack = const Color(0xFF101214);
@@ -672,6 +673,15 @@ TextStyle yachtChoiceBoxName = TextStyle(
   height: 1.4,
 );
 
+TextStyle yachtChoiceReOrderableListTitle = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
 // ICONS
 
 // BUTTONS
@@ -938,6 +948,23 @@ yachtSnackBar(String title) {
     backgroundColor: white.withOpacity(.5),
     barBlur: 2,
     margin: EdgeInsets.only(top: 60.w),
+    duration: const Duration(seconds: 1, milliseconds: 300),
+    // animationDuration: const Duration(microseconds: 1000),
+  );
+}
+
+yachtSnackBarFromBottom(String title) {
+  return Get.rawSnackbar(
+    messageText: Center(
+      child: Text(
+        title,
+        style: snackBarStyle.copyWith(fontWeight: FontWeight.w500),
+      ),
+    ),
+    snackPosition: SnackPosition.BOTTOM,
+    backgroundColor: white.withOpacity(.5),
+    barBlur: 2,
+    margin: EdgeInsets.only(bottom: 80.w + SizeConfig.safeAreaBottom),
     duration: const Duration(seconds: 1, milliseconds: 300),
     // animationDuration: const Duration(microseconds: 1000),
   );
