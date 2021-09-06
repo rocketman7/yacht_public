@@ -42,43 +42,58 @@ class SquareQuestWidget extends StatelessWidget {
   final double width;
   final double height;
   final QuestModel questModel;
-  final UserQuestModel? userQuestModel;
 
-  SquareQuestWidget(
-      {Key? key, required this.width, required this.height, required this.questModel, this.userQuestModel})
-      : super(key: key);
+  SquareQuestWidget({
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.questModel,
+  }) : super(key: key);
 
   final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
   @override
   Widget build(BuildContext context) {
     // 이 위젯에 해당하는 userQuestModel을 확인하고 userQuestModel에 넣어준다
-    final Rxn<UserQuestModel> userQuestModel = Rxn<UserQuestModel>();
-    // RxBool isUserQuestDone = false.obs;
-    userQuestModelRx.listen((value) {
-      // print('userQuestModelRx listening: $value');
-      // print(value == null);
-      if (value.isNotEmpty) {
-        var temp = value.where((i) => i.questId == questModel.questId).first;
-        userQuestModel(temp);
-        // print('userQuestModel $userQuestModel');
-      }
-    });
-    return sectionBoxWithBottomButton(
-      height: height,
-      width: width,
-      padding: EdgeInsets.all(primaryPaddingSize),
-      buttonTitle: "퀘스트 참여하기",
-      child: Column(
-        // mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-          QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
-          QuestCardRewards(questModel: questModel),
-        ],
-      ),
-    );
+    // final Rxn<UserQuestModel> userQuestModel = Rxn<UserQuestModel>();
+    // // RxBool isUserQuestDone = false.obs;
+    // userQuestModelRx.listen((value) {
+    //   // print('userQuestModelRx listening: $value');
+    //   // print('listening questmodel: $value');
+    //   if (value.isNotEmpty) {
+    //     var temp = value.where((i) {
+    //       print(i);
+    //       print(i.questId);
+    //       print(questModel.questId);
+    //       return i.questId == questModel.questId;
+    //     });
+    //     if (temp.length > 0) {
+    //       userQuestModel(temp.first);
+    //     }
+    //     // print('temp $temp');
+    //     // userQuestModel(temp);
+    //     // print('userQuestModel $userQuestModel');
+    //   }
+    // });
+    return Obx(() => sectionBoxWithBottomButton(
+          height: height,
+          width: width,
+          padding: EdgeInsets.all(primaryPaddingSize),
+          buttonTitle: userQuestModelRx.length > 0
+              ? userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty
+                  ? "예측 변경하기"
+                  : "퀘스트 참여하기"
+              : "퀘스트 참여하기",
+          child: Column(
+            // mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
+              QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
+              QuestCardRewards(questModel: questModel),
+            ],
+          ),
+        ));
 
     //  );
 

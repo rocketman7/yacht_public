@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/styles/size_config.dart';
 
 // BASIC COLORS CODE
 const Color yachtBlack = const Color(0xFF101214);
@@ -49,8 +50,7 @@ double correctHeight(double originalPadding, upperTextSize, lowerTextSize) {
 }
 
 double offsetTextHeight(double upperTextSize, double lowerTextSize) {
-  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round())
-      .toDouble();
+  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round()).toDouble();
 }
 
 // 섹션 타이틀과 박스 사이
@@ -60,12 +60,12 @@ double widthHorizontalListView = 14.w;
 // 첫 섹션과 앱바 사이
 // 섹션 안에 패딩
 double primaryPaddingSize = 14.w;
-EdgeInsets primaryHorizontalPadding =
-    EdgeInsets.symmetric(horizontal: primaryPaddingSize);
+EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(horizontal: primaryPaddingSize);
 EdgeInsets primaryAllPadding = EdgeInsets.all(primaryPaddingSize);
 // FONTS
 
 String krFont = 'SCore';
+String krFontW400 = 'Default';
 double primaryFontHeight = 1.35;
 double contentFontHeight = 1.5;
 
@@ -714,6 +714,23 @@ TextStyle accountWarning = TextStyle(
   height: 1.4,
 );
 
+TextStyle yachtChoiceBoxName = TextStyle(
+  fontSize: bodyBigSize,
+  fontFamily: krFontW400,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtChoiceReOrderableListTitle = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
 // ICONS
 
 // BUTTONS
@@ -751,8 +768,7 @@ Container textContainerButtonWithOptions({
       child: Text(
         text,
         style: isDarkBackground
-            ? simpleTextButtonStyle.copyWith(
-                color: buttonBackgroundPurple, fontSize: bodyBigSize)
+            ? simpleTextButtonStyle.copyWith(color: buttonBackgroundPurple, fontSize: bodyBigSize)
             : simpleTextButtonStyle.copyWith(fontSize: bodyBigSize),
       ),
     ),
@@ -775,8 +791,7 @@ Container bigTextContainerButton({
       child: Text(
         text,
         style: isDisabled
-            ? simpleTextButtonStyle.copyWith(
-                color: yachtGrey, fontSize: heading5Size)
+            ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
             : simpleTextButtonStyle.copyWith(fontSize: heading5Size),
       ),
     ),
@@ -795,31 +810,35 @@ Container sectionBox({
     height: height,
     width: width,
     padding: padding ?? EdgeInsets.all(0),
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
-    child: child,
-  );
-}
-
-// 기본 박스 데코레이션
-BoxDecoration yachtBoxDecoration = BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.circular(12.w),
-    boxShadow: [
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
       BoxShadow(
         color: yachtShadow,
         blurRadius: 8.w,
         spreadRadius: 1.w,
       )
-    ]);
+    ]),
+    child: child,
+  );
+}
+
+// 기본 박스 데코레이션
+BoxDecoration yachtBoxDecoration = BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
+
+// 퀘스트 선택지 박스 데코레이션
+BoxDecoration yachtChoiceBoxDecoration =
+    BoxDecoration(color: white, borderRadius: BorderRadius.circular(10.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -834,16 +853,13 @@ Container sectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -859,9 +875,7 @@ Container sectionBoxWithBottomButton({
           width: double.infinity,
           decoration: BoxDecoration(
               color: buttonBackgroundPurple,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12.w),
-                  bottomRight: Radius.circular(12.w))),
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -908,8 +922,7 @@ Container simpleTierRRectBox({String tier = "newbie", double width = 70}) {
   return Container(
     width: width.w,
     height: (width / 3.75).w,
-    decoration: BoxDecoration(
-        color: tierColor, borderRadius: BorderRadius.circular(50)),
+    decoration: BoxDecoration(color: tierColor, borderRadius: BorderRadius.circular(50)),
     child: Center(
       child: Text(
         '$tierName 3',
@@ -925,9 +938,7 @@ ClipRect glassmorphismContainer({required Widget child}) {
         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
         child: Container(
           padding: EdgeInsets.all(6.w),
-          decoration: BoxDecoration(
-              color: glassmorphismBackgroundColor,
-              borderRadius: BorderRadius.circular(10.w)),
+          decoration: BoxDecoration(color: glassmorphismBackgroundColor, borderRadius: BorderRadius.circular(10.w)),
           child: child,
         )),
   );
@@ -986,6 +997,23 @@ yachtSnackBar(String title) {
     backgroundColor: white.withOpacity(.5),
     barBlur: 2,
     margin: EdgeInsets.only(top: 60.w),
+    duration: const Duration(seconds: 1, milliseconds: 300),
+    // animationDuration: const Duration(microseconds: 1000),
+  );
+}
+
+yachtSnackBarFromBottom(String title) {
+  return Get.rawSnackbar(
+    messageText: Center(
+      child: Text(
+        title,
+        style: snackBarStyle.copyWith(fontWeight: FontWeight.w500),
+      ),
+    ),
+    snackPosition: SnackPosition.BOTTOM,
+    backgroundColor: white.withOpacity(.5),
+    barBlur: 2,
+    margin: EdgeInsets.only(bottom: 80.w + SizeConfig.safeAreaBottom),
     duration: const Duration(seconds: 1, milliseconds: 300),
     // animationDuration: const Duration(microseconds: 1000),
   );

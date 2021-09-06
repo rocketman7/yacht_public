@@ -10,6 +10,7 @@ import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
 import 'package:yachtOne/screens/award/award_view.dart';
 import 'package:yachtOne/screens/contents/reading_content/reading_content_view.dart';
 import 'package:yachtOne/screens/contents/today_market/today_market_view.dart';
@@ -30,7 +31,7 @@ import '../quest/quest_widget.dart';
 class HomeView extends StatelessWidget {
   HomeViewModel homeViewModel = Get.put(HomeViewModel());
   AuthService _authService = locator<AuthService>();
-
+  final KakaoFirebaseAuthApi _kakaoApi = KakaoFirebaseAuthApi();
   ScrollController _scrollController = ScrollController();
   RxDouble offset = 0.0.obs;
 
@@ -43,6 +44,7 @@ class HomeView extends StatelessWidget {
         onTap: () {
           _authService.auth.signOut();
           userModelRx.value = null;
+          _kakaoApi.signOut();
           // homeViewModel.dispose();
           Get.reset();
           print("signout");

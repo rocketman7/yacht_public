@@ -13,6 +13,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/screens/auth/auth_check_view.dart';
+import 'package:yachtOne/screens/auth/email_register_view.dart';
 import 'package:yachtOne/screens/home/home_view.dart';
 import 'package:yachtOne/screens/onboarding/onboarding_view.dart';
 import 'package:yachtOne/screens/quest/quest_view.dart';
@@ -128,6 +129,11 @@ class _MyAppState extends State<MyApp> {
           GetPage(
             name: '/quest',
             page: () => QuestView(),
+            // transition: Transition.zoom
+          ),
+          GetPage(
+            name: '/emailRegister',
+            page: () => EmailRegisterView(),
             // transition: Transition.zoom
           ),
           // GetPage(
