@@ -53,7 +53,7 @@ class StartupView extends GetView<StartupViewModel> {
           children: pageList,
         ),
       ),
-      bottomNavigationBar: Obx(() => ClipRect(
+      bottomNavigationBar: Obx(() => ClipRRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
               child: BottomNavigationBar(

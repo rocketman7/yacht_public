@@ -182,6 +182,17 @@ class FirestoreService extends GetxService {
     return allQuests;
   }
 
+  // 개별 Quest 가져오기
+  Future<QuestModel> getEachQuest(String leagueId, String questId) async {
+    List<InvestAddressModel> invetAddresses = [];
+    return await _firestoreService.collection('leagues/$leagueId/quests').doc(questId).get().then((value) {
+      value.data()!['investAddresses'].toList().forEach((option) {
+        invetAddresses.add(InvestAddressModel.fromMap(option));
+      });
+      return QuestModel.fromMap(questId, value.data()!, invetAddresses);
+    });
+  }
+
   //// User의 QuestModel
   // User QuestModel 가져오기
 //     Future<UserQuestModel> getUserQuest(String uid) async {
@@ -279,8 +290,7 @@ class FirestoreService extends GetxService {
   // }
 
   // 라이브 스트림 가격차트
-  Stream<List<LiveQuestPriceModel>> getLiveQuestPrices(
-      List<InvestAddressModel> investAddressModels) {
+  Stream<List<LiveQuestPriceModel>> getLiveQuestPrices(List<InvestAddressModel> investAddressModels) {
     Stream<List<LiveQuestPriceModel>> realtimePrices;
 
     final snapshot = _firestoreService
@@ -301,10 +311,7 @@ class FirestoreService extends GetxService {
       return element.docs.map((e) {
         // e는 하나의 다큐
         return LiveQuestPriceModel.fromMap(
-            '005930',
-            element.docs
-                .map((t) => ChartPriceModel.fromMap(t.data()))
-                .toList());
+            '005930', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
       }).toList();
     });
 
@@ -342,8 +349,7 @@ class FirestoreService extends GetxService {
     // print('real' + realtimePrices.toString());
   }
 
-  Stream<LiveQuestPriceModel> getStreamLiveQuestPrice(
-      InvestAddressModel investAddress) {
+  Stream<LiveQuestPriceModel> getStreamLiveQuestPrice(InvestAddressModel investAddress) {
     return _firestoreService
         .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
         .where('dateTime', isGreaterThan: '20210902080000')
@@ -352,8 +358,8 @@ class FirestoreService extends GetxService {
       //element는 다큐모음
       // print('${investAddress.issueCode}');
       // print('snapshot: ${element.docs.last.data()}');
-      return LiveQuestPriceModel.fromMap('${investAddress.issueCode}',
-          element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
+      return LiveQuestPriceModel.fromMap(
+          '${investAddress.issueCode}', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
     });
   }
 
@@ -550,15 +556,11 @@ class FirestoreService extends GetxService {
 
   // fcm token이 없는 유저들(처음 들어온 유저들)은 토큰을 업데이트
   Future updateUserFCMToken(String token) async {
-    await _firestoreService
-        .collection('users')
-        .doc('${userModelRx.value!.uid}')
-        .update({'token': token});
+    await _firestoreService.collection('users').doc('${userModelRx.value!.uid}').update({'token': token});
   }
 
   // 유저 계좌정보 넣기
-  Future setAccInformations(
-      String accNumber, String accName, String secName, String uid) async {
+  Future setAccInformations(String accNumber, String accName, String secName, String uid) async {
     await _firestoreService.collection('users').doc(uid).update({
       'account.accNumber': accNumber,
       'account.accName': accName,

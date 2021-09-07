@@ -38,14 +38,108 @@ class AwardView extends StatelessWidget {
                   Get.dialog(
                     Dialog(
                       // backgroundColor: Colors.transparent,
-                      insetPadding: EdgeInsets.all(16.w),
-                      clipBehavior: Clip.hardEdge,
+                      insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
+                      // clipBehavior: C/lip.hardEdge,
                       child: Container(
-                        width: ScreenUtil().screenWidth * .12,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
+                        padding: primaryHorizontalPadding,
+                        width: double.infinity,
+                        height: ScreenUtil().screenHeight * .75,
+                        child: ListView(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          // mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text("요트 설명서"),
+                            SizedBox(
+                              height: correctHeight(24.w, 0.0, yachtInstructionDialogTitle.fontSize),
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Flexible(child: Container()),
+                                Text("요트 설명서", style: yachtInstructionDialogTitle),
+                                Flexible(
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Image.asset(
+                                      'assets/icons/exit.png',
+                                      height: 14.w,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: correctHeight(
+                                  24.w, yachtInstructionDialogTitle.fontSize, yachtInstructionDialogSubtitle.fontSize),
+                            ),
+                            Text("상금 주식이란?", style: yachtInstructionDialogSubtitle),
+                            SizedBox(
+                              height: correctHeight(14.w, yachtInstructionDialogSubtitle.fontSize,
+                                  yachtInstructionDialogDescription.fontSize),
+                            ),
+                            Text("제시된 목표에 도달하면 상금으로 지급되는 실제 주식을 말해요. 제시된 상금은 목표에 도달한 다른 사람들과 공평하게 나눠가지게 돼요.",
+                                style: yachtInstructionDialogDescription),
+                            SizedBox(
+                              height: correctHeight(40.w, yachtInstructionDialogSubtitle.fontSize,
+                                  yachtInstructionDialogDescription.fontSize),
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text("그럼 ", style: yachtInstructionDialogSubtitle),
+                                Image.asset(
+                                  'assets/icons/won_circle.png',
+                                  width: 22.w,
+                                  height: 22.w,
+                                ),
+                                Text(" 주식 잔고가 무엇인가요?", style: yachtInstructionDialogSubtitle),
+                              ],
+                            ),
+                            SizedBox(
+                              height: correctHeight(14.w, yachtInstructionDialogSubtitle.fontSize,
+                                  yachtInstructionDialogDescription.fontSize),
+                            ),
+                            Text("상금으로 받은 주식들의 가치에요. 내 계좌로 출고하거나 친구에게 선물할 수 있어요.",
+                                style: yachtInstructionDialogDescription),
+                            SizedBox(
+                              height: correctHeight(40.w, yachtInstructionDialogSubtitle.fontSize,
+                                  yachtInstructionDialogDescription.fontSize),
+                            ),
+                            Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                              Image.asset(
+                                'assets/icons/yacht_point_circle.png',
+                                width: 22.w,
+                                height: 22.w,
+                              ),
+                              Text(" 요트 포인트는 어떻게 다른가요?", style: yachtInstructionDialogSubtitle),
+                            ]),
+                            SizedBox(
+                              height: correctHeight(14.w, yachtInstructionDialogSubtitle.fontSize,
+                                  yachtInstructionDialogDescription.fontSize),
+                            ),
+                            Text(
+                                "주식 잔고’는 주식으로 직접 받는 상금의 가치인 반면, ‘요트 포인트’는 향후 요트샵에서 주식 혹은 굿즈로 교환할 때 쓰이는 포인트에요. 이 포인트는 퀘스트 참여에 성공하면 보상으로 획득할 수 있어요.",
+                                style: yachtInstructionDialogDescription),
+                            SizedBox(
+                              height: correctHeight(40.w, yachtInstructionDialogSubtitle.fontSize,
+                                  yachtInstructionDialogDescription.fontSize),
+                            ),
+                            Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                              Image.asset(
+                                'assets/icons/league_point_circle.png',
+                                width: 22.w,
+                                height: 22.w,
+                              ),
+                              Text(" 리그 포인트는 무엇인가요?", style: yachtInstructionDialogSubtitle),
+                            ]),
+                            SizedBox(
+                              height: correctHeight(14.w, yachtInstructionDialogSubtitle.fontSize,
+                                  yachtInstructionDialogDescription.fontSize),
+                            ),
+                            Text("월간 리그 순위의 기준이 되는 포인트에요. 퀘스트에 성공하면 얻을 수 있어요. 월간 리그가 종료되고 새로운 리그가 시작될 때 리그포인트는 초기화돼요.",
+                                style: yachtInstructionDialogDescription),
+                            SizedBox(
+                              height: correctHeight(24.w, yachtInstructionDialogDescription.fontSize, 0.0),
+                            ),
                           ],
                         ),
                       ),

@@ -5,7 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
+import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
@@ -70,18 +72,12 @@ Map<String, String> tierKRWName = {
 };
 
 class ProfileController extends GetxController {
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
   FirestoreService _firestoreService = locator<FirestoreService>();
 
   //////////////////////// storage  service 부분 ////////////////////////
   Future<String> getLogoUrl(String url) async {
-    final link = await FirebaseStorage.instance
-        .ref()
-        .child('logo/')
-        .child('$url')
-        .getDownloadURL()
-        .catchError((e) {
+    final link = await FirebaseStorage.instance.ref().child('logo/').child('$url').getDownloadURL().catchError((e) {
       print('ERROR: $e');
     });
 
@@ -104,19 +100,14 @@ class ProfileController extends GetxController {
   Future<StockModel> getStockModel(String country, String issueCode) async {
     var stockModel;
 
-    await firestoreService
-        .collection('stocks' + country)
-        .doc(issueCode)
-        .get()
-        .then((value) {
+    await firestoreService.collection('stocks' + country).doc(issueCode).get().then((value) {
       stockModel = StockModel.fromMap(value.data()!);
     });
 
     return stockModel;
   }
 
-  Future<StockHistoricalPriceModel> getStockHistoricalPriceModel(
-      String country, String issueCode) async {
+  Future<StockHistoricalPriceModel> getStockHistoricalPriceModel(String country, String issueCode) async {
     var stockHistoricalPriceModel;
 
     //
@@ -143,10 +134,7 @@ class ProfileController extends GetxController {
       val!.avatarImage = avatarImageURL;
     });
 
-    await firestoreService
-        .collection('users')
-        .doc(userModelRx.value!.uid)
-        .update({'avatarImage': avatarImageURL});
+    await firestoreService.collection('users').doc(userModelRx.value!.uid).update({'avatarImage': avatarImageURL});
   }
 
   Future updateUserNameOrIntro(String userName, String intro) async {
@@ -167,10 +155,7 @@ class ProfileController extends GetxController {
       'followers': FieldValue.arrayUnion(['${userModelRx.value!.uid}'])
     });
 
-    await firestoreService
-        .collection('users')
-        .doc(userModelRx.value!.uid)
-        .update({
+    await firestoreService.collection('users').doc(userModelRx.value!.uid).update({
       'followings': FieldValue.arrayUnion(['$otherUid'])
     });
   }
@@ -231,9 +216,7 @@ class ProfileController extends GetxController {
   Future<List<StockModel>> loadFavoriteStocks() async {
     List<StockModel> tempStockModels = [];
     if (user.favoriteStocks != null) {
-      for (int i = 0;
-          i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length);
-          i++) {
+      for (int i = 0; i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length); i++) {
         tempStockModels.add(await getStockModel('KR', user.favoriteStocks![i]));
       }
     }
@@ -243,11 +226,8 @@ class ProfileController extends GetxController {
   Future<List<StockHistoricalPriceModel>> loadFavoriteStocksPrices() async {
     List<StockHistoricalPriceModel> tempStockHistoricalPriceModels = [];
     if (user.favoriteStocks != null) {
-      for (int i = 0;
-          i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length);
-          i++) {
-        tempStockHistoricalPriceModels.add(
-            await getStockHistoricalPriceModel('KR', user.favoriteStocks![i]));
+      for (int i = 0; i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length); i++) {
+        tempStockHistoricalPriceModels.add(await getStockHistoricalPriceModel('KR', user.favoriteStocks![i]));
       }
     }
     return tempStockHistoricalPriceModels;
@@ -274,5 +254,47 @@ class ProfileController extends GetxController {
 
   Future followSomeoneMethod() async {
     await followSomeone(user.uid);
+  }
+
+  // 퀘스트 참여기록 파트
+  // 유저가 참여한 퀘스트의 퀘스트 정보 가져오기
+  Future<QuestModel> getEachQuestModel(UserQuestModel userQuest) async {
+    return await _firestoreService.getEachQuest(userQuest.leagueId!, userQuest.questId!);
+    // update(['userQuestRecord']);
+  }
+
+  String getUserChioce(QuestModel questModel, UserQuestModel userQuest) {
+    if (questModel.selectMode == "updown") {
+      return userQuest.selection![0] == 0 ? "상승" : "하락";
+    } else if (questModel.selectMode == "order") {
+      List userSelect = [];
+
+      for (int investAddressIndex in userQuest.selection!) {
+        userSelect.add(questModel.investAddresses[investAddressIndex].name);
+      }
+      String makeOrderResult(List selection) {
+        String result = "";
+        for (int i = 0; i < selection.length; i++) {
+          result += '${i + 1}. ${selection[i]} ';
+        }
+        return result;
+      }
+
+      return makeOrderResult(userSelect);
+    } else {
+      List userSelect = [];
+      for (int investAddressIndex in userQuest.selection!) {
+        userSelect.add(questModel.investAddresses[investAddressIndex].name);
+      }
+      String makePickResult(List selection) {
+        String result = "";
+        for (int i = 0; i < selection.length; i++) {
+          i == selection.length - 1 ? result += '${selection[i]}' : result += '${selection[i]}, ';
+        }
+        return result;
+      }
+
+      return makePickResult(userSelect);
+    }
   }
 }

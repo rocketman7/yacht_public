@@ -17,109 +17,111 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: double.infinity,
-      width: double.infinity,
-      color: yachtViolet,
-      child: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Container(
-                child: Center(
-                  child: Image.asset(
-                    'assets/logos/yacht_white.png',
-                    height: 115.w,
+    return Scaffold(
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        color: yachtViolet,
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Container(
+                  child: Center(
+                    child: Image.asset(
+                      'assets/logos/yacht_white.png',
+                      height: 115.w,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Obx(
-              () => InkWell(
-                onTap: () async {
-                  if (!isKakaoLoggingIn.value && !isAppleLoggingIn.value) {
-                    isKakaoLoggingIn(true);
-                    await _kakaoAuthApi.signIn();
-                    isKakaoLoggingIn(false);
-                  }
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: socialLoginContainer(
-                      logo: Image.asset(
-                        'assets/logos/kakao_black_with_paddings.png',
-                        width: 30.w,
-                        height: 30.w,
-                      ),
-                      title: isKakaoLoggingIn.value
-                          ? CircularProgressIndicator(
-                              color: socialLogin.color,
-                            )
-                          : Text(
-                              '카카오로 시작하기',
-                              style: socialLogin,
-                            ),
-                      loginBackgroundColor: Color(0xFFFEE500)),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10.w,
-            ),
-            Obx(() => InkWell(
+              Obx(
+                () => InkWell(
                   onTap: () async {
                     if (!isKakaoLoggingIn.value && !isAppleLoggingIn.value) {
-                      isAppleLoggingIn(true);
-                      await signInWithApple();
-                      isAppleLoggingIn(false);
+                      isKakaoLoggingIn(true);
+                      await _kakaoAuthApi.signIn();
+                      isKakaoLoggingIn(false);
                     }
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: socialLoginContainer(
                         logo: Image.asset(
-                          'assets/logos/apple_white_with_paddings.png',
+                          'assets/logos/kakao_black_with_paddings.png',
                           width: 30.w,
                           height: 30.w,
                         ),
-                        title: isAppleLoggingIn.value
+                        title: isKakaoLoggingIn.value
                             ? CircularProgressIndicator(
-                                color: white,
+                                color: socialLogin.color,
                               )
                             : Text(
-                                'Apple로 시작하기',
-                                style: socialLogin.copyWith(color: white),
+                                '카카오로 시작하기',
+                                style: socialLogin,
                               ),
-                        loginBackgroundColor: Colors.black),
+                        loginBackgroundColor: Color(0xFFFEE500)),
                   ),
-                )),
-            SizedBox(
-              height: 16.w,
-            ),
-            Container(
-              padding: EdgeInsets.only(bottom: 6.w),
-              // height: 26.w,
-              // width: ,
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1.w, color: white),
                 ),
               ),
-              child: InkWell(
-                onTap: () {
-                  Get.toNamed('/emailRegister');
-                },
-                child: Text(
-                  " 이메일로 시작하기 ",
-                  style: socialLogin.copyWith(color: white),
+              SizedBox(
+                height: 10.w,
+              ),
+              Obx(() => InkWell(
+                    onTap: () async {
+                      if (!isKakaoLoggingIn.value && !isAppleLoggingIn.value) {
+                        isAppleLoggingIn(true);
+                        await signInWithApple();
+                        isAppleLoggingIn(false);
+                      }
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: socialLoginContainer(
+                          logo: Image.asset(
+                            'assets/logos/apple_white_with_paddings.png',
+                            width: 30.w,
+                            height: 30.w,
+                          ),
+                          title: isAppleLoggingIn.value
+                              ? CircularProgressIndicator(
+                                  color: white,
+                                )
+                              : Text(
+                                  'Apple로 시작하기',
+                                  style: socialLogin.copyWith(color: white),
+                                ),
+                          loginBackgroundColor: Colors.black),
+                    ),
+                  )),
+              SizedBox(
+                height: 16.w,
+              ),
+              Container(
+                padding: EdgeInsets.only(bottom: 6.w),
+                // height: 26.w,
+                // width: ,
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(width: 1.w, color: white),
+                  ),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Get.toNamed('emailRegister');
+                  },
+                  child: Text(
+                    " 이메일로 시작하기 ",
+                    style: socialLogin.copyWith(color: white),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 50.w,
-            )
-          ],
+              SizedBox(
+                height: 50.w,
+              )
+            ],
+          ),
         ),
       ),
     );

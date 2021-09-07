@@ -7,4 +7,6 @@ import 'firestore_service.dart';
 class AuthService {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
+
+  Future registerWithEmail() async {}
 }

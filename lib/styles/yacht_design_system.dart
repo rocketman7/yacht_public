@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/styles/size_config.dart';
+import 'package:yachtOne/styles/style_constants.dart';
 
 // BASIC COLORS CODE
 const Color yachtBlack = const Color(0xFF101214);
@@ -93,6 +94,11 @@ InputDecoration emailRegisterInputDecoration = InputDecoration(
   ),
   enabledBorder: UnderlineInputBorder(
     borderSide: BorderSide(color: yachtGrey),
+  ),
+  errorStyle: emailRegisterFieldHint.copyWith(
+    color: yachtRed,
+    fontFamily: krFont,
+    fontWeight: FontWeight.w500,
   ),
   hintText: "이메일 입력하기",
   hintStyle: emailRegisterFieldHint,
@@ -731,7 +737,61 @@ TextStyle yachtChoiceReOrderableListTitle = TextStyle(
   height: 1.4,
 );
 
-// ICONS
+// 마이페이지-퀘스트참여기록
+TextStyle questRecordendDateTime = TextStyle(
+  fontSize: 12.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle questRecordTitle = TextStyle(
+  fontSize: bodyBigSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle questRecordSelection = TextStyle(
+  fontSize: bodySmallSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 요트 설명서 다이얼로그
+TextStyle yachtInstructionDialogTitle = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtInstructionDialogSubtitle = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtInstructionDialogDescription = TextStyle(
+  fontSize: bodyBigSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
 
 // BUTTONS
 Container simpleTextContainerButton(
@@ -743,6 +803,24 @@ Container simpleTextContainerButton(
     decoration: BoxDecoration(
       color: buttonBackgroundPurple,
       borderRadius: BorderRadius.circular(50),
+    ),
+    child: Text(
+      text,
+      textAlign: TextAlign.center,
+      style: simpleTextButtonStyle,
+    ),
+  );
+}
+
+Container simpleTextContainerLessRadiusButton(
+  String text,
+) {
+  return Container(
+    // alignment: Alignment.center,
+    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+    decoration: BoxDecoration(
+      color: buttonBackgroundPurple,
+      borderRadius: BorderRadius.circular(4.w),
     ),
     child: Text(
       text,

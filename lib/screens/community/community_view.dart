@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/screens/community/feed_widget.dart';
+import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
@@ -38,118 +39,155 @@ class CommunityView extends StatelessWidget {
   Widget build(BuildContext context) {
     print("commuity view building");
     return Scaffold(
-      floatingActionButton: GestureDetector(
-        onTap: () {
-          Get.bottomSheet(
-            WritingNewPost(
-              // contentFormKey: _contentFormKey,
-              // contentController: _contentController,
-              communityViewModel: _communityViewModel,
-            ),
-            isScrollControlled: true,
-            ignoreSafeArea: false, // add this
-          );
-        },
-        child: Container(
-          decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
-            BoxShadow(
-              color: yachtShadow,
-              blurRadius: 8.w,
-              spreadRadius: 1.w,
-            )
-          ]),
-          height: 54,
-          width: 54,
-          child: Image.asset('assets/icons/writing.png'),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // floatingActionButton: GestureDetector(
+      //   onTap: () {
+      //     Get.bottomSheet(
+      //       WritingNewPost(
+      //         // contentFormKey: _contentFormKey,
+      //         // contentController: _contentController,
+      //         communityViewModel: _communityViewModel,
+      //       ),
+      //       isScrollControlled: true,
+      //       ignoreSafeArea: false, // add this
+      //     );
+      //   },
+      //   child: Container(
+      //     decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+      //       BoxShadow(
+      //         color: yachtShadow,
+      //         blurRadius: 8.w,
+      //         spreadRadius: 1.w,
+      //       )
+      //     ]),
+      //     height: 54,
+      //     width: 54,
+      //     child: Image.asset('assets/icons/writing.png'),
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: primaryAppBar("커뮤니티"),
-      body: RefreshConfiguration(
-        enableScrollWhenRefreshCompleted: true,
-        child: SmartRefresher(
-          // physics: AlwaysScrollableScrollPhysics(),
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          // onLoading: _onLoading,
-          child: SingleChildScrollView(
-            // physics: NeverScrollableScrollPhysics(),
-            child: Padding(
-              padding: primaryHorizontalPadding,
-              child: Column(
-                children: [
-                  // 전문글만, 팔로워만 고르기
-                  Container(
-                    height: 48.w,
-                    // color: Colors.blueGrey,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                              onTap: () {
-                                Get.rawSnackbar(
-                                  messageText: Center(
-                                    child: Text(
-                                      "성공적으로 업로드 되었어요.",
-                                      style: snackBarStyle,
+      body: Stack(clipBehavior: Clip.none, children: [
+        RefreshConfiguration(
+          enableScrollWhenRefreshCompleted: true,
+          child: SmartRefresher(
+            // physics: AlwaysScrollableScrollPhysics(),
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            // onLoading: _onLoading,
+            child: SingleChildScrollView(
+              // physics: NeverScrollableScrollPhysics(),
+              child: Padding(
+                padding: primaryHorizontalPadding,
+                child: Column(
+                  children: [
+                    // 전문글만, 팔로워만 고르기
+                    Container(
+                      height: 48.w,
+                      // color: Colors.blueGrey,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                                onTap: () {
+                                  Get.rawSnackbar(
+                                    messageText: Center(
+                                      child: Text(
+                                        "성공적으로 업로드 되었어요.",
+                                        style: snackBarStyle,
+                                      ),
                                     ),
-                                  ),
-                                  // message: "성공적으로 업로드 되었어요.",
-                                  snackPosition: SnackPosition.TOP,
-                                  backgroundColor: white.withOpacity(.5),
-                                  barBlur: 2,
-                                  // padding: EdgeInsets.only(top: 60.w),
-                                  // overlayBlur: 4,
-                                  margin: EdgeInsets.only(top: 60.w),
-                                  duration: const Duration(seconds: 1, milliseconds: 100),
-                                  // animationDuration: const Duration(microseconds: 1000),
-                                );
-                              },
+                                    // message: "성공적으로 업로드 되었어요.",
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: white.withOpacity(.5),
+                                    barBlur: 2,
+                                    // padding: EdgeInsets.only(top: 60.w),
+                                    // overlayBlur: 4,
+                                    margin: EdgeInsets.only(top: 60.w),
+                                    duration: const Duration(seconds: 1, milliseconds: 100),
+                                    // animationDuration: const Duration(microseconds: 1000),
+                                  );
+                                },
+                                child: Center(
+                                    child: Text(
+                                  "프로 모아보기",
+                                  style: subheadingStyle.copyWith(color: buttonTextPurple),
+                                ))),
+                          ),
+                          Container(height: 32.w, width: 1.w, color: yachtLineColor),
+                          Expanded(
                               child: Center(
                                   child: Text(
-                                "프로 모아보기",
-                                style: subheadingStyle.copyWith(color: buttonTextPurple),
-                              ))),
-                        ),
-                        Container(height: 32.w, width: 1.w, color: yachtLineColor),
-                        Expanded(
-                            child: Center(
-                                child: Text(
-                          "팔로워 모아보기",
-                          style: subheadingStyle.copyWith(color: buttonTextPurple),
-                        )))
-                      ],
+                            "팔로워 모아보기",
+                            style: subheadingStyle.copyWith(color: buttonTextPurple),
+                          )))
+                        ],
+                      ),
                     ),
-                  ),
 
-                  Obx(() => (_communityViewModel.posts.length == 0)
-                      ? Container(
-                          child: Text("게시글이 없습니다"),
-                        )
+                    Obx(() => (_communityViewModel.posts.length == 0)
+                        ? Container(
+                            child: Text("게시글이 없습니다"),
+                          )
 
-                      // print(snapshot.data);
-                      // 임시로 0 index만. 위젯 블럭 제작 이후에는 Lazy List로
-                      : ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: _communityViewModel.posts.length,
-                          itemBuilder: (_, index) {
-                            return Column(
-                              children: [
-                                FeedWidget(
-                                    communityViewModel: _communityViewModel, post: _communityViewModel.posts[index]),
-                                SizedBox(
-                                  height: 12.w,
-                                )
-                              ],
-                            );
-                          }))
-                ],
+                        // print(snapshot.data);
+                        // 임시로 0 index만. 위젯 블럭 제작 이후에는 Lazy List로
+                        : ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _communityViewModel.posts.length,
+                            itemBuilder: (_, index) {
+                              return Column(
+                                children: [
+                                  FeedWidget(
+                                      communityViewModel: _communityViewModel, post: _communityViewModel.posts[index]),
+                                  SizedBox(
+                                    height: 12.w,
+                                  )
+                                ],
+                              );
+                            }))
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
+        Positioned(
+          bottom: SizeConfig.safeAreaBottom + 74.w,
+          right: 14.w,
+          child: InkWell(
+            onTap: () {
+              Get.bottomSheet(
+                WritingNewPost(
+                  // contentFormKey: _contentFormKey,
+                  // contentController: _contentController,
+                  communityViewModel: _communityViewModel,
+                ),
+                isScrollControlled: true,
+                ignoreSafeArea: false, // add this
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                BoxShadow(
+                  color: yachtShadow,
+                  offset: Offset(1.w, 1.w),
+                  blurRadius: 3.w,
+                  spreadRadius: 1.w,
+                )
+              ]),
+              height: 54,
+              width: 54,
+              child: Opacity(
+                opacity: .85,
+                child: Image.asset(
+                  'assets/icons/writing.png',
+                ),
+              ),
+            ),
+          ),
+        ),
+      ]),
     );
   }
 }
