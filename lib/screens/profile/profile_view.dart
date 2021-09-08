@@ -295,7 +295,7 @@ class ProfileView extends GetView<ProfileController> {
                                 width: 100.w,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(70.0),
-                                  border: Border.all(color: buttonTextPurple, width: 1.5.w),
+                                  border: Border.all(color: primaryButtonBackground, width: 1.5.w),
                                 ),
                                 child: Center(
                                   child: GetBuilder<ProfileController>(
@@ -421,7 +421,7 @@ class ProfileView extends GetView<ProfileController> {
                   child: Container(
                     height: 3.w,
                     width: SizeConfig.screenWidth / 2,
-                    color: 0 == 1 ? buttonTextPurple : Colors.transparent,
+                    color: 0 == 1 ? primaryButtonBackground : Colors.transparent,
                   ),
                 ),
                 Positioned(
@@ -430,7 +430,7 @@ class ProfileView extends GetView<ProfileController> {
                   child: Container(
                     height: 3.w,
                     width: SizeConfig.screenWidth / 2,
-                    color: 1 == 1 ? buttonTextPurple : Colors.transparent,
+                    color: 1 == 1 ? primaryButtonBackground : Colors.transparent,
                   ),
                 ),
               ],
@@ -536,65 +536,71 @@ class ProfileView extends GetView<ProfileController> {
           SizedBox(
             height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
           ),
-          Column(
-            children: List.generate(
-                userQuestModelRx.length,
-                (index) => Column(
-                      children: [
-                        Padding(
-                          padding: primaryHorizontalPadding,
-                          child: sectionBox(
-                              padding: primaryAllPadding,
-                              child: FutureBuilder<QuestModel>(
-                                  future: controller.getEachQuestModel(userQuestModelRx[index]),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return Container();
-                                    } else {
-                                      return InkWell(
-                                        onTap: () {
-                                          Get.toNamed('/quest', arguments: snapshot.data);
-                                        },
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    timeStampToStringWithHourMinute(snapshot.data!.questEndDateTime) +
-                                                        " 마감",
-                                                    style: questRecordendDateTime,
+          Obx(
+            () => Column(
+              children: List.generate(
+                  userQuestModelRx.length,
+                  (index) => Column(
+                        children: [
+                          Padding(
+                            padding: primaryHorizontalPadding,
+                            child: Obx(
+                              () => sectionBox(
+                                  padding: primaryAllPadding,
+                                  child: FutureBuilder<QuestModel>(
+                                      future: controller.getEachQuestModel(userQuestModelRx[index]),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return Container();
+                                        } else {
+                                          return InkWell(
+                                            onTap: () {
+                                              Get.toNamed('/quest', arguments: snapshot.data);
+                                            },
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        timeStampToStringWithHourMinute(
+                                                                snapshot.data!.questEndDateTime) +
+                                                            " 마감",
+                                                        style: questRecordendDateTime,
+                                                      ),
+                                                      Text(snapshot.data!.title, style: questRecordTitle),
+                                                      SizedBox(
+                                                          height: correctHeight(14.w, questRecordTitle.fontSize,
+                                                              questRecordSelection.fontSize)),
+                                                      Text(
+                                                          controller.getUserChioce(
+                                                              snapshot.data!, userQuestModelRx[index]),
+                                                          style: questRecordSelection),
+                                                      // Text(userQuestModelRx[index].selection),
+                                                    ],
                                                   ),
-                                                  Text(snapshot.data!.title, style: questRecordTitle),
-                                                  SizedBox(
-                                                      height: correctHeight(14.w, questRecordTitle.fontSize,
-                                                          questRecordSelection.fontSize)),
-                                                  Text(
-                                                      controller.getUserChioce(snapshot.data!, userQuestModelRx[index]),
-                                                      style: questRecordSelection),
-                                                  // Text(userQuestModelRx[index].selection),
-                                                ],
-                                              ),
+                                                ),
+                                                SizedBox(
+                                                  width: 30.w,
+                                                ),
+                                                simpleTextContainerLessRadiusButton("퀘스트 보기")
+                                              ],
                                             ),
-                                            SizedBox(
-                                              width: 30.w,
-                                            ),
-                                            simpleTextContainerLessRadiusButton("퀘스트 보기")
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                  })),
-                        ),
-                        if (index != userQuestModelRx.length)
-                          SizedBox(
-                            height: 10.w,
-                          )
-                      ],
-                    )),
+                                          );
+                                        }
+                                      })),
+                            ),
+                          ),
+                          if (index != userQuestModelRx.length)
+                            SizedBox(
+                              height: 10.w,
+                            )
+                        ],
+                      )),
+            ),
           ),
           //////// 여기까지는 최신UI 아님
           SizedBox(

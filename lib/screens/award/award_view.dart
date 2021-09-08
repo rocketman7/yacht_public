@@ -85,7 +85,6 @@ class AwardView extends StatelessWidget {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text("그럼 ", style: yachtInstructionDialogSubtitle),
                                 Image.asset(
                                   'assets/icons/won_circle.png',
                                   width: 22.w,

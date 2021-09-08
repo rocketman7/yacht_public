@@ -13,8 +13,11 @@ const Color yachtDarkGrey = const Color(0xFF5B6A87);
 const Color yachtGrey = const Color(0xFF879098);
 const Color yachtRed = const Color(0xFFEE5076);
 const Color seaBlue = Color(0xFF489EDD);
-const Color buttonBackgroundPurple = const Color(0xFFEFF2FA);
-const Color buttonTextPurple = const Color(0xFF6073B4);
+const Color primaryButtonText = const Color(0xFFEFF2FA);
+const Color primaryButtonBackground = yachtViolet;
+const Color secondaryButtonText = yachtViolet;
+const Color secondaryButtonBackground = const Color(0xFFEFF2FA);
+
 const Color buttonDisabled = const Color(0xFFE6E6E6);
 const Color buttonNormal = const Color(0xFFEFF2FA);
 Color yachtShadow = Color(0xFFCEC4DA).withOpacity(.3);
@@ -110,7 +113,7 @@ TextStyle onboardingTitle = TextStyle(
   fontFamily: krFont,
   fontSize: heading3Size,
   fontWeight: FontWeight.w500,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   height: primaryFontHeight,
   letterSpacing: -1.0,
 );
@@ -238,7 +241,7 @@ TextStyle profileButtonTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -294,7 +297,7 @@ TextStyle profileChangeButtonTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 20.w,
   fontWeight: FontWeight.w500,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -467,7 +470,7 @@ TextStyle myAssetAmount = TextStyle(
 TextStyle buttonTitleStyle = TextStyle(
   fontFamily: krFont,
   fontSize: bodyBigSize,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   fontWeight: FontWeight.w500,
   height: primaryFontHeight,
   letterSpacing: -0.1,
@@ -520,7 +523,7 @@ TextStyle contentStyle = TextStyle(
 TextStyle simpleTextButtonStyle = TextStyle(
   fontSize: bodySmallSize,
   fontWeight: FontWeight.w500,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   letterSpacing: -0.5,
   height: primaryFontHeight,
 );
@@ -557,7 +560,7 @@ TextStyle feedHashTag = TextStyle(
   fontFamily: 'SCore',
   fontSize: 12.w,
   fontWeight: FontWeight.w300,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -715,7 +718,7 @@ TextStyle accountWarning = TextStyle(
   fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w400,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -801,7 +804,7 @@ Container simpleTextContainerButton(
     // alignment: Alignment.center,
     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
-      color: buttonBackgroundPurple,
+      color: primaryButtonText,
       borderRadius: BorderRadius.circular(50),
     ),
     child: Text(
@@ -819,7 +822,7 @@ Container simpleTextContainerLessRadiusButton(
     // alignment: Alignment.center,
     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
-      color: buttonBackgroundPurple,
+      color: primaryButtonText,
       borderRadius: BorderRadius.circular(4.w),
     ),
     child: Text(
@@ -839,14 +842,14 @@ Container textContainerButtonWithOptions({
     height: height,
     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
-      color: isDarkBackground ? buttonTextPurple : buttonBackgroundPurple,
+      color: isDarkBackground ? primaryButtonBackground : primaryButtonText,
       borderRadius: BorderRadius.circular(50),
     ),
     child: Center(
       child: Text(
         text,
         style: isDarkBackground
-            ? simpleTextButtonStyle.copyWith(color: buttonBackgroundPurple, fontSize: bodyBigSize)
+            ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: bodyBigSize)
             : simpleTextButtonStyle.copyWith(fontSize: bodyBigSize),
       ),
     ),
@@ -862,7 +865,7 @@ Container bigTextContainerButton({
     height: height,
     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
-      color: isDisabled ? buttonDisabled : buttonNormal,
+      color: isDisabled ? buttonDisabled : primaryButtonBackground,
       borderRadius: BorderRadius.circular(50),
     ),
     child: Center(
@@ -870,7 +873,7 @@ Container bigTextContainerButton({
         text,
         style: isDisabled
             ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
-            : simpleTextButtonStyle.copyWith(fontSize: heading5Size),
+            : simpleTextButtonStyle.copyWith(fontSize: heading5Size, color: primaryButtonText),
       ),
     ),
   );
@@ -952,7 +955,7 @@ Container sectionBoxWithBottomButton({
           height: 44.w,
           width: double.infinity,
           decoration: BoxDecoration(
-              color: buttonBackgroundPurple,
+              color: primaryButtonText,
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
@@ -1035,7 +1038,7 @@ AppBar primaryAppBar(String title) {
 Container feedHashTagContainer(String hashTag) => Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
       decoration: BoxDecoration(
-        color: buttonBackgroundPurple,
+        color: primaryButtonText,
         borderRadius: BorderRadius.circular(4.w),
       ),
       child: Text(

@@ -25,8 +25,7 @@ const int maxFailedLoadAttempts = 3;
 class HomeViewModel extends GetxController {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthService _authService = locator<AuthService>();
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
   QuestRepository _questRepository = QuestRepository();
   QuestModel? tempQuestModel;
@@ -54,11 +53,10 @@ class HomeViewModel extends GetxController {
   @override
   void onInit() async {
     // TODO: implement onInit
-    // await getTodayData();
 
     await getAllQuests();
     await getDictionaries();
-    // await getUser();
+
     isLoading = false;
 
     _createRewardedAd();
@@ -73,6 +71,7 @@ class HomeViewModel extends GetxController {
   Future<String> getImageUrlFromStorage(String imageUrl) async {
     return await _firebaseStorageService.downloadImageURL(imageUrl);
   }
+
   // Future getUser() async {
   //   uid = _authService.auth.currentUser!.uid;
   //   // Future.delayed(Duration(seconds: 10)).then((value) async {
@@ -98,16 +97,13 @@ class HomeViewModel extends GetxController {
     // 분리작업
     DateTime now = DateTime.now();
     allQuests.forEach((element) {
-      if (element.showHomeDateTime.toDate().isBefore(now) &&
-          element.liveStartDateTime.toDate().isAfter(now)) {
+      if (element.showHomeDateTime.toDate().isBefore(now) && element.liveStartDateTime.toDate().isAfter(now)) {
         // showHome ~ liveStart: 새로나온 퀘스트
         newQuests.add(element);
-      } else if (element.liveStartDateTime.toDate().isBefore(now) &&
-          element.liveEndDateTime.toDate().isAfter(now)) {
+      } else if (element.liveStartDateTime.toDate().isBefore(now) && element.liveEndDateTime.toDate().isAfter(now)) {
         // liveStart ~ liveEnd: 퀘스트 생중계
         liveQuests.add(element);
-      } else if (element.resultDateTime.toDate().isBefore(now) &&
-          element.closeHomeDateTime.toDate().isAfter(now)) {
+      } else if (element.resultDateTime.toDate().isBefore(now) && element.closeHomeDateTime.toDate().isAfter(now)) {
         // result ~ closeHome: 퀘스트 결과보기
         resultQuests.add(element);
       } else {
@@ -161,8 +157,7 @@ class HomeViewModel extends GetxController {
     }
 
     _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (RewardedAd ad) =>
-          print('ad onAdShowedFullScreenContent.'),
+      onAdShowedFullScreenContent: (RewardedAd ad) => print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (RewardedAd ad) {
         print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
@@ -225,9 +220,7 @@ Widget rewardedNotLoadDialog() {
                 },
                 child: Container(
                   height: 44.w,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(70.0),
-                      color: Color(0xFF6073B4)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: Color(0xFF6073B4)),
                   width: double.infinity,
                   child: Center(
                     child: Text(

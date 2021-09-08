@@ -42,7 +42,7 @@ class LiveQuestView extends StatelessWidget {
             // print(homeViewModel.liveQuests);
             liveQuestViewModel.getListStreamPriceModel(homeViewModel.liveQuests);
             // });
-
+            print("live quest view rebuilt");
             return SingleChildScrollView(
                 clipBehavior: Clip.none,
                 scrollDirection: Axis.horizontal,

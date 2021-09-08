@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/screens/auth/email_auth_controller.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:email_validator/email_validator.dart';
 
-import 'email_auth_controller.dart';
-
-class EmailRegisterView extends StatefulWidget {
-  EmailRegisterView({Key? key}) : super(key: key);
+class EmailLoginView extends StatefulWidget {
+  EmailLoginView({Key? key}) : super(key: key);
 
   @override
-  _EmailRegisterViewState createState() => _EmailRegisterViewState();
+  _EmailLoginViewState createState() => _EmailLoginViewState();
 }
 
-class _EmailRegisterViewState extends State<EmailRegisterView> {
+class _EmailLoginViewState extends State<EmailLoginView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _emailController = TextEditingController(text: "");
@@ -23,9 +22,8 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
 
   final EmailAuthController controller = Get.put((EmailAuthController()));
 
-  // final TextEditingController _confirmPasswordController = TextEditingController(text: "");
   bool _obscureText = true;
-  bool _registerButtonDisabled = true;
+  bool _loginButtonDisabled = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +40,7 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                 height: correctHeight(60.w, 0.0, emailRegisterTitle.fontSize),
               ),
               Text(
-                "회원가입",
+                "이메일로 시작",
                 style: emailRegisterTitle,
               ),
               SizedBox(
@@ -57,13 +55,13 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                 onChanged: (_) {
                   if (_emailController.text.length > 0 &&
                       EmailValidator.validate(_emailController.text) &&
-                      _passwordController.text.length > 6) {
+                      _passwordController.text.length > 7) {
                     setState(() {
-                      _registerButtonDisabled = false;
+                      _loginButtonDisabled = false;
                     });
                   } else {
                     setState(() {
-                      _registerButtonDisabled = true;
+                      _loginButtonDisabled = true;
                     });
                   }
                 },
@@ -94,18 +92,18 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                     onChanged: (_) {
                       if (_emailController.text.length > 0 &&
                           EmailValidator.validate(_emailController.text) &&
-                          _passwordController.text.length > 6) {
+                          _passwordController.text.length > 7) {
                         setState(() {
-                          _registerButtonDisabled = false;
+                          _loginButtonDisabled = false;
                         });
                       } else {
                         setState(() {
-                          _registerButtonDisabled = true;
+                          _loginButtonDisabled = true;
                         });
                       }
                     },
                     validator: (value) {
-                      if (value!.length > 6) {
+                      if (value!.length > 7) {
                         print("email");
                         return null;
                       } else {
@@ -160,13 +158,14 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                 onTap: () async {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
+
                     print(_emailController.text);
                     await controller.startWithEmail(_emailController.text, _passwordController.text);
                   }
                 },
                 child: bigTextContainerButton(
-                  text: "가입 완료하기",
-                  isDisabled: _registerButtonDisabled,
+                  text: "시작하기",
+                  isDisabled: _loginButtonDisabled,
                   height: 60.w,
                 ),
               ),

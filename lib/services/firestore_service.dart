@@ -35,6 +35,12 @@ class FirestoreService extends GetxService {
   }
 
   //// USER 정보
+  // 새 USER 만들기
+
+  Future makeNewUser(UserModel userModel) async {
+    await _firestoreService.collection('users').doc(userModel.uid).set(userModel.toMap());
+  }
+
   // User Model 가져오기
   Future<UserModel> getUserModel(String uid) async {
     return await _firestoreService.collection('users').doc(uid).get().then((value) => UserModel.fromMap(value.data()!));
@@ -350,6 +356,7 @@ class FirestoreService extends GetxService {
   }
 
   Stream<LiveQuestPriceModel> getStreamLiveQuestPrice(InvestAddressModel investAddress) {
+    print('firestore realtime price stream');
     return _firestoreService
         .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
         .where('dateTime', isGreaterThan: '20210902080000')

@@ -40,6 +40,7 @@ class LiveWidget extends StatelessWidget {
     areaGraphColors.add(color3);
     areaGraphColors.add(color4);
 
+    print('live widget $liveQuestIndex');
     return sectionBox(
         height: 250.w,
         width: 232.w,

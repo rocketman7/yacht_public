@@ -64,13 +64,14 @@ class LiveQuestViewModel extends GetxController {
     }
   }
 
-  Stream<List<LiveQuestPriceModel>> realTimePriceStream(List<InvestAddressModel> investAddresses) {
-    // print('live stream started: $investAddresses');
-    // Stream<List<LiveQuestPriceModel>> livePrices = _firestoreService.getLiveQuestPrices(investAddresses);
-    return _firestoreService.getLiveQuestPrices(investAddresses);
-  }
+  // Stream<List<LiveQuestPriceModel>> realTimePriceStream(List<InvestAddressModel> investAddresses) {
+  //   // print('live stream started: $investAddresses');
+  //   // Stream<List<LiveQuestPriceModel>> livePrices = _firestoreService.getLiveQuestPrices(investAddresses);
+  //   return _firestoreService.getLiveQuestPrices(investAddresses);
+  // }
 
   getListStreamPriceModel(List<QuestModel> liveQuests) {
+    print("get stream price model");
     // print('stream triggered');
     // print(liveQuests);
     makeInvestAddressList();

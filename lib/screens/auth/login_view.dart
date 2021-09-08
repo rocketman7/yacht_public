@@ -109,7 +109,7 @@ class LoginView extends StatelessWidget {
                 ),
                 child: InkWell(
                   onTap: () {
-                    Get.toNamed('emailRegister');
+                    Get.to(() => EmailRegisterView());
                   },
                   child: Text(
                     " 이메일로 시작하기 ",

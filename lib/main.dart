@@ -25,6 +25,7 @@ import 'package:yachtOne/styles/yacht_design_system_sample_view.dart';
 
 import 'locator.dart';
 import 'models/corporation_model.dart';
+import 'screens/auth/email_login_view.dart';
 import 'screens/award/award_detail_view.dart';
 import 'screens/award/award_view.dart';
 import 'screens/award_old/award_viewOld.dart';
@@ -78,9 +79,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     SizeConfig().init(context);
     ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
+        BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
         designSize: Size(375, 812),
         orientation: Orientation.portrait);
     super.didChangeDependencies();
@@ -101,6 +100,7 @@ class _MyAppState extends State<MyApp> {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
+        // FocusManager.instance.primaryFocus?.unfocus();
       },
       child: GetMaterialApp(
         theme: theme(),
@@ -122,10 +122,7 @@ class _MyAppState extends State<MyApp> {
           //         field: f,
           //         ),
           //     transition: Transition.zoom),
-          GetPage(
-              name: '/designSystem',
-              page: () => YachtDesignSystemSampleView(),
-              transition: Transition.zoom),
+          GetPage(name: '/designSystem', page: () => YachtDesignSystemSampleView(), transition: Transition.zoom),
           GetPage(
             name: '/quest',
             page: () => QuestView(),
@@ -136,14 +133,16 @@ class _MyAppState extends State<MyApp> {
             page: () => EmailRegisterView(),
             // transition: Transition.zoom
           ),
+          GetPage(
+            name: '/emailLogin',
+            page: () => EmailLoginView(),
+            // transition: Transition.zoom
+          ),
           // GetPage(
           //     name: 'award',
           //     page: () => AwardView(),
           //     transition: Transition.rightToLeft),
-          GetPage(
-              name: '/awardold',
-              page: () => AwardOldView(),
-              transition: Transition.rightToLeft),
+          GetPage(name: '/awardold', page: () => AwardOldView(), transition: Transition.rightToLeft),
           // GetPage(
           //     name: 'tempHome',
           //     page: () => TempHomeView(leagueName: '7월',),

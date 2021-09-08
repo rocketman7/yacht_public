@@ -31,9 +31,9 @@ class PushNotificationService {
   ];
 
   Future initialise() async {
+    print("push notification init");
     if (Platform.isIOS) {
-      await FirebaseMessaging.instance
-          .setForegroundNotificationPresentationOptions(
+      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
         alert: true,
         badge: true,
         sound: true,

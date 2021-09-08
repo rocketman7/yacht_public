@@ -110,7 +110,7 @@ class CommunityView extends StatelessWidget {
                                 child: Center(
                                     child: Text(
                                   "프로 모아보기",
-                                  style: subheadingStyle.copyWith(color: buttonTextPurple),
+                                  style: subheadingStyle.copyWith(color: primaryButtonBackground),
                                 ))),
                           ),
                           Container(height: 32.w, width: 1.w, color: yachtLineColor),
@@ -118,7 +118,7 @@ class CommunityView extends StatelessWidget {
                               child: Center(
                                   child: Text(
                             "팔로워 모아보기",
-                            style: subheadingStyle.copyWith(color: buttonTextPurple),
+                            style: subheadingStyle.copyWith(color: primaryButtonBackground),
                           )))
                         ],
                       ),
