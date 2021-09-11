@@ -577,4 +577,51 @@ class FirestoreService extends GetxService {
       'account.secName': secName,
     });
   }
+
+  // 친구추천코드 관련
+  // 프렌즈코드가 다른 유저들이랑 겹치는지 검사해준다.
+  Future<bool> isFriendsCodeDuplicated(String friendsCode) async {
+    var data;
+
+    await _firestoreService
+        .collection('users')
+        .where('friendsCode', isEqualTo: friendsCode)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              data = element.data();
+            }));
+
+    return (data != null);
+  }
+
+  // 유저가 입력한 프렌즈코드를 가진 유저를 찾아준다.
+  Future<String> searchByFriendsCode(String friendsCode) async {
+    var data;
+    await _firestoreService
+        .collection('users')
+        .where('friendsCode', isEqualTo: friendsCode)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              data = element.id;
+            }));
+
+    return data;
+  }
+
+  Future updateFriendsCode(String uid, String friendsCode) async {
+    print("friendsCode IS" + friendsCode);
+    await _firestoreService
+        .collection('users')
+        .doc(uid)
+        .update({'friendsCode': friendsCode});
+  }
+
+  Future updateInsertedFriendsCode(
+      String uid, String insertedFriendsCode) async {
+    print("insertedFriendsCode IS" + insertedFriendsCode);
+    await _firestoreService
+        .collection('users')
+        .doc(uid)
+        .update({'insertedFriendsCode': insertedFriendsCode});
+  }
 }
