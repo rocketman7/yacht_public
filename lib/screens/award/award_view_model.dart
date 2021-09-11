@@ -18,6 +18,7 @@ class AwardViewModel extends GetxController {
   bool isAllSubLeaguesLoaded = false;
   RxInt pageIndexForHomeUI = 0.obs;
   RxInt pageIndexForUI = 0.obs;
+  List<double> totalValue = [];
 
   //for STATE
   RxString test = homeRepositoryStateStream1;
@@ -40,6 +41,7 @@ class AwardViewModel extends GetxController {
     // });
 
     sortAwardStocksAndCalcUIvar();
+    isAllSubLeaguesLoaded = true;
     update();
 
     super.onInit();
@@ -58,25 +60,30 @@ class AwardViewModel extends GetxController {
     // award 의 갯수만큼 돌아가야함. (페이지당 하나의 어워드 = 페이지 갯수만큼)
     for (int v = 0; v < allSubLeagues.length; v++) {
       subLeaguePortfolioUIModels.add([]);
-      isMaxLabel.add(allSubLeagues[v].stocks.length > labelMaxNum ? labelState.NEED_MIN : labelState.NONEED);
+      isMaxLabel.add(allSubLeagues[v].stocks.length > labelMaxNum
+          ? labelState.NEED_MIN
+          : labelState.NONEED);
+
+      // 어워드의 상금 전체 가치 계산
+      totalValue.add(0.0);
+      for (int i = 0; i < allSubLeagues[v].stocks.length; i++) {
+        totalValue[v] += allSubLeagues[v].stocks[i].sharesNum *
+            allSubLeagues[v].stocks[i].standardPrice;
+      }
+
       for (int i = 0; i < allSubLeagues[v].stocks.length; i++) {
         // awardModels[i].totalAwardValue = 0.0;
 
         double accumPercentage = 0.0;
 
-        // 어워드의 상금 전체 가치 계산
-        // for (int j = 0; j < awardModels[i].awardStockModels.length; j++) {
-        //   awardModels[i].totalAwardValue +=
-        //       awardModels[i].awardStockModels[j].sharesNum *
-        //           awardModels[i].awardStockModels[j].currentPrice;
-        // }
-
         // 각 종목 비중별로 정렬한다.
         for (int j = 0; j < allSubLeagues[v].stocks.length; j++) {
           SubLeagueStocksModel tempSubLeagueStockModel;
           for (int k = j + 1; k < allSubLeagues[v].stocks.length; k++) {
-            if (allSubLeagues[v].stocks[j].sharesNum * allSubLeagues[v].stocks[j].standardPrice <
-                allSubLeagues[v].stocks[k].sharesNum * allSubLeagues[v].stocks[k].standardPrice) {
+            if (allSubLeagues[v].stocks[j].sharesNum *
+                    allSubLeagues[v].stocks[j].standardPrice <
+                allSubLeagues[v].stocks[k].sharesNum *
+                    allSubLeagues[v].stocks[k].standardPrice) {
               tempSubLeagueStockModel = allSubLeagues[v].stocks[j];
               allSubLeagues[v].stocks[j] = allSubLeagues[v].stocks[k];
               allSubLeagues[v].stocks[k] = tempSubLeagueStockModel;
@@ -87,7 +94,9 @@ class AwardViewModel extends GetxController {
         // UI를 위한 모델을 채워준다.
         if (allSubLeagues[v].stocks.length == 1) {
           Size portionTxtSize = textSizeGet('100%', subLeagueAwardPortionStyle);
-          Size stockNameTxtSize = textSizeGet('${allSubLeagues[v].stocks[0].name}', subLeagueAwardStockNameStyle);
+          Size stockNameTxtSize = textSizeGet(
+              '${allSubLeagues[v].stocks[0].name}',
+              subLeagueAwardStockNameStyle);
 
           subLeaguePortfolioUIModels[v].add(SubLeaguePortfolioUIModel(
             legendVisible: true,
@@ -95,19 +104,26 @@ class AwardViewModel extends GetxController {
             startPercentage: 0,
             endPercentage: 100,
             portionOffsetFromCenter: Offset(
-                portfolioArcRadius / 2 - portionTxtSize.width / 2, portfolioArcRadius / 2 - portionTxtSize.height),
-            stockNameOffsetFromCenter:
-                Offset(portfolioArcRadius / 2 - stockNameTxtSize.width / 2, portfolioArcRadius / 2),
+                portfolioArcRadius / 2 - portionTxtSize.width / 2,
+                portfolioArcRadius / 2 - portionTxtSize.height),
+            stockNameOffsetFromCenter: Offset(
+                portfolioArcRadius / 2 - stockNameTxtSize.width / 2,
+                portfolioArcRadius / 2),
           ));
         } else {
           for (int j = 0; j < allSubLeagues[v].stocks.length; j++) {
-            double portion = (allSubLeagues[v].stocks[j].standardPrice * allSubLeagues[v].stocks[j].sharesNum) /
-                allSubLeagues[v].totalValue;
+            double portion = (allSubLeagues[v].stocks[j].standardPrice *
+                    allSubLeagues[v].stocks[j].sharesNum) /
+                totalValue[v];
             double nextAccumPercentage = accumPercentage + portion;
             int portionInt = (portion * 100).round();
-            Size portionTxtSize = textSizeGet('$portionInt%', subLeagueAwardPortionStyle);
-            Size stockNameTxtSize = textSizeGet('${allSubLeagues[v].stocks[j].name}', subLeagueAwardStockNameStyle);
-            bool legendVisible = portion >= legendVisiblePercentage ? true : false;
+            Size portionTxtSize =
+                textSizeGet('$portionInt%', subLeagueAwardPortionStyle);
+            Size stockNameTxtSize = textSizeGet(
+                '${allSubLeagues[v].stocks[j].name}',
+                subLeagueAwardStockNameStyle);
+            bool legendVisible =
+                portion >= legendVisiblePercentage ? true : false;
 
             //
             subLeaguePortfolioUIModels[v].add(SubLeaguePortfolioUIModel(
@@ -119,31 +135,46 @@ class AwardViewModel extends GetxController {
                   portfolioArcRadius / 2 +
                       (portfolioArcRadius / 2) *
                           0.5 *
-                          math.cos(2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) - math.pi / 2) -
+                          math.cos(2 *
+                                  math.pi *
+                                  ((accumPercentage + nextAccumPercentage) /
+                                      2) -
+                              math.pi / 2) -
                       portionTxtSize.width / 2,
                   portfolioArcRadius / 2 +
                       (portfolioArcRadius / 2) *
                           0.5 *
-                          math.sin(2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) - math.pi / 2) -
+                          math.sin(2 *
+                                  math.pi *
+                                  ((accumPercentage + nextAccumPercentage) /
+                                      2) -
+                              math.pi / 2) -
                       portionTxtSize.height),
               stockNameOffsetFromCenter: Offset(
                   portfolioArcRadius / 2 +
                               (portfolioArcRadius / 2) *
                                   0.5 *
-                                  math.cos(2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) - math.pi / 2) -
+                                  math.cos(2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) -
+                                      math.pi / 2) -
                               stockNameTxtSize.width / 2 >
                           0
                       ? portfolioArcRadius / 2 +
                                   (portfolioArcRadius / 2) *
                                       0.5 *
-                                      math.cos(
-                                          2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) - math.pi / 2) +
+                                      math.cos(2 *
+                                              math.pi *
+                                              ((accumPercentage +
+                                                      nextAccumPercentage) /
+                                                  2) -
+                                          math.pi / 2) +
                                   stockNameTxtSize.width / 2 <
                               portfolioArcRadius
                           ? portfolioArcRadius / 2 +
                               (portfolioArcRadius / 2) *
                                   0.5 *
-                                  math.cos(2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) - math.pi / 2) -
+                                  math.cos(
+                                      2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) -
+                                          math.pi / 2) -
                               stockNameTxtSize.width / 2
                           : portfolioArcRadius - stockNameTxtSize.width
                       : 0,
@@ -162,7 +193,8 @@ class AwardViewModel extends GetxController {
 
   // 페이지 이동
   void pageNavigateToRight() {
-    if (isAllSubLeaguesLoaded && pageIndexForUI.value < (allSubLeagues.length - 1)) {
+    if (isAllSubLeaguesLoaded &&
+        pageIndexForUI.value < (allSubLeagues.length - 1)) {
       pageIndexForUI++;
     }
   }
@@ -177,25 +209,33 @@ class AwardViewModel extends GetxController {
   void moreStockOrCancel(int index) {
     if (isMaxLabel[index] == labelState.NEED_MAX)
       isMaxLabel[index] = labelState.NEED_MIN;
-    else if (isMaxLabel[index] == labelState.NEED_MIN) isMaxLabel[index] = labelState.NEED_MAX;
+    else if (isMaxLabel[index] == labelState.NEED_MIN)
+      isMaxLabel[index] = labelState.NEED_MAX;
   }
 
   // color index 고르기
   // 아래 color는 style_constant -> awardColor list의 색깔들을
   // 1, 2, 3, ..., color갯수-1, color갯수, color갯수-1, ..., 3, 2, 1, 2, 3, ... 처럼 쓰기 위함
-  Color colorIndex(int index) {
+  Color colorIndex(int index, int sideOrCenter) {
+    //sideOrCenter => 0 or 1
     return awardColors[index < awardColors.length
         ? index
-        : (((index - awardColors.length) / (awardColors.length - 1)).floor() % 2) == 1
+        : (((index - awardColors.length) / (awardColors.length - 1)).floor() %
+                    2) ==
+                1
             ? (index -
                     awardColors.length -
-                    ((index - awardColors.length) / (awardColors.length - 1)).floor() * (awardColors.length - 1)) +
+                    ((index - awardColors.length) / (awardColors.length - 1))
+                            .floor() *
+                        (awardColors.length - 1)) +
                 1
             : (awardColors.length - 1) -
                 (index -
                     awardColors.length -
-                    ((index - awardColors.length) / (awardColors.length - 1)).floor() * (awardColors.length - 1)) -
-                1];
+                    ((index - awardColors.length) / (awardColors.length - 1))
+                            .floor() *
+                        (awardColors.length - 1)) -
+                1][sideOrCenter];
   }
 }
 

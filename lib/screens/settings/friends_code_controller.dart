@@ -101,6 +101,9 @@ class FriendsCodeController extends GetxController {
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
   String uiFriendsCode = '추천 코드 생성 중';
+  bool checking = false;
+  bool dialogError = false;
+  String errMsg = '';
 
   @override
   void onInit() async {
@@ -143,6 +146,68 @@ class FriendsCodeController extends GetxController {
       await LinkClient.instance.launchKakaoTalk(uri);
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  void resetFriendsCodeVar() {
+    checking = false;
+    dialogError = false;
+    errMsg = '';
+  }
+
+  // 추천코드를 입력하면, 1. 유효성 검사를 해주고, 2. 상대방 아이템 반영
+  Future friendsCodeYacht(String code) async {
+    checking = true;
+    update();
+
+    if (code.length != 6) {
+      checking = false;
+      dialogError = true;
+      errMsg = '추천코드는 6자입니다! 다시 확인해주세요.';
+      print(errMsg);
+      update();
+
+      return false;
+    }
+
+    if (userModelRx.value!.friendsCode == code) {
+      checking = false;
+      dialogError = true;
+      errMsg = '자신의 추천코드는 입력할 수 없습니다.';
+      print(errMsg);
+      update();
+
+      return false;
+    } else {
+      // 비로소 이제.. 그 추천코드를 가진 다른 유저가 있는지 검사해준다.
+      var a = await _firestoreService.searchByFriendsCode(code);
+      // null 이면 없는 거고.. 아니면 있는것. uid를 뱉어냄
+      if (a == null) {
+        checking = false;
+        dialogError = true;
+        errMsg = '없는 추천코드입니다. 다시 확인해주세요.';
+        print(errMsg);
+        update();
+
+        return false;
+      } else {
+        _firestoreService.updateOtherUserItem(a.toString(), 5);
+        // 이 다음에 a의 (즉 코드입력받은 상대방) 피드?에 올려주든지 하면 좋을듯 (추천받아서 아이템 5개 받았다고)
+        _firestoreService.updateInsertedFriendsCode(
+            a.toString(), userModelRx.value!.friendsCode!);
+        _firestoreService.updateFriendsCodeDone(userModelRx.value!.uid, true);
+
+        // insertedCode = code;
+
+        // didInserted = true;
+
+        checking = false;
+        errMsg = '';
+        print(errMsg);
+        update();
+
+        return true;
+      }
     }
   }
 }

@@ -52,7 +52,8 @@ double reducedPaddingWhenTextIsBelow(double padding, double textSize) {
   return padding - (textSize * 0.2).round().toDouble();
 }
 
-double reducedPaddingWhenTextIsBothSide(double padding, double topTextSize, double bottomTextSize) {
+double reducedPaddingWhenTextIsBothSide(
+    double padding, double topTextSize, double bottomTextSize) {
   return padding - reducePaddingBothSide(topTextSize, bottomTextSize);
 }
 
@@ -61,11 +62,13 @@ double reducePaddingOneSide(double textSize) {
 }
 
 double reducePaddingBothSide(double topTextSize, double bottomTextSize) {
-  return ((topTextSize * 0.2).round() + (bottomTextSize * 0.2).round()).toDouble();
+  return ((topTextSize * 0.2).round() + (bottomTextSize * 0.2).round())
+      .toDouble();
 }
 
 EdgeInsets textTopPadding(double textSize) {
-  return EdgeInsets.fromLTRB(14.w, (-(textSize * 0.2).round() + 30).w, 14.w, 14.w);
+  return EdgeInsets.fromLTRB(
+      14.w, (-(textSize * 0.2).round() + 30).w, 14.w, 14.w);
 }
 
 EdgeInsets textTopOpenHorizontalPadding(double textSize) {
@@ -181,8 +184,8 @@ TextStyle smallSubtitleTextStyle = TextStyle(
 TextStyle awardModuleSliderTitleTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 16.w,
-  fontWeight: FontWeight.w700,
-  color: primaryFontColor,
+  fontWeight: FontWeight.w400,
+  color: yachtBlack,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -360,7 +363,8 @@ TextStyle feedUserName = TextStyle(
 // }
 
 // 차트 토글 버튼
-Container chartToggleButton({required Widget child, required bool isSelected, required Color color}) {
+Container chartToggleButton(
+    {required Widget child, required bool isSelected, required Color color}) {
   return Container(
       // width: 50.w,
       decoration: BoxDecoration(
@@ -521,10 +525,18 @@ final ohlcInfoStyle = TextStyle(
     height: 1.1);
 
 final ohlcPriceStyle = TextStyle(
-    fontSize: reactiveHeight(18), fontWeight: FontWeight.w500, fontFamily: 'DmSans', letterSpacing: -0.5, height: 1.1);
+    fontSize: reactiveHeight(18),
+    fontWeight: FontWeight.w500,
+    fontFamily: 'DmSans',
+    letterSpacing: -0.5,
+    height: 1.1);
 
 final detailPriceStyle = TextStyle(
-    fontSize: reactiveHeight(16), fontWeight: FontWeight.w700, fontFamily: 'DmSans', letterSpacing: -0.5, height: 1.1);
+    fontSize: reactiveHeight(16),
+    fontWeight: FontWeight.w700,
+    fontFamily: 'DmSans',
+    letterSpacing: -0.5,
+    height: 1.1);
 
 Container toggleButton(Widget child, Color color) {
   return Container(
@@ -539,7 +551,8 @@ Container toggleButton(Widget child, Color color) {
 const defaultDuration = Duration(milliseconds: 250);
 
 // Form Error
-final RegExp emailValidatorRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+final RegExp emailValidatorRegExp =
+    RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 const String kEmailNullError = "Please Enter your email";
 const String kInvalidEmailError = "Please Enter Valid Email";
 const String kPassNullError = "Please Enter your password";

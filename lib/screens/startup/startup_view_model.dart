@@ -12,7 +12,8 @@ import '../../locator.dart';
 
 class StartupViewModel extends GetxController {
   AuthService _authService = locator<AuthService>();
-  PushNotificationService _pushNotificationService = locator<PushNotificationService>();
+  PushNotificationService _pushNotificationService =
+      locator<PushNotificationService>();
   late LeagueAddressModel addressModel;
   RxInt selectedPage = 0.obs;
   late User currentUser;
@@ -24,9 +25,9 @@ class StartupViewModel extends GetxController {
     checkUserNameConfirm();
     // selectedPage = 0.obs;
     // get league Address
-    Future.delayed(Duration(seconds: 1))
-        .then((value) => addressModel = LeagueAddressModel(league: "league001", date: "20210706", uid: "uid"));
-    // _pushNotificationService.initialise();
+    Future.delayed(Duration(seconds: 1)).then((value) => addressModel =
+        LeagueAddressModel(league: "league001", date: "20210706", uid: "uid"));
+    _pushNotificationService.initialise();
     super.onInit();
   }
 

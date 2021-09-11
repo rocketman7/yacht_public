@@ -80,7 +80,9 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     SizeConfig().init(context);
     ScreenUtil.init(
-        BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
         designSize: Size(375, 812),
         orientation: Orientation.portrait);
     super.didChangeDependencies();
@@ -123,7 +125,10 @@ class _MyAppState extends State<MyApp> {
           //         field: f,
           //         ),
           //     transition: Transition.zoom),
-          GetPage(name: '/designSystem', page: () => YachtDesignSystemSampleView(), transition: Transition.zoom),
+          GetPage(
+              name: '/designSystem',
+              page: () => YachtDesignSystemSampleView(),
+              transition: Transition.zoom),
           GetPage(
             name: '/quest',
             page: () => QuestView(),
@@ -148,17 +153,20 @@ class _MyAppState extends State<MyApp> {
           //     name: 'award',
           //     page: () => AwardView(),
           //     transition: Transition.rightToLeft),
-          GetPage(name: '/awardold', page: () => AwardOldView(), transition: Transition.rightToLeft),
+          GetPage(
+              name: '/awardold',
+              page: () => AwardOldView(),
+              transition: Transition.rightToLeft),
           // GetPage(
           //     name: 'tempHome',
           //     page: () => TempHomeView(leagueName: '7월',),
           //     transition: Transition.rightToLeft),
-          GetPage(
-            name: '/subLeague',
-            page: () => AwardDetailView(),
-            // transition: Transition.rightToLeft,
-            binding: HomeRepositoryBinding(),
-          ),
+          // GetPage(
+          //   name: '/subLeague',
+          //   page: () => AwardDetailView(),
+          //   // transition: Transition.rightToLeft,
+          //   binding: HomeRepositoryBinding(),
+          // ),
         ],
         builder: (context, child) {
           return MediaQuery(

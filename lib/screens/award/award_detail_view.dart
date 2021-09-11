@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/screens/award_old/award_viewOld.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/widgets/appbar_back_button.dart';
 
@@ -14,6 +15,11 @@ import '../../handlers/numbers_handler.dart' as NumbersHandler;
 import 'award_view_model.dart';
 
 class AwardDetailView extends StatelessWidget {
+  final String leagueName;
+  final String leagueEndDateTime;
+
+  AwardDetailView({required this.leagueName, required this.leagueEndDateTime});
+
   final AwardViewModel _awardViewModel = Get.find<AwardViewModel>();
 
   @override
@@ -44,149 +50,236 @@ class AwardDetailView extends StatelessWidget {
             padding: EdgeInsets.all(14.0.w),
             child: Container(
               width: double.infinity,
-              decoration:
-                  primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
+              decoration: primaryBoxDecoration.copyWith(
+                  boxShadow: [primaryBoxShadow],
+                  color: homeModuleBoxBackgroundColor),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Obx(() => Container(
-                        width: double.infinity,
-                        // height: 300.w,
-                        decoration: primaryBoxDecoration.copyWith(
-                            color: _awardViewModel.colorIndex(_awardViewModel.pageIndexForUI.value),
-                            borderRadius:
-                                BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 14.w - reducePaddingOneSide(homeModuleTitleTextStyle.fontSize!),
+                  Obx(() => Stack(
+                        children: [
+                          Container(
+                            width: SizeConfig.screenWidth - 28.w,
+                            height: 185.w + 22.w,
+                            decoration: primaryBoxDecoration.copyWith(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    _awardViewModel.colorIndex(
+                                        _awardViewModel.pageIndexForUI.value,
+                                        0),
+                                    _awardViewModel.colorIndex(
+                                        _awardViewModel.pageIndexForUI.value,
+                                        1),
+                                    _awardViewModel.colorIndex(
+                                        _awardViewModel.pageIndexForUI.value,
+                                        0),
+                                  ]),
                             ),
-                            Text(
-                              '${_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].name}',
-                              style: subLeagueTitleTextStyle,
+                          ),
+                          Positioned(
+                            top: 6.w,
+                            left: 8.w,
+                            child: Container(
+                              width: SizeConfig.screenWidth - 28.w - 16.w,
+                              height: 185.w + 22.w - 12.w,
+                              decoration: primaryBoxDecoration.copyWith(
+                                gradient: LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      Color(0xFFFDFEFF).withOpacity(0),
+                                      Color(0xFFFDFEFF).withOpacity(1),
+                                      Color(0xFFFDFEFF).withOpacity(0),
+                                    ]),
+                              ),
                             ),
-                            SizedBox(
-                              height: 30.w - reducePaddingOneSide(homeModuleTitleTextStyle.fontSize!),
-                            ),
-                            Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                              SizedBox(
-                                width: 14.w,
-                              ),
-                              GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () {
-                                  _awardViewModel.pageNavigateToLeft();
-                                },
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 12.w,
-                                    ),
-                                    Container(
-                                      child: Center(
-                                        child: Image.asset(
-                                          'assets/icons/award_left_arrow.png',
-                                          height: 30.w,
-                                          width: 30.w,
-                                          // color: _awardViewModel.pageIndexForUI.value == 0
-                                          //     ? Colors.transparent
-                                          //     : primaryFontColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Spacer(),
-                              Image.asset(
-                                'assets/icons/won_mark.png',
-                                height: 34.w,
-                                width: 34.w,
-                                color: Colors.white,
-                              ),
-                              SizedBox(width: 5.0.w),
-                              Text(
-                                '${NumbersHandler.toPriceKRW(_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].totalValue)}',
-                                style: subLeagueAwardTextStyle,
-                              ),
-                              Spacer(),
-                              GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () {
-                                  _awardViewModel.pageNavigateToRight();
-                                },
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 12.w,
-                                    ),
-                                    Container(
-                                      child: Center(
-                                        child: Image.asset(
-                                          'assets/icons/award_right_arrow.png',
-                                          height: 30.w,
-                                          width: 30.w,
-                                          // color: _awardViewModel.pageIndexForUI.value ==
-                                          //         _awardViewModel.allSubLeagues.length - 1
-                                          //     ? Colors.transparent
-                                          //     : primaryFontColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: 14.w,
-                              ),
-                            ]),
-                            SizedBox(height: 10.w),
-                            Text(
-                              '상금 약 ${NumbersHandler.parseNumberKRWtoApproxiKorean(_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].totalValue)}',
-                              style: awardModuleSliderAmountKoreanTextStyle.copyWith(
-                                  fontSize: 22.w,
-                                  color: awardModuleSliderAmountKoreanTextStyle.color!.withOpacity(0.3)),
-                            ),
-                            SizedBox(
-                              height: 4.0.w,
-                            ),
-                            Row(
+                          ),
+                          Container(
+                            width: double.infinity,
+                            child: Column(
                               children: [
-                                Container(
-                                  width: 17.w,
+                                SizedBox(
+                                  height: correctHeight(20.w, 0.w,
+                                      subLeagueTitleTextStyle.fontSize),
                                 ),
-                                Flexible(
+                                Text(
+                                  '${_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].name}',
+                                  style: subLeagueTitleTextStyle,
+                                ),
+                                SizedBox(
+                                  height: correctHeight(12.w,
+                                      subLeagueTitleTextStyle.fontSize, 0.w),
+                                ),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 23.w, right: 23.w),
                                   child: Container(
                                     height: 1.w,
-                                    color: awardModuleSliderAmountKoreanTextStyle.color!.withOpacity(0.3),
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Color(0xFF798AE6).withOpacity(0),
+                                        Color(0xFF798AE6).withOpacity(0.5),
+                                        Color(0xFF798AE6).withOpacity(0),
+                                      ],
+                                    )),
                                   ),
                                 ),
-                                Container(
-                                  width: 17.w,
+                                SizedBox(
+                                  height: correctHeight(12.w, 0.w,
+                                      subLeagueAwardTextStyle.fontSize),
+                                ),
+                                Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: 8.w,
+                                      ),
+                                      GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: () {
+                                          _awardViewModel.pageNavigateToLeft();
+                                        },
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 18.w,
+                                            ),
+                                            Container(
+                                              child: Center(
+                                                child: _awardViewModel
+                                                            .pageIndexForUI
+                                                            .value ==
+                                                        0
+                                                    ? Container(
+                                                        height: 24.w,
+                                                        width: 24.w,
+                                                      )
+                                                    : Image.asset(
+                                                        'assets/icons/award_left_arrow.png',
+                                                        height: 24.w,
+                                                        width: 24.w,
+                                                      ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Image.asset('assets/icons/won_mark.png',
+                                          height: 42.w,
+                                          width: 42.w,
+                                          color: yachtDarkGrey),
+                                      SizedBox(width: 7.0.w),
+                                      Text(
+                                        '${NumbersHandler.toPriceKRW(_awardViewModel.totalValue[_awardViewModel.pageIndexForUI.value])}',
+                                        style: subLeagueAwardTextStyle,
+                                      ),
+                                      Spacer(),
+                                      GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: () {
+                                          _awardViewModel.pageNavigateToRight();
+                                        },
+                                        child: Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 18.w,
+                                            ),
+                                            Container(
+                                              child: Center(
+                                                child: _awardViewModel
+                                                            .pageIndexForUI
+                                                            .value ==
+                                                        _awardViewModel
+                                                                .allSubLeagues
+                                                                .length -
+                                                            1
+                                                    ? Container(
+                                                        height: 24.w,
+                                                        width: 24.w,
+                                                      )
+                                                    : Image.asset(
+                                                        'assets/icons/award_right_arrow.png',
+                                                        height: 24.w,
+                                                        width: 24.w,
+                                                      ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 8.w,
+                                      ),
+                                    ]),
+                                SizedBox(
+                                    height: correctHeight(16.w,
+                                        subLeagueAwardTextStyle.fontSize, 0.w)),
+                                Text(
+                                    '상금 약 ${NumbersHandler.parseNumberKRWtoApproxiKorean(_awardViewModel.totalValue[_awardViewModel.pageIndexForUI.value])}',
+                                    style: awardAmountKoreanTextStyle),
+                                SizedBox(
+                                  height: correctHeight(10.w,
+                                      awardAmountKoreanTextStyle.fontSize, 0.w),
+                                ),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(left: 23.w, right: 23.w),
+                                  child: Container(
+                                    height: 1.w,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Color(0xFF798AE6).withOpacity(0),
+                                        Color(0xFF798AE6).withOpacity(0.5),
+                                        Color(0xFF798AE6).withOpacity(0),
+                                      ],
+                                    )),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: correctHeight(
+                                      11.w,
+                                      0.w,
+                                      awardModuleSliderEndDateTimeTextStyle
+                                          .copyWith(fontSize: 14.w)
+                                          .fontSize),
+                                ),
+                                // 얘는 리그 필드?에서 받아와야할듯. leageu name 처럼.
+                                Text(
+                                  '$leagueEndDateTime',
+                                  style: awardModuleSliderEndDateTimeTextStyle
+                                      .copyWith(
+                                          fontSize: 14.w,
+                                          color:
+                                              awardModuleSliderEndDateTimeTextStyle
+                                                  .color!
+                                                  .withOpacity(0.5)),
+                                ),
+                                SizedBox(
+                                  height: correctHeight(
+                                      17.w,
+                                      awardModuleSliderEndDateTimeTextStyle
+                                          .copyWith(fontSize: 14.w)
+                                          .fontSize,
+                                      0.w),
                                 ),
                               ],
                             ),
-                            SizedBox(
-                              height: 10.0.w -
-                                  reducePaddingOneSide(
-                                      awardModuleSliderEndDateTimeTextStyle.copyWith(fontSize: 14.w).fontSize!),
-                            ),
-                            // 얘는 리그 필드?에서 받아와야할듯. leageu name 처럼.
-                            Text(
-                              '2021년 06월 30일까지',
-                              style: awardModuleSliderEndDateTimeTextStyle.copyWith(fontSize: 14.w),
-                            ),
-                            SizedBox(
-                              height: 10.0.w -
-                                  reducePaddingOneSide(
-                                      awardModuleSliderEndDateTimeTextStyle.copyWith(fontSize: 14.w).fontSize!),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       )),
                   SizedBox(
-                    height: 30.w - reducePaddingOneSide(subLeagueAwardDescriptionStyle.fontSize!),
-                  ),
+                      height: correctHeight(
+                          30.w, 0.w, subLeagueAwardDescriptionStyle.fontSize)),
                   Obx(() => Padding(
                         padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w),
                         child: Container(
@@ -199,32 +292,41 @@ class AwardDetailView extends StatelessWidget {
                         ),
                       )),
                   SizedBox(
-                    height: 8.w - reducePaddingOneSide(subLeagueAwardDescriptionStyle.fontSize!),
-                  ),
+                      height: correctHeight(
+                          12.w,
+                          subLeagueAwardDescriptionStyle.fontSize,
+                          subLeagueAwardRulesStyle.fontSize)),
                   Obx(() => Padding(
                         padding: EdgeInsets.only(left: 15.5.w, right: 15.5.w),
                         child: Container(
                           alignment: Alignment.centerLeft,
                           child: SubLeagueViewDetailRulesTextWidget(
-                            rules: _awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].rules,
+                            rules: _awardViewModel
+                                .allSubLeagues[
+                                    _awardViewModel.pageIndexForUI.value]
+                                .rules,
                           ),
                         ),
                       )),
                   SizedBox(
-                    height: 40.w - reducePaddingOneSide(homeModuleTitleTextStyle.fontSize!),
+                    height: correctHeight(
+                        50.w,
+                        subLeagueAwardRulesStyle.fontSize,
+                        awardModuleTitleTextStyle.fontSize),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 14.0.w),
                     child: Text(
                       '상금 주식 포트폴리오',
-                      style: homeModuleTitleTextStyle,
+                      style: awardModuleTitleTextStyle,
                     ),
                   ),
                   SizedBox(
-                    height: 10.w - reducePaddingOneSide(homeModuleTitleTextStyle.fontSize!),
-                  ),
+                      height: correctHeight(
+                          20.w, awardModuleTitleTextStyle.fontSize, 0.w)),
                   Padding(
-                    padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w, bottom: 14.0.w),
+                    padding: EdgeInsets.only(
+                        left: 14.0.w, right: 14.0.w, bottom: 14.0.w),
                     child: Container(
                       height: SizeConfig.screenWidth - 14.0.w * 4,
                       width: SizeConfig.screenWidth - 14.0.w * 4,
@@ -232,43 +334,55 @@ class AwardDetailView extends StatelessWidget {
                       child: PortfolioChart(),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w), child: PortfolioLabel()),
-                  Obx(() => _awardViewModel.isMaxLabel[_awardViewModel.pageIndexForUI.value] == labelState.NONEED
+                  Padding(
+                      padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w),
+                      child: PortfolioLabel()),
+                  Obx(() => _awardViewModel.isMaxLabel[
+                              _awardViewModel.pageIndexForUI.value] ==
+                          labelState.NONEED
                       ? Container()
-                      : _awardViewModel.isMaxLabel[_awardViewModel.pageIndexForUI.value] == labelState.NEED_MIN
+                      : _awardViewModel.isMaxLabel[
+                                  _awardViewModel.pageIndexForUI.value] ==
+                              labelState.NEED_MIN
                           ? Padding(
-                              padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w),
+                              padding:
+                                  EdgeInsets.only(left: 14.0.w, right: 14.0.w),
                               child: GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onTap: () {
-                                  _awardViewModel.moreStockOrCancel(_awardViewModel.pageIndexForUI.value);
+                                  _awardViewModel.moreStockOrCancel(
+                                      _awardViewModel.pageIndexForUI.value);
                                 },
                                 child: Row(
                                   children: [
                                     Flexible(
                                       child: Container(
                                         height: 1.w,
-                                        color: primaryLightFontColor,
+                                        color: yachtGrey,
                                       ),
                                     ),
                                     SizedBox(
                                       width: 6.w,
                                     ),
                                     Text('더보기',
-                                        style: subLeagueAwardLabelStyle.copyWith(
-                                            fontWeight: FontWeight.w300, color: primaryLightFontColor)),
+                                        style:
+                                            subLeagueAwardLabelStyle.copyWith(
+                                                fontWeight: FontWeight.w300,
+                                                color: yachtGrey)),
                                     SizedBox(
                                       width: 6.w,
                                     ),
-                                    Image.asset('assets/icons/drop_down_arrow.png',
-                                        width: 12.w, color: primaryLightFontColor),
+                                    Image.asset(
+                                        'assets/icons/drop_down_arrow.png',
+                                        width: 12.w,
+                                        color: yachtGrey),
                                     SizedBox(
                                       width: 6.w,
                                     ),
                                     Flexible(
                                       child: Container(
                                         height: 1.w,
-                                        color: primaryLightFontColor,
+                                        color: yachtGrey,
                                       ),
                                     ),
                                   ],
@@ -276,38 +390,44 @@ class AwardDetailView extends StatelessWidget {
                               ),
                             )
                           : Padding(
-                              padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w),
+                              padding:
+                                  EdgeInsets.only(left: 14.0.w, right: 14.0.w),
                               child: GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onTap: () {
-                                  _awardViewModel.moreStockOrCancel(_awardViewModel.pageIndexForUI.value);
+                                  _awardViewModel.moreStockOrCancel(
+                                      _awardViewModel.pageIndexForUI.value);
                                 },
                                 child: Row(
                                   children: [
                                     Flexible(
                                       child: Container(
                                         height: 1.w,
-                                        color: primaryLightFontColor,
+                                        color: yachtGrey,
                                       ),
                                     ),
                                     SizedBox(
                                       width: 6.w,
                                     ),
                                     Text('닫기',
-                                        style: subLeagueAwardLabelStyle.copyWith(
-                                            fontWeight: FontWeight.w300, color: primaryLightFontColor)),
+                                        style:
+                                            subLeagueAwardLabelStyle.copyWith(
+                                                fontWeight: FontWeight.w300,
+                                                color: yachtGrey)),
                                     SizedBox(
                                       width: 6.w,
                                     ),
-                                    Image.asset('assets/icons/drop_down_cancel_arrow.png',
-                                        width: 12.w, color: primaryLightFontColor),
+                                    Image.asset(
+                                        'assets/icons/drop_down_cancel_arrow.png',
+                                        width: 12.w,
+                                        color: yachtGrey),
                                     SizedBox(
                                       width: 6.w,
                                     ),
                                     Flexible(
                                       child: Container(
                                         height: 1.w,
-                                        color: primaryLightFontColor,
+                                        color: yachtGrey,
                                       ),
                                     ),
                                   ],
@@ -315,17 +435,21 @@ class AwardDetailView extends StatelessWidget {
                               ),
                             )),
                   SizedBox(
-                    height: 40.w - reducePaddingOneSide(homeModuleTitleTextStyle.fontSize!),
+                    height: 40.w -
+                        reducePaddingOneSide(
+                            awardModuleTitleTextStyle.fontSize!),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 14.0.w),
                     child: Text(
                       '요트선장 코멘트',
-                      style: homeModuleTitleTextStyle,
+                      style: awardModuleTitleTextStyle,
                     ),
                   ),
                   SizedBox(
-                    height: 20.5.w - reducePaddingOneSide(subLeagueAwardCommentStyle.fontSize!),
+                    height: 20.5.w -
+                        reducePaddingOneSide(
+                            subLeagueAwardCommentStyle.fontSize!),
                   ),
                   Obx(() => Padding(
                         padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w),
@@ -335,13 +459,15 @@ class AwardDetailView extends StatelessWidget {
                         ),
                       )),
                   SizedBox(
-                    height: 40.w - reducePaddingOneSide(homeModuleTitleTextStyle.fontSize!),
+                    height: 40.w -
+                        reducePaddingOneSide(
+                            awardModuleTitleTextStyle.fontSize!),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 14.0.w),
                     child: Text(
                       '랭킹',
-                      style: homeModuleTitleTextStyle,
+                      style: awardModuleTitleTextStyle,
                     ),
                   ),
                 ],
@@ -368,7 +494,7 @@ class SubLeagueViewDetailRulesTextWidget extends StatelessWidget {
           .map((i, element) => MapEntry(
                 i,
                 Text(
-                  '*${rules[i]}',
+                  '* ${rules[i]}',
                   style: subLeagueAwardRulesStyle,
                 ),
               ))
@@ -385,23 +511,39 @@ class PortfolioLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: _awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks
+          children: _awardViewModel
+              .allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks
               .asMap()
               .map((i, element) => MapEntry(
                   i,
-                  (_awardViewModel.isMaxLabel[_awardViewModel.pageIndexForUI.value] == labelState.NEED_MIN &&
+                  (_awardViewModel.isMaxLabel[
+                                      _awardViewModel.pageIndexForUI.value] ==
+                                  labelState.NEED_MIN &&
                               i < labelMaxNum) ||
-                          (_awardViewModel.isMaxLabel[_awardViewModel.pageIndexForUI.value] == labelState.NEED_MAX) ||
-                          (_awardViewModel.isMaxLabel[_awardViewModel.pageIndexForUI.value] == labelState.NONEED)
+                          (_awardViewModel.isMaxLabel[
+                                  _awardViewModel.pageIndexForUI.value] ==
+                              labelState.NEED_MAX) ||
+                          (_awardViewModel.isMaxLabel[
+                                  _awardViewModel.pageIndexForUI.value] ==
+                              labelState.NONEED)
                       ? Column(
                           children: [
                             Row(
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: _awardViewModel
-                                        .colorIndex(_awardViewModel.pageIndexForUI.value)
-                                        .withOpacity(math.max(1.0 - 0.1 * i, 0.0)),
+                                    color: (i < portfolioColors.length)
+                                        ? portfolioColors[i]
+                                        : portfolioColors[
+                                                portfolioColors.length - 1]
+                                            .withOpacity(math.max(
+                                                1.0 -
+                                                    0.4 *
+                                                        (i -
+                                                            portfolioColors
+                                                                .length +
+                                                            1),
+                                                0.0)),
                                     borderRadius: BorderRadius.circular(2.0),
                                   ),
                                   height: 18.w,
@@ -420,15 +562,22 @@ class PortfolioLabel extends StatelessWidget {
                                 Flexible(
                                   child: Container(
                                     height: 1.w,
-                                    color: primaryFontColor,
+                                    color: yachtBlack,
                                   ),
                                 ),
                                 SizedBox(
                                   width: 6.w,
                                 ),
-                                Text(
+                                SizedBox(
+                                  width: textSizeGet(
+                                          '000%', subLeagueAwardLabelStyle)
+                                      .width,
+                                  child: Text(
                                     '${_awardViewModel.subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].roundPercentage}%',
-                                    style: subLeagueAwardLabelStyle),
+                                    style: subLeagueAwardLabelStyle,
+                                    textAlign: TextAlign.end,
+                                  ),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -460,53 +609,87 @@ class PortfolioChart extends StatelessWidget {
   List<Widget> portfolioList() {
     List<Widget> result = [];
 
-    for (int i = 0; i < _awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks.length; i++) {
+    for (int i = 0;
+        i <
+            _awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value]
+                .stocks.length;
+        i++) {
       result.add(
         GestureDetector(
           onTap: () {},
           child: CustomPaint(
-            size: Size(_awardViewModel.portfolioArcRadius, _awardViewModel.portfolioArcRadius),
+            size: Size(_awardViewModel.portfolioArcRadius,
+                _awardViewModel.portfolioArcRadius),
             painter: PortfolioArcChartPainter(
-              center: Offset(_awardViewModel.portfolioArcRadius / 2, _awardViewModel.portfolioArcRadius / 2),
-              color: _awardViewModel
-                  .colorIndex(_awardViewModel.pageIndexForUI.value)
-                  .withOpacity(math.max(1.0 - 0.1 * i, 0.0)),
-              percentage1:
-                  _awardViewModel.subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].startPercentage! *
-                      100,
-              percentage2:
-                  _awardViewModel.subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].endPercentage! *
-                      100,
+              center: Offset(_awardViewModel.portfolioArcRadius / 2,
+                  _awardViewModel.portfolioArcRadius / 2),
+              color: (i < portfolioColors.length)
+                  ? portfolioColors[i]
+                  : portfolioColors[portfolioColors.length - 1].withOpacity(math
+                      .max(1.0 - 0.4 * (i - portfolioColors.length + 1), 0.0)),
+              percentage1: _awardViewModel
+                      .subLeaguePortfolioUIModels[
+                          _awardViewModel.pageIndexForUI.value][i]
+                      .startPercentage! *
+                  100,
+              percentage2: _awardViewModel
+                      .subLeaguePortfolioUIModels[
+                          _awardViewModel.pageIndexForUI.value][i]
+                      .endPercentage! *
+                  100,
             ),
           ),
         ),
       );
     }
 
-    for (int i = 0; i < _awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks.length; i++) {
-      if (_awardViewModel.subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].legendVisible!)
+    for (int i = 0;
+        i <
+            _awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value]
+                .stocks.length;
+        i++) {
+      if (_awardViewModel
+          .subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i]
+          .legendVisible!)
         result.add(
           Positioned(
             left: _awardViewModel
-                .subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].portionOffsetFromCenter!.dx,
+                .subLeaguePortfolioUIModels[
+                    _awardViewModel.pageIndexForUI.value][i]
+                .portionOffsetFromCenter!
+                .dx,
             top: _awardViewModel
-                .subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].portionOffsetFromCenter!.dy,
+                .subLeaguePortfolioUIModels[
+                    _awardViewModel.pageIndexForUI.value][i]
+                .portionOffsetFromCenter!
+                .dy,
             child: Text(
               '${_awardViewModel.subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].roundPercentage}%',
               style: subLeagueAwardPortionStyle,
             ),
           ),
         );
-      if (_awardViewModel.subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].legendVisible!)
+      if (_awardViewModel
+          .subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i]
+          .legendVisible!)
         result.add(
           Positioned(
               left: _awardViewModel
-                  .subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].stockNameOffsetFromCenter!.dx,
+                  .subLeaguePortfolioUIModels[
+                      _awardViewModel.pageIndexForUI.value][i]
+                  .stockNameOffsetFromCenter!
+                  .dx,
               top: _awardViewModel
-                  .subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].stockNameOffsetFromCenter!.dy,
+                  .subLeaguePortfolioUIModels[
+                      _awardViewModel.pageIndexForUI.value][i]
+                  .stockNameOffsetFromCenter!
+                  .dy,
               child: Container(
                 child: Text(
-                  _awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks[i].name,
+                  _awardViewModel
+                      .allSubLeagues[_awardViewModel.pageIndexForUI.value]
+                      .stocks[i]
+                      .name,
                   style: subLeagueAwardStockNameStyle,
                 ),
               )),
@@ -523,19 +706,30 @@ class PortfolioArcChartPainter extends CustomPainter {
   double? percentage1 = 0.0;
   double? percentage2 = 0.0;
 
-  PortfolioArcChartPainter({this.center, this.color, this.percentage1, this.percentage2});
+  PortfolioArcChartPainter(
+      {this.center, this.color, this.percentage1, this.percentage2});
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = color!
+      // ..color = color!
+      ..shader = RadialGradient(
+        colors: [
+          color!,
+          color!.withOpacity(0.5),
+        ],
+      ).createShader(Rect.fromCircle(
+        center: center!,
+        radius: size.width / 2,
+      ))
       ..style = PaintingStyle.fill;
 
     double radius = size.width / 2;
 
     double arcAngle1 = 2 * math.pi * (percentage1! / 100) - math.pi / 2;
     double arcAngle2 = 2 * math.pi * (percentage2! / 100) - math.pi / 2;
-    canvas.drawArc(Rect.fromCircle(center: center!, radius: radius), arcAngle1, arcAngle2 - arcAngle1, true, paint);
+    canvas.drawArc(Rect.fromCircle(center: center!, radius: radius), arcAngle1,
+        arcAngle2 - arcAngle1, true, paint);
   }
 
   @override

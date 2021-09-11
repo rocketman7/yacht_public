@@ -112,8 +112,7 @@ class HomeSubLeagueCardCarouselSliderWidget extends StatelessWidget {
                       height: 22.0,
                     ),
                     //원인지 달러인지 등도 나중에는 구분해줘야할 듯
-                    Text(
-                        '${NumbersHandler.toPriceKRW(_subLeagueController.allSubLeagues[index].totalValue)}원',
+                    Text('${NumbersHandler.toPriceKRW(300)}원',
                         style: titleStyle.copyWith(
                             color: Color(0xFFEE5076),
                             fontSize: 30.0,

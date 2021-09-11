@@ -11,7 +11,7 @@ class SubLeagueModel {
   final String comment;
   final List<String> rules;
   final List<SubLeagueStocksModel> stocks;
-  final num totalValue;
+  // final num totalValue;
 
   SubLeagueModel({
     required this.name,
@@ -19,7 +19,7 @@ class SubLeagueModel {
     required this.comment,
     required this.rules,
     required this.stocks,
-    required this.totalValue,
+    // required this.totalValue,
   });
 
   SubLeagueModel copyWith({
@@ -28,7 +28,7 @@ class SubLeagueModel {
     String? comment,
     List<String>? rules,
     List<SubLeagueStocksModel>? stocks,
-    num? totalValue,
+    // num? totalValue,
   }) {
     return SubLeagueModel(
       name: name ?? this.name,
@@ -36,7 +36,7 @@ class SubLeagueModel {
       comment: comment ?? this.comment,
       rules: rules ?? this.rules,
       stocks: stocks ?? this.stocks,
-      totalValue: totalValue ?? this.totalValue,
+      // totalValue: totalValue ?? this.totalValue,
     );
   }
 
@@ -47,7 +47,7 @@ class SubLeagueModel {
       'comment': comment,
       'rules': rules,
       'stocks': stocks.map((x) => x.toMap()).toList(),
-      'totalValue': totalValue,
+      // 'totalValue': totalValue,
     };
   }
 
@@ -57,18 +57,20 @@ class SubLeagueModel {
       description: map['description'],
       comment: map['comment'],
       rules: List<String>.from(map['rules']),
-      stocks: List<SubLeagueStocksModel>.from(map['stocks']?.map((x) => SubLeagueStocksModel.fromMap(x))),
-      totalValue: map['totalValue'],
+      stocks: List<SubLeagueStocksModel>.from(
+          map['stocks']?.map((x) => SubLeagueStocksModel.fromMap(x))),
+      // totalValue: map['totalValue'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory SubLeagueModel.fromJson(String source) => SubLeagueModel.fromMap(json.decode(source));
+  factory SubLeagueModel.fromJson(String source) =>
+      SubLeagueModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'SubLeagueModel(name: $name, description: $description, comment: $comment, rules: $rules, stocks: $stocks, totalValue: $totalValue)';
+    return 'SubLeagueModel(name: $name, description: $description, comment: $comment, rules: $rules, stocks: $stocks)'; //, totalValue: $totalValue)';
   }
 
   @override
@@ -80,8 +82,8 @@ class SubLeagueModel {
         other.description == description &&
         other.comment == comment &&
         listEquals(other.rules, rules) &&
-        listEquals(other.stocks, stocks) &&
-        other.totalValue == totalValue;
+        listEquals(other.stocks, stocks); // &&
+    // other.totalValue == totalValue;
   }
 
   @override
@@ -90,8 +92,8 @@ class SubLeagueModel {
         description.hashCode ^
         comment.hashCode ^
         rules.hashCode ^
-        stocks.hashCode ^
-        totalValue.hashCode;
+        stocks.hashCode; // ^
+    // totalValue.hashCode;
   }
 }
 
@@ -155,7 +157,8 @@ class SubLeagueStocksModel {
 
   String toJson() => json.encode(toMap());
 
-  factory SubLeagueStocksModel.fromJson(String source) => SubLeagueStocksModel.fromMap(json.decode(source));
+  factory SubLeagueStocksModel.fromJson(String source) =>
+      SubLeagueStocksModel.fromMap(json.decode(source));
 
   @override
   String toString() {
