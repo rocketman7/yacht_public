@@ -40,6 +40,7 @@ class LiveWidget extends StatelessWidget {
     areaGraphColors.add(color3);
     areaGraphColors.add(color4);
 
+    print('live widget $liveQuestIndex');
     return sectionBox(
         height: 250.w,
         width: 232.w,
@@ -85,14 +86,14 @@ class LiveWidget extends StatelessWidget {
                                   majorGridLines: MajorGridLines(width: 0),
                                   isVisible: false),
                               axes: List.generate(
-                                  homeViewModel.liveQuests[liveQuestIndex].investAddresses.length,
+                                  homeViewModel.liveQuests[liveQuestIndex].investAddresses!.length,
                                   (index) => NumericAxis(
                                       name: index.toString(),
                                       // maximum: 101,
                                       // minimum: 97,
                                       majorGridLines: MajorGridLines(width: 0),
                                       isVisible: false)),
-                              series: List.generate(homeViewModel.liveQuests[liveQuestIndex].investAddresses.length,
+                              series: List.generate(homeViewModel.liveQuests[liveQuestIndex].investAddresses!.length,
                                   (index) {
                                 return AreaSeries<ChartPriceModel, DateTime>(
                                   dataSource: liveQuestViewModel.livePrices[liveQuestIndex][index].value.chartPrices,

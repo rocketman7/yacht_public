@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/styles/size_config.dart';
+import 'package:yachtOne/styles/style_constants.dart';
 
 // BASIC COLORS CODE
 const Color yachtBlack = const Color(0xFF101214);
@@ -11,8 +13,11 @@ const Color yachtDarkGrey = const Color(0xFF5B6A87);
 const Color yachtGrey = const Color(0xFF879098);
 const Color yachtRed = const Color(0xFFEE5076);
 const Color seaBlue = Color(0xFF489EDD);
-const Color buttonBackgroundPurple = const Color(0xFFEFF2FA);
-const Color buttonTextPurple = const Color(0xFF6073B4);
+const Color primaryButtonText = const Color(0xFFEFF2FA);
+const Color primaryButtonBackground = yachtViolet;
+const Color secondaryButtonText = yachtViolet;
+const Color secondaryButtonBackground = const Color(0xFFEFF2FA);
+
 const Color buttonDisabled = const Color(0xFFE6E6E6);
 const Color buttonNormal = const Color(0xFFEFF2FA);
 Color yachtShadow = Color(0xFFCEC4DA).withOpacity(.3);
@@ -49,8 +54,7 @@ double correctHeight(double originalPadding, upperTextSize, lowerTextSize) {
 }
 
 double offsetTextHeight(double upperTextSize, double lowerTextSize) {
-  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round())
-      .toDouble();
+  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round()).toDouble();
 }
 
 // 섹션 타이틀과 박스 사이
@@ -60,12 +64,12 @@ double widthHorizontalListView = 14.w;
 // 첫 섹션과 앱바 사이
 // 섹션 안에 패딩
 double primaryPaddingSize = 14.w;
-EdgeInsets primaryHorizontalPadding =
-    EdgeInsets.symmetric(horizontal: primaryPaddingSize);
+EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(horizontal: primaryPaddingSize);
 EdgeInsets primaryAllPadding = EdgeInsets.all(primaryPaddingSize);
 // FONTS
 
 String krFont = 'SCore';
+String krFontW400 = 'Default';
 double primaryFontHeight = 1.35;
 double contentFontHeight = 1.5;
 
@@ -94,6 +98,11 @@ InputDecoration emailRegisterInputDecoration = InputDecoration(
   enabledBorder: UnderlineInputBorder(
     borderSide: BorderSide(color: yachtGrey),
   ),
+  errorStyle: emailRegisterFieldHint.copyWith(
+    color: yachtRed,
+    fontFamily: krFont,
+    fontWeight: FontWeight.w500,
+  ),
   hintText: "이메일 입력하기",
   hintStyle: emailRegisterFieldHint,
 );
@@ -104,7 +113,7 @@ TextStyle onboardingTitle = TextStyle(
   fontFamily: krFont,
   fontSize: heading3Size,
   fontWeight: FontWeight.w500,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   height: primaryFontHeight,
   letterSpacing: -1.0,
 );
@@ -232,7 +241,7 @@ TextStyle profileButtonTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -288,7 +297,7 @@ TextStyle profileChangeButtonTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 20.w,
   fontWeight: FontWeight.w500,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -461,7 +470,7 @@ TextStyle myAssetAmount = TextStyle(
 TextStyle buttonTitleStyle = TextStyle(
   fontFamily: krFont,
   fontSize: bodyBigSize,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   fontWeight: FontWeight.w500,
   height: primaryFontHeight,
   letterSpacing: -0.1,
@@ -514,7 +523,7 @@ TextStyle contentStyle = TextStyle(
 TextStyle simpleTextButtonStyle = TextStyle(
   fontSize: bodySmallSize,
   fontWeight: FontWeight.w500,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   letterSpacing: -0.5,
   height: primaryFontHeight,
 );
@@ -551,7 +560,7 @@ TextStyle feedHashTag = TextStyle(
   fontFamily: 'SCore',
   fontSize: 12.w,
   fontWeight: FontWeight.w300,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -611,7 +620,7 @@ TextStyle snackBarStyle = TextStyle(
 //// 다이얼로그
 // 제목
 TextStyle dialogTitle = TextStyle(
-  fontSize: bodyBigSize,
+  fontSize: heading5Size,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
@@ -709,7 +718,43 @@ TextStyle accountWarning = TextStyle(
   fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w400,
-  color: buttonTextPurple,
+  color: primaryButtonBackground,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtChoiceBoxName = TextStyle(
+  fontSize: bodyBigSize,
+  fontFamily: krFontW400,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtChoiceReOrderableListTitle = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 마이페이지-퀘스트참여기록
+TextStyle questRecordendDateTime = TextStyle(
+  fontSize: 12.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle questRecordTitle = TextStyle(
+  fontSize: bodyBigSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -786,7 +831,62 @@ TextStyle settingFriendsCodeButton2 = TextStyle(
   height: 1.4,
 );
 
-// ICONS
+TextStyle questRecordSelection = TextStyle(
+  fontSize: bodySmallSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 요트 설명서 다이얼로그
+TextStyle yachtInstructionDialogTitle = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtInstructionDialogSubtitle = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtInstructionDialogDescription = TextStyle(
+  fontSize: bodyBigSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// Survey
+// Survey Title
+TextStyle surveyTitle = TextStyle(
+  fontSize: heading4Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle pickManyCircleName = TextStyle(
+  fontSize: bodySmallSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtViolet,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
 
 // BUTTONS
 Container simpleTextContainerButton(
@@ -796,8 +896,26 @@ Container simpleTextContainerButton(
     // alignment: Alignment.center,
     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
-      color: buttonBackgroundPurple,
+      color: primaryButtonText,
       borderRadius: BorderRadius.circular(50),
+    ),
+    child: Text(
+      text,
+      textAlign: TextAlign.center,
+      style: simpleTextButtonStyle,
+    ),
+  );
+}
+
+Container simpleTextContainerLessRadiusButton(
+  String text,
+) {
+  return Container(
+    // alignment: Alignment.center,
+    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+    decoration: BoxDecoration(
+      color: primaryButtonText,
+      borderRadius: BorderRadius.circular(4.w),
     ),
     child: Text(
       text,
@@ -810,22 +928,23 @@ Container simpleTextContainerButton(
 Container textContainerButtonWithOptions({
   required String text,
   required bool isDarkBackground,
+  double? fontSize,
+  EdgeInsets? padding,
   double? height,
 }) {
   return Container(
     height: height,
-    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+    padding: padding ?? EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
-      color: isDarkBackground ? buttonTextPurple : buttonBackgroundPurple,
+      color: isDarkBackground ? primaryButtonBackground : primaryButtonText,
       borderRadius: BorderRadius.circular(50),
     ),
     child: Center(
       child: Text(
         text,
         style: isDarkBackground
-            ? simpleTextButtonStyle.copyWith(
-                color: buttonBackgroundPurple, fontSize: bodyBigSize)
-            : simpleTextButtonStyle.copyWith(fontSize: bodyBigSize),
+            ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
+            : simpleTextButtonStyle.copyWith(fontSize: fontSize ?? bodyBigSize),
       ),
     ),
   );
@@ -840,16 +959,15 @@ Container bigTextContainerButton({
     height: height,
     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
-      color: isDisabled ? buttonDisabled : buttonNormal,
+      color: isDisabled ? buttonDisabled : primaryButtonBackground,
       borderRadius: BorderRadius.circular(50),
     ),
     child: Center(
       child: Text(
         text,
         style: isDisabled
-            ? simpleTextButtonStyle.copyWith(
-                color: yachtGrey, fontSize: heading5Size)
-            : simpleTextButtonStyle.copyWith(fontSize: heading5Size),
+            ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
+            : simpleTextButtonStyle.copyWith(fontSize: heading5Size, color: primaryButtonText),
       ),
     ),
   );
@@ -867,31 +985,35 @@ Container sectionBox({
     height: height,
     width: width,
     padding: padding ?? EdgeInsets.all(0),
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
-    child: child,
-  );
-}
-
-// 기본 박스 데코레이션
-BoxDecoration yachtBoxDecoration = BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.circular(12.w),
-    boxShadow: [
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
       BoxShadow(
         color: yachtShadow,
         blurRadius: 8.w,
         spreadRadius: 1.w,
       )
-    ]);
+    ]),
+    child: child,
+  );
+}
+
+// 기본 박스 데코레이션
+BoxDecoration yachtBoxDecoration = BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
+
+// 퀘스트 선택지 박스 데코레이션
+BoxDecoration yachtChoiceBoxDecoration =
+    BoxDecoration(color: white, borderRadius: BorderRadius.circular(10.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -906,16 +1028,13 @@ Container sectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -930,10 +1049,8 @@ Container sectionBoxWithBottomButton({
           height: 44.w,
           width: double.infinity,
           decoration: BoxDecoration(
-              color: buttonBackgroundPurple,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12.w),
-                  bottomRight: Radius.circular(12.w))),
+              color: primaryButtonText,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -946,7 +1063,7 @@ Container sectionBoxWithBottomButton({
   );
 }
 
-Container simpleTierRRectBox({String tier = "newbie", double width = 70}) {
+Container simpleTierRRectBox({String tier = "newbie", double? fontSize, double width = 70}) {
   late Color tierColor;
   late String tierName;
   switch (tier) {
@@ -970,7 +1087,7 @@ Container simpleTierRRectBox({String tier = "newbie", double width = 70}) {
       tierColor = tierMaster;
       tierName = "마스터";
       break;
-    case 'grandMaster':
+    case 'grandmaster':
       tierColor = tierGrandMaster;
       tierName = "그랜드마스터";
       break;
@@ -978,14 +1095,13 @@ Container simpleTierRRectBox({String tier = "newbie", double width = 70}) {
       tierColor = tierNewbie;
   }
   return Container(
-    width: width.w,
-    height: (width / 3.75).w,
-    decoration: BoxDecoration(
-        color: tierColor, borderRadius: BorderRadius.circular(50)),
+    // width: width.w,
+    // height: (width / 3.75).w,
+    decoration: BoxDecoration(color: tierColor, borderRadius: BorderRadius.circular(50)),
     child: Center(
       child: Text(
-        '$tierName 3',
-        style: simpleTierStyle.copyWith(fontWeight: FontWeight.w500),
+        '$tierName',
+        style: simpleTierStyle.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
       ),
     ),
   );
@@ -997,9 +1113,7 @@ ClipRect glassmorphismContainer({required Widget child}) {
         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
         child: Container(
           padding: EdgeInsets.all(6.w),
-          decoration: BoxDecoration(
-              color: glassmorphismBackgroundColor,
-              borderRadius: BorderRadius.circular(10.w)),
+          decoration: BoxDecoration(color: glassmorphismBackgroundColor, borderRadius: BorderRadius.circular(10.w)),
           child: child,
         )),
   );
@@ -1018,7 +1132,7 @@ AppBar primaryAppBar(String title) {
 Container feedHashTagContainer(String hashTag) => Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
       decoration: BoxDecoration(
-        color: buttonBackgroundPurple,
+        color: primaryButtonText,
         borderRadius: BorderRadius.circular(4.w),
       ),
       child: Text(
@@ -1058,6 +1172,23 @@ yachtSnackBar(String title) {
     backgroundColor: white.withOpacity(.5),
     barBlur: 2,
     margin: EdgeInsets.only(top: 60.w),
+    duration: const Duration(seconds: 1, milliseconds: 300),
+    // animationDuration: const Duration(microseconds: 1000),
+  );
+}
+
+yachtSnackBarFromBottom(String title) {
+  return Get.rawSnackbar(
+    messageText: Center(
+      child: Text(
+        title,
+        style: snackBarStyle.copyWith(fontWeight: FontWeight.w500),
+      ),
+    ),
+    snackPosition: SnackPosition.BOTTOM,
+    backgroundColor: white.withOpacity(.5),
+    barBlur: 2,
+    margin: EdgeInsets.only(bottom: 80.w + SizeConfig.safeAreaBottom),
     duration: const Duration(seconds: 1, milliseconds: 300),
     // animationDuration: const Duration(microseconds: 1000),
   );

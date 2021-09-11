@@ -41,12 +41,13 @@ class FeedWidget extends StatelessWidget {
         children: [
           // 아바타 이미지 임시
           Container(
-              width: 36.w,
-              height: 36.w,
-              child: CachedNetworkImage(
-                imageUrl:
-                    "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
-              )),
+            width: 36.w,
+            height: 36.w,
+            // child: CachedNetworkImage(
+            //   imageUrl:
+            //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+            // )
+          ),
           SizedBox(
             width: 6.w,
           ),

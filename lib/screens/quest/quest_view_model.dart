@@ -33,7 +33,7 @@ class QuestViewModel extends GetxController {
   DateTime now = DateTime.now();
 
   String? imageUrl;
-  List logoImage = [];
+  RxList logoImage = [].obs;
   String? uid;
   RxBool isLoading = false.obs;
 
@@ -44,10 +44,11 @@ class QuestViewModel extends GetxController {
   //   // update();
   // }
   // 이 위젯에 해당하는 userQuestModel을 확인하고 userQuestModel에 넣어준다
-  final Rxn<UserQuestModel> userQuestModel = Rxn<UserQuestModel>();
+  final Rxn<UserQuestModel> thisUserQuestModel = Rxn<UserQuestModel>();
 
   // toggle에 쓰일 bool list
   RxList<bool> toggleList = <bool>[].obs;
+  RxList<int> orderList = <int>[].obs;
 
   @override
   void onClose() {
@@ -59,7 +60,6 @@ class QuestViewModel extends GetxController {
 
   @override
   void onInit() async {
-    print('userquestmodel value check: ${userQuestModel.value}');
     // print(
     // 'userquestmodel selectDatetime value check: ${userQuestModel.value!.selectDateTime}');
     isLoading(true);
@@ -67,35 +67,61 @@ class QuestViewModel extends GetxController {
       now = DateTime.now();
       timeLeft();
     });
-    if (userQuestModel.value == null) {
-      userQuestModel((userQuestModelRx.where((i) => i.questId == questModel.questId)).first);
-      print('userquest ${userQuestModel.value}');
+
+    // 뷰모델의 Local userQuestModel에 userQuestModel Rx value를 받아오는데
+    // 이 퀘스트의 선택만 가져온다
+    if (userQuestModelRx.length > 0) {
+      print('init');
+      if (userQuestModelRx.where((element) => element.questId == questModel.questId).length > 0) {
+        thisUserQuestModel(userQuestModelRx.where((element) => element.questId == questModel.questId).first);
+      }
+      thisUserQuestModel.value == null
+          ? orderList.addAll(List.generate(questModel.investAddresses!.length, (index) => index))
+          : orderList(thisUserQuestModel.value!.selection);
     }
+
     userQuestModelRx.listen((value) {
-      print('userQuestModel changed');
-      print(value);
-      if (value.isNotEmpty) {
-        UserQuestModel thisUserQuestModel = value.where((i) => i.questId == questModel.questId).first;
-        userQuestModel(thisUserQuestModel);
+      // print('userQuestModel changed');
+      if (value.length > 0) {
+        if (userQuestModelRx.where((element) => element.questId == questModel.questId).length > 0) {
+          thisUserQuestModel(userQuestModelRx.where((element) => element.questId == questModel.questId).first);
+        }
+        thisUserQuestModel.value == null
+            ? orderList.addAll(List.generate(questModel.investAddresses!.length, (index) => index))
+            : orderList(thisUserQuestModel.value!.selection);
       }
     });
+    print('userquestmodel value check: ${thisUserQuestModel.value}');
+    // order 타입의 selectMode Quest를 위한 리스트
+    thisUserQuestModel.value == null
+        ? orderList.addAll(List.generate(questModel.investAddresses!.length, (index) => index))
+        : orderList(thisUserQuestModel.value!.selection);
+
     syncUserSelect();
 
     // logo 이미지 가져오기
     await getImages();
 
     isLoading(false);
+    print('locally' + thisUserQuestModel.toString());
+    print('globally' + userQuestModelRx.toString());
     update();
     super.onInit();
     // return
   }
 
   void syncUserSelect() {
-    toggleList = List.generate(
-        questModel.investAddresses.length,
-        (index) => (userQuestModel.value == null || userQuestModel.value!.selection == null)
-            ? false
-            : userQuestModel.value!.selection![0] == index).obs;
+    toggleList = questModel.selectMode == 'updown'
+        ? List.generate(
+            questModel.choices!.length,
+            (index) => (thisUserQuestModel.value == null || thisUserQuestModel.value!.selection == null)
+                ? false
+                : thisUserQuestModel.value!.selection![0] == index).obs
+        : List.generate(
+            questModel.investAddresses!.length,
+            (index) => (thisUserQuestModel.value == null || thisUserQuestModel.value!.selection == null)
+                ? false
+                : thisUserQuestModel.value!.selection![0] == index).obs;
   }
 
   void changeIndex(int index) {
@@ -107,13 +133,11 @@ class QuestViewModel extends GetxController {
   // }
 
   Future getImages() async {
-    for (int i = 0; i < questModel.investAddresses.length; i++) {
-      imageUrl = await _storageService.downloadImageURL(questModel.investAddresses[i].logoUrl!);
+    for (int i = 0; i < questModel.investAddresses!.length; i++) {
+      imageUrl = await _storageService.downloadImageURL(questModel.investAddresses![i].logoUrl!);
       logoImage.add(Image.network(
         imageUrl!,
         fit: BoxFit.cover,
-        height: reactiveHeight(60),
-        width: reactiveHeight(60),
       ));
     }
   }
@@ -127,53 +151,39 @@ class QuestViewModel extends GetxController {
     toggleList[index] = true;
   }
 
-  // userQuest에 user가 선택한 정답 업데이트하는 함수
-  Future updateUserQuest(
-      // String uid,
-      // LeagueAddressModel leagueAddressModel,
-      // QuestModel questModel,
-      // List answers,
+  reorderUserSelect(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      int temp = orderList[oldIndex];
+      orderList.removeAt(oldIndex);
+      print('new OrderList: $orderList');
+      orderList.insert(newIndex - 1, temp);
+    } else {
+      int temp = orderList[oldIndex];
+      orderList.removeAt(oldIndex);
+      print('new OrderList: $orderList');
+      orderList.insert(newIndex, temp);
+    }
 
-      ) async {
+    print('new OrderList: $orderList');
+    // if (thisUserQuestModel.value == null) {
+    //   orderList.addAll(List.generate(questModel.investAddresses.length, (index) => index));
+    // } else {
+    //   thisUserQuestModel.value!.selection!;
+    // }
+  }
+
+  // userQuest에 user가 선택한 정답 업데이트하는 함수
+  Future updateUserQuest() async {
+    // [2], [2,3], 이런식으로 넣게 됨.
     List<num> answers = [];
     for (int i = 0; i < toggleList.length; i++) {
       if (toggleList[i] == true) answers.add(i);
     }
     print(answers);
-    await _firestoreService.updateUserQuest(questModel, answers);
+    questModel.selectMode == 'order'
+        ? await _firestoreService.updateUserQuest(questModel, orderList)
+        : await _firestoreService.updateUserQuest(questModel, answers);
   }
-
-  // Future<Image> getLogoImage(String imageName) async {
-  //   imageUrl = await _storageService.downloadImageURL(imageName);
-  //   logoImage = Image.network(
-  //     imageUrl!,
-  //     fit: BoxFit.cover,
-  //     height: getProportionateScreenHeight(60),
-  //     width: getProportionateScreenHeight(60),
-  //   );
-  //   print("logoimage is " + logoImage.toString());
-  //   // precacheImage(logoImage.image, context);
-  //   return logoImage;
-  //   // update();
-  // }
-
-  // final QuestModel tempQuestModel = QuestModel(
-  //     category: "one",
-  //     title: "7월 1일 수익률이 더 높을 종목은?",
-  //     subtitle: "7월 1일 수익률 대결",
-  //     country: "KR",
-  //     pointReward: 3,
-  //     cashReward: 50000,
-  //     exp: 300,
-  //     candidates: [
-  //       {"stocks": "005930"},
-  //       {"stocks": "326030"}
-  //     ],
-  //     counts: [300, 450],
-  //     results: [1, 0],
-  //     startDateTime: DateTime(2021, 6, 12, 08, 50, 00),
-  //     endDateTime: DateTime(2021, 6, 20, 08, 50),
-  //     resultDateTime: DateTime(2021, 6, 14, 16, 00));
 
   // final DateTime now = DateTime.now();
   // Duration? timeLeft;

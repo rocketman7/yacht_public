@@ -10,6 +10,9 @@ import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/auth/auth_check_view.dart';
+import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
+import 'package:yachtOne/screens/auth/login_view.dart';
 import 'package:yachtOne/screens/award/award_view.dart';
 import 'package:yachtOne/screens/contents/reading_content/reading_content_view.dart';
 import 'package:yachtOne/screens/contents/today_market/today_market_view.dart';
@@ -30,7 +33,7 @@ import '../quest/quest_widget.dart';
 class HomeView extends StatelessWidget {
   HomeViewModel homeViewModel = Get.put(HomeViewModel());
   AuthService _authService = locator<AuthService>();
-
+  final KakaoFirebaseAuthApi _kakaoApi = KakaoFirebaseAuthApi();
   ScrollController _scrollController = ScrollController();
   RxDouble offset = 0.0.obs;
 
@@ -41,10 +44,12 @@ class HomeView extends StatelessWidget {
       // sign out 임시
       InkWell(
         onTap: () {
+          Get.off(() => AuthCheckView());
           _authService.auth.signOut();
           userModelRx.value = null;
+          _kakaoApi.signOut();
           // homeViewModel.dispose();
-          Get.reset();
+          // Get.reset();
           print("signout");
         },
         child: Container(
@@ -61,13 +66,13 @@ class HomeView extends StatelessWidget {
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       QuestResults(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      ReadingContentView(
-          homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
+      ReadingContentView(homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       TodayMarketView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       DictionaryView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(80.w, 0.0, sectionTitle.fontSize)),
+
       // SliverToBoxAdapter(child: SizedBox(height: 100)),
       // OldLiveQuests(homeViewModel: homeViewModel),
       // SliverToBoxAdapter(child: Container(height: 200, color: Colors.grey)),
@@ -78,17 +83,14 @@ class HomeView extends StatelessWidget {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
     _scrollController.addListener(() {
       // offset obs 값에 scroll controller offset 넣어주기
-      _scrollController.offset < 0
-          ? offset(0)
-          : offset(_scrollController.offset);
+      _scrollController.offset < 0 ? offset(0) : offset(_scrollController.offset);
       // print(offset);
     });
 
     print(
         'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
-    if (userQuestModelRx.length != 0)
-      print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
+    if (userQuestModelRx.length != 0) print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
 
     return Scaffold(
       body: CustomScrollView(
@@ -100,14 +102,10 @@ class HomeView extends StatelessWidget {
                 floating: false,
                 pinned: true,
                 // 홈 뷰 앱바 구현
-                delegate: _GlassmorphismAppBarDelegate(
-                    MediaQuery.of(context).padding,
-                    offset.value,
-                    homeViewModel)),
+                delegate: _GlassmorphismAppBarDelegate(MediaQuery.of(context).padding, offset.value, homeViewModel)),
           ),
           SliverList(
-            delegate:
-                SliverChildBuilderDelegate((BuildContext context, int index) {
+            delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
               return homeWidgets[index];
             }, childCount: homeWidgets.length),
           ),
@@ -134,8 +132,7 @@ class HomeView extends StatelessWidget {
 
 class DictionaryView extends StatelessWidget {
   final HomeViewModel homeViewModel;
-  const DictionaryView({Key? key, required this.homeViewModel})
-      : super(key: key);
+  const DictionaryView({Key? key, required this.homeViewModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -166,16 +163,14 @@ class DictionaryView extends StatelessWidget {
                               children: [
                                 FutureBuilder<String>(
                                     future: homeViewModel
-                                        .getImageUrlFromStorage(homeViewModel
-                                            .dictionaries[index].imageUrl),
+                                        .getImageUrlFromStorage(homeViewModel.dictionaries[index].imageUrl),
                                     builder: (context, snapshot) {
                                       return !snapshot.hasData
                                           ? Container(
                                               height: 50.w,
                                               width: 50.w,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5.w),
+                                                borderRadius: BorderRadius.circular(5.w),
                                                 color: yachtRed,
                                               ),
                                             )
@@ -183,8 +178,7 @@ class DictionaryView extends StatelessWidget {
                                               height: 50.w,
                                               width: 50.w,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5.w),
+                                                borderRadius: BorderRadius.circular(5.w),
                                                 // color: yachtRed,
                                               ),
                                               child: Image.network(
@@ -231,8 +225,7 @@ class QuestResults extends StatelessWidget {
           // color: Colors.amber.withOpacity(.3),
           // height: 340.w,
           child: Obx(() {
-            return (homeViewModel.resultQuests.length ==
-                    0) // 로딩 중과 length 0인 걸 구분해야 함
+            return (homeViewModel.resultQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
                 ? Container(
                     child: Image.asset(
                     'assets/illusts/not_exists/no_result.png',
@@ -267,72 +260,66 @@ class QuestResults extends StatelessWidget {
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        SizedBox(
+                                        Container(
+                                          padding: primaryHorizontalPadding,
                                           height: 60.w,
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.max,
+                                            // mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               // Text("x"),
-                                              Text(
-                                                "퀘스트 결과보기",
-                                                style: questTitleTextStyle,
+                                              Flexible(child: Container()),
+                                              Center(
+                                                child: Text(
+                                                  "퀘스트 결과보기",
+                                                  style: dialogTitle,
+                                                ),
                                               ),
+                                              Flexible(
+                                                child: Align(
+                                                  alignment: Alignment.centerRight,
+                                                  child: Image.asset(
+                                                    'assets/buttons/close.png',
+                                                    width: 16.w,
+                                                    height: 16.w,
+                                                  ),
+                                                ),
+                                              )
                                               // Text("x"),
                                             ],
                                           ),
                                         ),
                                         Container(
-                                          height: 1.w,
-                                          width: double.infinity,
-                                          color:
-                                              Color(0xFF94BDE0).withOpacity(.5),
-                                        ),
-                                        Container(
-                                          padding: moduleBoxPadding(
-                                              questTermTextStyle.fontSize!),
+                                          padding: moduleBoxPadding(dialogTitle.fontSize!),
                                           child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Row(
                                                 children: [
                                                   Expanded(
                                                     child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                      mainAxisSize: MainAxisSize.max,
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         Text(
                                                           // '${questModel.category} 퀘스트',
-                                                          '일간 퀘스트',
-                                                          style:
-                                                              questTermTextStyle,
+                                                          homeViewModel.resultQuests[index].category,
+                                                          style: questTerm,
                                                         ),
                                                         SizedBox(
-                                                            height: reducedPaddingWhenTextIsBothSide(
-                                                                18.w,
-                                                                questTermTextStyle
-                                                                    .fontSize!,
-                                                                questTitleTextStyle
-                                                                    .fontSize!)),
+                                                            height: correctHeight(
+                                                                8.w, questTerm.fontSize, questTitle.fontSize)),
                                                         Text(
                                                           '${homeViewModel.resultQuests[index].title}',
-                                                          style:
-                                                              questTitleTextStyle,
+                                                          style: questTitle,
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                  SvgPicture.asset(
-                                                    'assets/icons/quest_success.svg',
+                                                  Image.asset(
+                                                    'assets/icons/quest_success.png',
                                                     width: 72.w,
                                                     height: 72.w,
                                                   ),
@@ -342,82 +329,34 @@ class QuestResults extends StatelessWidget {
                                                 height: 20.w,
                                               ),
                                               Container(
-                                                height: 66.w,
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                width: double.infinity,
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                   // mainAxisAlignment:
                                                   //     MainAxisAlignment
                                                   //         .spaceBetween,
                                                   children: [
-                                                    Expanded(
-                                                      child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          children: [
-                                                            Text("나의 선택",
-                                                                style: smallSubtitleTextStyle.copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w300)),
-                                                            Text(
-                                                              "상승",
-                                                              style: questTitleTextStyle
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          24.w),
-                                                            )
-                                                          ]),
+                                                    Text("나의 선택", style: questTerm),
+                                                    Text(
+                                                      "상승",
+                                                      style: questTitle.copyWith(fontSize: 24.w),
                                                     ),
-                                                    VerticalDivider(
-                                                      thickness: 1.w,
-                                                      color: Color(0xFF94BDE0)
-                                                          .withOpacity(.5),
-                                                    ),
-                                                    Expanded(
-                                                      child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          children: [
-                                                            Text("결과",
-                                                                style: smallSubtitleTextStyle.copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w300)),
-                                                            Text(
-                                                              "상승",
-                                                              style: questTitleTextStyle
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          24.w),
-                                                            )
-                                                          ]),
-                                                    ),
+                                                    SizedBox(height: 14.w),
+                                                    Text("결과", style: questTerm.copyWith(color: yachtViolet)),
+                                                    Text(
+                                                      "상승",
+                                                      style: questTitle.copyWith(fontSize: 24.w, color: yachtViolet),
+                                                    )
                                                   ],
                                                 ),
                                               ),
                                               SizedBox(
-                                                  height:
-                                                      reducedPaddingWhenTextIsBelow(
-                                                          30.w,
-                                                          smallSubtitleTextStyle
-                                                              .fontSize!)),
-                                              Text("퀘스트 성공 보상",
-                                                  style:
-                                                      smallSubtitleTextStyle),
+                                                  height: reducedPaddingWhenTextIsBelow(
+                                                      30.w, smallSubtitleTextStyle.fontSize!)),
+                                              Text("퀘스트 성공 보상", style: questTitle),
                                               SizedBox(
-                                                height:
-                                                    reducedPaddingWhenTextIsBothSide(
-                                                        20.w,
-                                                        smallSubtitleTextStyle
-                                                            .fontSize!,
-                                                        0),
+                                                height: reducedPaddingWhenTextIsBothSide(
+                                                    20.w, smallSubtitleTextStyle.fontSize!, 0),
                                               ),
                                               Column(
                                                 children: [
@@ -431,9 +370,8 @@ class QuestResults extends StatelessWidget {
                                                       SizedBox(
                                                         width: 6.w,
                                                       ),
-                                                      Text("승점",
-                                                          style:
-                                                              questRewardTextStyle)
+                                                      Text("리그 포인트",
+                                                          style: questTerm.copyWith(fontWeight: FontWeight.w500))
                                                     ])
                                                   ]),
                                                   SizedBox(
@@ -452,8 +390,7 @@ class QuestResults extends StatelessWidget {
                                                             width: 6.w,
                                                           ),
                                                           Text("요트 포인트",
-                                                              style:
-                                                                  questRewardTextStyle),
+                                                              style: questTerm.copyWith(fontWeight: FontWeight.w500)),
                                                         ],
                                                       ),
                                                     ],
@@ -461,13 +398,36 @@ class QuestResults extends StatelessWidget {
                                                   SizedBox(
                                                     height: 14.w,
                                                   ),
-                                                  Row(
+                                                  Column(
                                                     children: [
-                                                      Obx(() => Text(
-                                                          'exp testing ${userModelRx.value!.exp.toString()}',
-                                                          style:
-                                                              questRewardTextStyle)),
+                                                      Row(
+                                                        children: [
+                                                          simpleTierRRectBox(
+                                                              tier: userModelRx.value!.tier ?? "newbie",
+                                                              fontSize: 14.w),
+                                                          Obx(() => Text(
+                                                              'exp testing ${userModelRx.value!.exp.toString()}',
+                                                              style: questRewardTextStyle)),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 6.w),
+                                                      Container(
+                                                        height: 14.w,
+                                                        width: double.infinity,
+                                                        decoration: BoxDecoration(
+                                                          color: yachtViolet,
+                                                        ),
+                                                      )
                                                     ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 14.w,
+                                                  ),
+                                                  textContainerButtonWithOptions(
+                                                    text: "확인",
+                                                    fontSize: 20.w,
+                                                    isDarkBackground: true,
+                                                    height: 50.w,
                                                   )
                                                 ],
                                               )
@@ -495,29 +455,56 @@ class QuestResults extends StatelessWidget {
                                 color: homeModuleBoxBackgroundColor,
                               ),
                               child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    padding: moduleBoxPadding(
-                                        questTermTextStyle.fontSize!),
+                                    padding: moduleBoxPadding(questTermTextStyle.fontSize!),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           // '${questModel.category} 퀘스트',
-                                          '일간 퀘스트',
+                                          homeViewModel.resultQuests[index].category,
                                           style: subheadingStyle,
                                         ),
                                         SizedBox(height: 6.w),
                                         Text(
                                           '${homeViewModel.resultQuests[index].title}',
                                           style: sectionTitle,
+                                        ),
+                                        // Spacer(),
+                                        Text(
+                                          "01시간 24분 뒤 마감", // temp
+                                          style: questTimerStyle,
+                                        ),
+                                        SizedBox(
+                                          height: correctHeight(7.w, sectionTitle.fontSize, questTimerStyle.fontSize),
+                                        ),
+                                        SizedBox(
+                                          height: correctHeight(
+                                              10.w, questTimerStyle.fontSize, questRewardTextStyle.fontSize),
+                                        ),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/icons/manypeople.svg',
+                                              width: 17.w,
+                                              color: yachtBlack,
+                                            ),
+                                            SizedBox(width: 4.w),
+                                            homeViewModel.resultQuests[index].counts == null
+                                                ? Text(
+                                                    '0',
+                                                    style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                                                  )
+                                                : Text(
+                                                    '${homeViewModel.resultQuests[index].counts!.fold<int>(0, (previous, current) => previous + current)}',
+                                                    style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                                                  )
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -528,9 +515,7 @@ class QuestResults extends StatelessWidget {
                                       decoration: BoxDecoration(
                                           color: Color(0xFFDCE9F4),
                                           borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(12.w),
-                                              bottomRight:
-                                                  Radius.circular(12.w))),
+                                              bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
                                       child: Center(
                                         child: Text(
                                           "결과 보기",
@@ -576,8 +561,7 @@ class NewQuests extends StatelessWidget {
             children: [
               Container(
                   // color: Colors.blue,
-                  child: Text("새로 나온 퀘스트",
-                      style: sectionTitle.copyWith(height: 1.0))),
+                  child: Text("새로 나온 퀘스트", style: sectionTitle.copyWith(height: 1.0))),
               Spacer(),
               GestureDetector(
                 onTap: () {
@@ -589,8 +573,7 @@ class NewQuests extends StatelessWidget {
                         backgroundColor: primaryBackgroundColor,
                         insetPadding: EdgeInsets.all(16.w),
                         clipBehavior: Clip.hardEdge,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                         child: Padding(
                           padding: EdgeInsets.only(left: 14.w, right: 14.w),
                           child: Container(
@@ -617,8 +600,7 @@ class NewQuests extends StatelessWidget {
                                   height: 24.w,
                                 ),
                                 Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 14.w, right: 14.w),
+                                  padding: EdgeInsets.only(left: 14.w, right: 14.w),
                                   child: GestureDetector(
                                     onTap: () {
                                       print('aaaaaa');
@@ -627,9 +609,7 @@ class NewQuests extends StatelessWidget {
                                     child: Container(
                                       height: 44.w,
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(70.0),
-                                          color: Color(0xFF6073B4)),
+                                          borderRadius: BorderRadius.circular(70.0), color: Color(0xFF6073B4)),
                                       width: double.infinity,
                                       child: Center(
                                         child: Text(
@@ -654,10 +634,8 @@ class NewQuests extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
-                      decoration: jogabiButtonBoxDecoration
-                          .copyWith(boxShadow: [primaryBoxShadow]),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
+                      decoration: jogabiButtonBoxDecoration.copyWith(boxShadow: [primaryBoxShadow]),
                       child: Row(
                         children: [
                           SvgPicture.asset(
@@ -671,12 +649,8 @@ class NewQuests extends StatelessWidget {
                           Obx(() {
                             print("item changed");
                             return Text(
-                              userModelRx.value == null
-                                  ? 0.toString()
-                                  : userModelRx.value!.item.toString(),
-                              style: questTermTextStyle.copyWith(
-                                  color: Color(0xFF4D6A87),
-                                  fontWeight: FontWeight.w600),
+                              userModelRx.value == null ? 0.toString() : userModelRx.value!.item.toString(),
+                              style: questTermTextStyle.copyWith(color: Color(0xFF4D6A87), fontWeight: FontWeight.w600),
                             );
                           })
                         ],
@@ -687,8 +661,7 @@ class NewQuests extends StatelessWidget {
                       top: -10.w,
                       child: Container(
                         padding: EdgeInsets.all(3.5.w),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.red),
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
                         height: 20.w,
                         width: 20.w,
                         child: SvgPicture.asset(
@@ -711,8 +684,7 @@ class NewQuests extends StatelessWidget {
         ),
         // btwHomeModuleTitleSlider,
         Obx(() {
-          return (homeViewModel.newQuests.length ==
-                  0) // 로딩 중과 length 0인 걸 구분해야 함
+          return (homeViewModel.newQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
               ? Container(
                   width: 232.w,
                   height: 344.w,
@@ -734,13 +706,11 @@ class NewQuests extends StatelessWidget {
                                       : Container(),
                                   InkWell(
                                     onTap: () {
-                                      Get.toNamed('/quest',
-                                          arguments:
-                                              homeViewModel.newQuests[index]);
+                                      homeViewModel.newQuests[index].selectMode == 'survey'
+                                          ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
+                                          : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
                                     },
-                                    child: QuestWidget(
-                                        questModel:
-                                            homeViewModel.newQuests[index]),
+                                    child: QuestWidget(questModel: homeViewModel.newQuests[index]),
                                   ),
                                   SizedBox(width: primaryPaddingSize),
                                 ],
@@ -784,19 +754,11 @@ class MyAssets extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                      height: reducedPaddingWhenTextIsBelow(
-                          14.w, detailedContentTextStyle.fontSize!)),
+                  SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
                   RichText(
-                      text: TextSpan(
-                          text: "351,530",
-                          style: myAssetAmount,
-                          children: [
-                        TextSpan(
-                            text: " 원",
-                            style: myAssetAmount.copyWith(
-                                fontWeight: FontWeight.w300))
-                      ])),
+                      text: TextSpan(text: "351,530", style: myAssetAmount, children: [
+                    TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
+                  ])),
                 ],
               ),
             ),
@@ -826,19 +788,12 @@ class MyAssets extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
-                    height: reducedPaddingWhenTextIsBelow(
-                        14.w, detailedContentTextStyle.fontSize!)),
+                SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
                 RichText(
                     text: TextSpan(
                         text: "351,530",
                         style: myAssetAmount,
-                        children: [
-                      TextSpan(
-                          text: " 원",
-                          style: myAssetAmount.copyWith(
-                              fontWeight: FontWeight.w300))
-                    ])),
+                        children: [TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))])),
               ],
             ),
           ))
@@ -853,8 +808,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double offset;
   final HomeViewModel homeViewModel;
 
-  _GlassmorphismAppBarDelegate(
-      this.safeAreaPadding, this.offset, this.homeViewModel);
+  _GlassmorphismAppBarDelegate(this.safeAreaPadding, this.offset, this.homeViewModel);
 
   @override
   double get minExtent => 60.h + ScreenUtil().statusBarHeight;
@@ -863,8 +817,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => minExtent + kToolbarHeight - 40.h;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return ClipRect(
         child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),

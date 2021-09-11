@@ -291,7 +291,7 @@ class NewQuests extends StatelessWidget {
                     height: 340.w + 2 * btwHomeModuleTitleBox.height!,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: 5, //homeViewModel.allQuests.length
+                        itemCount: homeViewModel.newQuests.length,
                         itemBuilder: (context, index) {
                           return Row(
                             children: [
@@ -302,9 +302,9 @@ class NewQuests extends StatelessWidget {
                                   : Container(),
                               InkWell(
                                 onTap: () {
-                                  Get.toNamed('quest', arguments: homeViewModel.allQuests[0]);
+                                  Get.toNamed('quest', arguments: homeViewModel.newQuests[index]);
                                 },
-                                child: QuestWidget(questModel: homeViewModel.allQuests[0]),
+                                child: QuestWidget(questModel: homeViewModel.newQuests[index]),
                               ),
                               horizontalSpaceLarge
                             ],

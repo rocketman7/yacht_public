@@ -166,22 +166,16 @@ class UserModel {
       item: map['item'],
       friendsCode: map['friendsCode'],
       // insertedFriendsCode: map['insertedFriendsCode'] == null ? null : List<String>.from(map['insertedFriendsCode']),
-      blockList:
-          map['blockList'] == null ? null : List<String>.from(map['blockList']),
+      blockList: map['blockList'] == null ? null : List<String>.from(map['blockList']),
       rewardedCnt: map['rewardedCnt'],
       exp: map['exp'] ?? 0,
       tier: map['tier'],
       // followersNum: map['followersNum'],
-      followers:
-          map['followers'] == null ? null : List<String>.from(map['followers']),
+      followers: map['followers'] == null ? null : List<String>.from(map['followers']),
       // followingNum: map['followingNum'],
-      followings: map['followings'] == null
-          ? null
-          : List<String>.from(map['followings']),
+      followings: map['followings'] == null ? null : List<String>.from(map['followings']),
       intro: map['intro'],
-      favoriteStocks: map['favoriteStocks'] == null
-          ? null
-          : List<String>.from(map['favoriteStocks']),
+      favoriteStocks: map['favoriteStocks'] == null ? null : List<String>.from(map['favoriteStocks']),
       badges: map['badges'] == null ? null : List<String>.from(map['badges']),
       membership: map['membership'],
       membershipStartAt: map['membershipStartAt'],
@@ -192,8 +186,7 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -264,12 +257,12 @@ class UserModel {
 }
 
 // 유저가 없을 때 초기 유저모델
-UserModel newUserModel(
-  String uid,
-  String userName,
+UserModel newUserModel({
+  required String uid,
+  required String userName,
   String? email,
   String? phoneNumber,
-) {
+}) {
   return UserModel(
       uid: uid,
       userName: userName,

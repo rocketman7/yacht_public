@@ -125,7 +125,7 @@ class _ReadingContentWebViewState extends State<ReadingContentWebView> {
                   child: progessPercent.value < 1.0
                       ? LinearProgressIndicator(
                           value: progessPercent.value,
-                          backgroundColor: buttonBackgroundPurple,
+                          backgroundColor: primaryButtonText,
                           valueColor: AlwaysStoppedAnimation<Color>(yachtViolet),
                         )
                       : Container()),

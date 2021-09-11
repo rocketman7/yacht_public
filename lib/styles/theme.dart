@@ -15,7 +15,7 @@ ThemeData theme() {
     fontFamily: "SCore",
     appBarTheme: appBarTheme(),
     // textTheme: textTheme(),
-    inputDecorationTheme: inputDecorationTheme(),
+    // inputDecorationTheme: inputDecorationTheme(),
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 }

@@ -51,9 +51,9 @@ class LiveQuestViewModel extends GetxController {
     for (int i = 0; i < homeViewModel.liveQuests.length; i++) {
       List<InvestAddressModel> tempAddress = [];
       List<Rx<LiveQuestPriceModel>> tempPrices = [];
-      for (int j = 0; j < homeViewModel.liveQuests[i].investAddresses.length; j++) {
+      for (int j = 0; j < homeViewModel.liveQuests[i].investAddresses!.length; j++) {
         // print(j);
-        tempAddress.add(homeViewModel.liveQuests[i].investAddresses[j]);
+        tempAddress.add(homeViewModel.liveQuests[i].investAddresses![j]);
 
         tempPrices.add(Rx<LiveQuestPriceModel>(initial(tempAddress[j])));
 
@@ -64,13 +64,14 @@ class LiveQuestViewModel extends GetxController {
     }
   }
 
-  Stream<List<LiveQuestPriceModel>> realTimePriceStream(List<InvestAddressModel> investAddresses) {
-    // print('live stream started: $investAddresses');
-    // Stream<List<LiveQuestPriceModel>> livePrices = _firestoreService.getLiveQuestPrices(investAddresses);
-    return _firestoreService.getLiveQuestPrices(investAddresses);
-  }
+  // Stream<List<LiveQuestPriceModel>> realTimePriceStream(List<InvestAddressModel> investAddresses) {
+  //   // print('live stream started: $investAddresses');
+  //   // Stream<List<LiveQuestPriceModel>> livePrices = _firestoreService.getLiveQuestPrices(investAddresses);
+  //   return _firestoreService.getLiveQuestPrices(investAddresses);
+  // }
 
   getListStreamPriceModel(List<QuestModel> liveQuests) {
+    print("get stream price model");
     // print('stream triggered');
     // print(liveQuests);
     makeInvestAddressList();
@@ -79,7 +80,7 @@ class LiveQuestViewModel extends GetxController {
     // });
     print(livePrices);
     for (int i = 0; i < liveQuests.length; i++) {
-      for (int j = 0; j < liveQuests[i].investAddresses.length; j++) {
+      for (int j = 0; j < liveQuests[i].investAddresses!.length; j++) {
         livePrices[i][j].bindStream(_firestoreService.getStreamLiveQuestPrice(investAddresses[i][j]));
       }
     }

@@ -25,8 +25,9 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
         bool isUserNull = controller.currentUser == null ? true : controller.currentUser!.value == null;
         bool isUserModelReady = userModelRx.value != null;
         print('isUserNull? : $isUserNull');
+        print('isUserModelReady? : $isUserModelReady');
         print('current User: ${userModelRx.value}');
-        return isUserNull
+        return (isUserNull && leagueRx.value != "")
             ? LoginView()
             : !isUserModelReady
                 ? Container()

@@ -95,8 +95,7 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                                     width: 6.w,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color:
-                                          controller.newsIndex.value == index ? yachtDarkGrey : buttonBackgroundPurple,
+                                      color: controller.newsIndex.value == index ? yachtDarkGrey : primaryButtonText,
                                     ),
                                   ),
                                   SizedBox(width: 8.w),
@@ -225,7 +224,7 @@ class _TodayMarketWebViewState extends State<TodayMarketWebView> {
                   child: progessPercent.value < 1.0
                       ? LinearProgressIndicator(
                           value: progessPercent.value,
-                          backgroundColor: buttonBackgroundPurple,
+                          backgroundColor: primaryButtonText,
                           valueColor: AlwaysStoppedAnimation<Color>(yachtViolet),
                         )
                       : Container()),

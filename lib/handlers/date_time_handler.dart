@@ -84,6 +84,12 @@ String timeStampToString(Timestamp time) {
   return '${time.toDate().year}년 ${time.toDate().month}월 ${time.toDate().day}일';
 }
 
+// DB timeStamp형식을 xxxx년 0x월 0x일 형식으로 (상금 히스토리에서 쓰이는)
+String timeStampToStringWithHourMinute(Timestamp time) {
+  return '${time.toDate().year}년 ${time.toDate().month}월 ${time.toDate().day}일 ${time.toDate().hour}시 ${time.toDate().minute}분';
+}
+
+
   // return "Now";
  
 

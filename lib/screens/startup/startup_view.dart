@@ -27,14 +27,14 @@ class StartupView extends GetView<StartupViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> pageList = [
+    RxList<Widget> pageList = [
       HomeView(),
       CommunityView(),
       // Container(color: Colors.red),
       // Container(color: yachtViolet),
       // ProfileView(uid: _auth.currentUser.uid) //, null value error
       ProfileView(uid: userModelRx.value!.uid) //
-    ];
+    ].obs;
     // print('startup rebuild');
 
     // WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -53,7 +53,7 @@ class StartupView extends GetView<StartupViewModel> {
           children: pageList,
         ),
       ),
-      bottomNavigationBar: Obx(() => ClipRect(
+      bottomNavigationBar: Obx(() => ClipRRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
               child: BottomNavigationBar(

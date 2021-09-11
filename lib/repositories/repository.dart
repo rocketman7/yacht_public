@@ -17,3 +17,4 @@ UserModel? userModel;
 // Usermodel Rx형태로 만들어서 어디서든 구독
 final Rxn<UserModel> userModelRx = Rxn<UserModel>();
 final RxList<UserQuestModel> userQuestModelRx = RxList<UserQuestModel>();
+final RxString leagueRx = "".obs;

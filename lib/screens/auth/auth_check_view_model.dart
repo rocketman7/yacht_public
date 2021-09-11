@@ -20,14 +20,24 @@ class AuthCheckViewModel extends GetxController {
   void onInit() async {
     // TODO: implement onInit
     currentUser!.bindStream(_authService.auth.authStateChanges());
+    leagueRx.bindStream(_firestoreService.getOpenLeague());
+    // _authService.auth.signOut();
     currentUser!.listen((user) async {
       print('listening $user');
 
       if (user != null) {
+        print(currentUser!.value!.providerData);
+        print(currentUser!.value!.metadata);
         // userModelRx.value = await _firestoreService.getUserModel(user.uid);
         print('when user is not null');
         userModelRx.bindStream(_userRepository.getUserStream(user.uid));
-        userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
+
+        leagueRx.listen((value) {
+          if (value != "") {
+            print('userquest binding');
+            userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
+          }
+        });
 
         // print('this user: ${userModelRx.value}.');
         // userModelRx.listen((user) {

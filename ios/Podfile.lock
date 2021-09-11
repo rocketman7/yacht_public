@@ -354,11 +354,11 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.7):
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
-  - cloud_firestore (2.2.0):
+  - cloud_firestore (2.5.1):
     - Firebase/Firestore (= 8.6.0)
     - firebase_core
     - Flutter
-  - cloud_functions (3.0.0):
+  - cloud_functions (3.0.2):
     - Firebase/Functions (= 8.6.0)
     - firebase_core
     - Flutter
@@ -390,11 +390,11 @@ PODS:
   - Firebase/Storage (8.6.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 8.6.0)
-  - firebase_analytics (8.1.0):
+  - firebase_analytics (8.3.1):
     - Firebase/Analytics (= 8.6.0)
     - firebase_core
     - Flutter
-  - firebase_auth (3.0.1):
+  - firebase_auth (3.1.0):
     - Firebase/Auth (= 8.6.0)
     - firebase_core
     - Flutter
@@ -409,11 +409,11 @@ PODS:
     - Firebase/Messaging (= 8.6.0)
     - firebase_core
     - Flutter
-  - firebase_remote_config (0.10.0-dev.4):
+  - firebase_remote_config (0.10.0-5):
     - Firebase/RemoteConfig (= 8.6.0)
     - firebase_core
     - Flutter
-  - firebase_storage (8.1.0):
+  - firebase_storage (10.0.3):
     - Firebase/Storage (= 8.6.0)
     - firebase_core
     - Flutter
@@ -761,16 +761,16 @@ SPEC CHECKSUMS:
   app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
   apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
-  cloud_firestore: cc8c99cff7131a651ac6b20680bbee968c22a057
-  cloud_functions: 1fc84eb69477398af111bd5524f5e1ffadf0a594
+  cloud_firestore: 3280837bd2fdec18489ef93699527df4af4f177d
+  cloud_functions: 05add95f7488c5a3a4d39b060a58d67595acfd17
   Firebase: 21ac9f28b09a8bdfc005f34c984fca84e7e8786d
-  firebase_analytics: 73f0fc97289b96bf266a19df77c1cf20f1840d2c
-  firebase_auth: ad04cf09ccdf9c28fbd55a5556ce1871cd0e2549
+  firebase_analytics: de68415415782a5ad1d922d5c51789afbb2bb82d
+  firebase_auth: 2dfa8e886191c24ddcf4da34463d47b72e6d19dc
   firebase_core: c21ac09a8d23afd3594b56ed786bad12e5266bba
   firebase_in_app_messaging: de096cce6f175ad43923cd9a9a9e7d887bcc4d09
   firebase_messaging: 0da89f644566bce5822fa3a5d47c764c44f1cf1d
-  firebase_remote_config: e327a8b7008b936798cf7aa879f2e62490071a8c
-  firebase_storage: 4bf563c9e4feaaffa9631d2175c0c2a36733d10f
+  firebase_remote_config: 68becd5f079ab2f73bc717c24ce6c31f5f1cf13f
+  firebase_storage: 75fc62b16cfbb268ea4e90729be5729e3dc38b1e
   FirebaseABTesting: c3e48ebf5e7e5c674c5a131c68e941d7921d83dc
   FirebaseAnalytics: 8f32ae54ad42754f503354782575c4ddfc1425c3
   FirebaseAuth: 223adeeb2262b417532e89bf06a960e3a0a1e9e4
@@ -783,7 +783,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: ce0a5ee974f7bfe83b6cc5acce88c2d969e37c41
   FirebaseRemoteConfig: 9ee4672d4eacf646256e26cfac61021b3a390ea4
   FirebaseStorage: 2765944230981e63f8bd2938d9d5819158b7c34c
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_chat_bubble: cad6265ec611ba0f7bede70eabc26fdfce9bf2b0
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_segment: f20a38d465030de0f1b2aa9325cef9c1442b0721
@@ -817,6 +817,6 @@ SPEC CHECKSUMS:
   vibration: 1ec279c4a1a7a646627b54039d812334b3f1114a
   webview_flutter: 9f491a9b5a66f2573946a389b2677987b0ff8c0b
 
-PODFILE CHECKSUM: b74cda28efb3a78df1eca6760f82c15bd4a3fa39
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
 COCOAPODS: 1.10.1

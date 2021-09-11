@@ -13,9 +13,11 @@ import 'package:timezone/data/latest_all.dart' as tz;
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/screens/auth/auth_check_view.dart';
+import 'package:yachtOne/screens/auth/email_register_view.dart';
 import 'package:yachtOne/screens/home/home_view.dart';
 import 'package:yachtOne/screens/onboarding/onboarding_view.dart';
 import 'package:yachtOne/screens/quest/quest_view.dart';
+import 'package:yachtOne/screens/quest/survey_view.dart';
 import 'package:yachtOne/screens/startup/startup_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/services_binding.dart';
@@ -24,6 +26,7 @@ import 'package:yachtOne/styles/yacht_design_system_sample_view.dart';
 
 import 'locator.dart';
 import 'models/corporation_model.dart';
+import 'screens/auth/email_login_view.dart';
 import 'screens/award/award_detail_view.dart';
 import 'screens/award/award_view.dart';
 import 'screens/award_old/award_viewOld.dart';
@@ -77,9 +80,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     SizeConfig().init(context);
     ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
+        BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
         designSize: Size(375, 812),
         orientation: Orientation.portrait);
     super.didChangeDependencies();
@@ -100,6 +101,7 @@ class _MyAppState extends State<MyApp> {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
+        // FocusManager.instance.primaryFocus?.unfocus();
       },
       child: GetMaterialApp(
         theme: theme(),
@@ -121,23 +123,32 @@ class _MyAppState extends State<MyApp> {
           //         field: f,
           //         ),
           //     transition: Transition.zoom),
-          GetPage(
-              name: '/designSystem',
-              page: () => YachtDesignSystemSampleView(),
-              transition: Transition.zoom),
+          GetPage(name: '/designSystem', page: () => YachtDesignSystemSampleView(), transition: Transition.zoom),
           GetPage(
             name: '/quest',
             page: () => QuestView(),
+            // transition: Transition.zoom
+          ),
+          GetPage(
+            name: '/survey',
+            page: () => SurveyView(),
+            // transition: Transition.zoom
+          ),
+          GetPage(
+            name: '/emailRegister',
+            page: () => EmailRegisterView(),
+            // transition: Transition.zoom
+          ),
+          GetPage(
+            name: '/emailLogin',
+            page: () => EmailLoginView(),
             // transition: Transition.zoom
           ),
           // GetPage(
           //     name: 'award',
           //     page: () => AwardView(),
           //     transition: Transition.rightToLeft),
-          GetPage(
-              name: '/awardold',
-              page: () => AwardOldView(),
-              transition: Transition.rightToLeft),
+          GetPage(name: '/awardold', page: () => AwardOldView(), transition: Transition.rightToLeft),
           // GetPage(
           //     name: 'tempHome',
           //     page: () => TempHomeView(leagueName: '7월',),
