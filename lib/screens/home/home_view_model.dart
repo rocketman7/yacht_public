@@ -98,15 +98,17 @@ class HomeViewModel extends GetxController {
         newQuests.add(element);
       } else if (element.liveStartDateTime.toDate().isBefore(now) && element.liveEndDateTime.toDate().isAfter(now)) {
         // liveStart ~ liveEnd: 퀘스트 생중계
+
         liveQuests.add(element);
       } else if (element.resultDateTime.toDate().isBefore(now) && element.closeHomeDateTime.toDate().isAfter(now)) {
         // result ~ closeHome: 퀘스트 결과보기
+        print('result: ${element.results}');
+        print('result: ${element}');
         resultQuests.add(element);
       } else {
         print("포함 안 된 quest: $element");
       }
     });
-    // print('liveQuests: ${liveQuests[1]}');
   }
 
   // 유저 광고모델보기 버튼 누르면?

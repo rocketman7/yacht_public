@@ -22,7 +22,7 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
       Container(
         padding: EdgeInsets.symmetric(horizontal: primaryPaddingSize),
         // color: Colors.red,
-        child: Text("읽을 거리", style: sectionTitle),
+        child: Text("요트 매거진", style: sectionTitle),
       ),
       SizedBox(
         height: heightSectionTitleAndBox,

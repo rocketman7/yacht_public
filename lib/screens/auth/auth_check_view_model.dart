@@ -19,9 +19,11 @@ class AuthCheckViewModel extends GetxController {
   @override
   void onInit() async {
     // TODO: implement onInit
+    tierSystemModelRx(await _firestoreService.getTierSystem());
     currentUser!.bindStream(_authService.auth.authStateChanges());
     leagueRx.bindStream(_firestoreService.getOpenLeague());
     // _authService.auth.signOut();
+    update();
     currentUser!.listen((user) async {
       print('listening $user');
 

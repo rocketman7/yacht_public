@@ -18,7 +18,7 @@ class FirebaseStorageService extends StorageService {
     } catch (e) {
       print('downloadImagURL error : ${e.toString()}');
       downloadAddress =
-          "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F001.png?alt=media&token=3035b5da-debe-465d-b3be-57ce73c68ec7";
+          "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatar_new_admin.png?alt=media&token=bab121d4-8dcf-4cb6-9748-b3650a6b9753";
     }
     return downloadAddress;
   }

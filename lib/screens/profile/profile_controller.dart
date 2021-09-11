@@ -41,48 +41,18 @@ class StockHistoricalPriceModel {
   StockHistoricalPriceModel({required this.close, required this.prevClose});
 }
 
-// 티어정보별로 색깔을 가지고 있는다.
-Map<String, Color> tierColor = {
-  'newbie': Color(0xFFFCE4A8),
-  'intern': Color(0xFFCDE7AC),
-  'amateur': Color(0xFFC2E7F2),
-  'pro': Color(0xFFC3C2FF),
-  'master': Color(0xFFE1BFFC),
-  'grandmaster': Color(0xFFFEB8B8),
-};
-
-// 티어별 스토리지 주소를 갖고 있는다.
-Map<String, String> tierJellyBeanURL = {
-  'newbie': 'tier/newbie.png',
-  'intern': 'tier/intern.png',
-  'amateur': 'tier/amateur.png',
-  'pro': 'tier/pro.png',
-  'master': 'tier/master.png',
-  'grandmaster': 'tier/grandmaster.png',
-};
-
-// 티어별 네임을 갖고 있는다. 경험지에 따른 레벨도 갖고 있는다. 위 색깔, 스토리지 주소, 아래는 모두 admin에 있는게 나을 듯?
-Map<String, String> tierKRWName = {
-  'newbie': '뉴비',
-  'intern': '인턴',
-  'amateur': '아마추어',
-  'pro': '프로',
-  'master': '마스터',
-  'grandmaster': '그랜드마스터',
-};
-
 class ProfileController extends GetxController {
   final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
   FirestoreService _firestoreService = locator<FirestoreService>();
 
   //////////////////////// storage  service 부분 ////////////////////////
-  Future<String> getLogoUrl(String url) async {
-    final link = await FirebaseStorage.instance.ref().child('logo/').child('$url').getDownloadURL().catchError((e) {
-      print('ERROR: $e');
-    });
+  // Future<String> getLogoUrl(String url) async {
+  //   final link = await FirebaseStorage.instance.ref().child('logo/').child('$url').getDownloadURL().catchError((e) {
+  //     print('ERROR: $e');
+  //   });
 
-    return link;
-  }
+  //   return link;
+  // }
 
   //////////////////////// database service 부분 ////////////////////////
   final FirebaseFirestore firestoreService = FirebaseFirestore.instance;

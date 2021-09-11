@@ -72,4 +72,8 @@ class DetailPostViewModel extends GetxController {
       writerUserName: userModelRx.value!.userName,
     );
   }
+
+  Future<String> getImageUrlFromStorage(String imageUrl) async {
+    return await _firebaseStorageService.downloadImageURL(imageUrl);
+  }
 }

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/handlers/user_tier_handler.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
@@ -46,6 +47,38 @@ const primaryBackgroundColor = white;
 
 // 불투명 Glassmorphism 백그라운드
 Color glassmorphismBackgroundColor = Color(0xFFFBFAFD).withOpacity(.4);
+
+// Tier
+
+// 티어정보별로 색깔을 가지고 있는다.
+Map<String, Color> tierColor = {
+  'newbie': tierNewbie,
+  'intern': tierIntern,
+  'amateur': tierAmateur,
+  'pro': tierPro,
+  'master': tierMaster,
+  'grandmaster': tierGrandMaster,
+};
+
+// 티어별 스토리지 주소를 갖고 있는다.
+Map<String, String> tierJellyBeanURL = {
+  'newbie': 'tier/newbie.png',
+  'intern': 'tier/intern.png',
+  'amateur': 'tier/amateur.png',
+  'pro': 'tier/pro.png',
+  'master': 'tier/master.png',
+  'grandmaster': 'tier/grandmaster.png',
+};
+
+// 티어별 네임을 갖고 있는다. 경험지에 따른 레벨도 갖고 있는다. 위 색깔, 스토리지 주소, 아래는 모두 admin에 있는게 나을 듯?
+Map<String, String> tierKorName = {
+  'newbie': '뉴비',
+  'intern': '인턴',
+  'amateur': '아마추어',
+  'pro': '프로',
+  'master': '마스터',
+  'grandmaster': '그랜드마스터',
+};
 
 // Paddings
 // Padding, Score 폰트 height 보정
@@ -879,6 +912,15 @@ TextStyle surveyTitle = TextStyle(
   height: 1.4,
 );
 
+TextStyle surveySelection = TextStyle(
+  fontSize: heading5Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
 TextStyle pickManyCircleName = TextStyle(
   fontSize: bodySmallSize,
   fontFamily: krFont,
@@ -1063,44 +1105,53 @@ Container sectionBoxWithBottomButton({
   );
 }
 
-Container simpleTierRRectBox({String tier = "newbie", double? fontSize, double width = 70}) {
-  late Color tierColor;
-  late String tierName;
-  switch (tier) {
-    case 'newbie':
-      tierColor = tierNewbie;
-      tierName = "뉴비";
-      break;
-    case 'intern':
-      tierColor = tierIntern;
-      tierName = "인턴";
-      break;
-    case 'amateur':
-      tierColor = tierAmateur;
-      tierName = "아마추어";
-      break;
-    case 'pro':
-      tierColor = tierPro;
-      tierName = "프로";
-      break;
-    case 'master':
-      tierColor = tierMaster;
-      tierName = "마스터";
-      break;
-    case 'grandmaster':
-      tierColor = tierGrandMaster;
-      tierName = "그랜드마스터";
-      break;
-    default:
-      tierColor = tierNewbie;
-  }
+Container simpleTierRRectBox({int exp = 0, double? fontSize, double width = 70}) {
+  String tierName = getTierByExp(exp);
+  String tierTitle = separateStringFromTier(tierName);
+  // String tierTitle = "intern";
+  int tierLevel = separateIntFromTier(tierName);
+  // switch (tierTitle) {
+  //   case 'newbie':
+  //     tierColor = tierNewbie;
+  //     // tierName = "뉴비";
+  //     break;
+  //   case 'intern':
+  //     tierColor = tierIntern;
+  //     // tierName = "인턴";
+  //     break;
+  //   case 'amateur':
+  //     tierColor = tierAmateur;
+  //     // tierName = "아마추어";
+  //     break;
+  //   case 'pro':
+  //     tierColor = tierPro;
+  //     // tierName = "프로";
+  //     break;
+  //   case 'master':
+  //     tierColor = tierMaster;
+  //     // tierName = "마스터";
+  //     break;
+  //   case 'grandmaster':
+  //     tierColor = tierGrandMaster;
+  //     // tierName = "그랜드마스터";
+  //     break;
+  //   default:
+  //   // tierColor = tierNewbie;
+  // }
   return Container(
+    padding: EdgeInsets.symmetric(
+        vertical: fontSize == null ? 3.w : (fontSize / 4),
+        horizontal: tierKorName[tierTitle]!.length >= 6
+            ? 8.w
+            : tierKorName[tierTitle]!.length >= 4
+                ? 8.w
+                : 12.w),
     // width: width.w,
     // height: (width / 3.75).w,
-    decoration: BoxDecoration(color: tierColor, borderRadius: BorderRadius.circular(50)),
+    decoration: BoxDecoration(color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
     child: Center(
       child: Text(
-        '$tierName',
+        '${tierKorName[tierTitle]} $tierLevel',
         style: simpleTierStyle.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
       ),
     ),

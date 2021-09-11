@@ -73,10 +73,25 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                               Container(
                                   width: 36.w,
                                   height: 36.w,
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
-                                  )),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: FutureBuilder<String>(
+                                      future: detailPostViewModel
+                                          .getImageUrlFromStorage('avatars/${post.writerAvatarUrl}.png'),
+                                      builder: (context, snapshot) {
+                                        return snapshot.hasData
+                                            ? CachedNetworkImage(
+                                                imageUrl: snapshot.data!,
+                                              )
+                                            : Container();
+                                      })
+
+                                  // child: CachedNetworkImage(
+                                  //   imageUrl:
+                                  //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+                                  // )
+                                  ),
                               SizedBox(
                                 width: 6.w,
                               ),
@@ -100,7 +115,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                               width: 8.w,
                                             ),
                                             // 티어 컨테이너
-                                            simpleTierRRectBox(tier: "newbie"),
+                                            simpleTierRRectBox(exp: detailPostViewModel.post.writerExp ?? 0),
                                             Spacer(),
                                             PopupMenuButton(
                                               padding: EdgeInsets.symmetric(horizontal: 4),
@@ -226,11 +241,52 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                             6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
                                     detailPostViewModel.post.title == null
                                         ? Container()
-                                        : Text(
-                                            detailPostViewModel.post.title!,
-                                            style: feedTitle,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
+                                        : Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 6.w,
+                                              ),
+                                              Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  post.isPro
+                                                      ? Column(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          children: [
+                                                            Row(
+                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                              children: [
+                                                                Container(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal: 8.w, vertical: 1.w),
+                                                                    decoration: BoxDecoration(
+                                                                      color: yachtRed,
+                                                                      borderRadius: BorderRadius.circular(20.w),
+                                                                    ),
+                                                                    child: Text("PRO",
+                                                                        style: TextStyle(
+                                                                          fontSize: 11.w,
+                                                                          fontWeight: FontWeight.w500,
+                                                                          color: white,
+                                                                          height: 1.4,
+                                                                        ))),
+                                                                SizedBox(
+                                                                  width: 4.w,
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        )
+                                                      : Container(),
+                                                  Text(
+                                                    post.title!,
+                                                    style: feedTitle,
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                     SizedBox(
                                       height: 2.w,
@@ -270,7 +326,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                           ClipRRect(
                                                               borderRadius: BorderRadius.circular(5.w),
                                                               child: FutureBuilder<String>(
-                                                                  future: getImageUrlFromStorage(
+                                                                  future: detailPostViewModel.getImageUrlFromStorage(
                                                                       detailPostViewModel.post.imageUrlList![index]),
                                                                   builder: (context, snapshot) {
                                                                     if (!snapshot.hasData) {
@@ -283,8 +339,8 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                                       imageUrls[index] = snapshot.data!;
                                                                       return InkWell(
                                                                         onTap: () {
-                                                                          Get.dialog(
-                                                                              buildPhotoPageView(index, imageUrls));
+                                                                          Get.dialog(buildPhotoPageView(
+                                                                              index, imageUrls, detailPostViewModel));
                                                                         },
                                                                         child: CachedNetworkImage(
                                                                           imageUrl: imageUrls[index],
@@ -410,10 +466,25 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                             Container(
                                                 width: 36.w,
                                                 height: 36.w,
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
-                                                )),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: FutureBuilder<String>(
+                                                    future: detailPostViewModel.getImageUrlFromStorage(
+                                                        'avatars/${detailPostViewModel.comments[index].writerAvatarUrl}.png'),
+                                                    builder: (context, snapshot) {
+                                                      return snapshot.hasData
+                                                          ? CachedNetworkImage(
+                                                              imageUrl: snapshot.data!,
+                                                            )
+                                                          : Container();
+                                                    })
+
+                                                // child: CachedNetworkImage(
+                                                //   imageUrl:
+                                                //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+                                                // )
+                                                ),
                                             SizedBox(
                                               width: 6.w,
                                             ),
@@ -432,7 +503,8 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                       SizedBox(
                                                         width: 4.w,
                                                       ),
-                                                      simpleTierRRectBox(tier: "newbie"),
+                                                      simpleTierRRectBox(
+                                                          exp: detailPostViewModel.comments[index].writerExp ?? 0),
                                                       Spacer(),
                                                       PopupMenuButton(
                                                         padding: EdgeInsets.symmetric(horizontal: 4),
@@ -618,7 +690,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
     );
   }
 
-  Dialog buildPhotoPageView(int index, List<String> imageUrls) {
+  Dialog buildPhotoPageView(int index, List<String> imageUrls, DetailPostViewModel detailPostViewModel) {
     return Dialog(
       backgroundColor: Colors.transparent,
       clipBehavior: Clip.hardEdge,
@@ -644,7 +716,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                         ?
                         // image주소 로딩못했을 때만 퓨쳐빌더로
                         FutureBuilder<String>(
-                            future: getImageUrlFromStorage(post.imageUrlList![index]),
+                            future: detailPostViewModel.getImageUrlFromStorage(post.imageUrlList![index]),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return Container(
@@ -688,10 +760,6 @@ class DetailPostView extends GetView<DetailPostViewModel> {
         ],
       ),
     );
-  }
-
-  Future<String> getImageUrlFromStorage(String imageUrl) async {
-    return await _firebaseStorageService.downloadImageURL(imageUrl);
   }
 }
 
@@ -828,13 +896,27 @@ class _CommentInputState extends State<CommentInput> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                height: 36.w,
-                                width: 36.w,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.grey,
-                                ),
-                              ),
+                                  width: 36.w,
+                                  height: 36.w,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: FutureBuilder<String>(
+                                      future: widget.detailPostViewModel
+                                          .getImageUrlFromStorage('avatars/${userModelRx.value!.avatarImage!}.png'),
+                                      builder: (context, snapshot) {
+                                        return snapshot.hasData
+                                            ? CachedNetworkImage(
+                                                imageUrl: snapshot.data!,
+                                              )
+                                            : Container();
+                                      })
+
+                                  // child: CachedNetworkImage(
+                                  //   imageUrl:
+                                  //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+                                  // )
+                                  ),
                               SizedBox(
                                 width: 4.w,
                               ),

@@ -21,7 +21,7 @@ class PostModel {
   // Writer Info
   final String writerUid;
   final String writerUserName;
-  final String? writerExp;
+  final int? writerExp;
   final String? writerAvatarUrl;
 
   PostModel({
@@ -58,7 +58,7 @@ class PostModel {
     List<String>? sharedBy,
     String? writerUid,
     String? writerUserName,
-    String? writerExp,
+    int? writerExp,
     String? writerAvatarUrl,
   }) {
     return PostModel(

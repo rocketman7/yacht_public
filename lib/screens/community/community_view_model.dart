@@ -66,11 +66,12 @@ class CommunityViewModel extends GetxController {
     // print(userModelRx.value!.userName);
     //   docUid = address.postsSeasonCollection().doc().id;
     return PostModel(
-      isPro: false,
-      content: content,
-      writerUid: userModelRx.value!.uid,
-      writerUserName: userModelRx.value!.userName,
-    );
+        isPro: false,
+        content: content,
+        writerUid: userModelRx.value!.uid,
+        writerUserName: userModelRx.value!.userName,
+        writerExp: userModelRx.value!.exp,
+        writerAvatarUrl: userModelRx.value!.avatarImage);
   }
 
   // 게시글 올리기 버튼
@@ -102,5 +103,9 @@ class CommunityViewModel extends GetxController {
   Future deletePost(PostModel post) async {
     // PostModel _newPost = convertFeedtoPostModel(content);
     await _firestoreService.deletePost(post.postId!);
+  }
+
+  Future<String> getImageUrlFromStorage(String imageUrl) async {
+    return await _firebaseStorageService.downloadImageURL(imageUrl);
   }
 }

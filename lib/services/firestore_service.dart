@@ -13,6 +13,7 @@ import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 import 'package:yachtOne/models/corporation_model.dart';
 import 'package:yachtOne/models/live_quest_price_model.dart';
+import 'package:yachtOne/models/tier_system_model.dart';
 import 'package:yachtOne/models/today_market_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
@@ -32,6 +33,16 @@ class FirestoreService extends GetxService {
   void onInit() {
     print('firestore service initiated');
     super.onInit();
+  }
+
+  //// Admin data들
+  // 티어시스템
+  Future<TierSystemModel> getTierSystem() async {
+    return await _firestoreService
+        .collection('admin')
+        .doc('tierSystem')
+        .get()
+        .then((value) => TierSystemModel.fromMap(value.data()!));
   }
 
   //// USER 정보
@@ -181,7 +192,6 @@ class FirestoreService extends GetxService {
             invetAddresses.add(InvestAddressModel.fromMap(option));
           });
         }
-
         // print('questmodel options from db: $options');
         allQuests
             .add(QuestModel.fromMap(element.id, element.data(), invetAddresses.length == 0 ? null : invetAddresses));
@@ -610,18 +620,11 @@ class FirestoreService extends GetxService {
 
   Future updateFriendsCode(String uid, String friendsCode) async {
     print("friendsCode IS" + friendsCode);
-    await _firestoreService
-        .collection('users')
-        .doc(uid)
-        .update({'friendsCode': friendsCode});
+    await _firestoreService.collection('users').doc(uid).update({'friendsCode': friendsCode});
   }
 
-  Future updateInsertedFriendsCode(
-      String uid, String insertedFriendsCode) async {
+  Future updateInsertedFriendsCode(String uid, String insertedFriendsCode) async {
     print("insertedFriendsCode IS" + insertedFriendsCode);
-    await _firestoreService
-        .collection('users')
-        .doc(uid)
-        .update({'insertedFriendsCode': insertedFriendsCode});
+    await _firestoreService.collection('users').doc(uid).update({'insertedFriendsCode': insertedFriendsCode});
   }
 }

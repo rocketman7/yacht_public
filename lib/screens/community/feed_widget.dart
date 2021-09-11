@@ -41,13 +41,26 @@ class FeedWidget extends StatelessWidget {
         children: [
           // 아바타 이미지 임시
           Container(
-            width: 36.w,
-            height: 36.w,
-            // child: CachedNetworkImage(
-            //   imageUrl:
-            //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
-            // )
-          ),
+              width: 36.w,
+              height: 36.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: FutureBuilder<String>(
+                  future: communityViewModel.getImageUrlFromStorage('avatars/${post.writerAvatarUrl}.png'),
+                  builder: (context, snapshot) {
+                    return snapshot.hasData
+                        ? CachedNetworkImage(
+                            imageUrl: snapshot.data!,
+                          )
+                        : Container();
+                  })
+
+              // child: CachedNetworkImage(
+              //   imageUrl:
+              //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+              // )
+              ),
           SizedBox(
             width: 6.w,
           ),
@@ -70,7 +83,7 @@ class FeedWidget extends StatelessWidget {
                         SizedBox(
                           width: 8.w,
                         ),
-                        simpleTierRRectBox(tier: "newbie"),
+                        simpleTierRRectBox(exp: post.writerExp ?? 0),
                         Spacer(),
                         PopupMenuButton(
                           padding: EdgeInsets.symmetric(horizontal: 4),
@@ -176,11 +189,51 @@ class FeedWidget extends StatelessWidget {
                 SizedBox(height: reducedPaddingWhenTextIsBothSide(6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
                 post.title == null
                     ? Container()
-                    : Text(
-                        post.title!,
-                        style: feedTitle,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                    : Column(
+                        children: [
+                          SizedBox(
+                            height: 6.w,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              post.isPro
+                                  ? Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 1.w),
+                                                decoration: BoxDecoration(
+                                                  color: yachtRed,
+                                                  borderRadius: BorderRadius.circular(20.w),
+                                                ),
+                                                child: Text("PRO",
+                                                    style: TextStyle(
+                                                      fontSize: 11.w,
+                                                      fontWeight: FontWeight.w500,
+                                                      color: white,
+                                                      height: 1.4,
+                                                    ))),
+                                            SizedBox(
+                                              width: 4.w,
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    )
+                                  : Container(),
+                              Text(
+                                post.title!,
+                                style: feedTitle,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                 SizedBox(
                   height: 2.w,

@@ -81,48 +81,29 @@ class CommunityView extends StatelessWidget {
                 child: Column(
                   children: [
                     // 전문글만, 팔로워만 고르기
-                    Container(
-                      height: 48.w,
-                      // color: Colors.blueGrey,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                                onTap: () {
-                                  Get.rawSnackbar(
-                                    messageText: Center(
-                                      child: Text(
-                                        "성공적으로 업로드 되었어요.",
-                                        style: snackBarStyle,
-                                      ),
-                                    ),
-                                    // message: "성공적으로 업로드 되었어요.",
-                                    snackPosition: SnackPosition.TOP,
-                                    backgroundColor: white.withOpacity(.5),
-                                    barBlur: 2,
-                                    // padding: EdgeInsets.only(top: 60.w),
-                                    // overlayBlur: 4,
-                                    margin: EdgeInsets.only(top: 60.w),
-                                    duration: const Duration(seconds: 1, milliseconds: 100),
-                                    // animationDuration: const Duration(microseconds: 1000),
-                                  );
-                                },
-                                child: Center(
-                                    child: Text(
-                                  "프로 모아보기",
-                                  style: subheadingStyle.copyWith(color: primaryButtonBackground),
-                                ))),
-                          ),
-                          Container(height: 32.w, width: 1.w, color: yachtLineColor),
-                          Expanded(
-                              child: Center(
-                                  child: Text(
-                            "팔로워 모아보기",
-                            style: subheadingStyle.copyWith(color: primaryButtonBackground),
-                          )))
-                        ],
-                      ),
-                    ),
+                    // Container(
+                    //   height: 48.w,
+                    //   // color: Colors.blueGrey,
+                    //   child: Row(
+                    //     children: [
+                    //       Expanded(
+                    //         child: Center(
+                    //             child: Text(
+                    //           "프로 모아보기",
+                    //           style: subheadingStyle.copyWith(color: primaryButtonBackground),
+                    //         )),
+                    //       ),
+                    //       Container(height: 32.w, width: 1.w, color: yachtLineColor),
+                    //       Expanded(
+                    //           child: Center(
+                    //               child: Text(
+                    //         "팔로워 모아보기",
+                    //         style: subheadingStyle.copyWith(color: primaryButtonBackground),
+                    //       )))
+                    //     ],
+                    //   ),
+                    // ),
+                    SizedBox(height: 14.w),
 
                     Obx(() => (_communityViewModel.posts.length == 0)
                         ? Container(

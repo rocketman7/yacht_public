@@ -29,7 +29,7 @@ class CommentModel {
   // Writer Info
   final String writerUid;
   final String writerUserName;
-  final String? writerExp;
+  final int? writerExp;
   final String? writerAvatarUrl;
   CommentModel({
     this.commentId,
@@ -65,7 +65,7 @@ class CommentModel {
     List<String>? reportedBy,
     String? writerUid,
     String? writerUserName,
-    String? writerExp,
+    int? writerExp,
     String? writerAvatarUrl,
   }) {
     return CommentModel(
@@ -116,17 +116,13 @@ class CommentModel {
       writtenDateTime: map['writtenDateTime'],
       editedDateTime: map['editedDateTime'],
       content: map['content'],
-      repliedBy:
-          map['repliedBy'] == null ? null : List<String>.from(map['repliedBy']),
+      repliedBy: map['repliedBy'] == null ? null : List<String>.from(map['repliedBy']),
       isReply: map['isReply'],
       replyToCommentId: map['replyToCommentId'],
       replyToUserUid: map['replyToUserUid'],
       replyToUserName: map['replyToUserName'],
-      likedBy:
-          map['likedBy'] == null ? null : List<String>.from(map['likedBy']),
-      reportedBy: map['reportedBy'] == null
-          ? null
-          : List<String>.from(map['reportedBy']),
+      likedBy: map['likedBy'] == null ? null : List<String>.from(map['likedBy']),
+      reportedBy: map['reportedBy'] == null ? null : List<String>.from(map['reportedBy']),
       writerUid: map['writerUid'],
       writerUserName: map['writerUserName'],
       writerExp: map['writerExp'],
@@ -136,8 +132,7 @@ class CommentModel {
 
   String toJson() => json.encode(toMap());
 
-  factory CommentModel.fromJson(String source) =>
-      CommentModel.fromMap(json.decode(source));
+  factory CommentModel.fromJson(String source) => CommentModel.fromMap(json.decode(source));
 
   @override
   String toString() {

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
+import 'package:yachtOne/handlers/user_tier_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
@@ -79,9 +80,7 @@ class ProfileView extends GetView<ProfileController> {
                                     gradient:
                                         LinearGradient(begin: Alignment(0.0, 0.0), end: Alignment(0.0, 1.0), colors: [
                                       (controller.isUserModelLoaded)
-                                          ? controller.user.tier != null
-                                              ? tierColor[controller.user.tier]!
-                                              : tierColor['newbie']!
+                                          ? tierColor[separateStringFromTier(getTierByExp(controller.user.exp))]!
                                           : tierColor['newbie']!,
                                       primaryBackgroundColor
                                     ])),
@@ -141,8 +140,8 @@ class ProfileView extends GetView<ProfileController> {
                                   child: (controller.isUserModelLoaded)
                                       ? controller.user.tier != null
                                           ? FutureBuilder<String>(
-                                              future: controller
-                                                  .getImageUrlFromStorage(tierJellyBeanURL[controller.user.tier]!),
+                                              future: controller.getImageUrlFromStorage(tierJellyBeanURL[
+                                                  separateStringFromTier(getTierByExp(controller.user.exp))]!),
                                               builder: (context, snapshot) {
                                                 return snapshot.hasData
                                                     ? Stack(
@@ -155,7 +154,7 @@ class ProfileView extends GetView<ProfileController> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            '${tierKRWName[controller.user.tier]}',
+                                                            '${tierKorName[separateStringFromTier(getTierByExp(controller.user.exp))]} ${separateIntFromTier(getTierByExp(controller.user.exp))}',
                                                             style: profileTierNameStyle,
                                                           ),
                                                         ],
@@ -664,7 +663,7 @@ class ProfileViewFavoritesCardWidget extends StatelessWidget {
                           height: 50.w,
                           width: 50.w,
                           child: FutureBuilder<String>(
-                            future: profileController.getLogoUrl(profileController.stockModels[i].logoUrl),
+                            future: profileController.getImageUrlFromStorage(profileController.stockModels[i].logoUrl),
                             builder: (_, snapshot) {
                               if (snapshot.hasData) {
                                 return Image.network(snapshot.data.toString());

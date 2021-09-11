@@ -32,11 +32,14 @@ class LiveQuestView extends StatelessWidget {
           // print(homeViewModel.liveQuests.length);
           if (homeViewModel.liveQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
           {
-            return Container(
-              height: 250.w,
-              width: 232.w,
-              child: Image.asset('assets/illusts/not_exists/no_live.png'),
-              // height: 340.w,
+            return Padding(
+              padding: primaryHorizontalPadding,
+              child: sectionBox(
+                height: 250.w,
+                width: 232.w,
+                child: Image.asset('assets/illusts/not_exists/no_live.png'),
+                // height: 340.w,
+              ),
             );
           } else {
             // print(homeViewModel.liveQuests);

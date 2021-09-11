@@ -22,7 +22,7 @@ class UserModel {
 
   final int rewardedCnt; // 아이템 리워드 받은 횟수
 
-  final num? exp;
+  final int exp;
   final String? tier;
 
   // final num? followersNum;
@@ -54,7 +54,7 @@ class UserModel {
     this.insertedFriendsCode,
     this.blockList,
     required this.rewardedCnt,
-    this.exp,
+    required this.exp,
     this.tier,
     // this.followersNum,
     this.followers,
@@ -82,7 +82,7 @@ class UserModel {
       List<String>? insertedFriendsCode,
       List<String>? blockList,
       int? rewardedCnt,
-      num? exp,
+      int? exp,
       String? tier,
       // num? followersNum,
       List<String>? followers,

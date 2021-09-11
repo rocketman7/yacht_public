@@ -153,6 +153,24 @@ class QuestModel {
     };
   }
 
+  String showResults() {
+    if (results == null) {
+      return "아직 결과 발표 전입니다.";
+    } else {
+      List<String> resultArray = results!.map((e) => choices![e]).toList();
+      String temp = "";
+      for (int i = 0; i < resultArray.length; i++) {
+        if (i != resultArray.length - 1) {
+          temp += "${resultArray[i]}, ";
+        } else {
+          temp += "${resultArray[i]}";
+        }
+      }
+
+      return temp;
+    }
+  }
+
   factory QuestModel.fromMap(String questId, Map<String, dynamic> map, List<InvestAddressModel>? investAddress) {
     return QuestModel(
       questId: questId,

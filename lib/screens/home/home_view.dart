@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
@@ -87,44 +88,57 @@ class HomeView extends StatelessWidget {
       // print(offset);
     });
 
-    print(
-        'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
+    // print(
+    //     'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
     if (userQuestModelRx.length != 0) print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
 
+    final RefreshController _refreshController = RefreshController(initialRefresh: false);
+    void _onRefresh() async {
+      _refreshController.refreshCompleted();
+    }
+
     return Scaffold(
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          // 앱바
-          Obx(
-            () => SliverPersistentHeader(
-                floating: false,
-                pinned: true,
-                // 홈 뷰 앱바 구현
-                delegate: _GlassmorphismAppBarDelegate(MediaQuery.of(context).padding, offset.value, homeViewModel)),
+      body: RefreshConfiguration(
+        enableScrollWhenRefreshCompleted: true,
+        child: SmartRefresher(
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              // 앱바
+              Obx(
+                () => SliverPersistentHeader(
+                    floating: false,
+                    pinned: true,
+                    // 홈 뷰 앱바 구현
+                    delegate:
+                        _GlassmorphismAppBarDelegate(MediaQuery.of(context).padding, offset.value, homeViewModel)),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                  return homeWidgets[index];
+                }, childCount: homeWidgets.length),
+              ),
+              // MyAssets(),
+              // SliverToBoxAdapter(
+              //     child: SizedBox(
+              //         height: reducedPaddingWhenTextIsBelow(
+              //             30.w, sectionTitle.fontSize!))),
+              // // 이달의 상금 주식
+              // Awards(),
+              // SliverToBoxAdapter(child: btwHomeModule),
+              // NewQuests(homeViewModel: homeViewModel),
+              // SliverToBoxAdapter(child: btwHomeModule),
+              // LiveQuests(),
+              // SliverToBoxAdapter(child: SizedBox(height: 100)),
+              // OldLiveQuests(homeViewModel: homeViewModel),
+              // SliverToBoxAdapter(child: Container(height: 200, color: Colors.grey)),
+              // Admins(homeViewModel: homeViewModel),
+            ],
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-              return homeWidgets[index];
-            }, childCount: homeWidgets.length),
-          ),
-          // MyAssets(),
-          // SliverToBoxAdapter(
-          //     child: SizedBox(
-          //         height: reducedPaddingWhenTextIsBelow(
-          //             30.w, sectionTitle.fontSize!))),
-          // // 이달의 상금 주식
-          // Awards(),
-          // SliverToBoxAdapter(child: btwHomeModule),
-          // NewQuests(homeViewModel: homeViewModel),
-          // SliverToBoxAdapter(child: btwHomeModule),
-          // LiveQuests(),
-          // SliverToBoxAdapter(child: SizedBox(height: 100)),
-          // OldLiveQuests(homeViewModel: homeViewModel),
-          // SliverToBoxAdapter(child: Container(height: 200, color: Colors.grey)),
-          // Admins(homeViewModel: homeViewModel),
-        ],
+        ),
       ),
     );
   }
@@ -249,194 +263,210 @@ class QuestResults extends StatelessWidget {
                               : Container(),
                           InkWell(
                             onTap: () {
-                              Get.dialog(Dialog(
-                                  backgroundColor: Colors.transparent,
-                                  insetPadding: EdgeInsets.all(16.w),
-                                  child: Container(
-                                    // height: 400.w,
-                                    decoration: primaryBoxDecoration.copyWith(
-                                      color: homeModuleBoxBackgroundColor,
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          padding: primaryHorizontalPadding,
-                                          height: 60.w,
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            // mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              // Text("x"),
-                                              Flexible(child: Container()),
-                                              Center(
-                                                child: Text(
-                                                  "퀘스트 결과보기",
-                                                  style: dialogTitle,
-                                                ),
-                                              ),
-                                              Flexible(
-                                                child: Align(
-                                                  alignment: Alignment.centerRight,
-                                                  child: Image.asset(
-                                                    'assets/buttons/close.png',
-                                                    width: 16.w,
-                                                    height: 16.w,
-                                                  ),
-                                                ),
-                                              )
-                                              // Text("x"),
-                                            ],
-                                          ),
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => Dialog(
+                                      backgroundColor: Colors.transparent,
+                                      insetPadding: EdgeInsets.all(16.w),
+                                      child: Container(
+                                        // height: 400.w,
+                                        decoration: primaryBoxDecoration.copyWith(
+                                          color: homeModuleBoxBackgroundColor,
                                         ),
-                                        Container(
-                                          padding: moduleBoxPadding(dialogTitle.fontSize!),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              padding: primaryHorizontalPadding,
+                                              height: 60.w,
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                // mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
-                                                  Expanded(
+                                                  // Text("x"),
+                                                  Flexible(child: Container()),
+                                                  Center(
+                                                    child: Text(
+                                                      "퀘스트 결과보기",
+                                                      style: dialogTitle,
+                                                    ),
+                                                  ),
+                                                  Flexible(
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Container(
+                                                        // width: 25.w,
+                                                        child: Align(
+                                                          alignment: Alignment.centerRight,
+                                                          child: Image.asset(
+                                                            'assets/buttons/close.png',
+                                                            width: 16.w,
+                                                            height: 16.w,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                  // Text("x"),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: moduleBoxPadding(dialogTitle.fontSize!),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Column(
+                                                          mainAxisSize: MainAxisSize.max,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text(
+                                                              // '${questModel.category} 퀘스트',
+                                                              homeViewModel.resultQuests[index].category,
+                                                              style: questTerm,
+                                                            ),
+                                                            SizedBox(
+                                                                height: correctHeight(
+                                                                    8.w, questTerm.fontSize, questTitle.fontSize)),
+                                                            Text(
+                                                              '${homeViewModel.resultQuests[index].title}',
+                                                              style: questTitle,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Image.asset(
+                                                        'assets/icons/quest_success.png',
+                                                        width: 72.w,
+                                                        height: 72.w,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 20.w,
+                                                  ),
+                                                  Container(
+                                                    width: double.infinity,
                                                     child: Column(
-                                                      mainAxisSize: MainAxisSize.max,
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      // mainAxisAlignment:
+                                                      //     MainAxisAlignment
+                                                      //         .spaceBetween,
                                                       children: [
+                                                        Text("나의 선택", style: questTerm),
                                                         Text(
-                                                          // '${questModel.category} 퀘스트',
-                                                          homeViewModel.resultQuests[index].category,
-                                                          style: questTerm,
+                                                          "상승",
+                                                          style: questTitle.copyWith(fontSize: 24.w),
                                                         ),
-                                                        SizedBox(
-                                                            height: correctHeight(
-                                                                8.w, questTerm.fontSize, questTitle.fontSize)),
+                                                        SizedBox(height: 14.w),
+                                                        Text("결과", style: questTerm.copyWith(color: yachtViolet)),
                                                         Text(
-                                                          '${homeViewModel.resultQuests[index].title}',
-                                                          style: questTitle,
-                                                        ),
+                                                          homeViewModel.resultQuests[index].showResults(),
+                                                          style:
+                                                              questTitle.copyWith(fontSize: 24.w, color: yachtViolet),
+                                                        )
                                                       ],
                                                     ),
                                                   ),
-                                                  Image.asset(
-                                                    'assets/icons/quest_success.png',
-                                                    width: 72.w,
-                                                    height: 72.w,
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 20.w,
-                                              ),
-                                              Container(
-                                                width: double.infinity,
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  // mainAxisAlignment:
-                                                  //     MainAxisAlignment
-                                                  //         .spaceBetween,
-                                                  children: [
-                                                    Text("나의 선택", style: questTerm),
-                                                    Text(
-                                                      "상승",
-                                                      style: questTitle.copyWith(fontSize: 24.w),
-                                                    ),
-                                                    SizedBox(height: 14.w),
-                                                    Text("결과", style: questTerm.copyWith(color: yachtViolet)),
-                                                    Text(
-                                                      "상승",
-                                                      style: questTitle.copyWith(fontSize: 24.w, color: yachtViolet),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                  height: reducedPaddingWhenTextIsBelow(
-                                                      30.w, smallSubtitleTextStyle.fontSize!)),
-                                              Text("퀘스트 성공 보상", style: questTitle),
-                                              SizedBox(
-                                                height: reducedPaddingWhenTextIsBothSide(
-                                                    20.w, smallSubtitleTextStyle.fontSize!, 0),
-                                              ),
-                                              Column(
-                                                children: [
-                                                  Row(children: [
-                                                    Row(children: [
-                                                      SvgPicture.asset(
-                                                        'assets/icons/league_point.svg',
-                                                        width: 27.w,
-                                                        height: 27.w,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 6.w,
-                                                      ),
-                                                      Text("리그 포인트",
-                                                          style: questTerm.copyWith(fontWeight: FontWeight.w500))
-                                                    ])
-                                                  ]),
                                                   SizedBox(
-                                                    height: 14.w,
+                                                      height: reducedPaddingWhenTextIsBelow(
+                                                          30.w, smallSubtitleTextStyle.fontSize!)),
+                                                  Text("퀘스트 성공 보상", style: questTitle),
+                                                  SizedBox(
+                                                    height: reducedPaddingWhenTextIsBothSide(
+                                                        20.w, smallSubtitleTextStyle.fontSize!, 0),
                                                   ),
-                                                  Row(
+                                                  Column(
                                                     children: [
-                                                      Row(
-                                                        children: [
-                                                          Image.asset(
-                                                            'assets/icons/yacht_point_circle.png',
+                                                      Row(children: [
+                                                        Row(children: [
+                                                          SvgPicture.asset(
+                                                            'assets/icons/league_point.svg',
                                                             width: 27.w,
                                                             height: 27.w,
                                                           ),
                                                           SizedBox(
                                                             width: 6.w,
                                                           ),
-                                                          Text("요트 포인트",
-                                                              style: questTerm.copyWith(fontWeight: FontWeight.w500)),
-                                                        ],
+                                                          Text("리그 포인트",
+                                                              style: questTerm.copyWith(fontWeight: FontWeight.w500))
+                                                        ])
+                                                      ]),
+                                                      SizedBox(
+                                                        height: 14.w,
                                                       ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 14.w,
-                                                  ),
-                                                  Column(
-                                                    children: [
                                                       Row(
                                                         children: [
-                                                          simpleTierRRectBox(
-                                                              tier: userModelRx.value!.tier ?? "newbie",
-                                                              fontSize: 14.w),
-                                                          Obx(() => Text(
-                                                              'exp testing ${userModelRx.value!.exp.toString()}',
-                                                              style: questRewardTextStyle)),
+                                                          Row(
+                                                            children: [
+                                                              Image.asset(
+                                                                'assets/icons/yacht_point_circle.png',
+                                                                width: 27.w,
+                                                                height: 27.w,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 6.w,
+                                                              ),
+                                                              Text("요트 포인트",
+                                                                  style:
+                                                                      questTerm.copyWith(fontWeight: FontWeight.w500)),
+                                                            ],
+                                                          ),
                                                         ],
                                                       ),
-                                                      SizedBox(height: 6.w),
-                                                      Container(
+                                                      SizedBox(
                                                         height: 14.w,
-                                                        width: double.infinity,
-                                                        decoration: BoxDecoration(
-                                                          color: yachtViolet,
+                                                      ),
+                                                      Column(
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              simpleTierRRectBox(
+                                                                  exp: userModelRx.value!.exp, fontSize: 14.w),
+                                                              Obx(() => Text(
+                                                                  'exp testing ${userModelRx.value!.exp.toString()}',
+                                                                  style: questRewardTextStyle)),
+                                                            ],
+                                                          ),
+                                                          SizedBox(height: 6.w),
+                                                          Container(
+                                                            height: 14.w,
+                                                            width: double.infinity,
+                                                            decoration: BoxDecoration(
+                                                              color: yachtViolet,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 14.w,
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        child: textContainerButtonWithOptions(
+                                                          text: "확인",
+                                                          fontSize: 20.w,
+                                                          isDarkBackground: true,
+                                                          height: 50.w,
                                                         ),
                                                       )
                                                     ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 14.w,
-                                                  ),
-                                                  textContainerButtonWithOptions(
-                                                    text: "확인",
-                                                    fontSize: 20.w,
-                                                    isDarkBackground: true,
-                                                    height: 50.w,
                                                   )
                                                 ],
-                                              )
-                                            ],
-                                          ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  )));
+                                      )));
                               // Get.defaultDialog(
                               //     title: '',
                               //     titleStyle:

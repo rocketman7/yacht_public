@@ -24,8 +24,7 @@ class StartupViewModel extends GetxController {
     checkUserNameConfirm();
     // selectedPage = 0.obs;
     // get league Address
-    Future.delayed(Duration(seconds: 1))
-        .then((value) => addressModel = LeagueAddressModel(league: "league001", date: "20210706", uid: "uid"));
+
     // _pushNotificationService.initialise();
     super.onInit();
   }
