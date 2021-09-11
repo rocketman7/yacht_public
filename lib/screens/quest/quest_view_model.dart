@@ -76,7 +76,7 @@ class QuestViewModel extends GetxController {
         thisUserQuestModel(userQuestModelRx.where((element) => element.questId == questModel.questId).first);
       }
       thisUserQuestModel.value == null
-          ? orderList.addAll(List.generate(questModel.investAddresses.length, (index) => index))
+          ? orderList.addAll(List.generate(questModel.investAddresses!.length, (index) => index))
           : orderList(thisUserQuestModel.value!.selection);
     }
 
@@ -87,14 +87,14 @@ class QuestViewModel extends GetxController {
           thisUserQuestModel(userQuestModelRx.where((element) => element.questId == questModel.questId).first);
         }
         thisUserQuestModel.value == null
-            ? orderList.addAll(List.generate(questModel.investAddresses.length, (index) => index))
+            ? orderList.addAll(List.generate(questModel.investAddresses!.length, (index) => index))
             : orderList(thisUserQuestModel.value!.selection);
       }
     });
     print('userquestmodel value check: ${thisUserQuestModel.value}');
     // order 타입의 selectMode Quest를 위한 리스트
     thisUserQuestModel.value == null
-        ? orderList.addAll(List.generate(questModel.investAddresses.length, (index) => index))
+        ? orderList.addAll(List.generate(questModel.investAddresses!.length, (index) => index))
         : orderList(thisUserQuestModel.value!.selection);
 
     syncUserSelect();
@@ -118,7 +118,7 @@ class QuestViewModel extends GetxController {
                 ? false
                 : thisUserQuestModel.value!.selection![0] == index).obs
         : List.generate(
-            questModel.investAddresses.length,
+            questModel.investAddresses!.length,
             (index) => (thisUserQuestModel.value == null || thisUserQuestModel.value!.selection == null)
                 ? false
                 : thisUserQuestModel.value!.selection![0] == index).obs;
@@ -133,8 +133,8 @@ class QuestViewModel extends GetxController {
   // }
 
   Future getImages() async {
-    for (int i = 0; i < questModel.investAddresses.length; i++) {
-      imageUrl = await _storageService.downloadImageURL(questModel.investAddresses[i].logoUrl!);
+    for (int i = 0; i < questModel.investAddresses!.length; i++) {
+      imageUrl = await _storageService.downloadImageURL(questModel.investAddresses![i].logoUrl!);
       logoImage.add(Image.network(
         imageUrl!,
         fit: BoxFit.cover,

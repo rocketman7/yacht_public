@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 class QuestModel {
   final String questId;
   final String category;
-  final String term;
   final String? themeColor;
   final String? imageUrl;
   final dynamic uploadDateTime;
@@ -31,7 +30,8 @@ class QuestModel {
   final num? leaguePointReward;
   final num? exp;
 
-  final List<InvestAddressModel> investAddresses;
+  final List<InvestAddressModel>? investAddresses;
+  // final SurveyModel survey;
 
   //기본적으로 investAddresses element의 name
   //그러나 category 상승, 하락이면 따로 '상승', '하락' 표기
@@ -41,7 +41,6 @@ class QuestModel {
   QuestModel({
     required this.questId,
     required this.category,
-    required this.term,
     this.themeColor,
     this.imageUrl,
     required this.uploadDateTime,
@@ -98,7 +97,6 @@ class QuestModel {
     return QuestModel(
       questId: questId ?? this.questId,
       category: category ?? this.category,
-      term: term ?? this.term,
       themeColor: themeColor ?? this.themeColor,
       imageUrl: imageUrl ?? this.imageUrl,
       uploadDateTime: uploadDateTime ?? this.uploadDateTime,
@@ -129,7 +127,6 @@ class QuestModel {
     return {
       'questId': questId,
       'category': category,
-      'term': term,
       'themeColor': themeColor,
       'imageUrl': imageUrl,
       'uploadDateTime': uploadDateTime,
@@ -149,18 +146,17 @@ class QuestModel {
       'yachtPointReward': yachtPointReward,
       'leaguePointReward': leaguePointReward,
       'exp': exp,
-      'investAddresses': investAddresses.map((x) => x.toMap()).toList(),
+      'investAddresses': investAddresses?.map((x) => x.toMap()).toList(),
       'choices': choices,
       'counts': counts,
       'results': results,
     };
   }
 
-  factory QuestModel.fromMap(String questId, Map<String, dynamic> map, List<InvestAddressModel> investAddress) {
+  factory QuestModel.fromMap(String questId, Map<String, dynamic> map, List<InvestAddressModel>? investAddress) {
     return QuestModel(
       questId: questId,
       category: map['category'],
-      term: map['term'],
       themeColor: map['themeColor'],
       imageUrl: map['imageUrl'],
       uploadDateTime: map['uploadDateTime'],
@@ -193,7 +189,7 @@ class QuestModel {
 
   @override
   String toString() {
-    return 'QuestModel(questId: $questId, category: $category, term: $term, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointReward: $yachtPointReward, leaguePointReward: $leaguePointReward, exp: $exp, investAddresses: $investAddresses, choices: $choices, counts: $counts, results: $results)';
+    return 'QuestModel(questId: $questId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointReward: $yachtPointReward, leaguePointReward: $leaguePointReward, exp: $exp, investAddresses: $investAddresses, choices: $choices, counts: $counts, results: $results)';
   }
 
   @override
@@ -203,7 +199,6 @@ class QuestModel {
     return other is QuestModel &&
         other.questId == questId &&
         other.category == category &&
-        other.term == term &&
         other.themeColor == themeColor &&
         other.imageUrl == imageUrl &&
         other.uploadDateTime == uploadDateTime &&
@@ -233,7 +228,6 @@ class QuestModel {
   int get hashCode {
     return questId.hashCode ^
         category.hashCode ^
-        term.hashCode ^
         themeColor.hashCode ^
         imageUrl.hashCode ^
         uploadDateTime.hashCode ^

@@ -176,12 +176,15 @@ class FirestoreService extends GetxService {
       value.docs.forEach((element) {
         // print(element.data());
         // options 필드의 List of Object를 아래와 같이 처리
-        element.data()['investAddresses'].toList().forEach((option) {
-          invetAddresses.add(InvestAddressModel.fromMap(option));
-        });
+        if (element.data()['investAddresses'] != null) {
+          element.data()['investAddresses'].toList().forEach((option) {
+            invetAddresses.add(InvestAddressModel.fromMap(option));
+          });
+        }
 
         // print('questmodel options from db: $options');
-        allQuests.add(QuestModel.fromMap(element.id, element.data(), invetAddresses));
+        allQuests
+            .add(QuestModel.fromMap(element.id, element.data(), invetAddresses.length == 0 ? null : invetAddresses));
         invetAddresses = [];
       });
     });

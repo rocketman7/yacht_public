@@ -620,7 +620,7 @@ TextStyle snackBarStyle = TextStyle(
 //// 다이얼로그
 // 제목
 TextStyle dialogTitle = TextStyle(
-  fontSize: bodyBigSize,
+  fontSize: heading5Size,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
@@ -796,6 +796,26 @@ TextStyle yachtInstructionDialogDescription = TextStyle(
   height: 1.4,
 );
 
+// Survey
+// Survey Title
+TextStyle surveyTitle = TextStyle(
+  fontSize: heading4Size,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle pickManyCircleName = TextStyle(
+  fontSize: bodySmallSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtViolet,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
 // BUTTONS
 Container simpleTextContainerButton(
   String text,
@@ -836,11 +856,13 @@ Container simpleTextContainerLessRadiusButton(
 Container textContainerButtonWithOptions({
   required String text,
   required bool isDarkBackground,
+  double? fontSize,
+  EdgeInsets? padding,
   double? height,
 }) {
   return Container(
     height: height,
-    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+    padding: padding ?? EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
       color: isDarkBackground ? primaryButtonBackground : primaryButtonText,
       borderRadius: BorderRadius.circular(50),
@@ -849,8 +871,8 @@ Container textContainerButtonWithOptions({
       child: Text(
         text,
         style: isDarkBackground
-            ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: bodyBigSize)
-            : simpleTextButtonStyle.copyWith(fontSize: bodyBigSize),
+            ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
+            : simpleTextButtonStyle.copyWith(fontSize: fontSize ?? bodyBigSize),
       ),
     ),
   );
@@ -969,7 +991,7 @@ Container sectionBoxWithBottomButton({
   );
 }
 
-Container simpleTierRRectBox({String tier = "newbie", double width = 70}) {
+Container simpleTierRRectBox({String tier = "newbie", double? fontSize, double width = 70}) {
   late Color tierColor;
   late String tierName;
   switch (tier) {
@@ -993,7 +1015,7 @@ Container simpleTierRRectBox({String tier = "newbie", double width = 70}) {
       tierColor = tierMaster;
       tierName = "마스터";
       break;
-    case 'grandMaster':
+    case 'grandmaster':
       tierColor = tierGrandMaster;
       tierName = "그랜드마스터";
       break;
@@ -1001,13 +1023,13 @@ Container simpleTierRRectBox({String tier = "newbie", double width = 70}) {
       tierColor = tierNewbie;
   }
   return Container(
-    width: width.w,
-    height: (width / 3.75).w,
+    // width: width.w,
+    // height: (width / 3.75).w,
     decoration: BoxDecoration(color: tierColor, borderRadius: BorderRadius.circular(50)),
     child: Center(
       child: Text(
-        '$tierName 3',
-        style: simpleTierStyle.copyWith(fontWeight: FontWeight.w500),
+        '$tierName',
+        style: simpleTierStyle.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
       ),
     ),
   );

@@ -270,7 +270,7 @@ class ProfileController extends GetxController {
       List userSelect = [];
 
       for (int investAddressIndex in userQuest.selection!) {
-        userSelect.add(questModel.investAddresses[investAddressIndex].name);
+        userSelect.add(questModel.investAddresses![investAddressIndex].name);
       }
       String makeOrderResult(List selection) {
         String result = "";
@@ -284,7 +284,7 @@ class ProfileController extends GetxController {
     } else {
       List userSelect = [];
       for (int investAddressIndex in userQuest.selection!) {
-        userSelect.add(questModel.investAddresses[investAddressIndex].name);
+        userSelect.add(questModel.investAddresses![investAddressIndex].name);
       }
       String makePickResult(List selection) {
         String result = "";

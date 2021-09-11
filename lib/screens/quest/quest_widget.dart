@@ -248,7 +248,7 @@ class QuestCardHeader extends StatelessWidget {
               children: [
                 Text(
                   // '${questModel.category} 퀘스트',
-                  questModel.term,
+                  questModel.category,
                   style: questTerm,
                 ),
                 Row(

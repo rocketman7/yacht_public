@@ -82,12 +82,6 @@ class HomeViewModel extends GetxController {
   // 이런 방식으로 처음 메뉴 들어왔을 때 필요한 데이터들을 받아서 global로 저장해놓고
   // 데이터가 있으면 로컬을, 없으면 서버에서 가져오는 방식
   // 기존에 Statemanagement와 비슷
-  Future getTodayData() async {
-    Future.delayed(Duration(seconds: 3)).then((value) {
-      print("3 secs passed");
-      globalString = "All data Fetched";
-    });
-  }
 
   Future getTodayAwards() async {}
 
@@ -97,7 +91,9 @@ class HomeViewModel extends GetxController {
     // 분리작업
     DateTime now = DateTime.now();
     allQuests.forEach((element) {
-      if (element.showHomeDateTime.toDate().isBefore(now) && element.liveStartDateTime.toDate().isAfter(now)) {
+      if (element.selectMode == 'survey') {
+        newQuests.add(element);
+      } else if (element.showHomeDateTime.toDate().isBefore(now) && element.liveStartDateTime.toDate().isAfter(now)) {
         // showHome ~ liveStart: 새로나온 퀘스트
         newQuests.add(element);
       } else if (element.liveStartDateTime.toDate().isBefore(now) && element.liveEndDateTime.toDate().isAfter(now)) {

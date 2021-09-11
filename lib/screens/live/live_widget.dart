@@ -86,14 +86,14 @@ class LiveWidget extends StatelessWidget {
                                   majorGridLines: MajorGridLines(width: 0),
                                   isVisible: false),
                               axes: List.generate(
-                                  homeViewModel.liveQuests[liveQuestIndex].investAddresses.length,
+                                  homeViewModel.liveQuests[liveQuestIndex].investAddresses!.length,
                                   (index) => NumericAxis(
                                       name: index.toString(),
                                       // maximum: 101,
                                       // minimum: 97,
                                       majorGridLines: MajorGridLines(width: 0),
                                       isVisible: false)),
-                              series: List.generate(homeViewModel.liveQuests[liveQuestIndex].investAddresses.length,
+                              series: List.generate(homeViewModel.liveQuests[liveQuestIndex].investAddresses!.length,
                                   (index) {
                                 return AreaSeries<ChartPriceModel, DateTime>(
                                   dataSource: liveQuestViewModel.livePrices[liveQuestIndex][index].value.chartPrices,

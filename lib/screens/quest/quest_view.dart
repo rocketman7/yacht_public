@@ -44,7 +44,7 @@ class QuestView extends StatelessWidget {
     final QuestViewModel questViewModel = Get.put(QuestViewModel(questModel));
 
     final stockInfoViewModel = Get.put(
-        StockInfoKRViewModel(investAddressModel: questModel.investAddresses[questViewModel.stockInfoIndex.value]));
+        StockInfoKRViewModel(investAddressModel: questModel.investAddresses![questViewModel.stockInfoIndex.value]));
     // questViewModel.init(questModel);
     // streamSubscription =
     //     StockInfoKRView.streamController.stream.listen((event) {
@@ -124,14 +124,14 @@ class QuestView extends StatelessWidget {
                 delegate: SectionHeaderDelegate(
                     ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: questModel.investAddresses.length,
+                        itemCount: questModel.investAddresses!.length,
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
                               GestureDetector(
                                 onTap: () {
                                   questViewModel.changeIndex(index);
-                                  stockInfoViewModel.changeInvestAddressModel(questModel.investAddresses[index]);
+                                  stockInfoViewModel.changeInvestAddressModel(questModel.investAddresses![index]);
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(14.w, 0, 4.w, 0),
@@ -143,7 +143,7 @@ class QuestView extends StatelessWidget {
                                               bottom: questViewModel.stockInfoIndex.value == index
                                                   ? BorderSide(width: 3.w, color: seaBlue)
                                                   : BorderSide.none)),
-                                      child: Obx(() => Text(questModel.investAddresses[index].name,
+                                      child: Obx(() => Text(questModel.investAddresses![index].name,
                                           style: buttonTextStyle.copyWith(
                                               color: questViewModel.stockInfoIndex.value == index
                                                   ? seaBlue
@@ -175,7 +175,7 @@ class QuestView extends StatelessWidget {
                   child: GetBuilder<QuestViewModel>(
                     builder: (questViewModel) {
                       return StockInfoKRView(
-                          investAddressModel: questModel.investAddresses[questViewModel.stockInfoIndex.value]);
+                          investAddressModel: questModel.investAddresses![questViewModel.stockInfoIndex.value]);
                     },
                   ),
                 ),
@@ -295,7 +295,7 @@ class QuestView extends StatelessWidget {
               Divider(color: primaryFontColor.withOpacity(.4)),
               Column(
                 children: List.generate(
-                    questModel.investAddresses.length,
+                    questModel.investAddresses!.length,
                     (index) => Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -321,7 +321,7 @@ class QuestView extends StatelessWidget {
                                       ),
                                       SizedBox(width: 8.w),
                                       Text(
-                                        questModel.investAddresses[index].name,
+                                        questModel.investAddresses![index].name,
                                         style: detailedContentTextStyle.copyWith(fontSize: 18.w),
                                       ),
                                     ],
@@ -381,15 +381,17 @@ class QuestView extends StatelessWidget {
               SizedBox(height: reducedPaddingWhenTextIsBelow(16.w, questTitleTextStyle.fontSize!)),
               questModel.selectMode == 'pickone'
                   ? Row(
-                      children: List.generate(questModel.investAddresses.length, (index) {
+                      children: List.generate(questModel.investAddresses!.length, (index) {
                       return Row(
                         children: [
                           InkWell(
                             onTap: () {
                               questViewModel.toggleUserSelect(index);
                               print('$index is change to ${questViewModel.toggleList}');
+                              HapticFeedback.lightImpact();
                             },
-                            child: Container(
+                            child: AnimatedContainer(
+                              duration: Duration(milliseconds: 300),
                               width: 151.w,
                               height: 151.w,
                               decoration: yachtChoiceBoxDecoration.copyWith(
@@ -416,7 +418,7 @@ class QuestView extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      questModel.investAddresses[index].name,
+                                      questModel.investAddresses![index].name,
                                       style: yachtChoiceBoxName.copyWith(
                                           color: questViewModel.toggleList[index] ? white : yachtBlack),
                                     )
@@ -438,8 +440,10 @@ class QuestView extends StatelessWidget {
                                 onTap: () {
                                   questViewModel.toggleUserSelect(index);
                                   print('$index is change to ${questViewModel.toggleList}');
+                                  HapticFeedback.lightImpact();
                                 },
-                                child: Container(
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 300),
                                   width: 151.w,
                                   height: 151.w,
                                   decoration: yachtChoiceBoxDecoration.copyWith(
@@ -491,10 +495,10 @@ class QuestView extends StatelessWidget {
                                     mainAxisSize: MainAxisSize.max,
                                     // mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: List.generate(
-                                        questModel.investAddresses.length,
+                                        questModel.investAddresses!.length,
                                         (index) => Container(
                                               margin: EdgeInsets.only(
-                                                  bottom: index != questModel.investAddresses.length ? 10.w : 0.0),
+                                                  bottom: index != questModel.investAddresses!.length ? 10.w : 0.0),
                                               height: 50.w,
                                               child: Center(
                                                 child: Text(
@@ -525,11 +529,11 @@ class QuestView extends StatelessWidget {
                                           print('old' + oldIndex.toString());
                                           print('new' + newIndex.toString());
                                         },
-                                        children: List.generate(questModel.investAddresses.length, (index) {
+                                        children: List.generate(questModel.investAddresses!.length, (index) {
                                           return Container(
                                             key: ValueKey(index),
                                             margin: EdgeInsets.only(
-                                                bottom: index != questModel.investAddresses.length ? 10.w : 0.0),
+                                                bottom: index != questModel.investAddresses!.length ? 10.w : 0.0),
                                             clipBehavior: Clip.hardEdge,
                                             padding: primaryHorizontalPadding,
                                             height: 50.w,
@@ -556,7 +560,7 @@ class QuestView extends StatelessWidget {
                                                     // orderList 없을 때 처리 필요
                                                     Obx(() => Text(
                                                           questModel
-                                                              .investAddresses[questViewModel.orderList[index]].name,
+                                                              .investAddresses![questViewModel.orderList[index]].name,
                                                           style: yachtChoiceReOrderableListTitle,
                                                         )),
                                                     Spacer(),

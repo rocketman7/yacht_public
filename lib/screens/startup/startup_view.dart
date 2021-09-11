@@ -27,14 +27,14 @@ class StartupView extends GetView<StartupViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> pageList = [
+    RxList<Widget> pageList = [
       HomeView(),
       CommunityView(),
       // Container(color: Colors.red),
       // Container(color: yachtViolet),
       // ProfileView(uid: _auth.currentUser.uid) //, null value error
       ProfileView(uid: userModelRx.value!.uid) //
-    ];
+    ].obs;
     // print('startup rebuild');
 
     // WidgetsBinding.instance!.addPostFrameCallback((_) {
