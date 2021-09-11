@@ -43,15 +43,15 @@ List<String> portfolioColor = [
   'CFF8F7',
 ];
 
-// text size get 함수
-Size textSizeGet(String txt, TextStyle txtStyle) {
-  return (TextPainter(
-          text: TextSpan(text: txt, style: txtStyle),
-          maxLines: 1,
-          textDirection: TextDirection.ltr)
-        ..layout())
-      .size;
-}
+// // text size get 함수
+// Size textSizeGet(String txt, TextStyle txtStyle) {
+//   return (TextPainter(
+//           text: TextSpan(text: txt, style: txtStyle),
+//           maxLines: 1,
+//           textDirection: TextDirection.ltr)
+//         ..layout())
+//       .size;
+// }
 
 // model.
 class PortfolioModel {

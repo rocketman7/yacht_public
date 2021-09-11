@@ -14,26 +14,21 @@ class PushNotificationService {
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
   int numOfPushAlarm = 3;
-  // List<bool> pushAlarm = [
-  //   false,
-  //   false,
-  //   false,
-  // ]; //***중요:true이면 알림이 오는것이고, false이면 알림 거부하는 것임
-
   // List<String> topics = ['vote', 'time', 'result'];
   // 아래 토픽 및 타이틀들은 정해진게 아니므로 (갯수3개도 그렇고) 출시 전 바꿔줘야함
-  List<String> topics = ['aaa', 'bbb', 'ccc'];
+  List<String> topics = ['quest', 'contents', 'feed'];
 
   List<String> pushAlarmTitles = [
-    '새로운 퀘스트 및 퀘스트 마감 알림',
-    '퀘스트 결과 알림',
-    '장의 시작/종료 알림',
+    '퀘스트 알림',
+    '컨텐츠 알림',
+    '피드 알림',
   ];
 
   Future initialise() async {
     print("push notification init");
     if (Platform.isIOS) {
-      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
         alert: true,
         badge: true,
         sound: true,
@@ -47,7 +42,7 @@ class PushNotificationService {
         print('pushpushpuhspuhspuhspuhs');
       }
 
-      // print('${GetStorage().read('pushAlarm' + topics[i])}');
+      print('ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ ${GetStorage().read('pushAlarm' + topics[i])}');
     }
 
     // 처음 들어오거나 특정한 이유로 토큰이 없는 사용자들은 토큰을 저장해줘야한다 DB에. 그리고 기본적으로 모두 구독해줘야한다.
@@ -71,10 +66,10 @@ class PushNotificationService {
     GetStorage().write('pushAlarm' + topics[i], value);
 
     if (value) {
-      print('subscribe to topic $i');
+      print('subscribe to topic ${topics[i]}');
       await FirebaseMessaging.instance.subscribeToTopic(topics[i]);
     } else {
-      print('unsubscribe from topic $i');
+      print('unsubscribe from topic ${topics[i]}');
       await FirebaseMessaging.instance.unsubscribeFromTopic(topics[i]);
     }
   }

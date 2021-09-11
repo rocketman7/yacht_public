@@ -87,7 +87,8 @@ double correctHeight(double originalPadding, upperTextSize, lowerTextSize) {
 }
 
 double offsetTextHeight(double upperTextSize, double lowerTextSize) {
-  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round()).toDouble();
+  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round())
+      .toDouble();
 }
 
 // 섹션 타이틀과 박스 사이
@@ -97,7 +98,8 @@ double widthHorizontalListView = 14.w;
 // 첫 섹션과 앱바 사이
 // 섹션 안에 패딩
 double primaryPaddingSize = 14.w;
-EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(horizontal: primaryPaddingSize);
+EdgeInsets primaryHorizontalPadding =
+    EdgeInsets.symmetric(horizontal: primaryPaddingSize);
 EdgeInsets primaryAllPadding = EdgeInsets.all(primaryPaddingSize);
 // FONTS
 
@@ -348,9 +350,9 @@ TextStyle profileAvatarChangeTextStyle = TextStyle(
 // 홈-상금-상금상세-상금타이틀
 TextStyle subLeagueTitleTextStyle = TextStyle(
   fontFamily: 'SCore',
-  fontSize: 20.w,
-  fontWeight: FontWeight.w700,
-  color: Colors.white,
+  fontSize: 18.w,
+  fontWeight: FontWeight.w400,
+  color: yachtBlack,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -358,10 +360,20 @@ TextStyle subLeagueTitleTextStyle = TextStyle(
 // 홈-상금-상금상세-상금액수
 TextStyle subLeagueAwardTextStyle = TextStyle(
   fontFamily: 'SCore',
-  fontSize: 36.w,
-  fontWeight: FontWeight.w700,
-  color: Colors.white,
-  letterSpacing: -0.25,
+  fontSize: 40.w,
+  fontWeight: FontWeight.w500,
+  color: yachtDarkGrey,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 상금박스-상금액수한글
+TextStyle awardAmountKoreanTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 24.w,
+  fontWeight: FontWeight.w300,
+  color: yachtViolet.withOpacity(0.3),
+  letterSpacing: 5.75,
   height: 1.4,
 );
 
@@ -379,7 +391,7 @@ TextStyle subLeagueAwardDescriptionStyle = TextStyle(
 TextStyle subLeagueAwardRulesStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 12.w,
-  fontWeight: FontWeight.w500,
+  fontWeight: FontWeight.w400,
   color: yachtGrey,
   letterSpacing: -1.0,
   height: 1.4,
@@ -409,7 +421,7 @@ TextStyle subLeagueAwardStockNameStyle = TextStyle(
 TextStyle subLeagueAwardLabelStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 14.w,
-  fontWeight: FontWeight.w500,
+  fontWeight: FontWeight.w400,
   color: yachtBlack,
   letterSpacing: -1.0,
   height: 1.4,
@@ -428,10 +440,10 @@ TextStyle subLeagueAwardCommentStyle = TextStyle(
 // 홈-상금박스-상금액수
 TextStyle awardModuleSliderAmountTextStyle = TextStyle(
   fontFamily: 'SCore',
-  fontSize: 30.w,
-  fontWeight: FontWeight.w700,
-  color: Colors.white,
-  letterSpacing: -0.25,
+  fontSize: 34.w,
+  fontWeight: FontWeight.w500,
+  color: yachtDarkGrey,
+  letterSpacing: -1.0,
   height: 1.4,
 );
 // 홈-상금박스-상금액수한글
@@ -439,8 +451,8 @@ TextStyle awardModuleSliderAmountKoreanTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 18.w,
   fontWeight: FontWeight.w300,
-  color: Colors.white,
-  letterSpacing: 5.75,
+  color: yachtViolet,
+  // letterSpacing: 5.75,
   height: 1.4,
 );
 // 홈-상금박스-상금기한
@@ -448,17 +460,32 @@ TextStyle awardModuleSliderEndDateTimeTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 12.w,
   fontWeight: FontWeight.w300,
-  color: Colors.white,
+  color: yachtBlack,
   letterSpacing: -0.25,
+  height: 1.4,
+);
+// 홈-섹션박스-헤더
+TextStyle awardModuleTitleTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
   height: 1.4,
 );
 
 // 상금박스의 색깔.
-const List<Color> awardColors = [
-  Color(0xFF87C7EC),
-  Color(0xFF489EDD),
-  Color(0xFF196AB4),
-  // Color(0xFF084176)
+const List<List<Color>> awardColors = [
+  [Color(0xFFCFEAF9), Color(0xFFE7EBFF)],
+  [Color(0xFFCFD8F9), Color(0xFFDDF1FF)],
+  [Color(0xFFE3E1FB), Color(0xFFDDE3FF)],
+];
+// 포트폴리오 색깔.
+const List<Color> portfolioColors = [
+  Color(0xFF798AE6),
+  Color(0xFF79A5E6),
+  Color(0xFF79D2E6),
+  Color(0xFF79E6CC),
 ];
 
 //// 홈
@@ -985,7 +1012,8 @@ Container textContainerButtonWithOptions({
       child: Text(
         text,
         style: isDarkBackground
-            ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
+            ? simpleTextButtonStyle.copyWith(
+                color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
             : simpleTextButtonStyle.copyWith(fontSize: fontSize ?? bodyBigSize),
       ),
     ),
@@ -1008,8 +1036,10 @@ Container bigTextContainerButton({
       child: Text(
         text,
         style: isDisabled
-            ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
-            : simpleTextButtonStyle.copyWith(fontSize: heading5Size, color: primaryButtonText),
+            ? simpleTextButtonStyle.copyWith(
+                color: yachtGrey, fontSize: heading5Size)
+            : simpleTextButtonStyle.copyWith(
+                fontSize: heading5Size, color: primaryButtonText),
       ),
     ),
   );
@@ -1027,35 +1057,43 @@ Container sectionBox({
     height: height,
     width: width,
     padding: padding ?? EdgeInsets.all(0),
-    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]),
+    decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(12.w),
+        boxShadow: [
+          BoxShadow(
+            color: yachtShadow,
+            blurRadius: 8.w,
+            spreadRadius: 1.w,
+          )
+        ]),
     child: child,
   );
 }
 
 // 기본 박스 데코레이션
-BoxDecoration yachtBoxDecoration = BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-  BoxShadow(
-    color: yachtShadow,
-    blurRadius: 8.w,
-    spreadRadius: 1.w,
-  )
-]);
+BoxDecoration yachtBoxDecoration = BoxDecoration(
+    color: white,
+    borderRadius: BorderRadius.circular(12.w),
+    boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]);
 
 // 퀘스트 선택지 박스 데코레이션
-BoxDecoration yachtChoiceBoxDecoration =
-    BoxDecoration(color: white, borderRadius: BorderRadius.circular(10.w), boxShadow: [
-  BoxShadow(
-    color: yachtShadow,
-    blurRadius: 8.w,
-    spreadRadius: 1.w,
-  )
-]);
+BoxDecoration yachtChoiceBoxDecoration = BoxDecoration(
+    color: white,
+    borderRadius: BorderRadius.circular(10.w),
+    boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]);
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -1070,13 +1108,16 @@ Container sectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]),
+    decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(12.w),
+        boxShadow: [
+          BoxShadow(
+            color: yachtShadow,
+            blurRadius: 8.w,
+            spreadRadius: 1.w,
+          )
+        ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1092,7 +1133,9 @@ Container sectionBoxWithBottomButton({
           width: double.infinity,
           decoration: BoxDecoration(
               color: primaryButtonText,
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(12.w),
+                  bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -1105,7 +1148,8 @@ Container sectionBoxWithBottomButton({
   );
 }
 
-Container simpleTierRRectBox({int exp = 0, double? fontSize, double width = 70}) {
+Container simpleTierRRectBox(
+    {int exp = 0, double? fontSize, double width = 70}) {
   String tierName = getTierByExp(exp);
   String tierTitle = separateStringFromTier(tierName);
   // String tierTitle = "intern";
@@ -1148,11 +1192,13 @@ Container simpleTierRRectBox({int exp = 0, double? fontSize, double width = 70})
                 : 12.w),
     // width: width.w,
     // height: (width / 3.75).w,
-    decoration: BoxDecoration(color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
+    decoration: BoxDecoration(
+        color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
     child: Center(
       child: Text(
         '${tierKorName[tierTitle]} $tierLevel',
-        style: simpleTierStyle.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
+        style: simpleTierStyle.copyWith(
+            fontSize: fontSize, fontWeight: FontWeight.w500),
       ),
     ),
   );
@@ -1164,7 +1210,9 @@ ClipRect glassmorphismContainer({required Widget child}) {
         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
         child: Container(
           padding: EdgeInsets.all(6.w),
-          decoration: BoxDecoration(color: glassmorphismBackgroundColor, borderRadius: BorderRadius.circular(10.w)),
+          decoration: BoxDecoration(
+              color: glassmorphismBackgroundColor,
+              borderRadius: BorderRadius.circular(10.w)),
           child: child,
         )),
   );

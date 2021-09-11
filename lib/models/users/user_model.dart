@@ -17,6 +17,7 @@ class UserModel {
   final num item;
 
   final String? friendsCode; // 앱 공유 코드
+  final bool? friendsCodeDone; // 추천완료
   final List<String>? insertedFriendsCode; // 자기를 추천한 친구 uid 목록
   final List<String>? blockList; // 내가 차단한 uid 목록
 
@@ -51,6 +52,7 @@ class UserModel {
     this.avatarImage,
     required this.item,
     this.friendsCode,
+    this.friendsCodeDone,
     this.insertedFriendsCode,
     this.blockList,
     required this.rewardedCnt,
@@ -79,6 +81,7 @@ class UserModel {
       String? avatarImage,
       num? item,
       String? friendsCode,
+      bool? friendsCodeDone,
       List<String>? insertedFriendsCode,
       List<String>? blockList,
       int? rewardedCnt,
@@ -105,6 +108,7 @@ class UserModel {
       avatarImage: avatarImage ?? this.avatarImage,
       item: item ?? this.item,
       friendsCode: friendsCode ?? this.friendsCode,
+      friendsCodeDone: friendsCodeDone ?? this.friendsCodeDone,
       insertedFriendsCode: insertedFriendsCode ?? this.insertedFriendsCode,
       blockList: blockList ?? this.blockList,
       rewardedCnt: rewardedCnt ?? this.rewardedCnt,
@@ -135,6 +139,7 @@ class UserModel {
       'avatarImage': avatarImage,
       'item': item,
       'friendsCode': friendsCode,
+      'friendsCodeDone': friendsCodeDone,
       'insertedFriendsCode': insertedFriendsCode,
       'blockList': blockList,
       'rewardedCnt': rewardedCnt,
@@ -165,17 +170,26 @@ class UserModel {
       avatarImage: map['avatarImage'],
       item: map['item'],
       friendsCode: map['friendsCode'],
-      // insertedFriendsCode: map['insertedFriendsCode'] == null ? null : List<String>.from(map['insertedFriendsCode']),
-      blockList: map['blockList'] == null ? null : List<String>.from(map['blockList']),
+      friendsCodeDone: map['friendsCodeDone'],
+      insertedFriendsCode: map['insertedFriendsCode'] == null
+          ? null
+          : List<String>.from(map['insertedFriendsCode']),
+      blockList:
+          map['blockList'] == null ? null : List<String>.from(map['blockList']),
       rewardedCnt: map['rewardedCnt'],
       exp: map['exp'] ?? 0,
       tier: map['tier'],
       // followersNum: map['followersNum'],
-      followers: map['followers'] == null ? null : List<String>.from(map['followers']),
+      followers:
+          map['followers'] == null ? null : List<String>.from(map['followers']),
       // followingNum: map['followingNum'],
-      followings: map['followings'] == null ? null : List<String>.from(map['followings']),
+      followings: map['followings'] == null
+          ? null
+          : List<String>.from(map['followings']),
       intro: map['intro'],
-      favoriteStocks: map['favoriteStocks'] == null ? null : List<String>.from(map['favoriteStocks']),
+      favoriteStocks: map['favoriteStocks'] == null
+          ? null
+          : List<String>.from(map['favoriteStocks']),
       badges: map['badges'] == null ? null : List<String>.from(map['badges']),
       membership: map['membership'],
       membershipStartAt: map['membershipStartAt'],
@@ -186,11 +200,12 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, tier: $tier, followers: $followers, followings: $followings, intro: $intro, favoriteStocks: $favoriteStocks, badges: $badges, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt), token: $token';
+    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, friendsCodeDone: $friendsCodeDone, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, tier: $tier, followers: $followers, followings: $followings, intro: $intro, favoriteStocks: $favoriteStocks, badges: $badges, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt), token: $token';
   }
 
   @override
@@ -208,6 +223,7 @@ class UserModel {
         other.avatarImage == avatarImage &&
         other.item == item &&
         other.friendsCode == friendsCode &&
+        other.friendsCodeDone == friendsCodeDone &&
         listEquals(other.insertedFriendsCode, insertedFriendsCode) &&
         listEquals(other.blockList, blockList) &&
         other.rewardedCnt == rewardedCnt &&
@@ -237,6 +253,7 @@ class UserModel {
         avatarImage.hashCode ^
         item.hashCode ^
         friendsCode.hashCode ^
+        friendsCodeDone.hashCode ^
         insertedFriendsCode.hashCode ^
         blockList.hashCode ^
         rewardedCnt.hashCode ^

@@ -45,7 +45,7 @@ class SubLeagueView extends StatelessWidget {
                         Text(
                             '${_subLeagueController.allSubLeagues[_subLeagueController.pageIndexForUI.value].description}'),
                         Text(
-                            '${_subLeagueController.allSubLeagues[_subLeagueController.pageIndexForUI.value].totalValue}'),
+                            '${_subLeagueController.allSubLeagues[_subLeagueController.pageIndexForUI.value]}'),
                         Text(
                             '${_subLeagueController.allSubLeagues[_subLeagueController.pageIndexForUI.value].rules[0]}'),
                       ],
