@@ -713,6 +713,78 @@ TextStyle accountWarning = TextStyle(
   letterSpacing: -1.0,
   height: 1.4,
 );
+TextStyle accountVerificationTitle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle accountVerificationContent = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w400,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle accountButtonText = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 20.w,
+  fontWeight: FontWeight.w500,
+  color: Color(0xFFEFF2FA),
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle authNumText = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 20.w,
+  fontWeight: FontWeight.w500,
+  color: Colors.white,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle settingFriendsCodeDialogTitle = TextStyle(
+  fontSize: 18.w,
+  fontFamily: 'SCore',
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: 0.0,
+  height: 1.4,
+);
+TextStyle settingFriendsCodeDialogContent = TextStyle(
+  fontSize: 18.w,
+  fontFamily: 'SCore',
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle settingFriendsCodeStyle = TextStyle(
+  fontSize: 18.w,
+  fontFamily: 'SCore',
+  fontWeight: FontWeight.w300,
+  color: yachtGrey,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle settingFriendsCodeButton1 = TextStyle(
+  fontSize: 16.w,
+  fontFamily: 'SCore',
+  fontWeight: FontWeight.w500,
+  color: buttonNormal,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle settingFriendsCodeButton2 = TextStyle(
+  fontSize: 16.w,
+  fontFamily: 'SCore',
+  fontWeight: FontWeight.w500,
+  color: yachtViolet,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
 
 // ICONS
 

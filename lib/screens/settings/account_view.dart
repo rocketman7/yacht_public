@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:stacked/stacked.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/styles/size_config.dart';
+import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -19,10 +22,16 @@ class _AccountViewState extends State<AccountView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _accNumberController = TextEditingController();
   final TextEditingController _accNameController = TextEditingController();
-  final TextEditingController _authNumController = TextEditingController();
+  final TextEditingController _authNumController1 = TextEditingController();
+  final TextEditingController _authNumController2 = TextEditingController();
+  final TextEditingController _authNumController3 = TextEditingController();
+  final TextEditingController _authNumController4 = TextEditingController();
   FocusNode myFocusNode = FocusNode();
   FocusNode myFocusNode2 = FocusNode();
-  FocusNode myFocusNode3 = FocusNode();
+  FocusNode myFocusNode3 = FocusNode(); // 3~6 은 인증코드 네자리
+  FocusNode myFocusNode4 = FocusNode();
+  FocusNode myFocusNode5 = FocusNode();
+  FocusNode myFocusNode6 = FocusNode();
 
   final AccountViewModel _accountViewModel = Get.put(AccountViewModel());
 
@@ -33,6 +42,9 @@ class _AccountViewState extends State<AccountView> {
     myFocusNode = FocusNode();
     myFocusNode2 = FocusNode();
     myFocusNode3 = FocusNode();
+    myFocusNode4 = FocusNode();
+    myFocusNode5 = FocusNode();
+    myFocusNode6 = FocusNode();
   }
 
   @override
@@ -40,6 +52,9 @@ class _AccountViewState extends State<AccountView> {
     myFocusNode.dispose();
     myFocusNode2.dispose();
     myFocusNode3.dispose();
+    myFocusNode4.dispose();
+    myFocusNode5.dispose();
+    myFocusNode6.dispose();
 
     super.dispose();
   }
@@ -51,665 +66,722 @@ class _AccountViewState extends State<AccountView> {
       appBar: primaryAppBar('계좌 정보'),
       body: Form(
         key: _formKey,
-        child: SafeArea(
-          child: ListView(
-            children: [
-              userModelRx.value!.account['accNumber'] == null
-                  ? Container(
-                      width: double.infinity,
-                      color: buttonNormal,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: 14.w, top: 8.w, bottom: 8.w, right: 14.w),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/icons/account_not.png',
-                              width: 18.w,
-                              height: 18.w,
-                            ),
-                            SizedBox(
-                              width: 6.w,
-                            ),
-                            Text(
-                              '증권계좌 미인증 상태네요. 인증을 완료해주세요.',
-                              style: accountWarning,
-                            ),
-                          ],
-                        ),
-                      ))
-                  : Container(
-                      width: double.infinity,
-                      color: buttonNormal,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: 14.w, top: 8.w, bottom: 8.w, right: 14.w),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/icons/account_done.png',
-                              width: 18.w,
-                              height: 18.w,
-                            ),
-                            SizedBox(
-                              width: 6.w,
-                            ),
-                            Text(
-                              '인증된 증권계좌네요!',
-                              style: accountWarning,
-                            ),
-                          ],
-                        ),
-                      )),
-            ],
-          ),
-        ),
+        child: SafeArea(child: GetBuilder<AccountViewModel>(
+          builder: (controller) {
+            return ListView(
+              children: [
+                userModelRx.value!.account['accNumber'] == null
+                    ? GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          controller.verificationFlowStart = true;
+                          controller.selectBankFlow =
+                              true; // 첫번째는 바로 뱅크리스트부터 고르도록 유도
+                          controller.update();
+                        },
+                        child: Container(
+                            width: double.infinity,
+                            color: buttonNormal,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 14.w,
+                                  top: 8.w,
+                                  bottom: 8.w,
+                                  right: 14.w),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/icons/account_not.png',
+                                    width: 18.w,
+                                    height: 18.w,
+                                  ),
+                                  SizedBox(
+                                    width: 6.w,
+                                  ),
+                                  Text('증권계좌 미인증 상태네요. 여기를 눌러 인증해주세요.',
+                                      style: accountWarning.copyWith(
+                                          color: yachtViolet)),
+                                  Spacer(),
+                                  Image.asset(
+                                    'assets/icons/verification_arrow.png',
+                                    width: 8.w,
+                                    height: 12.w,
+                                  ),
+                                ],
+                              ),
+                            )),
+                      )
+                    : Container(
+                        width: double.infinity,
+                        color: buttonNormal,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 14.w, top: 8.w, bottom: 8.w, right: 14.w),
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/icons/account_done.png',
+                                width: 18.w,
+                                height: 18.w,
+                              ),
+                              SizedBox(
+                                width: 6.w,
+                              ),
+                              Text(
+                                '인증된 증권계좌네요!',
+                                style: accountWarning,
+                              ),
+                            ],
+                          ),
+                        )),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 14.w,
+                    right: 14.w,
+                  ),
+                  child: Column(
+                    children: [
+                      userModelRx.value!.account['accNumber'] == null
+                          ? controller.visibleAuthNumProcess
+                              ? authNumProcess()
+                              : forNotVerificationUser()
+                          : forVerificationUser()
+                      // authNumProcess()
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        )),
       ),
     );
-    // return ViewModelBuilder<MypageAccountVerificationViewModel>.reactive(
-    //     viewModelBuilder: () => MypageAccountVerificationViewModel(),
-    //     builder: (context, model, child) {
-    //       return Scaffold(
-    //           appBar: AppBar(
-    //             title: Text(
-    //               '계좌 정보',
-    //               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-    //             ),
-    //             elevation: 0,
-    //           ),
-    //           backgroundColor: Colors.white,
-    //           resizeToAvoidBottomInset: false,
-    //           body: model.hasError
-    //               ? Container(
-    //                   child: Text('error발생. 페이지를 벗어나신 후 다시 시도하세요.'),
-    //                 )
-    //               : model.isBusy
-    //                   ? Container()
-    //                   : Form(
-    //                       key: _formKey,
-    //                       child: SafeArea(
-    //                           child: Column(
-    //                         children: [
-    //                           model.user.accNumber == null
-    //                               ? Container(
-    //                                   width: double.infinity,
-    //                                   color: Color(0xFFFFCA42),
-    //                                   child: Padding(
-    //                                     padding: const EdgeInsets.only(
-    //                                         left: 16, top: 8, bottom: 8),
-    //                                     child: Row(
-    //                                       children: [
-    //                                         Container(
-    //                                           height: 16,
-    //                                           child: SvgPicture.asset(
-    //                                             'assets/icons/notification.svg',
-    //                                             color: Color(0xFFFFFFFF),
-    //                                           ),
-    //                                         ),
-    //                                         SizedBox(
-    //                                           width: 3,
-    //                                         ),
-    //                                         Text(
-    //                                           '증권계좌 인증이 완료되지 않았습니다.',
-    //                                           style: TextStyle(
-    //                                               color: Colors.white,
-    //                                               fontSize: 12),
-    //                                         ),
-    //                                       ],
-    //                                     ),
-    //                                   ))
-    //                               : Container(
-    //                                   width: double.infinity,
-    //                                   color: Color(0xFF1EC8CF),
-    //                                   child: Padding(
-    //                                     padding: const EdgeInsets.only(
-    //                                         left: 16, top: 8, bottom: 8),
-    //                                     child: Row(
-    //                                       children: [
-    //                                         Container(
-    //                                           height: 16,
-    //                                           child: SvgPicture.asset(
-    //                                             'assets/icons/check.svg',
-    //                                             color: Color(0xFFFFFFFF),
-    //                                           ),
-    //                                         ),
-    //                                         SizedBox(
-    //                                           width: 3,
-    //                                         ),
-    //                                         Text(
-    //                                           '증권계좌 인증이 완료되었습니다!',
-    //                                           style: TextStyle(
-    //                                               color: Colors.white,
-    //                                               fontSize: 12),
-    //                                         ),
-    //                                       ],
-    //                                     ),
-    //                                   )),
-    //                           Padding(
-    //                             padding: const EdgeInsets.only(
-    //                               left: 16,
-    //                               right: 16,
-    //                             ),
-    //                             child: Column(
-    //                               children: [
-    //                                 model.user.accNumber == null
-    //                                     ? forNotVerificationUser(model)
-    //                                     : forVerificationUser(model)
-    //                               ],
-    //                             ),
-    //                           ),
-    //                         ],
-    //                       )),
-    //                     ));
-    //     });
   }
 
-  // Widget forNotVerificationUser(MypageAccountVerificationViewModel model) {
-  //   return Column(
-  //     children: [
-  //       SizedBox(
-  //         height: 24,
-  //       ),
-  //       model.visibleButton1
-  //           ? Container(
-  //               height: 56,
-  //               width: double.infinity,
-  //               child: RaisedButton(
-  //                   onPressed: () {
-  //                     model.visibleButton1 = false;
-  //                     model.visibleBankList = true;
-  //                     model.visibleButton2 = true;
-  //                     model.notifyListeners();
-  //                   },
-  //                   child: Text(
-  //                     '증권계좌 인증 진행하기',
-  //                     style: TextStyle(fontSize: 16, color: Colors.white),
-  //                   ),
-  //                   color: Color(0xFF1EC8CF),
-  //                   shape: RoundedRectangleBorder(
-  //                       borderRadius: BorderRadius.circular(10.0))),
-  //             )
-  //           : verificationProcess(model),
-  //       SizedBox(height: 16),
-  //       model.visibleButton1
-  //           ? Text('은행연계계좌는 계좌 인증이 불가능하며, 계좌 인증 서비스를 제공하지 못하는 증권사가 존재할 수 있습니다.',
-  //               style: TextStyle(fontSize: 12, color: Color(0xFF5F5E5E)))
-  //           : Container(),
-  //       model.visibleButton1 ? Container() : accNumberInsertProcess(model),
-  //       model.visibleButton1 ? Container() : accNameInsertProcess(model),
-  //       SizedBox(height: 16),
-  //       model.visibleButton2
-  //           ? Container(
-  //               width: deviceWidth,
-  //               height: 40,
-  //               child: RaisedButton(
-  //                 color:
-  //                     model.ableButton2 ? Color(0xFF1EC8CF) : Color(0xFFB2B7BE),
-  //                 shape: RoundedRectangleBorder(
-  //                     borderRadius: BorderRadius.circular(10.0)),
-  //                 onPressed: () async {
-  //                   if (model.ableButton2) {
-  //                     if (_accNameController.text != '' &&
-  //                         _accNumberController.text != '' &&
-  //                         model.secName != '') {
-  //                       FocusScope.of(context).unfocus();
-  //                       model.accNumber = _accNumberController.text;
-  //                       model.accName = _accNameController.text;
+  Widget authNumProcess() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 18.w,
+        ),
+        Text(
+          '인증하신 계좌로 1원을 입금하였습니다.\n입금 확인 후, 입금자명에 쓰인 숫자 네 자를 입력하여주세요!\n(요트OOOO 라고 써져 있을 거에요.)',
+          style: accountWarning.copyWith(color: yachtBlack),
+        ),
+        SizedBox(
+          height: 36.w,
+        ),
+        Row(
+          children: [
+            Spacer(),
+            Container(
+              width: 40.w,
+              height: 50.w,
+              decoration: BoxDecoration(
+                color: yachtViolet,
+                borderRadius: BorderRadius.circular(5.w),
+              ),
+              child: Center(
+                child: TextFormField(
+                  onChanged: (value) {
+                    if (value.length == 1 && value.isNum)
+                      myFocusNode4.requestFocus();
+                    // 다 채워졌으면
+                    if (_authNumController1.text != '' &&
+                        _authNumController2.text != '' &&
+                        _authNumController3.text != '' &&
+                        _authNumController4.text != '') {
+                      _accountViewModel.ableButton3 = true;
+                      _accountViewModel.update();
+                    } else {
+                      _accountViewModel.ableButton3 = false;
+                      _accountViewModel.update();
+                    }
+                  },
+                  controller: _authNumController1,
+                  focusNode: myFocusNode3,
+                  textAlignVertical: TextAlignVertical.center,
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.phone,
+                  style: authNumText,
+                  cursorColor: Colors.white,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.all(0.w),
+                    focusedBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Container(
+              width: 40.w,
+              height: 50.w,
+              decoration: BoxDecoration(
+                color: yachtViolet,
+                borderRadius: BorderRadius.circular(5.w),
+              ),
+              child: Center(
+                child: TextFormField(
+                  onChanged: (value) {
+                    if (value.length == 1 && value.isNum)
+                      myFocusNode5.requestFocus();
+                    else if (value.length == 0) myFocusNode3.requestFocus();
+                    // 다 채워졌으면
+                    if (_authNumController1.text != '' &&
+                        _authNumController2.text != '' &&
+                        _authNumController3.text != '' &&
+                        _authNumController4.text != '') {
+                      _accountViewModel.ableButton3 = true;
+                      _accountViewModel.update();
+                    } else {
+                      _accountViewModel.ableButton3 = false;
+                      _accountViewModel.update();
+                    }
+                  },
+                  controller: _authNumController2,
+                  focusNode: myFocusNode4,
+                  textAlignVertical: TextAlignVertical.center,
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.phone,
+                  style: authNumText,
+                  cursorColor: Colors.white,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.all(0.w),
+                    focusedBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Container(
+              width: 40.w,
+              height: 50.w,
+              decoration: BoxDecoration(
+                color: yachtViolet,
+                borderRadius: BorderRadius.circular(5.w),
+              ),
+              child: Center(
+                child: TextFormField(
+                  onChanged: (value) {
+                    if (value.length == 1 && value.isNum)
+                      myFocusNode6.requestFocus();
+                    else if (value.length == 0) myFocusNode4.requestFocus();
+                    // 다 채워졌으면
+                    if (_authNumController1.text != '' &&
+                        _authNumController2.text != '' &&
+                        _authNumController3.text != '' &&
+                        _authNumController4.text != '') {
+                      _accountViewModel.ableButton3 = true;
+                      _accountViewModel.update();
+                    } else {
+                      _accountViewModel.ableButton3 = false;
+                      _accountViewModel.update();
+                    }
+                  },
+                  controller: _authNumController3,
+                  focusNode: myFocusNode5,
+                  textAlignVertical: TextAlignVertical.center,
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.phone,
+                  style: authNumText,
+                  cursorColor: Colors.white,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.all(0.w),
+                    focusedBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 4.w,
+            ),
+            Container(
+              width: 40.w,
+              height: 50.w,
+              decoration: BoxDecoration(
+                color: yachtViolet,
+                borderRadius: BorderRadius.circular(5.w),
+              ),
+              child: Center(
+                child: TextFormField(
+                  onChanged: (value) {
+                    if (value.length == 0) myFocusNode5.requestFocus();
+                    // 다 채워졌으면
+                    if (_authNumController1.text != '' &&
+                        _authNumController2.text != '' &&
+                        _authNumController3.text != '' &&
+                        _authNumController4.text != '') {
+                      _accountViewModel.ableButton3 = true;
+                      _accountViewModel.update();
+                    } else {
+                      _accountViewModel.ableButton3 = false;
+                      _accountViewModel.update();
+                    }
+                  },
+                  controller: _authNumController4,
+                  focusNode: myFocusNode6,
+                  textAlignVertical: TextAlignVertical.center,
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.phone,
+                  style: authNumText,
+                  cursorColor: Colors.white,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.all(0.w),
+                    focusedBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                  ),
+                ),
+              ),
+            ),
+            Spacer(),
+          ],
+        ),
+        SizedBox(
+          height: 36.w,
+        ),
+        _accountViewModel.ableButton3
+            ? GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () async {
+                  _accountViewModel.verificationSuccess =
+                      await _accountViewModel.accVerification(
+                          _authNumController1.text +
+                              _authNumController2.text +
+                              _authNumController3.text +
+                              _authNumController4.text);
+                  FocusScope.of(context).unfocus();
+                  _accountViewModel.update();
+                },
+                child: Container(
+                  height: 50.w,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(70.0),
+                      color: yachtViolet),
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      '입력 완료',
+                      style: accountButtonText,
+                    ),
+                  ),
+                ),
+              )
+            : Container(),
+        _accountViewModel.verificationSuccess
+            ? Container()
+            : Text(
+                '${_accountViewModel.verificationFailMsg}',
+                style: accountWarning.copyWith(color: yachtViolet),
+              )
+      ],
+    );
+  }
 
-  //                       model.ableButton2 = false;
+  Widget forNotVerificationUser() {
+    return _accountViewModel.verificationFlowStart
+        ? Column(
+            children: [
+              SizedBox(
+                height:
+                    correctHeight(18.w, 0.w, accountVerificationTitle.fontSize),
+              ),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  if (_accountViewModel.ableBankListButton) {
+                    _accountViewModel.selectBankFlow = true;
+                    _accountViewModel.secName = '';
+                    _accountViewModel.selectSecLogo = 100;
+                    myFocusNode.unfocus();
+                    _accountViewModel.update();
+                  }
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      '증권사',
+                      style: accountVerificationTitle,
+                    ),
+                    Spacer(),
+                    _accountViewModel.selectSecLogo != 100
+                        ? Image.asset(
+                            '${_accountViewModel.getBankLogoList().values.toList()[_accountViewModel.selectSecLogo]}',
+                            width: 17.w,
+                            height: 17.w)
+                        : Container(),
+                    SizedBox(
+                      width: 4.w,
+                    ),
+                    _accountViewModel.selectSecLogo != 100
+                        ? Text(
+                            '${_accountViewModel.secName}',
+                            style: accountVerificationContent,
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: correctHeight(
+                    17.w, accountVerificationContent.fontSize, 0.w),
+              ),
+              _accountViewModel.selectBankFlow ? bankList() : Container(),
+              Container(
+                height: 1.w,
+                color: yachtLineColor,
+              ),
+              accNumberInsertProcess(),
+              accNameInsertProcess(),
+              SizedBox(
+                height: 18.w,
+              ),
+              _accountViewModel.visibleButton2
+                  ? GestureDetector(
+                      onTap: () async {
+                        if (_accountViewModel.ableButton2) {
+                          if (_accNameController.text != '' &&
+                              _accNumberController.text != '' &&
+                              _accountViewModel.secName != '') {
+                            FocusScope.of(context).unfocus();
+                            _accountViewModel.accNumber =
+                                _accNumberController.text;
+                            _accountViewModel.accName = _accNameController.text;
 
-  //                       // 이제 위에 적은 값들 수정 안되게
-  //                       model.ableBankListButton = false;
-  //                       model.accNameInsertProcess = true;
-  //                       model.accNumberInsertProcess = true;
+                            _accountViewModel.ableButton2 = false;
 
-  //                       model.notifyListeners();
+                            // 이제 위에 적은 값들 수정 안되게
+                            _accountViewModel.ableBankListButton = false;
+                            _accountViewModel.accNameInsertProcess = true;
+                            _accountViewModel.accNumberInsertProcess = true;
 
-  //                       String result = await model.accVerificationRequest();
+                            _accountViewModel.update();
 
-  //                       if (result == 'success') {
-  //                         model.visibleButton2 = false;
-  //                         model.visibleAuthNumProcess = true;
+                            String result = await _accountViewModel
+                                .accVerificationRequest();
 
-  //                         model.accVerificationFailMsg = '';
+                            if (result == 'success') {
+                              _accountViewModel.visibleButton2 = false;
+                              _accountViewModel.visibleAuthNumProcess = true;
 
-  //                         // 이제 위에 적은 값들 수정 안되게
-  //                         // model.accNameInsertProcess = true;
-  //                         // model.accNumberInsertProcess = true;
-  //                         // model.ableBankListButton = false;
+                              _accountViewModel.accVerificationFailMsg = '';
 
-  //                         myFocusNode3.requestFocus();
-  //                       } else {
-  //                         model.accVerificationFailMsg = result;
-  //                         model.ableBankListButton = true;
-  //                         model.accNameInsertProcess = false;
-  //                         model.accNumberInsertProcess = false;
-  //                       }
+                              myFocusNode3.requestFocus();
+                            } else {
+                              _accountViewModel.accVerificationFailMsg = result;
+                              _accountViewModel.ableBankListButton = true;
+                              _accountViewModel.accNameInsertProcess = false;
+                              _accountViewModel.accNumberInsertProcess = false;
+                            }
 
-  //                       model.ableButton2 = true;
-  //                       model.notifyListeners();
-  //                     } else {
-  //                       model.accVerificationFailMsg = '값들을 모두 입력하여주세요!';
+                            _accountViewModel.ableButton2 = true;
+                            _accountViewModel.update();
+                          } else {
+                            _accountViewModel.accVerificationFailMsg =
+                                '값들을 모두 입력하여주세요!';
 
-  //                       model.notifyListeners();
-  //                     }
-  //                   } else {
-  //                     return null;
-  //                   }
-  //                 },
-  //                 child: Text(
-  //                   model.ableButton2 ? '계좌 인증 코드 전송하기' : '진행 중',
-  //                   style: TextStyle(
-  //                     fontSize: 16,
-  //                     color: Colors.white,
-  //                   ),
-  //                 ),
-  //               ))
-  //           : Container(),
-  //       SizedBox(
-  //         height: 8,
-  //       ),
-  //       Text(
-  //         '${model.accVerificationFailMsg}',
-  //         style: TextStyle(color: Color(0xFFC5C5C7)),
-  //       ),
-  //       model.visibleAuthNumProcess ? authNumProcess(model) : Container()
-  //     ],
-  //   );
-  // }
+                            _accountViewModel.update();
+                          }
+                        } else {
+                          return null;
+                        }
+                      },
+                      child: Container(
+                        height: 50.w,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(70.0),
+                            color: _accountViewModel.ableButton2
+                                ? yachtViolet
+                                : buttonNormal),
+                        width: double.infinity,
+                        child: Center(
+                          child: Text(
+                            _accountViewModel.ableButton2
+                                ? '계좌 인증코드 전송하기'
+                                : '인증코드를 전송하고 있어요',
+                            style: _accountViewModel.ableButton2
+                                ? accountButtonText
+                                : accountButtonText.copyWith(
+                                    color: Color(0xFF6073B4)),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
+              SizedBox(
+                height: 8.w,
+              ),
+              Text(
+                '${_accountViewModel.accVerificationFailMsg}',
+                style: accountWarning.copyWith(color: yachtViolet),
+              ),
+            ],
+          )
+        : Container();
+  }
 
-  // Widget verificationProcess(MypageAccountVerificationViewModel model) {
-  //   return Column(
-  //     children: [
-  //       Row(
-  //         children: [
-  //           Text(
-  //             '증권사',
-  //             style: TextStyle(fontSize: 16, letterSpacing: -1),
-  //           ),
-  //           Spacer(),
-  //           model.selectSecLogo != 100
-  //               ? Image.asset(
-  //                   '${model.getBankLogoList().values.toList()[model.selectSecLogo]}',
-  //                   width: 20,
-  //                   height: 20)
-  //               : Container(),
-  //           SizedBox(
-  //             width: 5,
-  //           ),
-  //           Text(
-  //             '${model.secName}',
-  //             style: TextStyle(fontSize: 16),
-  //           ),
-  //           model.ableBankListButton
-  //               ? (!model.visibleBankList
-  //                   ? IconButton(
-  //                       icon: Icon(Icons.keyboard_arrow_down),
-  //                       onPressed: () {
-  //                         model.visibleBankList = true;
-  //                         model.secName = '';
-  //                         model.selectSecLogo = 100;
-  //                         myFocusNode.unfocus();
-  //                         model.notifyListeners();
-  //                       })
-  //                   : IconButton(
-  //                       icon: Icon(
-  //                         Icons.keyboard_arrow_down,
-  //                         color: Colors.transparent,
-  //                       ),
-  //                       onPressed: null,
-  //                     ))
-  //               : IconButton(
-  //                   icon: Icon(
-  //                     Icons.keyboard_arrow_down,
-  //                     color: Colors.transparent,
-  //                   ),
-  //                   onPressed: null),
-  //         ],
-  //       ),
-  //       model.visibleBankList ? bankList(model) : Container()
-  //     ],
-  //   );
-  // }
+  Widget bankList() {
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          height: SizeConfig.screenHeight / 3,
+          decoration: primaryBoxDecoration.copyWith(
+              boxShadow: [primaryBoxShadow],
+              color: homeModuleBoxBackgroundColor),
+          child: GridView.count(
+            crossAxisCount: 2,
+            childAspectRatio: 6,
+            children:
+                List.generate(_accountViewModel.getBankListLength(), (index) {
+              return Padding(
+                padding: EdgeInsets.only(top: 4.w, bottom: 4.w, left: 8.w),
+                child: GestureDetector(
+                  onTap: () {
+                    _accountViewModel.secName =
+                        _accountViewModel.getBankList().keys.toList()[index];
+                    print(_accountViewModel.secName);
+                    // _accountViewModel.visibleBankList = false;
+                    _accountViewModel.selectBankFlow = false;
+                    _accountViewModel.selectSecLogo = index;
+                    myFocusNode.requestFocus();
+                    _accountViewModel.update();
+                  },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Image.asset(
+                            '${_accountViewModel.getBankLogoList().values.toList()[index]}',
+                            width: 17.w,
+                            height: 17.w),
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      Text(
+                        '${_accountViewModel.getBankList().keys.toList()[index]}',
+                        style: accountVerificationTitle,
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
+        SizedBox(
+          height: 17.w,
+        ),
+      ],
+    );
+  }
 
-  // Widget bankList(MypageAccountVerificationViewModel model) {
-  //   return Container(
-  //     height: deviceHeight / 3,
-  //     child: GridView.count(
-  //       crossAxisCount: 2,
-  //       childAspectRatio: 6,
-  //       children: List.generate(model.getBankListLength(), (index) {
-  //         return Padding(
-  //           padding: const EdgeInsets.only(bottom: 10),
-  //           child: GestureDetector(
-  //             onTap: () {
-  //               model.secName = model.getBankList().keys.toList()[index];
-  //               print(model.secName);
-  //               model.visibleBankList = false;
-  //               model.selectSecLogo = index;
-  //               myFocusNode.requestFocus();
-  //               model.notifyListeners();
-  //             },
-  //             child: Row(
-  //               children: [
-  //                 Image.asset(
-  //                     '${model.getBankLogoList().values.toList()[index]}'),
-  //                 SizedBox(
-  //                   width: 5,
-  //                 ),
-  //                 Text(
-  //                   '${model.getBankList().keys.toList()[index]}',
-  //                   style: TextStyle(fontSize: 16),
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         );
-  //       }),
-  //     ),
-  //   );
-  // }
+  Widget accNumberInsertProcess() {
+    return Column(
+      children: [
+        SizedBox(
+          height: correctHeight(18.w, 0.w, accountVerificationTitle.fontSize),
+        ),
+        Row(
+          children: [
+            Text(
+              '계좌번호',
+              style: accountVerificationTitle,
+            ),
+            Expanded(
+              child: TextFormField(
+                onChanged: (value) {
+                  if (_accNameController.text != '' &&
+                      _accNumberController.text != '') {
+                    _accountViewModel.visibleButton2 = true;
+                  } else {
+                    _accountViewModel.visibleButton2 = false;
+                  }
+                  _accountViewModel.update();
+                },
+                readOnly: _accountViewModel.accNumberInsertProcess,
+                controller: _accNumberController,
+                focusNode: myFocusNode,
+                textAlignVertical: TextAlignVertical.bottom,
+                textAlign: TextAlign.right,
+                keyboardType: TextInputType.phone,
+                cursorColor: yachtViolet,
+                style: accountVerificationTitle,
+                decoration: InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.all(0.w),
+                  focusedBorder:
+                      OutlineInputBorder(borderSide: BorderSide.none),
+                  enabledBorder:
+                      OutlineInputBorder(borderSide: BorderSide.none),
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: correctHeight(17.w, accountVerificationContent.fontSize, 0.w),
+        ),
+        Container(
+          height: 1,
+          color: yachtLineColor,
+        ),
+      ],
+    );
+  }
 
-  // Widget accNumberInsertProcess(MypageAccountVerificationViewModel model) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Container(
-  //         height: 1,
-  //         color: Color(0xFFE3E3E3),
-  //       ),
-  //       Row(
-  //         children: [
-  //           Text(
-  //             '계좌번호',
-  //             style: TextStyle(fontSize: 16, letterSpacing: -1),
-  //           ),
-  //           Expanded(
-  //             child: TextField(
-  //               readOnly: model.accNumberInsertProcess,
-  //               focusNode: myFocusNode,
-  //               textAlign: TextAlign.right,
-  //               controller: _accNumberController,
-  //               keyboardType: TextInputType.phone,
-  //               style: TextStyle(
-  //                 fontSize: 16,
-  //                 fontFamily: 'DM Sans',
-  //                 // letterSpacing: 2.0,
-  //               ),
-  //               decoration: InputDecoration(
-  //                 enabledBorder: UnderlineInputBorder(
-  //                   borderSide: const BorderSide(
-  //                     color: Color(0xFFF2F2F2),
-  //                     width: 0.0,
-  //                   ),
-  //                 ),
-  //                 floatingLabelBehavior: FloatingLabelBehavior.never,
-  //                 alignLabelWithHint: true,
-  //                 focusedBorder: UnderlineInputBorder(
-  //                   borderSide: const BorderSide(
-  //                     color: Color(0xFFF2F2F2),
-  //                     width: 0.0,
-  //                   ),
-  //                 ),
-  //                 filled: false,
-  //                 // hintText: "계좌번호",
-  //                 // hintStyle: TextStyle(
-  //                 //   fontSize: 12,
-  //                 // ),
-  //               ),
-  //             ),
-  //           ),
-  //           GestureDetector(
-  //             onTap: () {
-  //               // 쓸데없는 영역이지만, 사용자가 텍스트필드 오른쪽을 클릭해도 포커스되도록
-  //               myFocusNode.requestFocus();
-  //             },
-  //             child: IconButton(
-  //               icon: Icon(
-  //                 Icons.keyboard_arrow_down,
-  //                 color: Colors.transparent,
-  //               ),
-  //               onPressed: null,
-  //             ),
-  //           )
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget accNameInsertProcess() {
+    return Column(
+      children: [
+        SizedBox(
+          height: correctHeight(18.w, 0.w, accountVerificationTitle.fontSize),
+        ),
+        Row(
+          children: [
+            Text(
+              '예금주',
+              style: accountVerificationTitle,
+            ),
+            Expanded(
+              child: TextFormField(
+                onChanged: (value) {
+                  if (_accNameController.text != '' &&
+                      _accNumberController.text != '') {
+                    _accountViewModel.visibleButton2 = true;
+                  } else {
+                    _accountViewModel.visibleButton2 = false;
+                  }
+                  _accountViewModel.update();
+                },
+                readOnly: _accountViewModel.accNameInsertProcess,
+                controller: _accNameController,
+                focusNode: myFocusNode2,
+                textAlignVertical: TextAlignVertical.bottom,
+                textAlign: TextAlign.right,
+                style: accountVerificationTitle,
+                cursorColor: yachtViolet,
+                decoration: InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.all(0.w),
+                  focusedBorder:
+                      OutlineInputBorder(borderSide: BorderSide.none),
+                  enabledBorder:
+                      OutlineInputBorder(borderSide: BorderSide.none),
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: correctHeight(17.w, accountVerificationContent.fontSize, 0.w),
+        ),
+        Container(
+          height: 1,
+          color: yachtLineColor,
+        ),
+      ],
+    );
+  }
 
-  // Widget accNameInsertProcess(MypageAccountVerificationViewModel model) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Container(
-  //         height: 1,
-  //         color: Color(0xFFE3E3E3),
-  //       ),
-  //       Row(
-  //         children: [
-  //           Text(
-  //             '예금주',
-  //             style: TextStyle(fontSize: 16, letterSpacing: -1),
-  //           ),
-  //           // Spacer(),
-  //           Expanded(
-  //             // width: 200,
-  //             child: TextField(
-  //               readOnly: model.accNameInsertProcess,
-  //               focusNode: myFocusNode2,
-  //               textAlign: TextAlign.right,
-  //               controller: _accNameController,
-  //               style: TextStyle(
-  //                 fontSize: 16,
-  //                 // fontFamily: 'DM Sans',
-  //                 // letterSpacing: 2.0,
-  //               ),
-  //               decoration: InputDecoration(
-  //                 enabledBorder: UnderlineInputBorder(
-  //                   borderSide: const BorderSide(
-  //                     color: Color(0xFFF2F2F2),
-  //                     width: 0.0,
-  //                   ),
-  //                 ),
-  //                 floatingLabelBehavior: FloatingLabelBehavior.never,
-  //                 alignLabelWithHint: true,
-  //                 focusedBorder: UnderlineInputBorder(
-  //                   borderSide: const BorderSide(
-  //                     color: Color(0xFFF2F2F2),
-  //                     width: 0.0,
-  //                   ),
-  //                 ),
-  //                 filled: false,
-  //                 // hintText: "예금주 이름",
-  //                 // hintStyle: TextStyle(fontSize: 16, letterSpacing: -1),
-  //               ),
-  //             ),
-  //           ),
-  //           GestureDetector(
-  //             onTap: () {
-  //               // 쓸데없는 영역이지만, 사용자가 텍스트필드 오른쪽을 클릭해도 포커스되도록
-  //               myFocusNode2.requestFocus();
-  //             },
-  //             child: IconButton(
-  //               icon: Icon(
-  //                 Icons.keyboard_arrow_down,
-  //                 color: Colors.transparent,
-  //               ),
-  //               onPressed: null,
-  //             ),
-  //           )
-  //         ],
-  //       ),
-  //       Container(
-  //         height: 1,
-  //         color: Color(0xFFE3E3E3),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget authNumProcess(MypageAccountVerificationViewModel model) {
-  //   return Column(
-  //     children: [
-  //       Text(
-  //         '인증계좌로 1원을 입금하였습니다.\n입금 확인 후, 입금자명에 쓰인 숫자 네 자를 입력하여주세요!',
-  //         style: TextStyle(color: Color(0xFFC5C5C7)),
-  //       ),
-  //       SizedBox(
-  //         height: 8,
-  //       ),
-  //       Row(
-  //         children: [
-  //           Flexible(
-  //             flex: 1,
-  //             child: Container(),
-  //           ),
-  //           Flexible(
-  //             flex: 1,
-  //             child: GestureDetector(
-  //               onTap: () {
-  //                 _authNumController.text = '';
-  //               },
-  //               child: TextField(
-  //                 focusNode: myFocusNode3,
-  //                 inputFormatters: [
-  //                   LengthLimitingTextInputFormatter(4),
-  //                 ],
-  //                 textAlign: TextAlign.center,
-  //                 controller: _authNumController,
-  //                 keyboardType: TextInputType.phone,
-  //                 style: TextStyle(
-  //                   fontSize: 30,
-  //                   fontFamily: 'DM Sans',
-  //                   letterSpacing: 3.0,
-  //                 ),
-  //                 cursorColor: Colors.white,
-  //                 decoration: InputDecoration(
-  //                   enabledBorder: UnderlineInputBorder(
-  //                     borderSide: const BorderSide(
-  //                       color: Color(0xFFF2F2F2),
-  //                       width: 0.0,
-  //                     ),
-  //                   ),
-  //                   floatingLabelBehavior: FloatingLabelBehavior.never,
-  //                   alignLabelWithHint: true,
-  //                   focusedBorder: UnderlineInputBorder(
-  //                     borderSide: const BorderSide(
-  //                       color: Color(0xFFF2F2F2),
-  //                       width: 0.0,
-  //                     ),
-  //                   ),
-  //                   filled: false,
-  //                   hintText: "____",
-  //                   hintStyle: TextStyle(
-  //                     fontSize: 30,
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //           Flexible(
-  //             flex: 1,
-  //             child: Container(),
-  //           ),
-  //         ],
-  //       ),
-  //       RaisedButton(
-  //         color: Color(0xFF1EC8CF),
-  //         shape:
-  //             RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-  //         onPressed: () async {
-  //           model.verificationSuccess =
-  //               await model.accVerification(_authNumController.text);
-  //           FocusScope.of(context).unfocus();
-  //           model.notifyListeners();
-  //         },
-  //         child: Text(
-  //           '계좌 인증하기',
-  //           style: TextStyle(fontSize: 14, color: Colors.white),
-  //         ),
-  //       ),
-  //       model.verificationSuccess
-  //           ? Container()
-  //           : Text('${model.verificationFailMsg}')
-  //     ],
-  //   );
-  // }
-
-  // Widget forVerificationUser(MypageAccountVerificationViewModel model) {
-  //   return Column(
-  //     children: [
-  //       SizedBox(
-  //         height: 24,
-  //       ),
-  //       Row(
-  //         children: [
-  //           Text(
-  //             '증권사',
-  //             style: TextStyle(fontSize: 16),
-  //           ),
-  //           Spacer(),
-  //           Image.asset(
-  //               '${model.getBankLogoList().values.toList()[model.selectSecLogo]}',
-  //               width: 20,
-  //               height: 20),
-  //           SizedBox(
-  //             width: 5,
-  //           ),
-  //           Text(
-  //             '${model.user.secName}',
-  //             style: TextStyle(fontSize: 16),
-  //           )
-  //         ],
-  //       ),
-  //       SizedBox(
-  //         height: 16,
-  //       ),
-  //       Container(
-  //         height: 1,
-  //         color: Color(0xFFE3E3E3),
-  //       ),
-  //       SizedBox(
-  //         height: 16,
-  //       ),
-  //       Row(
-  //         children: [
-  //           Text(
-  //             '계좌번호',
-  //             style: TextStyle(fontSize: 16),
-  //           ),
-  //           Spacer(),
-  //           Text(
-  //             '${model.user.accNumber}',
-  //             style: TextStyle(fontSize: 16),
-  //           )
-  //         ],
-  //       ),
-  //       SizedBox(
-  //         height: 16,
-  //       ),
-  //       Container(
-  //         height: 1,
-  //         color: Color(0xFFE3E3E3),
-  //       ),
-  //       SizedBox(
-  //         height: 16,
-  //       ),
-  //       Row(
-  //         children: [
-  //           Text(
-  //             '예금주',
-  //             style: TextStyle(fontSize: 16),
-  //           ),
-  //           Spacer(),
-  //           Text(
-  //             '${model.user.accName}',
-  //             style: TextStyle(fontSize: 16),
-  //           )
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
+  Widget forVerificationUser() {
+    return Column(
+      children: [
+        SizedBox(
+          height: correctHeight(18.w, 0.w, accountVerificationTitle.fontSize),
+        ),
+        Row(
+          children: [
+            Text(
+              '증권사',
+              style: accountVerificationTitle,
+            ),
+            Spacer(),
+            Image.asset(
+                '${_accountViewModel.getBankLogoList().values.toList()[_accountViewModel.selectSecLogo]}',
+                width: 17.w,
+                height: 17.w),
+            SizedBox(
+              width: 4.w,
+            ),
+            Text(
+              '${userModelRx.value!.account['secName']}',
+              style: accountVerificationContent,
+            )
+          ],
+        ),
+        SizedBox(
+          height: correctHeight(17.w, accountVerificationContent.fontSize, 0.w),
+        ),
+        Container(
+          height: 1.w,
+          color: yachtLineColor,
+        ),
+        SizedBox(
+          height: correctHeight(18.w, 0.w, accountVerificationTitle.fontSize),
+        ),
+        Row(
+          children: [
+            Text(
+              '계좌번호',
+              style: accountVerificationTitle,
+            ),
+            Spacer(),
+            Text(
+              '${userModelRx.value!.account['accNumber']}',
+              style: accountVerificationContent,
+            )
+          ],
+        ),
+        SizedBox(
+          height: correctHeight(17.w, accountVerificationContent.fontSize, 0.w),
+        ),
+        Container(
+          height: 1,
+          color: yachtLineColor,
+        ),
+        SizedBox(
+          height: correctHeight(18.w, 0.w, accountVerificationTitle.fontSize),
+        ),
+        Row(
+          children: [
+            Text(
+              '예금주',
+              style: accountVerificationTitle,
+            ),
+            Spacer(),
+            Text(
+              '${userModelRx.value!.account['accName']}',
+              style: accountVerificationContent,
+            )
+          ],
+        ),
+        SizedBox(
+          height: correctHeight(17.w, accountVerificationContent.fontSize, 0.w),
+        ),
+        Container(
+          height: 1,
+          color: yachtLineColor,
+        ),
+      ],
+    );
+  }
 }
