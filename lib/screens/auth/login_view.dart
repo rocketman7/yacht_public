@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -68,33 +70,35 @@ class LoginView extends StatelessWidget {
               SizedBox(
                 height: 10.w,
               ),
-              Obx(() => InkWell(
-                    onTap: () async {
-                      if (!isKakaoLoggingIn.value && !isAppleLoggingIn.value) {
-                        isAppleLoggingIn(true);
-                        await signInWithApple();
-                        isAppleLoggingIn(false);
-                      }
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: socialLoginContainer(
-                          logo: Image.asset(
-                            'assets/logos/apple_white_with_paddings.png',
-                            width: 30.w,
-                            height: 30.w,
-                          ),
-                          title: isAppleLoggingIn.value
-                              ? CircularProgressIndicator(
-                                  color: white,
-                                )
-                              : Text(
-                                  'Apple로 시작하기',
-                                  style: socialLogin.copyWith(color: white),
-                                ),
-                          loginBackgroundColor: Colors.black),
-                    ),
-                  )),
+              Platform.isIOS
+                  ? Obx(() => InkWell(
+                        onTap: () async {
+                          if (!isKakaoLoggingIn.value && !isAppleLoggingIn.value) {
+                            isAppleLoggingIn(true);
+                            await signInWithApple();
+                            isAppleLoggingIn(false);
+                          }
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          child: socialLoginContainer(
+                              logo: Image.asset(
+                                'assets/logos/apple_white_with_paddings.png',
+                                width: 30.w,
+                                height: 30.w,
+                              ),
+                              title: isAppleLoggingIn.value
+                                  ? CircularProgressIndicator(
+                                      color: white,
+                                    )
+                                  : Text(
+                                      'Apple로 시작하기',
+                                      style: socialLogin.copyWith(color: white),
+                                    ),
+                              loginBackgroundColor: Colors.black),
+                        ),
+                      ))
+                  : Container(),
               SizedBox(
                 height: 16.w,
               ),

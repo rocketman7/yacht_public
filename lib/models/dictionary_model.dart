@@ -5,13 +5,13 @@ class DictionaryModel {
   final String imageUrl;
   final String dictionaryUrl;
   final dynamic updateDateTime;
-  final bool? showHomeView;
+  final bool showHomeView;
   DictionaryModel({
     required this.title,
     required this.imageUrl,
     required this.dictionaryUrl,
     required this.updateDateTime,
-    this.showHomeView,
+    required this.showHomeView,
   });
 
   DictionaryModel copyWith({

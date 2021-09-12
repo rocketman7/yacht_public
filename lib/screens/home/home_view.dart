@@ -15,6 +15,7 @@ import 'package:yachtOne/screens/auth/auth_check_view.dart';
 import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
 import 'package:yachtOne/screens/auth/login_view.dart';
 import 'package:yachtOne/screens/award/award_view.dart';
+import 'package:yachtOne/screens/contents/dictionary/dictionary_view.dart';
 import 'package:yachtOne/screens/contents/reading_content/reading_content_view.dart';
 import 'package:yachtOne/screens/contents/today_market/today_market_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
@@ -45,13 +46,18 @@ class HomeView extends StatelessWidget {
       // sign out 임시
       InkWell(
         onTap: () {
-          Get.off(() => AuthCheckView());
-          _authService.auth.signOut();
-          userModelRx.value = null;
-          _kakaoApi.signOut();
-          // homeViewModel.dispose();
-          // Get.reset();
-          print("signout");
+          // Get.off(() => AuthCheckView());
+          // _authService.auth.signOut();
+          // userModelRx.value = null;
+          // _kakaoApi.signOut();
+          // print("signout");
+          showDialog(
+            context: context,
+            builder: (context) => yachtTierInfoPopUp(
+              context,
+              2140,
+            ),
+          );
         },
         child: Container(
             // color: Colors.blue,
@@ -140,79 +146,6 @@ class HomeView extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class DictionaryView extends StatelessWidget {
-  final HomeViewModel homeViewModel;
-  const DictionaryView({Key? key, required this.homeViewModel}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Container(
-          padding: primaryHorizontalPadding,
-          // color: Colors.red,
-          child: Text("금융 백과사전", style: sectionTitle),
-        ),
-        SizedBox(
-          height: heightSectionTitleAndBox,
-        ),
-        Padding(
-          padding: primaryAllPadding,
-          child: sectionBox(
-              padding: primaryAllPadding,
-              child: Column(
-                children: List.generate(
-                    homeViewModel.dictionaries.length,
-                    (index) => InkWell(
-                          onTap: () {},
-                          child: Container(
-                            padding: primaryAllPadding,
-                            child: Row(
-                              children: [
-                                FutureBuilder<String>(
-                                    future: homeViewModel
-                                        .getImageUrlFromStorage(homeViewModel.dictionaries[index].imageUrl),
-                                    builder: (context, snapshot) {
-                                      return !snapshot.hasData
-                                          ? Container(
-                                              height: 50.w,
-                                              width: 50.w,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5.w),
-                                                color: yachtRed,
-                                              ),
-                                            )
-                                          : Container(
-                                              height: 50.w,
-                                              width: 50.w,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5.w),
-                                                // color: yachtRed,
-                                              ),
-                                              child: Image.network(
-                                                snapshot.data!,
-                                              ),
-                                            );
-                                    }),
-                                SizedBox(width: 14.w),
-                                Text(homeViewModel.dictionaries[index].title,
-                                    style: dictionaryKeyword.copyWith(
-                                      fontFamily: 'Default',
-                                      // fontWeight: FontWeight.w400,
-                                    ))
-                              ],
-                            ),
-                          ),
-                        )),
-              )),
-        ),
-      ],
     );
   }
 }

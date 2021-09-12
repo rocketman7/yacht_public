@@ -12,6 +12,7 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/community_view.dart';
 import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/screens/community/community_widgets.dart';
+import 'package:yachtOne/screens/profile/profile_view.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,9 +77,14 @@ class FeedWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          post.writerUserName,
-                          style: feedWriterName,
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(() => ProfileView(uid: post.writerUid));
+                          },
+                          child: Text(
+                            post.writerUserName,
+                            style: feedWriterName,
+                          ),
                         ),
                         SizedBox(
                           width: 8.w,

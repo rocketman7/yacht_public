@@ -1,9 +1,12 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/handlers/user_tier_handler.dart';
+import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
@@ -18,6 +21,8 @@ const Color primaryButtonText = const Color(0xFFEFF2FA);
 const Color primaryButtonBackground = yachtViolet;
 const Color secondaryButtonText = yachtViolet;
 const Color secondaryButtonBackground = const Color(0xFFEFF2FA);
+
+Color thinDivider = Color(0xFF879098).withOpacity(.05);
 
 const Color buttonDisabled = const Color(0xFFE6E6E6);
 const Color buttonNormal = const Color(0xFFEFF2FA);
@@ -87,8 +92,7 @@ double correctHeight(double originalPadding, upperTextSize, lowerTextSize) {
 }
 
 double offsetTextHeight(double upperTextSize, double lowerTextSize) {
-  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round())
-      .toDouble();
+  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round()).toDouble();
 }
 
 // 섹션 타이틀과 박스 사이
@@ -98,8 +102,7 @@ double widthHorizontalListView = 14.w;
 // 첫 섹션과 앱바 사이
 // 섹션 안에 패딩
 double primaryPaddingSize = 14.w;
-EdgeInsets primaryHorizontalPadding =
-    EdgeInsets.symmetric(horizontal: primaryPaddingSize);
+EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(horizontal: primaryPaddingSize);
 EdgeInsets primaryAllPadding = EdgeInsets.all(primaryPaddingSize);
 // FONTS
 
@@ -1012,8 +1015,7 @@ Container textContainerButtonWithOptions({
       child: Text(
         text,
         style: isDarkBackground
-            ? simpleTextButtonStyle.copyWith(
-                color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
+            ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
             : simpleTextButtonStyle.copyWith(fontSize: fontSize ?? bodyBigSize),
       ),
     ),
@@ -1036,10 +1038,8 @@ Container bigTextContainerButton({
       child: Text(
         text,
         style: isDisabled
-            ? simpleTextButtonStyle.copyWith(
-                color: yachtGrey, fontSize: heading5Size)
-            : simpleTextButtonStyle.copyWith(
-                fontSize: heading5Size, color: primaryButtonText),
+            ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
+            : simpleTextButtonStyle.copyWith(fontSize: heading5Size, color: primaryButtonText),
       ),
     ),
   );
@@ -1057,43 +1057,35 @@ Container sectionBox({
     height: height,
     width: width,
     padding: padding ?? EdgeInsets.all(0),
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
     child: child,
   );
 }
 
 // 기본 박스 데코레이션
-BoxDecoration yachtBoxDecoration = BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.circular(12.w),
-    boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]);
+BoxDecoration yachtBoxDecoration = BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
 
 // 퀘스트 선택지 박스 데코레이션
-BoxDecoration yachtChoiceBoxDecoration = BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.circular(10.w),
-    boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]);
+BoxDecoration yachtChoiceBoxDecoration =
+    BoxDecoration(color: white, borderRadius: BorderRadius.circular(10.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -1108,16 +1100,13 @@ Container sectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1133,9 +1122,7 @@ Container sectionBoxWithBottomButton({
           width: double.infinity,
           decoration: BoxDecoration(
               color: primaryButtonText,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12.w),
-                  bottomRight: Radius.circular(12.w))),
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -1148,8 +1135,7 @@ Container sectionBoxWithBottomButton({
   );
 }
 
-Container simpleTierRRectBox(
-    {int exp = 0, double? fontSize, double width = 70}) {
+Container simpleTierRRectBox({int exp = 0, double? fontSize, double width = 70}) {
   String tierName = getTierByExp(exp);
   String tierTitle = separateStringFromTier(tierName);
   // String tierTitle = "intern";
@@ -1192,13 +1178,11 @@ Container simpleTierRRectBox(
                 : 12.w),
     // width: width.w,
     // height: (width / 3.75).w,
-    decoration: BoxDecoration(
-        color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
+    decoration: BoxDecoration(color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
     child: Center(
       child: Text(
         '${tierKorName[tierTitle]} $tierLevel',
-        style: simpleTierStyle.copyWith(
-            fontSize: fontSize, fontWeight: FontWeight.w500),
+        style: simpleTierStyle.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
       ),
     ),
   );
@@ -1210,9 +1194,7 @@ ClipRect glassmorphismContainer({required Widget child}) {
         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
         child: Container(
           padding: EdgeInsets.all(6.w),
-          decoration: BoxDecoration(
-              color: glassmorphismBackgroundColor,
-              borderRadius: BorderRadius.circular(10.w)),
+          decoration: BoxDecoration(color: glassmorphismBackgroundColor, borderRadius: BorderRadius.circular(10.w)),
           child: child,
         )),
   );
@@ -1224,6 +1206,33 @@ AppBar primaryAppBar(String title) {
     backgroundColor: white,
     toolbarHeight: 60.w,
     title: Text(title, style: appBarTitle),
+  );
+}
+
+Container appBarWithCloseButton({required String title, double? height}) {
+  return Container(
+    height: height ?? 60.w,
+    color: white,
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(
+          child: Container(),
+        ),
+        Center(child: Text(title, style: appBarTitle.copyWith(fontFamily: 'Default'))),
+        Flexible(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Image.asset(
+              'assets/icons/exit.png',
+              width: 14.w,
+              height: 14.w,
+              color: yachtBlack,
+            ),
+          ),
+        )
+      ],
+    ),
   );
 }
 
@@ -1295,3 +1304,162 @@ yachtSnackBarFromBottom(String title) {
 
 // 다이얼로그
 // yachtDialog(String title)
+Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
+  String thisUserTierTitle = separateStringFromTier(getTierByExp(thisUserExp));
+  print(thisUserTierTitle);
+  return Dialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10.w),
+    ),
+    insetPadding: primaryHorizontalPadding,
+    child: InkWell(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Container(
+          padding: EdgeInsets.fromLTRB(primaryPaddingSize, 0.0, primaryPaddingSize, primaryPaddingSize),
+          width: double.infinity,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              appBarWithCloseButton(title: "티어"),
+              SizedBox(height: correctHeight(8.w, 0.0, 0.0)),
+              Column(children: [
+                Row(
+                  children: [
+                    Expanded(child: Center(child: Text("티어 엠블럼", style: feedTitle))),
+                    Expanded(child: Center(child: Text("필요 경험치", style: feedTitle)))
+                  ],
+                ),
+                SizedBox(height: correctHeight(10.w, feedTitle.fontSize, 0.0)),
+                ...List.generate(
+                    tierSystemModelRx.value == null ? 0 : getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length,
+                    (index) {
+                  bool isThisUserBelongthisTier =
+                      getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index] == thisUserTierTitle;
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            // color:
+                            //     isThisUserBelongthisTier ? Colors.blue.withOpacity(.2) : Colors.yellow.withOpacity(.2),
+                            height: 60.w,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    child: Center(
+                                      child: FutureBuilder<String>(
+                                          future: FirebaseStorageService().downloadImageURL(tierJellyBeanURL[
+                                              getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index]]!),
+                                          builder: (context, snapshot) {
+                                            return snapshot.hasData
+                                                ? Stack(
+                                                    alignment: Alignment.center,
+                                                    children: [
+                                                      Container(
+                                                        width: 120.w,
+                                                        child: CachedNetworkImage(
+                                                          imageUrl: snapshot.data!,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '${tierKorName[getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index]]}',
+                                                        style: feedTitle,
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Container();
+                                          }),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                      child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        index == 0
+                                            ? 0.toString()
+                                            : index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
+                                                ? "상위 1%"
+                                                : getExpNeededForEachTierTitle(tierSystemModelRx.value!.tierNames,
+                                                        tierSystemModelRx.value!.tierStops)[index - 1]
+                                                    .toString(),
+                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
+                                      ),
+                                      Text(
+                                        index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
+                                            ? ""
+                                            : " ~ ",
+                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
+                                      ),
+                                      Text(
+                                        index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 2
+                                            ? ""
+                                            : index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
+                                                ? " "
+                                                : getExpNeededForEachTierTitle(tierSystemModelRx.value!.tierNames,
+                                                        tierSystemModelRx.value!.tierStops)[index]
+                                                    .toString(),
+                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
+                                      ),
+                                    ],
+                                  )),
+                                )
+                              ],
+                            ),
+                          ),
+                          isThisUserBelongthisTier
+                              ? Container(
+                                  // width: 40,
+                                  height: 1.w,
+                                  color: yachtViolet,
+                                )
+                              : Container(),
+                        ],
+                      ),
+                      Positioned.fill(
+                        top: -60.w,
+                        child: isThisUserBelongthisTier
+                            ? Container(
+                                // width: 300,
+                                child: Row(children: [
+                                  Expanded(
+                                      child: Container(
+                                    height: 1.w,
+                                    color: yachtViolet,
+                                  )),
+                                  Padding(
+                                    padding: primaryHorizontalPadding,
+                                    child: Text(
+                                      '현재 티어',
+                                      style: TextStyle(
+                                        color: yachtViolet,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                      child: Container(
+                                    height: 1.w,
+                                    color: yachtViolet,
+                                  )),
+                                ]),
+                              )
+                            : Container(),
+                      ),
+                    ],
+                  );
+                })
+              ])
+            ],
+          ),
+        )),
+  );
+}

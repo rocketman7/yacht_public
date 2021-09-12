@@ -193,7 +193,7 @@ class WritingNewPost extends StatelessWidget {
           height: MediaQuery.of(context).padding.top,
         ),
         Container(
-          height: 60,
+          height: 60.w,
           padding: primaryHorizontalPadding,
           color: primaryBackgroundColor,
           child: Row(
