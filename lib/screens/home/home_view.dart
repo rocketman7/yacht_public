@@ -91,7 +91,7 @@ class HomeView extends StatelessWidget {
     _scrollController.addListener(() {
       // offset obs 값에 scroll controller offset 넣어주기
       _scrollController.offset < 0 ? offset(0) : offset(_scrollController.offset);
-      // print(offset);
+      // print(_scrollController.offset);
     });
 
     // print(
