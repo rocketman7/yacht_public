@@ -88,7 +88,7 @@ class KakaoFirebaseAuthApi implements BaseAuthAPI {
         installed ? await AuthCodeClient.instance.requestWithTalk() : await AuthCodeClient.instance.request();
     AccessTokenResponse token = await AuthApi.instance.issueAccessToken(authCode);
 
-    await AccessTokenStore.instance.toStore(token); // Store access token in AccessTokenStore for future API requests.
+    await TokenManager.instance.setToken(token); // Store access token in AccessTokenStore for future API requests.
     return token.accessToken;
   }
 
@@ -148,7 +148,7 @@ class KakaoFirebaseAuthApi implements BaseAuthAPI {
 
   @override
   Future<void> signOut() {
-    AccessTokenStore.instance.clear();
+    TokenManager.instance.clear();
     return Future.value("");
   }
 

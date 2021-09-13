@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,17 +27,52 @@ class CommunityViewModel extends GetxController {
   List<String> filePaths = [];
   RxList<PostModel> posts = RxList<PostModel>();
 
+  ScrollController scrollController = ScrollController();
+  int postAtOnceLimit = 56;
+  RxBool isGettingPosts = false.obs;
+  RxBool hasNextPosts = true.obs;
+
   @override
   void onInit() async {
     // TODO: implement onInit
     await getPost();
+    // await monitorScroll();
+    // scrollController = ScrollController();
+    print('scrollcont: ' + scrollController.hasClients.toString());
+    scrollController.addListener(() {
+      // print(scrollController.offset);
+      // print(scrollController.position.maxScrollExtent);
+      print(scrollController.offset > scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .2));
+      // print(scrollController.position);
+      if ((scrollController.offset > scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .2)) &&
+          hasNextPosts.value) {
+        getPost();
+      }
+    });
 
     super.onInit();
   }
 
   Future getPost() async {
-    posts(await _firestoreService.getPosts());
+    if (isGettingPosts.value) return;
+    isGettingPosts(true);
+
+    List<PostModel> newPosts = await _firestoreService.getPosts(postAtOnceLimit,
+        startAfterThisPostId: posts.length > 0 ? posts.last.writtenDateTime : null);
+    print(newPosts.length);
+    posts.addAll(newPosts);
+    if (newPosts.length < postAtOnceLimit) {
+      print('no more posts');
+      hasNextPosts(false);
+    }
+    print('all posts: ${posts.length}');
+    isGettingPosts(false);
+    update();
   }
+
+  // Future getMorePosts() async {
+  //   await _firestoreService.getPosts(15);
+  // }
 
   // 기기에서 사진 고르기. 여러개 고를 수 있음.
   // TODO: max length 처리는 필요
