@@ -11,6 +11,8 @@ import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/screens/home/home_view.dart';
 
 import 'package:yachtOne/screens/home/performance_test_home_view.dart';
+import 'package:yachtOne/screens/profile/asset_view_model.dart';
+import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/profile/profile_view.dart';
 import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
@@ -33,7 +35,8 @@ class StartupView extends GetView<StartupViewModel> {
       // Container(color: Colors.red),
       // Container(color: yachtViolet),
       // ProfileView(uid: _auth.currentUser.uid) //, null value error
-      ProfileView(uid: userModelRx.value!.uid) //
+      // ProfileView(uid: userModelRx.value!.uid) //
+      ProfileMyView(),
     ].obs;
     // print('startup rebuild');
 
@@ -44,6 +47,9 @@ class StartupView extends GetView<StartupViewModel> {
     //     print("need to update userName");
     //   }
     // });
+
+    // 가장 상위에서 put 해줘야함
+    Get.put(AssetViewModel());
 
     return Scaffold(
       extendBody: true,

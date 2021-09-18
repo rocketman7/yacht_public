@@ -12,10 +12,10 @@ import '../../styles/size_config.dart';
 
 import 'asset_view.dart';
 import 'asset_view_model.dart';
-import 'profile_controller.dart';
+import 'profile_my_view_model.dart';
 
 class ProfileChangeView extends StatelessWidget {
-  final ProfileController profileController = Get.find<ProfileController>();
+  final ProfileMyViewModel profileMyViewModel = Get.find<ProfileMyViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +43,11 @@ class ProfileChangeView extends StatelessWidget {
                   Obx(() => Container(
                         height: 110.w,
                         width: 110.w,
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFFC4C4C4)),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: Color(0xFFC4C4C4)),
                         child: FutureBuilder<String>(
-                          future:
-                              profileController.getImageUrlFromStorage('avatars/${userModelRx.value!.avatarImage}.png'),
+                          future: profileMyViewModel.getImageUrlFromStorage(
+                              'avatars/${userModelRx.value!.avatarImage}.png'),
                           builder: (_, snapshot) {
                             return snapshot.hasData
                                 ? CachedNetworkImage(
@@ -61,7 +62,8 @@ class ProfileChangeView extends StatelessWidget {
                   Container(
                     height: 36.w,
                     width: 36.w,
-                    decoration: BoxDecoration(shape: BoxShape.circle, color: primaryButtonText),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: primaryButtonText),
                     child: Center(
                       child: SizedBox(
                         height: 22.w,
@@ -88,28 +90,35 @@ class ProfileChangeView extends StatelessWidget {
                   color: yachtLineColor,
                 ),
                 SizedBox(
-                  height: correctHeight(20.w, 0.w, profileChangeTitleTextStyle.fontSize),
+                  height: correctHeight(
+                      20.w, 0.w, profileChangeTitleTextStyle.fontSize),
                 ),
                 Text('닉네임', style: profileChangeTitleTextStyle),
                 SizedBox(
-                  height:
-                      correctHeight(8.w, profileChangeTitleTextStyle.fontSize, profileChangeContentTextStyle.fontSize),
+                  height: correctHeight(
+                      8.w,
+                      profileChangeTitleTextStyle.fontSize,
+                      profileChangeContentTextStyle.fontSize),
                 ),
                 TextFormField(
-                  controller: profileController.nameChangeController,
+                  controller: profileMyViewModel.nameChangeController,
                   textAlignVertical: TextAlignVertical.bottom,
                   keyboardType: TextInputType.name,
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: EdgeInsets.all(0.w),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
                     hintText: '${userModelRx.value!.userName}',
-                    hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                    hintStyle: profileChangeContentTextStyle.copyWith(
+                        color: yachtGrey),
                   ),
                 ),
                 SizedBox(
-                  height: correctHeight(20.w, profileChangeContentTextStyle.fontSize, 0.w),
+                  height: correctHeight(
+                      20.w, profileChangeContentTextStyle.fontSize, 0.w),
                 ),
                 Container(
                   height: 1.w,
@@ -117,29 +126,37 @@ class ProfileChangeView extends StatelessWidget {
                   color: yachtLineColor,
                 ),
                 SizedBox(
-                  height: correctHeight(20.w, 0.w, profileChangeTitleTextStyle.fontSize),
+                  height: correctHeight(
+                      20.w, 0.w, profileChangeTitleTextStyle.fontSize),
                 ),
                 Text('소개글', style: profileChangeTitleTextStyle),
                 SizedBox(
-                  height:
-                      correctHeight(8.w, profileChangeTitleTextStyle.fontSize, profileChangeContentTextStyle.fontSize),
+                  height: correctHeight(
+                      8.w,
+                      profileChangeTitleTextStyle.fontSize,
+                      profileChangeContentTextStyle.fontSize),
                 ),
                 TextFormField(
-                  controller: profileController.introChangeController,
+                  controller: profileMyViewModel.introChangeController,
                   textAlignVertical: TextAlignVertical.bottom,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: EdgeInsets.all(0.w),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                    hintText: '${userModelRx.value!.intro}'.replaceAll('\\n', '\n'),
-                    hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                    focusedBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                    hintText:
+                        '${userModelRx.value!.intro}'.replaceAll('\\n', '\n'),
+                    hintStyle: profileChangeContentTextStyle.copyWith(
+                        color: yachtGrey),
                   ),
                 ),
                 SizedBox(
-                  height: correctHeight(20.w, profileChangeContentTextStyle.fontSize, 0.w),
+                  height: correctHeight(
+                      20.w, profileChangeContentTextStyle.fontSize, 0.w),
                 ),
                 Container(
                   height: 1.w,
@@ -161,8 +178,9 @@ class ProfileChangeView extends StatelessWidget {
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    profileController.updateUserNameOrIntroMethod(
-                        profileController.nameChangeController.text, profileController.introChangeController.text);
+                    profileMyViewModel.updateUserNameOrIntroMethod(
+                        profileMyViewModel.nameChangeController.text,
+                        profileMyViewModel.introChangeController.text);
                     Get.rawSnackbar(
                       messageText: Center(
                         child: Text(
@@ -178,7 +196,9 @@ class ProfileChangeView extends StatelessWidget {
                   child: Container(
                     height: 50.w,
                     width: double.infinity,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: primaryButtonText),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(70.0),
+                        color: primaryButtonText),
                     child: Center(
                       child: Text(
                         '저장하기',
@@ -198,7 +218,7 @@ class ProfileChangeView extends StatelessWidget {
 }
 
 class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
-  final ProfileController profileController = Get.find<ProfileController>();
+  final ProfileMyViewModel profileMyViewModel = Get.find<ProfileMyViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -213,11 +233,14 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                 child: Container(
                   height: 435.w,
                   width: double.infinity,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.white),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.white),
                   child: Column(
                     children: [
                       SizedBox(
-                        height: correctHeight(24.w, 0.w, profileAvatarChangeTextStyle.fontSize),
+                        height: correctHeight(
+                            24.w, 0.w, profileAvatarChangeTextStyle.fontSize),
                       ),
                       Row(
                         children: [
@@ -251,19 +274,22 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        height: correctHeight(20.w - 9.w, profileAvatarChangeTextStyle.fontSize, 0.w),
+                        height: correctHeight(20.w - 9.w,
+                            profileAvatarChangeTextStyle.fontSize, 0.w),
                       ),
                       Container(
                         height: 351.w,
                         child: FutureBuilder<List<String>>(
-                          future: profileController.getAvatarImagesURLs(),
+                          future: profileMyViewModel.getAvatarImagesURLs(),
                           builder: (_, snapshot) {
                             if (snapshot.hasData) {
-                              profileController.avatarImagesURLs = snapshot.data!;
+                              profileMyViewModel.avatarImagesURLs =
+                                  snapshot.data!;
 
                               for (int i = 0; i < snapshot.data!.length; i++) {
-                                if (snapshot.data![i] == profileController.user.avatarImage)
-                                  profileController.avatarIndex(i);
+                                if (snapshot.data![i] ==
+                                    userModelRx.value!.avatarImage)
+                                  profileMyViewModel.avatarIndex(i);
                               }
                               return AvatarImages(
                                 avatarImagesURLs: snapshot.data!,
@@ -290,15 +316,17 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    profileController.updateAvatarImageMethod(
-                        '${profileController.avatarImagesURLs[profileController.avatarIndex.value]}');
+                    profileMyViewModel.updateAvatarImageMethod(
+                        '${profileMyViewModel.avatarImagesURLs[profileMyViewModel.avatarIndex.value]}');
                     Get.back();
                     // Get.snackbar('', '');
                   },
                   child: Container(
                     height: 50.w,
                     width: double.infinity,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: primaryButtonText),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(70.0),
+                        color: primaryButtonText),
                     child: Center(
                       child: Text(
                         '저장하기',
@@ -319,7 +347,7 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
 }
 
 class AvatarImages extends StatelessWidget {
-  final ProfileController profileController = Get.find<ProfileController>();
+  final ProfileMyViewModel profileMyViewModel = Get.find<ProfileMyViewModel>();
   final List<String> avatarImagesURLs;
 
   AvatarImages({required this.avatarImagesURLs});
@@ -340,7 +368,7 @@ class AvatarImages extends StatelessWidget {
                   return GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      profileController.avatarIndex(i * 4 + j);
+                      profileMyViewModel.avatarIndex(i * 4 + j);
                     },
                     child: Container(
                       height: 68.w + 26.w,
@@ -356,8 +384,8 @@ class AvatarImages extends StatelessWidget {
                               height: 68.w,
                               width: 68.w,
                               child: FutureBuilder<String>(
-                                future: profileController
-                                    .getImageUrlFromStorage('avatars/${avatarImagesURLs[i * 4 + j]}.png'),
+                                future: profileMyViewModel.getImageUrlFromStorage(
+                                    'avatars/${avatarImagesURLs[i * 4 + j]}.png'),
                                 builder: (_, snapshot) {
                                   return snapshot.hasData
                                       ? Image.network(
@@ -377,10 +405,13 @@ class AvatarImages extends StatelessWidget {
                                     width: 68.w + 16.w,
                                     height: 68.w + 16.w,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                         border: Border.all(
                                             width: 4.w,
-                                            color: (i * 4 + j == profileController.avatarIndex.value)
+                                            color: (i * 4 + j ==
+                                                    profileMyViewModel
+                                                        .avatarIndex.value)
                                                 ? yachtViolet
                                                 : Colors.transparent))),
                               )),
