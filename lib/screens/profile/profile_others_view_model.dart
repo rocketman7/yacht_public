@@ -29,12 +29,12 @@ class ProfileOthersViewModel extends GetxController {
   bool isUserModelLoaded = false;
   bool isFavoritesLoaded = false;
 
-  // RxBool isFollowing = false.obs;
   bool isFollowing = false;
 
   @override
   void onInit() async {
-    if (userModelRx.value!.followings!.contains(uid)) isFollowing = true;
+    if (userModelRx.value!.followings != null &&
+        userModelRx.value!.followings!.contains(uid)) isFollowing = true;
 
     user = await _firestoreService.getOtherUserModel(uid);
     isUserModelLoaded = true;
@@ -96,6 +96,12 @@ class ProfileOthersViewModel extends GetxController {
     await _firestoreService.unFollowSomeone(user.uid);
 
     getRawSnackbar('팔로우를 취소했어요!');
+  }
+
+  Future reloadUserModel() async {
+    user = await _firestoreService.getOtherUserModel(uid);
+
+    update(['profile']);
   }
 }
 

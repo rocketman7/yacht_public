@@ -12,6 +12,8 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/community_view.dart';
 import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/screens/community/community_widgets.dart';
+import 'package:yachtOne/screens/profile/profile_my_view.dart';
+import 'package:yachtOne/screens/profile/profile_others_view.dart';
 import 'package:yachtOne/screens/profile/profile_view.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -27,13 +29,16 @@ import 'package:styled_widget/styled_widget.dart';
 class FeedWidget extends StatelessWidget {
   final CommunityViewModel communityViewModel;
   final PostModel post;
-  FeedWidget({Key? key, required this.communityViewModel, required this.post}) : super(key: key);
+  FeedWidget({Key? key, required this.communityViewModel, required this.post})
+      : super(key: key);
 
-  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService =
+      locator<FirebaseStorageService>();
 
   @override
   Widget build(BuildContext context) {
-    List<String> imageUrls = List.generate(post.imageUrlList!.length, (index) => "");
+    List<String> imageUrls =
+        List.generate(post.imageUrlList!.length, (index) => "");
     return Container(
       padding: moduleBoxPadding(feedDateTime.fontSize!),
       decoration: primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow]),
@@ -49,7 +54,8 @@ class FeedWidget extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: FutureBuilder<String>(
-                  future: communityViewModel.getImageUrlFromStorage('avatars/${post.writerAvatarUrl}.png'),
+                  future: communityViewModel.getImageUrlFromStorage(
+                      'avatars/${post.writerAvatarUrl}.png'),
                   builder: (context, snapshot) {
                     return snapshot.hasData
                         ? CachedNetworkImage(
@@ -80,7 +86,11 @@ class FeedWidget extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Get.to(() => ProfileView(uid: post.writerUid));
+                            if (post.writerUid != userModelRx.value!.uid)
+                              Get.to(
+                                  () => ProfileOthersView(uid: post.writerUid));
+                            else
+                              Get.to(() => ProfileMyView());
                           },
                           child: Text(
                             post.writerUserName,
@@ -127,37 +137,71 @@ class FeedWidget extends StatelessWidget {
                                     context: context,
                                     builder: (context) {
                                       return Dialog(
-                                          insetPadding: primaryHorizontalPadding,
+                                          insetPadding:
+                                              primaryHorizontalPadding,
                                           child: Container(
                                               padding: EdgeInsets.fromLTRB(
-                                                  14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                  14.w,
+                                                  correctHeight(14.w, 0.0,
+                                                      dialogTitle.fontSize),
+                                                  14.w,
+                                                  14.w),
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.w)),
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  Text("알림", style: dialogTitle),
-                                                  SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                                  SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                  Text("정말 삭제하시겠습니까?", style: dialogContent),
+                                                  Text("알림",
+                                                      style: dialogTitle),
+                                                  SizedBox(
+                                                      height: correctHeight(
+                                                          14.w,
+                                                          0.0,
+                                                          dialogTitle
+                                                              .fontSize)),
+                                                  SizedBox(
+                                                      height: correctHeight(
+                                                          24.w,
+                                                          0.w,
+                                                          dialogContent
+                                                              .fontSize)),
+                                                  Text("정말 삭제하시겠습니까?",
+                                                      style: dialogContent),
                                                   Text(
                                                     "삭제 후 되돌릴 수 없습니다.",
                                                     style: dialogWarning,
                                                   ),
-                                                  SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                  SizedBox(
+                                                      height: correctHeight(
+                                                          24.w,
+                                                          0.w,
+                                                          dialogContent
+                                                              .fontSize)),
                                                   Row(
                                                     children: [
                                                       Expanded(
                                                         child: GestureDetector(
                                                             onTap: () async {
-                                                              HapticFeedback.lightImpact();
-                                                              await communityViewModel.deletePost(post);
-                                                              await communityViewModel.getPost();
-                                                              Navigator.of(context).pop();
-                                                              yachtSnackBar("피드가 삭제되었습니다");
+                                                              HapticFeedback
+                                                                  .lightImpact();
+                                                              await communityViewModel
+                                                                  .deletePost(
+                                                                      post);
+                                                              await communityViewModel
+                                                                  .getPost();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              yachtSnackBar(
+                                                                  "피드가 삭제되었습니다");
                                                             },
-                                                            child: textContainerButtonWithOptions(
+                                                            child:
+                                                                textContainerButtonWithOptions(
                                                               text: "예",
-                                                              isDarkBackground: true,
+                                                              isDarkBackground:
+                                                                  true,
                                                               height: 44.w,
                                                             )),
                                                       ),
@@ -165,11 +209,16 @@ class FeedWidget extends StatelessWidget {
                                                       Expanded(
                                                         child: InkWell(
                                                             onTap: () {
-                                                              Navigator.of(context).pop();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
                                                               // Get.back(closeOverlays: true);
                                                             },
                                                             child: textContainerButtonWithOptions(
-                                                                text: "아니오", isDarkBackground: false, height: 44.w)),
+                                                                text: "아니오",
+                                                                isDarkBackground:
+                                                                    false,
+                                                                height: 44.w)),
                                                       )
                                                     ],
                                                   )
@@ -181,7 +230,9 @@ class FeedWidget extends StatelessWidget {
                             }
                           },
                           itemBuilder: (context) {
-                            return post.writerUid == userModelRx.value!.uid ? communityMyShowMore : communityShowMore;
+                            return post.writerUid == userModelRx.value!.uid
+                                ? communityMyShowMore
+                                : communityShowMore;
                           },
                         ),
                       ],
@@ -193,7 +244,9 @@ class FeedWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: reducedPaddingWhenTextIsBothSide(6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
+                SizedBox(
+                    height: reducedPaddingWhenTextIsBothSide(
+                        6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
                 post.title == null
                     ? Container()
                     : Column(
@@ -206,13 +259,16 @@ class FeedWidget extends StatelessWidget {
                             children: [
                               post.isPro
                                   ? Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 1.w),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.w, vertical: 1.w),
                                             decoration: BoxDecoration(
                                               color: yachtRed,
-                                              borderRadius: BorderRadius.circular(20.w),
+                                              borderRadius:
+                                                  BorderRadius.circular(20.w),
                                             ),
                                             child: Text(
                                               "PRO",
@@ -258,7 +314,10 @@ class FeedWidget extends StatelessWidget {
                     text: post.content,
                     style: feedContent,
                     linkStyle: feedContent.copyWith(color: yachtViolet),
-                    maxLines: (post.imageUrlList == null || post.imageUrlList!.length == 0) ? 3 : 4,
+                    maxLines: (post.imageUrlList == null ||
+                            post.imageUrlList!.length == 0)
+                        ? 3
+                        : 4,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -278,9 +337,11 @@ class FeedWidget extends StatelessWidget {
                                   return Row(
                                     children: [
                                       ClipRRect(
-                                          borderRadius: BorderRadius.circular(5.w),
+                                          borderRadius:
+                                              BorderRadius.circular(5.w),
                                           child: FutureBuilder<String>(
-                                              future: getImageUrlFromStorage(post.imageUrlList![index]),
+                                              future: getImageUrlFromStorage(
+                                                  post.imageUrlList![index]),
                                               builder: (context, snapshot) {
                                                 if (!snapshot.hasData) {
                                                   return Container(
@@ -289,14 +350,19 @@ class FeedWidget extends StatelessWidget {
                                                     color: Colors.yellow,
                                                   );
                                                 } else {
-                                                  imageUrls[index] = snapshot.data!;
+                                                  imageUrls[index] =
+                                                      snapshot.data!;
                                                   return InkWell(
                                                     onTap: () {
                                                       print(imageUrls);
-                                                      Get.dialog(buildPhotoPageView(index, imageUrls));
+                                                      Get.dialog(
+                                                          buildPhotoPageView(
+                                                              index,
+                                                              imageUrls));
                                                     },
                                                     child: CachedNetworkImage(
-                                                      imageUrl: imageUrls[index],
+                                                      imageUrl:
+                                                          imageUrls[index],
                                                       height: 140.w,
                                                       width: 140.w,
                                                       fit: BoxFit.cover,
@@ -355,7 +421,9 @@ class FeedWidget extends StatelessWidget {
                                       width: 8.w,
                                     ),
                                     Text(
-                                      post.commentedBy == null ? 0.toString() : post.commentedBy!.length.toString(),
+                                      post.commentedBy == null
+                                          ? 0.toString()
+                                          : post.commentedBy!.length.toString(),
                                       style: feedCommentLikeCount,
                                     ),
                                   ],
@@ -374,21 +442,27 @@ class FeedWidget extends StatelessWidget {
                                 children: [
                                   LikeButton(
                                     size: 20.w,
-                                    isLiked:
-                                        post.likedBy == null ? false : post.likedBy!.contains(userModelRx.value!.uid),
+                                    isLiked: post.likedBy == null
+                                        ? false
+                                        : post.likedBy!
+                                            .contains(userModelRx.value!.uid),
                                   ),
                                   SizedBox(
                                     width: 8.w,
                                   ),
                                   Text(
-                                    post.likedBy == null ? 0.toString() : post.likedBy!.length.toString(),
+                                    post.likedBy == null
+                                        ? 0.toString()
+                                        : post.likedBy!.length.toString(),
                                     style: feedCommentLikeCount,
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                          Flexible(child: SvgPicture.asset('assets/icons/share.svg', color: yachtBlack)),
+                          Flexible(
+                              child: SvgPicture.asset('assets/icons/share.svg',
+                                  color: yachtBlack)),
                           Container(
                             width: 3,
                           )
@@ -431,7 +505,8 @@ class FeedWidget extends StatelessWidget {
                         ?
                         // image주소 로딩못했을 때만 퓨쳐빌더로
                         FutureBuilder<String>(
-                            future: getImageUrlFromStorage(post.imageUrlList![index]),
+                            future: getImageUrlFromStorage(
+                                post.imageUrlList![index]),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return Container(
@@ -521,7 +596,8 @@ class EditingMyPost extends StatelessWidget {
                       onTap: () {
                         Get.back();
                       },
-                      child: Image.asset('assets/icons/exit.png', width: 14.w, height: 14.w, color: yachtBlack)),
+                      child: Image.asset('assets/icons/exit.png',
+                          width: 14.w, height: 14.w, color: yachtBlack)),
                 ),
               ),
               Text(
@@ -537,7 +613,8 @@ class EditingMyPost extends StatelessWidget {
                         if (_contentFormKey.currentState!.validate()) {
                           print("OKAY");
                           print(_contentController.value.text);
-                          await _communityViewModel.editPost(post, _contentController.value.text);
+                          await _communityViewModel.editPost(
+                              post, _contentController.value.text);
                           await _communityViewModel.getPost();
 
                           Get.back();
@@ -556,8 +633,10 @@ class EditingMyPost extends StatelessWidget {
           decoration: BoxDecoration(
               color: primaryBackgroundColor,
               border: Border(
-                bottom: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
-                top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
+                bottom: BorderSide(
+                    color: Colors.black.withOpacity(.05), width: 1.w),
+                top: BorderSide(
+                    color: Colors.black.withOpacity(.05), width: 1.w),
               )),
           child: Center(child: Text("피드", style: sectionTitle)),
         ),
@@ -583,10 +662,13 @@ class EditingMyPost extends StatelessWidget {
                         decoration: InputDecoration(
                             isDense: true,
                             contentPadding: EdgeInsets.all(14.w),
-                            focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                            enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                            focusedBorder:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                            enabledBorder:
+                                OutlineInputBorder(borderSide: BorderSide.none),
                             hintText: '글을 입력해주세요.',
-                            hintStyle: feedContent.copyWith(color: feedContent.color!.withOpacity(.5))),
+                            hintStyle: feedContent.copyWith(
+                                color: feedContent.color!.withOpacity(.5))),
                       ),
                     ),
                     // 업로드한 이미지 미리보기하는 부분
@@ -598,7 +680,9 @@ class EditingMyPost extends StatelessWidget {
                         return Container(
                           decoration: BoxDecoration(
                               border: Border(
-                            top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
+                            top: BorderSide(
+                                color: Colors.black.withOpacity(.05),
+                                width: 1.w),
                           )),
                           height: 100.w,
                           child: ListView.builder(
@@ -612,9 +696,11 @@ class EditingMyPost extends StatelessWidget {
                                     ),
                                     Stack(children: [
                                       ClipRRect(
-                                        borderRadius: BorderRadius.circular(16.w),
+                                        borderRadius:
+                                            BorderRadius.circular(16.w),
                                         child: Image.file(
-                                          File(_communityViewModel.images![index].path),
+                                          File(_communityViewModel
+                                              .images![index].path),
                                           height: 100.w,
                                           width: 100.w,
                                           fit: BoxFit.cover,
@@ -624,12 +710,15 @@ class EditingMyPost extends StatelessWidget {
                                         top: 10.w,
                                         right: 10.w,
                                         child: InkWell(
-                                            onTap: () => _communityViewModel.images!.removeAt(index),
+                                            onTap: () => _communityViewModel
+                                                .images!
+                                                .removeAt(index),
                                             child: Container(
                                               height: 20.w,
                                               width: 20.w,
                                               // color: Colors.red,
-                                              child: Image.asset('assets/icons/deletePhoto.png'),
+                                              child: Image.asset(
+                                                  'assets/icons/deletePhoto.png'),
                                             )),
                                       ),
                                     ]),
@@ -645,14 +734,19 @@ class EditingMyPost extends StatelessWidget {
                       decoration: BoxDecoration(
                           color: primaryBackgroundColor,
                           border: Border(
-                            bottom: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
-                            top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
+                            bottom: BorderSide(
+                                color: Colors.black.withOpacity(.05),
+                                width: 1.w),
+                            top: BorderSide(
+                                color: Colors.black.withOpacity(.05),
+                                width: 1.w),
                           )),
                       // color: Colors.yellow,
                       child: GestureDetector(
                         onTap: () async {
                           await _communityViewModel.getImageFromDevice();
-                          print('image length: ${_communityViewModel.images!.length}');
+                          print(
+                              'image length: ${_communityViewModel.images!.length}');
                         },
                         child: Padding(
                           padding: primaryHorizontalPadding,
