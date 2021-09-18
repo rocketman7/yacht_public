@@ -69,7 +69,7 @@ dependencies:
   kakao_flutter_sdk: ^0.8.1
   like_button: ^2.0.2
   lite_rolling_switch: ^0.1.1
-  mixpanel_flutter: ^1.0.0
+  mixpanel_flutter: ^1.2.1
   ntp: ^2.0.0
   package_info: ^2.0.0
   path: ^1.7.0
@@ -78,7 +78,7 @@ dependencies:
   provider: ^5.0.0
   quiver: ^3.0.1
   random_string: ^2.2.0-nullsafety
-  rive: ^0.7.22
+  rive: ^0.7.28
   rflutter_alert: ^2.0.2
   rxdart: ^0.27.0
   shared_preferences: ^2.0.5

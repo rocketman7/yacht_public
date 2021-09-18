@@ -36,6 +36,7 @@ class DetailPostViewModel extends GetxController {
 
   Future getThisPost(PostModel post) async {
     thisPost(await _firestoreService.getThisPost(post));
+    thisPost.refresh();
   }
 
   // 코멘트 올리기
@@ -75,5 +76,9 @@ class DetailPostViewModel extends GetxController {
 
   Future<String> getImageUrlFromStorage(String imageUrl) async {
     return await _firebaseStorageService.downloadImageURL(imageUrl);
+  }
+
+  Future toggleLikeComment(PostModel post) async {
+    await _firestoreService.toggleLikeComment(thisPost.value, userModelRx.value!.uid);
   }
 }

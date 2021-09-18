@@ -67,6 +67,7 @@ class FirestoreService extends GetxService {
   Stream<UserModel> getUserStream(String uid) {
     return _firestoreService.collection('users').doc(uid).snapshots().map((snapshot) {
       print('user data stream changed, user model snapshot: ${snapshot.data()}');
+
       return UserModel.fromMap(snapshot.data()!);
     });
   }
@@ -428,6 +429,9 @@ class FirestoreService extends GetxService {
 
   // 포스트 받아오기
   Future getPosts(int limit, {dynamic startAfterThisPostId}) async {
+    if (startAfterThisPostId != null)
+      print(
+          'getpost argu: ${Timestamp.fromMillisecondsSinceEpoch(startAfterThisPostId.toDate().toUtc().millisecondsSinceEpoch)}');
     List<PostModel> posts = [];
     Query<Map<String, dynamic>> getPostQuery =
         _firestoreService.collection('posts').orderBy('writtenDateTime', descending: true).limit(limit);
@@ -435,27 +439,26 @@ class FirestoreService extends GetxService {
     var temp = await _firestoreService.collection('posts').orderBy('writtenDateTime', descending: true).get();
 
     print('docun length: ${temp.docs.length}');
-    print(startAfterThisPostId);
+
     if (startAfterThisPostId == null) {
       await getPostQuery.get().then((value) {
         value.docs.forEach((element) {
+          print(element);
           posts.add(PostModel.fromMap(element.data()));
         });
       });
     } else {
       await getPostQuery
-          .endBefore([
-            {'writtenDateTime': startAfterThisPostId}
-          ])
+          .startAfter([]
+            ..add(Timestamp.fromMillisecondsSinceEpoch(startAfterThisPostId.toDate().toUtc().millisecondsSinceEpoch)))
           .get()
           .then((value) {
-            value.docs.forEach((element) {
-              posts.add(PostModel.fromMap(element.data()));
-            });
-          });
+        value.docs.forEach((element) {
+          posts.add(PostModel.fromMap(element.data()));
+        });
+      });
     }
-    
-    
+    return posts;
   }
 
   // 한 포스트 다시 받아오기
@@ -526,7 +529,24 @@ class FirestoreService extends GetxService {
         .catchError((error) => print("Failed to delete user: $error"));
   }
 
-  // 컨텐츠 관련
+  // 코멘트 좋아요 버튼
+  Future toggleLikeComment(PostModel post, String uid) async {
+    if (post.likedBy == null) {
+      await _firestoreService.collection('posts').doc(post.postId).update({
+        'likedBy': FieldValue.arrayUnion([uid])
+      });
+    } else if (post.likedBy!.contains(uid)) {
+      await _firestoreService.collection('posts').doc(post.postId).update({
+        'likedBy': FieldValue.arrayRemove([uid])
+      });
+    } else {
+      await _firestoreService.collection('posts').doc(post.postId).update({
+        'likedBy': FieldValue.arrayUnion([uid])
+      });
+    }
+  }
+
+  //// 컨텐츠 관련
   // 읽을 거리 가져오기
   Future<List<ReadingContentModel>> getReadingContents() async {
     List<ReadingContentModel> readingContents = [];

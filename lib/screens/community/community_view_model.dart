@@ -28,7 +28,7 @@ class CommunityViewModel extends GetxController {
   RxList<PostModel> posts = RxList<PostModel>();
 
   ScrollController scrollController = ScrollController();
-  int postAtOnceLimit = 56;
+  int postAtOnceLimit = 20;
   RxBool isGettingPosts = false.obs;
   RxBool hasNextPosts = true.obs;
 
@@ -38,11 +38,10 @@ class CommunityViewModel extends GetxController {
     await getPost();
     // await monitorScroll();
     // scrollController = ScrollController();
-    print('scrollcont: ' + scrollController.hasClients.toString());
+    // print('scrollcont: ' + scrollController.hasClients.toString());
     scrollController.addListener(() {
       // print(scrollController.offset);
       // print(scrollController.position.maxScrollExtent);
-      print(scrollController.offset > scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .2));
       // print(scrollController.position);
       if ((scrollController.offset > scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .2)) &&
           hasNextPosts.value) {
@@ -53,13 +52,34 @@ class CommunityViewModel extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    scrollController.dispose();
+  }
+
+  Future reloadPost() async {
+    if (isGettingPosts.value) return;
+    isGettingPosts(true);
+    hasNextPosts(true);
+
+    List<PostModel> newPosts = [];
+    newPosts.addAll(await _firestoreService.getPosts(
+      postAtOnceLimit,
+    ));
+
+    posts.assignAll(newPosts);
+    isGettingPosts(false);
+
+    update();
+  }
+
   Future getPost() async {
     if (isGettingPosts.value) return;
     isGettingPosts(true);
+    List<PostModel> newPosts = [];
+    newPosts.addAll(await _firestoreService.getPosts(postAtOnceLimit,
+        startAfterThisPostId: posts.length > 0 ? posts.last.writtenDateTime : null));
 
-    List<PostModel> newPosts = await _firestoreService.getPosts(postAtOnceLimit,
-        startAfterThisPostId: posts.length > 0 ? posts.last.writtenDateTime : null);
-    print(newPosts.length);
     posts.addAll(newPosts);
     if (newPosts.length < postAtOnceLimit) {
       print('no more posts');
@@ -104,6 +124,7 @@ class CommunityViewModel extends GetxController {
     //   docUid = address.postsSeasonCollection().doc().id;
     return PostModel(
         isPro: false,
+        isNotice: false,
         content: content,
         writerUid: userModelRx.value!.uid,
         writerUserName: userModelRx.value!.userName,
@@ -144,5 +165,9 @@ class CommunityViewModel extends GetxController {
 
   Future<String> getImageUrlFromStorage(String imageUrl) async {
     return await _firebaseStorageService.downloadImageURL(imageUrl);
+  }
+
+  Future toggleLikeComment(PostModel post) async {
+    await _firestoreService.toggleLikeComment(post, userModelRx.value!.uid);
   }
 }

@@ -736,7 +736,7 @@ packages:
       name: mixpanel_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.1"
   nested:
     dependency: transitive
     description:

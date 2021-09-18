@@ -633,7 +633,7 @@ TextStyle feedDateTime = TextStyle(
   fontSize: 10.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
-  letterSpacing: -1.0,
+  letterSpacing: -0.5,
   height: 1.4,
 );
 

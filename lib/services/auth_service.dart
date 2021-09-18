@@ -38,6 +38,7 @@ class AuthService {
       UserCredential authResult = await auth.signInWithEmailAndPassword(email: email, password: password);
       if (authResult.user != null) {
         if (!authResult.user!.emailVerified) {
+          await authResult.user!.sendEmailVerification();
           Get.to(() => EmailVerificationWaitingView());
         } else {
           Get.to(() => AuthCheckView());

@@ -22,7 +22,7 @@ class QuestModel {
   final String questDescription;
   final String selectInstruction;
   final String? rewardDescription;
-//선택모드: updown, pickone, pickmany, order 로 나눠서
+//선택모드: updown, updownmany, pickone, pickmany, order, 로 나눠서
   final String selectMode;
 
   final num itemNeeded;

@@ -7,6 +7,7 @@ import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:yachtOne/widgets/loading_container.dart';
 
 class ReadingContentView extends GetView<ReadingContentViewModel> {
   final HomeViewModel homeViewModel;
@@ -58,11 +59,21 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
                                             imageUrl,
                                             width: 270.w,
                                             height: 240.w,
+                                            loadingBuilder: (_, Widget child, ImageChunkEvent? progress) {
+                                              // print('progress: $progress');
+                                              if (progress == null) return child;
+                                              return LoadingContainer(
+                                                width: 270.w,
+                                                height: 240.w,
+                                                radius: 10.w,
+                                              );
+                                            },
                                           );
                                         } else {
-                                          return Container(
+                                          return LoadingContainer(
                                             width: 270.w,
                                             height: 240.w,
+                                            radius: 10.w,
                                           );
                                         }
                                       })),
@@ -134,7 +145,7 @@ class _ReadingContentWebViewState extends State<ReadingContentWebView> {
               child: InAppWebView(
                 key: webViewKey,
                 onProgressChanged: (controller, progress) {
-                  print('progress: $progress');
+                  // print('progress: $progress');
                   progessPercent(progress / 100);
                 },
                 initialUrlRequest: URLRequest(url: Uri.parse(widget.readingContent.contentUrl)),

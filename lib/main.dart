@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -18,8 +19,10 @@ import 'package:yachtOne/screens/home/home_view.dart';
 import 'package:yachtOne/screens/onboarding/onboarding_view.dart';
 import 'package:yachtOne/screens/quest/quest_view.dart';
 import 'package:yachtOne/screens/quest/survey_view.dart';
+import 'package:yachtOne/screens/startup/loading_view.dart';
 import 'package:yachtOne/screens/startup/startup_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services_binding.dart';
 import 'package:yachtOne/styles/theme.dart';
 import 'package:yachtOne/styles/yacht_design_system_sample_view.dart';
@@ -39,13 +42,16 @@ import 'styles/size_config.dart';
 import 'screens/subLeague/subLeague_controller.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   tz.initializeTimeZones();
+  // Mixpanel mixpanel = await Mixpanel.init(
+  //   "155a00c5962c973fc4f1d87442068894",
+  // );
   setupLocator();
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  await _mixpanelService.initMixpanel();
   KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
-
-  WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
   await MobileAds.instance.initialize();
@@ -61,6 +67,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   final box = GetStorage();
   bool hasSeenOnboarding = false;
   @override
@@ -69,7 +76,10 @@ class _MyAppState extends State<MyApp> {
     // box.erase();
     hasSeenOnboarding = box.read('hasSeenOnboarding') ?? false;
     print('hasSeenOnboarding:' + hasSeenOnboarding.toString());
+    // mixpanel.track('AppOpen');
 
+    _mixpanelService.mixpanel.track('App Open');
+    // _mixpanelService.mixpanel.flush();
     super.initState();
     // initMixpanel();
     // _connectionCheckService.checkConnection(context);
@@ -80,9 +90,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     SizeConfig().init(context);
     ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
+        BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
         designSize: Size(375, 812),
         orientation: Orientation.portrait);
     super.didChangeDependencies();
@@ -125,10 +133,7 @@ class _MyAppState extends State<MyApp> {
           //         field: f,
           //         ),
           //     transition: Transition.zoom),
-          GetPage(
-              name: '/designSystem',
-              page: () => YachtDesignSystemSampleView(),
-              transition: Transition.zoom),
+          GetPage(name: '/designSystem', page: () => YachtDesignSystemSampleView(), transition: Transition.zoom),
           GetPage(
             name: '/quest',
             page: () => QuestView(),
@@ -153,10 +158,7 @@ class _MyAppState extends State<MyApp> {
           //     name: 'award',
           //     page: () => AwardView(),
           //     transition: Transition.rightToLeft),
-          GetPage(
-              name: '/awardold',
-              page: () => AwardOldView(),
-              transition: Transition.rightToLeft),
+          GetPage(name: '/awardold', page: () => AwardOldView(), transition: Transition.rightToLeft),
           // GetPage(
           //     name: 'tempHome',
           //     page: () => TempHomeView(leagueName: '7월',),

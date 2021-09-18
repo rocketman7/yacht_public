@@ -21,7 +21,7 @@ class UserModel {
   final List<String>? insertedFriendsCode; // 자기를 추천한 친구 uid 목록
   final List<String>? blockList; // 내가 차단한 uid 목록
 
-  final int rewardedCnt; // 아이템 리워드 받은 횟수
+  final int? rewardedCnt; // 아이템 리워드 받은 횟수
 
   final int exp;
   final String? tier;
@@ -171,25 +171,17 @@ class UserModel {
       item: map['item'],
       friendsCode: map['friendsCode'],
       friendsCodeDone: map['friendsCodeDone'],
-      insertedFriendsCode: map['insertedFriendsCode'] == null
-          ? null
-          : List<String>.from(map['insertedFriendsCode']),
-      blockList:
-          map['blockList'] == null ? null : List<String>.from(map['blockList']),
-      rewardedCnt: map['rewardedCnt'],
+      insertedFriendsCode: map['insertedFriendsCode'] == null ? null : List<String>.from(map['insertedFriendsCode']),
+      blockList: map['blockList'] == null ? null : List<String>.from(map['blockList']),
+      rewardedCnt: map['rewardedCnt'] ?? 0,
       exp: map['exp'] ?? 0,
       tier: map['tier'],
       // followersNum: map['followersNum'],
-      followers:
-          map['followers'] == null ? null : List<String>.from(map['followers']),
+      followers: map['followers'] == null ? null : List<String>.from(map['followers']),
       // followingNum: map['followingNum'],
-      followings: map['followings'] == null
-          ? null
-          : List<String>.from(map['followings']),
+      followings: map['followings'] == null ? null : List<String>.from(map['followings']),
       intro: map['intro'],
-      favoriteStocks: map['favoriteStocks'] == null
-          ? null
-          : List<String>.from(map['favoriteStocks']),
+      favoriteStocks: map['favoriteStocks'] == null ? null : List<String>.from(map['favoriteStocks']),
       badges: map['badges'] == null ? null : List<String>.from(map['badges']),
       membership: map['membership'],
       membershipStartAt: map['membershipStartAt'],
@@ -200,8 +192,7 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {

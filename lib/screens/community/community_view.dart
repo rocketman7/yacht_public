@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/screens/community/feed_widget.dart';
+import 'package:yachtOne/screens/community/notice_widget.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -24,7 +25,7 @@ class CommunityView extends GetView<CommunityViewModel> {
   void _onRefresh() async {
     // monitor network fetch
     // await Future.delayed(Duration(milliseconds: 1200));
-    await _communityViewModel.getPost();
+    await _communityViewModel.reloadPost();
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
@@ -80,16 +81,17 @@ class CommunityView extends GetView<CommunityViewModel> {
       // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       appBar: primaryAppBar("커뮤니티"),
       body: Stack(clipBehavior: Clip.none, children: [
-        RefreshConfiguration(
-          enableScrollWhenRefreshCompleted: true,
-          child: SmartRefresher(
-            // physics: AlwaysScrollableScrollPhysics(),
-            controller: _refreshController,
-            onRefresh: _onRefresh,
-            // onLoading: _onLoading,
-            child: Padding(
-              padding: primaryHorizontalPadding,
+        Padding(
+          padding: primaryHorizontalPadding,
+          child: RefreshConfiguration(
+            enableScrollWhenRefreshCompleted: true,
+            child: SmartRefresher(
+              // physics: AlwaysScrollableScrollPhysics(),
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              // onLoading: _onLoading,
               child: ListView(
+                clipBehavior: Clip.none,
                 controller: _communityViewModel.scrollController,
                 // physics: ScrollPhysics(),
 
@@ -159,6 +161,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                         //     },
                         //   )
                         ListView.builder(
+                            // clipBehavior: Clip.none,
                             // controller: _scrollController,
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
@@ -166,8 +169,13 @@ class CommunityView extends GetView<CommunityViewModel> {
                             itemBuilder: (_, index) {
                               return Column(
                                 children: [
-                                  FeedWidget(
-                                      communityViewModel: _communityViewModel, post: _communityViewModel.posts[index]),
+                                  _communityViewModel.posts[index].isNotice
+                                      ? NoticeWidget(
+                                          communityViewModel: _communityViewModel,
+                                          post: _communityViewModel.posts[index])
+                                      : FeedWidget(
+                                          communityViewModel: _communityViewModel,
+                                          post: _communityViewModel.posts[index]),
                                   SizedBox(
                                     height: 12.w,
                                   )
@@ -206,11 +214,8 @@ class CommunityView extends GetView<CommunityViewModel> {
               ]),
               height: 54,
               width: 54,
-              child: Opacity(
-                opacity: .85,
-                child: Image.asset(
-                  'assets/icons/writing.png',
-                ),
+              child: Image.asset(
+                'assets/icons/writing.png',
               ),
             ),
           ),

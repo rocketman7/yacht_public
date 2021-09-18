@@ -18,6 +18,7 @@ import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:yachtOne/widgets/like_button.dart';
 import '../../locator.dart';
 import 'detail_post_view.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -204,30 +205,28 @@ class FeedWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               post.isPro
-                                  ? Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                  ? Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 1.w),
-                                                decoration: BoxDecoration(
-                                                  color: yachtRed,
-                                                  borderRadius: BorderRadius.circular(20.w),
-                                                ),
-                                                child: Text("PRO",
-                                                    style: TextStyle(
-                                                      fontSize: 11.w,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: white,
-                                                      height: 1.4,
-                                                    ))),
-                                            SizedBox(
-                                              width: 4.w,
-                                            )
-                                          ],
-                                        ),
+                                        Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 1.w),
+                                            decoration: BoxDecoration(
+                                              color: yachtRed,
+                                              borderRadius: BorderRadius.circular(20.w),
+                                            ),
+                                            child: Text(
+                                              "PRO",
+                                              style: TextStyle(
+                                                fontSize: 11.w,
+                                                fontWeight: FontWeight.w500,
+                                                color: white,
+                                                height: 1.4,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            )),
+                                        SizedBox(
+                                          width: 4.w,
+                                        )
                                       ],
                                     )
                                   : Container(),
@@ -365,17 +364,28 @@ class FeedWidget extends StatelessWidget {
                             ),
                           ),
                           Flexible(
-                            child: Row(
-                              children: [
-                                SvgPicture.asset('assets/icons/likes.svg', color: yachtBlack),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Text(
-                                  post.likedBy == null ? 0.toString() : post.likedBy!.length.toString(),
-                                  style: feedCommentLikeCount,
-                                ),
-                              ],
+                            child: GestureDetector(
+                              onTap: () {
+                                HapticFeedback.lightImpact();
+                                communityViewModel.toggleLikeComment(post);
+                                communityViewModel.reloadPost();
+                              },
+                              child: Row(
+                                children: [
+                                  LikeButton(
+                                    size: 20.w,
+                                    isLiked:
+                                        post.likedBy == null ? false : post.likedBy!.contains(userModelRx.value!.uid),
+                                  ),
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                  Text(
+                                    post.likedBy == null ? 0.toString() : post.likedBy!.length.toString(),
+                                    style: feedCommentLikeCount,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           Flexible(child: SvgPicture.asset('assets/icons/share.svg', color: yachtBlack)),

@@ -141,7 +141,7 @@ class _DictionaryWebViewState extends State<DictionaryWebView> {
               child: InAppWebView(
                 key: webViewKey,
                 onProgressChanged: (controller, progress) {
-                  print('progress: $progress');
+                  // print('progress: $progress');
                   progessPercent(progress / 100);
                 },
                 initialUrlRequest: URLRequest(url: Uri.parse(widget.dictionaryModel.dictionaryUrl)),

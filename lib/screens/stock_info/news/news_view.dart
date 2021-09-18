@@ -9,6 +9,7 @@ import 'package:yachtOne/screens/stock_info/news/news_view_model.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/widgets/loading_container.dart';
 
 class NewsView extends GetView<NewsViewModel> {
   final InvestAddressModel investAddressModel;
@@ -121,13 +122,20 @@ class NewsView extends GetView<NewsViewModel> {
                   child: Container(
                     height: 84.w,
                     width: 84.w,
-                    color: Colors.yellow[200],
+                    // color: Colors.yellow[200],
                     // decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
                     child: controller.newsList[index].imageUrl == null
                         ? Container()
                         : Image.network(
                             controller.newsList[index].imageUrl!,
                             fit: BoxFit.cover,
+                            loadingBuilder: (_, Widget child, ImageChunkEvent? progress) {
+                              return LoadingContainer(
+                                width: 84.w,
+                                height: 84.w,
+                                radius: 10.w,
+                              );
+                            },
                           ),
                   ),
                 ),

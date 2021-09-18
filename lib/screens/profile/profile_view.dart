@@ -143,6 +143,7 @@ class ProfileView extends GetView<ProfileController> {
                                               future: controller.getImageUrlFromStorage(tierJellyBeanURL[
                                                   separateStringFromTier(getTierByExp(controller.user.exp))]!),
                                               builder: (context, snapshot) {
+                                                print('tier' + controller.user.exp.toString());
                                                 return snapshot.hasData
                                                     ? Stack(
                                                         alignment: Alignment.center,

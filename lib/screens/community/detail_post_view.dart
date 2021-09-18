@@ -20,6 +20,7 @@ import 'package:yachtOne/screens/community/feed_widget.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/widgets/like_button.dart';
 
 import '../../locator.dart';
 import 'community_view_model.dart';
@@ -250,31 +251,31 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   post.isPro
-                                                      ? Column(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                      ? Row(
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
                                                           children: [
-                                                            Row(
-                                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                                              children: [
-                                                                Container(
-                                                                    padding: EdgeInsets.symmetric(
-                                                                        horizontal: 8.w, vertical: 1.w),
-                                                                    decoration: BoxDecoration(
-                                                                      color: yachtRed,
-                                                                      borderRadius: BorderRadius.circular(20.w),
+                                                            Container(
+                                                                padding: EdgeInsets.symmetric(
+                                                                    horizontal: 8.w, vertical: 1.w),
+                                                                decoration: BoxDecoration(
+                                                                  color: yachtRed,
+                                                                  borderRadius: BorderRadius.circular(20.w),
+                                                                ),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    "PRO",
+                                                                    style: TextStyle(
+                                                                      fontSize: 11.w,
+                                                                      fontWeight: FontWeight.w500,
+                                                                      color: white,
+                                                                      height: 1.4,
                                                                     ),
-                                                                    child: Text("PRO",
-                                                                        style: TextStyle(
-                                                                          fontSize: 11.w,
-                                                                          fontWeight: FontWeight.w500,
-                                                                          color: white,
-                                                                          height: 1.4,
-                                                                        ))),
-                                                                SizedBox(
-                                                                  width: 4.w,
-                                                                )
-                                                              ],
-                                                            ),
+                                                                    textAlign: TextAlign.center,
+                                                                  ),
+                                                                )),
+                                                            SizedBox(
+                                                              width: 4.w,
+                                                            )
                                                           ],
                                                         )
                                                       : Container(),
@@ -407,19 +408,36 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                 ),
                                               ),
                                               Flexible(
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset('assets/icons/likes.svg', color: yachtBlack),
-                                                    SizedBox(
-                                                      width: 8.w,
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    HapticFeedback.lightImpact();
+                                                    await detailPostViewModel.toggleLikeComment(post);
+                                                    await detailPostViewModel.getThisPost(post);
+                                                    await communityViewModel.reloadPost();
+                                                  },
+                                                  child: Obx(
+                                                    () => Row(
+                                                      children: [
+                                                        LikeButton(
+                                                          size: 20.w,
+                                                          isLiked: detailPostViewModel.thisPost.value.likedBy == null
+                                                              ? false
+                                                              : detailPostViewModel.thisPost.value.likedBy!
+                                                                  .contains(userModelRx.value!.uid),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8.w,
+                                                        ),
+                                                        Text(
+                                                          detailPostViewModel.thisPost.value.likedBy == null
+                                                              ? 0.toString()
+                                                              : detailPostViewModel.thisPost.value.likedBy!.length
+                                                                  .toString(),
+                                                          style: feedCommentLikeCount,
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Text(
-                                                      post.likedBy == null
-                                                          ? 0.toString()
-                                                          : post.likedBy!.length.toString(),
-                                                      style: feedCommentLikeCount,
-                                                    ),
-                                                  ],
+                                                  ),
                                                 ),
                                               ),
                                               Flexible(
@@ -1005,7 +1023,7 @@ class _CommentInputState extends State<CommentInput> {
                                                 .jumpTo(widget.scrollController.position.maxScrollExtent);
                                             commentController.clear();
                                             _focusNode.unfocus();
-                                            await widget.communityViewModel.getPost();
+                                            await widget.communityViewModel.reloadPost();
                                           }
                                         },
                                         child: simpleTextContainerButton("답글 달기")),

@@ -11,6 +11,7 @@ class PostModel {
   final String content;
   final List<String>? imageUrlList;
   final bool isPro; // 프로 글인지 체크
+  final bool isNotice;
   final List<String>? commentedBy; // commentId List
 
   final List<String>? hashTags;
@@ -32,6 +33,7 @@ class PostModel {
     required this.content,
     this.imageUrlList,
     required this.isPro,
+    required this.isNotice,
     this.hashTags,
     this.commentedBy,
     this.likedBy,
@@ -51,6 +53,7 @@ class PostModel {
     String? content,
     List<String>? imageUrlList,
     bool? isPro,
+    bool? isNotice,
     List<String>? hashTags,
     List<String>? commentedBy,
     List<String>? likedBy,
@@ -69,6 +72,7 @@ class PostModel {
       content: content ?? this.content,
       imageUrlList: imageUrlList ?? this.imageUrlList,
       isPro: isPro ?? this.isPro,
+      isNotice: isNotice ?? this.isNotice,
       hashTags: hashTags ?? this.hashTags,
       commentedBy: commentedBy ?? this.commentedBy,
       likedBy: likedBy ?? this.likedBy,
@@ -90,6 +94,7 @@ class PostModel {
       'content': content,
       'imageUrlList': imageUrlList,
       'isPro': isPro,
+      'isNotice': isNotice,
       'hashTags': hashTags,
       'commentedBy': commentedBy,
       'likedBy': likedBy,
@@ -111,6 +116,7 @@ class PostModel {
       content: map['content'],
       imageUrlList: map['imageUrlList'] == null ? null : List<String>.from(map['imageUrlList']),
       isPro: map['isPro'],
+      isNotice: map['isNotice'] ?? false,
       hashTags: map['hashTags'] == null ? null : List<String>.from(map['hashTags']),
       commentedBy: map['commentedBy'] == null ? null : List<String>.from(map['commentedBy']),
       likedBy: map['likedBy'] == null ? null : List<String>.from(map['likedBy']),
@@ -129,7 +135,7 @@ class PostModel {
 
   @override
   String toString() {
-    return 'PostModel(postId: $postId, writtenDateTime: $writtenDateTime, editedDateTime: $editedDateTime, title: $title, content: $content, imageUrlList: $imageUrlList, isPro: $isPro, hashTags: $hashTags, commentedBy: $commentedBy, likedBy: $likedBy, reportedBy: $reportedBy, sharedBy: $sharedBy, writerUid: $writerUid, writerUserName: $writerUserName, writerExp: $writerExp, writerAvatarUrl: $writerAvatarUrl)';
+    return 'PostModel(postId: $postId, writtenDateTime: $writtenDateTime, editedDateTime: $editedDateTime, title: $title, content: $content, imageUrlList: $imageUrlList, isPro: $isPro, isNotice:$isNotice, hashTags: $hashTags, commentedBy: $commentedBy, likedBy: $likedBy, reportedBy: $reportedBy, sharedBy: $sharedBy, writerUid: $writerUid, writerUserName: $writerUserName, writerExp: $writerExp, writerAvatarUrl: $writerAvatarUrl)';
   }
 
   @override
@@ -145,6 +151,7 @@ class PostModel {
         other.content == content &&
         listEquals(other.imageUrlList, imageUrlList) &&
         other.isPro == isPro &&
+        other.isNotice == isNotice &&
         listEquals(other.hashTags, hashTags) &&
         listEquals(other.commentedBy, commentedBy) &&
         listEquals(other.likedBy, likedBy) &&
@@ -165,6 +172,7 @@ class PostModel {
         content.hashCode ^
         imageUrlList.hashCode ^
         isPro.hashCode ^
+        isNotice.hashCode ^
         hashTags.hashCode ^
         commentedBy.hashCode ^
         likedBy.hashCode ^

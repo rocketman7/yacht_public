@@ -192,6 +192,7 @@ class HomeSubLeagueCarouselSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Positioned(
           left: 0.0.w,
@@ -232,6 +233,7 @@ class HomeSubLeagueCarouselSlider extends StatelessWidget {
                       );
                   },
                   child: Stack(
+                    clipBehavior: Clip.none,
                     children: [
                       Container(
                         decoration: BoxDecoration(
@@ -269,7 +271,11 @@ class HomeSubLeagueCarouselSlider extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12.0),
                           boxShadow: [
-                            primaryBoxShadow,
+                            BoxShadow(
+                              color: yachtShadow,
+                              blurRadius: 8.w,
+                              spreadRadius: 1.w,
+                            )
                           ],
                         ),
                         width: 275.0.w,

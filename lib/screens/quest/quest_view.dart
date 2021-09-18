@@ -240,10 +240,10 @@ class QuestView extends StatelessWidget {
                         child: Center(
                             child: Text(
                           questViewModel.isSelectingSheetShowing.value
-                              ? "나의 예측 저장"
+                              ? "예측 확정하기"
                               : (questViewModel.thisUserQuestModel.value == null ||
                                       questViewModel.thisUserQuestModel.value!.selectDateTime == null)
-                                  ? "예측 확정하기"
+                                  ? "예측하기"
                                   : "예측 변경하기",
                           style: buttonTextStyle.copyWith(fontSize: 24.w),
                         )),

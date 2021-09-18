@@ -24,6 +24,7 @@ import 'package:yachtOne/screens/subLeague/temp_home_view.dart';
 import 'package:yachtOne/screens/live/live_widget.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,17 +48,17 @@ class HomeView extends StatelessWidget {
       InkWell(
         onTap: () {
           // Get.off(() => AuthCheckView());
-          // _authService.auth.signOut();
-          // userModelRx.value = null;
-          // _kakaoApi.signOut();
-          // print("signout");
-          showDialog(
-            context: context,
-            builder: (context) => yachtTierInfoPopUp(
-              context,
-              2140,
-            ),
-          );
+          _authService.auth.signOut();
+          userModelRx.value = null;
+          _kakaoApi.signOut();
+          print("signout");
+          // showDialog(
+          //   context: context,
+          //   builder: (context) => yachtTierInfoPopUp(
+          //     context,
+          //     2140,
+          //   ),
+          // );
         },
         child: Container(
             // color: Colors.blue,
@@ -476,13 +477,13 @@ class QuestResults extends StatelessWidget {
                                       height: 40.w,
                                       width: double.infinity,
                                       decoration: BoxDecoration(
-                                          color: Color(0xFFDCE9F4),
+                                          color: primaryButtonText,
                                           borderRadius: BorderRadius.only(
                                               bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
                                       child: Center(
                                         child: Text(
                                           "결과 보기",
-                                          style: cardButtonTextStyle,
+                                          style: buttonTitleStyle,
                                         ),
                                       )),
                                 ],
@@ -510,6 +511,7 @@ class NewQuests extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MixpanelService _mixpanelService = locator<MixpanelService>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -528,7 +530,8 @@ class NewQuests extends StatelessWidget {
               Spacer(),
               GestureDetector(
                 onTap: () {
-                  if (userModelRx.value!.rewardedCnt < maxRewardedAds)
+                  _mixpanelService.mixpanel.track('Ad view');
+                  if (userModelRx.value!.rewardedCnt! < maxRewardedAds)
                     Get.find<HomeViewModel>().rewardedAdsButtonTap();
                   else
                     Get.dialog(

@@ -4,6 +4,7 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/repositories/user_repository.dart';
 import 'package:yachtOne/screens/auth/auth_check_view_model.dart';
 import 'package:yachtOne/screens/community/community_view_model.dart';
+import 'package:yachtOne/screens/startup/loading_view.dart';
 import 'package:yachtOne/screens/startup/startup_view.dart';
 import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import '../../services/auth_service.dart';
@@ -30,7 +31,7 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
         return (isUserNull && leagueRx.value != "")
             ? LoginView()
             : !isUserModelReady
-                ? Container()
+                ? LoadingView()
                 : StartupView();
       }),
     );
