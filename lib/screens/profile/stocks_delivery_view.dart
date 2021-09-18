@@ -91,8 +91,8 @@ TextStyle stocksDeliveryViewTextStyle10 = TextStyle(
 );
 
 class StocksDeliveryView extends StatelessWidget {
-  // final AssetViewModel assetViewModel = Get.find<AssetViewModel>();
-  final AssetViewModel assetViewModel = Get.put(AssetViewModel());
+  final AssetViewModel assetViewModel = Get.find<AssetViewModel>();
+  // final AssetViewModel assetViewModel = Get.put(AssetViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -107,11 +107,16 @@ class StocksDeliveryView extends StatelessWidget {
             padding: EdgeInsets.only(left: 14.w, right: 14.w),
             child: Container(
               width: double.infinity,
-              decoration:
-                  primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
+              decoration: primaryBoxDecoration.copyWith(
+                  boxShadow: [primaryBoxShadow],
+                  color: homeModuleBoxBackgroundColor),
               child: Padding(
                 padding: EdgeInsets.only(
-                    left: 15.w, right: 15.w, top: 14.w - reducePaddingOneSide(stocksDeliveryViewTextStyle1.fontSize!)),
+                    left: 15.w,
+                    right: 15.w,
+                    top: 14.w -
+                        reducePaddingOneSide(
+                            stocksDeliveryViewTextStyle1.fontSize!)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -127,7 +132,8 @@ class StocksDeliveryView extends StatelessWidget {
                             if (controller.isHoldingStocksFutureLoad) {
                               return Text(
                                 '${controller.allHoldingStocks.length}',
-                                style: stocksDeliveryViewTextStyle1.copyWith(color: yachtRed),
+                                style: stocksDeliveryViewTextStyle1.copyWith(
+                                    color: yachtRed),
                               );
                             } else {
                               return Text('');
@@ -147,24 +153,30 @@ class StocksDeliveryView extends StatelessWidget {
                                   .map((i, element) => MapEntry(
                                       i,
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             height: 14.w,
                                           ),
                                           Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Container(
                                                 width: 150.w,
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    Text('${controller.allHoldingStocks[i].name}',
-                                                        style: stocksDeliveryViewTextStyle3),
+                                                    Text(
+                                                        '${controller.allHoldingStocks[i].name}',
+                                                        style:
+                                                            stocksDeliveryViewTextStyle3),
                                                     Text(
                                                       '잔고 ${controller.allHoldingStocks[i].sharesNum}',
-                                                      style: stocksDeliveryViewTextStyle4,
+                                                      style:
+                                                          stocksDeliveryViewTextStyle4,
                                                     ),
                                                   ],
                                                 ),
@@ -172,17 +184,25 @@ class StocksDeliveryView extends StatelessWidget {
                                               Container(
                                                 width: 80.w,
                                                 child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       '${toPriceKRW(controller.allHoldingStocks[i].currentPrice)}',
-                                                      style: stocksDeliveryViewTextStyle5,
+                                                      style:
+                                                          stocksDeliveryViewTextStyle5,
                                                     ),
                                                     Text(
                                                       '${toPercentageChange((controller.allHoldingStocks[i].currentPrice - controller.allHoldingStocks[i].priceAtAward) / controller.allHoldingStocks[i].priceAtAward)}',
                                                       style: stocksDeliveryViewTextStyle6.copyWith(
-                                                          color: (controller.allHoldingStocks[i].currentPrice >
-                                                                  controller.allHoldingStocks[i].priceAtAward)
+                                                          color: (controller
+                                                                      .allHoldingStocks[
+                                                                          i]
+                                                                      .currentPrice >
+                                                                  controller
+                                                                      .allHoldingStocks[
+                                                                          i]
+                                                                      .priceAtAward)
                                                               ? yachtRed
                                                               : seaBlue),
                                                     )
@@ -194,7 +214,8 @@ class StocksDeliveryView extends StatelessWidget {
                                                 children: [
                                                   GestureDetector(
                                                     onTap: () {
-                                                      controller.tapMinusButton(i);
+                                                      controller
+                                                          .tapMinusButton(i);
                                                     },
                                                     child: SizedBox(
                                                       height: 24.w,
@@ -210,13 +231,15 @@ class StocksDeliveryView extends StatelessWidget {
                                                         child: Center(
                                                           child: Text(
                                                             '${controller.stocksDeliveryNum[i]}',
-                                                            style: stocksDeliveryViewTextStyle7,
+                                                            style:
+                                                                stocksDeliveryViewTextStyle7,
                                                           ),
                                                         ),
                                                       )),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      controller.tapPlusButton(i);
+                                                      controller
+                                                          .tapPlusButton(i);
                                                     },
                                                     child: SizedBox(
                                                       height: 24.w,
@@ -237,7 +260,8 @@ class StocksDeliveryView extends StatelessWidget {
                                           ),
                                           Container(
                                             height: 1.w,
-                                            color: Color(0xFF94BDE0).withOpacity(0.15),
+                                            color: Color(0xFF94BDE0)
+                                                .withOpacity(0.15),
                                           )
                                         ],
                                       )))
@@ -260,7 +284,8 @@ class StocksDeliveryView extends StatelessWidget {
                         Spacer(),
                         Obx(() => Text(
                               '${toPriceKRW(assetViewModel.totalDeliveryValue.value)}',
-                              style: stocksDeliveryViewTextStyle5.copyWith(fontSize: 20.w, fontWeight: FontWeight.w500),
+                              style: stocksDeliveryViewTextStyle5.copyWith(
+                                  fontSize: 20.w, fontWeight: FontWeight.w500),
                             )),
                       ],
                     ),
@@ -293,7 +318,9 @@ class StocksDeliveryView extends StatelessWidget {
               },
               child: Container(
                 height: 50.w,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: Color(0xFF6073B4)),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(70.0),
+                    color: Color(0xFF6073B4)),
                 width: double.infinity,
                 child: Center(
                   child: Text(
@@ -315,12 +342,15 @@ class StocksDeliveryView extends StatelessWidget {
                 },
                 child: Container(
                   height: 50.w,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: Color(0xFFEFF2FA)),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(70.0),
+                      color: Color(0xFFEFF2FA)),
                   width: double.infinity,
                   child: Center(
                     child: Text(
                       '친구에게 선물하기',
-                      style: stocksDeliveryViewTextStyle9.copyWith(color: Color(0xFF6073B4)),
+                      style: stocksDeliveryViewTextStyle9.copyWith(
+                          color: Color(0xFF6073B4)),
                     ),
                   ),
                 ),
