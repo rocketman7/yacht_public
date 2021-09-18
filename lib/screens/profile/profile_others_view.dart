@@ -201,6 +201,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                                   0
                                           ? Get.to(() =>
                                               FollowersNFollowingsView(
+                                                  isMe: false,
                                                   whichfollowersOrfollowings:
                                                       true,
                                                   followersNFollowingsUid:
@@ -251,6 +252,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                                   0
                                           ? Get.to(() =>
                                               FollowersNFollowingsView(
+                                                  isMe: false,
                                                   whichfollowersOrfollowings:
                                                       false,
                                                   followersNFollowingsUid:
@@ -297,44 +299,18 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                           Spacer(),
                           // *(내 프로필이 아닌 남의 프로필일 경우) 팔로우 버튼
                           GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 if (profileViewModel.isFollowing)
-                                  Get.find<ProfileOthersViewModel>()
+                                  await Get.find<ProfileOthersViewModel>()
                                       .unFollowSomeoneMethod();
                                 else
-                                  Get.find<ProfileOthersViewModel>()
+                                  await Get.find<ProfileOthersViewModel>()
                                       .followSomeoneMethod();
+
+                                Get.find<ProfileOthersViewModel>()
+                                    .reloadUserModel();
                               },
-                              child:
-                                  // Container(
-                                  //   height: 30.w,
-                                  //   width: 100.w,
-                                  //   decoration: BoxDecoration(
-                                  //     borderRadius: BorderRadius.circular(70.0),
-                                  //     border: Border.all(
-                                  //         color: primaryButtonBackground,
-                                  //         width: 1.5.w),
-                                  //   ),
-                                  //   child: Center(
-                                  //     child: GetBuilder<ProfileOthersViewModel>(
-                                  //       id: 'profile',
-                                  //       builder: (controller) {
-                                  //         if (controller.isUserModelLoaded) {
-                                  //           return Text(
-                                  //             '팔로우',
-                                  //             style: profileButtonTextStyle,
-                                  //           );
-                                  //         } else {
-                                  //           return Text(
-                                  //             '',
-                                  //             style: profileButtonTextStyle,
-                                  //           );
-                                  //         }
-                                  //       },
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  GetBuilder<ProfileOthersViewModel>(
+                              child: GetBuilder<ProfileOthersViewModel>(
                                 id: 'profile',
                                 builder: (controller) {
                                   if (controller.isUserModelLoaded) {
@@ -654,42 +630,42 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
         //             )),
         //   ),
         // ),
-        //////// 여기까지는 최신UI 아님
-        SizedBox(
-          height: 50.w,
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 20.w),
-          child: Row(
-            children: [
-              Text(
-                '즐겨찾기한 종목',
-                style: profileHeaderTextStyle,
-              ),
-              Spacer(),
-              Image.asset(
-                'assets/icons/navigate_foward_arrow.png',
-                height: 16.w,
-                width: 9.w,
-              )
-            ],
-          ),
-        ),
-        GetBuilder<ProfileOthersViewModel>(
-          id: 'favorites',
-          builder: (controller) {
-            if (controller.isUserModelLoaded && controller.isFavoritesLoaded) {
-              // 굳이 이렇게 조건을 중첩한 이유는 그냥 혹시 먼저 뜨게되면 부자연스러울 것 같아서.
-              return ProfileViewFavoritesCardWidget(
-                favoriteStockModels: controller.favoriteStockModels,
-                favoriteStockHistoricalPriceModels:
-                    controller.favoriteStockHistoricalPriceModels,
-              );
-            } else {
-              return Container();
-            }
-          },
-        ),
+        // 일단 1차는 즐겨찾기 빼고
+        // SizedBox(
+        //   height: 50.w,
+        // ),
+        // Padding(
+        //   padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 20.w),
+        //   child: Row(
+        //     children: [
+        //       Text(
+        //         '즐겨찾기한 종목',
+        //         style: profileHeaderTextStyle,
+        //       ),
+        //       Spacer(),
+        //       Image.asset(
+        //         'assets/icons/navigate_foward_arrow.png',
+        //         height: 16.w,
+        //         width: 9.w,
+        //       )
+        //     ],
+        //   ),
+        // ),
+        // GetBuilder<ProfileOthersViewModel>(
+        //   id: 'favorites',
+        //   builder: (controller) {
+        //     if (controller.isUserModelLoaded && controller.isFavoritesLoaded) {
+        //       // 굳이 이렇게 조건을 중첩한 이유는 그냥 혹시 먼저 뜨게되면 부자연스러울 것 같아서.
+        //       return ProfileViewFavoritesCardWidget(
+        //         favoriteStockModels: controller.favoriteStockModels,
+        //         favoriteStockHistoricalPriceModels:
+        //             controller.favoriteStockHistoricalPriceModels,
+        //       );
+        //     } else {
+        //       return Container();
+        //     }
+        //   },
+        // ),
       ]),
     );
   }

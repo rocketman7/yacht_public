@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/models/users/user_model.dart';
 
 import '../../services/storage_service.dart';
 import '../../services/firestore_service.dart';
@@ -79,6 +80,14 @@ class ProfileMyViewModel extends GetxController {
 
   Future<String> getImageUrlFromStorage(String imageUrl) async {
     return await _firebaseStorageService.downloadImageURL(imageUrl);
+  }
+
+  Future<UserModel> getOtherUserModel(String uid) async {
+    UserModel user;
+
+    user = await _firestoreService.getUserModel(uid);
+
+    return user;
   }
 
   Future<List<String>> getAvatarImagesURLs() async {

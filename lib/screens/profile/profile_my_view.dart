@@ -213,6 +213,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                                     0
                                             ? Get.to(() =>
                                                 FollowersNFollowingsView(
+                                                    isMe: true,
                                                     whichfollowersOrfollowings:
                                                         true,
                                                     followersNFollowingsUid:
@@ -267,6 +268,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                                     0
                                             ? Get.to(() =>
                                                 FollowersNFollowingsView(
+                                                    isMe: true,
                                                     whichfollowersOrfollowings:
                                                         false,
                                                     followersNFollowingsUid:
@@ -649,40 +651,67 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                       )),
             ),
           ),
+          // 일단 1차는 즐겨찾기 빼고
+          // SizedBox(
+          //   height: 50.w,
+          // ),
+          // Padding(
+          //   padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 20.w),
+          //   child: Row(
+          //     children: [
+          //       Text(
+          //         '즐겨찾기한 종목',
+          //         style: profileHeaderTextStyle,
+          //       ),
+          //       Spacer(),
+          //       Image.asset(
+          //         'assets/icons/navigate_foward_arrow.png',
+          //         height: 16.w,
+          //         width: 9.w,
+          //       )
+          //     ],
+          //   ),
+          // ),
+          // GetBuilder<ProfileMyViewModel>(
+          //   id: 'favorites',
+          //   builder: (controller) {
+          //     if (controller.isUserModelLoaded &&
+          //         controller.isFavoritesLoaded) {
+          //       // 굳이 이렇게 조건을 중첩한 이유는 그냥 혹시 먼저 뜨게되면 부자연스러울 것 같아서.
+          //       return ProfileViewFavoritesCardWidget(
+          //           favoriteStockModels: controller.favoriteStockModels,
+          //           favoriteStockHistoricalPriceModels:
+          //               controller.favoriteStockHistoricalPriceModels);
+          //     } else {
+          //       return Container();
+          //     }
+          //   },
+          // ),
           SizedBox(
             height: 50.w,
           ),
           Padding(
             padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 20.w),
-            child: Row(
-              children: [
-                Text(
-                  '즐겨찾기한 종목',
-                  style: profileHeaderTextStyle,
-                ),
-                Spacer(),
-                Image.asset(
-                  'assets/icons/navigate_foward_arrow.png',
-                  height: 16.w,
-                  width: 9.w,
-                )
-              ],
+            child: Text(
+              '획득한 뱃지',
+              style: profileHeaderTextStyle,
             ),
           ),
           GetBuilder<ProfileMyViewModel>(
-            id: 'favorites',
+            id: 'profile',
             builder: (controller) {
-              if (controller.isUserModelLoaded &&
-                  controller.isFavoritesLoaded) {
-                // 굳이 이렇게 조건을 중첩한 이유는 그냥 혹시 먼저 뜨게되면 부자연스러울 것 같아서.
-                return ProfileViewFavoritesCardWidget(
-                    favoriteStockModels: controller.favoriteStockModels,
-                    favoriteStockHistoricalPriceModels:
-                        controller.favoriteStockHistoricalPriceModels);
+              if (controller.isUserModelLoaded) {
+                // null 처리해줘야함
+                return BadgesGridView(badges: userModelRx.value!.badges!);
               } else {
-                return Container();
+                return BadgesGridView(
+                  badges: [],
+                );
               }
             },
+          ),
+          SizedBox(
+            height: 50.w,
           ),
         ]));
   }

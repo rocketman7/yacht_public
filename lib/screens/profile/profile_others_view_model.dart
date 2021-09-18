@@ -19,20 +19,22 @@ class ProfileOthersViewModel extends GetxController {
   ProfileOthersViewModel({required this.uid});
 
   FirestoreService _firestoreService = locator<FirestoreService>();
-  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService =
+      locator<FirebaseStorageService>();
 
   late UserModel user;
   late List<FavoriteStockModel> favoriteStockModels;
-  late List<FavoriteStockHistoricalPriceModel> favoriteStockHistoricalPriceModels;
+  late List<FavoriteStockHistoricalPriceModel>
+      favoriteStockHistoricalPriceModels;
   bool isUserModelLoaded = false;
   bool isFavoritesLoaded = false;
 
-  // RxBool isFollowing = false.obs;
   bool isFollowing = false;
 
   @override
   void onInit() async {
-    if (userModelRx.value!.followings != null && userModelRx.value!.followings!.contains(uid)) isFollowing = true;
+    if (userModelRx.value!.followings != null &&
+        userModelRx.value!.followings!.contains(uid)) isFollowing = true;
 
     user = await _firestoreService.getOtherUserModel(uid);
     isUserModelLoaded = true;
@@ -49,19 +51,26 @@ class ProfileOthersViewModel extends GetxController {
   Future<List<FavoriteStockModel>> loadFavoriteStocks() async {
     List<FavoriteStockModel> tempStockModels = [];
     if (user.favoriteStocks != null) {
-      for (int i = 0; i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length); i++) {
-        tempStockModels.add(await _firestoreService.getFavoriteStockModel('KR', user.favoriteStocks![i]));
+      for (int i = 0;
+          i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length);
+          i++) {
+        tempStockModels.add(await _firestoreService.getFavoriteStockModel(
+            'KR', user.favoriteStocks![i]));
       }
     }
     return tempStockModels;
   }
 
-  Future<List<FavoriteStockHistoricalPriceModel>> loadFavoriteStocksPrices() async {
+  Future<List<FavoriteStockHistoricalPriceModel>>
+      loadFavoriteStocksPrices() async {
     List<FavoriteStockHistoricalPriceModel> tempStockHistoricalPriceModels = [];
     if (user.favoriteStocks != null) {
-      for (int i = 0; i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length); i++) {
-        tempStockHistoricalPriceModels
-            .add(await _firestoreService.getFavoriteStockHistoricalPriceModel('KR', user.favoriteStocks![i]));
+      for (int i = 0;
+          i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length);
+          i++) {
+        tempStockHistoricalPriceModels.add(
+            await _firestoreService.getFavoriteStockHistoricalPriceModel(
+                'KR', user.favoriteStocks![i]));
       }
     }
     return tempStockHistoricalPriceModels;
@@ -87,6 +96,12 @@ class ProfileOthersViewModel extends GetxController {
     await _firestoreService.unFollowSomeone(user.uid);
 
     getRawSnackbar('팔로우를 취소했어요!');
+  }
+
+  Future reloadUserModel() async {
+    user = await _firestoreService.getOtherUserModel(uid);
+
+    update(['profile']);
   }
 }
 

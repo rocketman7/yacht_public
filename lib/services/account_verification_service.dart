@@ -48,7 +48,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
     'KTB투자증권': '227',
     'NH투자증권': '247',
     'SK증권': '266',
-    // '토스증권': '271',
+    '토스증권': '271',
   };
 
   //나중에 DB로 옮기는게..?
@@ -79,7 +79,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
     'KTB투자증권': 'assets/images/secLogo/ktb.png',
     'NH투자증권': 'assets/images/secLogo/nh.png',
     'SK증권': 'assets/images/secLogo/sk.png',
-    // '토스증권': 'assets/images/secLogo/toss.png',
+    '토스증권': 'assets/images/secLogo/toss.png',
   };
 
   @override
