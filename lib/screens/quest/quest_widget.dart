@@ -95,8 +95,6 @@ class SquareQuestWidget extends StatelessWidget {
           ),
         ));
 
-    //  );
-
     // Stack(
     //   children: [
     //     // 퀘스트 카드 배경 일러스트

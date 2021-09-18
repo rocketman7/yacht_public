@@ -7,7 +7,7 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 
-import '../../locator.dart';
+import '../../../locator.dart';
 
 class LiveQuestViewModel extends GetxController {
   final HomeViewModel homeViewModel;

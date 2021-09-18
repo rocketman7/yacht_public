@@ -49,6 +49,7 @@ class QuestViewModel extends GetxController {
   // toggle에 쓰일 bool list
   RxList<bool> toggleList = <bool>[].obs;
   RxList<int> orderList = <int>[].obs;
+  RxList<int> updownManyList = <int>[].obs;
 
   @override
   void onClose() {
@@ -105,6 +106,11 @@ class QuestViewModel extends GetxController {
     isLoading(false);
     print('locally' + thisUserQuestModel.toString());
     print('globally' + userQuestModelRx.toString());
+    if (questModel.selectMode == 'updown_many') {
+      questModel.investAddresses!.forEach((element) {
+        updownManyList.add(-1);
+      });
+    }
     update();
     super.onInit();
     // return
@@ -163,14 +169,15 @@ class QuestViewModel extends GetxController {
       print('new OrderList: $orderList');
       orderList.insert(newIndex, temp);
     }
-
-    print('new OrderList: $orderList');
-    // if (thisUserQuestModel.value == null) {
-    //   orderList.addAll(List.generate(questModel.investAddresses.length, (index) => index));
-    // } else {
-    //   thisUserQuestModel.value!.selection!;
-    // }
   }
+
+  // updateUserSelect(int index) {
+  //   if (updownManyList[index] == -1) {
+  //     updownManyList[index] = 1;
+  //   } else {
+  //     updownManyList[index] = !updownManyList[index];
+  //   }
+  // }
 
   // userQuest에 user가 선택한 정답 업데이트하는 함수
   Future updateUserQuest() async {
@@ -184,9 +191,6 @@ class QuestViewModel extends GetxController {
         ? await _firestoreService.updateUserQuest(questModel, orderList)
         : await _firestoreService.updateUserQuest(questModel, answers);
   }
-
-  // final DateTime now = DateTime.now();
-  // Duration? timeLeft;
 
   void timeLeft() {
     Duration timeLeft = questModel.questEndDateTime.toDate().difference(now);

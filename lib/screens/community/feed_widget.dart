@@ -12,6 +12,7 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/community_view.dart';
 import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/screens/community/community_widgets.dart';
+import 'package:yachtOne/screens/profile/profile_others_view.dart';
 import 'package:yachtOne/screens/profile/profile_view.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -80,7 +81,7 @@ class FeedWidget extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Get.to(() => ProfileView(uid: post.writerUid));
+                            Get.to(() => ProfileOthersView(uid: post.writerUid));
                           },
                           child: Text(
                             post.writerUserName,

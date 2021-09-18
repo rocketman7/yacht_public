@@ -66,21 +66,24 @@ class StartupView extends GetView<StartupViewModel> {
                 // elevation: 8,
                 backgroundColor: primaryBackgroundColor.withOpacity(.65),
                 showSelectedLabels: false,
-                showUnselectedLabels: false,
-
+                showUnselectedLabels: false, currentIndex: controller.selectedPage.value,
+                onTap: (index) {
+                  controller.selectedPage(index);
+                },
                 items: [
                   BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/icons/bottom_navigation/home_unselected.png',
-                        width: iconSize,
-                        height: iconSize,
-                      ),
-                      activeIcon: Image.asset(
-                        'assets/icons/bottom_navigation/home_selected.png',
-                        width: iconSize,
-                        height: iconSize,
-                      ),
-                      label: ''),
+                    icon: Image.asset(
+                      'assets/icons/bottom_navigation/home_unselected.png',
+                      width: iconSize,
+                      height: iconSize,
+                    ),
+                    activeIcon: Image.asset(
+                      'assets/icons/bottom_navigation/home_selected.png',
+                      width: iconSize,
+                      height: iconSize,
+                    ),
+                    label: '',
+                  ),
                   BottomNavigationBarItem(
                       icon: Image.asset(
                         'assets/icons/bottom_navigation/community_unselected.png',
@@ -106,10 +109,6 @@ class StartupView extends GetView<StartupViewModel> {
                       ),
                       label: '')
                 ],
-                currentIndex: controller.selectedPage.value,
-                onTap: (index) {
-                  controller.selectedPage(index);
-                },
               ),
             ),
           )),

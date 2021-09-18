@@ -526,8 +526,8 @@ class QuestView extends StatelessWidget {
                                         shrinkWrap: true,
                                         onReorder: (oldIndex, newIndex) {
                                           questViewModel.reorderUserSelect(oldIndex, newIndex);
-                                          print('old' + oldIndex.toString());
-                                          print('new' + newIndex.toString());
+                                          // print('old' + oldIndex.toString());
+                                          // print('new' + newIndex.toString());
                                         },
                                         children: List.generate(questModel.investAddresses!.length, (index) {
                                           return Container(
@@ -580,9 +580,125 @@ class QuestView extends StatelessWidget {
                                 ),
                               ],
                             )
-                          //   ],
-                          // )
-                          : Container(),
+                          : questModel.selectMode == 'updown_many'
+                              ? Container(
+                                  constraints: BoxConstraints.loose(
+                                    Size(double.infinity, 300.w),
+                                  ),
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: questModel.investAddresses!.length,
+                                    itemBuilder: (_, index) {
+                                      return Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    height: 27.w,
+                                                    width: 27.w,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  SizedBox(width: 3.w),
+                                                  Text("삼성전자", style: yachtChoiceBoxName)
+                                                ],
+                                              ),
+                                              Row(
+                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    "기준 가격",
+                                                    style: TextStyle(fontSize: captionSize, fontFamily: 'Default'),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 4.w,
+                                                  ),
+                                                  Text("58,500",
+                                                      style: yachtChoiceBoxName.copyWith(
+                                                        fontWeight: FontWeight.w600,
+                                                      ))
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(height: 16.w),
+                                          Row(
+                                            children: List.generate(2, (choice) {
+                                              return Obx(() => Row(
+                                                    children: [
+                                                      InkWell(
+                                                        onTap: () {
+                                                          questViewModel.updownManyList[index] = choice;
+                                                          print(questViewModel.updownManyList);
+                                                          HapticFeedback.lightImpact();
+                                                        },
+                                                        child: AnimatedContainer(
+                                                          duration: Duration(milliseconds: 300),
+                                                          width: 151.w,
+                                                          height: 50.w,
+                                                          decoration: yachtChoiceBoxDecoration.copyWith(
+                                                              color: choice == 0 &&
+                                                                      questViewModel.updownManyList[index] == 0
+                                                                  ? yachtRed
+                                                                  : choice == 1 &&
+                                                                          questViewModel.updownManyList[index] == 1
+                                                                      ? seaBlue
+                                                                      : white),
+                                                          child: Padding(
+                                                            padding: primaryAllPadding,
+                                                            child: Column(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Center(
+                                                                  child: Container(
+                                                                      width: 28.w,
+                                                                      // height: 38.w,
+
+                                                                      child: choice == 0
+                                                                          ? Image.asset(
+                                                                              'assets/icons/quest_select_up.png',
+                                                                              color: questViewModel
+                                                                                          .updownManyList[index] ==
+                                                                                      0
+                                                                                  ? white
+                                                                                  : yachtRed)
+                                                                          : Image.asset(
+                                                                              'assets/icons/quest_select_down.png',
+                                                                              color: questViewModel
+                                                                                          .updownManyList[index] ==
+                                                                                      1
+                                                                                  ? white
+                                                                                  : seaBlue)),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      if (choice == 0) SizedBox(width: primaryPaddingSize)
+                                                    ],
+                                                  ));
+                                            }),
+                                          ),
+                                          (index != questModel.investAddresses!.length - 1)
+                                              ? SizedBox(
+                                                  height: 32.w,
+                                                )
+                                              : Container()
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                )
+
+                              //   ],
+                              // )
+                              : Container(),
 
               SizedBox(height: 12.w)
             ],

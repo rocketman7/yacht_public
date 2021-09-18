@@ -7,7 +7,8 @@ import 'package:yachtOne/models/chart_price_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/live_quest_price_model.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
-import 'package:yachtOne/screens/live/live_quest_view.dart';
+import 'package:yachtOne/screens/quest/live/live_quest_view_model.dart';
+
 import 'package:yachtOne/screens/quest/quest_widget.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
@@ -15,8 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
-import '../../locator.dart';
-import 'live_quest_view_model.dart';
+// import 'live_quest_view_model.dart';
 
 class LiveWidget extends StatelessWidget {
   final int liveQuestIndex;

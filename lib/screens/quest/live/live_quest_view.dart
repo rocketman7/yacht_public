@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
-import 'package:yachtOne/screens/live/live_quest_view_model.dart';
-import 'package:yachtOne/screens/live/live_widget.dart';
+import 'package:yachtOne/screens/quest/live/live_quest_view_model.dart';
+import 'package:yachtOne/screens/quest/live/live_widget.dart';
+
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

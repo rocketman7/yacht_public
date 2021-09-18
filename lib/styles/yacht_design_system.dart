@@ -533,7 +533,7 @@ TextStyle myAssetAmount = TextStyle(
 TextStyle buttonTitleStyle = TextStyle(
   fontFamily: krFont,
   fontSize: bodyBigSize,
-  color: primaryButtonBackground,
+  color: buttonNormal,
   fontWeight: FontWeight.w500,
   height: primaryFontHeight,
   letterSpacing: -0.1,
@@ -1121,7 +1121,7 @@ Container sectionBoxWithBottomButton({
           height: 44.w,
           width: double.infinity,
           decoration: BoxDecoration(
-              color: primaryButtonText,
+              color: yachtViolet,
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
