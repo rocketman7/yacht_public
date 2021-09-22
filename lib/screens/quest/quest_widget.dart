@@ -277,9 +277,8 @@ class QuestCardHeader extends StatelessWidget {
         SizedBox(
           height: correctHeight(10.w, sectionTitle.fontSize, questTimerStyle.fontSize),
         ),
-        Text(
-          "01시간 24분 뒤 마감", // temp
-          style: questTimerStyle,
+        TimeToEndCounter(
+          questModel: questModel,
         ),
         SizedBox(
           height: correctHeight(10.w, questTimerStyle.fontSize, questRewardTextStyle.fontSize),
@@ -305,6 +304,53 @@ class QuestCardHeader extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class TimeToEndCounter extends StatefulWidget {
+  final QuestModel questModel;
+  TimeToEndCounter({
+    Key? key,
+    required this.questModel,
+  }) : super(key: key);
+
+  @override
+  State<TimeToEndCounter> createState() => _TimeToEndCounterState();
+}
+
+class _TimeToEndCounterState extends State<TimeToEndCounter> {
+  // 타이머 1초마다 작동
+  Timer? _everySecond;
+  // 남은 시간 보여줌
+  RxString timeToEnd = "".obs;
+  DateTime now = DateTime.now();
+
+  @override
+  void initState() {
+    _everySecond = Timer.periodic(Duration(seconds: 1), (timer) {
+      now = DateTime.now();
+      timeLeft();
+    });
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void timeLeft() {
+    if (widget.questModel.questEndDateTime == null) {
+      timeToEnd("마감시한 없음");
+    } else {
+      Duration timeLeft = widget.questModel.questEndDateTime.toDate().difference(now);
+      timeToEnd('${countDown(timeLeft)} 뒤 마감');
+    }
+    // return countDown(timeLeft);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Text(
+          timeToEnd.value, // temp
+          style: questTimerStyle,
+        ));
   }
 }
 

@@ -53,6 +53,7 @@ class HomeView extends StatelessWidget {
           // Get.off(() => AuthCheckView());
           _authService.auth.signOut();
           userModelRx.value = null;
+          userQuestModelRx.value = [];
           _kakaoApi.signOut();
           print("signout");
           // showDialog(
@@ -69,7 +70,7 @@ class HomeView extends StatelessWidget {
             height: correctHeight(30.w, sectionTitle.fontSize!, 0.0)),
       ),
       // 이달의 상금 주식
-      AwardView(leagueName: "9월 리그", leagueEndDateTime: "2021년 9월 30일까지"),
+      // AwardView(leagueName: "9월 리그", leagueEndDateTime: "2021년 9월 30일까지"),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       NewQuests(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),

@@ -280,7 +280,7 @@ class InvestAddressModel {
   final String name;
   final String? indexIncluded;
   final String? logoUrl;
-  final String? basePrice;
+  final int? basePrice;
   InvestAddressModel({
     required this.market,
     required this.country,
@@ -300,7 +300,7 @@ class InvestAddressModel {
     String? name,
     String? indexIncluded,
     String? logoUrl,
-    String? basePrice,
+    int? basePrice,
   }) {
     return InvestAddressModel(
       market: market ?? this.market,

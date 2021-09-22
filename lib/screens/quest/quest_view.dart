@@ -208,7 +208,7 @@ class QuestView extends StatelessWidget {
 
             // List<num>? answers = questViewModel.userQuestModel.value!.selection;
             // print('answers from server: $toggleList');
-            return questViewModel.isSelectingSheetShowing.value ? newSelectBottomSheet(questViewModel) : Container();
+            return newSelectBottomSheet(questViewModel);
           }),
           Obx(
             () => Positioned(
@@ -222,7 +222,9 @@ class QuestView extends StatelessWidget {
                       questViewModel.syncUserSelect();
                     } else {
                       questViewModel.updateUserQuest();
-                      // questViewModel.isSelectingSheetShowing(false);
+                      Future.delayed(Duration(milliseconds: 600)).then((_) {
+                        questViewModel.isSelectingSheetShowing(false);
+                      });
                       yachtSnackBarFromBottom("저장되었습니다.");
                     }
                     ;
@@ -339,11 +341,12 @@ class QuestView extends StatelessWidget {
         ));
   }
 
-  Positioned newSelectBottomSheet(QuestViewModel questViewModel) {
-    return Positioned(
+  AnimatedPositioned newSelectBottomSheet(QuestViewModel questViewModel) {
+    return AnimatedPositioned(
+        duration: Duration(milliseconds: 300),
         left: 14.w,
         right: 14.w,
-        bottom: 20.w + 60.w + 20.w,
+        bottom: questViewModel.isSelectingSheetShowing.value ? (20.w + 60.w + 20.w) : -500.w,
         child: Container(
           // color: Colors.white,
           width: double.infinity,
@@ -355,7 +358,9 @@ class QuestView extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
-                  onTap: () => questViewModel.isSelectingSheetShowing(false),
+                  onTap: () {
+                    questViewModel.isSelectingSheetShowing(false);
+                  },
                   child: Container(
                     alignment: Alignment.topRight,
                     width: 50.w,
@@ -604,7 +609,8 @@ class QuestView extends StatelessWidget {
                                                     color: Colors.blue,
                                                   ),
                                                   SizedBox(width: 3.w),
-                                                  Text("삼성전자", style: yachtChoiceBoxName)
+                                                  Text(questModel.investAddresses![index].name,
+                                                      style: yachtChoiceBoxName)
                                                 ],
                                               ),
                                               Row(
@@ -617,7 +623,10 @@ class QuestView extends StatelessWidget {
                                                   SizedBox(
                                                     width: 4.w,
                                                   ),
-                                                  Text("58,500",
+                                                  Text(
+                                                      questModel.investAddresses![index].basePrice == null
+                                                          ? 0.toString()
+                                                          : questModel.investAddresses![index].basePrice.toString(),
                                                       style: yachtChoiceBoxName.copyWith(
                                                         fontWeight: FontWeight.w600,
                                                       ))
@@ -628,61 +637,63 @@ class QuestView extends StatelessWidget {
                                           SizedBox(height: 16.w),
                                           Row(
                                             children: List.generate(2, (choice) {
-                                              return Obx(() => Row(
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          questViewModel.updownManyList[index] = choice;
-                                                          print(questViewModel.updownManyList);
-                                                          HapticFeedback.lightImpact();
-                                                        },
-                                                        child: AnimatedContainer(
-                                                          duration: Duration(milliseconds: 300),
-                                                          width: 151.w,
-                                                          height: 50.w,
-                                                          decoration: yachtChoiceBoxDecoration.copyWith(
-                                                              color: choice == 0 &&
-                                                                      questViewModel.updownManyList[index] == 0
-                                                                  ? yachtRed
-                                                                  : choice == 1 &&
-                                                                          questViewModel.updownManyList[index] == 1
-                                                                      ? seaBlue
-                                                                      : white),
-                                                          child: Padding(
-                                                            padding: primaryAllPadding,
-                                                            child: Column(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Center(
-                                                                  child: Container(
-                                                                      width: 28.w,
-                                                                      // height: 38.w,
+                                              return Obx(() => !questViewModel.isLoading.value
+                                                  ? Row(
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            questViewModel.updownManyList[index] = choice;
+                                                            print(questViewModel.updownManyList);
+                                                            HapticFeedback.lightImpact();
+                                                          },
+                                                          child: AnimatedContainer(
+                                                            duration: Duration(milliseconds: 300),
+                                                            width: 151.w,
+                                                            height: 50.w,
+                                                            decoration: yachtChoiceBoxDecoration.copyWith(
+                                                                color: choice == 0 &&
+                                                                        questViewModel.updownManyList[index] == 0
+                                                                    ? yachtRed
+                                                                    : choice == 1 &&
+                                                                            questViewModel.updownManyList[index] == 1
+                                                                        ? seaBlue
+                                                                        : white),
+                                                            child: Padding(
+                                                              padding: primaryAllPadding,
+                                                              child: Column(
+                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Center(
+                                                                    child: Container(
+                                                                        width: 28.w,
+                                                                        // height: 38.w,
 
-                                                                      child: choice == 0
-                                                                          ? Image.asset(
-                                                                              'assets/icons/quest_select_up.png',
-                                                                              color: questViewModel
-                                                                                          .updownManyList[index] ==
-                                                                                      0
-                                                                                  ? white
-                                                                                  : yachtRed)
-                                                                          : Image.asset(
-                                                                              'assets/icons/quest_select_down.png',
-                                                                              color: questViewModel
-                                                                                          .updownManyList[index] ==
-                                                                                      1
-                                                                                  ? white
-                                                                                  : seaBlue)),
-                                                                ),
-                                                              ],
+                                                                        child: choice == 0
+                                                                            ? Image.asset(
+                                                                                'assets/icons/quest_select_up.png',
+                                                                                color: questViewModel
+                                                                                            .updownManyList[index] ==
+                                                                                        0
+                                                                                    ? white
+                                                                                    : yachtRed)
+                                                                            : Image.asset(
+                                                                                'assets/icons/quest_select_down.png',
+                                                                                color: questViewModel
+                                                                                            .updownManyList[index] ==
+                                                                                        1
+                                                                                    ? white
+                                                                                    : seaBlue)),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      if (choice == 0) SizedBox(width: primaryPaddingSize)
-                                                    ],
-                                                  ));
+                                                        if (choice == 0) SizedBox(width: primaryPaddingSize)
+                                                      ],
+                                                    )
+                                                  : Container());
                                             }),
                                           ),
                                           (index != questModel.investAddresses!.length - 1)

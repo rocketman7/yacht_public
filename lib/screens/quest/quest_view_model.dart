@@ -103,7 +103,6 @@ class QuestViewModel extends GetxController {
     // logo 이미지 가져오기
     await getImages();
 
-    isLoading(false);
     print('locally' + thisUserQuestModel.toString());
     print('globally' + userQuestModelRx.toString());
     if (questModel.selectMode == 'updown_many') {
@@ -111,6 +110,7 @@ class QuestViewModel extends GetxController {
         updownManyList.add(-1);
       });
     }
+    isLoading(false);
     update();
     super.onInit();
     // return
@@ -171,14 +171,6 @@ class QuestViewModel extends GetxController {
     }
   }
 
-  // updateUserSelect(int index) {
-  //   if (updownManyList[index] == -1) {
-  //     updownManyList[index] = 1;
-  //   } else {
-  //     updownManyList[index] = !updownManyList[index];
-  //   }
-  // }
-
   // userQuest에 user가 선택한 정답 업데이트하는 함수
   Future updateUserQuest() async {
     // [2], [2,3], 이런식으로 넣게 됨.
@@ -187,14 +179,28 @@ class QuestViewModel extends GetxController {
       if (toggleList[i] == true) answers.add(i);
     }
     print(answers);
-    questModel.selectMode == 'order'
-        ? await _firestoreService.updateUserQuest(questModel, orderList)
-        : await _firestoreService.updateUserQuest(questModel, answers);
+    switch (questModel.selectMode) {
+      case 'order':
+        await _firestoreService.updateUserQuest(questModel, orderList);
+        break;
+      case 'updown_many':
+        await _firestoreService.updateUserQuest(questModel, updownManyList);
+        break;
+      default:
+        await _firestoreService.updateUserQuest(questModel, answers);
+    }
+    // questModel.selectMode == 'order'
+    //     ? await _firestoreService.updateUserQuest(questModel, orderList)
+    //     : await _firestoreService.updateUserQuest(questModel, answers);
   }
 
   void timeLeft() {
-    Duration timeLeft = questModel.questEndDateTime.toDate().difference(now);
-    timeToEnd(countDown(timeLeft));
+    if (questModel.questEndDateTime == null) {
+      timeToEnd("마감시한 없음");
+    } else {
+      Duration timeLeft = questModel.questEndDateTime.toDate().difference(now);
+      timeToEnd('${countDown(timeLeft)} 뒤 마감');
+    }
     // return countDown(timeLeft);
   }
 }

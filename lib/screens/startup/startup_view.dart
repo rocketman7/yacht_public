@@ -31,12 +31,12 @@ class StartupView extends GetView<StartupViewModel> {
   Widget build(BuildContext context) {
     RxList<Widget> pageList = [
       HomeView(),
-      CommunityView(),
+      // CommunityView(),
       // Container(color: Colors.red),
       // Container(color: yachtViolet),
       // ProfileView(uid: _auth.currentUser.uid) //, null value error
       // ProfileView(uid: userModelRx.value!.uid) //
-      ProfileMyView(),
+      // ProfileMyView(),
     ].obs;
     // print('startup rebuild');
 
@@ -53,65 +53,66 @@ class StartupView extends GetView<StartupViewModel> {
 
     return Scaffold(
       extendBody: true,
-      body: Obx(
-        () => IndexedStack(
-          index: controller.selectedPage.value,
-          children: pageList,
-        ),
-      ),
-      bottomNavigationBar: Obx(() => ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-              child: BottomNavigationBar(
-                // elevation: 8,
-                backgroundColor: primaryBackgroundColor.withOpacity(.65),
-                showSelectedLabels: false,
-                showUnselectedLabels: false, currentIndex: controller.selectedPage.value,
-                onTap: (index) {
-                  controller.selectedPage(index);
-                },
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/icons/bottom_navigation/home_unselected.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    activeIcon: Image.asset(
-                      'assets/icons/bottom_navigation/home_selected.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/icons/bottom_navigation/community_unselected.png',
-                        width: iconSize,
-                        height: iconSize,
-                      ),
-                      activeIcon: Image.asset(
-                        'assets/icons/bottom_navigation/community_selected.png',
-                        width: iconSize,
-                        height: iconSize,
-                      ),
-                      label: ''),
-                  BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/icons/bottom_navigation/my_unselected.png',
-                        width: iconSize,
-                        height: iconSize,
-                      ),
-                      activeIcon: Image.asset(
-                        'assets/icons/bottom_navigation/my_selected.png',
-                        width: iconSize,
-                        height: iconSize,
-                      ),
-                      label: '')
-                ],
-              ),
-            ),
-          )),
+      body: HomeView(),
+      //  Obx(
+      //   () => IndexedStack(
+      //     index: controller.selectedPage.value,
+      //     children: pageList,
+      //   ),
+      // ),
+      // bottomNavigationBar: Obx(() => ClipRRect(
+      //       child: BackdropFilter(
+      //         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+      //         child: BottomNavigationBar(
+      //           // elevation: 8,
+      //           backgroundColor: primaryBackgroundColor.withOpacity(.65),
+      //           showSelectedLabels: false,
+      //           showUnselectedLabels: false, currentIndex: controller.selectedPage.value,
+      //           onTap: (index) {
+      //             controller.selectedPage(index);
+      //           },
+      //           items: [
+      //             BottomNavigationBarItem(
+      //               icon: Image.asset(
+      //                 'assets/icons/bottom_navigation/home_unselected.png',
+      //                 width: iconSize,
+      //                 height: iconSize,
+      //               ),
+      //               activeIcon: Image.asset(
+      //                 'assets/icons/bottom_navigation/home_selected.png',
+      //                 width: iconSize,
+      //                 height: iconSize,
+      //               ),
+      //               label: '',
+      //             ),
+      //             BottomNavigationBarItem(
+      //                 icon: Image.asset(
+      //                   'assets/icons/bottom_navigation/community_unselected.png',
+      //                   width: iconSize,
+      //                   height: iconSize,
+      //                 ),
+      //                 activeIcon: Image.asset(
+      //                   'assets/icons/bottom_navigation/community_selected.png',
+      //                   width: iconSize,
+      //                   height: iconSize,
+      //                 ),
+      //                 label: ''),
+      //             // BottomNavigationBarItem(
+      //             //     icon: Image.asset(
+      //             //       'assets/icons/bottom_navigation/my_unselected.png',
+      //             //       width: iconSize,
+      //             //       height: iconSize,
+      //             //     ),
+      //             //     activeIcon: Image.asset(
+      //             //       'assets/icons/bottom_navigation/my_selected.png',
+      //             //       width: iconSize,
+      //             //       height: iconSize,
+      //             //     ),
+      //             //     label: '')
+      //           ],
+      //         ),
+      //       ),
+      //     )),
 
       // Container(
       //   // height: _screenUtil.bottomBarHeight + 50,

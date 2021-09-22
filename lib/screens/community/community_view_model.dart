@@ -34,8 +34,10 @@ class CommunityViewModel extends GetxController {
 
   @override
   void onInit() async {
+    print('community view model oninit');
     // TODO: implement onInit
     await getPost();
+    print('get post done');
     // await monitorScroll();
     // scrollController = ScrollController();
     // print('scrollcont: ' + scrollController.hasClients.toString());
