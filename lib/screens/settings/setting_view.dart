@@ -9,6 +9,7 @@ import '../../styles/yacht_design_system.dart';
 
 import 'account_view.dart';
 import 'friends_code_controller.dart';
+import 'one_on_one_view.dart';
 import 'push_notification_view.dart';
 
 class SettingView extends StatelessWidget {
@@ -605,6 +606,212 @@ class SettingView extends StatelessWidget {
             width: double.infinity,
             color: yachtLineColor,
           ),
+        ),
+        SizedBox(
+          height: correctHeight(20.w, 0.w, settingTitle.fontSize),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 13.w, right: 13.w),
+          child: Text(
+            '고객센터',
+            style: settingTitle,
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(10.w, settingTitle.fontSize, 0.w),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 14.w, right: 14.w),
+          child: Container(
+            height: 1.w,
+            width: double.infinity,
+            color: yachtLineColor,
+          ),
+        ),
+        // SizedBox(
+        //   height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        // ),
+        // GestureDetector(
+        //   behavior: HitTestBehavior.opaque,
+        //   onTap: () {},
+        //   child: Padding(
+        //     padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //     child: Text(
+        //       '공지사항',
+        //       style: settingContent,
+        //     ),
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        // ),
+        // Padding(
+        //   padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //   child: Container(
+        //     height: 1.w,
+        //     width: double.infinity,
+        //     color: yachtLineColor,
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        // ),
+        // GestureDetector(
+        //   behavior: HitTestBehavior.opaque,
+        //   onTap: () {},
+        //   child: Padding(
+        //     padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //     child: Text(
+        //       '자주 묻는 질문 (FAQ)',
+        //       style: settingContent,
+        //     ),
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        // ),
+        // Padding(
+        //   padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //   child: Container(
+        //     height: 1.w,
+        //     width: double.infinity,
+        //     color: yachtLineColor,
+        //   ),
+        // ),
+        SizedBox(
+          height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Get.to(() => OneOnOneView());
+          },
+          child: Padding(
+            padding: EdgeInsets.only(left: 14.w, right: 14.w),
+            child: Text(
+              '1:1 문의하기',
+              style: settingContent,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 14.w, right: 14.w),
+          child: Container(
+            height: 1.w,
+            width: double.infinity,
+            color: yachtLineColor,
+          ),
+        ),
+        // SizedBox(
+        //   height: correctHeight(20.w, 0.w, settingTitle.fontSize),
+        // ),
+        // Padding(
+        //   padding: EdgeInsets.only(left: 13.w, right: 13.w),
+        //   child: Text(
+        //     '약관 및 정보',
+        //     style: settingTitle,
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(10.w, settingTitle.fontSize, 0.w),
+        // ),
+        // Padding(
+        //   padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //   child: Container(
+        //     height: 1.w,
+        //     width: double.infinity,
+        //     color: yachtLineColor,
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        // ),
+        // GestureDetector(
+        //   behavior: HitTestBehavior.opaque,
+        //   onTap: () {},
+        //   child: Padding(
+        //     padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //     child: Text(
+        //       '이용약관',
+        //       style: settingContent,
+        //     ),
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        // ),
+        // Padding(
+        //   padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //   child: Container(
+        //     height: 1.w,
+        //     width: double.infinity,
+        //     color: yachtLineColor,
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        // ),
+        // GestureDetector(
+        //   behavior: HitTestBehavior.opaque,
+        //   onTap: () {},
+        //   child: Padding(
+        //     padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //     child: Text(
+        //       '개인정보 취급 방침',
+        //       style: settingContent,
+        //     ),
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        // ),
+        // Padding(
+        //   padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //   child: Container(
+        //     height: 1.w,
+        //     width: double.infinity,
+        //     color: yachtLineColor,
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        // ),
+        // GestureDetector(
+        //   behavior: HitTestBehavior.opaque,
+        //   onTap: () {},
+        //   child: Padding(
+        //     padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //     child: Text(
+        //       '사업자 정보',
+        //       style: settingContent,
+        //     ),
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        // ),
+        // Padding(
+        //   padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        //   child: Container(
+        //     height: 1.w,
+        //     width: double.infinity,
+        //     color: yachtLineColor,
+        //   ),
+        // ),
+        SizedBox(
+          height: correctHeight(20.w, 0.w, settingLogout.fontSize),
+        ),
+        Center(
+          child: Text(
+            '로그아웃',
+            style: settingLogout,
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(20.w, settingLogout.fontSize, 0.w),
         ),
       ]),
     );

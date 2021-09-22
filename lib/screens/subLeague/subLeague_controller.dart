@@ -45,35 +45,35 @@ class SubLeagueController extends GetxController {
 }
 
 //// 아래는 repository 및 DB admin state manage (stream) 을 위한 것들을 구현해본 것
-class HomeRepository extends GetxController {
-  FirestoreService _firestoreService = FirestoreService();
+// class HomeRepository extends GetxController {
+//   FirestoreService _firestoreService = FirestoreService();
 
-  RxString stateStream1 = ''.obs;
-  RxString stateStream2 = ''.obs;
+//   RxString stateStream1 = ''.obs;
+//   RxString stateStream2 = ''.obs;
 
-  @override
-  void onInit() {
-    stateStream1.bindStream(getStateStream1());
-    stateStream2.bindStream(getStateStream2());
+//   @override
+//   void onInit() {
+//     stateStream1.bindStream(getStateStream1());
+//     stateStream2.bindStream(getStateStream2());
 
-    stateStream1.listen((stream) {
-      print('state stream1 come ==> $stream');
-    });
+//     stateStream1.listen((stream) {
+//       print('state stream1 come ==> $stream');
+//     });
 
-    stateStream2.listen((stream) {
-      print('state stream2 come ==> $stream');
-    });
+//     stateStream2.listen((stream) {
+//       print('state stream2 come ==> $stream');
+//     });
 
-    super.onInit();
-  }
+//     super.onInit();
+//   }
 
-  Stream<String> getStateStream1() {
-    return _firestoreService.getStateStream1();
-  }
+//   Stream<String> getStateStream1() {
+//     return _firestoreService.getStateStream1();
+//   }
 
-  Stream<String> getStateStream2() {
-    return _firestoreService.getStateStream2();
-  }
+//   Stream<String> getStateStream2() {
+//     return _firestoreService.getStateStream2();
+//   }
 
-  // late Stream<String> stateStream = _firestoreService.getStateStream();
-}
+//   // late Stream<String> stateStream = _firestoreService.getStateStream();
+// }

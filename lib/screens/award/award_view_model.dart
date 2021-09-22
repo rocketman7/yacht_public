@@ -21,7 +21,7 @@ class AwardViewModel extends GetxController {
   List<double> totalValue = [];
 
   //for STATE
-  RxString test = homeRepositoryStateStream1;
+  // RxString test = homeRepositoryStateStream1;
 
   //for UI..
   final portfolioArcRadius = SizeConfig.screenWidth - 14.0.w * 4;
@@ -274,35 +274,35 @@ class SubLeaguePortfolioUIModel {
 ///////////////////////////////////////////
 //// 아래는 repository 및 DB admin state manage (stream) 을 위한 것들을 구현해본 것
 // 전역변수를 써야하나?
-RxString homeRepositoryStateStream1 = ''.obs;
-RxString homeRepositoryStateStream2 = ''.obs;
+// RxString homeRepositoryStateStream1 = ''.obs;
+// RxString homeRepositoryStateStream2 = ''.obs;
 
-class HomeRepository extends GetxController {
-  FirestoreService _firestoreService = FirestoreService();
+// class HomeRepository extends GetxController {
+//   FirestoreService _firestoreService = FirestoreService();
 
-  @override
-  void onInit() {
-    homeRepositoryStateStream1.bindStream(getStateStream1());
-    homeRepositoryStateStream2.bindStream(getStateStream2());
+//   @override
+//   void onInit() {
+//     homeRepositoryStateStream1.bindStream(getStateStream1());
+//     homeRepositoryStateStream2.bindStream(getStateStream2());
 
-    homeRepositoryStateStream1.listen((stream) {
-      print('state stream1 come ==> $stream');
-    });
+//     homeRepositoryStateStream1.listen((stream) {
+//       print('state stream1 come ==> $stream');
+//     });
 
-    homeRepositoryStateStream2.listen((stream) {
-      print('state stream2 come ==> $stream');
-    });
+//     homeRepositoryStateStream2.listen((stream) {
+//       print('state stream2 come ==> $stream');
+//     });
 
-    super.onInit();
-  }
+//     super.onInit();
+//   }
 
-  Stream<String> getStateStream1() {
-    return _firestoreService.getStateStream1();
-  }
+//   Stream<String> getStateStream1() {
+//     return _firestoreService.getStateStream1();
+//   }
 
-  Stream<String> getStateStream2() {
-    return _firestoreService.getStateStream2();
-  }
+//   Stream<String> getStateStream2() {
+//     return _firestoreService.getStateStream2();
+//   }
 
-  // late Stream<String> stateStream = _firestoreService.getStateStream();
-}
+//   // late Stream<String> stateStream = _firestoreService.getStateStream();
+// }

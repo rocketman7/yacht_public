@@ -24,6 +24,7 @@ import 'package:yachtOne/screens/quest/live/live_quest_view.dart';
 import 'package:yachtOne/screens/profile/asset_view.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
 import 'package:yachtOne/screens/quest/result/quest_results_view.dart';
+import 'package:yachtOne/screens/ranks/rank_share_view.dart';
 import 'package:yachtOne/screens/subLeague/temp_home_view.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
@@ -77,7 +78,10 @@ class HomeView extends StatelessWidget {
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       QuestResultsView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      ReadingContentView(homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
+      RankHomeWidget(),
+      SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
+      ReadingContentView(
+          homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       TodayMarketView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
@@ -94,16 +98,20 @@ class HomeView extends StatelessWidget {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
     _scrollController.addListener(() {
       // offset obs 값에 scroll controller offset 넣어주기
-      _scrollController.offset < 0 ? offset(0) : offset(_scrollController.offset);
+      _scrollController.offset < 0
+          ? offset(0)
+          : offset(_scrollController.offset);
       // print(_scrollController.offset);
     });
 
     // print(
     //     'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
-    if (userQuestModelRx.length != 0) print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
+    if (userQuestModelRx.length != 0)
+      print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
 
-    final RefreshController _refreshController = RefreshController(initialRefresh: false);
+    final RefreshController _refreshController =
+        RefreshController(initialRefresh: false);
     void _onRefresh() async {
       _refreshController.refreshCompleted();
     }
@@ -123,11 +131,14 @@ class HomeView extends StatelessWidget {
                     floating: false,
                     pinned: true,
                     // 홈 뷰 앱바 구현
-                    delegate:
-                        _GlassmorphismAppBarDelegate(MediaQuery.of(context).padding, offset.value, homeViewModel)),
+                    delegate: _GlassmorphismAppBarDelegate(
+                        MediaQuery.of(context).padding,
+                        offset.value,
+                        homeViewModel)),
               ),
               SliverList(
-                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
                   return homeWidgets[index];
                 }, childCount: homeWidgets.length),
               ),
@@ -178,7 +189,8 @@ class NewQuests extends StatelessWidget {
             children: [
               Container(
                   // color: Colors.blue,
-                  child: Text("새로 나온 퀘스트", style: sectionTitle.copyWith(height: 1.0))),
+                  child: Text("새로 나온 퀘스트",
+                      style: sectionTitle.copyWith(height: 1.0))),
               Spacer(),
               GestureDetector(
                 onTap: () {
@@ -191,7 +203,8 @@ class NewQuests extends StatelessWidget {
                         backgroundColor: primaryBackgroundColor,
                         insetPadding: EdgeInsets.all(16.w),
                         clipBehavior: Clip.hardEdge,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
                         child: Padding(
                           padding: EdgeInsets.only(left: 14.w, right: 14.w),
                           child: Container(
@@ -218,7 +231,8 @@ class NewQuests extends StatelessWidget {
                                   height: 24.w,
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left: 14.w, right: 14.w),
+                                  padding:
+                                      EdgeInsets.only(left: 14.w, right: 14.w),
                                   child: GestureDetector(
                                     onTap: () {
                                       print('aaaaaa');
@@ -227,7 +241,9 @@ class NewQuests extends StatelessWidget {
                                     child: Container(
                                       height: 44.w,
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(70.0), color: Color(0xFF6073B4)),
+                                          borderRadius:
+                                              BorderRadius.circular(70.0),
+                                          color: Color(0xFF6073B4)),
                                       width: double.infinity,
                                       child: Center(
                                         child: Text(
@@ -252,8 +268,10 @@ class NewQuests extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
-                      decoration: jogabiButtonBoxDecoration.copyWith(boxShadow: [primaryBoxShadow]),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
+                      decoration: jogabiButtonBoxDecoration
+                          .copyWith(boxShadow: [primaryBoxShadow]),
                       child: Row(
                         children: [
                           SvgPicture.asset(
@@ -267,8 +285,12 @@ class NewQuests extends StatelessWidget {
                           Obx(() {
                             print("item changed");
                             return Text(
-                              userModelRx.value == null ? 0.toString() : userModelRx.value!.item.toString(),
-                              style: questTermTextStyle.copyWith(color: Color(0xFF4D6A87), fontWeight: FontWeight.w600),
+                              userModelRx.value == null
+                                  ? 0.toString()
+                                  : userModelRx.value!.item.toString(),
+                              style: questTermTextStyle.copyWith(
+                                  color: Color(0xFF4D6A87),
+                                  fontWeight: FontWeight.w600),
                             );
                           })
                         ],
@@ -279,7 +301,8 @@ class NewQuests extends StatelessWidget {
                       top: -10.w,
                       child: Container(
                         padding: EdgeInsets.all(3.5.w),
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.red),
                         height: 20.w,
                         width: 20.w,
                         child: SvgPicture.asset(
@@ -302,7 +325,8 @@ class NewQuests extends StatelessWidget {
         ),
         // btwHomeModuleTitleSlider,
         Obx(() {
-          return (homeViewModel.newQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
+          return (homeViewModel.newQuests.length ==
+                  0) // 로딩 중과 length 0인 걸 구분해야 함
               ? Container(
                   width: 232.w,
                   height: 344.w,
@@ -324,11 +348,19 @@ class NewQuests extends StatelessWidget {
                                       : Container(),
                                   InkWell(
                                     onTap: () {
-                                      homeViewModel.newQuests[index].selectMode == 'survey'
-                                          ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
-                                          : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
+                                      homeViewModel.newQuests[index]
+                                                  .selectMode ==
+                                              'survey'
+                                          ? Get.toNamed('/survey',
+                                              arguments: homeViewModel
+                                                  .newQuests[index])
+                                          : Get.toNamed('/quest',
+                                              arguments: homeViewModel
+                                                  .newQuests[index]);
                                     },
-                                    child: QuestWidget(questModel: homeViewModel.newQuests[index]),
+                                    child: QuestWidget(
+                                        questModel:
+                                            homeViewModel.newQuests[index]),
                                   ),
                                   SizedBox(width: primaryPaddingSize),
                                 ],
@@ -340,7 +372,8 @@ class NewQuests extends StatelessWidget {
 }
 
 class MyAssets extends StatelessWidget {
-  final AssetViewModel _assetViewModel = Get.put(AssetViewModel());
+  final AssetViewModel _assetViewModel = Get.find<AssetViewModel>();
+  // final AssetViewModel _assetViewModel = Get.put(AssetViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -374,7 +407,9 @@ class MyAssets extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
+                    SizedBox(
+                        height: reducedPaddingWhenTextIsBelow(
+                            14.w, detailedContentTextStyle.fontSize!)),
                     GetBuilder<AssetViewModel>(
                         id: 'holdingStocks',
                         builder: (controller) {
@@ -385,7 +420,10 @@ class MyAssets extends StatelessWidget {
                                       : "0",
                                   style: myAssetAmount,
                                   children: [
-                                TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
+                                TextSpan(
+                                    text: " 원",
+                                    style: myAssetAmount.copyWith(
+                                        fontWeight: FontWeight.w300))
                               ]));
                         }),
                   ],
@@ -417,7 +455,9 @@ class MyAssets extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
+                  SizedBox(
+                      height: reducedPaddingWhenTextIsBelow(
+                          14.w, detailedContentTextStyle.fontSize!)),
                   GetBuilder<AssetViewModel>(
                       id: 'holdingStocks',
                       builder: (controller) {
@@ -428,7 +468,10 @@ class MyAssets extends StatelessWidget {
                                     : "0",
                                 style: myAssetAmount,
                                 children: [
-                              TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
+                              TextSpan(
+                                  text: " 원",
+                                  style: myAssetAmount.copyWith(
+                                      fontWeight: FontWeight.w300))
                             ]));
                       }),
                 ],
@@ -446,7 +489,8 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double offset;
   final HomeViewModel homeViewModel;
 
-  _GlassmorphismAppBarDelegate(this.safeAreaPadding, this.offset, this.homeViewModel);
+  _GlassmorphismAppBarDelegate(
+      this.safeAreaPadding, this.offset, this.homeViewModel);
 
   @override
   double get minExtent => 60.h + ScreenUtil().statusBarHeight;
@@ -455,7 +499,8 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => minExtent + kToolbarHeight - 40.h;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return ClipRect(
         child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),

@@ -10,6 +10,7 @@ import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/chart_price_model.dart';
 import 'package:yachtOne/models/profile_models.dart';
 import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/models/rank_model.dart';
 import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 import 'package:yachtOne/models/corporation_model.dart';
@@ -301,23 +302,119 @@ class FirestoreService extends GetxService {
     return allSubLeagues;
   }
 
-  // state stream test용
-  Stream<String> getStateStream1() {
-    return _firestoreService
+  Future<List<List<RankModel>>> getAllTopRanker(int limitDoc) async {
+    List<List<RankModel>> allTopRankersOfSubLeagues = [];
+    List<RankModel> tempRankList;
+
+    // print('rank   ' + leagueRx.value);
+
+    await _firestoreService
+        .collection('leagues') // 변하지 않음
+        .doc(leagueRx.value) // 변함. 현재 리그를 가져올지, 다음 리그를 가져올지 등에 따라. 값 자체도 변수로 줘야
+        .collection('subLeagues') // 변하지 않음
+        .get()
+        .then((value) async {
+      for (var element in value.docs) {
+        allTopRankersOfSubLeagues.add([]);
+        tempRankList = [];
+
+        await _firestoreService
+            .collection('leagues')
+            .doc(leagueRx.value)
+            .collection('subLeagues')
+            .doc(element.id)
+            .collection('ranks')
+            .orderBy('todayRank', descending: false)
+            .limit(limitDoc)
+            .get()
+            .then((v) {
+          v.docs.forEach((e) {
+            tempRankList.add(RankModel.fromMap(e.data()));
+          });
+        });
+
+        allTopRankersOfSubLeagues.last = tempRankList;
+      }
+    });
+
+    print(allTopRankersOfSubLeagues[2]);
+
+    return allTopRankersOfSubLeagues;
+  }
+
+  Future<List<Map<String, int>>> getMyRanks() async {
+    List<Map<String, int>> myRanksAndPoint = [];
+
+    await _firestoreService
+        .collection('leagues') // 변하지 않음
+        .doc(leagueRx.value) // 변함. 현재 리그를 가져올지, 다음 리그를 가져올지 등에 따라. 값 자체도 변수로 줘야
+        .collection('subLeagues') // 변하지 않음
+        .get()
+        .then((value) async {
+      for (var element in value.docs) {
+        // 일단 리그 참여안한 것도 있을 수 있으니 모두 0으로 초기화. 랭크가 0이면 다른곳에서 특수처리하는걸로.
+        myRanksAndPoint.add({'todayRank': 0, 'todayPoint': 0});
+
+        await _firestoreService
+            .collection('leagues')
+            .doc(leagueRx.value)
+            .collection('subLeagues')
+            .doc(element.id)
+            .collection('ranks')
+            .where('uid', isEqualTo: userModelRx.value!.uid)
+            .get()
+            .then((v) {
+          v.docs.forEach((e) {
+            myRanksAndPoint.last = {
+              'todayRank': e.data()['todayRank'],
+              'todayPoint': e.data()['todayPoint']
+            };
+            // myRanks.add(e.data()['todayRank']);
+          });
+        });
+      }
+    });
+
+    return myRanksAndPoint;
+  }
+
+  // 임시
+  Future addRank() async {
+    await _firestoreService
         .collection('leagues')
-        .doc(leagueRx.value)
-        .snapshots()
-        .map((snapshot) => snapshot.data()!['stateStream1']);
+        .doc('league001')
+        .collection('subLeagues')
+        .doc('subLeague001')
+        .collection('ranks')
+        .add({
+          'uid': 'kakao:1513684681',
+          'userName': '7번방의선물옵션',
+          'avatarImage': 'avatar_admin',
+          'todayRank': 2,
+          'todayPoint': 8,
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+    // }
   }
 
   // state stream test용
-  Stream<String> getStateStream2() {
-    return _firestoreService
-        .collection('leagues')
-        .doc(leagueRx.value)
-        .snapshots()
-        .map((snapshot) => snapshot.data()!['stateStream2']);
-  }
+  // Stream<String> getStateStream1() {
+  //   return _firestoreService
+  //       .collection('leagues')
+  //       .doc(leagueRx.value)
+  //       .snapshots()
+  //       .map((snapshot) => snapshot.data()!['stateStream1']);
+  // }
+
+  // // state stream test용
+  // Stream<String> getStateStream2() {
+  //   return _firestoreService
+  //       .collection('leagues')
+  //       .doc(leagueRx.value)
+  //       .snapshots()
+  //       .map((snapshot) => snapshot.data()!['stateStream2']);
+  // }
 
   // 라이브 스트림 가격차트 테스트용
   // Stream<List<RealtimePriceModel>> getTempRealtimePrice(InvestAddressModel investAddressModel) {
