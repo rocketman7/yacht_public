@@ -32,12 +32,12 @@ class StartupView extends GetView<StartupViewModel> {
   Widget build(BuildContext context) {
     RxList<Widget> pageList = [
       HomeView(),
-      // CommunityView(),
+      CommunityView(),
       // Container(color: Colors.red),
       // Container(color: yachtViolet),
       // ProfileView(uid: _auth.currentUser.uid) //, null value error
       // ProfileView(uid: userModelRx.value!.uid) //
-      // ProfileMyView(),
+      ProfileMyView(),
     ].obs;
     // print('startup rebuild');
 

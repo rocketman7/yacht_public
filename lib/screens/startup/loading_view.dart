@@ -38,7 +38,7 @@ class LoadingView extends StatelessWidget {
     return Scaffold(
       body: Container(
         // height: 20,
-        color: white,
+        color: yachtViolet,
         child: Center(
           child: Column(
             children: [
@@ -50,29 +50,29 @@ class LoadingView extends StatelessWidget {
                   // height: 20,
                 ),
               ),
-              SizedBox(
-                height: 50,
-              ),
-              GestureDetector(
-                onTap: () {
-                  likeThis(!likeThis.value);
-                  _pressLike();
-                  print(likeThis.value);
-                },
-                child: SizedBox(
-                    height: 50,
-                    child: RiveAnimation.asset(
-                      'assets/buttons/like.riv',
-                      onInit: _onRiveInit,
-                      // animations: ['play', 'idle'],
-                      // controllers: [
-                      //   _playController,
-                      //   // _idleController,
-                      // ],
-                      stateMachines: ['likeButton'],
-                      // animations: ['idle', 'like'],
-                    )),
-              ),
+              // SizedBox(
+              //   height: 50,
+              // ),
+              // GestureDetector(
+              //   onTap: () {
+              //     likeThis(!likeThis.value);
+              //     _pressLike();
+              //     print(likeThis.value);
+              //   },
+              //   child: SizedBox(
+              //       height: 50,
+              //       child: RiveAnimation.asset(
+              //         'assets/buttons/like.riv',
+              //         onInit: _onRiveInit,
+              //         // animations: ['play', 'idle'],
+              //         // controllers: [
+              //         //   _playController,
+              //         //   // _idleController,
+              //         // ],
+              //         stateMachines: ['likeButton'],
+              //         // animations: ['idle', 'like'],
+              //       )),
+              // ),
               // GestureDetector(
               //   onTap: () {
               //     likeThis(!likeThis.value);
@@ -94,146 +94,146 @@ class LoadingView extends StatelessWidget {
               //     // onInit: _controller.,
               //   ),
               // ),,
-              LoadingContainer(
-                height: 200,
-                width: 200,
-                radius: 10,
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  "PLAY",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // ElevatedButton(
-                  //   child: const Text('Simple Animation'),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute<void>(
-                  //         builder: (context) => const SimpleAnimation(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  // const SizedBox(
-                  //   height: 10,
-                  // ),
-                  ElevatedButton(
-                    child: const Text('Play/Pause Animation'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (context) => const PlayPauseAnimation(),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                    child: const Text('Play One-Shot Animation'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (context) => const PlayOneShotAnimation(),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // ElevatedButton(
-                  //   child: const Text('Button State Machine'),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute<void>(
-                  //         builder: (context) => const ExampleStateMachine(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  // const SizedBox(
-                  //   height: 10,
-                  // ),
-                  // ElevatedButton(
-                  //   child: const Text('Skills Machine'),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute<void>(
-                  //         builder: (context) => const StateMachineSkills(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  // const SizedBox(
-                  //   height: 10,
-                  // ),
-                  // ElevatedButton(
-                  //   child: const Text('Little Machine'),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute<void>(
-                  //         builder: (context) => const LittleMachine(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  // const SizedBox(
-                  //   height: 10,
-                  // ),
-                  // ElevatedButton(
-                  //   child: const Text('Liquid Download'),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute<void>(
-                  //         builder: (context) => const LiquidDownload(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                    child: const Text('Custom Controller - Speed'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (context) => const SpeedyAnimation(),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // ElevatedButton(
-                  //   child: const Text('Simple State Machine'),
-                  //   onPressed: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute<void>(
-                  //         builder: (context) => const SimpleStateMachine(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                ],
-              ),
+              // LoadingContainer(
+              //   height: 200,
+              //   width: 200,
+              //   radius: 10,
+              // ),
+              // TextButton(
+              //   onPressed: () {},
+              //   child: Text(
+              //     "PLAY",
+              //     style: TextStyle(fontSize: 20),
+              //   ),
+              // ),
+              // Column(
+              //   mainAxisSize: MainAxisSize.min,
+              //   children: [
+              //     // ElevatedButton(
+              //     //   child: const Text('Simple Animation'),
+              //     //   onPressed: () {
+              //     //     Navigator.push(
+              //     //       context,
+              //     //       MaterialPageRoute<void>(
+              //     //         builder: (context) => const SimpleAnimation(),
+              //     //       ),
+              //     //     );
+              //     //   },
+              //     // ),
+              //     // const SizedBox(
+              //     //   height: 10,
+              //     // ),
+              //     // ElevatedButton(
+              //     //   child: const Text('Play/Pause Animation'),
+              //     //   onPressed: () {
+              //     //     Navigator.push(
+              //     //       context,
+              //     //       MaterialPageRoute<void>(
+              //     //         builder: (context) => const PlayPauseAnimation(),
+              //     //       ),
+              //     //     );
+              //     //   },
+              //     // ),
+              //     // const SizedBox(
+              //     //   height: 10,
+              //     // ),
+              //     // ElevatedButton(
+              //     //   child: const Text('Play One-Shot Animation'),
+              //     //   onPressed: () {
+              //     //     Navigator.push(
+              //     //       context,
+              //     //       MaterialPageRoute<void>(
+              //     //         builder: (context) => const PlayOneShotAnimation(),
+              //     //       ),
+              //     //     );
+              //     //   },
+              //     // ),
+              //     // const SizedBox(
+              //     //   height: 10,
+              //     // ),
+              //     // ElevatedButton(
+              //     //   child: const Text('Button State Machine'),
+              //     //   onPressed: () {
+              //     //     Navigator.push(
+              //     //       context,
+              //     //       MaterialPageRoute<void>(
+              //     //         builder: (context) => const ExampleStateMachine(),
+              //     //       ),
+              //     //     );
+              //     //   },
+              //     // ),
+              //     // const SizedBox(
+              //     //   height: 10,
+              //     // ),
+              //     // ElevatedButton(
+              //     //   child: const Text('Skills Machine'),
+              //     //   onPressed: () {
+              //     //     Navigator.push(
+              //     //       context,
+              //     //       MaterialPageRoute<void>(
+              //     //         builder: (context) => const StateMachineSkills(),
+              //     //       ),
+              //     //     );
+              //     //   },
+              //     // ),
+              //     // const SizedBox(
+              //     //   height: 10,
+              //     // ),
+              //     // ElevatedButton(
+              //     //   child: const Text('Little Machine'),
+              //     //   onPressed: () {
+              //     //     Navigator.push(
+              //     //       context,
+              //     //       MaterialPageRoute<void>(
+              //     //         builder: (context) => const LittleMachine(),
+              //     //       ),
+              //     //     );
+              //     //   },
+              //     // ),
+              //     // const SizedBox(
+              //     //   height: 10,
+              //     // ),
+              //     // ElevatedButton(
+              //     //   child: const Text('Liquid Download'),
+              //     //   onPressed: () {
+              //     //     Navigator.push(
+              //     //       context,
+              //     //       MaterialPageRoute<void>(
+              //     //         builder: (context) => const LiquidDownload(),
+              //     //       ),
+              //     //     );
+              //     //   },
+              //     // ),
+              //     // const SizedBox(
+              //     //   height: 10,
+              //     // ),
+              //     // ElevatedButton(
+              //     //   child: const Text('Custom Controller - Speed'),
+              //     //   onPressed: () {
+              //     //     Navigator.push(
+              //     //       context,
+              //     //       MaterialPageRoute<void>(
+              //     //         builder: (context) => const SpeedyAnimation(),
+              //     //       ),
+              //     //     );
+              //     //   },
+              //     // ),
+              //     // const SizedBox(
+              //     //   height: 10,
+              //     // ),
+              //     // ElevatedButton(
+              //     //   child: const Text('Simple State Machine'),
+              //     //   onPressed: () {
+              //     //     Navigator.push(
+              //     //       context,
+              //     //       MaterialPageRoute<void>(
+              //     //         builder: (context) => const SimpleStateMachine(),
+              //     //       ),
+              //     //     );
+              //     //   },
+              //     // ),
+              //   ],
+              // ),
             ],
           ),
         ),
