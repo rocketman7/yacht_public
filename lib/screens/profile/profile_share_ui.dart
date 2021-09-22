@@ -13,6 +13,7 @@ import 'profile_my_view_model.dart';
 import 'profile_others_view.dart';
 
 const int maxNumOfFavoriteStocks = 3; // 최초화면에서 즐겨찾기 종목이 최대 몇개 보일 것인지.
+const int maxNumOfBadges = 4 * 3; // 최초화면에서 획득한 뱃지가 최대 몇개 보일 것인지
 
 // favorite stocks 카드위젯 공통으로 쓴다. 단 로딩된 favoriteStocksModel과 로딩된 favoriteHistoricalStocksModel을 넘겨줘야함
 // 또 대부분의 상황에서는 MyViewModel은 떠져있는 상태일 것이므로 find는 MyViewModel걸로 해준다.
@@ -159,6 +160,8 @@ class FollowersNFollowingsView extends StatelessWidget {
                       padding: EdgeInsets.only(left: 20.w, right: 20.w),
                       child: GestureDetector(
                         onTap: () {
+                          print(followersNFollowingsUid[i]);
+
                           if (followersNFollowingsUid[i] !=
                               userModelRx.value!.uid)
                             Get.to(() => ProfileOthersView(
@@ -349,62 +352,325 @@ List<String> localBadges = [
   'survey', // '서베이완료',
 ];
 
-class BadgesGridView extends StatelessWidget {
+// ***위 뱃지 리스트와 동일한 순서로!
+List<Map<String, String>> localBadgesDescription = [
+  {'title': '성실한 항해사', 'description': '출석 30회'},
+  {'title': '성실한 항해사', 'description': '출석 60회'},
+  {'title': '성실한 항해사', 'description': '출석 100회'},
+  {'title': '가장 성실한 항해사', 'description': '출석 180회'},
+  {'title': '요트에 부는 바람', 'description': '광고 시청 100회'},
+  {'title': '요트에 부는 바람', 'description': '광고 시청 200회'},
+  {'title': '요트에 부는 바람', 'description': '광고 시청 300회'},
+  {'title': '요트에 부는 큰 바람', 'description': '광고 시청 400회'},
+  {'title': '종이 초대장', 'description': '친구 1명 초대하기'},
+  {'title': '구리빛 초대장', 'description': '친구 3명 초대하기'},
+  {'title': '은빛 초대장', 'description': '친구 6 초대하기'},
+  {'title': '황금 초대장', 'description': '친구 10명 이상 초대하기'},
+  {'title': '처음 낸 목소리', 'description': '커뮤니티 첫 게시글 작성'},
+  {'title': '소중한 소통', 'description': '댓글 3개 작성'},
+  {'title': '좋은 사람', 'description': '좋아요 10개 받기'},
+  {'title': '유쾌한 친구', 'description': '좋아요 10개 누르기'},
+  {'title': '관심은 곧 수익', 'description': '개별종목 코멘트 3개 작성'},
+  {'title': '그 사람의 매력', 'description': '내가 쓴 글에 댓글 10개 이상'},
+  {'title': '샵(#)의 유혹', 'description': '해쉬태그 1회 사용'},
+  {'title': '마켓 팔로워 20', 'description': '오늘의 시장 글 20개 읽기'},
+  {'title': '마켓 팔로워 60', 'description': '오늘의 시장 글 60개 읽기'},
+  {'title': '노력하는 투자자', 'description': '요트매거진 5개 읽기'},
+  {'title': '공부하는 투자자', 'description': '금융백과사전 20개 읽기'},
+  {'title': '시즌 우승자', 'description': '월간리그 우승'},
+  {'title': '예측의 달콤한 결실', 'description': '퀘스트를 통해 주식을 1주라도 수령'},
+  {'title': '돈이 되는 친구', 'description': '주식을 1주라도 선물하기'},
+  {'title': '고맙다 친구야', 'description': '주식을 1주라도 선물받기'},
+  {'title': '노력의 숭고한 결실', 'description': '리워드 포인트로 주식을 교환'},
+  {'title': '요트의 마케터', 'description': '퀘스트카드 친구에게 1회 공유하기'},
+  {'title': '요트의 아나운서', 'description': '퀘스트카드 친구에게 3회 공유하기'},
+  {'title': '요트의 아나운서', 'description': '퀘스트카드 친구에게 5회 공유하기'},
+  {'title': '요트의 아나운서', 'description': '퀘스트카드 친구에게 10회 공유하기'},
+  {'title': '포트폴리오 투자의 시작', 'description': '종목 즐겨찾기 5개'},
+  {'title': '인증된 투자자', 'description': '증권계좌 인증'},
+  {'title': '10명의 투자메이트', 'description': '팔로잉 10명'},
+  {'title': '30명의 투자메이트', 'description': '팔로잉 30명'},
+  {'title': '70명의 투자메이트', 'description': '팔로잉 70명'},
+  {'title': '100명의 투자메이트', 'description': '팔로잉 100명'},
+  {'title': '5명의 투자군단', 'description': '팔로워 5명'},
+  {'title': '20명의 투자군단', 'description': '팔로워 20명'},
+  {'title': '50명의 투자군단', 'description': '팔로워 50명'},
+  {'title': '100명의 투자군단', 'description': '팔로워 100명'},
+  {'title': '꾸욱의 서포터즈', 'description': '기존 꾸욱 유저'},
+  {'title': '꾸욱의 우승자들', 'description': '꾸욱 우승자 출신'},
+  {'title': '너 자신을 알라', 'description': '서베이 완료'},
+];
+
+class BadgesFullGridView extends StatelessWidget {
   final List<String> badges;
 
-  BadgesGridView({required this.badges});
+  BadgesFullGridView({required this.badges});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 14.w, right: 14.w),
-      child: Container(
-        width: double.infinity,
-        decoration: yachtBoxDecoration,
-        child: Padding(
-          padding:
-              EdgeInsets.only(left: 14.w, right: 14.w, top: 20.w, bottom: 20.w),
-          child: Column(
-            children: List.generate(
-                (localBadges.length - 1) ~/ 4 + 1, // 한 줄에 네 개씩 들어가므로~
-                (i) {
-              return Column(
-                children: [
-                  Row(
-                      children: List.generate(4, (j) {
-                    if (i * 4 + j < localBadges.length) {
-                      return Row(
-                        children: [
-                          Container(
-                            height: 76.w,
-                            width: 76.w,
-                            child: Image.asset(badges
-                                    .contains(localBadges[i * 4 + j])
-                                ? 'assets/badges/${localBadges[i * 4 + j]}.png'
-                                : 'assets/badges/${localBadges[i * 4 + j]}_none.png'),
-                          ),
-                          (j != 4 - 1)
-                              ? SizedBox(
-                                  width: 5.w,
-                                )
-                              : SizedBox(
-                                  width: 0.w,
-                                ),
-                        ],
-                      );
-                    } else {
-                      return Container(height: 76.w, width: 76.w);
-                    }
-                  })),
-                  SizedBox(
-                    height: 12.w,
-                  ),
-                ],
-              );
-            }),
+    return Scaffold(
+      backgroundColor: primaryBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: white,
+        toolbarHeight: 60.w,
+        title: Text('획득한 뱃지', style: appBarTitle),
+      ),
+      body: ListView(
+        children: [
+          SizedBox(
+            height: 20.w,
           ),
-        ),
+          BadgesGridView(
+            isFull: true,
+            badges: badges,
+          ),
+        ],
       ),
     );
   }
+}
+
+class BadgesGridView extends StatelessWidget {
+  final bool isFull;
+  final List<String> badges;
+
+  BadgesGridView({required this.isFull, required this.badges});
+
+  @override
+  Widget build(BuildContext context) {
+    // isFull 이 아닐 경우 badges만으로 그리드를 생성해주므로, 사용자가 뱃지를 획득한 순서에 상관 없이 local badge순으로 맞춰주기 위해 아래 작업 진행
+    List<String> tempBadges = [];
+    for (int i = 0; i < localBadges.length; i++) {
+      if (badges.contains(localBadges[i])) tempBadges.add(localBadges[i]);
+    }
+    if (badges.length != 0) {
+      return Padding(
+        padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        child: Container(
+          width: double.infinity,
+          decoration: yachtBoxDecoration,
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: 14.w, right: 14.w, top: 20.w, bottom: 20.w),
+            child: Column(
+              children: List.generate(
+                  (((isFull
+                                  ? (localBadges.length)
+                                  : min(badges.length, maxNumOfBadges)) -
+                              1) ~/
+                          4 +
+                      1), // 한 줄에 네 개씩 들어가므로~
+                  (i) {
+                return Column(
+                  children: [
+                    Row(
+                        children: List.generate(4, (j) {
+                      if (i * 4 + j <
+                          (isFull
+                              ? (localBadges.length)
+                              : min(badges.length, maxNumOfBadges))) {
+                        return Row(
+                          children: [
+                            isFull
+                                ? GestureDetector(
+                                    onTap: () {
+                                      badgeDialog(context, i * 4 + j);
+                                    },
+                                    child: Container(
+                                      height: 76.w,
+                                      width: 76.w,
+                                      child: Image.asset(badges
+                                              .contains(localBadges[i * 4 + j])
+                                          ? 'assets/badges/${localBadges[i * 4 + j]}.png'
+                                          : 'assets/badges/${localBadges[i * 4 + j]}_none.png'),
+                                    ),
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      badgeDialog(
+                                          context,
+                                          localBadges.indexWhere((element) =>
+                                              (element ==
+                                                  tempBadges[i * 4 + j])));
+                                    },
+                                    child: Container(
+                                      height: 76.w,
+                                      width: 76.w,
+                                      child: Image.asset(
+                                          'assets/badges/${tempBadges[i * 4 + j]}.png'),
+                                    ),
+                                  ),
+                            (j != 4 - 1)
+                                ? SizedBox(
+                                    width: 5.w,
+                                  )
+                                : SizedBox(
+                                    width: 0.w,
+                                  ),
+                          ],
+                        );
+                      } else {
+                        return Container(height: 76.w, width: 76.w);
+                      }
+                    })),
+                    SizedBox(
+                      height: 12.w,
+                    ),
+                  ],
+                );
+              }),
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Column(
+        children: [
+          SizedBox(
+            height: 50.w,
+          ),
+          Container(
+            width: 375.w,
+            child: Stack(
+              children: [
+                Center(
+                    child: Container(
+                  width: 265.w,
+                  height: 86.w,
+                  child: Image.asset(
+                      'assets/illusts/not_exists/no_general_words.png'),
+                )),
+                Positioned(
+                  top: 21.w,
+                  child: Container(
+                    width: 375.w,
+                    child: Center(
+                      child: Text(
+                        '아직 획득한 뱃지가 없어요.',
+                        style: notExistsText,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10.w,
+          ),
+          Center(
+              child: Container(
+            width: 71.w,
+            height: 56.w,
+            child:
+                Image.asset('assets/illusts/not_exists/no_general_illust.png'),
+          ))
+        ],
+      );
+    }
+  }
+}
+
+badgeDialog(BuildContext context, int indexOfLocalBadges) {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: primaryBackgroundColor,
+          insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+          clipBehavior: Clip.hardEdge,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Container(
+            height: 376.w,
+            width: 347.w,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 21.w,
+                    ),
+                    SizedBox(
+                        height: 15.w,
+                        width: 15.w,
+                        child: Image.asset('assets/icons/exit.png',
+                            color: Colors.transparent)),
+                    Spacer(),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 24.w,
+                        ),
+                        Text('뱃지', style: yachtBadgesDialogTitle)
+                      ],
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 24.w,
+                              ),
+                              SizedBox(
+                                  height: 15.w,
+                                  width: 15.w,
+                                  child: Image.asset('assets/icons/exit.png',
+                                      color: yachtBlack)),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 39.w,
+                            width: 21.w,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height:
+                      correctHeight(26.w, yachtBadgesDialogTitle.fontSize, 0.w),
+                ),
+                Center(
+                  child: Container(
+                    height: 200.w,
+                    width: 200.w,
+                    child: Image.asset(
+                        'assets/badges/${localBadges[indexOfLocalBadges]}.png'),
+                  ),
+                ),
+                SizedBox(
+                  height: correctHeight(
+                      18.w, 0.w, yachtBadgesDescriptionDialogTitle.fontSize),
+                ),
+                Text(
+                  '${localBadgesDescription[indexOfLocalBadges]['title']}',
+                  style: yachtBadgesDescriptionDialogTitle,
+                ),
+                SizedBox(
+                  height: correctHeight(
+                      9.w,
+                      yachtBadgesDescriptionDialogTitle.fontSize,
+                      yachtBadgesDescriptionDialogContent.fontSize),
+                ),
+                Text(
+                  '${localBadgesDescription[indexOfLocalBadges]['description']}',
+                  style: yachtBadgesDescriptionDialogContent,
+                ),
+                SizedBox(
+                  height: correctHeight(
+                      40.w, yachtBadgesDescriptionDialogContent.fontSize, 0.w),
+                ),
+              ],
+            ),
+          ),
+        );
+      });
 }

@@ -321,8 +321,6 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                             GestureDetector(
                               onTap: () {
                                 Get.to(() => ProfileChangeView());
-                                // Get.to(() =>
-                                //     ProfileOthersView(uid: 'kakao:1513684681'));
                               },
                               child: Container(
                                 height: 30.w,
@@ -692,19 +690,40 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
           ),
           Padding(
             padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 20.w),
-            child: Text(
-              '획득한 뱃지',
-              style: profileHeaderTextStyle,
+            child: Row(
+              children: [
+                Text(
+                  '획득한 뱃지',
+                  style: profileHeaderTextStyle,
+                ),
+                Spacer(),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => BadgesFullGridView(
+                          badges: userModelRx.value!.badges != null
+                              ? userModelRx.value!.badges!
+                              : [],
+                        ));
+                  },
+                  child: Image.asset(
+                    'assets/icons/navigate_foward_arrow.png',
+                    height: 16.w,
+                    width: 9.w,
+                  ),
+                )
+              ],
             ),
           ),
           GetBuilder<ProfileMyViewModel>(
             id: 'profile',
             builder: (controller) {
-              if (controller.isUserModelLoaded) {
-                // null 처리해줘야함
-                return BadgesGridView(badges: userModelRx.value!.badges!);
+              if (userModelRx.value!.badges != null &&
+                  controller.isUserModelLoaded) {
+                return BadgesGridView(
+                    isFull: false, badges: userModelRx.value!.badges!);
               } else {
                 return BadgesGridView(
+                  isFull: false,
                   badges: [],
                 );
               }

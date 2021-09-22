@@ -678,6 +678,16 @@ TextStyle dictionaryKeyword = TextStyle(
   height: 1.4,
 );
 
+// 더보기
+TextStyle moreText = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w300,
+  color: yachtGrey,
+  letterSpacing: 0.0,
+  height: 1.4,
+);
+
 /// 세부 포스트 페이지
 // 세부 포스트에서 사이즈 1픽셀 확대
 TextStyle feedTitleDetail = feedTitle.copyWith(fontSize: 15.w);
@@ -796,6 +806,15 @@ TextStyle settingContent = TextStyle(
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle settingLogout = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w300,
+  color: yachtGrey,
+  decoration: TextDecoration.underline,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -949,6 +968,119 @@ TextStyle yachtInstructionDialogDescription = TextStyle(
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 뱃지 설명서 다이얼로그
+TextStyle yachtBadgesDialogTitle = TextStyle(
+  fontSize: 18.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: 0.0,
+  height: 1.4,
+);
+TextStyle yachtBadgesDescriptionDialogTitle = TextStyle(
+  fontSize: 18.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle yachtBadgesDescriptionDialogContent = TextStyle(
+  fontSize: 16.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+// 출고 다이얼로그
+TextStyle yachtDeliveryDialogTitle = TextStyle(
+  fontSize: 16.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: 0.0,
+  height: 1.4,
+);
+TextStyle yachtDeliveryDialogText = TextStyle(
+  fontSize: 18.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle yachtDeliveryDialogText2 = TextStyle(
+  fontSize: 18.w,
+  fontFamily: krFontW400,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle yachtDeliveryDialogButtonText = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 16.w,
+  fontWeight: FontWeight.w500,
+  color: buttonNormal,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+// 랭킹뷰
+TextStyle rankMainText = TextStyle(
+  fontFamily: krFont,
+  fontSize: 18.w,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle rankNameText = TextStyle(
+  fontFamily: krFontW400,
+  fontSize: 18.w,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle rankMainBoldText = TextStyle(
+  fontFamily: krFont,
+  fontSize: 18.w,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle rankDescriptionBoldText = TextStyle(
+  fontFamily: krFont,
+  fontSize: 16.w,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle rankDescriptionMainText = TextStyle(
+  fontFamily: krFont,
+  fontSize: 16.w,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle rankDescriptionContentText = TextStyle(
+  fontFamily: krFontW400,
+  fontSize: 14.w,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle notExistsText = TextStyle(
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  fontSize: 16.w,
+  color: yachtDarkGrey,
   letterSpacing: -1.0,
   height: 1.4,
 );

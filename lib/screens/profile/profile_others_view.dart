@@ -33,7 +33,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
   @override
   Widget build(BuildContext context) {
     final ProfileOthersViewModel profileViewModel =
-        Get.put(ProfileOthersViewModel(uid: uid));
+        Get.put(ProfileOthersViewModel(uid: uid), tag: uid);
 
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
@@ -50,6 +50,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
               children: [
                 GetBuilder<ProfileOthersViewModel>(
                     id: 'profile',
+                    tag: uid,
                     builder: (controller) {
                       return Container(
                         width: 79.w,
@@ -170,6 +171,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                               // 유저아이디
                               GetBuilder<ProfileOthersViewModel>(
                                 id: 'profile',
+                                tag: uid,
                                 builder: (controller) {
                                   if (controller.isUserModelLoaded) {
                                     return Text(
@@ -195,18 +197,24 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      controller.user.followers != null &&
-                                              controller
-                                                      .user.followers!.length !=
+                                      Get.find<ProfileOthersViewModel>(tag: uid)
+                                                      .user
+                                                      .followers !=
+                                                  null &&
+                                              Get.find<ProfileOthersViewModel>(
+                                                          tag: uid)
+                                                      .user
+                                                      .followers!
+                                                      .length !=
                                                   0
-                                          ? Get.to(() =>
-                                              FollowersNFollowingsView(
-                                                  isMe: false,
-                                                  whichfollowersOrfollowings:
-                                                      true,
-                                                  followersNFollowingsUid:
-                                                      controller
-                                                          .user.followers!))
+                                          ? Get.to(() => FollowersNFollowingsView(
+                                              isMe: false,
+                                              whichfollowersOrfollowings: true,
+                                              followersNFollowingsUid: Get.find<
+                                                          ProfileOthersViewModel>(
+                                                      tag: uid)
+                                                  .user
+                                                  .followers!))
                                           : Get.to(() =>
                                               NullFollowersNFollowingsView(
                                                 whichNULLfollowersOrfollowings:
@@ -217,6 +225,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                       children: [
                                         GetBuilder<ProfileOthersViewModel>(
                                           id: 'profile',
+                                          tag: uid,
                                           builder: (controller) {
                                             if (controller.isUserModelLoaded) {
                                               return Text(
@@ -246,18 +255,24 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      controller.user.followings != null &&
-                                              controller.user.followings!
+                                      Get.find<ProfileOthersViewModel>(tag: uid)
+                                                      .user
+                                                      .followings !=
+                                                  null &&
+                                              Get.find<ProfileOthersViewModel>(
+                                                          tag: uid)
+                                                      .user
+                                                      .followings!
                                                       .length !=
                                                   0
-                                          ? Get.to(() =>
-                                              FollowersNFollowingsView(
-                                                  isMe: false,
-                                                  whichfollowersOrfollowings:
-                                                      false,
-                                                  followersNFollowingsUid:
-                                                      controller
-                                                          .user.followings!))
+                                          ? Get.to(() => FollowersNFollowingsView(
+                                              isMe: false,
+                                              whichfollowersOrfollowings: false,
+                                              followersNFollowingsUid: Get.find<
+                                                          ProfileOthersViewModel>(
+                                                      tag: uid)
+                                                  .user
+                                                  .followings!))
                                           : Get.to(() =>
                                               NullFollowersNFollowingsView(
                                                 whichNULLfollowersOrfollowings:
@@ -268,6 +283,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                       children: [
                                         GetBuilder<ProfileOthersViewModel>(
                                           id: 'profile',
+                                          tag: uid,
                                           builder: (controller) {
                                             if (controller.isUserModelLoaded) {
                                               return Text(
@@ -301,17 +317,20 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                           GestureDetector(
                               onTap: () async {
                                 if (profileViewModel.isFollowing)
-                                  await Get.find<ProfileOthersViewModel>()
+                                  await Get.find<ProfileOthersViewModel>(
+                                          tag: uid)
                                       .unFollowSomeoneMethod();
                                 else
-                                  await Get.find<ProfileOthersViewModel>()
+                                  await Get.find<ProfileOthersViewModel>(
+                                          tag: uid)
                                       .followSomeoneMethod();
 
-                                Get.find<ProfileOthersViewModel>()
+                                Get.find<ProfileOthersViewModel>(tag: uid)
                                     .reloadUserModel();
                               },
                               child: GetBuilder<ProfileOthersViewModel>(
                                 id: 'profile',
+                                tag: uid,
                                 builder: (controller) {
                                   if (controller.isUserModelLoaded) {
                                     if (controller.isFollowing) {
@@ -376,6 +395,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                       // 유저소개글
                       GetBuilder<ProfileOthersViewModel>(
                         id: 'profile',
+                        tag: uid,
                         builder: (controller) {
                           if (controller.isUserModelLoaded) {
                             return Text(
@@ -523,29 +543,29 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
           height: 1.w,
           color: dividerColor,
         ),
-        SizedBox(
-          height: correctHeight(30.w, 0.0, profileHeaderTextStyle.fontSize),
-        ),
-        Padding(
-          padding: primaryHorizontalPadding,
-          child: Row(
-            children: [
-              Text(
-                '퀘스트 참여기록',
-                style: profileHeaderTextStyle,
-              ),
-              Spacer(),
-              Image.asset(
-                'assets/icons/navigate_foward_arrow.png',
-                height: 16.w,
-                width: 9.w,
-              )
-            ],
-          ),
-        ),
-        SizedBox(
-          height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
-        ),
+        // SizedBox(
+        //   height: correctHeight(30.w, 0.0, profileHeaderTextStyle.fontSize),
+        // ),
+        // Padding(
+        //   padding: primaryHorizontalPadding,
+        //   child: Row(
+        //     children: [
+        //       Text(
+        //         '퀘스트 참여기록',
+        //         style: profileHeaderTextStyle,
+        //       ),
+        //       Spacer(),
+        //       Image.asset(
+        //         'assets/icons/navigate_foward_arrow.png',
+        //         height: 16.w,
+        //         width: 9.w,
+        //       )
+        //     ],
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
+        // ),
         // Obx(
         //   () => Column(
         //     children: List.generate(
@@ -666,6 +686,59 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
         //     }
         //   },
         // ),
+        SizedBox(
+          height: 50.w,
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 20.w),
+          child: Row(
+            children: [
+              Text(
+                '획득한 뱃지',
+                style: profileHeaderTextStyle,
+              ),
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => BadgesFullGridView(
+                        badges: Get.find<ProfileOthersViewModel>(tag: uid)
+                                    .user
+                                    .badges !=
+                                null
+                            ? Get.find<ProfileOthersViewModel>(tag: uid)
+                                .user
+                                .badges!
+                            : [],
+                      ));
+                },
+                child: Image.asset(
+                  'assets/icons/navigate_foward_arrow.png',
+                  height: 16.w,
+                  width: 9.w,
+                ),
+              )
+            ],
+          ),
+        ),
+        GetBuilder<ProfileOthersViewModel>(
+          id: 'profile',
+          tag: uid,
+          builder: (controller) {
+            if (controller.isUserModelLoaded &&
+                controller.user.badges != null) {
+              return BadgesGridView(
+                  isFull: false, badges: controller.user.badges!);
+            } else {
+              return BadgesGridView(
+                isFull: false,
+                badges: [],
+              );
+            }
+          },
+        ),
+        SizedBox(
+          height: 50.w,
+        ),
       ]),
     );
   }

@@ -11,12 +11,12 @@ class ServicesBinding implements Bindings {
   }
 }
 
-class HomeRepositoryBinding implements Bindings {
-  @override
-  void dependencies() {
-    Get.put(HomeRepository());
-  }
-}
+// class HomeRepositoryBinding implements Bindings {
+//   @override
+//   void dependencies() {
+//     Get.put(HomeRepository());
+//   }
+// }
 
 // 남들 프로필은 아니고.. 내 프로필 용
 class MyProfileRepositoryBinding implements Bindings {

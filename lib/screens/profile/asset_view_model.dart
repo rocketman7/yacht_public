@@ -177,13 +177,13 @@ class AssetViewModel extends GetxController {
   ///////////////////////// 실제 Controller 부분 /////////////////////////
   static AssetViewModel get to => Get.find();
 
-  late final List<AssetModel> allAssets;
+  late List<AssetModel> allAssets;
   //현재 잔고 보여주기 위한 변수들
   Map<String, String> stocksNameMap = {};
   Map<String, int> stocksSharesNumMap = {};
   Map<String, double> stocksAveragePriceAtAwardMap = {};
   //위 세 맵들을 모으자.
-  late final List<HoldingAwardModel> allHoldingStocks = [];
+  late List<HoldingAwardModel> allHoldingStocks = [];
   bool isHoldingStocksFutureLoad = false;
   int totalYachtPoint = 0;
   double totalHoldingStocksValue = 0.0;
@@ -361,7 +361,7 @@ class AssetViewModel extends GetxController {
     }
   }
 
-  void deliveryToME() {
+  Future deliveryToME() async {
     // print('deliveryToME');
 
     for (int i = 0; i < allHoldingStocks.length; i++) {
@@ -380,9 +380,31 @@ class AssetViewModel extends GetxController {
               )
             ]);
 
-        updateUserAsset('kakao:1518231402', ingAssetModel);
+        await updateUserAsset(userModelRx.value!.uid, ingAssetModel);
       }
     }
+  }
+
+  Future reloadUserAsset() async {
+    // 하고 모든 유저애샛모델 재로드 (변수들 초기화 + onInit부분 복사)
+    stocksNameMap = {};
+    stocksSharesNumMap = {};
+    stocksAveragePriceAtAwardMap = {};
+    allHoldingStocks = [];
+    isHoldingStocksFutureLoad = false;
+    totalYachtPoint = 0;
+    totalHoldingStocksValue = 0.0;
+    totalDeliveriedValue = 0.0;
+    stocksDeliveryNum.clear();
+    totalDeliveryValue(0.0);
+
+    allAssets = await getAllAssets(userModelRx.value!.uid);
+
+    update(['assets']);
+
+    calcHoldingStocksAndYachtPoint();
+
+    await calcAllHoldingStocks();
   }
 
   void deliveryToFRIEND() {

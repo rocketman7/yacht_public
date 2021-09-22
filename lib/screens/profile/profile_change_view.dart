@@ -179,8 +179,14 @@ class ProfileChangeView extends StatelessWidget {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     profileMyViewModel.updateUserNameOrIntroMethod(
-                        profileMyViewModel.nameChangeController.text,
-                        profileMyViewModel.introChangeController.text);
+                        profileMyViewModel.nameChangeController.text != ''
+                            ? profileMyViewModel.nameChangeController.text
+                            : userModelRx.value!.userName,
+                        profileMyViewModel.introChangeController.text != ''
+                            ? profileMyViewModel.introChangeController.text
+                            : (userModelRx.value!.intro != null
+                                ? userModelRx.value!.intro!
+                                : ''));
                     Get.rawSnackbar(
                       messageText: Center(
                         child: Text(

@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/screens/award_old/award_viewOld.dart';
+import 'package:yachtOne/screens/ranks/rank_share_view.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/widgets/appbar_back_button.dart';
 
@@ -464,11 +465,50 @@ class AwardDetailView extends StatelessWidget {
                             awardModuleTitleTextStyle.fontSize!),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 14.0.w),
-                    child: Text(
-                      '랭킹',
-                      style: awardModuleTitleTextStyle,
+                    padding: EdgeInsets.only(left: 14.0.w, right: 14.w),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Container(
+                            child:
+                                Text('랭킹', style: awardModuleTitleTextStyle)),
+                        Spacer(),
+                        GestureDetector(
+                            onTap: () {
+                              Get.to(() => AllRankerView(
+                                    leagueIndex:
+                                        _awardViewModel.pageIndexForUI.value,
+                                  ));
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  '더 보기',
+                                  style: moreText,
+                                ),
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                                SizedBox(
+                                  height: 12.w,
+                                  width: 8.w,
+                                  child: Image.asset(
+                                      'assets/icons/right_arrow_grey.png'),
+                                )
+                              ],
+                            )),
+                      ],
                     ),
+                  ),
+                  SizedBox(
+                    height: 24.w,
+                  ),
+                  Obx(() => RankShareView(
+                        leagueIndex: _awardViewModel.pageIndexForUI.value,
+                        isFullView: false,
+                      )),
+                  SizedBox(
+                    height: 14.w,
                   ),
                 ],
               ),

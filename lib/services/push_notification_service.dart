@@ -42,7 +42,7 @@ class PushNotificationService {
         print('pushpushpuhspuhspuhspuhs');
       }
 
-      print('ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ ${GetStorage().read('pushAlarm' + topics[i])}');
+      // print('ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ ${GetStorage().read('pushAlarm' + topics[i])}');
     }
 
     // 처음 들어오거나 특정한 이유로 토큰이 없는 사용자들은 토큰을 저장해줘야한다 DB에. 그리고 기본적으로 모두 구독해줘야한다.
