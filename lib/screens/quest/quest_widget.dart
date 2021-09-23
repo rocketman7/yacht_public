@@ -381,12 +381,12 @@ class QuestCardRewards extends StatelessWidget {
                 height: 24.w,
               ),
               SizedBox(width: 6.w),
-              questModel.yachtPointReward == null
+              questModel.yachtPointSuccessReward == null
                   ? Container()
                   : Container(
                       // color: Colors.red[50],
                       child: Text(
-                        '${toPriceKRW(questModel.yachtPointReward!)}원',
+                        '${toPriceKRW(questModel.yachtPointSuccessReward!)}원',
                         style: questRewardAmoutStyle.copyWith(height: 1.35),
                       ),
                     )
@@ -409,7 +409,7 @@ class QuestCardRewards extends StatelessWidget {
               Container(
                 // color: Colors.red[50],
                 child: Text(
-                  '${questModel.leaguePointReward}점',
+                  '${questModel.leaguePointSuccessReward}점',
                   style: questRewardAmoutStyle.copyWith(height: 1.35),
                 ),
               )

@@ -25,10 +25,14 @@ class QuestModel {
 //선택모드: updown, updown_many, pickone, pickmany, order, 로 나눠서
   final String selectMode;
 
-  final num itemNeeded;
-  final num? yachtPointReward;
-  final num? leaguePointReward;
-  final num? exp;
+  final int itemNeeded;
+  final int? yachtPointSuccessReward;
+  final int? leaguePointSuccessReward;
+  final int? expSuccessReward;
+
+  final int? yachtPointParticipationReward;
+  final int? leaguePointParticipationReward;
+  final int? expParticipationReward;
 
   final List<InvestAddressModel>? investAddresses;
   // final SurveyModel survey;
@@ -57,10 +61,13 @@ class QuestModel {
     this.rewardDescription,
     required this.selectMode,
     required this.itemNeeded,
-    this.yachtPointReward,
-    this.leaguePointReward,
-    this.exp,
-    required this.investAddresses,
+    this.yachtPointSuccessReward,
+    this.leaguePointSuccessReward,
+    this.expSuccessReward,
+    this.yachtPointParticipationReward,
+    this.leaguePointParticipationReward,
+    this.expParticipationReward,
+    this.investAddresses,
     this.choices,
     this.counts,
     this.results,
@@ -69,26 +76,28 @@ class QuestModel {
   QuestModel copyWith({
     String? questId,
     String? category,
-    String? term,
     String? themeColor,
     String? imageUrl,
-    dynamic uploadDateTime,
-    dynamic showHomeDateTime,
-    dynamic closeHomeDateTime,
-    dynamic questStartDateTime,
-    dynamic questEndDateTime,
-    dynamic liveStartDateTime,
-    dynamic liveEndDateTime,
-    dynamic resultDateTime,
+    dynamic? uploadDateTime,
+    dynamic? showHomeDateTime,
+    dynamic? closeHomeDateTime,
+    dynamic? questStartDateTime,
+    dynamic? questEndDateTime,
+    dynamic? liveStartDateTime,
+    dynamic? liveEndDateTime,
+    dynamic? resultDateTime,
     String? title,
     String? questDescription,
     String? selectInstruction,
     String? rewardDescription,
     String? selectMode,
-    num? itemNeeded,
-    num? yachtPointReward,
-    num? leaguePointReward,
-    num? exp,
+    int? itemNeeded,
+    int? yachtPointSuccessReward,
+    int? leaguePointSuccessReward,
+    int? expSuccessReward,
+    int? yachtPointParticipationReward,
+    int? leaguePointParticipationReward,
+    int? expParticipationReward,
     List<InvestAddressModel>? investAddresses,
     List<String>? choices,
     List<int>? counts,
@@ -113,14 +122,35 @@ class QuestModel {
       rewardDescription: rewardDescription ?? this.rewardDescription,
       selectMode: selectMode ?? this.selectMode,
       itemNeeded: itemNeeded ?? this.itemNeeded,
-      yachtPointReward: yachtPointReward ?? this.yachtPointReward,
-      leaguePointReward: leaguePointReward ?? this.leaguePointReward,
-      exp: exp ?? this.exp,
+      yachtPointSuccessReward: yachtPointSuccessReward ?? this.yachtPointSuccessReward,
+      leaguePointSuccessReward: leaguePointSuccessReward ?? this.leaguePointSuccessReward,
+      expSuccessReward: expSuccessReward ?? this.expSuccessReward,
+      yachtPointParticipationReward: yachtPointParticipationReward ?? this.yachtPointParticipationReward,
+      leaguePointParticipationReward: leaguePointParticipationReward ?? this.leaguePointParticipationReward,
+      expParticipationReward: expParticipationReward ?? this.expParticipationReward,
       investAddresses: investAddresses ?? this.investAddresses,
       choices: choices ?? this.choices,
       counts: counts ?? this.counts,
       results: results ?? this.results,
     );
+  }
+
+  String showResults() {
+    if (results == null) {
+      return "아직 결과 발표 전입니다.";
+    } else {
+      List<String> resultArray = results!.map((e) => choices![e]).toList();
+      String temp = "";
+      for (int i = 0; i < resultArray.length; i++) {
+        if (i != resultArray.length - 1) {
+          temp += "${resultArray[i]}, ";
+        } else {
+          temp += "${resultArray[i]}";
+        }
+      }
+
+      return temp;
+    }
   }
 
   Map<String, dynamic> toMap() {
@@ -143,32 +173,17 @@ class QuestModel {
       'rewardDescription': rewardDescription,
       'selectMode': selectMode,
       'itemNeeded': itemNeeded,
-      'yachtPointReward': yachtPointReward,
-      'leaguePointReward': leaguePointReward,
-      'exp': exp,
+      'yachtPointSuccessReward': yachtPointSuccessReward,
+      'leaguePointSuccessReward': leaguePointSuccessReward,
+      'expSuccessReward': expSuccessReward,
+      'yachtPointParticipationReward': yachtPointParticipationReward,
+      'leaguePointParticipationReward': leaguePointParticipationReward,
+      'expParticipationReward': expParticipationReward,
       'investAddresses': investAddresses?.map((x) => x.toMap()).toList(),
       'choices': choices,
       'counts': counts,
       'results': results,
     };
-  }
-
-  String showResults() {
-    if (results == null) {
-      return "아직 결과 발표 전입니다.";
-    } else {
-      List<String> resultArray = results!.map((e) => choices![e]).toList();
-      String temp = "";
-      for (int i = 0; i < resultArray.length; i++) {
-        if (i != resultArray.length - 1) {
-          temp += "${resultArray[i]}, ";
-        } else {
-          temp += "${resultArray[i]}";
-        }
-      }
-
-      return temp;
-    }
   }
 
   factory QuestModel.fromMap(String questId, Map<String, dynamic> map, List<InvestAddressModel>? investAddress) {
@@ -191,9 +206,12 @@ class QuestModel {
       rewardDescription: map['rewardDescription'],
       selectMode: map['selectMode'],
       itemNeeded: map['itemNeeded'],
-      yachtPointReward: map['yachtPointReward'],
-      leaguePointReward: map['leaguePointReward'],
-      exp: map['exp'],
+      yachtPointSuccessReward: map['yachtPointSuccessReward'],
+      leaguePointSuccessReward: map['leaguePointSuccessReward'],
+      expSuccessReward: map[' expSuccessReward'],
+      yachtPointParticipationReward: map['yachtPointParticipationReward'],
+      leaguePointParticipationReward: map['leaguePointParticipationReward'],
+      expParticipationReward: map['expParticipationReward'],
       investAddresses: investAddress,
       choices: map['choices'] == null ? null : List<String>.from(map['choices']),
       counts: map['counts'] == null ? null : List<int>.from(map['counts']),
@@ -207,7 +225,7 @@ class QuestModel {
 
   @override
   String toString() {
-    return 'QuestModel(questId: $questId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointReward: $yachtPointReward, leaguePointReward: $leaguePointReward, exp: $exp, investAddresses: $investAddresses, choices: $choices, counts: $counts, results: $results)';
+    return 'QuestModel(questId: $questId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointSuccessReward: $yachtPointSuccessReward, leaguePointSuccessReward: $leaguePointSuccessReward, expSuccessReward: $expSuccessReward, yachtPointParticipationReward: $yachtPointParticipationReward, leaguePointParticipationReward: $leaguePointParticipationReward, expParticipationReward: $expParticipationReward, investAddresses: $investAddresses, choices: $choices, counts: $counts, results: $results)';
   }
 
   @override
@@ -233,9 +251,12 @@ class QuestModel {
         other.rewardDescription == rewardDescription &&
         other.selectMode == selectMode &&
         other.itemNeeded == itemNeeded &&
-        other.yachtPointReward == yachtPointReward &&
-        other.leaguePointReward == leaguePointReward &&
-        other.exp == exp &&
+        other.yachtPointSuccessReward == yachtPointSuccessReward &&
+        other.leaguePointSuccessReward == leaguePointSuccessReward &&
+        other.expSuccessReward == expSuccessReward &&
+        other.yachtPointParticipationReward == yachtPointParticipationReward &&
+        other.leaguePointParticipationReward == leaguePointParticipationReward &&
+        other.expParticipationReward == expParticipationReward &&
         listEquals(other.investAddresses, investAddresses) &&
         listEquals(other.choices, choices) &&
         listEquals(other.counts, counts) &&
@@ -262,9 +283,12 @@ class QuestModel {
         rewardDescription.hashCode ^
         selectMode.hashCode ^
         itemNeeded.hashCode ^
-        yachtPointReward.hashCode ^
-        leaguePointReward.hashCode ^
-        exp.hashCode ^
+        yachtPointSuccessReward.hashCode ^
+        leaguePointSuccessReward.hashCode ^
+        expSuccessReward.hashCode ^
+        yachtPointParticipationReward.hashCode ^
+        leaguePointParticipationReward.hashCode ^
+        expParticipationReward.hashCode ^
         investAddresses.hashCode ^
         choices.hashCode ^
         counts.hashCode ^

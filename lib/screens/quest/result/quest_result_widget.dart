@@ -272,138 +272,142 @@ class _ResultDialogState extends State<ResultDialog> {
                       ),
                     ),
                     SizedBox(height: reducedPaddingWhenTextIsBelow(30.w, smallSubtitleTextStyle.fontSize!)),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 96,
-                          child: Column(
-                            children: [
-                              Container(
-                                  width: double.infinity,
-                                  height: 39.w,
-                                  color: buttonNormal,
-                                  child: Center(
-                                    child: Text(
-                                      "퀘스트 보상",
-                                      style: questResultRewardTitle,
-                                    ),
-                                  )),
-                              Container(
-                                  width: double.infinity,
-                                  height: 39.w,
-                                  // color: buttonNormal,
-                                  child: Center(
-                                    child: Text(
-                                      "참여 보상",
-                                      style: questResultRewardTitle.copyWith(
-                                        fontFamily: krFont,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  )),
-                              Container(
-                                  width: double.infinity,
-                                  height: 39.w,
-                                  // color: buttonNormal,
-                                  child: Center(
-                                    child: Text(
-                                      "성공 보상",
-                                      style: questResultRewardTitle.copyWith(
-                                        fontFamily: krFont,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 2.w,
-                        ),
-                        Flexible(
-                          flex: 109,
-                          child: Column(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                height: 39.w,
-                                color: yachtYellowBackGround,
-                                child: SvgPicture.asset(
-                                  'assets/icons/league_point.svg',
-                                  width: 27.w,
-                                  height: 27.w,
+                    Obx(
+                      () => questResultViewModel.thisUserQuestModel.value != null
+                          ? Row(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  flex: 96,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "퀘스트 보상",
+                                              style: questResultRewardTitle,
+                                            ),
+                                          )),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "참여 보상",
+                                              style: questResultRewardTitle.copyWith(
+                                                fontFamily: krFont,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          )),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "성공 보상",
+                                              style: questResultRewardTitle.copyWith(
+                                                fontFamily: krFont,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          )),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                  width: double.infinity,
-                                  height: 39.w,
-                                  // color: buttonNormal,
-                                  child: Center(
-                                    child: Text(
-                                      "성공 보상",
-                                      style: questResultRewardTitle.copyWith(
-                                          fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtYellow),
-                                    ),
-                                  )),
-                              Container(
-                                  width: double.infinity,
-                                  height: 39.w,
-                                  // color: buttonNormal,
-                                  child: Center(
-                                    child: Text(
-                                      "성공 보상",
-                                      style: questResultRewardTitle.copyWith(
-                                          fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtYellow),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          width: 2.w,
-                        ),
-                        Flexible(
-                          flex: 109,
-                          child: Column(
-                            children: [
-                              Container(
-                                color: yachtGreenBackGround,
-                                width: double.infinity,
-                                height: 39.w,
-                                child: Image.asset(
-                                  'assets/icons/yacht_point_circle.png',
-                                  width: 27.w,
-                                  height: 27.w,
+                                SizedBox(
+                                  width: 2.w,
                                 ),
-                              ),
-                              Container(
-                                  width: double.infinity,
-                                  height: 39.w,
-                                  // color: buttonNormal,
-                                  child: Center(
-                                    child: Text(
-                                      "성공 보상",
-                                      style: questResultRewardTitle.copyWith(
-                                          fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtGreen),
-                                    ),
-                                  )),
-                              Container(
-                                  width: double.infinity,
-                                  height: 39.w,
-                                  // color: buttonNormal,
-                                  child: Center(
-                                    child: Text(
-                                      "성공 보상",
-                                      style: questResultRewardTitle.copyWith(
-                                          fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtGreen),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                        ),
-                      ],
+                                Flexible(
+                                  flex: 109,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        height: 39.w,
+                                        color: yachtYellowBackGround,
+                                        child: SvgPicture.asset(
+                                          'assets/icons/league_point.svg',
+                                          width: 27.w,
+                                          height: 27.w,
+                                        ),
+                                      ),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.leaguePointParticipationRewarded ?? "-"}",
+                                              style: questResultRewardTitle.copyWith(
+                                                  fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtYellow),
+                                            ),
+                                          )),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.leaguePointSuccessRewarded ?? "-"}",
+                                              style: questResultRewardTitle.copyWith(
+                                                  fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtYellow),
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Flexible(
+                                  flex: 109,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        color: yachtGreenBackGround,
+                                        width: double.infinity,
+                                        height: 39.w,
+                                        child: Image.asset(
+                                          'assets/icons/yacht_point_circle.png',
+                                          width: 27.w,
+                                          height: 27.w,
+                                        ),
+                                      ),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.yachtPointParticipationRewarded ?? "-"}",
+                                              style: questResultRewardTitle.copyWith(
+                                                  fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtGreen),
+                                            ),
+                                          )),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.yachtPointSuccessRewarded ?? "-"}",
+                                              style: questResultRewardTitle.copyWith(
+                                                  fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtGreen),
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
                     ),
                     SizedBox(
                       height: reducedPaddingWhenTextIsBothSide(20.w, smallSubtitleTextStyle.fontSize!, 0),
@@ -463,7 +467,7 @@ class _ResultDialogState extends State<ResultDialog> {
                                       Obx(
                                         () => questResultViewModel.thisUserQuestModel.value != null
                                             ? Text(
-                                                '경험치 보상 +${questResultViewModel.thisUserQuestModel.value!.expRewarded ?? 0}',
+                                                '경험치 보상 +${(questResultViewModel.thisUserQuestModel.value!.expSuccessRewarded ?? 0) + (questResultViewModel.thisUserQuestModel.value!.expParticipationRewarded ?? 0)}',
                                                 style: questRewardTextStyle.copyWith(
                                                   fontWeight: FontWeight.w500,
                                                   color: yachtDarkGrey,

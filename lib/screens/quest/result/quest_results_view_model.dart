@@ -56,20 +56,16 @@ class QuestResultsViewModel extends GetxController {
       }
     });
     // thisUserQuestModel.refresh();
-    print('userquestmodel at result' + thisUserQuestModel.toString());
+    // print('userquestmodel at result' + thisUserQuestModel.toString());
 
     if (thisUserQuestModel.value != null) {
       expBarStart(getBeforeTierExp(userModelRx.value!.exp));
       expBarEnd(getNextTierExp(userModelRx.value!.exp));
       expBarBeforeReward(userModelRx.value!.exp -
-          (thisUserQuestModel.value!.expRewarded == null ? 0 : thisUserQuestModel.value!.expRewarded as int));
+          ((thisUserQuestModel.value!.expSuccessRewarded ?? 0) +
+              (thisUserQuestModel.value!.expParticipationRewarded ?? 0)));
       expBarAfterReward(userModelRx.value!.exp);
     }
-
-    print(expBarStart);
-    print(expBarEnd);
-    print(expBarBeforeReward);
-    print(expBarAfterReward);
     super.onInit();
   }
 
