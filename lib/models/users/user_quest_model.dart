@@ -8,24 +8,40 @@ class UserQuestModel {
   final String? questId; //quest001
   final dynamic selectDateTime;
   final List<int>? selection;
+  final bool? hasSucceeded;
+  final num? yachtPointRewarded;
+  final num? leaguePointRewarded;
+  final num? expRewarded;
   UserQuestModel({
-    required this.leagueId,
+    this.leagueId,
     this.questId,
     required this.selectDateTime,
     this.selection,
+    this.hasSucceeded,
+    this.yachtPointRewarded,
+    this.leaguePointRewarded,
+    this.expRewarded,
   });
 
   UserQuestModel copyWith({
     String? leagueId,
     String? questId,
-    dynamic selectDateTime,
+    dynamic? selectDateTime,
     List<int>? selection,
+    bool? hasSucceeded,
+    num? yachtPointRewarded,
+    num? leaguePointRewarded,
+    num? expRewarded,
   }) {
     return UserQuestModel(
       leagueId: leagueId ?? this.leagueId,
       questId: questId ?? this.questId,
       selectDateTime: selectDateTime ?? this.selectDateTime,
       selection: selection ?? this.selection,
+      hasSucceeded: hasSucceeded ?? this.hasSucceeded,
+      yachtPointRewarded: yachtPointRewarded ?? this.yachtPointRewarded,
+      leaguePointRewarded: leaguePointRewarded ?? this.leaguePointRewarded,
+      expRewarded: expRewarded ?? this.expRewarded,
     );
   }
 
@@ -35,15 +51,23 @@ class UserQuestModel {
       'questId': questId,
       'selectDateTime': selectDateTime,
       'selection': selection,
+      'hasSucceeded': hasSucceeded,
+      'yachtPointRewarded': yachtPointRewarded,
+      'leaguePointRewarded': leaguePointRewarded,
+      'expRewarded': expRewarded,
     };
   }
 
-  factory UserQuestModel.fromMap(String id, Map<String, dynamic> map) {
+  factory UserQuestModel.fromMap(String questId, Map<String, dynamic> map) {
     return UserQuestModel(
       leagueId: map['leagueId'],
-      questId: id,
+      questId: questId,
       selectDateTime: map['selectDateTime'],
-      selection: map['selection'] == null ? null : List<int>.from(map['selection']),
+      selection: List<int>.from(map['selection']),
+      hasSucceeded: map['hasSucceeded'],
+      yachtPointRewarded: map['yachtPointRewarded'],
+      leaguePointRewarded: map['leaguePointRewarded'],
+      expRewarded: map['expRewarded'],
     );
   }
 
@@ -53,7 +77,7 @@ class UserQuestModel {
 
   @override
   String toString() {
-    return 'UserQuestModel(leagueId: $leagueId, questId: $questId, selectDateTime: $selectDateTime, selection: $selection)';
+    return 'UserQuestModel(leagueId: $leagueId, questId: $questId, selectDateTime: $selectDateTime, selection: $selection, hasSucceeded: $hasSucceeded, yachtPointRewarded: $yachtPointRewarded, leaguePointRewarded: $leaguePointRewarded, expRewarded: $expRewarded)';
   }
 
   @override
@@ -64,11 +88,22 @@ class UserQuestModel {
         other.leagueId == leagueId &&
         other.questId == questId &&
         other.selectDateTime == selectDateTime &&
-        listEquals(other.selection, selection);
+        listEquals(other.selection, selection) &&
+        other.hasSucceeded == hasSucceeded &&
+        other.yachtPointRewarded == yachtPointRewarded &&
+        other.leaguePointRewarded == leaguePointRewarded &&
+        other.expRewarded == expRewarded;
   }
 
   @override
   int get hashCode {
-    return leagueId.hashCode ^ questId.hashCode ^ selectDateTime.hashCode ^ selection.hashCode;
+    return leagueId.hashCode ^
+        questId.hashCode ^
+        selectDateTime.hashCode ^
+        selection.hashCode ^
+        hasSucceeded.hashCode ^
+        yachtPointRewarded.hashCode ^
+        leaguePointRewarded.hashCode ^
+        expRewarded.hashCode;
   }
 }

@@ -29,13 +29,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0+1"
-  apple_sign_in:
-    dependency: "direct main"
-    description:
-      name: apple_sign_in
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
   archive:
     dependency: transitive
     description:
@@ -1023,7 +1016,7 @@ packages:
       name: sign_in_with_apple
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.1.0"
   sky_engine:
     dependency: transitive
     description: flutter

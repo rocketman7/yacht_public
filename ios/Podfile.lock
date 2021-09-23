@@ -346,8 +346,6 @@ PODS:
   - Analytics (3.7.0)
   - app_tracking_transparency (0.0.1):
     - Flutter
-  - apple_sign_in (0.0.1):
-    - Flutter
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
@@ -629,7 +627,6 @@ PODS:
 DEPENDENCIES:
   - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
   - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
-  - apple_sign_in (from `.symlinks/plugins/apple_sign_in/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -700,8 +697,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/amplitude_flutter/ios"
   app_tracking_transparency:
     :path: ".symlinks/plugins/app_tracking_transparency/ios"
-  apple_sign_in:
-    :path: ".symlinks/plugins/apple_sign_in/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
@@ -764,7 +759,6 @@ SPEC CHECKSUMS:
   amplitude_flutter: 5c934cf8331619b62bbd5a69f3cfea9090b3ca94
   Analytics: 77fd5fb102a4a5eedafa2c2b0245ceb7b7c15e45
   app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
-  apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 3280837bd2fdec18489ef93699527df4af4f177d
   cloud_functions: 05add95f7488c5a3a4d39b060a58d67595acfd17
@@ -816,7 +810,7 @@ SPEC CHECKSUMS:
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   Segment-Amplitude: 1b3b02a2e92f4b08a413a72bf7aa44f78566ab3b
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
-  sign_in_with_apple: 34f3f5456a45fd7ac5fb42905e2ad31dae061b4a
+  sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
