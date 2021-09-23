@@ -551,90 +551,90 @@ class SettingView extends StatelessWidget {
         SizedBox(
           height: correctHeight(20.w, 0.w, settingTitle.fontSize),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 13.w, right: 13.w),
-          child: Text(
-            '고객센터',
-            style: settingTitle,
-          ),
-        ),
-        SizedBox(
-          height: correctHeight(10.w, settingTitle.fontSize, 0.w),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 14.w, right: 14.w),
-          child: Container(
-            height: 1.w,
-            width: double.infinity,
-            color: yachtLine,
-          ),
-        ),
-        // SizedBox(
-        //   height: correctHeight(18.w, 0.w, settingContent.fontSize),
-        // ),
-        // GestureDetector(
-        //   behavior: HitTestBehavior.opaque,
-        //   onTap: () {},
-        //   child: Padding(
-        //     padding: EdgeInsets.only(left: 14.w, right: 14.w),
-        //     child: Text(
-        //       '공지사항',
-        //       style: settingContent,
-        //     ),
+        // Padding(
+        //   padding: EdgeInsets.only(left: 13.w, right: 13.w),
+        //   child: Text(
+        //     '고객센터',
+        //     style: settingTitle,
         //   ),
         // ),
         // SizedBox(
-        //   height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        //   height: correctHeight(10.w, settingTitle.fontSize, 0.w),
         // ),
         // Padding(
         //   padding: EdgeInsets.only(left: 14.w, right: 14.w),
         //   child: Container(
         //     height: 1.w,
         //     width: double.infinity,
-        //     color: yachtLineColor,
+        //     color: yachtLine,
         //   ),
         // ),
+        // // SizedBox(
+        // //   height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        // // ),
+        // // GestureDetector(
+        // //   behavior: HitTestBehavior.opaque,
+        // //   onTap: () {},
+        // //   child: Padding(
+        // //     padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        // //     child: Text(
+        // //       '공지사항',
+        // //       style: settingContent,
+        // //     ),
+        // //   ),
+        // // ),
+        // // SizedBox(
+        // //   height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        // // ),
+        // // Padding(
+        // //   padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        // //   child: Container(
+        // //     height: 1.w,
+        // //     width: double.infinity,
+        // //     color: yachtLineColor,
+        // //   ),
+        // // ),
+        // // SizedBox(
+        // //   height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        // // ),
+        // // GestureDetector(
+        // //   behavior: HitTestBehavior.opaque,
+        // //   onTap: () {},
+        // //   child: Padding(
+        // //     padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        // //     child: Text(
+        // //       '자주 묻는 질문 (FAQ)',
+        // //       style: settingContent,
+        // //     ),
+        // //   ),
+        // // ),
+        // // SizedBox(
+        // //   height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        // // ),
+        // // Padding(
+        // //   padding: EdgeInsets.only(left: 14.w, right: 14.w),
+        // //   child: Container(
+        // //     height: 1.w,
+        // //     width: double.infinity,
+        // //     color: yachtLineColor,
+        // //   ),
+        // // ),
         // SizedBox(
         //   height: correctHeight(18.w, 0.w, settingContent.fontSize),
         // ),
         // GestureDetector(
         //   behavior: HitTestBehavior.opaque,
-        //   onTap: () {},
+        //   onTap: () {
+        //     Get.to(() => OneOnOneView());
+        //   },
         //   child: Padding(
         //     padding: EdgeInsets.only(left: 14.w, right: 14.w),
         //     child: Text(
-        //       '자주 묻는 질문 (FAQ)',
+        //       '1:1 문의하기',
         //       style: settingContent,
         //     ),
         //   ),
         // ),
-        // SizedBox(
-        //   height: correctHeight(17.w, settingContent.fontSize, 0.w),
-        // ),
-        // Padding(
-        //   padding: EdgeInsets.only(left: 14.w, right: 14.w),
-        //   child: Container(
-        //     height: 1.w,
-        //     width: double.infinity,
-        //     color: yachtLineColor,
-        //   ),
-        // ),
-        SizedBox(
-          height: correctHeight(18.w, 0.w, settingContent.fontSize),
-        ),
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            Get.to(() => OneOnOneView());
-          },
-          child: Padding(
-            padding: EdgeInsets.only(left: 14.w, right: 14.w),
-            child: Text(
-              '1:1 문의하기',
-              style: settingContent,
-            ),
-          ),
-        ),
         SizedBox(
           height: correctHeight(17.w, settingContent.fontSize, 0.w),
         ),
