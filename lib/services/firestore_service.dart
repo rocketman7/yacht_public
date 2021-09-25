@@ -18,6 +18,7 @@ import 'package:yachtOne/models/live_quest_price_model.dart';
 import 'package:yachtOne/models/tier_system_model.dart';
 import 'package:yachtOne/models/today_market_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
+import 'package:yachtOne/models/users/user_post_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 
@@ -492,6 +493,13 @@ class FirestoreService extends GetxService {
           writtenDateTime: timestampNow,
         )
         .toMap());
+
+    // 개인 계정 userFeed에 데이터 넣기
+    await _firestoreService.collection('users').doc(newPost.writerUid).collection('userFeed').doc(docUid).set({
+      'postId': docUid,
+      'writtenDateTime': timestampNow,
+      'isPro': newPost.isPro,
+    });
   }
 
   // 포스트 수정하기
@@ -558,10 +566,10 @@ class FirestoreService extends GetxService {
 
   // 한 포스트 다시 받아오기
 
-  Future getThisPost(PostModel post) async {
+  Future getThisPost(String postId) async {
     return await _firestoreService
         .collection('posts')
-        .doc(post.postId)
+        .doc(postId)
         .get()
         .then((value) => PostModel.fromMap(value.data()!));
   }
@@ -640,6 +648,20 @@ class FirestoreService extends GetxService {
         'likedBy': FieldValue.arrayUnion([uid])
       });
     }
+  }
+
+  // userFeed 받아오기
+  Future<List<UserPostModel>> getMyFeed(String uid) async {
+    List<UserPostModel> userPosts = [];
+    await _firestoreService
+        .collection('users')
+        .doc(uid)
+        .collection('userFeed')
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              userPosts.add(UserPostModel.fromMap(element.data()));
+            }));
+    return userPosts;
   }
 
   //// 컨텐츠 관련

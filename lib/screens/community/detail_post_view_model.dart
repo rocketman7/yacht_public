@@ -35,7 +35,7 @@ class DetailPostViewModel extends GetxController {
   }
 
   Future getThisPost(PostModel post) async {
-    thisPost(await _firestoreService.getThisPost(post));
+    thisPost(await _firestoreService.getThisPost(post.postId!));
     thisPost.refresh();
   }
 
