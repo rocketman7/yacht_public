@@ -21,6 +21,7 @@ import 'package:yachtOne/screens/contents/dictionary/dictionary_view.dart';
 import 'package:yachtOne/screens/contents/reading_content/reading_content_view.dart';
 import 'package:yachtOne/screens/contents/today_market/today_market_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
+import 'package:yachtOne/screens/notification/notification_view.dart';
 import 'package:yachtOne/screens/quest/live/live_quest_view.dart';
 import 'package:yachtOne/screens/profile/asset_view.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
@@ -587,9 +588,19 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
           padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
           child: Center(
               child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(
+                width: 12.w,
+              ),
+              SizedBox(
+                width: 24.w + 12.w + 12.w,
+              ),
+              SizedBox(
+                width: 12.w,
+              ),
               Container(
                   child: Obx(
                 () => Text(
@@ -605,6 +616,34 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                   " 님의 요트",
                   style: appBarTitle,
                 ),
+              ),
+              SizedBox(
+                width: 12.w,
+              ),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Get.to(() => NotificationView());
+                },
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 24.w,
+                      width: 12.w,
+                    ),
+                    SizedBox(
+                        height: 24.w,
+                        width: 24.w,
+                        child: Image.asset('assets/icons/notification.png')),
+                    SizedBox(
+                      height: 24.w,
+                      width: 12.w,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 12.w,
               ),
             ],
           )),

@@ -98,7 +98,8 @@ double correctHeight(double originalPadding, upperTextSize, lowerTextSize) {
 }
 
 double offsetTextHeight(double upperTextSize, double lowerTextSize) {
-  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round()).toDouble();
+  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round())
+      .toDouble();
 }
 
 // 섹션 타이틀과 박스 사이
@@ -108,7 +109,8 @@ double widthHorizontalListView = 14.w;
 // 첫 섹션과 앱바 사이
 // 섹션 안에 패딩
 double primaryPaddingSize = 14.w;
-EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(horizontal: primaryPaddingSize);
+EdgeInsets primaryHorizontalPadding =
+    EdgeInsets.symmetric(horizontal: primaryPaddingSize);
 EdgeInsets primaryAllPadding = EdgeInsets.all(primaryPaddingSize);
 // FONTS
 
@@ -1158,6 +1160,33 @@ TextStyle notExistsText = TextStyle(
   letterSpacing: -1.0,
   height: 1.4,
 );
+//알림뷰
+TextStyle notificationCategory = TextStyle(
+  fontSize: 14.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle notificationContent = TextStyle(
+  fontSize: 14.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle notificationContentForDetail = TextStyle(
+  fontSize: 16.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
 
 // Survey
 // Survey Title
@@ -1243,7 +1272,8 @@ Container textContainerButtonWithOptions({
       child: Text(
         text,
         style: isDarkBackground
-            ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
+            ? simpleTextButtonStyle.copyWith(
+                color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
             : simpleTextButtonStyle.copyWith(fontSize: fontSize ?? bodyBigSize),
       ),
     ),
@@ -1266,8 +1296,10 @@ Container bigTextContainerButton({
       child: Text(
         text,
         style: isDisabled
-            ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
-            : simpleTextButtonStyle.copyWith(fontSize: heading5Size, color: primaryButtonText),
+            ? simpleTextButtonStyle.copyWith(
+                color: yachtGrey, fontSize: heading5Size)
+            : simpleTextButtonStyle.copyWith(
+                fontSize: heading5Size, color: primaryButtonText),
       ),
     ),
   );
@@ -1285,35 +1317,43 @@ Container sectionBox({
     height: height,
     width: width,
     padding: padding ?? EdgeInsets.all(0),
-    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]),
+    decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(12.w),
+        boxShadow: [
+          BoxShadow(
+            color: yachtShadow,
+            blurRadius: 8.w,
+            spreadRadius: 1.w,
+          )
+        ]),
     child: child,
   );
 }
 
 // 기본 박스 데코레이션
-BoxDecoration yachtBoxDecoration = BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-  BoxShadow(
-    color: yachtShadow,
-    blurRadius: 8.w,
-    spreadRadius: 1.w,
-  )
-]);
+BoxDecoration yachtBoxDecoration = BoxDecoration(
+    color: white,
+    borderRadius: BorderRadius.circular(12.w),
+    boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]);
 
 // 퀘스트 선택지 박스 데코레이션
-BoxDecoration yachtChoiceBoxDecoration =
-    BoxDecoration(color: white, borderRadius: BorderRadius.circular(10.w), boxShadow: [
-  BoxShadow(
-    color: yachtShadow,
-    blurRadius: 8.w,
-    spreadRadius: 1.w,
-  )
-]);
+BoxDecoration yachtChoiceBoxDecoration = BoxDecoration(
+    color: white,
+    borderRadius: BorderRadius.circular(10.w),
+    boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]);
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -1328,13 +1368,16 @@ Container sectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]),
+    decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(12.w),
+        boxShadow: [
+          BoxShadow(
+            color: yachtShadow,
+            blurRadius: 8.w,
+            spreadRadius: 1.w,
+          )
+        ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1350,7 +1393,9 @@ Container sectionBoxWithBottomButton({
           width: double.infinity,
           decoration: BoxDecoration(
               color: yachtViolet,
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(12.w),
+                  bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -1375,13 +1420,16 @@ Container secondarySectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]),
+    decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(12.w),
+        boxShadow: [
+          BoxShadow(
+            color: yachtShadow,
+            blurRadius: 8.w,
+            spreadRadius: 1.w,
+          )
+        ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1397,7 +1445,9 @@ Container secondarySectionBoxWithBottomButton({
           width: double.infinity,
           decoration: BoxDecoration(
               color: buttonNormal,
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(12.w),
+                  bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -1410,7 +1460,8 @@ Container secondarySectionBoxWithBottomButton({
   );
 }
 
-Container simpleTierRRectBox({int exp = 0, double? fontSize, double width = 70}) {
+Container simpleTierRRectBox(
+    {int exp = 0, double? fontSize, double width = 70}) {
   String tierName = getTierByExp(exp);
   String tierTitle = separateStringFromTier(tierName);
   // String tierTitle = "intern";
@@ -1453,11 +1504,13 @@ Container simpleTierRRectBox({int exp = 0, double? fontSize, double width = 70})
                 : 12.w),
     // width: width.w,
     // height: (width / 3.75).w,
-    decoration: BoxDecoration(color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
+    decoration: BoxDecoration(
+        color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
     child: Center(
       child: Text(
         '${tierKorName[tierTitle]} $tierLevel',
-        style: simpleTierStyle.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
+        style: simpleTierStyle.copyWith(
+            fontSize: fontSize, fontWeight: FontWeight.w500),
       ),
     ),
   );
@@ -1469,7 +1522,9 @@ ClipRect glassmorphismContainer({required Widget child}) {
         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
         child: Container(
           padding: EdgeInsets.all(6.w),
-          decoration: BoxDecoration(color: glassmorphismBackgroundColor, borderRadius: BorderRadius.circular(10.w)),
+          decoration: BoxDecoration(
+              color: glassmorphismBackgroundColor,
+              borderRadius: BorderRadius.circular(10.w)),
           child: child,
         )),
   );
@@ -1494,7 +1549,9 @@ Container appBarWithCloseButton({required String title, double? height}) {
         Flexible(
           child: Container(),
         ),
-        Center(child: Text(title, style: appBarTitle.copyWith(fontFamily: 'Default'))),
+        Center(
+            child: Text(title,
+                style: appBarTitle.copyWith(fontFamily: 'Default'))),
         Flexible(
           child: Align(
             alignment: Alignment.centerRight,
@@ -1600,7 +1657,8 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
           Navigator.of(context).pop();
         },
         child: Container(
-          padding: EdgeInsets.fromLTRB(primaryPaddingSize, 0.0, primaryPaddingSize, primaryPaddingSize),
+          padding: EdgeInsets.fromLTRB(
+              primaryPaddingSize, 0.0, primaryPaddingSize, primaryPaddingSize),
           width: double.infinity,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -1610,16 +1668,21 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
               Column(children: [
                 Row(
                   children: [
-                    Expanded(child: Center(child: Text("티어 엠블럼", style: feedTitle))),
-                    Expanded(child: Center(child: Text("필요 경험치", style: feedTitle)))
+                    Expanded(
+                        child: Center(child: Text("티어 엠블럼", style: feedTitle))),
+                    Expanded(
+                        child: Center(child: Text("필요 경험치", style: feedTitle)))
                   ],
                 ),
                 SizedBox(height: correctHeight(10.w, feedTitle.fontSize, 0.0)),
                 ...List.generate(
-                    tierSystemModelRx.value == null ? 0 : getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length,
-                    (index) {
-                  bool isThisUserBelongthisTier =
-                      getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index] == thisUserTierTitle;
+                    tierSystemModelRx.value == null
+                        ? 0
+                        : getOnlyTierTitle(tierSystemModelRx.value!.tierNames)
+                            .length, (index) {
+                  bool isThisUserBelongthisTier = getOnlyTierTitle(
+                          tierSystemModelRx.value!.tierNames)[index] ==
+                      thisUserTierTitle;
                   return Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -1637,8 +1700,14 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
                                   child: Container(
                                     child: Center(
                                       child: FutureBuilder<String>(
-                                          future: FirebaseStorageService().downloadImageURL(tierJellyBeanURL[
-                                              getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index]]!),
+                                          future: FirebaseStorageService()
+                                              .downloadImageURL(
+                                                  tierJellyBeanURL[
+                                                      getOnlyTierTitle(
+                                                              tierSystemModelRx
+                                                                  .value!
+                                                                  .tierNames)[
+                                                          index]]!),
                                           builder: (context, snapshot) {
                                             return snapshot.hasData
                                                 ? Stack(
@@ -1646,8 +1715,10 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
                                                     children: [
                                                       Container(
                                                         width: 120.w,
-                                                        child: CachedNetworkImage(
-                                                          imageUrl: snapshot.data!,
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              snapshot.data!,
                                                         ),
                                                       ),
                                                       Text(
@@ -1669,28 +1740,62 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
                                       Text(
                                         index == 0
                                             ? 0.toString()
-                                            : index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
+                                            : index ==
+                                                    getOnlyTierTitle(
+                                                                tierSystemModelRx
+                                                                    .value!
+                                                                    .tierNames)
+                                                            .length -
+                                                        1
                                                 ? "상위 1%"
-                                                : getExpNeededForEachTierTitle(tierSystemModelRx.value!.tierNames,
-                                                        tierSystemModelRx.value!.tierStops)[index - 1]
+                                                : getExpNeededForEachTierTitle(
+                                                        tierSystemModelRx
+                                                            .value!.tierNames,
+                                                        tierSystemModelRx.value!
+                                                            .tierStops)[index -
+                                                        1]
                                                     .toString(),
-                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(
+                                            color: yachtBlack),
                                       ),
                                       Text(
-                                        index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
+                                        index ==
+                                                getOnlyTierTitle(
+                                                            tierSystemModelRx
+                                                                .value!
+                                                                .tierNames)
+                                                        .length -
+                                                    1
                                             ? ""
                                             : " ~ ",
-                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(
+                                            color: yachtBlack),
                                       ),
                                       Text(
-                                        index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 2
+                                        index ==
+                                                getOnlyTierTitle(
+                                                            tierSystemModelRx
+                                                                .value!
+                                                                .tierNames)
+                                                        .length -
+                                                    2
                                             ? ""
-                                            : index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
+                                            : index ==
+                                                    getOnlyTierTitle(
+                                                                tierSystemModelRx
+                                                                    .value!
+                                                                    .tierNames)
+                                                            .length -
+                                                        1
                                                 ? " "
-                                                : getExpNeededForEachTierTitle(tierSystemModelRx.value!.tierNames,
-                                                        tierSystemModelRx.value!.tierStops)[index]
+                                                : getExpNeededForEachTierTitle(
+                                                        tierSystemModelRx
+                                                            .value!.tierNames,
+                                                        tierSystemModelRx.value!
+                                                            .tierStops)[index]
                                                     .toString(),
-                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(
+                                            color: yachtBlack),
                                       ),
                                     ],
                                   )),
