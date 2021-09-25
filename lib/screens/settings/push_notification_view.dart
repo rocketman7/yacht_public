@@ -29,7 +29,7 @@ class PushNotificationView extends StatelessWidget {
                       child: Container(
                         height: 1.w,
                         width: double.infinity,
-                        color: yachtLineColor,
+                        color: yachtLine,
                       ),
                     )
                   : Container(),
@@ -96,7 +96,7 @@ class PushNotificationView extends StatelessWidget {
                 child: Container(
                   height: 1.w,
                   width: double.infinity,
-                  color: yachtLineColor,
+                  color: yachtLine,
                 ),
               ),
             ],

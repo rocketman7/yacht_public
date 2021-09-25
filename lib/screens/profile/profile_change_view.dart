@@ -43,11 +43,10 @@ class ProfileChangeView extends StatelessWidget {
                   Obx(() => Container(
                         height: 110.w,
                         width: 110.w,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xFFC4C4C4)),
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFFC4C4C4)),
                         child: FutureBuilder<String>(
-                          future: profileMyViewModel.getImageUrlFromStorage(
-                              'avatars/${userModelRx.value!.avatarImage}.png'),
+                          future: profileMyViewModel
+                              .getImageUrlFromStorage('avatars/${userModelRx.value!.avatarImage}.png'),
                           builder: (_, snapshot) {
                             return snapshot.hasData
                                 ? CachedNetworkImage(
@@ -62,8 +61,7 @@ class ProfileChangeView extends StatelessWidget {
                   Container(
                     height: 36.w,
                     width: 36.w,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: primaryButtonText),
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: primaryButtonText),
                     child: Center(
                       child: SizedBox(
                         height: 22.w,
@@ -87,18 +85,15 @@ class ProfileChangeView extends StatelessWidget {
                 Container(
                   height: 1.w,
                   width: double.infinity,
-                  color: yachtLineColor,
+                  color: yachtLine,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      20.w, 0.w, profileChangeTitleTextStyle.fontSize),
+                  height: correctHeight(20.w, 0.w, profileChangeTitleTextStyle.fontSize),
                 ),
                 Text('닉네임', style: profileChangeTitleTextStyle),
                 SizedBox(
-                  height: correctHeight(
-                      8.w,
-                      profileChangeTitleTextStyle.fontSize,
-                      profileChangeContentTextStyle.fontSize),
+                  height:
+                      correctHeight(8.w, profileChangeTitleTextStyle.fontSize, profileChangeContentTextStyle.fontSize),
                 ),
                 TextFormField(
                   controller: profileMyViewModel.nameChangeController,
@@ -107,34 +102,27 @@ class ProfileChangeView extends StatelessWidget {
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: EdgeInsets.all(0.w),
-                    focusedBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
-                    enabledBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                     hintText: '${userModelRx.value!.userName}',
-                    hintStyle: profileChangeContentTextStyle.copyWith(
-                        color: yachtGrey),
+                    hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
                   ),
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      20.w, profileChangeContentTextStyle.fontSize, 0.w),
+                  height: correctHeight(20.w, profileChangeContentTextStyle.fontSize, 0.w),
                 ),
                 Container(
                   height: 1.w,
                   width: double.infinity,
-                  color: yachtLineColor,
+                  color: yachtLine,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      20.w, 0.w, profileChangeTitleTextStyle.fontSize),
+                  height: correctHeight(20.w, 0.w, profileChangeTitleTextStyle.fontSize),
                 ),
                 Text('소개글', style: profileChangeTitleTextStyle),
                 SizedBox(
-                  height: correctHeight(
-                      8.w,
-                      profileChangeTitleTextStyle.fontSize,
-                      profileChangeContentTextStyle.fontSize),
+                  height:
+                      correctHeight(8.w, profileChangeTitleTextStyle.fontSize, profileChangeContentTextStyle.fontSize),
                 ),
                 TextFormField(
                   controller: profileMyViewModel.introChangeController,
@@ -144,24 +132,19 @@ class ProfileChangeView extends StatelessWidget {
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: EdgeInsets.all(0.w),
-                    focusedBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
-                    enabledBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
-                    hintText:
-                        '${userModelRx.value!.intro}'.replaceAll('\\n', '\n'),
-                    hintStyle: profileChangeContentTextStyle.copyWith(
-                        color: yachtGrey),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                    hintText: '${userModelRx.value!.intro}'.replaceAll('\\n', '\n'),
+                    hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
                   ),
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      20.w, profileChangeContentTextStyle.fontSize, 0.w),
+                  height: correctHeight(20.w, profileChangeContentTextStyle.fontSize, 0.w),
                 ),
                 Container(
                   height: 1.w,
                   width: double.infinity,
-                  color: yachtLineColor,
+                  color: yachtLine,
                 ),
               ],
             ),
@@ -184,9 +167,7 @@ class ProfileChangeView extends StatelessWidget {
                             : userModelRx.value!.userName,
                         profileMyViewModel.introChangeController.text != ''
                             ? profileMyViewModel.introChangeController.text
-                            : (userModelRx.value!.intro != null
-                                ? userModelRx.value!.intro!
-                                : ''));
+                            : (userModelRx.value!.intro != null ? userModelRx.value!.intro! : ''));
                     Get.rawSnackbar(
                       messageText: Center(
                         child: Text(
@@ -202,9 +183,7 @@ class ProfileChangeView extends StatelessWidget {
                   child: Container(
                     height: 50.w,
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(70.0),
-                        color: primaryButtonText),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: primaryButtonText),
                     child: Center(
                       child: Text(
                         '저장하기',
@@ -239,14 +218,11 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                 child: Container(
                   height: 435.w,
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.white),
                   child: Column(
                     children: [
                       SizedBox(
-                        height: correctHeight(
-                            24.w, 0.w, profileAvatarChangeTextStyle.fontSize),
+                        height: correctHeight(24.w, 0.w, profileAvatarChangeTextStyle.fontSize),
                       ),
                       Row(
                         children: [
@@ -280,8 +256,7 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        height: correctHeight(20.w - 9.w,
-                            profileAvatarChangeTextStyle.fontSize, 0.w),
+                        height: correctHeight(20.w - 9.w, profileAvatarChangeTextStyle.fontSize, 0.w),
                       ),
                       Container(
                         height: 351.w,
@@ -289,12 +264,10 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                           future: profileMyViewModel.getAvatarImagesURLs(),
                           builder: (_, snapshot) {
                             if (snapshot.hasData) {
-                              profileMyViewModel.avatarImagesURLs =
-                                  snapshot.data!;
+                              profileMyViewModel.avatarImagesURLs = snapshot.data!;
 
                               for (int i = 0; i < snapshot.data!.length; i++) {
-                                if (snapshot.data![i] ==
-                                    userModelRx.value!.avatarImage)
+                                if (snapshot.data![i] == userModelRx.value!.avatarImage)
                                   profileMyViewModel.avatarIndex(i);
                               }
                               return AvatarImages(
@@ -330,9 +303,7 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                   child: Container(
                     height: 50.w,
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(70.0),
-                        color: primaryButtonText),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: primaryButtonText),
                     child: Center(
                       child: Text(
                         '저장하기',
@@ -390,8 +361,8 @@ class AvatarImages extends StatelessWidget {
                               height: 68.w,
                               width: 68.w,
                               child: FutureBuilder<String>(
-                                future: profileMyViewModel.getImageUrlFromStorage(
-                                    'avatars/${avatarImagesURLs[i * 4 + j]}.png'),
+                                future: profileMyViewModel
+                                    .getImageUrlFromStorage('avatars/${avatarImagesURLs[i * 4 + j]}.png'),
                                 builder: (_, snapshot) {
                                   return snapshot.hasData
                                       ? Image.network(
@@ -411,13 +382,10 @@ class AvatarImages extends StatelessWidget {
                                     width: 68.w + 16.w,
                                     height: 68.w + 16.w,
                                     decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
+                                        borderRadius: BorderRadius.circular(100),
                                         border: Border.all(
                                             width: 4.w,
-                                            color: (i * 4 + j ==
-                                                    profileMyViewModel
-                                                        .avatarIndex.value)
+                                            color: (i * 4 + j == profileMyViewModel.avatarIndex.value)
                                                 ? yachtViolet
                                                 : Colors.transparent))),
                               )),

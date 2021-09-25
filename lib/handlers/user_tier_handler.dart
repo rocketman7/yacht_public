@@ -57,3 +57,33 @@ List<int> getExpNeededForEachTierTitle(List<String> tierNames, List<int> stops) 
   // print(temp);
   return temp;
 }
+
+int getNextTierExp(int expNow) {
+  int nextTierExp = 0;
+
+  for (int i = 0; i < tierSystemModelRx.value!.tierStops.length; i++) {
+    if (expNow > tierSystemModelRx.value!.tierStops[i]) {
+      if (i + 1 == tierSystemModelRx.value!.tierStops.length) {
+        nextTierExp = expNow;
+      } else {
+        nextTierExp = tierSystemModelRx.value!.tierStops[i + 1];
+      }
+    }
+  }
+  return nextTierExp;
+}
+
+int getBeforeTierExp(int expNow) {
+  int beforeTierExp = 0;
+
+  for (int i = 0; i < tierSystemModelRx.value!.tierStops.length; i++) {
+    if (expNow > tierSystemModelRx.value!.tierStops[i]) {
+      if (i == 0) {
+        beforeTierExp = 0;
+      } else {
+        beforeTierExp = tierSystemModelRx.value!.tierStops[i - 1];
+      }
+    }
+  }
+  return beforeTierExp;
+}

@@ -148,6 +148,10 @@ class QuestViewModel extends GetxController {
     }
   }
 
+  Future<String> getLogoByIssueCode(String issueCode) async {
+    return await _storageService.downloadImageURL('logo/$issueCode.png');
+  }
+
   // toggle user 선택
   // selectMode에 따라 토글/다수선택/순위선정 함수가 필요
   toggleUserSelect(int index) {

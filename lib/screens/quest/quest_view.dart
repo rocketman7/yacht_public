@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/handlers/numbers_handler.dart';
 
 import 'package:yachtOne/models/quest_model.dart';
 
@@ -15,6 +16,7 @@ import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/widgets/loading_container.dart';
 import 'quest_widget.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
@@ -603,33 +605,68 @@ class QuestView extends StatelessWidget {
                                               Row(
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
-                                                  Container(
-                                                    height: 27.w,
-                                                    width: 27.w,
-                                                    color: Colors.blue,
-                                                  ),
-                                                  SizedBox(width: 3.w),
-                                                  Text(questModel.investAddresses![index].name,
-                                                      style: yachtChoiceBoxName)
+                                                  FutureBuilder<String>(
+                                                      future: questViewModel.getLogoByIssueCode(
+                                                          questModel.investAddresses![index].issueCode),
+                                                      builder: (context, snapshot) {
+                                                        if (!snapshot.hasData) {
+                                                          return Container(
+                                                              height: 36.w,
+                                                              width: 36.w,
+                                                              decoration: BoxDecoration(shape: BoxShape.circle),
+                                                              child: LoadingContainer(
+                                                                  height: 36.w, width: 36.w, radius: 36.w));
+                                                        } else {
+                                                          print(snapshot.data);
+                                                          return Image.network(
+                                                            snapshot.data!,
+                                                            height: 36.w,
+                                                            // width: 28.w,
+                                                            // height: 27.w,
+                                                            // width: 27.w,
+                                                            filterQuality: FilterQuality.high,
+                                                            // isAntiAlias: true,
+                                                          );
+                                                        }
+                                                      }),
+                                                  SizedBox(width: 8.w),
+                                                  Text(
+                                                    questModel.investAddresses![index].name,
+                                                    style: yachtChoiceBoxName,
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  )
                                                 ],
                                               ),
                                               Row(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
-                                                  Text(
-                                                    "기준 가격",
-                                                    style: TextStyle(fontSize: captionSize, fontFamily: 'Default'),
+                                                  Container(
+                                                    // color: Colors.blue,
+                                                    child: Text(
+                                                      "기준 가격",
+                                                      style: TextStyle(
+                                                          color: yachtGrey,
+                                                          fontSize: captionSize,
+                                                          fontFamily: 'Default'),
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     width: 4.w,
                                                   ),
-                                                  Text(
-                                                      questModel.investAddresses![index].basePrice == null
-                                                          ? 0.toString()
-                                                          : questModel.investAddresses![index].basePrice.toString(),
-                                                      style: yachtChoiceBoxName.copyWith(
-                                                        fontWeight: FontWeight.w600,
-                                                      ))
+                                                  Container(
+                                                    // color: Colors.blue,
+                                                    child: Text(
+                                                        (questModel.investAddresses![index].basePrice == null
+                                                                ? 0.toString()
+                                                                : toPriceKRW(questModel
+                                                                    .investAddresses![index].basePrice as num)) +
+                                                            "원",
+                                                        style: yachtChoiceBoxName.copyWith(
+                                                          fontWeight: FontWeight.w600,
+                                                          height: 1.0,
+                                                        )),
+                                                  )
                                                 ],
                                               )
                                             ],

@@ -75,19 +75,14 @@ class _AccountViewState extends State<AccountView> {
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
                           controller.verificationFlowStart = true;
-                          controller.selectBankFlow =
-                              true; // 첫번째는 바로 뱅크리스트부터 고르도록 유도
+                          controller.selectBankFlow = true; // 첫번째는 바로 뱅크리스트부터 고르도록 유도
                           controller.update();
                         },
                         child: Container(
                             width: double.infinity,
                             color: buttonNormal,
                             child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 14.w,
-                                  top: 8.w,
-                                  bottom: 8.w,
-                                  right: 14.w),
+                              padding: EdgeInsets.only(left: 14.w, top: 8.w, bottom: 8.w, right: 14.w),
                               child: Row(
                                 children: [
                                   Image.asset(
@@ -99,8 +94,7 @@ class _AccountViewState extends State<AccountView> {
                                     width: 6.w,
                                   ),
                                   Text('증권계좌 미인증 상태네요. 여기를 눌러 인증해주세요.',
-                                      style: accountWarning.copyWith(
-                                          color: yachtViolet)),
+                                      style: accountWarning.copyWith(color: yachtViolet)),
                                   Spacer(),
                                   Image.asset(
                                     'assets/icons/verification_arrow.png',
@@ -115,8 +109,7 @@ class _AccountViewState extends State<AccountView> {
                         width: double.infinity,
                         color: buttonNormal,
                         child: Padding(
-                          padding: EdgeInsets.only(
-                              left: 14.w, top: 8.w, bottom: 8.w, right: 14.w),
+                          padding: EdgeInsets.only(left: 14.w, top: 8.w, bottom: 8.w, right: 14.w),
                           child: Row(
                             children: [
                               Image.asset(
@@ -184,8 +177,7 @@ class _AccountViewState extends State<AccountView> {
               child: Center(
                 child: TextFormField(
                   onChanged: (value) {
-                    if (value.length == 1 && value.isNum)
-                      myFocusNode4.requestFocus();
+                    if (value.length == 1 && value.isNum) myFocusNode4.requestFocus();
                     // 다 채워졌으면
                     if (_authNumController1.text != '' &&
                         _authNumController2.text != '' &&
@@ -208,10 +200,8 @@ class _AccountViewState extends State<AccountView> {
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: EdgeInsets.all(0.w),
-                    focusedBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
-                    enabledBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                   ),
                 ),
               ),
@@ -254,10 +244,8 @@ class _AccountViewState extends State<AccountView> {
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: EdgeInsets.all(0.w),
-                    focusedBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
-                    enabledBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                   ),
                 ),
               ),
@@ -300,10 +288,8 @@ class _AccountViewState extends State<AccountView> {
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: EdgeInsets.all(0.w),
-                    focusedBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
-                    enabledBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                   ),
                 ),
               ),
@@ -344,10 +330,8 @@ class _AccountViewState extends State<AccountView> {
                   decoration: InputDecoration(
                     isDense: true,
                     contentPadding: EdgeInsets.all(0.w),
-                    focusedBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
-                    enabledBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                   ),
                 ),
               ),
@@ -362,20 +346,17 @@ class _AccountViewState extends State<AccountView> {
             ? GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
-                  _accountViewModel.verificationSuccess =
-                      await _accountViewModel.accVerification(
-                          _authNumController1.text +
-                              _authNumController2.text +
-                              _authNumController3.text +
-                              _authNumController4.text);
+                  _accountViewModel.verificationSuccess = await _accountViewModel.accVerification(
+                      _authNumController1.text +
+                          _authNumController2.text +
+                          _authNumController3.text +
+                          _authNumController4.text);
                   FocusScope.of(context).unfocus();
                   _accountViewModel.update();
                 },
                 child: Container(
                   height: 50.w,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(70.0),
-                      color: yachtViolet),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: yachtViolet),
                   width: double.infinity,
                   child: Center(
                     child: Text(
@@ -401,8 +382,7 @@ class _AccountViewState extends State<AccountView> {
         ? Column(
             children: [
               SizedBox(
-                height:
-                    correctHeight(18.w, 0.w, accountVerificationTitle.fontSize),
+                height: correctHeight(18.w, 0.w, accountVerificationTitle.fontSize),
               ),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
@@ -441,13 +421,12 @@ class _AccountViewState extends State<AccountView> {
                 ),
               ),
               SizedBox(
-                height: correctHeight(
-                    17.w, accountVerificationContent.fontSize, 0.w),
+                height: correctHeight(17.w, accountVerificationContent.fontSize, 0.w),
               ),
               _accountViewModel.selectBankFlow ? bankList() : Container(),
               Container(
                 height: 1.w,
-                color: yachtLineColor,
+                color: yachtLine,
               ),
               accNumberInsertProcess(),
               accNameInsertProcess(),
@@ -462,8 +441,7 @@ class _AccountViewState extends State<AccountView> {
                               _accNumberController.text != '' &&
                               _accountViewModel.secName != '') {
                             FocusScope.of(context).unfocus();
-                            _accountViewModel.accNumber =
-                                _accNumberController.text;
+                            _accountViewModel.accNumber = _accNumberController.text;
                             _accountViewModel.accName = _accNameController.text;
 
                             _accountViewModel.ableButton2 = false;
@@ -475,8 +453,7 @@ class _AccountViewState extends State<AccountView> {
 
                             _accountViewModel.update();
 
-                            String result = await _accountViewModel
-                                .accVerificationRequest();
+                            String result = await _accountViewModel.accVerificationRequest();
 
                             if (result == 'success') {
                               _accountViewModel.visibleButton2 = false;
@@ -495,8 +472,7 @@ class _AccountViewState extends State<AccountView> {
                             _accountViewModel.ableButton2 = true;
                             _accountViewModel.update();
                           } else {
-                            _accountViewModel.accVerificationFailMsg =
-                                '값들을 모두 입력하여주세요!';
+                            _accountViewModel.accVerificationFailMsg = '값들을 모두 입력하여주세요!';
 
                             _accountViewModel.update();
                           }
@@ -508,19 +484,14 @@ class _AccountViewState extends State<AccountView> {
                         height: 50.w,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(70.0),
-                            color: _accountViewModel.ableButton2
-                                ? yachtViolet
-                                : buttonNormal),
+                            color: _accountViewModel.ableButton2 ? yachtViolet : buttonNormal),
                         width: double.infinity,
                         child: Center(
                           child: Text(
-                            _accountViewModel.ableButton2
-                                ? '계좌 인증코드 전송하기'
-                                : '인증코드를 전송하고 있어요',
+                            _accountViewModel.ableButton2 ? '계좌 인증코드 전송하기' : '인증코드를 전송하고 있어요',
                             style: _accountViewModel.ableButton2
                                 ? accountButtonText
-                                : accountButtonText.copyWith(
-                                    color: Color(0xFF6073B4)),
+                                : accountButtonText.copyWith(color: Color(0xFF6073B4)),
                           ),
                         ),
                       ),
@@ -544,20 +515,16 @@ class _AccountViewState extends State<AccountView> {
         Container(
           width: double.infinity,
           height: SizeConfig.screenHeight / 3,
-          decoration: primaryBoxDecoration.copyWith(
-              boxShadow: [primaryBoxShadow],
-              color: homeModuleBoxBackgroundColor),
+          decoration: primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
           child: GridView.count(
             crossAxisCount: 2,
             childAspectRatio: 6,
-            children:
-                List.generate(_accountViewModel.getBankListLength(), (index) {
+            children: List.generate(_accountViewModel.getBankListLength(), (index) {
               return Padding(
                 padding: EdgeInsets.only(top: 4.w, bottom: 4.w, left: 8.w),
                 child: GestureDetector(
                   onTap: () {
-                    _accountViewModel.secName =
-                        _accountViewModel.getBankList().keys.toList()[index];
+                    _accountViewModel.secName = _accountViewModel.getBankList().keys.toList()[index];
                     print(_accountViewModel.secName);
                     // _accountViewModel.visibleBankList = false;
                     _accountViewModel.selectBankFlow = false;
@@ -569,10 +536,8 @@ class _AccountViewState extends State<AccountView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Center(
-                        child: Image.asset(
-                            '${_accountViewModel.getBankLogoList().values.toList()[index]}',
-                            width: 17.w,
-                            height: 17.w),
+                        child: Image.asset('${_accountViewModel.getBankLogoList().values.toList()[index]}',
+                            width: 17.w, height: 17.w),
                       ),
                       SizedBox(
                         width: 4.w,
@@ -610,8 +575,7 @@ class _AccountViewState extends State<AccountView> {
             Expanded(
               child: TextFormField(
                 onChanged: (value) {
-                  if (_accNameController.text != '' &&
-                      _accNumberController.text != '') {
+                  if (_accNameController.text != '' && _accNumberController.text != '') {
                     _accountViewModel.visibleButton2 = true;
                   } else {
                     _accountViewModel.visibleButton2 = false;
@@ -629,10 +593,8 @@ class _AccountViewState extends State<AccountView> {
                 decoration: InputDecoration(
                   isDense: true,
                   contentPadding: EdgeInsets.all(0.w),
-                  focusedBorder:
-                      OutlineInputBorder(borderSide: BorderSide.none),
-                  enabledBorder:
-                      OutlineInputBorder(borderSide: BorderSide.none),
+                  focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                 ),
               ),
             ),
@@ -643,7 +605,7 @@ class _AccountViewState extends State<AccountView> {
         ),
         Container(
           height: 1,
-          color: yachtLineColor,
+          color: yachtLine,
         ),
       ],
     );
@@ -664,8 +626,7 @@ class _AccountViewState extends State<AccountView> {
             Expanded(
               child: TextFormField(
                 onChanged: (value) {
-                  if (_accNameController.text != '' &&
-                      _accNumberController.text != '') {
+                  if (_accNameController.text != '' && _accNumberController.text != '') {
                     _accountViewModel.visibleButton2 = true;
                   } else {
                     _accountViewModel.visibleButton2 = false;
@@ -682,10 +643,8 @@ class _AccountViewState extends State<AccountView> {
                 decoration: InputDecoration(
                   isDense: true,
                   contentPadding: EdgeInsets.all(0.w),
-                  focusedBorder:
-                      OutlineInputBorder(borderSide: BorderSide.none),
-                  enabledBorder:
-                      OutlineInputBorder(borderSide: BorderSide.none),
+                  focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                 ),
               ),
             ),
@@ -696,7 +655,7 @@ class _AccountViewState extends State<AccountView> {
         ),
         Container(
           height: 1,
-          color: yachtLineColor,
+          color: yachtLine,
         ),
       ],
     );
@@ -715,10 +674,8 @@ class _AccountViewState extends State<AccountView> {
               style: accountVerificationTitle,
             ),
             Spacer(),
-            Image.asset(
-                '${_accountViewModel.getBankLogoList().values.toList()[_accountViewModel.selectSecLogo]}',
-                width: 17.w,
-                height: 17.w),
+            Image.asset('${_accountViewModel.getBankLogoList().values.toList()[_accountViewModel.selectSecLogo]}',
+                width: 17.w, height: 17.w),
             SizedBox(
               width: 4.w,
             ),
@@ -733,7 +690,7 @@ class _AccountViewState extends State<AccountView> {
         ),
         Container(
           height: 1.w,
-          color: yachtLineColor,
+          color: yachtLine,
         ),
         SizedBox(
           height: correctHeight(18.w, 0.w, accountVerificationTitle.fontSize),
@@ -756,7 +713,7 @@ class _AccountViewState extends State<AccountView> {
         ),
         Container(
           height: 1,
-          color: yachtLineColor,
+          color: yachtLine,
         ),
         SizedBox(
           height: correctHeight(18.w, 0.w, accountVerificationTitle.fontSize),
@@ -779,7 +736,7 @@ class _AccountViewState extends State<AccountView> {
         ),
         Container(
           height: 1,
-          color: yachtLineColor,
+          color: yachtLine,
         ),
       ],
     );
