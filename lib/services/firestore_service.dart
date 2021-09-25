@@ -657,6 +657,7 @@ class FirestoreService extends GetxService {
         .collection('users')
         .doc(uid)
         .collection('userFeed')
+        .orderBy('writtenDateTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
               userPosts.add(UserPostModel.fromMap(element.data()));
@@ -799,8 +800,13 @@ class FirestoreService extends GetxService {
 
   Future updateInsertedFriendsCode(String uid, String insertedFriendsCode) async {
     print("insertedFriendsCode IS" + insertedFriendsCode);
-    await _firestoreService.collection('users').doc(uid).update({
-      'insertedFriendsCode': FieldValue.arrayUnion([insertedFriendsCode])
+    await _firestoreService.collection('users').doc(uid).update({'insertedFriendsCode': insertedFriendsCode});
+  }
+
+  Future friendsUidRecommededMe(String friendsUid, String myUid) async {
+    // print("insertedFriendsCode IS" + insertedFriendsCode);
+    await _firestoreService.collection('users').doc(friendsUid).update({
+      'friendsUidRecommededMe': FieldValue.arrayUnion([myUid])
     });
   }
 

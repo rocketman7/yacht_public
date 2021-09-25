@@ -14,7 +14,7 @@ class MyFeedViewModel extends GetxController {
   void onInit() async {
     // TODO: implement onInit
     await getMyFeed(userModelRx.value!.uid);
-    print(userPosts);
+    // print(userPosts);
     super.onInit();
   }
 

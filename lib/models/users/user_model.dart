@@ -18,7 +18,8 @@ class UserModel {
 
   final String? friendsCode; // 앱 공유 코드
   final bool? friendsCodeDone; // 추천완료
-  final List<String>? insertedFriendsCode; // 자기를 추천한 친구 uid 목록
+  final String? insertedFriendsCode; // 내가 추천한 추천코드
+  final List<String>? friendsUidRecommededMe; // 나를 추천한 UID LIST
   final List<String>? blockList; // 내가 차단한 uid 목록
 
   final int? rewardedCnt; // 아이템 리워드 받은 횟수
@@ -41,7 +42,6 @@ class UserModel {
   final dynamic membershipEndAt; // 멤버쉽 종료일
 
   final String? token;
-
   UserModel({
     required this.uid,
     required this.userName,
@@ -54,13 +54,12 @@ class UserModel {
     this.friendsCode,
     this.friendsCodeDone,
     this.insertedFriendsCode,
+    this.friendsUidRecommededMe,
     this.blockList,
-    required this.rewardedCnt,
+    this.rewardedCnt,
     required this.exp,
     this.tier,
-    // this.followersNum,
     this.followers,
-    // this.followingNum,
     this.followings,
     this.intro,
     this.favoriteStocks,
@@ -71,33 +70,33 @@ class UserModel {
     this.token,
   });
 
-  UserModel copyWith(
-      {String? uid,
-      String? userName,
-      bool? isNameUpdated,
-      String? email,
-      String? phoneNumber,
-      dynamic? account,
-      String? avatarImage,
-      num? item,
-      String? friendsCode,
-      bool? friendsCodeDone,
-      List<String>? insertedFriendsCode,
-      List<String>? blockList,
-      int? rewardedCnt,
-      int? exp,
-      String? tier,
-      // num? followersNum,
-      List<String>? followers,
-      // num? followingNum,
-      List<String>? followings,
-      String? intro,
-      List<String>? favoriteStocks,
-      List<String>? badges,
-      bool? membership,
-      dynamic? membershipStartAt,
-      dynamic? membershipEndAt,
-      String? token}) {
+  UserModel copyWith({
+    String? uid,
+    String? userName,
+    bool? isNameUpdated,
+    String? email,
+    String? phoneNumber,
+    dynamic? account,
+    String? avatarImage,
+    num? item,
+    String? friendsCode,
+    bool? friendsCodeDone,
+    String? insertedFriendsCode,
+    List<String>? friendsUidRecommededMe,
+    List<String>? blockList,
+    int? rewardedCnt,
+    int? exp,
+    String? tier,
+    List<String>? followers,
+    List<String>? followings,
+    String? intro,
+    List<String>? favoriteStocks,
+    List<String>? badges,
+    bool? membership,
+    dynamic? membershipStartAt,
+    dynamic? membershipEndAt,
+    String? token,
+  }) {
     return UserModel(
       uid: uid ?? this.uid,
       userName: userName ?? this.userName,
@@ -110,13 +109,12 @@ class UserModel {
       friendsCode: friendsCode ?? this.friendsCode,
       friendsCodeDone: friendsCodeDone ?? this.friendsCodeDone,
       insertedFriendsCode: insertedFriendsCode ?? this.insertedFriendsCode,
+      friendsUidRecommededMe: friendsUidRecommededMe ?? this.friendsUidRecommededMe,
       blockList: blockList ?? this.blockList,
       rewardedCnt: rewardedCnt ?? this.rewardedCnt,
       exp: exp ?? this.exp,
       tier: tier ?? this.tier,
-      // followersNum: followersNum ?? this.followersNum,
       followers: followers ?? this.followers,
-      // followingNum: followingNum ?? this.followingNum,
       followings: followings ?? this.followings,
       intro: intro ?? this.intro,
       favoriteStocks: favoriteStocks ?? this.favoriteStocks,
@@ -141,13 +139,12 @@ class UserModel {
       'friendsCode': friendsCode,
       'friendsCodeDone': friendsCodeDone,
       'insertedFriendsCode': insertedFriendsCode,
+      'friendsUidRecommededMe': friendsUidRecommededMe,
       'blockList': blockList,
       'rewardedCnt': rewardedCnt,
       'exp': exp,
       'tier': tier,
-      // 'followersNum': followersNum,
       'followers': followers,
-      // 'followingNum': followingNum,
       'followings': followings,
       'intro': intro,
       'favoriteStocks': favoriteStocks,
@@ -171,14 +168,14 @@ class UserModel {
       item: map['item'],
       friendsCode: map['friendsCode'],
       friendsCodeDone: map['friendsCodeDone'],
-      insertedFriendsCode: map['insertedFriendsCode'] == null ? null : List<String>.from(map['insertedFriendsCode']),
+      insertedFriendsCode: map['insertedFriendsCode'],
+      friendsUidRecommededMe:
+          map['friendsUidRecommededMe'] == null ? null : List<String>.from(map['friendsUidRecommededMe']),
       blockList: map['blockList'] == null ? null : List<String>.from(map['blockList']),
       rewardedCnt: map['rewardedCnt'] ?? 0,
-      exp: map['exp'] ?? 0,
+      exp: map['exp'],
       tier: map['tier'],
-      // followersNum: map['followersNum'],
       followers: map['followers'] == null ? null : List<String>.from(map['followers']),
-      // followingNum: map['followingNum'],
       followings: map['followings'] == null ? null : List<String>.from(map['followings']),
       intro: map['intro'],
       favoriteStocks: map['favoriteStocks'] == null ? null : List<String>.from(map['favoriteStocks']),
@@ -196,13 +193,12 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, friendsCodeDone: $friendsCodeDone, insertedFriendsCode: $insertedFriendsCode, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, tier: $tier, followers: $followers, followings: $followings, intro: $intro, favoriteStocks: $favoriteStocks, badges: $badges, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt), token: $token';
+    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, friendsCodeDone: $friendsCodeDone, insertedFriendsCode: $insertedFriendsCode, friendsUidRecommededMe: $friendsUidRecommededMe, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, tier: $tier, followers: $followers, followings: $followings, intro: $intro, favoriteStocks: $favoriteStocks, badges: $badges, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt, token: $token)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    final listEquals = const DeepCollectionEquality().equals;
 
     return other is UserModel &&
         other.uid == uid &&
@@ -215,14 +211,13 @@ class UserModel {
         other.item == item &&
         other.friendsCode == friendsCode &&
         other.friendsCodeDone == friendsCodeDone &&
-        listEquals(other.insertedFriendsCode, insertedFriendsCode) &&
+        other.insertedFriendsCode == insertedFriendsCode &&
+        listEquals(other.friendsUidRecommededMe, friendsUidRecommededMe) &&
         listEquals(other.blockList, blockList) &&
         other.rewardedCnt == rewardedCnt &&
         other.exp == exp &&
         other.tier == tier &&
-        // other.followersNum == followersNum &&
         listEquals(other.followers, followers) &&
-        // other.followingNum == followingNum &&
         listEquals(other.followings, followings) &&
         other.intro == intro &&
         listEquals(other.favoriteStocks, favoriteStocks) &&
@@ -246,13 +241,12 @@ class UserModel {
         friendsCode.hashCode ^
         friendsCodeDone.hashCode ^
         insertedFriendsCode.hashCode ^
+        friendsUidRecommededMe.hashCode ^
         blockList.hashCode ^
         rewardedCnt.hashCode ^
         exp.hashCode ^
         tier.hashCode ^
-        // followersNum.hashCode ^
         followers.hashCode ^
-        // followingNum.hashCode ^
         followings.hashCode ^
         intro.hashCode ^
         favoriteStocks.hashCode ^

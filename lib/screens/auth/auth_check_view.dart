@@ -28,11 +28,25 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
         print('isUserNull? : $isUserNull');
         print('isUserModelReady? : $isUserModelReady');
         print('current User: ${userModelRx.value}');
-        return (isUserNull && leagueRx.value != "")
-            ? LoginView()
-            : !isUserModelReady
-                ? LoadingView()
-                : StartupView();
+        if (isUserNull) {
+          return LoginView();
+        } else if (!isUserModelReady) {
+          return Container(
+            color: Colors.blue,
+          );
+        } else if (leagueRx.value == "") {
+          return Container(
+            color: Colors.red,
+          );
+        } else {
+          return StartupView();
+        }
+
+        // (isUserNull)
+        //     ? LoginView()
+        //     : !isUserModelReady
+        //         ? LoadingView()
+        //         : StartupView();
       }),
     );
   }
