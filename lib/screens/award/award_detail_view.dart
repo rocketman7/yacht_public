@@ -455,7 +455,8 @@ class AwardDetailView extends StatelessWidget {
                   Obx(() => Padding(
                         padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w),
                         child: Text(
-                          '${_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].comment}',
+                          '${_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].comment}'
+                              .replaceAll('\\n', '\n'),
                           style: subLeagueAwardCommentStyle,
                         ),
                       )),
@@ -534,7 +535,7 @@ class SubLeagueViewDetailRulesTextWidget extends StatelessWidget {
           .map((i, element) => MapEntry(
                 i,
                 Text(
-                  '* ${rules[i]}',
+                  '* ${rules[i]}'.replaceAll('\\n', '\n'),
                   style: subLeagueAwardRulesStyle,
                 ),
               ))

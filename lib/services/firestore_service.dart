@@ -8,6 +8,7 @@ import 'package:yachtOne/models/dictionary_model.dart';
 import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/chart_price_model.dart';
+import 'package:yachtOne/models/notification_model.dart';
 import 'package:yachtOne/models/profile_models.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/rank_model.dart';
@@ -300,6 +301,11 @@ class FirestoreService extends GetxService {
       });
     });
 
+    // print(allSubLeagues.length);
+    // print(allSubLeagues[0]);
+    // print(allSubLeagues[1]);
+    // print(allSubLeagues[2]);
+
     return allSubLeagues;
   }
 
@@ -377,6 +383,22 @@ class FirestoreService extends GetxService {
     });
 
     return myRanksAndPoint;
+  }
+
+  Future<List<NotificationModel>> getNotificationList() async {
+    List<NotificationModel> notificationList = [];
+
+    await _firestoreService
+        .collection('admin')
+        .doc('adminPost')
+        .collection('notification')
+        .orderBy('notificationTime', descending: true)
+        .get()
+        .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+              notificationList.add(NotificationModel.fromData(element.data()));
+            }));
+
+    return notificationList;
   }
 
   // 임시
@@ -580,7 +602,12 @@ class FirestoreService extends GetxService {
         .then((value) => print("user delete"))
         .catchError((error) => print("Failed to delete user: $error"));
 
-    await _firestoreService.collection('users').doc(userModelRx.value!.uid).collection('userFeed').doc(postId).delete();
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .collection('userFeed')
+        .doc(postId)
+        .delete();
   }
 
   // 포스트 받아오기
