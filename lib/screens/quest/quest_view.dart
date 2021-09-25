@@ -143,13 +143,13 @@ class QuestView extends StatelessWidget {
                                       decoration: BoxDecoration(
                                           border: Border(
                                               bottom: questViewModel.stockInfoIndex.value == index
-                                                  ? BorderSide(width: 3.w, color: seaBlue)
+                                                  ? BorderSide(width: 3.w, color: yachtDarkPurple)
                                                   : BorderSide.none)),
                                       child: Obx(() => Text(questModel.investAddresses![index].name,
                                           style: buttonTextStyle.copyWith(
                                               color: questViewModel.stockInfoIndex.value == index
-                                                  ? seaBlue
-                                                  : seaBlue.withOpacity(.4)))),
+                                                  ? yachtDarkPurple
+                                                  : yachtDarkPurple.withOpacity(.4)))),
                                     ),
                                   ),
                                 ),
@@ -239,7 +239,7 @@ class QuestView extends StatelessWidget {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50.w),
-                          color: activatedButtonColor.withOpacity(.85),
+                          color: yachtViolet80.withOpacity(.8),
                         ),
                         child: Center(
                             child: Text(

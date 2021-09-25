@@ -65,6 +65,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                   GetBuilder<ProfileMyViewModel>(
                       id: 'profile',
                       builder: (controller) {
+<<<<<<< HEAD
                         return Container(
                           width: 79.w,
                           height: 90.w,
@@ -148,14 +149,89 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                                             '${tierKorName[separateStringFromTier(getTierByExp(userModelRx.value!.exp))]} ${separateIntFromTier(getTierByExp(userModelRx.value!.exp))}',
                                                             style:
                                                                 profileTierNameStyle,
+=======
+                        return GestureDetector(
+                          onTap: () => showDialog(
+                              context: context,
+                              builder: (context) {
+                                return yachtTierInfoPopUp(context, userModelRx.value!.exp);
+                              }),
+                          child: Container(
+                            width: 79.w,
+                            height: 90.w,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  height: 79.w,
+                                  width: 79.w,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      gradient:
+                                          LinearGradient(begin: Alignment(0.0, 0.0), end: Alignment(0.0, 1.0), colors: [
+                                        (controller.isUserModelLoaded)
+                                            ? tierColor[separateStringFromTier(getTierByExp(userModelRx.value!.exp))]!
+                                            : tierColor['newbie']!,
+                                        primaryBackgroundColor
+                                      ])),
+                                ),
+                                Positioned(
+                                  left: 1.w,
+                                  top: 1.w,
+                                  child: Container(
+                                      height: 77.w,
+                                      width: 77.w,
+                                      decoration: BoxDecoration(shape: BoxShape.circle, color: primaryBackgroundColor)),
+                                ),
+                                Positioned(
+                                    left: 5.w,
+                                    top: 5.w,
+                                    child: Obx(() => Container(
+                                        height: 69.w,
+                                        width: 69.w,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: userModelRx.value!.avatarImage != null
+                                            ? FutureBuilder<String>(
+                                                future: controller.getImageUrlFromStorage(
+                                                    'avatars/${userModelRx.value!.avatarImage!}.png'),
+                                                builder: (context, snapshot) {
+                                                  return snapshot.hasData
+                                                      ? CachedNetworkImage(
+                                                          imageUrl: snapshot.data!,
+                                                        )
+                                                      : Container();
+                                                })
+                                            : Container()))),
+                                Positioned(
+                                    top: 58.w,
+                                    child: (controller.isUserModelLoaded)
+                                        ? FutureBuilder<String>(
+                                            future: controller.getImageUrlFromStorage(tierJellyBeanURL[
+                                                separateStringFromTier(getTierByExp(userModelRx.value!.exp))]!),
+                                            builder: (context, snapshot) {
+                                              return snapshot.hasData
+                                                  ? Stack(
+                                                      alignment: Alignment.center,
+                                                      children: [
+                                                        Container(
+                                                          width: 78.w,
+                                                          child: CachedNetworkImage(
+                                                            imageUrl: snapshot.data!,
+>>>>>>> 69ac9f53fba5f3070c490ad408599a413a1c0b57
                                                           ),
-                                                        ],
-                                                      )
-                                                    : Container();
-                                              })
-                                          : Container()
-                                      : Container()),
-                            ],
+                                                        ),
+                                                        Text(
+                                                          '${tierKorName[separateStringFromTier(getTierByExp(userModelRx.value!.exp))]} ${separateIntFromTier(getTierByExp(userModelRx.value!.exp))}',
+                                                          style: profileTierNameStyle,
+                                                        ),
+                                                      ],
+                                                    )
+                                                  : Container();
+                                            })
+                                        : Container()),
+                              ],
+                            ),
                           ),
                         );
                       }),
@@ -797,6 +873,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                 if (index == 0) {
                   // myFeedViewModel.getMyFeed(userModelRx.value!.uid);
                 }
+                tabIndex(index);
                 tabController.animateTo(index);
               },
               controller: pageController,

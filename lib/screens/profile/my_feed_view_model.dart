@@ -13,13 +13,17 @@ class MyFeedViewModel extends GetxController {
   @override
   void onInit() async {
     // TODO: implement onInit
-    await getMyFeed(userModelRx.value!.uid);
-    // print(userPosts);
+    // await getMyFeed(userModelRx.value!.uid);
+    userPosts.bindStream(getMyFeedStrem(userModelRx.value!.uid));
     super.onInit();
   }
 
   Future getMyFeed(String uid) async {
     userPosts.addAll(await _firestoreService.getMyFeed(uid));
+  }
+
+  Stream<List<UserPostModel>> getMyFeedStrem(String uid) {
+    return _firestoreService.getMyFeedStream(uid);
   }
 
   Future<PostModel> getPost(String postId) async {

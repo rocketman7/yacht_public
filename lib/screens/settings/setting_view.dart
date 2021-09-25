@@ -5,9 +5,15 @@ import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/link.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+<<<<<<< HEAD
 import 'package:yachtOne/screens/profile/profile_my_view_model.dart';
 import 'package:yachtOne/screens/profile/profile_others_view.dart';
+=======
+import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
+import 'package:yachtOne/services/auth_service.dart';
+>>>>>>> 69ac9f53fba5f3070c490ad408599a413a1c0b57
 
+import '../../locator.dart';
 import '../../styles/yacht_design_system.dart';
 
 import 'account_view.dart';
@@ -19,7 +25,8 @@ class SettingView extends StatelessWidget {
   final FriendsCodeController _friendsCodeController =
       Get.put(FriendsCodeController());
   final TextEditingController _keyController = TextEditingController();
-
+  final AuthService _authService = locator<AuthService>();
+  final KakaoFirebaseAuthApi _kakaoApi = KakaoFirebaseAuthApi();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -834,10 +841,19 @@ class SettingView extends StatelessWidget {
         SizedBox(
           height: correctHeight(20.w, 0.w, settingLogout.fontSize),
         ),
-        Center(
-          child: Text(
-            '로그아웃',
-            style: settingLogout,
+        InkWell(
+          onTap: () {
+            _authService.auth.signOut();
+            userModelRx.value = null;
+            userQuestModelRx.value = [];
+            _kakaoApi.signOut();
+            print("signout");
+          },
+          child: Center(
+            child: Text(
+              '로그아웃',
+              style: settingLogout,
+            ),
           ),
         ),
         SizedBox(

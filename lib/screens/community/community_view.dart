@@ -277,7 +277,7 @@ class WritingNewPost extends StatelessWidget {
                           print("OKAY");
                           print(_contentController.value.text);
                           await _communityViewModel.uploadPost(_contentController.value.text);
-                          await _communityViewModel.getPost();
+                          await _communityViewModel.reloadPost();
                           Get.back();
                           yachtSnackBar("성공적으로 업로드 되었어요.");
                         }

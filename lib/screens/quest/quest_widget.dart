@@ -75,25 +75,43 @@ class SquareQuestWidget extends StatelessWidget {
     //     // print('userQuestModel $userQuestModel');
     //   }
     // });
-    return Obx(() => sectionBoxWithBottomButton(
-          height: height,
-          width: width,
-          padding: EdgeInsets.all(primaryPaddingSize),
-          buttonTitle: userQuestModelRx.length > 0
-              ? userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty
-                  ? "예측 변경하기"
-                  : "퀘스트 참여하기"
-              : "퀘스트 참여하기",
-          child: Column(
-            // mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-              QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
-              QuestCardRewards(questModel: questModel),
-            ],
-          ),
-        ));
+    return Obx(
+        () => (userQuestModelRx.length > 0 && userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
+            ? secondarySectionBoxWithBottomButton(
+                height: height,
+                width: width,
+                padding: EdgeInsets.all(primaryPaddingSize),
+                buttonTitle: "예측 바꾸기",
+                child: Stack(
+                  children: [
+                    Column(
+                      // mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
+                        QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
+                        QuestCardRewards(questModel: questModel),
+                      ],
+                    ),
+                    Container(color: Colors.white.withOpacity(.50)),
+                  ],
+                ),
+              )
+            : sectionBoxWithBottomButton(
+                height: height,
+                width: width,
+                padding: EdgeInsets.all(primaryPaddingSize),
+                buttonTitle: "퀘스트 참여하기",
+                child: Column(
+                  // mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
+                    QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
+                    QuestCardRewards(questModel: questModel),
+                  ],
+                ),
+              ));
 
     // Stack(
     //   children: [
@@ -383,13 +401,48 @@ class QuestCardRewards extends StatelessWidget {
               SizedBox(width: 6.w),
               questModel.yachtPointSuccessReward == null
                   ? Container()
-                  : Container(
+                  : Row(
                       // color: Colors.red[50],
-                      child: Text(
-                        '${toPriceKRW(questModel.yachtPointSuccessReward!)}원',
-                        style: questRewardAmoutStyle.copyWith(height: 1.35),
-                      ),
-                    )
+                      children: [
+                          Text(
+                            '${toPriceKRW(questModel.yachtPointSuccessReward!)}원',
+                            style: questRewardAmoutStyle.copyWith(height: 1.35),
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          (questModel.isYachtPointOneOfN == null)
+                              ? Text("n빵")
+                              : !questModel.isYachtPointOneOfN!
+                                  ? Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.w),
+                                      decoration: BoxDecoration(
+                                        color: buttonDisabled,
+                                        borderRadius: BorderRadius.circular(20.w),
+                                      ),
+                                      child: Text("ALL",
+                                          style: TextStyle(
+                                              color: yachtDarkGrey,
+                                              fontSize: 12.w,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: krFont,
+                                              height: 1.4)),
+                                    )
+                                  : Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.w),
+                                      decoration: BoxDecoration(
+                                        color: buttonDisabled,
+                                        borderRadius: BorderRadius.circular(20.w),
+                                      ),
+                                      child: Text("1/N",
+                                          style: TextStyle(
+                                              color: yachtDarkGrey,
+                                              fontSize: 12.w,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: krFont,
+                                              height: 1.4)),
+                                    )
+                        ])
             ],
           ),
         ),

@@ -579,6 +579,8 @@ class FirestoreService extends GetxService {
         .delete()
         .then((value) => print("user delete"))
         .catchError((error) => print("Failed to delete user: $error"));
+
+    await _firestoreService.collection('users').doc(userModelRx.value!.uid).collection('userFeed').doc(postId).delete();
   }
 
   // 포스트 받아오기
@@ -726,6 +728,21 @@ class FirestoreService extends GetxService {
               userPosts.add(UserPostModel.fromMap(element.data()));
             }));
     return userPosts;
+  }
+
+  Stream<List<UserPostModel>> getMyFeedStream(String uid) {
+    print('stream starting');
+    print(leagueRx.value);
+    return _firestoreService
+        .collection('users')
+        .doc(uid)
+        .collection('userFeed')
+        .orderBy('writtenDateTime', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+              // print('user quest: ${doc.data()}');
+              return UserPostModel.fromMap(doc.data());
+            }).toList());
   }
 
   //// 컨텐츠 관련
@@ -899,7 +916,10 @@ class FirestoreService extends GetxService {
     var userModel;
 
     await firestoreService.collection('users').doc(uid).get().then((value) {
+      // print(value.data()!['uid']);
+      // print(value.data()!['exp']);
       userModel = UserModel.fromMap(value.data()!);
+      print(userModel.exp);
     });
 
     return userModel;

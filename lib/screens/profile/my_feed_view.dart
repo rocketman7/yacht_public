@@ -38,63 +38,69 @@ class MyFeedView extends GetView<MyFeedViewModel> {
         ),
         SizedBox(height: 8.w),
         Obx(
-          () => Container(
-              // height: 140.w,
+          () => controller.userPosts.length > 0
+              ? Container(
+                  // height: 140.w,
 
-              child: ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: min(controller.userPosts.length, 3),
-            itemBuilder: (_, index) {
-              return FutureBuilder<PostModel>(
-                  future: controller.getPost(controller.userPosts[index].postId),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Container();
-                    } else {
-                      return Padding(
-                        padding: primaryHorizontalPadding,
-                        child: Column(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.to(() => DetailPostView(snapshot.data!));
-                              },
-                              child: sectionBox(
-                                  width: double.infinity,
-                                  padding: primaryAllPadding,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        timeStampToStringWithHourMinute(snapshot.data!.writtenDateTime),
-                                        style: questRecordendDateTime,
-                                      ),
-                                      snapshot.data!.title != null
-                                          ? Text(
-                                              snapshot.data!.title!,
-                                              style: feedTitle,
-                                              maxLines: 2,
+                  child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: min(controller.userPosts.length, 3),
+                  itemBuilder: (_, index) {
+                    return FutureBuilder<PostModel>(
+                        future: controller.getPost(controller.userPosts[index].postId),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return Container();
+                          } else {
+                            return Padding(
+                              padding: primaryHorizontalPadding,
+                              child: Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Get.to(() => DetailPostView(snapshot.data!));
+                                    },
+                                    child: sectionBox(
+                                        width: double.infinity,
+                                        padding: primaryAllPadding,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              timeStampToStringWithHourMinute(snapshot.data!.writtenDateTime),
+                                              style: questRecordendDateTime,
+                                            ),
+                                            snapshot.data!.title != null
+                                                ? Text(
+                                                    snapshot.data!.title!,
+                                                    style: feedTitle,
+                                                    maxLines: 2,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  )
+                                                : Container(),
+                                            Text(
+                                              snapshot.data!.content,
+                                              style: feedContent,
+                                              maxLines: 3,
                                               overflow: TextOverflow.ellipsis,
                                             )
-                                          : Container(),
-                                      Text(
-                                        snapshot.data!.content,
-                                        style: feedContent,
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    ],
-                                  )),
-                            ),
-                            SizedBox(height: 8.w),
-                          ],
-                        ),
-                      );
-                    }
-                  });
-            },
-          )),
+                                          ],
+                                        )),
+                                  ),
+                                  SizedBox(height: 8.w),
+                                ],
+                              ),
+                            );
+                          }
+                        });
+                  },
+                ))
+              : Container(
+                  height: 170.w,
+                  width: double.infinity,
+                  child: Image.asset('assets/illusts/not_exists/no_feed.png'),
+                ),
         ),
       ],
     );

@@ -38,6 +38,7 @@ String parseBigNumberKRW(num bigNumber) {
 
 String parseBigNumberShortKRW(num bigNumber) {
   bool isNegative = false;
+  num mod = bigNumber.abs() % 1000000000000;
   if (bigNumber < 0) {
     isNegative = true;
   }
@@ -46,7 +47,11 @@ String parseBigNumberShortKRW(num bigNumber) {
     // num mod = bigNumber.abs() % 1000000000000;
     // print(bigNumber);
 
-    return (isNegative ? "-" : "") + formatPriceKRW.format((bigNumber.abs() / 1000000000000).floor()) + "조 ";
+    return (isNegative ? "-" : "") +
+        formatPriceKRW.format((bigNumber.abs() / 1000000000000).floor()) +
+        "조 " +
+        formatPriceKRW.format((mod / 100000000000).floor()) +
+        "천억";
   } else if (bigNumber.abs() >= 100000000) {
     return (isNegative ? "-" : "") + formatPriceKRW.format((bigNumber.abs() / 100000000).floor()) + "억";
   } else if (bigNumber.abs() >= 10000) {

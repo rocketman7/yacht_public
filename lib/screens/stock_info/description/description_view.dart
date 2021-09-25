@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/styles/style_constants.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import 'description_view_model.dart';
 
@@ -32,7 +33,10 @@ class DescriptionView extends GetView<DescriptionViewModel> {
           height: reducedPaddingWhenTextIsBelow(20.w, detailedContentTextStyle.fontSize!),
         ),
         Obx(() => Text(
-              controller.corporationModel.value.description ?? "기업 소개가 없습니다",
+              (controller.corporationModel.value.description == "" ||
+                      controller.corporationModel.value.description == null)
+                  ? "기업 소개가 없습니다"
+                  : controller.corporationModel.value.description!,
               style: detailedContentTextStyle,
             ))
       ],

@@ -192,19 +192,11 @@ TextStyle questTermTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
-  color: primaryFontColor,
+  color: yachtBlack,
   letterSpacing: -1.0,
   height: 1.4,
 );
 // 홈-퀘스트모듈-퀘스트박스-타이틀
-TextStyle questTitleTextStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 18.w,
-  fontWeight: FontWeight.w500,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
 
 // 홈-퀘스트모듈-퀘스트박스-남은시간
 TextStyle questTimeLeftTextStyle = TextStyle(
@@ -239,7 +231,7 @@ TextStyle questCountTextStyle = TextStyle(
 TextStyle buttonTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 16.w,
-  fontWeight: FontWeight.w600,
+  fontWeight: FontWeight.w500,
   color: buttonTextColor,
   letterSpacing: -1.0,
   height: 1.4,
@@ -255,47 +247,8 @@ TextStyle cardButtonTextStyle = TextStyle(
   height: 1.4,
 );
 
-// 자세한 내용 쓰는 텍스트
-TextStyle detailedContentTextStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 16.w,
-  fontWeight: FontWeight.w300,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
-
-/// 기업 정보
-// 기업 이름
-TextStyle stockInfoNameTextStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 22.w,
-  fontWeight: FontWeight.w500,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
-// 차트 메인 가격
-TextStyle stockPriceTextStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 30.w,
-  fontWeight: FontWeight.w600,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
-
 // 차트 세부 가격 변동 텍스트 // 차트 토글 버튼 텍스트
 TextStyle stockPriceChangeTextStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 14.w,
-  fontWeight: FontWeight.w500,
-  color: primaryFontColor,
-  letterSpacing: -1.0,
-  height: 1.4,
-);
-
-TextStyle stockInfoStatsTitle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
@@ -309,7 +262,7 @@ TextStyle mostDetailedContentTextStyle = TextStyle(
   fontFamily: 'SCore',
   fontSize: 10.w,
   fontWeight: FontWeight.w500,
-  color: primaryFontColor,
+  color: yachtBlack,
   letterSpacing: -1.0,
   height: 1.4,
 );

@@ -21,6 +21,7 @@ import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/widgets/like_button.dart';
+import 'package:yachtOne/widgets/loading_container.dart';
 
 import '../../locator.dart';
 import 'community_view_model.dart';
@@ -331,10 +332,11 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                                       detailPostViewModel.post.imageUrlList![index]),
                                                                   builder: (context, snapshot) {
                                                                     if (!snapshot.hasData) {
-                                                                      return Container(
+                                                                      return LoadingContainer(
+                                                                        radius: 5.w,
                                                                         height: 140.w,
                                                                         width: 140.w,
-                                                                        color: Colors.yellow,
+                                                                        // color: Colors.yellow,
                                                                       );
                                                                     } else {
                                                                       imageUrls[index] = snapshot.data!;
