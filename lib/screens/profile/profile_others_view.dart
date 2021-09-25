@@ -79,62 +79,6 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                 left: 1.w,
                                 top: 1.w,
                                 child: Container(
-<<<<<<< HEAD
-                                    height: 69.w,
-                                    width: 69.w,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: (controller.isUserModelLoaded)
-                                        ? controller.user.avatarImage != null
-                                            ? FutureBuilder<String>(
-                                                future: controller
-                                                    .getImageUrlFromStorage(
-                                                        'avatars/${controller.user.avatarImage}.png'),
-                                                builder: (context, snapshot) {
-                                                  return snapshot.hasData
-                                                      ? CachedNetworkImage(
-                                                          imageUrl:
-                                                              snapshot.data!,
-                                                        )
-                                                      : Container();
-                                                })
-                                            : Container()
-                                        : Container())),
-                            Positioned(
-                                top: 58.w,
-                                child: (controller.isUserModelLoaded)
-                                    ? FutureBuilder<String>(
-                                        future:
-                                            controller.getImageUrlFromStorage(
-                                                tierJellyBeanURL[
-                                                    separateStringFromTier(
-                                                        getTierByExp(controller
-                                                            .user.exp))]!),
-                                        builder: (context, snapshot) {
-                                          return snapshot.hasData
-                                              ? Stack(
-                                                  alignment: Alignment.center,
-                                                  children: [
-                                                    Container(
-                                                      width: 78.w,
-                                                      child: CachedNetworkImage(
-                                                        imageUrl:
-                                                            snapshot.data!,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      '${tierKorName[separateStringFromTier(getTierByExp(controller.user.exp))]} ${separateIntFromTier(getTierByExp(controller.user.exp))}',
-                                                      style:
-                                                          profileTierNameStyle,
-                                                    ),
-                                                  ],
-                                                )
-                                              : Container();
-                                        })
-                                    : Container()),
-                          ],
-=======
                                     height: 77.w,
                                     width: 77.w,
                                     decoration: BoxDecoration(shape: BoxShape.circle, color: primaryBackgroundColor)),
@@ -190,7 +134,6 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                       : Container()),
                             ],
                           ),
->>>>>>> 69ac9f53fba5f3070c490ad408599a413a1c0b57
                         ),
                       );
                     }),
@@ -349,12 +292,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                             borderRadius: BorderRadius.circular(70.0),
                                             border: Border.all(color: primaryButtonBackground, width: 1.5.w)),
                                         child: Center(
-<<<<<<< HEAD
-                                          child: Text('팔로우 중',
-                                              style: profileButtonTextStyle),
-=======
-                                          child: Text('팔로잉', style: profileButtonTextStyle),
->>>>>>> 69ac9f53fba5f3070c490ad408599a413a1c0b57
+                                          child: Text('팔로우 중', style: profileButtonTextStyle),
                                         ),
                                       );
                                     } else {
@@ -397,19 +335,11 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                         builder: (controller) {
                           if (controller.isUserModelLoaded) {
                             return Text(
-                              (controller.user.intro == null ||
-                                      controller.user.intro == '')
+                              (controller.user.intro == null || controller.user.intro == '')
                                   ? '소개글이 없습니다.'
-<<<<<<< HEAD
-                                  : '${controller.user.intro}'
-                                      .replaceAll('\\n', '\n'),
-                              style: subLeagueAwardCommentStyle.copyWith(
-                                  letterSpacing: -0.01),
-                              maxLines: 3,
-=======
                                   : '${controller.user.intro}'.replaceAll('\\n', '\n'),
                               style: subLeagueAwardCommentStyle.copyWith(letterSpacing: -0.01),
->>>>>>> 69ac9f53fba5f3070c490ad408599a413a1c0b57
+                              maxLines: 3,
                             );
                           } else {
                             return Text(
