@@ -1511,6 +1511,14 @@ Container appBarWithCloseButton({required String title, double? height}) {
   );
 }
 
+Container appBarWithoutCloseButton({required String title, double? height}) {
+  return Container(
+    height: height ?? 60.w,
+    color: white,
+    child: Center(child: Text(title, style: appBarTitle.copyWith(fontFamily: 'Default'))),
+  );
+}
+
 // 해쉬태그 컨테이너
 Container feedHashTagContainer(String hashTag) => Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),

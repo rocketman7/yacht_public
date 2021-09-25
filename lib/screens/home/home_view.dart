@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -44,8 +45,197 @@ class HomeView extends StatelessWidget {
   ScrollController _scrollController = ScrollController();
   RxDouble offset = 0.0.obs;
 
+  final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
+  final TextEditingController userNameController = TextEditingController(text: "");
+  final RxBool isCheckingUserNameDuplicated = false.obs;
+  final RxBool showSmallSnackBar = false.obs;
+  final RxString smallSnackBarText = "".obs;
+
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      if (!homeViewModel.noNeedShowUserNameDialog.value) {
+        showDialog(
+          context: context,
+          builder: (context) => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.w),
+            ),
+            insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Container(
+                constraints: BoxConstraints.loose(
+                  Size(double.infinity, 180.w),
+                ),
+                padding: primaryHorizontalPadding,
+                child: Form(
+                  key: userNameFormKey,
+                  child: Stack(
+                    children: [
+                      Column(
+                        children: [
+                          appBarWithoutCloseButton(title: "닉네임 설정"),
+                          SizedBox(height: 8.w),
+                          TextFormField(
+                            controller: userNameController,
+                            textAlignVertical: TextAlignVertical.bottom,
+                            keyboardType: TextInputType.name,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: EdgeInsets.all(0.w),
+                              focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                              enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                              hintText: '${userModelRx.value!.userName}',
+                              hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                            ),
+                            validator: (value) {
+                              if (value != '') {
+                                final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
+                                if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
+                                  return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
+                                } else {
+                                  return null;
+                                }
+                              }
+                            },
+                            onChanged: (value) {
+                              if (userNameFormKey.currentState!.validate()) {
+                                print('good');
+                              } else {
+                                print('bad');
+                              }
+                            },
+                          ),
+                          SizedBox(height: 16.w),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () async {
+                                // Get.dialog(Dialog(
+                                //   child: Text("TTT"),
+                                // ));
+                                // print('tap');
+                                if (userNameController.text == '') {
+                                  showSmallSnackBar(true);
+                                  smallSnackBarText("닉네임을 입력해주세요");
+                                  Future.delayed(Duration(seconds: 1)).then((value) {
+                                    showSmallSnackBar(false);
+                                    smallSnackBarText("");
+                                  });
+                                  // Get.rawSnackbar(
+                                  //   messageText: Center(
+                                  //     child: Text(
+                                  //       "변경한 내용이 없어요.",
+                                  //       style: snackBarStyle,
+                                  //     ),
+                                  //   ),
+                                  //   backgroundColor: white.withOpacity(.5),
+                                  //   barBlur: 8,
+                                  //   duration: const Duration(seconds: 1, milliseconds: 100),
+                                  // );
+                                } else if (userNameFormKey.currentState!.validate() &&
+                                    isCheckingUserNameDuplicated.value == false) {
+                                  if (userNameController.text != '') {
+                                    print(userNameController.text);
+                                    isCheckingUserNameDuplicated(true);
+                                    bool isUserNameDuplicatedVar = true;
+
+                                    isUserNameDuplicatedVar =
+                                        await homeViewModel.isUserNameDuplicated(userNameController.text);
+                                    print(isUserNameDuplicatedVar);
+                                    if (!isUserNameDuplicatedVar) {
+                                      await homeViewModel.updateUserName(userNameController.text);
+                                      showSmallSnackBar(true);
+                                      smallSnackBarText("닉네임이 저장되었어요");
+                                      Future.delayed(Duration(seconds: 1)).then((value) {
+                                        showSmallSnackBar(false);
+                                        smallSnackBarText("");
+                                        Navigator.of(context).pop();
+                                      });
+
+                                      // Get.rawSnackbar(
+                                      //   messageText: Center(
+                                      //     child: Text(
+                                      //       "변경한 내용이 저장되었어요.",
+                                      //       style: snackBarStyle,
+                                      //     ),
+                                      //   ),
+                                      //   backgroundColor: white.withOpacity(.5),
+                                      //   barBlur: 8,
+                                      //   duration: const Duration(seconds: 1, milliseconds: 100),
+                                      // );
+                                    } else {
+                                      showSmallSnackBar(true);
+                                      smallSnackBarText("중복된 닉네임이 있어요");
+                                      Future.delayed(Duration(seconds: 1)).then((value) {
+                                        showSmallSnackBar(false);
+                                        smallSnackBarText("");
+                                      });
+                                      // userNameDuplicatedDialog();
+                                    }
+
+                                    isCheckingUserNameDuplicated(false);
+                                  }
+                                }
+                              },
+                              child: Obx(() => Container(
+                                    height: 50.w,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(70.0),
+                                        color: isCheckingUserNameDuplicated.value == false
+                                            ? yachtViolet
+                                            : primaryButtonText),
+                                    child: Center(
+                                      child: Text(
+                                        isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
+                                        style: profileChangeButtonTextStyle.copyWith(
+                                            color: isCheckingUserNameDuplicated.value == false
+                                                ? primaryButtonText
+                                                : primaryButtonBackground),
+                                      ),
+                                    ),
+                                  )),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Obx(
+                        () => showSmallSnackBar.value
+                            ? Positioned(
+                                top: 40.w,
+                                child: Align(
+                                  alignment: Alignment(0, 0),
+                                  child: AnimatedContainer(
+                                    duration: Duration(milliseconds: 300),
+                                    constraints: BoxConstraints.loose(
+                                      Size(double.infinity, 180.w),
+                                    ),
+                                    padding: EdgeInsets.all(12.w),
+                                    color: Colors.white.withOpacity(.8),
+                                    // height: 40.w,
+                                    // width: double.infinity,
+                                    child: Text(
+                                      smallSnackBarText.value,
+                                      style: TextStyle(
+                                        fontSize: 16.w,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                      )
+                    ],
+                  ),
+                )),
+          ),
+          barrierDismissible: false,
+        );
+      }
+    });
+
     List<Widget> homeWidgets = [
       MyAssets(),
       // sign out 임시
@@ -64,8 +254,7 @@ class HomeView extends StatelessWidget {
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       RankHomeWidget(),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      ReadingContentView(
-          homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
+      ReadingContentView(homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       TodayMarketView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
@@ -82,20 +271,16 @@ class HomeView extends StatelessWidget {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
     _scrollController.addListener(() {
       // offset obs 값에 scroll controller offset 넣어주기
-      _scrollController.offset < 0
-          ? offset(0)
-          : offset(_scrollController.offset);
+      _scrollController.offset < 0 ? offset(0) : offset(_scrollController.offset);
       // print(_scrollController.offset);
     });
 
     // print(
     //     'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
-    if (userQuestModelRx.length != 0)
-      print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
+    if (userQuestModelRx.length != 0) print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
 
-    final RefreshController _refreshController =
-        RefreshController(initialRefresh: false);
+    final RefreshController _refreshController = RefreshController(initialRefresh: false);
     void _onRefresh() async {
       _refreshController.refreshCompleted();
     }
@@ -115,14 +300,11 @@ class HomeView extends StatelessWidget {
                     floating: false,
                     pinned: true,
                     // 홈 뷰 앱바 구현
-                    delegate: _GlassmorphismAppBarDelegate(
-                        MediaQuery.of(context).padding,
-                        offset.value,
-                        homeViewModel)),
+                    delegate:
+                        _GlassmorphismAppBarDelegate(MediaQuery.of(context).padding, offset.value, homeViewModel)),
               ),
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
+                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
                   return homeWidgets[index];
                 }, childCount: homeWidgets.length),
               ),
@@ -173,8 +355,7 @@ class NewQuests extends StatelessWidget {
             children: [
               Container(
                   // color: Colors.blue,
-                  child: Text("새로 나온 퀘스트",
-                      style: sectionTitle.copyWith(height: 1.0))),
+                  child: Text("새로 나온 퀘스트", style: sectionTitle.copyWith(height: 1.0))),
               Spacer(),
               GestureDetector(
                 onTap: () {
@@ -189,10 +370,8 @@ class NewQuests extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
-                      decoration: jogabiButtonBoxDecoration
-                          .copyWith(boxShadow: [primaryBoxShadow]),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
+                      decoration: jogabiButtonBoxDecoration.copyWith(boxShadow: [primaryBoxShadow]),
                       child: Row(
                         children: [
                           SvgPicture.asset(
@@ -206,12 +385,8 @@ class NewQuests extends StatelessWidget {
                           Obx(() {
                             print("item changed");
                             return Text(
-                              userModelRx.value == null
-                                  ? 0.toString()
-                                  : userModelRx.value!.item.toString(),
-                              style: questTermTextStyle.copyWith(
-                                  color: Color(0xFF4D6A87),
-                                  fontWeight: FontWeight.w600),
+                              userModelRx.value == null ? 0.toString() : userModelRx.value!.item.toString(),
+                              style: questTermTextStyle.copyWith(color: Color(0xFF4D6A87), fontWeight: FontWeight.w600),
                             );
                           })
                         ],
@@ -222,8 +397,7 @@ class NewQuests extends StatelessWidget {
                       top: -10.w,
                       child: Container(
                         padding: EdgeInsets.all(3.5.w),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.red),
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
                         height: 20.w,
                         width: 20.w,
                         child: SvgPicture.asset(
@@ -246,8 +420,7 @@ class NewQuests extends StatelessWidget {
         ),
         // btwHomeModuleTitleSlider,
         Obx(() {
-          return (homeViewModel.newQuests.length ==
-                  0) // 로딩 중과 length 0인 걸 구분해야 함
+          return (homeViewModel.newQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
               ? Container(
                   width: 232.w,
                   height: 344.w,
@@ -269,19 +442,11 @@ class NewQuests extends StatelessWidget {
                                       : Container(),
                                   InkWell(
                                     onTap: () {
-                                      homeViewModel.newQuests[index]
-                                                  .selectMode ==
-                                              'survey'
-                                          ? Get.toNamed('/survey',
-                                              arguments: homeViewModel
-                                                  .newQuests[index])
-                                          : Get.toNamed('/quest',
-                                              arguments: homeViewModel
-                                                  .newQuests[index]);
+                                      homeViewModel.newQuests[index].selectMode == 'survey'
+                                          ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
+                                          : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
                                     },
-                                    child: QuestWidget(
-                                        questModel:
-                                            homeViewModel.newQuests[index]),
+                                    child: QuestWidget(questModel: homeViewModel.newQuests[index]),
                                   ),
                                   SizedBox(width: primaryPaddingSize),
                                 ],
@@ -328,9 +493,7 @@ class MyAssets extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
-                        height: reducedPaddingWhenTextIsBelow(
-                            14.w, detailedContentTextStyle.fontSize!)),
+                    SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
                     GetBuilder<AssetViewModel>(
                         id: 'holdingStocks',
                         builder: (controller) {
@@ -341,10 +504,7 @@ class MyAssets extends StatelessWidget {
                                       : "0",
                                   style: myAssetAmount,
                                   children: [
-                                TextSpan(
-                                    text: " 원",
-                                    style: myAssetAmount.copyWith(
-                                        fontWeight: FontWeight.w300))
+                                TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
                               ]));
                         }),
                   ],
@@ -376,9 +536,7 @@ class MyAssets extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                      height: reducedPaddingWhenTextIsBelow(
-                          14.w, detailedContentTextStyle.fontSize!)),
+                  SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
                   GetBuilder<AssetViewModel>(
                       id: 'holdingStocks',
                       builder: (controller) {
@@ -389,10 +547,7 @@ class MyAssets extends StatelessWidget {
                                     : "0",
                                 style: myAssetAmount,
                                 children: [
-                              TextSpan(
-                                  text: " 원",
-                                  style: myAssetAmount.copyWith(
-                                      fontWeight: FontWeight.w300))
+                              TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
                             ]));
                       }),
                 ],
@@ -410,8 +565,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double offset;
   final HomeViewModel homeViewModel;
 
-  _GlassmorphismAppBarDelegate(
-      this.safeAreaPadding, this.offset, this.homeViewModel);
+  _GlassmorphismAppBarDelegate(this.safeAreaPadding, this.offset, this.homeViewModel);
 
   @override
   double get minExtent => 60.h + ScreenUtil().statusBarHeight;
@@ -420,8 +574,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => minExtent + kToolbarHeight - 40.h;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return ClipRect(
         child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),

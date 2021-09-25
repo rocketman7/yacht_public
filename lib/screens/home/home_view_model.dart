@@ -25,8 +25,7 @@ const int maxFailedLoadAttempts = 5; // 광고로딩실패하면 5번까지는 �
 class HomeViewModel extends GetxController {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthService _authService = locator<AuthService>();
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
   QuestRepository _questRepository = QuestRepository();
   QuestModel? tempQuestModel;
@@ -51,6 +50,13 @@ class HomeViewModel extends GetxController {
   RewardedAd? _rewardedAd;
   int _numRewardedLoadAttempts = 0;
 
+  final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
+  final TextEditingController userNameController = TextEditingController(text: "");
+  final RxBool isCheckingUserNameDuplicated = false.obs;
+  final RxBool noNeedShowUserNameDialog = true.obs;
+  final RxBool showSmallSnackBar = false.obs;
+  final RxString smallSnackBarText = "".obs;
+
   @override
   void onInit() async {
     // TODO: implement onInit
@@ -61,9 +67,241 @@ class HomeViewModel extends GetxController {
     isLoading = false;
 
     _createRewardedAd();
+    if (userModelRx.value != null) {
+      noNeedShowUserNameDialog(userModelRx.value!.isNameUpdated ?? false);
+      noNeedShowUserNameDialog.refresh();
+    }
 
     super.onInit();
   }
+
+  Future<bool> isUserNameDuplicated(String userName) async {
+    return await _firestoreService.isUserNameDuplicated(userName);
+  }
+
+  Future updateUserName(userName) async {
+    await _firestoreService.updateUserName(userName);
+  }
+
+  Future updateUserNameMethod(String userName, BuildContext context) async {
+    print(userName);
+    isCheckingUserNameDuplicated(true);
+    bool isUserNameDuplicatedVar = true;
+
+    isUserNameDuplicatedVar = await isUserNameDuplicated(userName);
+    print(isUserNameDuplicatedVar);
+    if (!isUserNameDuplicatedVar) {
+      await _firestoreService.updateUserName(userName);
+      showSmallSnackBar(true);
+      smallSnackBarText("닉네임이 저장되었어요");
+      Future.delayed(Duration(seconds: 1)).then((value) {
+        showSmallSnackBar(false);
+        smallSnackBarText("");
+      });
+      Navigator.pop(context);
+
+      // Get.rawSnackbar(
+      //   messageText: Center(
+      //     child: Text(
+      //       "변경한 내용이 저장되었어요.",
+      //       style: snackBarStyle,
+      //     ),
+      //   ),
+      //   backgroundColor: white.withOpacity(.5),
+      //   barBlur: 8,
+      //   duration: const Duration(seconds: 1, milliseconds: 100),
+      // );
+    } else {
+      showSmallSnackBar(true);
+      smallSnackBarText("중복된 닉네임이 있어요");
+      Future.delayed(Duration(seconds: 1)).then((value) {
+        showSmallSnackBar(false);
+        smallSnackBarText("");
+      });
+      // userNameDuplicatedDialog();
+    }
+
+    isCheckingUserNameDuplicated(false);
+  }
+
+  // showUserNameDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => Dialog(
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(10.w),
+  //       ),
+  //       insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
+  //       child: Container(
+  //           constraints: BoxConstraints.loose(
+  //             Size(double.infinity, 180.w),
+  //           ),
+  //           padding: primaryHorizontalPadding,
+  //           child: Form(
+  //             key: userNameFormKey,
+  //             child: Stack(
+  //               children: [
+  //                 Column(
+  //                   children: [
+  //                     appBarWithoutCloseButton(title: "닉네임 설정"),
+  //                     SizedBox(height: 8.w),
+  //                     TextFormField(
+  //                       controller: userNameController,
+  //                       textAlignVertical: TextAlignVertical.bottom,
+  //                       keyboardType: TextInputType.name,
+  //                       decoration: InputDecoration(
+  //                         isDense: true,
+  //                         contentPadding: EdgeInsets.all(0.w),
+  //                         focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+  //                         enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+  //                         hintText: '${userModelRx.value!.userName}',
+  //                         hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+  //                       ),
+  //                       validator: (value) {
+  //                         if (value != '') {
+  //                           final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
+  //                           if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
+  //                             return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
+  //                           } else {
+  //                             return null;
+  //                           }
+  //                         }
+  //                       },
+  //                       onChanged: (value) {
+  //                         if (userNameFormKey.currentState!.validate()) {
+  //                           print('good');
+  //                         } else {
+  //                           print('bad');
+  //                         }
+  //                       },
+  //                     ),
+  //                     SizedBox(height: 16.w),
+  //                     Align(
+  //                       alignment: Alignment.bottomCenter,
+  //                       child: GestureDetector(
+  //                         behavior: HitTestBehavior.opaque,
+  //                         onTap: () async {
+  //                           // Get.dialog(Dialog(
+  //                           //   child: Text("TTT"),
+  //                           // ));
+  //                           // print('tap');
+  //                           if (userNameController.text == '') {
+  //                             showSmallSnackBar(true);
+  //                             smallSnackBarText("닉네임을 입력해주세요");
+  //                             Future.delayed(Duration(seconds: 1)).then((value) {
+  //                               showSmallSnackBar(false);
+  //                               smallSnackBarText("");
+  //                             });
+  //                             // Get.rawSnackbar(
+  //                             //   messageText: Center(
+  //                             //     child: Text(
+  //                             //       "변경한 내용이 없어요.",
+  //                             //       style: snackBarStyle,
+  //                             //     ),
+  //                             //   ),
+  //                             //   backgroundColor: white.withOpacity(.5),
+  //                             //   barBlur: 8,
+  //                             //   duration: const Duration(seconds: 1, milliseconds: 100),
+  //                             // );
+  //                           } else if (userNameFormKey.currentState!.validate() &&
+  //                               isCheckingUserNameDuplicated.value == false) {
+  //                             if (userNameController.text != '') {
+  //                               print(userNameController.text);
+  //                               isCheckingUserNameDuplicated(true);
+  //                               bool isUserNameDuplicatedVar = true;
+
+  //                               isUserNameDuplicatedVar = await isUserNameDuplicated(userNameController.text);
+  //                               print(isUserNameDuplicatedVar);
+  //                               if (!isUserNameDuplicatedVar) {
+  //                                 await _firestoreService.updateUserName(userNameController.text);
+  //                                 showSmallSnackBar(true);
+  //                                 smallSnackBarText("닉네임이 저장되었어요");
+  //                                 Future.delayed(Duration(seconds: 1)).then((value) {
+  //                                   showSmallSnackBar(false);
+  //                                   smallSnackBarText("");
+  //                                   Navigator.of(context).pop();
+  //                                 });
+
+  //                                 // Get.rawSnackbar(
+  //                                 //   messageText: Center(
+  //                                 //     child: Text(
+  //                                 //       "변경한 내용이 저장되었어요.",
+  //                                 //       style: snackBarStyle,
+  //                                 //     ),
+  //                                 //   ),
+  //                                 //   backgroundColor: white.withOpacity(.5),
+  //                                 //   barBlur: 8,
+  //                                 //   duration: const Duration(seconds: 1, milliseconds: 100),
+  //                                 // );
+  //                               } else {
+  //                                 showSmallSnackBar(true);
+  //                                 smallSnackBarText("중복된 닉네임이 있어요");
+  //                                 Future.delayed(Duration(seconds: 1)).then((value) {
+  //                                   showSmallSnackBar(false);
+  //                                   smallSnackBarText("");
+  //                                 });
+  //                                 // userNameDuplicatedDialog();
+  //                               }
+
+  //                               isCheckingUserNameDuplicated(false);
+  //                             }
+  //                           }
+  //                         },
+  //                         child: Obx(() => Container(
+  //                               height: 50.w,
+  //                               width: double.infinity,
+  //                               decoration: BoxDecoration(
+  //                                   borderRadius: BorderRadius.circular(70.0),
+  //                                   color:
+  //                                       isCheckingUserNameDuplicated.value == false ? yachtViolet : primaryButtonText),
+  //                               child: Center(
+  //                                 child: Text(
+  //                                   isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
+  //                                   style: profileChangeButtonTextStyle.copyWith(
+  //                                       color: isCheckingUserNameDuplicated.value == false
+  //                                           ? primaryButtonText
+  //                                           : primaryButtonBackground),
+  //                                 ),
+  //                               ),
+  //                             )),
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //                 Obx(
+  //                   () => showSmallSnackBar.value
+  //                       ? Positioned(
+  //                           top: 40.w,
+  //                           child: Align(
+  //                             alignment: Alignment(0, 0),
+  //                             child: AnimatedContainer(
+  //                               duration: Duration(milliseconds: 300),
+  //                               constraints: BoxConstraints.loose(
+  //                                 Size(double.infinity, 180.w),
+  //                               ),
+  //                               padding: EdgeInsets.all(12.w),
+  //                               color: Colors.white.withOpacity(.8),
+  //                               // height: 40.w,
+  //                               // width: double.infinity,
+  //                               child: Text(
+  //                                 smallSnackBarText.value,
+  //                                 style: TextStyle(
+  //                                   fontSize: 16.w,
+  //                                   fontWeight: FontWeight.w600,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           ),
+  //                         )
+  //                       : Container(),
+  //                 )
+  //               ],
+  //             ),
+  //           )),
+  //     ),
+  //     barrierDismissible: false,
+  //   );
+  // }
 
   Future getDictionaries() async {
     dictionaries(await _firestoreService.getDictionaries());
@@ -94,17 +332,14 @@ class HomeViewModel extends GetxController {
     allQuests.forEach((element) {
       if (element.selectMode == 'survey') {
         newQuests.add(element);
-      } else if (element.showHomeDateTime.toDate().isBefore(now) &&
-          element.liveStartDateTime.toDate().isAfter(now)) {
+      } else if (element.showHomeDateTime.toDate().isBefore(now) && element.liveStartDateTime.toDate().isAfter(now)) {
         // showHome ~ liveStart: 새로나온 퀘스트
         newQuests.add(element);
-      } else if (element.liveStartDateTime.toDate().isBefore(now) &&
-          element.liveEndDateTime.toDate().isAfter(now)) {
+      } else if (element.liveStartDateTime.toDate().isBefore(now) && element.liveEndDateTime.toDate().isAfter(now)) {
         // liveStart ~ liveEnd: 퀘스트 생중계
 
         liveQuests.add(element);
-      } else if (element.resultDateTime.toDate().isBefore(now) &&
-          element.closeHomeDateTime.toDate().isAfter(now)) {
+      } else if (element.resultDateTime.toDate().isBefore(now) && element.closeHomeDateTime.toDate().isAfter(now)) {
         // result ~ closeHome: 퀘스트 결과보기
         print('result: ${element.results}');
         print('result: ${element}');
@@ -157,8 +392,7 @@ class HomeViewModel extends GetxController {
     }
 
     _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (RewardedAd ad) =>
-          print('ad onAdShowedFullScreenContent.'),
+      onAdShowedFullScreenContent: (RewardedAd ad) => print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (RewardedAd ad) {
         print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
@@ -172,8 +406,7 @@ class HomeViewModel extends GetxController {
     );
 
     // _rewardedAd!.setImmersiveMode(true); // ??
-    _rewardedAd!.show(
-        onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
+    _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
       print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
       // 광고 정상적으로 잘 보면 ~
       await _firestoreService.updateUserItem(1);
@@ -195,8 +428,7 @@ rewardedNotLoadDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -210,17 +442,14 @@ rewardedNotLoadDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
                         SizedBox(
                           height: 15.w,
                         ),
-                        Text('알림',
-                            style:
-                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                        Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
                       ],
                     ),
                     Spacer(),
@@ -239,8 +468,7 @@ rewardedNotLoadDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -253,8 +481,8 @@ rewardedNotLoadDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(35.w, yachtBadgesDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogTitle.fontSize),
+                  height:
+                      correctHeight(35.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Text(
                   "광고가 아직 로딩되지 않았어요.\n잠시 후 다시 시도해주세요!",
@@ -262,8 +490,7 @@ rewardedNotLoadDialog(BuildContext context) {
                   style: yachtBadgesDescriptionDialogTitle,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -314,8 +541,7 @@ maxRewardedAdsDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -329,17 +555,14 @@ maxRewardedAdsDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
                         SizedBox(
                           height: 15.w,
                         ),
-                        Text('알림',
-                            style:
-                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                        Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
                       ],
                     ),
                     Spacer(),
@@ -358,8 +581,7 @@ maxRewardedAdsDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -372,8 +594,8 @@ maxRewardedAdsDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(35.w, yachtBadgesDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogTitle.fontSize),
+                  height:
+                      correctHeight(35.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Text(
                   "오늘은 $maxRewardedAds개의 광고를 모두 보셨어요!\n내일 다시 볼 수 있어요!",
@@ -381,8 +603,7 @@ maxRewardedAdsDialog(BuildContext context) {
                   style: yachtBadgesDescriptionDialogTitle,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -433,8 +654,7 @@ adsViewDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -448,17 +668,14 @@ adsViewDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
                         SizedBox(
                           height: 15.w,
                         ),
-                        Text('알림',
-                            style:
-                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                        Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
                       ],
                     ),
                     Spacer(),
@@ -477,8 +694,7 @@ adsViewDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -491,8 +707,8 @@ adsViewDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(35.w, yachtBadgesDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogTitle.fontSize),
+                  height:
+                      correctHeight(35.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Center(
                   child: Text(
@@ -502,8 +718,7 @@ adsViewDialog(BuildContext context) {
                   ),
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -549,8 +764,7 @@ adsViewDialog(BuildContext context) {
                         child: Center(
                           child: Text(
                             '다음에 보기',
-                            style: yachtDeliveryDialogButtonText.copyWith(
-                                color: yachtViolet),
+                            style: yachtDeliveryDialogButtonText.copyWith(color: yachtViolet),
                           ),
                         ),
                       ),
