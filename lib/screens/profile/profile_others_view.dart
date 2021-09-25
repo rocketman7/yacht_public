@@ -112,39 +112,34 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                             Positioned(
                                 top: 58.w,
                                 child: (controller.isUserModelLoaded)
-                                    ? controller.user.tier != null
-                                        ? FutureBuilder<String>(
-                                            future: controller
-                                                .getImageUrlFromStorage(
-                                                    tierJellyBeanURL[
-                                                        separateStringFromTier(
-                                                            getTierByExp(
-                                                                controller.user
-                                                                    .exp))]!),
-                                            builder: (context, snapshot) {
-                                              return snapshot.hasData
-                                                  ? Stack(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      children: [
-                                                        Container(
-                                                          width: 78.w,
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            imageUrl:
-                                                                snapshot.data!,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          '${tierKorName[separateStringFromTier(getTierByExp(controller.user.exp))]} ${separateIntFromTier(getTierByExp(controller.user.exp))}',
-                                                          style:
-                                                              profileTierNameStyle,
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : Container();
-                                            })
-                                        : Container()
+                                    ? FutureBuilder<String>(
+                                        future:
+                                            controller.getImageUrlFromStorage(
+                                                tierJellyBeanURL[
+                                                    separateStringFromTier(
+                                                        getTierByExp(controller
+                                                            .user.exp))]!),
+                                        builder: (context, snapshot) {
+                                          return snapshot.hasData
+                                              ? Stack(
+                                                  alignment: Alignment.center,
+                                                  children: [
+                                                    Container(
+                                                      width: 78.w,
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            snapshot.data!,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '${tierKorName[separateStringFromTier(getTierByExp(controller.user.exp))]} ${separateIntFromTier(getTierByExp(controller.user.exp))}',
+                                                      style:
+                                                          profileTierNameStyle,
+                                                    ),
+                                                  ],
+                                                )
+                                              : Container();
+                                        })
                                     : Container()),
                           ],
                         ),
@@ -223,6 +218,10 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                     },
                                     child: Row(
                                       children: [
+                                        Text(
+                                          '팔로워 ',
+                                          style: profileFollowTextStyle,
+                                        ),
                                         GetBuilder<ProfileOthersViewModel>(
                                           id: 'profile',
                                           tag: uid,
@@ -242,10 +241,6 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                               );
                                             }
                                           },
-                                        ),
-                                        Text(
-                                          '팔로워',
-                                          style: profileFollowTextStyle,
                                         ),
                                       ],
                                     ),
@@ -281,6 +276,10 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                     },
                                     child: Row(
                                       children: [
+                                        Text(
+                                          '팔로잉 ',
+                                          style: profileFollowTextStyle,
+                                        ),
                                         GetBuilder<ProfileOthersViewModel>(
                                           id: 'profile',
                                           tag: uid,
@@ -300,10 +299,6 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                               );
                                             }
                                           },
-                                        ),
-                                        Text(
-                                          '팔로잉',
-                                          style: profileFollowTextStyle,
                                         ),
                                       ],
                                     ),
@@ -344,7 +339,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                                 color: primaryButtonBackground,
                                                 width: 1.5.w)),
                                         child: Center(
-                                          child: Text('팔로잉',
+                                          child: Text('팔로우 중',
                                               style: profileButtonTextStyle),
                                         ),
                                       );
@@ -399,12 +394,14 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                         builder: (controller) {
                           if (controller.isUserModelLoaded) {
                             return Text(
-                              controller.user.intro == null
+                              (controller.user.intro == null ||
+                                      controller.user.intro == '')
                                   ? '소개글이 없습니다.'
                                   : '${controller.user.intro}'
                                       .replaceAll('\\n', '\n'),
                               style: subLeagueAwardCommentStyle.copyWith(
                                   letterSpacing: -0.01),
+                              maxLines: 3,
                             );
                           } else {
                             return Text(
@@ -690,7 +687,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
           height: 50.w,
         ),
         Padding(
-          padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 20.w),
+          padding: EdgeInsets.only(left: 14.w, right: 0.w, bottom: 20.w),
           child: Row(
             children: [
               Text(
@@ -699,6 +696,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
               ),
               Spacer(),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Get.to(() => BadgesFullGridView(
                         badges: Get.find<ProfileOthersViewModel>(tag: uid)
@@ -711,10 +709,20 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                             : [],
                       ));
                 },
-                child: Image.asset(
-                  'assets/icons/navigate_foward_arrow.png',
-                  height: 16.w,
-                  width: 9.w,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 28.w,
+                    ),
+                    Image.asset(
+                      'assets/icons/navigate_foward_arrow.png',
+                      height: 16.w,
+                      width: 9.w,
+                    ),
+                    SizedBox(
+                      width: 14.w,
+                    ),
+                  ],
                 ),
               )
             ],

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
@@ -109,7 +110,8 @@ class UserModel {
       friendsCode: friendsCode ?? this.friendsCode,
       friendsCodeDone: friendsCodeDone ?? this.friendsCodeDone,
       insertedFriendsCode: insertedFriendsCode ?? this.insertedFriendsCode,
-      friendsUidRecommededMe: friendsUidRecommededMe ?? this.friendsUidRecommededMe,
+      friendsUidRecommededMe:
+          friendsUidRecommededMe ?? this.friendsUidRecommededMe,
       blockList: blockList ?? this.blockList,
       rewardedCnt: rewardedCnt ?? this.rewardedCnt,
       exp: exp ?? this.exp,
@@ -169,16 +171,23 @@ class UserModel {
       friendsCode: map['friendsCode'],
       friendsCodeDone: map['friendsCodeDone'],
       insertedFriendsCode: map['insertedFriendsCode'],
-      friendsUidRecommededMe:
-          map['friendsUidRecommededMe'] == null ? null : List<String>.from(map['friendsUidRecommededMe']),
-      blockList: map['blockList'] == null ? null : List<String>.from(map['blockList']),
+      friendsUidRecommededMe: map['friendsUidRecommededMe'] == null
+          ? null
+          : List<String>.from(map['friendsUidRecommededMe']),
+      blockList:
+          map['blockList'] == null ? null : List<String>.from(map['blockList']),
       rewardedCnt: map['rewardedCnt'] ?? 0,
-      exp: map['exp'],
+      exp: map['exp'] ?? 0,
       tier: map['tier'],
-      followers: map['followers'] == null ? null : List<String>.from(map['followers']),
-      followings: map['followings'] == null ? null : List<String>.from(map['followings']),
+      followers:
+          map['followers'] == null ? null : List<String>.from(map['followers']),
+      followings: map['followings'] == null
+          ? null
+          : List<String>.from(map['followings']),
       intro: map['intro'],
-      favoriteStocks: map['favoriteStocks'] == null ? null : List<String>.from(map['favoriteStocks']),
+      favoriteStocks: map['favoriteStocks'] == null
+          ? null
+          : List<String>.from(map['favoriteStocks']),
       badges: map['badges'] == null ? null : List<String>.from(map['badges']),
       membership: map['membership'],
       membershipStartAt: map['membershipStartAt'],
@@ -189,7 +198,8 @@ class UserModel {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {

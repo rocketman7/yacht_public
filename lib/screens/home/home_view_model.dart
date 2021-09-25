@@ -19,13 +19,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../locator.dart';
 
-const int maxRewardedAds = 5; // 하루 최대 5개 광고 볼 수 있음. (나중에 DB로?)
-const int maxFailedLoadAttempts = 3;
+const int maxRewardedAds = 10; // 하루 최대 10개 광고 볼 수 있음. (나중에 DB로?)
+const int maxFailedLoadAttempts = 5; // 광고로딩실패하면 5번까지는 계속 로딩 시도
 
 class HomeViewModel extends GetxController {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthService _authService = locator<AuthService>();
-  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService =
+      locator<FirebaseStorageService>();
 
   QuestRepository _questRepository = QuestRepository();
   QuestModel? tempQuestModel;
@@ -93,14 +94,17 @@ class HomeViewModel extends GetxController {
     allQuests.forEach((element) {
       if (element.selectMode == 'survey') {
         newQuests.add(element);
-      } else if (element.showHomeDateTime.toDate().isBefore(now) && element.liveStartDateTime.toDate().isAfter(now)) {
+      } else if (element.showHomeDateTime.toDate().isBefore(now) &&
+          element.liveStartDateTime.toDate().isAfter(now)) {
         // showHome ~ liveStart: 새로나온 퀘스트
         newQuests.add(element);
-      } else if (element.liveStartDateTime.toDate().isBefore(now) && element.liveEndDateTime.toDate().isAfter(now)) {
+      } else if (element.liveStartDateTime.toDate().isBefore(now) &&
+          element.liveEndDateTime.toDate().isAfter(now)) {
         // liveStart ~ liveEnd: 퀘스트 생중계
 
         liveQuests.add(element);
-      } else if (element.resultDateTime.toDate().isBefore(now) && element.closeHomeDateTime.toDate().isAfter(now)) {
+      } else if (element.resultDateTime.toDate().isBefore(now) &&
+          element.closeHomeDateTime.toDate().isAfter(now)) {
         // result ~ closeHome: 퀘스트 결과보기
         print('result: ${element.results}');
         print('result: ${element}');
@@ -112,8 +116,8 @@ class HomeViewModel extends GetxController {
   }
 
   // 유저 광고모델보기 버튼 누르면?
-  Future rewardedAdsButtonTap() async {
-    _showRewardedAd();
+  Future rewardedAdsButtonTap(BuildContext context) async {
+    _showRewardedAd(context);
   }
 
   // rewarded ads
@@ -145,17 +149,16 @@ class HomeViewModel extends GetxController {
         ));
   }
 
-  void _showRewardedAd() {
+  void _showRewardedAd(BuildContext context) {
     if (_rewardedAd == null) {
       print('Warning: attempt to show rewarded before loaded.');
-      Get.dialog(
-        rewardedNotLoadDialog(),
-      );
+      rewardedNotLoadDialog(context);
       return;
     }
 
     _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (RewardedAd ad) => print('ad onAdShowedFullScreenContent.'),
+      onAdShowedFullScreenContent: (RewardedAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (RewardedAd ad) {
         print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
@@ -169,72 +172,534 @@ class HomeViewModel extends GetxController {
     );
 
     // _rewardedAd!.setImmersiveMode(true); // ??
-    _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
+    _rewardedAd!.show(
+        onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
       print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
-      _firestoreService.updateUserItem(1);
-      _firestoreService.updateUserRewardedCnt();
+      // 광고 정상적으로 잘 보면 ~
+      await _firestoreService.updateUserItem(1);
+      await _firestoreService.updateUserRewardedCnt();
+      doneAdsGetRawSnackbar();
+      // Navigator.of(context).pop();
+      // doneAdsDialog(context);
     });
     _rewardedAd = null;
   }
 }
 
-// 홈뷰에서 광고 5개 다 봤다는 다이얼로그도 그렇고 아래 다이얼로그도 그렇고 확인버튼이 먹지 않는 상태 (Get.back땜시)
-Widget rewardedNotLoadDialog() {
-  return Dialog(
-    backgroundColor: primaryBackgroundColor,
-    insetPadding: EdgeInsets.all(16.w),
-    clipBehavior: Clip.hardEdge,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-    child: Padding(
-      padding: EdgeInsets.only(left: 14.w, right: 14.w),
-      child: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 14.w,
-            ),
-            Text(
-              '알림',
-              style: adsWarningTitle,
-            ),
-            SizedBox(
-              height: 24.w,
-            ),
-            Text(
-              "광고가 아직 로딩되지 않았어요.\n잠시 후 다시 시도해주세요!",
-              textAlign: TextAlign.center,
-              style: adsWarningText,
-            ),
-            SizedBox(
-              height: 24.w,
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 14.w, right: 14.w),
-              child: GestureDetector(
-                onTap: () {
-                  print('aaaaaa');
-                  Get.back();
-                },
-                child: Container(
-                  height: 44.w,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: Color(0xFF6073B4)),
-                  width: double.infinity,
-                  child: Center(
-                    child: Text(
-                      '확인',
-                      style: adsWarningButton,
+// 광고 아직 로드 안됐을 때 다이얼로그
+rewardedNotLoadDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: primaryBackgroundColor,
+          insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+          clipBehavior: Clip.hardEdge,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Container(
+            height: 196.w,
+            width: 347.w,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 21.w,
                     ),
+                    SizedBox(
+                        height: 15.w,
+                        width: 15.w,
+                        child: Image.asset('assets/icons/exit.png',
+                            color: Colors.transparent)),
+                    Spacer(),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 15.w,
+                        ),
+                        Text('알림',
+                            style:
+                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                      ],
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 15.w,
+                              ),
+                              SizedBox(
+                                  height: 15.w,
+                                  width: 15.w,
+                                  child: Image.asset('assets/icons/exit.png',
+                                      color: yachtBlack)),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 30.w,
+                            width: 21.w,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: correctHeight(35.w, yachtBadgesDialogTitle.fontSize,
+                      yachtBadgesDescriptionDialogTitle.fontSize),
+                ),
+                Text(
+                  "광고가 아직 로딩되지 않았어요.\n잠시 후 다시 시도해주세요!",
+                  textAlign: TextAlign.center,
+                  style: yachtBadgesDescriptionDialogTitle,
+                ),
+                SizedBox(
+                  height: correctHeight(
+                      25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 14.w,
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        height: 44.w,
+                        width: 319.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(70.0),
+                          color: yachtViolet,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '확인',
+                            style: yachtDeliveryDialogButtonText,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 14.w,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 14.w,
+                ),
+              ],
+            ),
+          ),
+        );
+      });
+}
+
+// 광고 최대 갯수만큼 봤을 때 다이얼로그
+maxRewardedAdsDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: primaryBackgroundColor,
+          insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+          clipBehavior: Clip.hardEdge,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Container(
+            height: 196.w,
+            width: 347.w,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 21.w,
+                    ),
+                    SizedBox(
+                        height: 15.w,
+                        width: 15.w,
+                        child: Image.asset('assets/icons/exit.png',
+                            color: Colors.transparent)),
+                    Spacer(),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 15.w,
+                        ),
+                        Text('알림',
+                            style:
+                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                      ],
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 15.w,
+                              ),
+                              SizedBox(
+                                  height: 15.w,
+                                  width: 15.w,
+                                  child: Image.asset('assets/icons/exit.png',
+                                      color: yachtBlack)),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 30.w,
+                            width: 21.w,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: correctHeight(35.w, yachtBadgesDialogTitle.fontSize,
+                      yachtBadgesDescriptionDialogTitle.fontSize),
+                ),
+                Text(
+                  "오늘은 $maxRewardedAds개의 광고를 모두 보셨어요!\n내일 다시 볼 수 있어요!",
+                  textAlign: TextAlign.center,
+                  style: yachtBadgesDescriptionDialogTitle,
+                ),
+                SizedBox(
+                  height: correctHeight(
+                      25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 14.w,
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        height: 44.w,
+                        width: 319.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(70.0),
+                          color: yachtViolet,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '확인',
+                            style: yachtDeliveryDialogButtonText,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 14.w,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 14.w,
+                ),
+              ],
+            ),
+          ),
+        );
+      });
+}
+
+// 광고 볼지말지 다이얼로그
+adsViewDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: primaryBackgroundColor,
+          insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+          clipBehavior: Clip.hardEdge,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Container(
+            height: 196.w,
+            width: 347.w,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 21.w,
+                    ),
+                    SizedBox(
+                        height: 15.w,
+                        width: 15.w,
+                        child: Image.asset('assets/icons/exit.png',
+                            color: Colors.transparent)),
+                    Spacer(),
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 15.w,
+                        ),
+                        Text('알림',
+                            style:
+                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                      ],
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 15.w,
+                              ),
+                              SizedBox(
+                                  height: 15.w,
+                                  width: 15.w,
+                                  child: Image.asset('assets/icons/exit.png',
+                                      color: yachtBlack)),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 30.w,
+                            width: 21.w,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: correctHeight(35.w, yachtBadgesDialogTitle.fontSize,
+                      yachtBadgesDescriptionDialogTitle.fontSize),
+                ),
+                Center(
+                  child: Text(
+                    '조가비 하나를 얻을 수 있어요.\n광고를 보러갈까요?',
+                    textAlign: TextAlign.center,
+                    style: yachtBadgesDescriptionDialogTitle,
                   ),
                 ),
-              ),
+                SizedBox(
+                  height: correctHeight(
+                      25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 14.w,
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        Get.find<HomeViewModel>().rewardedAdsButtonTap(context);
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        height: 44.w,
+                        width: 154.5.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(70.0),
+                          color: yachtViolet,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '광고 보기',
+                            style: yachtDeliveryDialogButtonText,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        height: 44.w,
+                        width: 154.5.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(70.0),
+                          color: buttonNormal,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '다음에 보기',
+                            style: yachtDeliveryDialogButtonText.copyWith(
+                                color: yachtViolet),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 14.w,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 14.w,
+                ),
+              ],
             ),
-            SizedBox(
-              height: 14.w,
-            ),
-          ],
-        ),
+          ),
+        );
+      });
+}
+
+doneAdsGetRawSnackbar() {
+  Get.rawSnackbar(
+    messageText: Center(
+      child: Text(
+        '조가비 1개 획득 완료!',
+        style: snackBarStyle,
       ),
     ),
+    snackPosition: SnackPosition.TOP,
+    backgroundColor: white.withOpacity(.5),
+    barBlur: 2,
+    duration: const Duration(milliseconds: 1000),
   );
 }
+
+// 광고 성공적으로 봤을 때 다이얼로그 -> 위에 스낵바로 수정
+// doneAdsDialog(BuildContext context) {
+//   showDialog(
+//       context: context,
+//       builder: (context) {
+//         return Dialog(
+//           backgroundColor: primaryBackgroundColor,
+//           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+//           clipBehavior: Clip.hardEdge,
+//           shape:
+//               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+//           child: Container(
+//             height: 196.w,
+//             width: 347.w,
+//             child: Column(
+//               children: [
+//                 Row(
+//                   children: [
+//                     SizedBox(
+//                       width: 21.w,
+//                     ),
+//                     SizedBox(
+//                         height: 15.w,
+//                         width: 15.w,
+//                         child: Image.asset('assets/icons/exit.png',
+//                             color: Colors.transparent)),
+//                     Spacer(),
+//                     Column(
+//                       children: [
+//                         SizedBox(
+//                           height: 15.w,
+//                         ),
+//                         Text('알림',
+//                             style:
+//                                 yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+//                       ],
+//                     ),
+//                     Spacer(),
+//                     GestureDetector(
+//                       behavior: HitTestBehavior.opaque,
+//                       onTap: () {
+//                         Navigator.of(context).pop();
+//                       },
+//                       child: Row(
+//                         children: [
+//                           Column(
+//                             children: [
+//                               SizedBox(
+//                                 height: 15.w,
+//                               ),
+//                               SizedBox(
+//                                   height: 15.w,
+//                                   width: 15.w,
+//                                   child: Image.asset('assets/icons/exit.png',
+//                                       color: yachtBlack)),
+//                             ],
+//                           ),
+//                           SizedBox(
+//                             height: 30.w,
+//                             width: 21.w,
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//                 SizedBox(
+//                   height: correctHeight(48.w, yachtBadgesDialogTitle.fontSize,
+//                       yachtBadgesDescriptionDialogTitle.fontSize),
+//                 ),
+//                 Text(
+//                   "조가비 1개 획득 완료!",
+//                   textAlign: TextAlign.center,
+//                   style: yachtBadgesDescriptionDialogTitle,
+//                 ),
+//                 SizedBox(
+//                   height: correctHeight(
+//                       37.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+//                 ),
+//                 Row(
+//                   children: [
+//                     SizedBox(
+//                       width: 14.w,
+//                     ),
+//                     GestureDetector(
+//                       behavior: HitTestBehavior.opaque,
+//                       onTap: () {
+//                         Navigator.of(context).pop();
+//                       },
+//                       child: Container(
+//                         height: 44.w,
+//                         width: 319.w,
+//                         decoration: BoxDecoration(
+//                           borderRadius: BorderRadius.circular(70.0),
+//                           color: yachtViolet,
+//                         ),
+//                         child: Center(
+//                           child: Text(
+//                             '확인',
+//                             style: yachtDeliveryDialogButtonText,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     SizedBox(
+//                       width: 14.w,
+//                     ),
+//                   ],
+//                 ),
+//                 SizedBox(
+//                   height: 14.w,
+//                 ),
+//               ],
+//             ),
+//           ),
+//         );
+//       });
+// }
