@@ -5,13 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/link.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
-<<<<<<< HEAD
 import 'package:yachtOne/screens/profile/profile_my_view_model.dart';
 import 'package:yachtOne/screens/profile/profile_others_view.dart';
-=======
 import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
 import 'package:yachtOne/services/auth_service.dart';
->>>>>>> 69ac9f53fba5f3070c490ad408599a413a1c0b57
 
 import '../../locator.dart';
 import '../../styles/yacht_design_system.dart';
