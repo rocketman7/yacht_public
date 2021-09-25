@@ -173,7 +173,7 @@ class UserModel {
           map['friendsUidRecommededMe'] == null ? null : List<String>.from(map['friendsUidRecommededMe']),
       blockList: map['blockList'] == null ? null : List<String>.from(map['blockList']),
       rewardedCnt: map['rewardedCnt'] ?? 0,
-      exp: map['exp'],
+      exp: map['exp'] ?? 0,
       tier: map['tier'],
       followers: map['followers'] == null ? null : List<String>.from(map['followers']),
       followings: map['followings'] == null ? null : List<String>.from(map['followings']),

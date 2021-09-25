@@ -29,6 +29,7 @@ class QuestModel {
   final int? yachtPointSuccessReward;
   final int? leaguePointSuccessReward;
   final int? expSuccessReward;
+  final bool? isYachtPointOneOfN;
 
   final int? yachtPointParticipationReward;
   final int? leaguePointParticipationReward;
@@ -64,6 +65,7 @@ class QuestModel {
     this.yachtPointSuccessReward,
     this.leaguePointSuccessReward,
     this.expSuccessReward,
+    this.isYachtPointOneOfN,
     this.yachtPointParticipationReward,
     this.leaguePointParticipationReward,
     this.expParticipationReward,
@@ -95,6 +97,7 @@ class QuestModel {
     int? yachtPointSuccessReward,
     int? leaguePointSuccessReward,
     int? expSuccessReward,
+    bool? isYachtPointOneOfN,
     int? yachtPointParticipationReward,
     int? leaguePointParticipationReward,
     int? expParticipationReward,
@@ -125,6 +128,7 @@ class QuestModel {
       yachtPointSuccessReward: yachtPointSuccessReward ?? this.yachtPointSuccessReward,
       leaguePointSuccessReward: leaguePointSuccessReward ?? this.leaguePointSuccessReward,
       expSuccessReward: expSuccessReward ?? this.expSuccessReward,
+      isYachtPointOneOfN: isYachtPointOneOfN ?? this.isYachtPointOneOfN,
       yachtPointParticipationReward: yachtPointParticipationReward ?? this.yachtPointParticipationReward,
       leaguePointParticipationReward: leaguePointParticipationReward ?? this.leaguePointParticipationReward,
       expParticipationReward: expParticipationReward ?? this.expParticipationReward,
@@ -176,6 +180,7 @@ class QuestModel {
       'yachtPointSuccessReward': yachtPointSuccessReward,
       'leaguePointSuccessReward': leaguePointSuccessReward,
       'expSuccessReward': expSuccessReward,
+      'isYachtPointOneOfN': isYachtPointOneOfN,
       'yachtPointParticipationReward': yachtPointParticipationReward,
       'leaguePointParticipationReward': leaguePointParticipationReward,
       'expParticipationReward': expParticipationReward,
@@ -209,6 +214,7 @@ class QuestModel {
       yachtPointSuccessReward: map['yachtPointSuccessReward'],
       leaguePointSuccessReward: map['leaguePointSuccessReward'],
       expSuccessReward: map[' expSuccessReward'],
+      isYachtPointOneOfN: map['isYachtPointOneOfN'] ?? true,
       yachtPointParticipationReward: map['yachtPointParticipationReward'],
       leaguePointParticipationReward: map['leaguePointParticipationReward'],
       expParticipationReward: map['expParticipationReward'],
@@ -225,7 +231,7 @@ class QuestModel {
 
   @override
   String toString() {
-    return 'QuestModel(questId: $questId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointSuccessReward: $yachtPointSuccessReward, leaguePointSuccessReward: $leaguePointSuccessReward, expSuccessReward: $expSuccessReward, yachtPointParticipationReward: $yachtPointParticipationReward, leaguePointParticipationReward: $leaguePointParticipationReward, expParticipationReward: $expParticipationReward, investAddresses: $investAddresses, choices: $choices, counts: $counts, results: $results)';
+    return 'QuestModel(questId: $questId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointSuccessReward: $yachtPointSuccessReward, leaguePointSuccessReward: $leaguePointSuccessReward, expSuccessReward: $expSuccessReward, isYachtPointOneOfN: $isYachtPointOneOfN, yachtPointParticipationReward: $yachtPointParticipationReward, leaguePointParticipationReward: $leaguePointParticipationReward, expParticipationReward: $expParticipationReward, investAddresses: $investAddresses, choices: $choices, counts: $counts, results: $results)';
   }
 
   @override
@@ -254,6 +260,7 @@ class QuestModel {
         other.yachtPointSuccessReward == yachtPointSuccessReward &&
         other.leaguePointSuccessReward == leaguePointSuccessReward &&
         other.expSuccessReward == expSuccessReward &&
+        other.isYachtPointOneOfN == isYachtPointOneOfN &&
         other.yachtPointParticipationReward == yachtPointParticipationReward &&
         other.leaguePointParticipationReward == leaguePointParticipationReward &&
         other.expParticipationReward == expParticipationReward &&
@@ -286,6 +293,7 @@ class QuestModel {
         yachtPointSuccessReward.hashCode ^
         leaguePointSuccessReward.hashCode ^
         expSuccessReward.hashCode ^
+        isYachtPointOneOfN.hashCode ^
         yachtPointParticipationReward.hashCode ^
         leaguePointParticipationReward.hashCode ^
         expParticipationReward.hashCode ^

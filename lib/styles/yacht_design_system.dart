@@ -13,6 +13,8 @@ import 'package:yachtOne/styles/style_constants.dart';
 // BASIC COLORS CODE
 const Color yachtBlack = const Color(0xFF101214);
 const Color yachtViolet = const Color(0xFF798AE6);
+const Color yachtViolet80 = const Color(0xFF586DE0);
+const Color yachtDarkPurple = const Color(0xFF6073B4);
 const Color yachtDarkGrey = const Color(0xFF5B6A87);
 const Color yachtGrey = const Color(0xFF879098);
 const Color yachtRed = const Color(0xFFEE5076);
@@ -147,6 +149,57 @@ InputDecoration emailRegisterInputDecoration = InputDecoration(
   ),
   hintText: "이메일 입력하기",
   hintStyle: emailRegisterFieldHint,
+);
+
+/// 기업 정보
+// 기업 이름
+TextStyle stockInfoNameTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 22.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 차트 메인 가격
+TextStyle stockPriceTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 30.w,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 퀘스트 타이틀
+TextStyle questTitleTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 스탯 각 제목
+TextStyle stockInfoStatsTitle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 자세한 내용 쓰는 텍스트
+TextStyle detailedContentTextStyle = TextStyle(
+  fontFamily: 'SCore',
+  fontSize: 16.w,
+  fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
 );
 
 //// 온보딩
@@ -1302,6 +1355,53 @@ Container sectionBoxWithBottomButton({
             child: Text(
               buttonTitle!,
               style: buttonTitleStyle,
+            ),
+          ),
+        )
+      ],
+    ),
+  );
+}
+
+Container secondarySectionBoxWithBottomButton({
+  double? height,
+  double? width,
+  EdgeInsets? padding,
+  String? buttonTitle,
+  // Function? onTap,
+  required Widget child,
+}) {
+  return Container(
+    height: height,
+    width: width,
+    // padding: padding,
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
+    child: Column(
+      // mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: padding!,
+            child: child,
+          ),
+        ),
+        Container(
+          height: 44.w,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: buttonNormal,
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
+          child: Center(
+            child: Text(
+              buttonTitle!,
+              style: buttonTitleStyle.copyWith(color: yachtViolet),
             ),
           ),
         )

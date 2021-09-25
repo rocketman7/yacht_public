@@ -523,7 +523,12 @@ class MainPriceDisplay extends StatelessWidget {
                 children: [
                   Text(
                     "현재 주가",
-                    style: questTermTextStyle,
+                    style: TextStyle(
+                      fontSize: 14.w,
+                      color: yachtGrey,
+                      fontFamily: 'Default',
+                      letterSpacing: -1.0,
+                    ),
                   ),
                   Obx(
                     () => Text(
