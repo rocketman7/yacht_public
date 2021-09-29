@@ -1778,3 +1778,23 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
         )),
   );
 }
+
+
+/// 잡 위젯
+// Dashed Line
+// Container dashedLine(
+//    {required bool isVertical, 
+//     required double length,
+//     required double dashedLength,
+//     required Color color,
+   
+   
+//    }
+// ) {
+
+//   return Container(
+//     child: Column(children: 
+//         List.generate(length, (index) => null)
+//     ,),
+//   );
+// }

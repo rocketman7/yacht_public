@@ -89,6 +89,7 @@ class QuestView extends StatelessWidget {
                           decoration: primaryBoxDecoration
                               .copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               QuestCardHeader(
                                 questModel: questModel,
@@ -96,12 +97,48 @@ class QuestView extends StatelessWidget {
                               btwHomeModuleTitleBox,
                               QuestCardRewards(questModel: questModel),
                               SizedBox(
-                                height: correctHeight(30.w, 0.0, detailedContentTextStyle.fontSize),
+                                height: correctHeight(24.w, 0.0, detailedContentTextStyle.fontSize),
+                              ),
+                              Text("퀘스트 상세 설명",
+                                  style: questDescription.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                              SizedBox(
+                                height: correctHeight(
+                                  14.w,
+                                  detailedContentTextStyle.fontSize,
+                                  questDescription.fontSize,
+                                ),
                               ),
                               Text(
                                 questModel.questDescription,
                                 style: questDescription,
-                              ) //temp
+                              ),
+                              SizedBox(
+                                height: correctHeight(24.w, 0.0, detailedContentTextStyle.fontSize),
+                              ),
+                              questModel.rewardDescription != null
+                                  ? Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("리워드 상세 설명",
+                                            style: questDescription.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        SizedBox(
+                                          height: correctHeight(
+                                            14.w,
+                                            detailedContentTextStyle.fontSize,
+                                            questDescription.fontSize,
+                                          ),
+                                        ),
+                                        Text(
+                                          questModel.rewardDescription!,
+                                          style: questDescription,
+                                        ), //temp
+                                      ],
+                                    )
+                                  : Container(),
                             ],
                           )),
                       // btwHomeModule,

@@ -41,13 +41,14 @@ class LiveQuestViewModel extends GetxController {
 
   @override
   void onInit() async {
+    getListStreamPriceModel(homeViewModel.liveQuests);
     // realTimePriceStream(homeViewModel.liveQuests[0].investAddresses);
-    homeViewModel.liveQuests.listen((val) {
-      if (val.length > 0) {
-        print('get live');
-        getListStreamPriceModel(homeViewModel.liveQuests);
-      }
-    });
+    // homeViewModel.liveQuests.listen((val) {
+    //   if (val.length > 0) {
+    //     print('get live');
+    //     getListStreamPriceModel(homeViewModel.liveQuests);
+    //   }
+    // });
     // getListStreamPriceModel(homeViewModel.liveQuests[0].investAddresses);
 
     super.onInit();
@@ -80,6 +81,8 @@ class LiveQuestViewModel extends GetxController {
   getListStreamPriceModel(List<QuestModel> liveQuests) {
     print("get stream price model");
 
+    // print('stream triggered');
+    // print(liveQuests);
     makeInvestAddressList();
     // livePrices = List.generate(investAddresses.length, (index) {
     //   return Rx<LiveQuestPriceModel>(initial(investAddresses[index]));
@@ -91,7 +94,9 @@ class LiveQuestViewModel extends GetxController {
           investAddresses[i][j],
           liveQuests[i],
         ));
+        livePrices[i][j].refresh();
       }
+      print(numberOfBusinessDay(liveQuests[i].liveStartDateTime.toDate(), liveQuests[i].liveEndDateTime.toDate()));
     }
   }
 

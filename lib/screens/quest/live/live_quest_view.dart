@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
+import 'package:yachtOne/screens/quest/live/live_detail_view.dart';
 import 'package:yachtOne/screens/quest/live/live_quest_view_model.dart';
 import 'package:yachtOne/screens/quest/live/live_widget.dart';
 
@@ -65,9 +66,17 @@ class LiveQuestView extends StatelessWidget {
                                         width: primaryHorizontalPadding.left,
                                       )
                                     : Container(),
-                                LiveWidget(
-                                  liveQuestIndex: index,
-                                  homeViewModel: homeViewModel,
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(
+                                      () => LiveDetailView(),
+                                      arguments: homeViewModel.liveQuests[index],
+                                    );
+                                  },
+                                  child: LiveWidget(
+                                    liveQuestIndex: index,
+                                    homeViewModel: homeViewModel,
+                                  ),
                                 ),
                                 SizedBox(width: widthHorizontalListView),
                               ],

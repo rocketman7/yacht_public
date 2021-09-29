@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -45,18 +46,7 @@ class LiveWidget extends StatelessWidget {
     List<DateTime> liveChartDays = [];
     // int i = 0;
     DateTime standardDate = homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate();
-    while (!isTwoDateSame(
-      standardDate,
-      homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate(),
-    )) {
-      if (isBusinessDay(standardDate)) {
-        liveChartDays.add(standardDate);
-      }
-      standardDate.add(Duration(days: 1));
-    }
 
-    int j = 0;
-    int day = 1;
     for (int i = 0;
         i <= homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate().difference(standardDate).inDays;
         i++) {
@@ -64,15 +54,21 @@ class LiveWidget extends StatelessWidget {
         standardDate.add(Duration(days: i)),
         homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate(),
       )) {
-        liveChartDays.add(standardDate.add(Duration(days: i)));
+        liveChartDays.add(
+          DateTime(standardDate.add(Duration(days: i)).year, standardDate.add(Duration(days: i)).month,
+              standardDate.add(Duration(days: i)).day),
+        );
         break;
       } else {
         if (isBusinessDay(standardDate.add(Duration(days: i)))) {
-          liveChartDays.add(standardDate.add(Duration(days: i)));
+          liveChartDays.add(
+            DateTime(standardDate.add(Duration(days: i)).year, standardDate.add(Duration(days: i)).month,
+                standardDate.add(Duration(days: i)).day),
+          );
         }
       }
     }
-    print(liveChartDays);
+    print('liveChartDays: $liveChartDays');
     return sectionBox(
         height: 250.w,
         width: 232.w,
@@ -84,108 +80,151 @@ class LiveWidget extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(primaryPaddingSize, primaryPaddingSize, primaryPaddingSize, 0),
                   child: LiveCardHeader(questModel: homeViewModel.liveQuests[liveQuestIndex])),
               Row(
-                children: List.generate(
-                    numberOfBusinessDay(homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate(),
-                        homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate()), (index) {
-                  return Container(
-                    height: 110.w,
-                    width: 232.w /
-                        numberOfBusinessDay(homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate(),
-                            homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate()),
-                    child: Stack(
+                children: List.generate(liveChartDays.length, (liveChartDayIndex) {
+                  if (liveChartDays[liveChartDayIndex].isAfter(DateTime.now())) {
+                    return Stack(
                       children: [
                         Container(
-                          height: double.infinity,
-                          width: double.infinity,
-                          child: Obx(
-                            () => ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w)),
-                              child: SfCartesianChart(
-                                  margin: EdgeInsets.all(0),
-                                  borderWidth: 0,
-                                  plotAreaBorderWidth: 0,
-                                  primaryXAxis: DateTimeAxis(
-                                      minimum: homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime
-                                          .toDate()
-                                          .add(Duration(days: index)),
-                                      maximum: homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime
-                                          .toDate()
-                                          .add(Duration(days: index)),
-                                      majorGridLines: MajorGridLines(
-                                        width: 0,
-                                      ),
-                                      // intervalType: DateTimeIntervalType.days,
-                                      // interval: 10,
-                                      isVisible: false),
-                                  primaryYAxis: NumericAxis(
-                                      // maximum: 176000,
-                                      // minimum: 168000,
-                                      // maximum: chartViewModel.maxPrice!,
-                                      // minimum: (5 * chartViewModel.minPrice! -
-                                      //         chartViewModel.maxPrice!) /
-                                      //     4,
-                                      // chartViewModel.minPrice! *
-                                      //     0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
-                                      majorGridLines: MajorGridLines(width: 0),
-                                      isVisible: false),
-                                  axes: List.generate(
-                                      homeViewModel.liveQuests[liveQuestIndex].investAddresses!.length,
-                                      (index) => NumericAxis(
-                                          name: index.toString(),
-                                          // maximum: 101,
-                                          // minimum: 97,
-                                          majorGridLines: MajorGridLines(width: 0),
-                                          isVisible: false)),
-                                  series: List.generate(
-                                      homeViewModel.liveQuests[liveQuestIndex].investAddresses!.length, (index) {
-                                    return AreaSeries<ChartPriceModel, DateTime>(
-                                      dataSource:
-                                          liveQuestViewModel.livePrices[liveQuestIndex][index].value.chartPrices,
-                                      xValueMapper: (ChartPriceModel chart, _) => stringToDateTime(chart.dateTime!),
-                                      gradient: LinearGradient(
-                                          colors: areaGraphColors[index],
-                                          stops: stops,
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter),
-                                      yAxisName: index.toString(),
-                                      yValueMapper: (ChartPriceModel chart, _) => chart.normalizedClose,
-                                      // gradient: gradientColors0,
-                                    );
-                                  })),
+                          height: 110.w,
+                          width: 232.w / (liveChartDays.length == 0 ? 1 : liveChartDays.length),
+
+                          // color: Colors.blue,
+                        ),
+                        liveChartDays.length == liveChartDayIndex + 1
+                            ? Container()
+                            : Positioned(
+                                right: 0,
+                                child: Container(
+                                  height: 110.w,
+                                  width: .5,
+                                  color: yachtGrey,
+                                ),
+                              )
+                      ],
+                    );
+                  } else {
+                    return Stack(
+                      children: [
+                        Container(
+                          height: 110.w,
+                          width: 232.w / (liveChartDays.length == 0 ? 1 : liveChartDays.length),
+                          child: Container(
+                            height: double.infinity,
+                            width: double.infinity,
+                            child: Obx(
+                              () => ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w)),
+                                child: SfCartesianChart(
+                                    margin: EdgeInsets.all(0),
+                                    borderWidth: 0,
+                                    plotAreaBorderWidth: 0,
+                                    primaryXAxis: DateTimeAxis(
+                                        minimum: DateTime(
+                                          liveChartDays[liveChartDayIndex].year,
+                                          liveChartDays[liveChartDayIndex].month,
+                                          liveChartDays[liveChartDayIndex].day,
+                                          homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate().hour,
+                                          homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate().minute,
+                                          homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate().second,
+                                        ),
+
+                                        //  homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate().hour, ,
+                                        maximum: DateTime(
+                                          liveChartDays[liveChartDayIndex].year,
+                                          liveChartDays[liveChartDayIndex].month,
+                                          liveChartDays[liveChartDayIndex].day,
+                                          homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate().hour,
+                                          homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate().minute,
+                                          homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate().second,
+                                        ),
+                                        majorGridLines: MajorGridLines(
+                                          width: 0,
+                                        ),
+                                        // intervalType: DateTimeIntervalType.days,
+                                        // interval: 10,
+                                        isVisible: false),
+                                    primaryYAxis: NumericAxis(
+                                        // maximum: 176000,
+                                        // minimum: 168000,
+                                        // maximum: chartViewModel.maxPrice!,
+                                        // minimum: (5 * chartViewModel.minPrice! -
+                                        //         chartViewModel.maxPrice!) /
+                                        //     4,
+                                        // chartViewModel.minPrice! *
+                                        //     0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
+                                        majorGridLines: MajorGridLines(width: 0),
+                                        isVisible: false),
+                                    axes: List.generate(
+                                        homeViewModel.liveQuests[liveQuestIndex].investAddresses!.length,
+                                        (index) => NumericAxis(
+                                            name: index.toString(),
+                                            // maximum: 101,
+                                            // minimum: 97,
+                                            majorGridLines: MajorGridLines(width: 0),
+                                            isVisible: false)),
+                                    series: List.generate(
+                                        homeViewModel.liveQuests[liveQuestIndex].investAddresses!.length, (index) {
+                                      return AreaSeries<ChartPriceModel, DateTime>(
+                                        dataSource:
+                                            liveQuestViewModel.livePrices[liveQuestIndex][index].value.chartPrices,
+                                        xValueMapper: (ChartPriceModel chart, _) => stringToDateTime(chart.dateTime!),
+                                        gradient: LinearGradient(
+                                            colors: areaGraphColors[index],
+                                            stops: stops,
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter),
+                                        yAxisName: index.toString(),
+                                        yValueMapper: (ChartPriceModel chart, _) => chart.normalizedClose,
+                                        // gradient: gradientColors0,
+                                      );
+                                    })),
+                              ),
                             ),
                           ),
+
+                          // Positioned(
+                          //   left: 14.w,
+                          //   bottom: 14.w,
+                          //   child: glassmorphismContainer(
+                          //     // color: Colors.blue,
+                          //     child: Row(
+                          //       children: [
+                          //         Text(
+                          //           "나의 선택:",
+                          //           style: questTermTextStyle.copyWith(
+                          //             fontSize: 12.w,
+                          //           ),
+                          //         ),
+                          //         SizedBox(
+                          //           width: 4.w,
+                          //         ),
+                          //         Text(
+                          //           "상승",
+                          //           style: questTermTextStyle.copyWith(fontSize: 12.w, fontWeight: FontWeight.w700),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // )
+
+                          // color: Colors.red,
                         ),
-                        // Positioned(
-                        //   left: 14.w,
-                        //   bottom: 14.w,
-                        //   child: glassmorphismContainer(
-                        //     // color: Colors.blue,
-                        //     child: Row(
-                        //       children: [
-                        //         Text(
-                        //           "나의 선택:",
-                        //           style: questTermTextStyle.copyWith(
-                        //             fontSize: 12.w,
-                        //           ),
-                        //         ),
-                        //         SizedBox(
-                        //           width: 4.w,
-                        //         ),
-                        //         Text(
-                        //           "상승",
-                        //           style: questTermTextStyle.copyWith(fontSize: 12.w, fontWeight: FontWeight.w700),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // )
+                        liveChartDays.length == liveChartDayIndex + 1
+                            ? Container()
+                            : Positioned(
+                                right: 0,
+                                child: Container(
+                                  height: 110.w,
+                                  width: .5,
+                                  color: yachtGrey,
+                                ),
+                              )
                       ],
-                    ),
-                    // color: Colors.red,
-                  );
+                    );
+                  }
                 }),
-              ),
+              )
             ]));
 
     // Container(
