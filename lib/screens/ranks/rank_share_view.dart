@@ -138,7 +138,7 @@ class RankShareView extends StatelessWidget {
                   style: rankMainBoldText,
                 ),
                 Text(
-                  rankController.myRanksAndPoint[leagueIndex]['todayRank']! != 0 ? '등' : '',
+                  rankController.myRanksAndPoint[leagueIndex]['todayRank']! != 0 ? '위' : '',
                   style: rankMainText,
                 ),
                 Spacer(),

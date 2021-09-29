@@ -62,10 +62,7 @@ class LiveQuestViewModel extends GetxController {
       for (int j = 0; j < homeViewModel.liveQuests[i].investAddresses!.length; j++) {
         // print(j);
         tempAddress.add(homeViewModel.liveQuests[i].investAddresses![j]);
-
         tempPrices.add(Rx<LiveQuestPriceModel>(initial(tempAddress[j])));
-
-        // print(investAddresses[i][j]);
       }
       investAddresses.add(tempAddress);
       livePrices.add(tempPrices);

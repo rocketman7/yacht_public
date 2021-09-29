@@ -782,9 +782,10 @@ class SettingView extends StatelessWidget {
         InkWell(
           onTap: () {
             _authService.auth.signOut();
-            Get.back();
-            userModelRx.value = null;
+            userModelRx(null);
             userQuestModelRx.value = [];
+            leagueRx("");
+            Get.back();
             _kakaoApi.signOut();
             print("signout");
           },

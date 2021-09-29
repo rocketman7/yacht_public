@@ -2,73 +2,51 @@ import 'dart:async';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/chart_price_model.dart';
-import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/live_quest_price_model.dart';
+import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/screens/quest/live/live_quest_view_model.dart';
-
 import 'package:yachtOne/screens/quest/quest_widget.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 // import 'live_quest_view_model.dart';
 
 class LiveWidget extends StatelessWidget {
+  final QuestModel questModel;
   final int liveQuestIndex;
-  final HomeViewModel homeViewModel;
-  LiveWidget({Key? key, required this.homeViewModel, required this.liveQuestIndex}) : super(key: key);
-
+  LiveWidget({
+    Key? key,
+    required this.questModel,
+    required this.liveQuestIndex,
+  }) : super(key: key);
   final liveQuestViewModel = Get.find<LiveQuestViewModel>();
   @override
   Widget build(BuildContext context) {
     // Area 차트에 쓰일 색상들
     final List<double> stops = <double>[0.0, 1.0];
     final List<List<Color>> areaGraphColors = [];
-    final List<Color> color0 = <Color>[graph0, graph0.withOpacity(0.05)];
-    final List<Color> color1 = <Color>[graph1, graph1.withOpacity(0.05)];
-    final List<Color> color2 = <Color>[graph2, graph2.withOpacity(0.05)];
-    final List<Color> color3 = <Color>[graph3, graph3.withOpacity(0.05)];
-    final List<Color> color4 = <Color>[graph4, graph4.withOpacity(0.05)];
-    areaGraphColors.add(color0);
-    areaGraphColors.add(color1);
-    areaGraphColors.add(color2);
-    areaGraphColors.add(color3);
-    areaGraphColors.add(color4);
 
-    List<DateTime> liveChartDays = [];
-    // int i = 0;
-    DateTime standardDate = homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate();
+    areaGraphColors.add(liveAreaColor0);
+    areaGraphColors.add(liveAreaColor1);
+    areaGraphColors.add(liveAreaColor2);
+    areaGraphColors.add(liveAreaColor3);
+    areaGraphColors.add(liveAreaColor4);
 
-    for (int i = 0;
-        i <= homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate().difference(standardDate).inDays;
-        i++) {
-      if (isTwoDateSame(
-        standardDate.add(Duration(days: i)),
-        homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate(),
-      )) {
-        liveChartDays.add(
-          DateTime(standardDate.add(Duration(days: i)).year, standardDate.add(Duration(days: i)).month,
-              standardDate.add(Duration(days: i)).day),
-        );
-        break;
-      } else {
-        if (isBusinessDay(standardDate.add(Duration(days: i)))) {
-          liveChartDays.add(
-            DateTime(standardDate.add(Duration(days: i)).year, standardDate.add(Duration(days: i)).month,
-                standardDate.add(Duration(days: i)).day),
-          );
-        }
-      }
-    }
-    print('liveChartDays: $liveChartDays');
+    List<DateTime> liveChartDays = businessDaysBtwTwoDates(
+      questModel.liveStartDateTime.toDate(),
+      questModel.liveEndDateTime.toDate(),
+    );
+
     return sectionBox(
         height: 250.w,
         width: 232.w,
@@ -78,7 +56,7 @@ class LiveWidget extends StatelessWidget {
             children: [
               Container(
                   padding: EdgeInsets.fromLTRB(primaryPaddingSize, primaryPaddingSize, primaryPaddingSize, 0),
-                  child: LiveCardHeader(questModel: homeViewModel.liveQuests[liveQuestIndex])),
+                  child: LiveCardHeader(questModel: questModel)),
               Row(
                 children: List.generate(liveChartDays.length, (liveChartDayIndex) {
                   if (liveChartDays[liveChartDayIndex].isAfter(DateTime.now())) {
@@ -94,11 +72,12 @@ class LiveWidget extends StatelessWidget {
                             ? Container()
                             : Positioned(
                                 right: 0,
-                                child: Container(
-                                  height: 110.w,
-                                  width: .5,
-                                  color: yachtGrey,
-                                ),
+                                child: dashedLine(
+                                    isVertical: true,
+                                    color: yachtGrey.withOpacity(.6),
+                                    length: 110.w,
+                                    dashedLength: 3.w,
+                                    thickness: .5),
                               )
                       ],
                     );
@@ -124,9 +103,9 @@ class LiveWidget extends StatelessWidget {
                                           liveChartDays[liveChartDayIndex].year,
                                           liveChartDays[liveChartDayIndex].month,
                                           liveChartDays[liveChartDayIndex].day,
-                                          homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate().hour,
-                                          homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate().minute,
-                                          homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate().second,
+                                          questModel.liveStartDateTime.toDate().hour,
+                                          questModel.liveStartDateTime.toDate().minute,
+                                          questModel.liveStartDateTime.toDate().second,
                                         ),
 
                                         //  homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate().hour, ,
@@ -134,9 +113,9 @@ class LiveWidget extends StatelessWidget {
                                           liveChartDays[liveChartDayIndex].year,
                                           liveChartDays[liveChartDayIndex].month,
                                           liveChartDays[liveChartDayIndex].day,
-                                          homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate().hour,
-                                          homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate().minute,
-                                          homeViewModel.liveQuests[liveQuestIndex].liveEndDateTime.toDate().second,
+                                          questModel.liveEndDateTime.toDate().hour,
+                                          questModel.liveEndDateTime.toDate().minute,
+                                          questModel.liveEndDateTime.toDate().second,
                                         ),
                                         majorGridLines: MajorGridLines(
                                           width: 0,
@@ -156,15 +135,14 @@ class LiveWidget extends StatelessWidget {
                                         majorGridLines: MajorGridLines(width: 0),
                                         isVisible: false),
                                     axes: List.generate(
-                                        homeViewModel.liveQuests[liveQuestIndex].investAddresses!.length,
+                                        questModel.investAddresses!.length,
                                         (index) => NumericAxis(
                                             name: index.toString(),
                                             // maximum: 101,
                                             // minimum: 97,
                                             majorGridLines: MajorGridLines(width: 0),
                                             isVisible: false)),
-                                    series: List.generate(
-                                        homeViewModel.liveQuests[liveQuestIndex].investAddresses!.length, (index) {
+                                    series: List.generate(questModel.investAddresses!.length, (index) {
                                       return AreaSeries<ChartPriceModel, DateTime>(
                                         dataSource:
                                             liveQuestViewModel.livePrices[liveQuestIndex][index].value.chartPrices,
@@ -214,11 +192,12 @@ class LiveWidget extends StatelessWidget {
                             ? Container()
                             : Positioned(
                                 right: 0,
-                                child: Container(
-                                  height: 110.w,
-                                  width: .5,
-                                  color: yachtGrey,
-                                ),
+                                child: dashedLine(
+                                    isVertical: true,
+                                    color: yachtGrey.withOpacity(.6),
+                                    length: 110.w,
+                                    dashedLength: 3.w,
+                                    thickness: .5),
                               )
                       ],
                     );

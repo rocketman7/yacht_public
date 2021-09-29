@@ -12,10 +12,16 @@ const int maxNumAllRanker = 100; // 아예 세부적으로 갔을 때 최대 몇
 
 class RankController extends GetxController {
   FirestoreService _firestoreService = locator<FirestoreService>();
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
-  late List<Map<String, int>> myRanksAndPoint;
+  List<Map<String, int>> myRanksAndPoint = [
+    {" ": 0}
+  ];
+
+  List<Map<String, int>> otherRanksAndPoint = [
+    {" ": 0}
+  ];
+
   late List<List<RankModel>> allRanker;
 
   bool isMyRanksAndPointLoaded = false;
@@ -40,6 +46,10 @@ class RankController extends GetxController {
     update(['ranks']);
 
     super.onInit();
+  }
+
+  Future<List<Map<String, int>>> getOtherUserRanks(String uid) async {
+    return await _firestoreService.getOtherRanks(uid);
   }
 
   Future<String> getImageUrlFromStorage(String imageUrl) async {

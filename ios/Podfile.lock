@@ -356,7 +356,7 @@ PODS:
     - Firebase/Firestore (= 8.6.0)
     - firebase_core
     - Flutter
-  - cloud_functions (3.0.2):
+  - cloud_functions (3.0.3):
     - Firebase/Functions (= 8.6.0)
     - firebase_core
     - Flutter
@@ -761,7 +761,7 @@ SPEC CHECKSUMS:
   app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 3280837bd2fdec18489ef93699527df4af4f177d
-  cloud_functions: 05add95f7488c5a3a4d39b060a58d67595acfd17
+  cloud_functions: eb40a5d5eed6baa51d163b7d0b06d2679ba4aac6
   Firebase: 21ac9f28b09a8bdfc005f34c984fca84e7e8786d
   firebase_analytics: de68415415782a5ad1d922d5c51789afbb2bb82d
   firebase_auth: 2dfa8e886191c24ddcf4da34463d47b72e6d19dc

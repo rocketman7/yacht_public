@@ -14,6 +14,7 @@ import 'package:yachtOne/screens/profile/my_feed_view_model.dart';
 import 'package:yachtOne/screens/profile/profile_others_view.dart';
 import 'package:yachtOne/screens/profile/profile_share_ui.dart';
 import 'package:yachtOne/screens/quest/result/quest_result_widget.dart';
+import 'package:yachtOne/screens/ranks/rank_controller.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../handlers/numbers_handler.dart';
@@ -28,6 +29,7 @@ import 'profile_my_view_model.dart';
 
 class ProfileMyView extends GetView<ProfileMyViewModel> {
   final ProfileMyViewModel profileViewModel = Get.put(ProfileMyViewModel());
+  // final RankController rankController = Get.put(RankController());
 
   @override
   Widget build(BuildContext context) {
@@ -618,6 +620,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
   late TabController tabController;
   late PageController pageController;
   final ProfileMyViewModel profileViewModel = Get.find<ProfileMyViewModel>();
+  // final RankController rankController = Get.find<RankController>();
   // final MyFeedViewModel myFeedViewModel = Get.find<MyFeedViewModel>();
   @override
   void initState() {
@@ -749,26 +752,55 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                           height: 90.w,
                           color: dividerColor,
                         ),
-                        Flexible(
-                          child: Container(
-                            height: 90.w,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text('순위', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
-                                  SizedBox(height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize)),
-                                  // *현재 리그 순위 및 승점
-                                  Text(
-                                    '7143위 | 42점',
-                                    style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                        GetBuilder<RankController>(
+                            id: 'ranks',
+                            init: RankController(),
+                            builder: (rankController) {
+                              return Flexible(
+                                child: Container(
+                                  height: 90.w,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text('순위', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
+                                        SizedBox(height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize)),
+                                        // *현재 리그 순위 및 승점
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              rankController.myRanksAndPoint[0]['todayRank'] == null
+                                                  ? ""
+                                                  : rankController.myRanksAndPoint[0]['todayRank']! != 0
+                                                      ? '${rankController.myRanksAndPoint[0]['todayRank']!}위 |'
+                                                      : '없음 |',
+                                              style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                                            ),
+                                            Text(
+                                              ' ${rankController.myRanksAndPoint[0]['todayPoint'] ?? 0}',
+                                              style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                                            ),
+                                            Text(
+                                              '점',
+                                              style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                                            ),
+                                          ],
+                                        ),
+
+                                        // GetBuilder(builder: (context) {
+                                        //   return Text(
+                                        //     '7143위 | 42점',
+                                        //     style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                                        //   );
+                                        // }),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                                ),
+                              );
+                            }),
                       ],
                     ),
                     Container(

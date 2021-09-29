@@ -68,14 +68,11 @@ class LiveQuestView extends StatelessWidget {
                                     : Container(),
                                 GestureDetector(
                                   onTap: () {
-                                    Get.to(
-                                      () => LiveDetailView(),
-                                      arguments: homeViewModel.liveQuests[index],
-                                    );
+                                    Get.to(() => LiveDetailView(), arguments: [homeViewModel.liveQuests[index], index]);
                                   },
                                   child: LiveWidget(
+                                    questModel: homeViewModel.liveQuests[index],
                                     liveQuestIndex: index,
-                                    homeViewModel: homeViewModel,
                                   ),
                                 ),
                                 SizedBox(width: widthHorizontalListView),

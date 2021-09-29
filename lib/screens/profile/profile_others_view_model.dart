@@ -19,24 +19,23 @@ class ProfileOthersViewModel extends GetxController {
   ProfileOthersViewModel({required this.uid});
 
   FirestoreService _firestoreService = locator<FirestoreService>();
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
   late UserModel user;
   late List<FavoriteStockModel> favoriteStockModels;
-  late List<FavoriteStockHistoricalPriceModel>
-      favoriteStockHistoricalPriceModels;
+  late List<FavoriteStockHistoricalPriceModel> favoriteStockHistoricalPriceModels;
   bool isUserModelLoaded = false;
   bool isFavoritesLoaded = false;
 
   bool isFollowing = false;
+  RxList<UserQuestModel> otherUserQuestModels = <UserQuestModel>[].obs;
 
   @override
   void onInit() async {
-    if (userModelRx.value!.followings != null &&
-        userModelRx.value!.followings!.contains(uid)) isFollowing = true;
+    if (userModelRx.value!.followings != null && userModelRx.value!.followings!.contains(uid)) isFollowing = true;
 
     user = await _firestoreService.getOtherUserModel(uid);
+    await getUserQuestFuture(uid);
     isUserModelLoaded = true;
     update(['profile']);
 
@@ -44,33 +43,25 @@ class ProfileOthersViewModel extends GetxController {
     favoriteStockHistoricalPriceModels = await loadFavoriteStocksPrices();
     isFavoritesLoaded = true;
     update(['favorites']);
-
     super.onInit();
   }
 
   Future<List<FavoriteStockModel>> loadFavoriteStocks() async {
     List<FavoriteStockModel> tempStockModels = [];
     if (user.favoriteStocks != null) {
-      for (int i = 0;
-          i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length);
-          i++) {
-        tempStockModels.add(await _firestoreService.getFavoriteStockModel(
-            'KR', user.favoriteStocks![i]));
+      for (int i = 0; i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length); i++) {
+        tempStockModels.add(await _firestoreService.getFavoriteStockModel('KR', user.favoriteStocks![i]));
       }
     }
     return tempStockModels;
   }
 
-  Future<List<FavoriteStockHistoricalPriceModel>>
-      loadFavoriteStocksPrices() async {
+  Future<List<FavoriteStockHistoricalPriceModel>> loadFavoriteStocksPrices() async {
     List<FavoriteStockHistoricalPriceModel> tempStockHistoricalPriceModels = [];
     if (user.favoriteStocks != null) {
-      for (int i = 0;
-          i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length);
-          i++) {
-        tempStockHistoricalPriceModels.add(
-            await _firestoreService.getFavoriteStockHistoricalPriceModel(
-                'KR', user.favoriteStocks![i]));
+      for (int i = 0; i < min(maxNumOfFavoriteStocks, user.favoriteStocks!.length); i++) {
+        tempStockHistoricalPriceModels
+            .add(await _firestoreService.getFavoriteStockHistoricalPriceModel('KR', user.favoriteStocks![i]));
       }
     }
     return tempStockHistoricalPriceModels;
@@ -102,6 +93,54 @@ class ProfileOthersViewModel extends GetxController {
     user = await _firestoreService.getOtherUserModel(uid);
 
     update(['profile']);
+  }
+
+  // 퀘스트 참여기록 파트
+  Future getUserQuestFuture(String uid) async {
+    otherUserQuestModels.addAll(await _firestoreService.getUserQuestFuture(uid));
+    // return await _firestoreService.getUserQuestFuture(uid);
+    print('otherUserQuestModels: $otherUserQuestModels');
+  }
+
+  // 유저가 참여한 퀘스트의 퀘스트 정보 가져오기
+  Future<QuestModel> getEachQuestModel(UserQuestModel userQuest) async {
+    return await _firestoreService.getEachQuest(userQuest.leagueId!, userQuest.questId!);
+    // update(['userQuestRecord']);
+  }
+
+  String getUserChioce(QuestModel questModel, UserQuestModel userQuest) {
+    if (questModel.selectMode == "updown") {
+      return userQuest.selection![0] == 0 ? "상승" : "하락";
+    } else if (questModel.selectMode == "order") {
+      List userSelect = [];
+
+      for (int investAddressIndex in userQuest.selection!) {
+        userSelect.add(questModel.investAddresses![investAddressIndex].name);
+      }
+      String makeOrderResult(List selection) {
+        String result = "";
+        for (int i = 0; i < selection.length; i++) {
+          result += '${i + 1}. ${selection[i]} ';
+        }
+        return result;
+      }
+
+      return makeOrderResult(userSelect);
+    } else {
+      List userSelect = [];
+      for (int investAddressIndex in userQuest.selection!) {
+        userSelect.add(questModel.investAddresses![investAddressIndex].name);
+      }
+      String makePickResult(List selection) {
+        String result = "";
+        for (int i = 0; i < selection.length; i++) {
+          i == selection.length - 1 ? result += '${selection[i]}' : result += '${selection[i]}, ';
+        }
+        return result;
+      }
+
+      return makePickResult(userSelect);
+    }
   }
 }
 

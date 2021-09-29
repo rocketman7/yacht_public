@@ -56,6 +56,15 @@ Color graph2 = Color(0xFF9255CF).withOpacity(.55);
 Color graph3 = Color(0xFF55CF69).withOpacity(.55);
 Color graph4 = Color(0xFF558DCF).withOpacity(.55);
 
+// Area 차트에 쓰일 색상들
+final List<double> stops = <double>[0.0, 1.0];
+
+final List<Color> liveAreaColor0 = <Color>[graph0, graph0.withOpacity(0.05)];
+final List<Color> liveAreaColor1 = <Color>[graph1, graph1.withOpacity(0.05)];
+final List<Color> liveAreaColor2 = <Color>[graph2, graph2.withOpacity(0.05)];
+final List<Color> liveAreaColor3 = <Color>[graph3, graph3.withOpacity(0.05)];
+final List<Color> liveAreaColor4 = <Color>[graph4, graph4.withOpacity(0.05)];
+
 const activatedButtonColor = Color(0xFF196AB4);
 Color dividerColor = Color(0xFF94BDE0).withOpacity(0.3);
 
@@ -1592,7 +1601,7 @@ yachtSnackBar(String title) {
       ),
     ),
     snackPosition: SnackPosition.TOP,
-    backgroundColor: white.withOpacity(.5),
+    backgroundColor: white.withOpacity(.7),
     barBlur: 2,
     margin: EdgeInsets.only(top: 60.w),
     duration: const Duration(seconds: 1, milliseconds: 300),
@@ -1609,7 +1618,7 @@ yachtSnackBarFromBottom(String title) {
       ),
     ),
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: white.withOpacity(.5),
+    backgroundColor: white.withOpacity(.7),
     barBlur: 2,
     margin: EdgeInsets.only(bottom: 80.w + SizeConfig.safeAreaBottom),
     duration: const Duration(seconds: 1, milliseconds: 300),
@@ -1779,22 +1788,32 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
   );
 }
 
-
-/// 잡 위젯
+//// 잡 위젯
 // Dashed Line
-// Container dashedLine(
-//    {required bool isVertical, 
-//     required double length,
-//     required double dashedLength,
-//     required Color color,
-   
-   
-//    }
-// ) {
-
-//   return Container(
-//     child: Column(children: 
-//         List.generate(length, (index) => null)
-//     ,),
-//   );
-// }
+Container dashedLine({
+  required bool isVertical,
+  required double length,
+  required double dashedLength,
+  required double thickness,
+  required Color color,
+}) {
+  int numberOfDashes = length ~/ (dashedLength * 6 / 4);
+  print('numberOfDashes: $numberOfDashes');
+  return Container(
+    child: Column(
+      children: List.generate(numberOfDashes * 2, (index) {
+        return index % 2 == 0
+            ? Container(
+                height: dashedLength,
+                width: thickness,
+                color: color,
+              )
+            : Container(
+                height: dashedLength / 2,
+                width: thickness,
+                color: Colors.transparent,
+              );
+      }),
+    ),
+  );
+}

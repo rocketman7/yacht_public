@@ -98,6 +98,25 @@ class FirestoreService extends GetxService {
             }).toList());
   }
 
+  // User Quest Model 퓨쳐
+  Future<List<UserQuestModel>> getUserQuestFuture(
+    String uid,
+  ) {
+    print('stream starting');
+    print(leagueRx.value);
+    return _firestoreService
+        .collection('users')
+        .doc(uid)
+        .collection('userVote')
+        .doc(leagueRx.value)
+        .collection('quests')
+        .get()
+        .then((value) => value.docs.map((doc) {
+              print('user quest: ${doc.data()}');
+              return UserQuestModel.fromMap(doc.id, doc.data());
+            }).toList());
+  }
+
   // user가 선택한 정답 UserQuest에 넣기
   Future updateUserQuest(
     // String uid,
@@ -466,6 +485,39 @@ class FirestoreService extends GetxService {
             .doc(element.id)
             .collection('ranks')
             .where('uid', isEqualTo: userModelRx.value!.uid)
+            .get()
+            .then((v) {
+          v.docs.forEach((e) {
+            myRanksAndPoint.last = {'todayRank': e.data()['todayRank'], 'todayPoint': e.data()['todayPoint']};
+            // myRanks.add(e.data()['todayRank']);
+          });
+        });
+      }
+    });
+
+    return myRanksAndPoint;
+  }
+
+  Future<List<Map<String, int>>> getOtherRanks(String uid) async {
+    List<Map<String, int>> myRanksAndPoint = [];
+
+    await _firestoreService
+        .collection('leagues') // 변하지 않음
+        .doc(leagueRx.value) // 변함. 현재 리그를 가져올지, 다음 리그를 가져올지 등에 따라. 값 자체도 변수로 줘야
+        .collection('subLeagues') // 변하지 않음
+        .get()
+        .then((value) async {
+      for (var element in value.docs) {
+        // 일단 리그 참여안한 것도 있을 수 있으니 모두 0으로 초기화. 랭크가 0이면 다른곳에서 특수처리하는걸로.
+        myRanksAndPoint.add({'todayRank': 0, 'todayPoint': 0});
+
+        await _firestoreService
+            .collection('leagues')
+            .doc(leagueRx.value)
+            .collection('subLeagues')
+            .doc(element.id)
+            .collection('ranks')
+            .where('uid', isEqualTo: uid)
             .get()
             .then((v) {
           v.docs.forEach((e) {

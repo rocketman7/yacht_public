@@ -162,6 +162,31 @@ int numberOfBusinessDay(DateTime first, DateTime last) {
   return day;
 }
 
+List<DateTime> businessDaysBtwTwoDates(DateTime first, DateTime last) {
+  List<DateTime> businessDays = [];
+
+  for (int i = 0; i <= last.difference(first).inDays; i++) {
+    if (isTwoDateSame(
+      first.add(Duration(days: i)),
+      last,
+    )) {
+      businessDays.add(
+        DateTime(
+            first.add(Duration(days: i)).year, first.add(Duration(days: i)).month, first.add(Duration(days: i)).day),
+      );
+      break;
+    } else {
+      if (isBusinessDay(first.add(Duration(days: i)))) {
+        businessDays.add(
+          DateTime(
+              first.add(Duration(days: i)).year, first.add(Duration(days: i)).month, first.add(Duration(days: i)).day),
+        );
+      }
+    }
+  }
+  return businessDays;
+}
+
 bool isTwoDateSame(DateTime dateTime1, DateTime dateTime2) {
   return dateTimeToString(dateTime1, 8)! == dateTimeToString(dateTime2, 8)!;
 }
