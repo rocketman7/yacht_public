@@ -24,3 +24,4 @@ final RxList<UserQuestModel> userQuestModelRx = RxList<UserQuestModel>();
 final RxString leagueRx = "".obs;
 
 final Rxn<TierSystemModel> tierSystemModelRx = Rxn<TierSystemModel>();
+final RxList<String> holidayListKR = <String>[].obs;

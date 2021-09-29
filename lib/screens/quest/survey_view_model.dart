@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/models/quest_model.dart';
 
 import 'package:yachtOne/models/survey_model.dart';
+import 'package:yachtOne/services/firestore_service.dart';
+import 'package:yachtOne/services/storage_service.dart';
+
+import '../../locator.dart';
 
 class SurveyViewModel extends GetxController {
-  final List<SurveyQuestionPageModel> surveyQuestionPageModel;
+  final List<SurveyQuestionModel> surveyQuestionPageModel;
+  final FirebaseStorageService _storageService = locator<FirebaseStorageService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
 
   SurveyViewModel({
     required this.surveyQuestionPageModel,
@@ -56,5 +63,22 @@ class SurveyViewModel extends GetxController {
       }
     });
     print(answerList);
+  }
+
+  Future<String> getResultImageAddress(String resultMapping) async {
+    return await _storageService.downloadImageURL(resultMapping);
+  }
+
+  Future updateUserSurvey(QuestModel questModel) async {
+    Map<String, dynamic> surveyUserAnswers = {};
+    for (int i = 0; i < answerList.length; i++) {
+      surveyUserAnswers[i.toString()] = answerList[i];
+    }
+
+    await _firestoreService.updateUserSurvey(questModel, surveyUserAnswers);
+  }
+
+  Future updateQuestParticipationReward(QuestModel questModel) async {
+    await _firestoreService.updateQuestParticipationReward(questModel);
   }
 }

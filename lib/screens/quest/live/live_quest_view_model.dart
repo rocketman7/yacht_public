@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/chart_price_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/live_quest_price_model.dart';
@@ -26,6 +27,7 @@ class LiveQuestViewModel extends GetxController {
 
   List<List<Rx<LiveQuestPriceModel>>> livePrices = <List<Rx<LiveQuestPriceModel>>>[];
   List<List<InvestAddressModel>> investAddresses = [];
+  RxList<int> eachQuestLiveDays = <int>[].obs;
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
   LiveQuestPriceModel initial(InvestAddressModel investAddressModel) {
@@ -40,7 +42,12 @@ class LiveQuestViewModel extends GetxController {
   @override
   void onInit() async {
     // realTimePriceStream(homeViewModel.liveQuests[0].investAddresses);
-
+    homeViewModel.liveQuests.listen((val) {
+      if (val.length > 0) {
+        print('get live');
+        getListStreamPriceModel(homeViewModel.liveQuests);
+      }
+    });
     // getListStreamPriceModel(homeViewModel.liveQuests[0].investAddresses);
 
     super.onInit();
@@ -72,8 +79,7 @@ class LiveQuestViewModel extends GetxController {
 
   getListStreamPriceModel(List<QuestModel> liveQuests) {
     print("get stream price model");
-    // print('stream triggered');
-    // print(liveQuests);
+
     makeInvestAddressList();
     // livePrices = List.generate(investAddresses.length, (index) {
     //   return Rx<LiveQuestPriceModel>(initial(investAddresses[index]));
@@ -81,17 +87,14 @@ class LiveQuestViewModel extends GetxController {
     print(livePrices);
     for (int i = 0; i < liveQuests.length; i++) {
       for (int j = 0; j < liveQuests[i].investAddresses!.length; j++) {
-        livePrices[i][j].bindStream(_firestoreService.getStreamLiveQuestPrice(investAddresses[i][j]));
+        livePrices[i][j].bindStream(_firestoreService.getStreamLiveQuestPrice(
+          investAddresses[i][j],
+          liveQuests[i],
+        ));
       }
     }
-
-    // for (int i = 0; i < investAddresses.length; i++) {
-    // livePrices[i].bindStream(_firestoreService.getStreamLiveQuestPrice(investAddresses[i]));
-    // print(livePrices);
-    // }
-
-    // return investAddresses.map((e) => _firestoreService.getStreamLiveQuestPrice(e)).toList();
   }
+
   // 1. 한 카드에 보여줄 InvestAddress List 필요 (n개 가정) Map 이용
   // 2. 각 종목의 realtime price Stream으로 받아와야 함
   // 3. 해당 리스트트들을 normalise 해서 새롭게 노말라이즈 된 리스트 n개 만들어야 함 (RxList)

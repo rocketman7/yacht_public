@@ -28,19 +28,28 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
         print('isUserNull? : $isUserNull');
         print('isUserModelReady? : $isUserModelReady');
         print('current User: ${userModelRx.value}');
-        if (isUserNull) {
+
+        if (controller.authService.auth.currentUser == null) {
           return LoginView();
-        } else if (!isUserModelReady) {
-          return Container(
-            color: Colors.blue,
-          );
-        } else if (leagueRx.value == "") {
-          return Container(
-            color: Colors.red,
-          );
+        } else if (isUserNull || !isUserModelReady) {
+          return LoadingView();
         } else {
           return StartupView();
         }
+
+        // // currentUser는 authStateChange와 관련.
+        // if (isUserNull) {
+        //   return LoginView();
+        //   // userModelRx가 없을 때
+        // } else if (!isUserModelReady) {
+        //   return Container(
+        //     color: Colors.blue,
+        //   );
+        // } else if (leagueRx.value == "") {
+        //   return LoadingView();
+        // } else {
+        //   return StartupView();
+        // }
 
         // (isUserNull)
         //     ? LoginView()

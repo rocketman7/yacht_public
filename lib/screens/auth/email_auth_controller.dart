@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/models/users/user_model.dart';
@@ -7,7 +8,7 @@ import 'package:yachtOne/services/auth_service.dart';
 
 class EmailAuthController extends GetxController {
   final AuthService _authService = locator<AuthService>();
-
+  RxBool isAuthProcessing = false.obs;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -15,6 +16,7 @@ class EmailAuthController extends GetxController {
   }
 
   Future startWithEmail(String email, String password) async {
+    isAuthProcessing(true);
     // UserModel newUser = newUserModel(
     //   uid: 'uid',
     //   userName: "새유저",
@@ -24,5 +26,6 @@ class EmailAuthController extends GetxController {
 
     // print('auth controller');
     await _authService.startWithEmail(email, password);
+    isAuthProcessing(false);
   }
 }

@@ -84,15 +84,27 @@ class QuestResultsViewModel extends GetxController {
       return "퀘스트에 참여하지 않았습니다.";
     } else {
       List<String> resultArray = userQuestModel.selection!.map((e) => questModel.choices![e]).toList();
+      // print(userQuestModel.selection);
+
       String temp = "";
-      for (int i = 0; i < resultArray.length; i++) {
-        if (i != resultArray.length - 1) {
-          temp += "${resultArray[i]}, ";
-        } else {
-          temp += "${resultArray[i]}";
+
+      if (questModel.selectMode == "order") {
+        for (int i = 0; i < resultArray.length; i++) {
+          if (i != resultArray.length - 1) {
+            temp += "${resultArray[i]}-";
+          } else {
+            temp += "${resultArray[i]}";
+          }
+        }
+      } else {
+        for (int i = 0; i < resultArray.length; i++) {
+          if (i != resultArray.length - 1) {
+            temp += "${resultArray[i]}, ";
+          } else {
+            temp += "${resultArray[i]}";
+          }
         }
       }
-
       return temp;
     }
   }

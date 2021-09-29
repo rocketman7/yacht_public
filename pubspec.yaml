@@ -82,7 +82,7 @@ dependencies:
   rxdart: ^0.27.0
   shared_preferences: ^2.0.5
   stacked: ^2.1.6
-  syncfusion_flutter_charts: ^19.1.64
+  syncfusion_flutter_charts: ^19.2.62
   timezone: ^0.7.0
   toggle_switch: ^0.1.8
   tutorial_coach_mark: ^1.0.0

@@ -10,8 +10,8 @@ class TodayMarketViewModel extends GetxController {
   late final RxInt newsIndex;
 
   RxList<TodayMarketModel> todayMarkets = <TodayMarketModel>[].obs;
-  RxList<TodayMarketModel> todayIssues = <TodayMarketModel>[].obs;
-  RxList<TodayMarketModel> todayNews = <TodayMarketModel>[].obs;
+  // RxList<TodayMarketModel> todayIssues = <TodayMarketModel>[].obs;
+  // RxList<TodayMarketModel> todayNews = <TodayMarketModel>[].obs;
 
   @override
   void onInit() async {
@@ -22,16 +22,16 @@ class TodayMarketViewModel extends GetxController {
   }
 
   Future getTodayMarket() async {
-    List<TodayMarketModel> todayMarkets = [];
-    todayMarkets = await _firestoreService.getTodayMarkets();
+    // List<TodayMarketModel> todayMarkets = [];
+    todayMarkets.addAll(await _firestoreService.getTodayMarkets());
 
-    todayMarkets.forEach((element) {
-      if (element.category == 'issue') {
-        todayIssues.add(element);
-      } else {
-        todayNews.add(element);
-      }
-    });
+    // todayMarkets.forEach((element) {
+    //   if (element.category == 'issue') {
+    //     todayIssues.add(element);
+    //   } else {
+    //     todayNews.add(element);
+    //   }
+    // });
 
     print(todayMarkets);
   }

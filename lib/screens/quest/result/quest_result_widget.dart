@@ -130,13 +130,13 @@ class ResultDialog extends StatefulWidget {
 class _ResultDialogState extends State<ResultDialog> {
   @override
   void initState() {
-    print('init');
+    // print('init');
     super.initState();
   }
 
   @override
   void dispose() {
-    print('dispose');
+    // print('dispose');
     Get.delete<QuestResultsViewModel>();
     super.dispose();
   }
@@ -228,7 +228,7 @@ class _ResultDialogState extends State<ResultDialog> {
                           questResultViewModel.thisUserQuestModel.value == null
                               ? 'assets/icons/quest_not_joined.png'
                               : questResultViewModel.thisUserQuestModel.value!.hasSucceeded == null
-                                  ? 'assets/icons/quest_not_joined.png'
+                                  ? 'assets/icons/quest_waiting.png'
                                   : !questResultViewModel.thisUserQuestModel.value!.hasSucceeded!
                                       ? 'assets/icons/quest_failed.png'
                                       : 'assets/icons/quest_success.png',
@@ -260,7 +260,8 @@ class _ResultDialogState extends State<ResultDialog> {
                               : Text(
                                   questResultViewModel.showUserSelection(
                                       questResultViewModel.thisUserQuestModel.value!, widget.questModel),
-                                  style: questTitle.copyWith(fontSize: 24.w),
+                                  style: questTitle.copyWith(
+                                      fontSize: widget.questModel.selectMode == "order" ? 18.w : 24.w),
                                 ),
                           SizedBox(height: 14.w),
                           Text("결과", style: questTerm.copyWith(color: yachtViolet)),

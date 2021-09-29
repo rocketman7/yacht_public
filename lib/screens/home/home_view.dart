@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -54,190 +55,16 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      if (!homeViewModel.noNeedShowUserNameDialog.value) {
-        showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.w),
-            ),
-            insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Container(
-                constraints: BoxConstraints.loose(
-                  Size(double.infinity, 180.w),
-                ),
-                padding: primaryHorizontalPadding,
-                child: Form(
-                  key: userNameFormKey,
-                  child: Stack(
-                    children: [
-                      Column(
-                        children: [
-                          appBarWithoutCloseButton(title: "닉네임 설정"),
-                          SizedBox(height: 8.w),
-                          TextFormField(
-                            controller: userNameController,
-                            textAlignVertical: TextAlignVertical.bottom,
-                            keyboardType: TextInputType.name,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding: EdgeInsets.all(0.w),
-                              focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                              enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                              hintText: '${userModelRx.value!.userName}',
-                              hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
-                            ),
-                            validator: (value) {
-                              if (value != '') {
-                                final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
-                                if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
-                                  return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
-                                } else {
-                                  return null;
-                                }
-                              }
-                            },
-                            onChanged: (value) {
-                              if (userNameFormKey.currentState!.validate()) {
-                                print('good');
-                              } else {
-                                print('bad');
-                              }
-                            },
-                          ),
-                          SizedBox(height: 16.w),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () async {
-                                // Get.dialog(Dialog(
-                                //   child: Text("TTT"),
-                                // ));
-                                // print('tap');
-                                if (userNameController.text == '') {
-                                  showSmallSnackBar(true);
-                                  smallSnackBarText("닉네임을 입력해주세요");
-                                  Future.delayed(Duration(seconds: 1)).then((value) {
-                                    showSmallSnackBar(false);
-                                    smallSnackBarText("");
-                                  });
-                                  // Get.rawSnackbar(
-                                  //   messageText: Center(
-                                  //     child: Text(
-                                  //       "변경한 내용이 없어요.",
-                                  //       style: snackBarStyle,
-                                  //     ),
-                                  //   ),
-                                  //   backgroundColor: white.withOpacity(.5),
-                                  //   barBlur: 8,
-                                  //   duration: const Duration(seconds: 1, milliseconds: 100),
-                                  // );
-                                } else if (userNameFormKey.currentState!.validate() &&
-                                    isCheckingUserNameDuplicated.value == false) {
-                                  if (userNameController.text != '') {
-                                    print(userNameController.text);
-                                    isCheckingUserNameDuplicated(true);
-                                    bool isUserNameDuplicatedVar = true;
-
-                                    isUserNameDuplicatedVar =
-                                        await homeViewModel.isUserNameDuplicated(userNameController.text);
-                                    print(isUserNameDuplicatedVar);
-                                    if (!isUserNameDuplicatedVar) {
-                                      await homeViewModel.updateUserName(userNameController.text);
-                                      showSmallSnackBar(true);
-                                      smallSnackBarText("닉네임이 저장되었어요");
-                                      Future.delayed(Duration(seconds: 1)).then((value) {
-                                        showSmallSnackBar(false);
-                                        smallSnackBarText("");
-                                        Navigator.of(context).pop();
-                                      });
-
-                                      // Get.rawSnackbar(
-                                      //   messageText: Center(
-                                      //     child: Text(
-                                      //       "변경한 내용이 저장되었어요.",
-                                      //       style: snackBarStyle,
-                                      //     ),
-                                      //   ),
-                                      //   backgroundColor: white.withOpacity(.5),
-                                      //   barBlur: 8,
-                                      //   duration: const Duration(seconds: 1, milliseconds: 100),
-                                      // );
-                                    } else {
-                                      showSmallSnackBar(true);
-                                      smallSnackBarText("중복된 닉네임이 있어요");
-                                      Future.delayed(Duration(seconds: 1)).then((value) {
-                                        showSmallSnackBar(false);
-                                        smallSnackBarText("");
-                                      });
-                                      // userNameDuplicatedDialog();
-                                    }
-
-                                    isCheckingUserNameDuplicated(false);
-                                  }
-                                }
-                              },
-                              child: Obx(() => Container(
-                                    height: 50.w,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(70.0),
-                                        color: isCheckingUserNameDuplicated.value == false
-                                            ? yachtViolet
-                                            : primaryButtonText),
-                                    child: Center(
-                                      child: Text(
-                                        isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
-                                        style: profileChangeButtonTextStyle.copyWith(
-                                            color: isCheckingUserNameDuplicated.value == false
-                                                ? primaryButtonText
-                                                : primaryButtonBackground),
-                                      ),
-                                    ),
-                                  )),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Obx(
-                        () => showSmallSnackBar.value
-                            ? Positioned(
-                                top: 40.w,
-                                child: Align(
-                                  alignment: Alignment(0, 0),
-                                  child: AnimatedContainer(
-                                    duration: Duration(milliseconds: 300),
-                                    constraints: BoxConstraints.loose(
-                                      Size(double.infinity, 180.w),
-                                    ),
-                                    padding: EdgeInsets.all(12.w),
-                                    color: Colors.white.withOpacity(.8),
-                                    // height: 40.w,
-                                    // width: double.infinity,
-                                    child: Text(
-                                      smallSnackBarText.value,
-                                      style: TextStyle(
-                                        fontSize: 16.w,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : Container(),
-                      )
-                    ],
-                  ),
-                )),
-          ),
-          barrierDismissible: false,
-        );
-      }
-    });
+    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
+    //   print('triggered' + homeViewModel.noNeedShowUserNameDialog.value.toString());
+    //   if (!homeViewModel.noNeedShowUserNameDialog.value) {
+    //     print('triggered');
+    //     await showChangeNameDialog(context);
+    //   }
+    // });
 
     List<Widget> homeWidgets = [
+      DialogReadyWidget(homeViewModel: homeViewModel),
       MyAssets(),
       // sign out 임시
       Container(
@@ -260,7 +87,7 @@ class HomeView extends StatelessWidget {
       TodayMarketView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       DictionaryView(homeViewModel: homeViewModel),
-      SizedBox(height: correctHeight(80.w, 0.0, sectionTitle.fontSize)),
+      SizedBox(height: correctHeight(90.w, 0.0, sectionTitle.fontSize)),
 
       // SliverToBoxAdapter(child: SizedBox(height: 100)),
       // OldLiveQuests(homeViewModel: homeViewModel),
@@ -309,6 +136,7 @@ class HomeView extends StatelessWidget {
                   return homeWidgets[index];
                 }, childCount: homeWidgets.length),
               ),
+
               // MyAssets(),
               // SliverToBoxAdapter(
               //     child: SizedBox(
@@ -329,6 +157,427 @@ class HomeView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  showChangeNameDialog(BuildContext context) async {
+    showDialog<Widget>(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.w),
+        ),
+        insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Container(
+            constraints: BoxConstraints.loose(
+              Size(double.infinity, 180.w),
+            ),
+            padding: primaryHorizontalPadding,
+            child: Form(
+              key: userNameFormKey,
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      appBarWithoutCloseButton(title: "닉네임 설정"),
+                      SizedBox(height: 8.w),
+                      TextFormField(
+                        controller: userNameController,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: EdgeInsets.all(0.w),
+                          focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                          enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                          hintText: '${userModelRx.value!.userName}',
+                          hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                        ),
+                        validator: (value) {
+                          if (value != '') {
+                            final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
+                            if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
+                              return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
+                            } else {
+                              return null;
+                            }
+                          }
+                        },
+                        onChanged: (value) {
+                          if (userNameFormKey.currentState!.validate()) {
+                            print('good');
+                          } else {
+                            print('bad');
+                          }
+                        },
+                      ),
+                      SizedBox(height: 16.w),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            // Get.dialog(Dialog(
+                            //   child: Text("TTT"),
+                            // ));
+                            // print('tap');
+                            if (userNameController.text == '') {
+                              showSmallSnackBar(true);
+                              smallSnackBarText("닉네임을 입력해주세요");
+                              Future.delayed(Duration(seconds: 1)).then((value) {
+                                showSmallSnackBar(false);
+                                smallSnackBarText("");
+                              });
+                              // Get.rawSnackbar(
+                              //   messageText: Center(
+                              //     child: Text(
+                              //       "변경한 내용이 없어요.",
+                              //       style: snackBarStyle,
+                              //     ),
+                              //   ),
+                              //   backgroundColor: white.withOpacity(.5),
+                              //   barBlur: 8,
+                              //   duration: const Duration(seconds: 1, milliseconds: 100),
+                              // );
+                            } else if (userNameFormKey.currentState!.validate() &&
+                                isCheckingUserNameDuplicated.value == false) {
+                              if (userNameController.text != '') {
+                                print(userNameController.text);
+                                isCheckingUserNameDuplicated(true);
+                                bool isUserNameDuplicatedVar = true;
+
+                                isUserNameDuplicatedVar =
+                                    await homeViewModel.isUserNameDuplicated(userNameController.text);
+                                print(isUserNameDuplicatedVar);
+                                if (!isUserNameDuplicatedVar) {
+                                  await homeViewModel.updateUserName(userNameController.text);
+                                  showSmallSnackBar(true);
+                                  smallSnackBarText("닉네임이 저장되었어요");
+                                  Future.delayed(Duration(seconds: 1)).then((value) {
+                                    showSmallSnackBar(false);
+                                    smallSnackBarText("");
+                                    Navigator.of(context).pop();
+                                  });
+
+                                  // Get.rawSnackbar(
+                                  //   messageText: Center(
+                                  //     child: Text(
+                                  //       "변경한 내용이 저장되었어요.",
+                                  //       style: snackBarStyle,
+                                  //     ),
+                                  //   ),
+                                  //   backgroundColor: white.withOpacity(.5),
+                                  //   barBlur: 8,
+                                  //   duration: const Duration(seconds: 1, milliseconds: 100),
+                                  // );
+                                } else {
+                                  showSmallSnackBar(true);
+                                  smallSnackBarText("중복된 닉네임이 있어요");
+                                  Future.delayed(Duration(seconds: 1)).then((value) {
+                                    showSmallSnackBar(false);
+                                    smallSnackBarText("");
+                                  });
+                                  // userNameDuplicatedDialog();
+                                }
+
+                                isCheckingUserNameDuplicated(false);
+                              }
+                            }
+                          },
+                          child: Obx(() => Container(
+                                height: 50.w,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(70.0),
+                                    color:
+                                        isCheckingUserNameDuplicated.value == false ? yachtViolet : primaryButtonText),
+                                child: Center(
+                                  child: Text(
+                                    isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
+                                    style: profileChangeButtonTextStyle.copyWith(
+                                        color: isCheckingUserNameDuplicated.value == false
+                                            ? primaryButtonText
+                                            : primaryButtonBackground),
+                                  ),
+                                ),
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Obx(
+                    () => showSmallSnackBar.value
+                        ? Positioned(
+                            top: 40.w,
+                            child: Align(
+                              alignment: Alignment(0, 0),
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 300),
+                                constraints: BoxConstraints.loose(
+                                  Size(double.infinity, 180.w),
+                                ),
+                                padding: EdgeInsets.all(12.w),
+                                color: Colors.white.withOpacity(.8),
+                                // height: 40.w,
+                                // width: double.infinity,
+                                child: Text(
+                                  smallSnackBarText.value,
+                                  style: TextStyle(
+                                    fontSize: 16.w,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  )
+                ],
+              ),
+            )),
+      ),
+      barrierDismissible: false,
+    );
+  }
+}
+
+class DialogReadyWidget extends StatefulWidget {
+  final HomeViewModel homeViewModel;
+
+  const DialogReadyWidget({Key? key, required this.homeViewModel}) : super(key: key);
+  @override
+  State<DialogReadyWidget> createState() => _DialogReadyWidgetState();
+}
+
+class _DialogReadyWidgetState extends State<DialogReadyWidget> {
+  final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
+  final TextEditingController userNameController = TextEditingController(text: "");
+  final RxBool isCheckingUserNameDuplicated = false.obs;
+  final RxBool noNeedShowUserNameDialog = true.obs;
+  final RxBool showSmallSnackBar = false.obs;
+  final RxString smallSnackBarText = "".obs;
+
+  @override
+  void initState() {
+    showChangeNameDialog(context);
+    super.initState();
+  }
+
+  showChangeNameDialog(BuildContext context) async {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      if (userModelRx.value!.isNameUpdated == null || !userModelRx.value!.isNameUpdated!) {
+        await showDialog(
+          context: context,
+          builder: (context) => Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.all(16.w),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.w),
+            ),
+            child: Container(
+                decoration: primaryBoxDecoration.copyWith(
+                  color: white,
+                ),
+                // height: double.minPositive,
+
+                padding: primaryAllPadding,
+                child: Form(
+                  key: userNameFormKey,
+                  child: Container(
+                    // height: double.minPositive,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            appBarWithoutCloseButton(title: "닉네임 설정하기"),
+                            // SizedBox(height: 8.w),
+                            Container(
+                              child: Text("어떤 호칭으로 불러드릴까요?",
+                                  style: TextStyle(
+                                      fontSize: 18.w, letterSpacing: -1.0, height: 1.4, fontWeight: FontWeight.w600)),
+                            ),
+                            SizedBox(height: 14.w),
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.w),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: yachtShadow,
+                                      blurRadius: 8.w,
+                                      spreadRadius: 1.w,
+                                    )
+                                  ]),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 12.w, top: 14.w, bottom: 11.w),
+                                child: TextFormField(
+                                  controller: userNameController,
+                                  textAlignVertical: TextAlignVertical.bottom,
+                                  keyboardType: TextInputType.name,
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.all(0.w),
+                                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                    hintText: '${userModelRx.value!.userName}',
+                                    hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                                  ),
+                                  validator: (value) {
+                                    if (value != '') {
+                                      final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
+                                      if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
+                                        return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
+                                      } else {
+                                        return null;
+                                      }
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    if (userNameFormKey.currentState!.validate()) {
+                                      print('good');
+                                    } else {
+                                      print('bad');
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 16.w),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () async {
+                                  // Get.dialog(Dialog(
+                                  //   child: Text("TTT"),
+                                  // ));
+                                  // print('tap');
+                                  if (userNameController.text == '') {
+                                    showSmallSnackBar(true);
+                                    smallSnackBarText("닉네임을 입력해주세요");
+                                    Future.delayed(Duration(seconds: 1)).then((value) {
+                                      showSmallSnackBar(false);
+                                      smallSnackBarText("");
+                                    });
+                                    // Get.rawSnackbar(
+                                    //   messageText: Center(
+                                    //     child: Text(
+                                    //       "변경한 내용이 없어요.",
+                                    //       style: snackBarStyle,
+                                    //     ),
+                                    //   ),
+                                    //   backgroundColor: white.withOpacity(.5),
+                                    //   barBlur: 8,
+                                    //   duration: const Duration(seconds: 1, milliseconds: 100),
+                                    // );
+                                  } else if (userNameFormKey.currentState!.validate() &&
+                                      isCheckingUserNameDuplicated.value == false) {
+                                    if (userNameController.text != '') {
+                                      print(userNameController.text);
+                                      isCheckingUserNameDuplicated(true);
+                                      bool isUserNameDuplicatedVar = true;
+
+                                      isUserNameDuplicatedVar =
+                                          await widget.homeViewModel.isUserNameDuplicated(userNameController.text);
+                                      print(isUserNameDuplicatedVar);
+                                      if (!isUserNameDuplicatedVar) {
+                                        await widget.homeViewModel.updateUserName(userNameController.text);
+                                        showSmallSnackBar(true);
+                                        smallSnackBarText("닉네임이 저장되었어요");
+                                        Future.delayed(Duration(seconds: 1)).then((value) {
+                                          showSmallSnackBar(false);
+                                          smallSnackBarText("");
+                                          Navigator.of(context).pop();
+                                        });
+
+                                        // Get.rawSnackbar(
+                                        //   messageText: Center(
+                                        //     child: Text(
+                                        //       "변경한 내용이 저장되었어요.",
+                                        //       style: snackBarStyle,
+                                        //     ),
+                                        //   ),
+                                        //   backgroundColor: white.withOpacity(.5),
+                                        //   barBlur: 8,
+                                        //   duration: const Duration(seconds: 1, milliseconds: 100),
+                                        // );
+                                      } else {
+                                        showSmallSnackBar(true);
+                                        smallSnackBarText("중복된 닉네임이 있어요");
+                                        Future.delayed(Duration(seconds: 1)).then((value) {
+                                          showSmallSnackBar(false);
+                                          smallSnackBarText("");
+                                        });
+                                        // userNameDuplicatedDialog();
+                                      }
+
+                                      isCheckingUserNameDuplicated(false);
+                                    }
+                                  }
+                                },
+                                child: Obx(() => Container(
+                                      height: 50.w,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(70.0),
+                                          color: isCheckingUserNameDuplicated.value == false
+                                              ? yachtViolet
+                                              : primaryButtonText),
+                                      child: Center(
+                                        child: Text(
+                                          isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
+                                          style: profileChangeButtonTextStyle.copyWith(
+                                              color: isCheckingUserNameDuplicated.value == false
+                                                  ? primaryButtonText
+                                                  : primaryButtonBackground),
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Positioned.fill(
+                            top: 48.w,
+                            // left: 16.w,
+                            child: Container(
+                              height: 24.w,
+                              child: Obx(
+                                () => showSmallSnackBar.value
+                                    ? AnimatedContainer(
+                                        duration: Duration(milliseconds: 300),
+
+                                        padding: EdgeInsets.all(12.w),
+                                        color: Colors.white.withOpacity(.8),
+
+                                        // width: double.infinity,
+                                        child: Text(
+                                          smallSnackBarText.value,
+                                          style: TextStyle(
+                                              fontSize: 16.w,
+                                              fontWeight: FontWeight.w600,
+                                              color: showSmallSnackBar.value ? yachtBlack : Colors.transparent),
+                                        ),
+                                      )
+                                    : Container(),
+                              ),
+                            ))
+                      ],
+                    ),
+                  ),
+                )),
+          ),
+          barrierDismissible: false,
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
 
@@ -384,7 +633,7 @@ class NewQuests extends StatelessWidget {
                             width: 4.w,
                           ),
                           Obx(() {
-                            print("item changed");
+                            // print("item changed");
                             return Text(
                               userModelRx.value == null ? 0.toString() : userModelRx.value!.item.toString(),
                               style: questTermTextStyle.copyWith(color: Color(0xFF4D6A87), fontWeight: FontWeight.w600),
@@ -588,62 +837,51 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
           padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
           child: Center(
               child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: 12.w,
+              Flexible(
+                flex: 1,
+                child: Container(),
               ),
-              SizedBox(
-                width: 24.w + 12.w + 12.w,
-              ),
-              SizedBox(
-                width: 12.w,
-              ),
-              Container(
-                  child: Obx(
-                () => Text(
-                  userModelRx.value == null ? "" : userModelRx.value!.userName,
-                  style: appBarTitle.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              )),
-              Container(
-                // color: Colors.blue,
-                child: Text(
-                  " 님의 요트",
-                  style: appBarTitle,
-                ),
-              ),
-              SizedBox(
-                width: 12.w,
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  Get.to(() => NotificationView());
-                },
+              Center(
                 child: Row(
                   children: [
-                    SizedBox(
-                      height: 24.w,
-                      width: 12.w,
+                    Text(
+                      userModelRx.value == null ? "" : userModelRx.value!.userName,
+                      style: appBarTitle.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    SizedBox(
-                        height: 24.w,
-                        width: 24.w,
-                        child: Image.asset('assets/icons/notification.png')),
-                    SizedBox(
-                      height: 24.w,
-                      width: 12.w,
+                    Text(
+                      " 님의 요트",
+                      style: appBarTitle,
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                width: 12.w,
+              // Spacer(),
+              Flexible(
+                flex: 1,
+                child: InkWell(
+                  onTap: () async {
+                    Get.to(() => NotificationView());
+                  },
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          height: 26.w,
+                          // width: 24.w,
+                          child: Image.asset('assets/icons/notification.png'),
+                        ),
+                        SizedBox(width: primaryPaddingSize)
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
           )),

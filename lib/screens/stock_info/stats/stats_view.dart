@@ -27,7 +27,7 @@ class StatsView extends StatelessWidget {
     return Obx(
       () => statsViewModel.isLoading.value
           ? Container(
-              color: Colors.blue,
+              // color: Colors.blue,
               child: Column(
                 children: [
                   Row(
@@ -238,7 +238,7 @@ class IncomeStatementChart extends StatelessWidget {
         ColumnSeries<StatsModel, String>(
           dataLabelMapper: (stats, index) {
             // if (index == statsViewModel.chartStats.length - 1)
-            return parseBigNumberShortKRW(stats.toMap()[fieldName]!);
+            return stats.toMap()[fieldName] == null ? "" : parseBigNumberShortKRW(stats.toMap()[fieldName]!);
             // else
             //   return "";
           },
@@ -259,7 +259,7 @@ class IncomeStatementChart extends StatelessWidget {
         ColumnSeries<StatsModel, String>(
           dataLabelMapper: (stats, index) {
             // if (index == statsViewModel.chartStats.length - 1)
-            return parseBigNumberShortKRW(stats.toMap()[fieldName]!);
+            return stats.toMap()[fieldName] == null ? "" : parseBigNumberShortKRW(stats.toMap()[fieldName]!);
             // else
             //   return "";
           },
@@ -280,7 +280,7 @@ class IncomeStatementChart extends StatelessWidget {
         ColumnSeries<StatsModel, String>(
           dataLabelMapper: (stats, index) {
             // if (index == statsViewModel.chartStats.length - 1)
-            return parseBigNumberShortKRW(stats.toMap()[fieldName]!);
+            return stats.toMap()[fieldName] == null ? "" : parseBigNumberShortKRW(stats.toMap()[fieldName]!);
             // else
             //   return "";
           },
@@ -301,7 +301,7 @@ class IncomeStatementChart extends StatelessWidget {
         ColumnSeries<StatsModel, String>(
           dataLabelMapper: (stats, index) {
             // if (index == statsViewModel.chartStats.length - 1)
-            return parseBigNumberShortKRW(stats.toMap()[fieldName]!);
+            return stats.toMap()[fieldName] == null ? "" : parseBigNumberShortKRW(stats.toMap()[fieldName]!);
             // else
             //   return "";
             //index가 0이면서 사업보고서만 있으면 1년임을 표시
@@ -314,7 +314,7 @@ class IncomeStatementChart extends StatelessWidget {
           yValueMapper: (StatsModel stats, _) {
             var result;
             if (stats.dateTime!.substring(4, 6) == '12') {
-              result = stats.toMap()[fieldName]!;
+              result = stats.toMap()[fieldName];
             }
             return result;
           },

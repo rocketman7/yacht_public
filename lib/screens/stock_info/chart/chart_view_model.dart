@@ -66,6 +66,8 @@ class ChartViewModel extends GetxController {
   Rx<num> high = 0.obs;
   Rx<num> low = 0.obs;
   Rx<num> volume = 0.obs;
+  RxString dateStart = "".obs;
+  RxString dateEnd = "".obs;
 
   RxDouble opacity = 1.0.obs;
 
@@ -124,6 +126,35 @@ class ChartViewModel extends GetxController {
         close(trackballArgs.chartPointInfo.chartDataPoint!.close as int);
         high(trackballArgs.chartPointInfo.chartDataPoint!.high as int);
         low(trackballArgs.chartPointInfo.chartDataPoint!.low as int);
+        // date(trackballArgs.chartPointInfo.chartDataPoint!.x as DateTime);
+        dateEnd(dateTimeToStringKorean(trackballArgs.chartPointInfo.chartDataPoint!.x as DateTime, true));
+        switch (cycles[selectedCycle.value]) {
+          case "1일":
+            dateStart(dateTimeToStringKorean(
+                (trackballArgs.chartPointInfo.chartDataPoint!.x as DateTime).subtract(Duration(minutes: 10)), true));
+            break;
+          case "1주":
+            dateStart(dateTimeToStringKorean(
+                (trackballArgs.chartPointInfo.chartDataPoint!.x as DateTime).subtract(Duration(minutes: 30)), true));
+            break;
+          case "1개월":
+            dateStart(dateTimeToStringKorean(
+                (trackballArgs.chartPointInfo.chartDataPoint!.x as DateTime).subtract(Duration(minutes: 130)), true));
+            break;
+          case "3개월":
+            dateStart(dateTimeToStringKorean(
+                (trackballArgs.chartPointInfo.chartDataPoint!.x as DateTime).subtract(Duration(days: 1)), false));
+            break;
+          case "1년":
+            dateStart(dateTimeToStringKorean(
+                (trackballArgs.chartPointInfo.chartDataPoint!.x as DateTime).subtract(Duration(days: 7)), false));
+            break;
+          case "5년":
+            dateStart(dateTimeToStringKorean(
+                (trackballArgs.chartPointInfo.chartDataPoint!.x as DateTime).subtract(Duration(days: 30)), false));
+            break;
+          default:
+        }
       } else {
         volume(trackballArgs.chartPointInfo.chartDataPoint!.yValue);
       }

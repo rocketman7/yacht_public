@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -143,13 +144,13 @@ class QuestView extends StatelessWidget {
                                       decoration: BoxDecoration(
                                           border: Border(
                                               bottom: questViewModel.stockInfoIndex.value == index
-                                                  ? BorderSide(width: 3.w, color: yachtDarkPurple)
+                                                  ? BorderSide(width: 3.w, color: yachtViolet)
                                                   : BorderSide.none)),
-                                      child: Obx(() => Text(questModel.investAddresses![index].name,
+                                      child: Obx(() => Text("  ${questModel.investAddresses![index].name}  ",
                                           style: buttonTextStyle.copyWith(
                                               color: questViewModel.stockInfoIndex.value == index
-                                                  ? yachtDarkPurple
-                                                  : yachtDarkPurple.withOpacity(.4)))),
+                                                  ? yachtViolet
+                                                  : yachtViolet.withOpacity(.4)))),
                                     ),
                                   ),
                                 ),
@@ -261,87 +262,87 @@ class QuestView extends StatelessWidget {
     );
   }
 
-  Positioned oldSelectBottomSheet(QuestViewModel questViewModel) {
-    return Positioned(
-        left: 14.w,
-        right: 14.w,
-        bottom: 20.w + 60.w + 20.w,
-        child: Container(
-          // color: Colors.white,
-          width: double.infinity,
-          // height: 100,
-          padding: EdgeInsets.all(14.w),
-          decoration: (primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow])),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () => questViewModel.isSelectingSheetShowing(false),
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    width: 50.w,
-                    color: Colors.yellow.withOpacity(.2),
-                    child: Icon(
-                      Icons.close,
-                      color: primaryFontColor,
-                      size: 30.w,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: reducedPaddingWhenTextIsBelow(8.w, questTitleTextStyle.fontSize!)),
-              Padding(
-                padding: EdgeInsets.all(16.0.w),
-                child: Text(questModel.selectInstruction, style: questTitleTextStyle, textAlign: TextAlign.center),
-              ),
-              SizedBox(height: reducedPaddingWhenTextIsBelow(16.w, questTitleTextStyle.fontSize!)),
-              Divider(color: primaryFontColor.withOpacity(.4)),
-              Column(
-                children: List.generate(
-                    questModel.investAddresses!.length,
-                    (index) => Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Obx(
-                              () => InkWell(
-                                onTap: () {
-                                  questViewModel.toggleUserSelect(index);
-                                  print('$index is change to ${questViewModel.toggleList}');
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(8.0.w),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        questViewModel.toggleList[index] == false
-                                            ? 'assets/buttons/radio_inactive.png'
-                                            : 'assets/buttons/radio_active.png',
-                                        width: 34.w,
-                                        height: 34.w,
-                                      ),
-                                      SizedBox(width: 8.w),
-                                      Text(
-                                        questModel.investAddresses![index].name,
-                                        style: detailedContentTextStyle.copyWith(fontSize: 18.w),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Divider(color: primaryFontColor.withOpacity(.4)),
-                          ],
-                        )),
-              ),
-              SizedBox(height: 12.w)
-            ],
-          ),
-        ));
-  }
+  // Positioned oldSelectBottomSheet(QuestViewModel questViewModel) {
+  //   return Positioned(
+  //       left: 14.w,
+  //       right: 14.w,
+  //       bottom: 20.w + 60.w + 20.w,
+  //       child: Container(
+  //         // color: Colors.white,
+  //         width: double.infinity,
+  //         // height: 100,
+  //         padding: EdgeInsets.all(14.w),
+  //         decoration: (primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow])),
+  //         child: Column(
+  //           children: [
+  //             Align(
+  //               alignment: Alignment.centerRight,
+  //               child: GestureDetector(
+  //                 onTap: () => questViewModel.isSelectingSheetShowing(false),
+  //                 child: Container(
+  //                   alignment: Alignment.centerRight,
+  //                   width: 50.w,
+  //                   color: Colors.yellow.withOpacity(.2),
+  //                   child: Icon(
+  //                     Icons.close,
+  //                     color: primaryFontColor,
+  //                     size: 30.w,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //             SizedBox(height: reducedPaddingWhenTextIsBelow(8.w, questTitleTextStyle.fontSize!)),
+  //             Padding(
+  //               padding: EdgeInsets.all(16.0.w),
+  //               child: Text(questModel.selectInstruction, style: questTitleTextStyle, textAlign: TextAlign.center),
+  //             ),
+  //             SizedBox(height: reducedPaddingWhenTextIsBelow(16.w, questTitleTextStyle.fontSize!)),
+  //             Divider(color: primaryFontColor.withOpacity(.4)),
+  //             Column(
+  //               children: List.generate(
+  //                   questModel.investAddresses!.length,
+  //                   (index) => Column(
+  //                         mainAxisAlignment: MainAxisAlignment.start,
+  //                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                         children: [
+  //                           Obx(
+  //                             () => InkWell(
+  //                               onTap: () {
+  //                                 questViewModel.toggleUserSelect(index);
+  //                                 print('$index is change to ${questViewModel.toggleList}');
+  //                               },
+  //                               child: Container(
+  //                                 padding: EdgeInsets.all(8.0.w),
+  //                                 child: Row(
+  //                                   mainAxisAlignment: MainAxisAlignment.start,
+  //                                   crossAxisAlignment: CrossAxisAlignment.center,
+  //                                   children: [
+  //                                     Image.asset(
+  //                                       questViewModel.toggleList[index] == false
+  //                                           ? 'assets/buttons/radio_inactive.png'
+  //                                           : 'assets/buttons/radio_active.png',
+  //                                       width: 34.w,
+  //                                       height: 34.w,
+  //                                     ),
+  //                                     SizedBox(width: 8.w),
+  //                                     Text(
+  //                                       questModel.investAddresses![index].name,
+  //                                       style: detailedContentTextStyle.copyWith(fontSize: 18.w),
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           ),
+  //                           Divider(color: primaryFontColor.withOpacity(.4)),
+  //                         ],
+  //                       )),
+  //             ),
+  //             SizedBox(height: 12.w)
+  //           ],
+  //         ),
+  //       ));
+  // }
 
   AnimatedPositioned newSelectBottomSheet(QuestViewModel questViewModel) {
     return AnimatedPositioned(
@@ -382,65 +383,16 @@ class QuestView extends StatelessWidget {
               ),
               // SizedBox(height: reducedPaddingWhenTextIsBelow(8.w, questTitleTextStyle.fontSize!)),
               Padding(
-                padding: EdgeInsets.all(16.0.w),
-                child: Text(questModel.selectInstruction, style: questTitleTextStyle, textAlign: TextAlign.center),
+                padding: EdgeInsets.all(4.0.w),
+                child: Text(questModel.selectInstruction,
+                    style: questTitleTextStyle, maxLines: 3, textAlign: TextAlign.center),
               ),
               SizedBox(height: reducedPaddingWhenTextIsBelow(16.w, questTitleTextStyle.fontSize!)),
               questModel.selectMode == 'pickone'
-                  ? Row(
-                      children: List.generate(questModel.investAddresses!.length, (index) {
-                      return Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              questViewModel.toggleUserSelect(index);
-                              print('$index is change to ${questViewModel.toggleList}');
-                              HapticFeedback.lightImpact();
-                            },
-                            child: AnimatedContainer(
-                              duration: Duration(milliseconds: 300),
-                              width: 151.w,
-                              height: 151.w,
-                              decoration: yachtChoiceBoxDecoration.copyWith(
-                                  color: questViewModel.toggleList[index] ? yachtRed : white),
-                              child: Padding(
-                                padding: primaryAllPadding,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Obx(
-                                        () => Container(
-                                            width: 38.w,
-                                            height: 38.w,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: yachtGrey,
-                                            ),
-                                            child: questViewModel.logoImage.length > 0
-                                                ? questViewModel.logoImage[index]
-                                                : Container()),
-                                      ),
-                                    ),
-                                    Text(
-                                      questModel.investAddresses![index].name,
-                                      style: yachtChoiceBoxName.copyWith(
-                                          color: questViewModel.toggleList[index] ? white : yachtBlack),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          if (index == 0) SizedBox(width: primaryPaddingSize)
-                        ],
-                      );
-                    }))
-                  : questModel.selectMode == 'updown'
-                      ? Row(
-                          children: List.generate(2, (index) {
+                  ? Column(
+                      children: [
+                        Row(
+                            children: List.generate(questModel.investAddresses!.length, (index) {
                           return Row(
                             children: [
                               InkWell(
@@ -454,11 +406,7 @@ class QuestView extends StatelessWidget {
                                   width: 151.w,
                                   height: 151.w,
                                   decoration: yachtChoiceBoxDecoration.copyWith(
-                                      color: index == 0 && questViewModel.toggleList[0]
-                                          ? yachtRed
-                                          : index == 1 && questViewModel.toggleList[1]
-                                              ? seaBlue
-                                              : white),
+                                      color: questViewModel.toggleList[index] ? yachtRed : white),
                                   child: Padding(
                                     padding: primaryAllPadding,
                                     child: Column(
@@ -467,21 +415,21 @@ class QuestView extends StatelessWidget {
                                       children: [
                                         Align(
                                           alignment: Alignment.centerRight,
-                                          child: Container(
-                                              width: 38.w,
-                                              height: 38.w,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                // color: yachtDarkGrey,
-                                              ),
-                                              child: index == 0
-                                                  ? Image.asset('assets/icons/quest_select_up.png',
-                                                      color: questViewModel.toggleList[0] ? white : yachtRed)
-                                                  : Image.asset('assets/icons/quest_select_down.png',
-                                                      color: questViewModel.toggleList[1] ? white : seaBlue)),
+                                          child: Obx(
+                                            () => Container(
+                                                width: 38.w,
+                                                height: 38.w,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: yachtGrey,
+                                                ),
+                                                child: questViewModel.logoImage.length > 0
+                                                    ? questViewModel.logoImage[index]
+                                                    : Container()),
+                                          ),
                                         ),
                                         Text(
-                                          questModel.choices![index],
+                                          questModel.investAddresses![index].name,
                                           style: yachtChoiceBoxName.copyWith(
                                               color: questViewModel.toggleList[index] ? white : yachtBlack),
                                         )
@@ -493,98 +441,241 @@ class QuestView extends StatelessWidget {
                               if (index == 0) SizedBox(width: primaryPaddingSize)
                             ],
                           );
-                        }))
-                      : questModel.selectMode == 'order'
-                          ? Row(
+                        })),
+                        SizedBox(
+                          height: 12.w,
+                        ),
+                        Align(
+                            alignment: Alignment.centerRight,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Container(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: List.generate(
-                                        questModel.investAddresses!.length,
-                                        (index) => Container(
-                                              margin: EdgeInsets.only(
-                                                  bottom: index != questModel.investAddresses!.length ? 10.w : 0.0),
-                                              height: 50.w,
-                                              child: Center(
-                                                child: Text(
-                                                  (index + 1).toString(),
-                                                  style: yachtChoiceReOrderableListTitle.copyWith(
-                                                      fontWeight: FontWeight.w600),
-                                                ),
-                                              ),
-                                            )),
-                                  ),
+                                SvgPicture.asset(
+                                  'assets/icons/jogabi.svg',
+                                  height: 20.w,
+                                  width: 20.w,
                                 ),
-                                SizedBox(width: 8.w),
-                                Expanded(
-                                  child: Container(
-                                    // height: 200.w,
-                                    child: Theme(
-                                      data: ThemeData(
-                                        canvasColor: Colors.transparent,
-                                        shadowColor: Colors.transparent,
-                                        backgroundColor: Colors.transparent,
-                                        dialogBackgroundColor: Colors.transparent,
-                                      ),
-                                      child: ReorderableListView(
-                                        physics: NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        onReorder: (oldIndex, newIndex) {
-                                          questViewModel.reorderUserSelect(oldIndex, newIndex);
-                                          // print('old' + oldIndex.toString());
-                                          // print('new' + newIndex.toString());
-                                        },
-                                        children: List.generate(questModel.investAddresses!.length, (index) {
-                                          return Container(
-                                            key: ValueKey(index),
-                                            margin: EdgeInsets.only(
-                                                bottom: index != questModel.investAddresses!.length ? 10.w : 0.0),
-                                            clipBehavior: Clip.hardEdge,
-                                            padding: primaryHorizontalPadding,
-                                            height: 50.w,
-                                            decoration: yachtBoxDecoration,
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Obx(
-                                                      () => Container(
-                                                          width: 24.w,
-                                                          height: 24.w,
-                                                          decoration: BoxDecoration(
-                                                            shape: BoxShape.circle,
-                                                            color: yachtGrey,
-                                                          ),
-                                                          child: questViewModel.logoImage.length > 0
-                                                              ? questViewModel
-                                                                  .logoImage[questViewModel.orderList[index]]
-                                                              : Container()),
-                                                    ),
-                                                    SizedBox(width: 8.w),
-                                                    // orderList 없을 때 처리 필요
-                                                    Obx(() => Text(
-                                                          questModel
-                                                              .investAddresses![questViewModel.orderList[index]].name,
-                                                          style: yachtChoiceReOrderableListTitle,
-                                                        )),
-                                                    Spacer(),
-                                                    Image.asset(
-                                                      'assets/icons/three_lines.png',
-                                                      width: 14.w,
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                                Text(
+                                  "${questModel.itemNeeded}개",
+                                  style: jogabiNumberStyle.copyWith(fontSize: 14.w),
+                                ),
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                              ],
+                            )),
+                      ],
+                    )
+                  : questModel.selectMode == 'updown'
+                      ? Column(
+                          children: [
+                            Row(
+                                children: List.generate(2, (index) {
+                              return Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      questViewModel.toggleUserSelect(index);
+                                      print('$index is change to ${questViewModel.toggleList}');
+                                      HapticFeedback.lightImpact();
+                                    },
+                                    child: AnimatedContainer(
+                                      duration: Duration(milliseconds: 300),
+                                      width: 151.w,
+                                      height: 151.w,
+                                      decoration: yachtChoiceBoxDecoration.copyWith(
+                                          color: index == 0 && questViewModel.toggleList[0]
+                                              ? yachtRed
+                                              : index == 1 && questViewModel.toggleList[1]
+                                                  ? yachtBlue
+                                                  : white),
+                                      child: Padding(
+                                        padding: primaryAllPadding,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                  width: 38.w,
+                                                  height: 38.w,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    // color: yachtDarkGrey,
+                                                  ),
+                                                  child: index == 0
+                                                      ? Image.asset('assets/icons/quest_select_up.png',
+                                                          color: questViewModel.toggleList[0] ? white : yachtRed)
+                                                      : Image.asset('assets/icons/quest_select_down.png',
+                                                          color: questViewModel.toggleList[1] ? white : yachtBlue)),
                                             ),
-                                          );
-                                        }),
+                                            Text(
+                                              questModel.choices![index],
+                                              style: yachtChoiceBoxName.copyWith(
+                                                  color: questViewModel.toggleList[index] ? white : yachtBlack),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
+                                  if (index == 0) SizedBox(width: primaryPaddingSize)
+                                ],
+                              );
+                            })),
+                            SizedBox(
+                              height: 12.w,
+                            ),
+                            Align(
+                                alignment: Alignment.centerRight,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icons/jogabi.svg',
+                                      height: 20.w,
+                                      width: 20.w,
+                                    ),
+                                    SizedBox(
+                                      width: 4.w,
+                                    ),
+                                    Text(
+                                      "${questModel.itemNeeded}개",
+                                      style: jogabiNumberStyle.copyWith(fontSize: 14.w),
+                                    ),
+                                    SizedBox(
+                                      width: 4.w,
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        )
+                      : questModel.selectMode == 'order'
+                          ? Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: List.generate(
+                                            questModel.investAddresses!.length,
+                                            (index) => Container(
+                                                  margin: EdgeInsets.only(
+                                                      bottom: index != questModel.investAddresses!.length ? 10.w : 0.0),
+                                                  height: 50.w,
+                                                  child: Center(
+                                                    child: Text(
+                                                      (index + 1).toString(),
+                                                      style: yachtChoiceReOrderableListTitle.copyWith(
+                                                          fontWeight: FontWeight.w600),
+                                                    ),
+                                                  ),
+                                                )),
+                                      ),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Expanded(
+                                      child: Container(
+                                        // height: 200.w,
+                                        child: Theme(
+                                          data: ThemeData(
+                                            canvasColor: Colors.transparent,
+                                            shadowColor: Colors.transparent,
+                                            backgroundColor: Colors.transparent,
+                                            dialogBackgroundColor: Colors.transparent,
+                                          ),
+                                          child: ReorderableListView(
+                                            // dragStartBehavior: DragStartBehavior.down,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            onReorder: (oldIndex, newIndex) {
+                                              questViewModel.reorderUserSelect(oldIndex, newIndex);
+                                              // print('old' + oldIndex.toString());
+                                              // print('new' + newIndex.toString());
+                                            },
+                                            children: List.generate(questModel.investAddresses!.length, (index) {
+                                              return Container(
+                                                key: ValueKey(index),
+                                                margin: EdgeInsets.only(
+                                                    bottom: index != questModel.investAddresses!.length ? 10.w : 0.0),
+                                                clipBehavior: Clip.hardEdge,
+                                                padding: primaryHorizontalPadding,
+                                                height: 50.w,
+                                                decoration: yachtBoxDecoration,
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Obx(
+                                                          () => Container(
+                                                              width: 24.w,
+                                                              height: 24.w,
+                                                              decoration: BoxDecoration(
+                                                                shape: BoxShape.circle,
+                                                                color: yachtGrey,
+                                                              ),
+                                                              child: !questViewModel.isLoading.value
+                                                                  ? questViewModel
+                                                                      .logoImage[questViewModel.orderList[index]]
+                                                                  : Container()),
+                                                        ),
+                                                        SizedBox(width: 8.w),
+                                                        // orderList 없을 때 처리 필요
+                                                        Obx(() => Text(
+                                                              questModel
+                                                                  .investAddresses![questViewModel.orderList[index]]
+                                                                  .name,
+                                                              style: yachtChoiceReOrderableListTitle,
+                                                            )),
+                                                        Spacer(),
+                                                        Image.asset(
+                                                          'assets/icons/three_lines.png',
+                                                          width: 14.w,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
+                                SizedBox(
+                                  height: 12.w,
+                                ),
+                                Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/icons/jogabi.svg',
+                                          height: 20.w,
+                                          width: 20.w,
+                                        ),
+                                        SizedBox(
+                                          width: 4.w,
+                                        ),
+                                        Text(
+                                          "${questModel.itemNeeded}개",
+                                          style: jogabiNumberStyle.copyWith(fontSize: 14.w),
+                                        ),
+                                        SizedBox(
+                                          width: 4.w,
+                                        ),
+                                      ],
+                                    )),
                               ],
                             )
                           : questModel.selectMode == 'updown_many'
@@ -592,155 +683,187 @@ class QuestView extends StatelessWidget {
                                   constraints: BoxConstraints.loose(
                                     Size(double.infinity, 300.w),
                                   ),
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: questModel.investAddresses!.length,
-                                    itemBuilder: (_, index) {
-                                      return Column(
-                                        children: [
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  child: Column(
+                                    children: [
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: questModel.investAddresses!.length,
+                                        itemBuilder: (_, index) {
+                                          return Column(
                                             children: [
                                               Row(
                                                 crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  FutureBuilder<String>(
-                                                      future: questViewModel.getLogoByIssueCode(
-                                                          questModel.investAddresses![index].issueCode),
-                                                      builder: (context, snapshot) {
-                                                        if (!snapshot.hasData) {
-                                                          return Container(
-                                                              height: 36.w,
-                                                              width: 36.w,
-                                                              decoration: BoxDecoration(shape: BoxShape.circle),
-                                                              child: LoadingContainer(
-                                                                  height: 36.w, width: 36.w, radius: 36.w));
-                                                        } else {
-                                                          print(snapshot.data);
-                                                          return Image.network(
-                                                            snapshot.data!,
-                                                            height: 36.w,
-                                                            // width: 28.w,
-                                                            // height: 27.w,
-                                                            // width: 27.w,
-                                                            filterQuality: FilterQuality.high,
-                                                            // isAntiAlias: true,
-                                                          );
-                                                        }
-                                                      }),
-                                                  SizedBox(width: 8.w),
-                                                  Text(
-                                                    questModel.investAddresses![index].name,
-                                                    style: yachtChoiceBoxName,
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.ellipsis,
+                                                  Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      FutureBuilder<String>(
+                                                          future: questViewModel.getLogoByIssueCode(
+                                                              questModel.investAddresses![index].issueCode),
+                                                          builder: (context, snapshot) {
+                                                            if (!snapshot.hasData) {
+                                                              return Container(
+                                                                  height: 36.w,
+                                                                  width: 36.w,
+                                                                  decoration: BoxDecoration(shape: BoxShape.circle),
+                                                                  child: LoadingContainer(
+                                                                      height: 36.w, width: 36.w, radius: 36.w));
+                                                            } else {
+                                                              print(snapshot.data);
+                                                              return Image.network(
+                                                                snapshot.data!,
+                                                                height: 36.w,
+                                                                // width: 28.w,
+                                                                // height: 27.w,
+                                                                // width: 27.w,
+                                                                filterQuality: FilterQuality.high,
+                                                                // isAntiAlias: true,
+                                                              );
+                                                            }
+                                                          }),
+                                                      SizedBox(width: 8.w),
+                                                      Text(
+                                                        questModel.investAddresses![index].name,
+                                                        style: yachtChoiceBoxName,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow.ellipsis,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Container(
+                                                        // color: Colors.blue,
+                                                        child: Text(
+                                                          "기준 가격",
+                                                          style: TextStyle(
+                                                              color: yachtGrey,
+                                                              fontSize: captionSize,
+                                                              fontFamily: 'Default'),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 4.w,
+                                                      ),
+                                                      Container(
+                                                        // color: Colors.blue,
+                                                        child: Text(
+                                                            (questModel.investAddresses![index].basePrice == null
+                                                                    ? 0.toString()
+                                                                    : toPriceKRW(questModel
+                                                                        .investAddresses![index].basePrice as num)) +
+                                                                "원",
+                                                            style: yachtChoiceBoxName.copyWith(
+                                                              fontWeight: FontWeight.w600,
+                                                              height: 1.0,
+                                                            )),
+                                                      )
+                                                    ],
                                                   )
                                                 ],
                                               ),
+                                              SizedBox(height: 16.w),
                                               Row(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    // color: Colors.blue,
-                                                    child: Text(
-                                                      "기준 가격",
-                                                      style: TextStyle(
-                                                          color: yachtGrey,
-                                                          fontSize: captionSize,
-                                                          fontFamily: 'Default'),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 4.w,
-                                                  ),
-                                                  Container(
-                                                    // color: Colors.blue,
-                                                    child: Text(
-                                                        (questModel.investAddresses![index].basePrice == null
-                                                                ? 0.toString()
-                                                                : toPriceKRW(questModel
-                                                                    .investAddresses![index].basePrice as num)) +
-                                                            "원",
-                                                        style: yachtChoiceBoxName.copyWith(
-                                                          fontWeight: FontWeight.w600,
-                                                          height: 1.0,
-                                                        )),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                          SizedBox(height: 16.w),
-                                          Row(
-                                            children: List.generate(2, (choice) {
-                                              return Obx(() => !questViewModel.isLoading.value
-                                                  ? Row(
-                                                      children: [
-                                                        InkWell(
-                                                          onTap: () {
-                                                            questViewModel.updownManyList[index] = choice;
-                                                            print(questViewModel.updownManyList);
-                                                            HapticFeedback.lightImpact();
-                                                          },
-                                                          child: AnimatedContainer(
-                                                            duration: Duration(milliseconds: 300),
-                                                            width: 151.w,
-                                                            height: 50.w,
-                                                            decoration: yachtChoiceBoxDecoration.copyWith(
-                                                                color: choice == 0 &&
-                                                                        questViewModel.updownManyList[index] == 0
-                                                                    ? yachtRed
-                                                                    : choice == 1 &&
-                                                                            questViewModel.updownManyList[index] == 1
-                                                                        ? seaBlue
-                                                                        : white),
-                                                            child: Padding(
-                                                              padding: primaryAllPadding,
-                                                              child: Column(
-                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                children: [
-                                                                  Center(
-                                                                    child: Container(
-                                                                        width: 28.w,
-                                                                        // height: 38.w,
+                                                children: List.generate(2, (choice) {
+                                                  return Obx(() => !questViewModel.isLoading.value
+                                                      ? Row(
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                questViewModel.updownManyList[index] = choice;
+                                                                print(questViewModel.updownManyList);
+                                                                HapticFeedback.lightImpact();
+                                                              },
+                                                              child: AnimatedContainer(
+                                                                duration: Duration(milliseconds: 300),
+                                                                width: 151.w,
+                                                                height: 50.w,
+                                                                decoration: yachtChoiceBoxDecoration.copyWith(
+                                                                    color: choice == 0 &&
+                                                                            questViewModel.updownManyList[index] == 0
+                                                                        ? yachtRed
+                                                                        : choice == 1 &&
+                                                                                questViewModel.updownManyList[index] ==
+                                                                                    1
+                                                                            ? yachtBlue
+                                                                            : white),
+                                                                child: Padding(
+                                                                  padding: primaryAllPadding,
+                                                                  child: Column(
+                                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                    children: [
+                                                                      Center(
+                                                                        child: Container(
+                                                                            width: 28.w,
+                                                                            // height: 38.w,
 
-                                                                        child: choice == 0
-                                                                            ? Image.asset(
-                                                                                'assets/icons/quest_select_up.png',
-                                                                                color: questViewModel
-                                                                                            .updownManyList[index] ==
-                                                                                        0
-                                                                                    ? white
-                                                                                    : yachtRed)
-                                                                            : Image.asset(
-                                                                                'assets/icons/quest_select_down.png',
-                                                                                color: questViewModel
-                                                                                            .updownManyList[index] ==
-                                                                                        1
-                                                                                    ? white
-                                                                                    : seaBlue)),
+                                                                            child: choice == 0
+                                                                                ? Image.asset(
+                                                                                    'assets/icons/quest_select_up.png',
+                                                                                    color:
+                                                                                        questViewModel.updownManyList[
+                                                                                                    index] ==
+                                                                                                0
+                                                                                            ? white
+                                                                                            : yachtRed)
+                                                                                : Image.asset(
+                                                                                    'assets/icons/quest_select_down.png',
+                                                                                    color:
+                                                                                        questViewModel.updownManyList[
+                                                                                                    index] ==
+                                                                                                1
+                                                                                            ? white
+                                                                                            : yachtBlue)),
+                                                                      ),
+                                                                    ],
                                                                   ),
-                                                                ],
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                        if (choice == 0) SizedBox(width: primaryPaddingSize)
-                                                      ],
+                                                            if (choice == 0) SizedBox(width: primaryPaddingSize)
+                                                          ],
+                                                        )
+                                                      : Container());
+                                                }),
+                                              ),
+                                              (index != questModel.investAddresses!.length - 1)
+                                                  ? SizedBox(
+                                                      height: 32.w,
                                                     )
-                                                  : Container());
-                                            }),
-                                          ),
-                                          (index != questModel.investAddresses!.length - 1)
-                                              ? SizedBox(
-                                                  height: 32.w,
-                                                )
-                                              : Container()
-                                        ],
-                                      );
-                                    },
+                                                  : Container()
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: 12.w,
+                                      ),
+                                      Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/icons/jogabi.svg',
+                                                height: 20.w,
+                                                width: 20.w,
+                                              ),
+                                              SizedBox(
+                                                width: 4.w,
+                                              ),
+                                              Text(
+                                                "${questModel.itemNeeded}개",
+                                                style: jogabiNumberStyle.copyWith(fontSize: 14.w),
+                                              ),
+                                              SizedBox(
+                                                width: 4.w,
+                                              ),
+                                            ],
+                                          )),
+                                    ],
                                   ),
                                 )
 
@@ -748,7 +871,7 @@ class QuestView extends StatelessWidget {
                               // )
                               : Container(),
 
-              SizedBox(height: 12.w)
+              // SizedBox(height: 16.w)
             ],
           ),
         ));

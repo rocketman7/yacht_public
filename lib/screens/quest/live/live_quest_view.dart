@@ -15,7 +15,11 @@ class LiveQuestView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("live quest view built");
-    final LiveQuestViewModel liveQuestViewModel = Get.put(LiveQuestViewModel(homeViewModel: homeViewModel));
+    final LiveQuestViewModel liveQuestViewModel = Get.put(
+      LiveQuestViewModel(
+        homeViewModel: homeViewModel,
+      ),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +48,7 @@ class LiveQuestView extends StatelessWidget {
             );
           } else {
             // print(homeViewModel.liveQuests);
-            liveQuestViewModel.getListStreamPriceModel(homeViewModel.liveQuests);
+            // liveQuestViewModel.getListStreamPriceModel(homeViewModel.liveQuests);
             // });
             print("live quest view rebuilt");
             return SingleChildScrollView(

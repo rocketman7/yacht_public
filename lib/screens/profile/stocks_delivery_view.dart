@@ -112,16 +112,11 @@ class StocksDeliveryView extends StatelessWidget {
             padding: EdgeInsets.only(left: 14.w, right: 14.w),
             child: Container(
               width: double.infinity,
-              decoration: primaryBoxDecoration.copyWith(
-                  boxShadow: [primaryBoxShadow],
-                  color: homeModuleBoxBackgroundColor),
+              decoration:
+                  primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
               child: Padding(
                 padding: EdgeInsets.only(
-                    left: 15.w,
-                    right: 15.w,
-                    top: 14.w -
-                        reducePaddingOneSide(
-                            stocksDeliveryViewTextStyle1.fontSize!)),
+                    left: 15.w, right: 15.w, top: 14.w - reducePaddingOneSide(stocksDeliveryViewTextStyle1.fontSize!)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -137,8 +132,7 @@ class StocksDeliveryView extends StatelessWidget {
                             if (controller.isHoldingStocksFutureLoad) {
                               return Text(
                                 '${controller.allHoldingStocks.length}',
-                                style: stocksDeliveryViewTextStyle1.copyWith(
-                                    color: yachtRed),
+                                style: stocksDeliveryViewTextStyle1.copyWith(color: yachtRed),
                               );
                             } else {
                               return Text('');
@@ -158,30 +152,24 @@ class StocksDeliveryView extends StatelessWidget {
                                   .map((i, element) => MapEntry(
                                       i,
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             height: 14.w,
                                           ),
                                           Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Container(
                                                 width: 150.w,
                                                 child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                        '${controller.allHoldingStocks[i].name}',
-                                                        style:
-                                                            stocksDeliveryViewTextStyle3),
+                                                    Text('${controller.allHoldingStocks[i].name}',
+                                                        style: stocksDeliveryViewTextStyle3),
                                                     Text(
                                                       '잔고 ${controller.allHoldingStocks[i].sharesNum}',
-                                                      style:
-                                                          stocksDeliveryViewTextStyle4,
+                                                      style: stocksDeliveryViewTextStyle4,
                                                     ),
                                                   ],
                                                 ),
@@ -189,27 +177,19 @@ class StocksDeliveryView extends StatelessWidget {
                                               Container(
                                                 width: 80.w,
                                                 child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       '${toPriceKRW(controller.allHoldingStocks[i].currentPrice)}',
-                                                      style:
-                                                          stocksDeliveryViewTextStyle5,
+                                                      style: stocksDeliveryViewTextStyle5,
                                                     ),
                                                     Text(
                                                       '${toPercentageChange((controller.allHoldingStocks[i].currentPrice - controller.allHoldingStocks[i].priceAtAward) / controller.allHoldingStocks[i].priceAtAward)}',
                                                       style: stocksDeliveryViewTextStyle6.copyWith(
-                                                          color: (controller
-                                                                      .allHoldingStocks[
-                                                                          i]
-                                                                      .currentPrice >
-                                                                  controller
-                                                                      .allHoldingStocks[
-                                                                          i]
-                                                                      .priceAtAward)
+                                                          color: (controller.allHoldingStocks[i].currentPrice >
+                                                                  controller.allHoldingStocks[i].priceAtAward)
                                                               ? yachtRed
-                                                              : seaBlue),
+                                                              : yachtBlue),
                                                     )
                                                   ],
                                                 ),
@@ -219,8 +199,7 @@ class StocksDeliveryView extends StatelessWidget {
                                                 children: [
                                                   GestureDetector(
                                                     onTap: () {
-                                                      controller
-                                                          .tapMinusButton(i);
+                                                      controller.tapMinusButton(i);
                                                     },
                                                     child: SizedBox(
                                                       height: 24.w,
@@ -236,15 +215,13 @@ class StocksDeliveryView extends StatelessWidget {
                                                         child: Center(
                                                           child: Text(
                                                             '${controller.stocksDeliveryNum[i]}',
-                                                            style:
-                                                                stocksDeliveryViewTextStyle7,
+                                                            style: stocksDeliveryViewTextStyle7,
                                                           ),
                                                         ),
                                                       )),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      controller
-                                                          .tapPlusButton(i);
+                                                      controller.tapPlusButton(i);
                                                     },
                                                     child: SizedBox(
                                                       height: 24.w,
@@ -265,8 +242,7 @@ class StocksDeliveryView extends StatelessWidget {
                                           ),
                                           Container(
                                             height: 1.w,
-                                            color: Color(0xFF94BDE0)
-                                                .withOpacity(0.15),
+                                            color: Color(0xFF94BDE0).withOpacity(0.15),
                                           )
                                         ],
                                       )))
@@ -289,8 +265,7 @@ class StocksDeliveryView extends StatelessWidget {
                         Spacer(),
                         Obx(() => Text(
                               '${toPriceKRW(assetViewModel.totalDeliveryValue.value)}',
-                              style: stocksDeliveryViewTextStyle5.copyWith(
-                                  fontSize: 20.w, fontWeight: FontWeight.w500),
+                              style: stocksDeliveryViewTextStyle5.copyWith(fontSize: 20.w, fontWeight: FontWeight.w500),
                             )),
                       ],
                     ),
@@ -319,8 +294,7 @@ class StocksDeliveryView extends StatelessWidget {
                 if (userModelRx.value!.account['accNumber'] == null)
                   notAccountDialog(context);
                 else {
-                  if (assetViewModel.stocksDeliveryNum
-                      .any((element) => (element.value != 0)))
+                  if (assetViewModel.stocksDeliveryNum.any((element) => (element.value != 0)))
                     deliveryDialog(context);
                   else
                     noChoiceStocksDialog(context);
@@ -328,9 +302,7 @@ class StocksDeliveryView extends StatelessWidget {
               },
               child: Container(
                 height: 50.w,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(70.0),
-                    color: Color(0xFF6073B4)),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: Color(0xFF6073B4)),
                 width: double.infinity,
                 child: Center(
                   child: Text(
@@ -353,15 +325,12 @@ class StocksDeliveryView extends StatelessWidget {
                 },
                 child: Container(
                   height: 50.w,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(70.0),
-                      color: Color(0xFFEFF2FA)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: Color(0xFFEFF2FA)),
                   width: double.infinity,
                   child: Center(
                     child: Text(
                       '친구에게 선물하기',
-                      style: stocksDeliveryViewTextStyle9.copyWith(
-                          color: Color(0xFF6073B4)),
+                      style: stocksDeliveryViewTextStyle9.copyWith(color: Color(0xFF6073B4)),
                     ),
                   ),
                 ),
@@ -378,8 +347,7 @@ deliveryDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -393,8 +361,7 @@ deliveryDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
@@ -420,8 +387,7 @@ deliveryDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -434,8 +400,7 @@ deliveryDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(35.w, yachtDeliveryDialogTitle.fontSize,
-                      yachtDeliveryDialogText.fontSize),
+                  height: correctHeight(35.w, yachtDeliveryDialogTitle.fontSize, yachtDeliveryDialogText.fontSize),
                 ),
                 Text(
                   '정말 출고하시겠습니까?',
@@ -446,8 +411,7 @@ deliveryDialog(BuildContext context) {
                   style: yachtDeliveryDialogText.copyWith(color: yachtRed),
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtDeliveryDialogText.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtDeliveryDialogText.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -495,8 +459,7 @@ deliveryDialog(BuildContext context) {
                         child: Center(
                           child: Text(
                             '아니오',
-                            style: yachtDeliveryDialogButtonText.copyWith(
-                                color: yachtViolet),
+                            style: yachtDeliveryDialogButtonText.copyWith(color: yachtViolet),
                           ),
                         ),
                       ),
@@ -524,8 +487,7 @@ deliveryDoneDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 167.w,
             width: 347.w,
@@ -539,8 +501,7 @@ deliveryDoneDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
@@ -566,8 +527,7 @@ deliveryDoneDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -580,16 +540,14 @@ deliveryDoneDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(31.w, yachtDeliveryDialogTitle.fontSize,
-                      yachtDeliveryDialogText2.fontSize),
+                  height: correctHeight(31.w, yachtDeliveryDialogTitle.fontSize, yachtDeliveryDialogText2.fontSize),
                 ),
                 Text(
                   '출고가 완료되었습니다.',
                   style: yachtDeliveryDialogText2,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtDeliveryDialogText2.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtDeliveryDialogText2.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -641,8 +599,7 @@ notAccountDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -656,8 +613,7 @@ notAccountDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
@@ -683,8 +639,7 @@ notAccountDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -697,8 +652,7 @@ notAccountDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(35.w, yachtDeliveryDialogTitle.fontSize,
-                      yachtDeliveryDialogText.fontSize),
+                  height: correctHeight(35.w, yachtDeliveryDialogTitle.fontSize, yachtDeliveryDialogText.fontSize),
                 ),
                 Text(
                   '증권계좌를 연결하지 않은 사용자입니다.',
@@ -709,8 +663,7 @@ notAccountDialog(BuildContext context) {
                   style: yachtDeliveryDialogText,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtDeliveryDialogText.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtDeliveryDialogText.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -756,8 +709,7 @@ notAccountDialog(BuildContext context) {
                         child: Center(
                           child: Text(
                             '나중에 하기',
-                            style: yachtDeliveryDialogButtonText.copyWith(
-                                color: yachtViolet),
+                            style: yachtDeliveryDialogButtonText.copyWith(color: yachtViolet),
                           ),
                         ),
                       ),
@@ -785,8 +737,7 @@ noChoiceStocksDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -800,8 +751,7 @@ noChoiceStocksDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
@@ -827,8 +777,7 @@ noChoiceStocksDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -841,8 +790,7 @@ noChoiceStocksDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(35.w, yachtDeliveryDialogTitle.fontSize,
-                      yachtDeliveryDialogText.fontSize),
+                  height: correctHeight(35.w, yachtDeliveryDialogTitle.fontSize, yachtDeliveryDialogText.fontSize),
                 ),
                 Text(
                   '출고할 주식이 선택되지 않았습니다.',
@@ -853,8 +801,7 @@ noChoiceStocksDialog(BuildContext context) {
                   style: yachtDeliveryDialogText,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtDeliveryDialogText.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtDeliveryDialogText.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -904,8 +851,7 @@ notYetStocksToFriendsDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -919,8 +865,7 @@ notYetStocksToFriendsDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
@@ -946,8 +891,7 @@ notYetStocksToFriendsDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -960,8 +904,7 @@ notYetStocksToFriendsDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(35.w, yachtDeliveryDialogTitle.fontSize,
-                      yachtDeliveryDialogText.fontSize),
+                  height: correctHeight(35.w, yachtDeliveryDialogTitle.fontSize, yachtDeliveryDialogText.fontSize),
                 ),
                 Text(
                   '아직 친구에게 주식을 줄 수 없어요.',
@@ -972,8 +915,7 @@ notYetStocksToFriendsDialog(BuildContext context) {
                   style: yachtDeliveryDialogText,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtDeliveryDialogText.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtDeliveryDialogText.fontSize, 0.w),
                 ),
                 Row(
                   children: [

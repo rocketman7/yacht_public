@@ -127,7 +127,7 @@ class ChartView extends StatelessWidget {
                       if (args.chartPointInfo.seriesIndex == 0 && previousXPosition != args.chartPointInfo.xPosition) {
                         // Printing Coordinate intersect point of first line
                         HapticFeedback.lightImpact();
-                        print(args.chartPointInfo.chartDataPoint!.x);
+                        // print(args.chartPointInfo.chartDataPoint!.x);
                         chartViewModel.onTrackballChanging(args);
                       }
                       if (args.chartPointInfo.seriesIndex == 1) {
@@ -593,7 +593,7 @@ class MainPriceTrackingDisplay extends StatelessWidget {
                     style: questTermTextStyle,
                   ),
                   Text(
-                    "20/07/01 14:00\n~20/07/01 15:00",
+                    "${chartViewModel.dateStart}\n~${chartViewModel.dateEnd}",
                     style: questTermTextStyle.copyWith(color: primaryFontColor),
                   ),
                 ],

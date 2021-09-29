@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:yachtOne/models/survey_model.dart';
 
 // enum Category { ONE, TWO, THREE }
 
 class QuestModel {
   final String questId;
+  final String? leagueId;
   final String category;
   final String? themeColor;
   final String? imageUrl;
@@ -36,7 +38,7 @@ class QuestModel {
   final int? expParticipationReward;
 
   final List<InvestAddressModel>? investAddresses;
-  // final SurveyModel survey;
+  final List<SurveyQuestionModel>? surveys;
 
   //기본적으로 investAddresses element의 name
   //그러나 category 상승, 하락이면 따로 '상승', '하락' 표기
@@ -45,6 +47,7 @@ class QuestModel {
   final List<int>? results;
   QuestModel({
     required this.questId,
+    this.leagueId,
     required this.category,
     this.themeColor,
     this.imageUrl,
@@ -70,6 +73,7 @@ class QuestModel {
     this.leaguePointParticipationReward,
     this.expParticipationReward,
     this.investAddresses,
+    this.surveys,
     this.choices,
     this.counts,
     this.results,
@@ -77,6 +81,7 @@ class QuestModel {
 
   QuestModel copyWith({
     String? questId,
+    String? leagueId,
     String? category,
     String? themeColor,
     String? imageUrl,
@@ -102,12 +107,14 @@ class QuestModel {
     int? leaguePointParticipationReward,
     int? expParticipationReward,
     List<InvestAddressModel>? investAddresses,
+    List<SurveyQuestionModel>? surveys,
     List<String>? choices,
     List<int>? counts,
     List<int>? results,
   }) {
     return QuestModel(
       questId: questId ?? this.questId,
+      leagueId: leagueId ?? this.leagueId,
       category: category ?? this.category,
       themeColor: themeColor ?? this.themeColor,
       imageUrl: imageUrl ?? this.imageUrl,
@@ -133,6 +140,7 @@ class QuestModel {
       leaguePointParticipationReward: leaguePointParticipationReward ?? this.leaguePointParticipationReward,
       expParticipationReward: expParticipationReward ?? this.expParticipationReward,
       investAddresses: investAddresses ?? this.investAddresses,
+      surveys: surveys ?? this.surveys,
       choices: choices ?? this.choices,
       counts: counts ?? this.counts,
       results: results ?? this.results,
@@ -160,6 +168,7 @@ class QuestModel {
   Map<String, dynamic> toMap() {
     return {
       'questId': questId,
+      'leagueId': leagueId,
       'category': category,
       'themeColor': themeColor,
       'imageUrl': imageUrl,
@@ -185,15 +194,22 @@ class QuestModel {
       'leaguePointParticipationReward': leaguePointParticipationReward,
       'expParticipationReward': expParticipationReward,
       'investAddresses': investAddresses?.map((x) => x.toMap()).toList(),
+      'surveys': surveys,
       'choices': choices,
       'counts': counts,
       'results': results,
     };
   }
 
-  factory QuestModel.fromMap(String questId, Map<String, dynamic> map, List<InvestAddressModel>? investAddress) {
+  factory QuestModel.fromMap(
+    String questId,
+    Map<String, dynamic> map,
+    List<InvestAddressModel>? investAddress,
+    List<SurveyQuestionModel>? surveys,
+  ) {
     return QuestModel(
       questId: questId,
+      leagueId: map['leagueId'],
       category: map['category'],
       themeColor: map['themeColor'],
       imageUrl: map['imageUrl'],
@@ -219,6 +235,7 @@ class QuestModel {
       leaguePointParticipationReward: map['leaguePointParticipationReward'],
       expParticipationReward: map['expParticipationReward'],
       investAddresses: investAddress,
+      surveys: surveys,
       choices: map['choices'] == null ? null : List<String>.from(map['choices']),
       counts: map['counts'] == null ? null : List<int>.from(map['counts']),
       results: map['results'] == null ? null : List<int>.from(map['results']),
@@ -231,7 +248,7 @@ class QuestModel {
 
   @override
   String toString() {
-    return 'QuestModel(questId: $questId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointSuccessReward: $yachtPointSuccessReward, leaguePointSuccessReward: $leaguePointSuccessReward, expSuccessReward: $expSuccessReward, isYachtPointOneOfN: $isYachtPointOneOfN, yachtPointParticipationReward: $yachtPointParticipationReward, leaguePointParticipationReward: $leaguePointParticipationReward, expParticipationReward: $expParticipationReward, investAddresses: $investAddresses, choices: $choices, counts: $counts, results: $results)';
+    return 'QuestModel(questId: $questId, leagueId: $leagueId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointSuccessReward: $yachtPointSuccessReward, leaguePointSuccessReward: $leaguePointSuccessReward, expSuccessReward: $expSuccessReward, isYachtPointOneOfN: $isYachtPointOneOfN, yachtPointParticipationReward: $yachtPointParticipationReward, leaguePointParticipationReward: $leaguePointParticipationReward, expParticipationReward: $expParticipationReward, investAddresses: $investAddresses, surveys: $surveys, choices: $choices, counts: $counts, results: $results)';
   }
 
   @override
@@ -240,6 +257,7 @@ class QuestModel {
 
     return other is QuestModel &&
         other.questId == questId &&
+        other.leagueId == leagueId &&
         other.category == category &&
         other.themeColor == themeColor &&
         other.imageUrl == imageUrl &&
@@ -265,6 +283,7 @@ class QuestModel {
         other.leaguePointParticipationReward == leaguePointParticipationReward &&
         other.expParticipationReward == expParticipationReward &&
         listEquals(other.investAddresses, investAddresses) &&
+        listEquals(other.surveys, surveys) &&
         listEquals(other.choices, choices) &&
         listEquals(other.counts, counts) &&
         listEquals(other.results, results);
@@ -273,6 +292,7 @@ class QuestModel {
   @override
   int get hashCode {
     return questId.hashCode ^
+        leagueId.hashCode ^
         category.hashCode ^
         themeColor.hashCode ^
         imageUrl.hashCode ^
@@ -298,6 +318,7 @@ class QuestModel {
         leaguePointParticipationReward.hashCode ^
         expParticipationReward.hashCode ^
         investAddresses.hashCode ^
+        surveys.hashCode ^
         choices.hashCode ^
         counts.hashCode ^
         results.hashCode;

@@ -68,8 +68,11 @@ class HomeViewModel extends GetxController {
 
     _createRewardedAd();
     if (userModelRx.value != null) {
+      print('usermodel name update' + userModelRx.value!.isNameUpdated.toString());
       noNeedShowUserNameDialog(userModelRx.value!.isNameUpdated ?? false);
+      print(noNeedShowUserNameDialog.value);
       noNeedShowUserNameDialog.refresh();
+      print(noNeedShowUserNameDialog.value);
     }
 
     super.onInit();
@@ -326,6 +329,10 @@ class HomeViewModel extends GetxController {
 
   // 현재 홈 뷰에 올려야 하는 퀘스트를 모두 가져온 뒤, 각 섹션에 맞게 분류
   Future getAllQuests() async {
+    allQuests.clear();
+    newQuests.clear();
+    liveQuests.clear();
+    resultQuests.clear();
     allQuests.assignAll(await _questRepository.getQuestForHomeView());
     // 분리작업
     DateTime now = DateTime.now();

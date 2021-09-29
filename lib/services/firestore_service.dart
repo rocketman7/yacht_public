@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/admin_standards_model.dart';
 import 'package:yachtOne/models/community/comment_model.dart';
 import 'package:yachtOne/models/community/post_model.dart';
@@ -16,12 +17,14 @@ import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 import 'package:yachtOne/models/corporation_model.dart';
 import 'package:yachtOne/models/live_quest_price_model.dart';
+import 'package:yachtOne/models/survey_model.dart';
 import 'package:yachtOne/models/tier_system_model.dart';
 import 'package:yachtOne/models/today_market_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_post_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/profile/asset_view_model.dart';
 
 import '../models/subLeague_model.dart';
 
@@ -102,20 +105,101 @@ class FirestoreService extends GetxService {
     QuestModel questModel,
     List answers,
   ) async {
-    await _firestoreService
+    //수정인지 처음인지 체크해서
+    // 처음이면 participation 넣어주기
+
+    var checkIfUserAlreadyDone = await _firestoreService
         .collection('users/${userModelRx.value!.uid}/userVote')
         .doc(leagueRx.value)
         .collection('quests')
         .doc(questModel.questId)
+        .get();
+
+    // print(checkIfUserAlreadyDone.exists);
+
+    if (checkIfUserAlreadyDone.exists) {
+      await _firestoreService
+          .collection('users/${userModelRx.value!.uid}/userVote')
+          .doc(leagueRx.value)
+          .collection('quests')
+          .doc(questModel.questId)
+          .set(
+              {
+            'leagueId': leagueRx.value,
+            'selection': answers,
+            'selectDateTime': FieldValue.serverTimestamp(),
+          },
+              SetOptions(
+                merge: true,
+              ));
+    } else {
+      await _firestoreService
+          .collection('users/${userModelRx.value!.uid}/userVote')
+          .doc(leagueRx.value)
+          .collection('quests')
+          .doc(questModel.questId)
+          .set(
+              {
+            'leagueId': leagueRx.value,
+            'selection': answers,
+            'selectDateTime': FieldValue.serverTimestamp(),
+            'yachtPointParticipationRewarded': questModel.yachtPointParticipationReward,
+            'leaguePointParticipationRewarded': questModel.leaguePointParticipationReward,
+            'expParticipationRewarded': questModel.expParticipationReward,
+          },
+              SetOptions(
+                merge: true,
+              ));
+      if (questModel.expParticipationReward != null && questModel.expParticipationReward! > 0) {
+        await _firestoreService
+            .collection('users')
+            .doc('${userModelRx.value!.uid}')
+            .update({'exp': FieldValue.increment(questModel.expParticipationReward!)});
+      }
+    }
+  }
+
+  Future updateUserSurvey(
+    QuestModel questModel,
+    Map surveyUserAnswers,
+  ) async {
+    await _firestoreService
+        .collection('users/${userModelRx.value!.uid}/userVote')
+        .doc(questModel.leagueId ?? leagueRx.value)
+        .collection('quests')
+        .doc(questModel.questId)
         .set(
             {
-          'leagueId': leagueRx.value,
-          'selection': answers,
+          'leagueId': questModel.leagueId ?? leagueRx.value,
+          'survey': surveyUserAnswers,
           'selectDateTime': FieldValue.serverTimestamp(),
         },
             SetOptions(
               merge: true,
             ));
+  }
+
+  Future updateQuestParticipationReward(
+    QuestModel questModel,
+  ) async {
+    AssetModel newAssetModel = AssetModel(
+      tradeDate: Timestamp.fromDate(DateTime.now()),
+      assetCategory: 'YachtPoint',
+      tradeTitle: "퀘스트 성공",
+      yachtPoint: questModel.yachtPointParticipationReward,
+    );
+
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .collection('userAsset')
+        .add(newAssetModel.toMapAwards());
+
+    await _firestoreService.collection('users').doc(userModelRx.value!.uid).update({
+      'exp': FieldValue.increment(
+        questModel.expParticipationReward as int,
+      )
+    });
   }
 
   // 차트 그리기 위한 Historical Price
@@ -188,6 +272,42 @@ class FirestoreService extends GetxService {
   Future<List<QuestModel>> getAllQuests() async {
     final List<QuestModel> allQuests = [];
     List<InvestAddressModel> invetAddresses = [];
+    List<SurveyQuestionModel> surveys = [];
+    List<String> userAlltimeQuestDoneId = [];
+
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .collection('userVote')
+        .doc('allTime')
+        .collection('quests')
+        .get()
+        .then((userAlltimeQuests) => userAlltimeQuests.docs.forEach((userAlltimeQuestDone) {
+              userAlltimeQuestDoneId.add(userAlltimeQuestDone.id);
+            }));
+    // alltime 리그에서는 마감기한이 없는 퀘스트나 서베이들
+    await _firestoreService
+        .collection('leagues')
+        .doc('allTime')
+        .collection('quests')
+        .get()
+        .then((allTimeQuests) => allTimeQuests.docs.forEach((eachAllTimeQuest) {
+              if (!userAlltimeQuestDoneId.contains(eachAllTimeQuest.id)) {
+                if (eachAllTimeQuest.data()['investAddresses'] != null) {
+                  eachAllTimeQuest.data()['investAddresses'].toList().forEach((option) {
+                    invetAddresses.add(InvestAddressModel.fromMap(option));
+                  });
+                }
+                if (eachAllTimeQuest.data()['surveys'] != null) {
+                  eachAllTimeQuest.data()['surveys'].toList().forEach((survey) {
+                    surveys.add(SurveyQuestionModel.fromMap(survey));
+                  });
+                }
+                allQuests.add(QuestModel.fromMap(eachAllTimeQuest.id, eachAllTimeQuest.data(),
+                    invetAddresses.length == 0 ? null : invetAddresses, surveys.length == 0 ? null : surveys));
+              }
+            }));
+
     await _firestoreService.collection('leagues').doc(leagueRx.value).collection('quests').get().then((value) {
       value.docs.forEach((element) {
         // print(element.data());
@@ -197,9 +317,15 @@ class FirestoreService extends GetxService {
             invetAddresses.add(InvestAddressModel.fromMap(option));
           });
         }
+        if (element.data()['surveys'] != null) {
+          element.data()['surveys'].toList().forEach((survey) {
+            surveys.add(SurveyQuestionModel.fromMap(survey));
+          });
+        }
+
         // print('questmodel options from db: $options');
-        allQuests
-            .add(QuestModel.fromMap(element.id, element.data(), invetAddresses.length == 0 ? null : invetAddresses));
+        allQuests.add(QuestModel.fromMap(element.id, element.data(), invetAddresses.length == 0 ? null : invetAddresses,
+            surveys.length == 0 ? null : surveys));
         invetAddresses = [];
       });
     });
@@ -209,11 +335,20 @@ class FirestoreService extends GetxService {
   // 개별 Quest 가져오기
   Future<QuestModel> getEachQuest(String leagueId, String questId) async {
     List<InvestAddressModel> invetAddresses = [];
+    List<SurveyQuestionModel> surveys = [];
     return await _firestoreService.collection('leagues/$leagueId/quests').doc(questId).get().then((value) {
-      value.data()!['investAddresses'].toList().forEach((option) {
-        invetAddresses.add(InvestAddressModel.fromMap(option));
-      });
-      return QuestModel.fromMap(questId, value.data()!, invetAddresses);
+      if (value.data()!['investAddresses'] != null) {
+        value.data()!['investAddresses'].toList().forEach((option) {
+          invetAddresses.add(InvestAddressModel.fromMap(option));
+        });
+      }
+      if (value.data()!['surveys'] != null) {
+        value.data()!['surveys'].toList().forEach((survey) {
+          surveys.add(SurveyQuestionModel.fromMap(survey));
+        });
+      }
+      return QuestModel.fromMap(questId, value.data()!, invetAddresses.length == 0 ? null : invetAddresses,
+          surveys.length == 0 ? null : surveys);
     });
   }
 
@@ -487,13 +622,22 @@ class FirestoreService extends GetxService {
     // print('real' + realtimePrices.toString());
   }
 
-  Stream<LiveQuestPriceModel> getStreamLiveQuestPrice(InvestAddressModel investAddress) {
-    print('firestore realtime price stream');
+  Stream<LiveQuestPriceModel> getStreamLiveQuestPrice(
+    InvestAddressModel investAddress,
+    QuestModel questModel,
+  ) {
+    // print(
+    //   dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
+    // );
     return _firestoreService
         .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
-        .where('dateTime', isGreaterThan: '20210902080000')
+        .where(
+          'dateTime',
+          isGreaterThan: dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
+        )
         .snapshots()
         .map((element) {
+      print("get");
       //element는 다큐모음
       // print('${investAddress.issueCode}');
       // print('snapshot: ${element.docs.last.data()}');
@@ -551,12 +695,7 @@ class FirestoreService extends GetxService {
         .then((value) => print("user delete"))
         .catchError((error) => print("Failed to delete user: $error"));
 
-    await _firestoreService
-        .collection('users')
-        .doc(userModelRx.value!.uid)
-        .collection('userFeed')
-        .doc(postId)
-        .delete();
+    await _firestoreService.collection('users').doc(userModelRx.value!.uid).collection('userFeed').doc(postId).delete();
   }
 
   // 포스트 받아오기
@@ -912,14 +1051,17 @@ class FirestoreService extends GetxService {
   // userName이 다른 유저들이랑 겹치는지 검사해준다.
   Future<bool> isUserNameDuplicated(String userName) async {
     var data;
-
-    await _firestoreService
-        .collection('users')
-        .where('userName', isEqualTo: userName)
-        .get()
-        .then((value) => value.docs.forEach((element) {
-              data = element.data();
-            }));
+    if (userName == userModelRx.value!.userName) {
+      return false;
+    } else {
+      await _firestoreService
+          .collection('users')
+          .where('userName', isEqualTo: userName)
+          .get()
+          .then((value) => value.docs.forEach((element) {
+                data = element.data();
+              }));
+    }
 
     return (data != null);
   }

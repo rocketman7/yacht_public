@@ -78,7 +78,7 @@ class UserQuestModel {
       leagueId: map['leagueId'],
       questId: questId,
       selectDateTime: map['selectDateTime'],
-      selection: List<int>.from(map['selection']),
+      selection: map['selection'] == null ? null : List<int>.from(map['selection']),
       hasSucceeded: map['hasSucceeded'],
       yachtPointSuccessRewarded: map['yachtPointSuccessRewarded'],
       leaguePointSuccessRewarded: map['leaguePointSuccessRewarded'],

@@ -36,11 +36,6 @@ const buttonTextColor = Colors.white;
 // 모듈박스 그림자 색
 Color boxShadowColor = Color(0xFF38204B).withOpacity(.08);
 
-// k-Bull & Bear & Volume Color
-const bullColorKR = Colors.red;
-const bearColorKR = seaBlue;
-const volumeColor = Color(0xFF789EC1);
-
 Color hexToColorCode(String colorCode) {
   return Color(int.parse(colorCode, radix: 16) + 0xFF000000);
 }

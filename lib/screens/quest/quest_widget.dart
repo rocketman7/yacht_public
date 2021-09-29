@@ -278,7 +278,7 @@ class QuestCardHeader extends StatelessWidget {
                       width: 4.w,
                     ),
                     Text(
-                      "5개", // 퀘스트 모델 데이터랑 연동 되어야 함
+                      "${questModel.itemNeeded}개", // 퀘스트 모델 데이터랑 연동 되어야 함
                       style: jogabiNumberStyle.copyWith(fontSize: 13.w),
                     )
                   ],
@@ -289,6 +289,8 @@ class QuestCardHeader extends StatelessWidget {
             Text(
               '${questModel.title}',
               style: questTitle,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             )
           ],
         ),
@@ -475,65 +477,65 @@ class QuestCardRewards extends StatelessWidget {
 }
 
 // 퀘스트 남은 시간 표기하는 Stateful Widget
-class QuestTimer extends StatefulWidget {
-  final QuestModel questModel;
-  const QuestTimer({
-    Key? key,
-    required this.questModel,
-  }) : super(key: key);
+// class QuestTimer extends StatefulWidget {
+//   final QuestModel questModel;
+//   const QuestTimer({
+//     Key? key,
+//     required this.questModel,
+//   }) : super(key: key);
 
-  @override
-  _QuestTimerState createState() => _QuestTimerState();
-}
+//   @override
+//   _QuestTimerState createState() => _QuestTimerState();
+// }
 
-class _QuestTimerState extends State<QuestTimer> {
-  Timer? _everySecond;
-  Rx<Duration> _timeLeft = Duration(
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  ).obs;
+// class _QuestTimerState extends State<QuestTimer> {
+//   Timer? _everySecond;
+//   Rx<Duration> _timeLeft = Duration(
+//     hours: 0,
+//     minutes: 0,
+//     seconds: 0,
+//   ).obs;
 
-  void timeLeft(DateTime dateTime) {
-    _everySecond = Timer.periodic(Duration(seconds: 1), (timer) {
-      DateTime now = DateTime.now();
-      Duration duration = dateTime.difference(now);
-      _timeLeft(duration);
-    });
-  }
+//   void timeLeft(DateTime dateTime) {
+//     _everySecond = Timer.periodic(Duration(seconds: 1), (timer) {
+//       DateTime now = DateTime.now();
+//       Duration duration = dateTime.difference(now);
+//       _timeLeft(duration);
+//     });
+//   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    timeLeft(widget.questModel.questEndDateTime.toDate());
-  }
+//   @override
+//   void didChangeDependencies() {
+//     super.didChangeDependencies();
+//     timeLeft(widget.questModel.questEndDateTime.toDate());
+//   }
 
-  @override
-  void dispose() {
-    _everySecond!.cancel();
-    // TODO: implement dispose
+//   @override
+//   void dispose() {
+//     _everySecond!.cancel();
+//     // TODO: implement dispose
 
-    super.dispose();
-  }
+//     super.dispose();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    // print(widget.questModel);
-    return Obx(() => Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(Icons.timer_rounded),
-            // horizontalSpaceSmall,
-            SizedBox(width: 4),
-            Text(
-              countDown(_timeLeft.value),
-              style: contentStyle,
-            ),
-          ],
-        ));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     // print(widget.questModel);
+//     return Obx(() => Row(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             Icon(Icons.timer_rounded),
+//             // horizontalSpaceSmall,
+//             SizedBox(width: 4),
+//             Text(
+//               countDown(_timeLeft.value),
+//               style: contentStyle,
+//             ),
+//           ],
+//         ));
+//   }
+// }
 
 
 

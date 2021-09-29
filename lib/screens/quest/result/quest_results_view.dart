@@ -34,14 +34,19 @@ class QuestResultsView extends StatelessWidget {
           // height: 340.w,
           child: Obx(() {
             return (homeViewModel.resultQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
-                ? Container(
-                    child: Image.asset(
-                    'assets/illusts/not_exists/no_result.png',
-                    width: 232.w,
-                    height: 170.w,
+                ? Padding(
+                    padding: primaryHorizontalPadding,
+                    child: sectionBox(
+                      child: Container(
+                          child: Image.asset(
+                        'assets/illusts/not_exists/no_result.png',
+                        width: 232.w,
+                        height: 170.w,
+                      )
+                          // height: 340.w,
+                          ),
+                    ),
                   )
-                    // height: 340.w,
-                    )
                 : SingleChildScrollView(
                     clipBehavior: Clip.none,
                     scrollDirection: Axis.horizontal,

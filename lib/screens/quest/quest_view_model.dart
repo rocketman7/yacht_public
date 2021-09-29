@@ -165,13 +165,13 @@ class QuestViewModel extends GetxController {
     if (oldIndex < newIndex) {
       int temp = orderList[oldIndex];
       orderList.removeAt(oldIndex);
-      print('new OrderList: $orderList');
       orderList.insert(newIndex - 1, temp);
+      print('new OrderList: $orderList');
     } else {
       int temp = orderList[oldIndex];
       orderList.removeAt(oldIndex);
-      print('new OrderList: $orderList');
       orderList.insert(newIndex, temp);
+      print('new OrderList: $orderList');
     }
   }
 

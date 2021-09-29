@@ -2,6 +2,7 @@
 // 타임존 처리 필요
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:yachtOne/repositories/repository.dart';
 
 DateFormat dateInString = DateFormat("yyyyMMdd");
 DateFormat dateTimeInString = DateFormat("yyyyMMddHHmmSS");
@@ -89,13 +90,78 @@ String timeStampToStringWithHourMinute(Timestamp time) {
   return '${time.toDate().year}년 ${time.toDate().month}월 ${time.toDate().day}일 ${time.toDate().hour}시 ${time.toDate().minute}분';
 }
 
+String dateTimeToStringKorean(DateTime dateTime, bool toMinute) {
+  if (toMinute == true) {
+    return '${dateTime.year}.${dateTime.month}.${dateTime.day} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, "0")}';
+  } else {
+    return '${dateTime.year}.${dateTime.month}.${dateTime.day}';
+  }
+}
 
-  // return "Now";
- 
+bool isHoliday(DateTime dateTime) {
+  // dateTime = _timezoneService.koreaTime(dateTime);
+  String dateTimeStr = dateTimeToString(dateTime, 8)!;
+  return holidayListKR.contains(dateTimeStr);
+}
 
-// Duration timeLeftFromNow(DateTime dateTime) {
-//     // Duration timeLeft = tempQuestModel!.endDateTime.toDate().difference(now);
-//     Duration timeLeft = dateTime.difference(now);
-//     timeToEnd(countDown(timeLeft));
-//     // return countDown(timeLeft);
-//   }
+bool isBusinessDay(DateTime dateTime) {
+  // dateTime = _timezoneService.koreaTime(dateTime);
+  String dateTimeStr = dateTimeToString(dateTime, 8)!;
+  return !(dateTime.weekday == 6 || dateTime.weekday == 7 || holidayListKR.contains(dateTimeStr));
+}
+
+DateTime closestBusinessDay(DateTime dateTime) {
+  // holiday랑 주말 거르고 다음 영업일 return
+  String dateTimeStr = dateTimeToString(dateTime, 8)!;
+  print("BUSINESSDAYCHECK" + dateTime.weekday.toString());
+  if (dateTime.weekday == 6 || dateTime.weekday == 7 || holidayListKR.contains(dateTimeStr)) {
+    return closestBusinessDay(dateTime.add(Duration(days: 1)));
+  } else {
+    print("RETURNED DATETIME" + dateTime.toString());
+    return dateTime;
+  } // return dateTime;
+}
+
+DateTime nextNthBusinessDay(DateTime dateTime, int n) {
+  // holiday랑 주말 거르고 다음 영업일 return
+  // if n = 3, i = 0
+
+  // dateTime = _timezoneService.koreaTime(dateTime);
+  for (int i = 0; i < n; i++) {
+    dateTime = closestBusinessDay(dateTime.add(Duration(days: 1)));
+    print(dateTime);
+  }
+
+  return dateTime;
+}
+
+DateTime previousBusinessDay(DateTime dateTime) {
+  // dateTime = _timezoneService.koreaTime(dateTime);
+  // 랭킹페이지를 위한 전영업일 불러오기
+  DateTime previousDay = dateTime.add(Duration(days: -1));
+  String previousDayStr = dateTimeToString(dateTime, 8)!;
+
+  if (previousDay.weekday == 6 || previousDay.weekday == 7 || holidayListKR.contains(previousDayStr)) {
+    return previousBusinessDay(previousDay);
+  } else {
+    return previousDay;
+  }
+}
+
+int numberOfBusinessDay(DateTime first, DateTime last) {
+  int j = 0;
+  int day = 1;
+  for (int i = 0; i <= last.difference(first).inDays; i++) {
+    if (isTwoDateSame(first.add(Duration(days: i)), last)) {
+      day += j;
+      break;
+    } else {
+      if (isBusinessDay(first.add(Duration(days: i)))) j++;
+    }
+  }
+  return day;
+}
+
+bool isTwoDateSame(DateTime dateTime1, DateTime dateTime2) {
+  return dateTimeToString(dateTime1, 8)! == dateTimeToString(dateTime2, 8)!;
+}

@@ -15,7 +15,7 @@ class StatsViewModel extends GetxController {
 
   FirestoreService _firestoreService = FirestoreService();
 
-  List<StatsModel>? _stats;
+  List<StatsModel> _stats = [];
   List<StatsModel> _quarterStats = [];
   List<StatsModel> _yearStats = [];
   RxList<StatsModel>? chartStats = RxList<StatsModel>();
@@ -68,20 +68,20 @@ class StatsViewModel extends GetxController {
     List<int> toBeRemoved = [];
     // TODO: 분기, 연간을 토글 스위치로 (캔들차트처럼) 바꿔서 볼 수 있게. 10,11월엔 어떻게 할지?
     // TODO: 막대그래프  스케일 조정
-    _stats = null;
+    _stats = [];
     _stats = await _firestoreService.getStats(investAddressModel);
     // print(_statsList);
     // term이 Y이면 같은 year의 Q들의 합을 Y에서 빼주어야 함.
     // 만약 중간에 상장한 기업은 어떻게 처리하나?
     // SK바이오팜으로 체크해봐야 함
     int idx = 0;
-    // 1) 3년 전 날짜를 얻어서
+    // 1) 4년 전 날짜를 얻어서
     DateTime fourYearsAgo = DateTime.now().subtract(Duration(days: 1460));
 
-    _stats!.forEach((element) {
+    _stats.forEach((element) {
       // print(int.parse(element.year!));
       int temp = int.parse(element.year!);
-      // 2) 3년 전 1월 1일보다 이전 데이터의 인덱스들을 저장하고
+      // 2) 4년 전 1월 1일보다 이전 데이터의 인덱스들을 저장하고
       if (temp < fourYearsAgo.year) {
         toBeRemoved.add(idx);
       }
@@ -90,35 +90,44 @@ class StatsViewModel extends GetxController {
 
     // print(toBeRemoved);
     // 3) 데이터에서 필요 없는 연도 데이터를 지워준다
-    if (toBeRemoved.length > 0) _stats!.removeRange(toBeRemoved[0], toBeRemoved.last + 1);
+    if (toBeRemoved.length > 0) _stats.removeRange(toBeRemoved[0], toBeRemoved.last + 1);
     // dateTime 오름차순으로 정렬
-    _stats!.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
+    _stats.sort((a, b) => a.dateTime!.compareTo(b.dateTime!));
     // print(_statsList![0]);
     // 사업 보고서에서 같은 해 3분기까지 누적치 빼서 4분기 IS data로 생성
     _yearStats = [];
     _quarterStats = [];
-    for (int i = 0; i < _stats!.length; i++) {
+    for (int i = 0; i < _stats.length; i++) {
       // if 사업보고서,
-      if (_stats![i].term == "Y") {
-        _yearStats.add(_stats![i]);
+      if (_stats[i].term == "Y") {
+        _yearStats.add(_stats[i]);
         // 1) 같은 해 3분기 데이터가 있는지 체크하고
         // 2) 있다면 사업보고서 IS 데이터에서 3분기 IS 데이터의 누적치를 빼서 4분기 생성
         // 3) 없다면 상장 해에 보고서가 사업보고서만 있다는 뜻,
         if (i == 0) {
-          _quarterStats.add(_stats![i]);
+          // 텀이 "Y"인데 맨 첫 인덱스면 그냥 쿼터에 넣는 것.
+          _quarterStats.add(_stats[i]);
         } else {
-          print('stats check: ${_stats![i]}');
-          StatsModel temp = _stats![i].copyWith(
-              salesIS: _stats![i].salesIS! - _stats![i - 1].salesAccIS!,
-              operatingIncomeIS: _stats![i].operatingIncomeIS! - _stats![i - 1].operatingIncomeAccIS!,
-              incomeBeforeTaxesIS: _stats![i].incomeBeforeTaxesIS! - _stats![i - 1].incomeBeforeTaxesAccIS!,
-              netIncomeIS: _stats![i].netIncomeIS! - _stats![i - 1].netIncomeAccIS!,
+          print('stats check: ${_stats[i]}');
+          StatsModel temp = _stats[i].copyWith(
+              salesIS: (_stats[i].salesIS == null || _stats[i - 1].salesAccIS == null)
+                  ? null
+                  : _stats[i].salesIS! - _stats[i - 1].salesAccIS!,
+              operatingIncomeIS: (_stats[i].operatingIncomeIS == null || _stats[i - 1].operatingIncomeIS == null)
+                  ? null
+                  : _stats[i].operatingIncomeIS! - _stats[i - 1].operatingIncomeAccIS!,
+              incomeBeforeTaxesIS: (_stats[i].incomeBeforeTaxesIS == null || _stats[i - 1].incomeBeforeTaxesIS == null)
+                  ? null
+                  : _stats[i].incomeBeforeTaxesIS! - _stats[i - 1].incomeBeforeTaxesAccIS!,
+              netIncomeIS: (_stats[i].netIncomeIS == null || _stats[i - 1].netIncomeIS == null)
+                  ? null
+                  : _stats[i].netIncomeIS! - _stats[i - 1].netIncomeAccIS!,
               term: "Q",
-              dateTime: _stats![i].year! + "1231");
+              dateTime: _stats[i].year! + "1231");
           _quarterStats.add(temp);
         }
       } else {
-        _quarterStats.add(_stats![i]);
+        _quarterStats.add(_stats[i]);
       }
     }
     // print(_yearStatsList[0].toJson());
@@ -192,14 +201,32 @@ class StatsViewModel extends GetxController {
   }
 
   void calculateMaxMin() {
-    _maxSales = quiver.max(List.generate(chartStats!.length, (index) => chartStats![index].salesIS))! * 1.00;
-    _minSales = quiver.min(List.generate(chartStats!.length, (index) => chartStats![index].salesIS))! * 1.00;
-    _maxOperatingIncome =
-        quiver.max(List.generate(chartStats!.length, (index) => chartStats![index].operatingIncomeIS))! * 1.00;
-    _minOperatingIncome =
-        quiver.min(List.generate(chartStats!.length, (index) => chartStats![index].operatingIncomeIS))! * 1.00;
-    _maxNetIncome = quiver.max(List.generate(chartStats!.length, (index) => chartStats![index].netIncomeIS))! * 1.00;
-    _minNetIncome = quiver.min(List.generate(chartStats!.length, (index) => chartStats![index].netIncomeIS))! * 1.00;
+    List<num> sales = [];
+    List<num> opeartingIncomes = [];
+    List<num> netIncomes = [];
+
+    chartStats!.forEach((element) {
+      if (element.salesIS != null) {
+        sales.add(element.salesIS!);
+      }
+      if (element.operatingIncomeIS != null) {
+        opeartingIncomes.add(element.operatingIncomeIS!);
+      }
+      if (element.netIncomeIS != null) {
+        netIncomes.add(element.netIncomeIS!);
+      }
+    });
+    print(opeartingIncomes);
+
+    _maxSales = quiver.max(sales)! * 1.00;
+    _minSales = quiver.min(sales)! * 1.00;
+    // print(_minSales);
+    _maxOperatingIncome = quiver.max(opeartingIncomes)! * 1.00;
+
+    _minOperatingIncome = quiver.min(opeartingIncomes)! * 1.00;
+    print(_minOperatingIncome);
+    _maxNetIncome = quiver.max(netIncomes)! * 1.00;
+    _minNetIncome = quiver.min(netIncomes)! * 1.00;
   }
 
   // 연간 width;

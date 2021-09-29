@@ -42,7 +42,7 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                 height: correctHeight(60.w, 0.0, emailRegisterTitle.fontSize),
               ),
               Text(
-                "회원가입",
+                "이메일로 시작하기",
                 style: emailRegisterTitle,
               ),
               SizedBox(
@@ -156,20 +156,34 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
               SizedBox(
                 height: 50.w,
               ),
-              InkWell(
-                onTap: () async {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    print(_emailController.text);
-                    await controller.startWithEmail(_emailController.text, _passwordController.text);
-                  }
-                },
-                child: bigTextContainerButton(
-                  text: "가입 완료하기",
-                  isDisabled: _registerButtonDisabled,
-                  height: 60.w,
-                ),
-              ),
+              Obx(() => !controller.isAuthProcessing.value
+                  ? InkWell(
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+
+                          await controller.startWithEmail(_emailController.text, _passwordController.text);
+                        }
+                      },
+                      child: bigTextContainerButton(
+                        text: "시작하기",
+                        isDisabled: _registerButtonDisabled,
+                        height: 60.w,
+                      ),
+                    )
+                  : Container(
+                      height: 60.w,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+                      decoration: BoxDecoration(
+                        color: primaryButtonBackground,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: buttonNormal,
+                        ),
+                      ),
+                    )),
               // bigTextContainerButton(text: "가입 완료하기", isDisabled: false, height: 60.w),
             ],
           ),

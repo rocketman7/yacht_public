@@ -45,12 +45,12 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                   Obx(
                     () => Flexible(
                       child: PageView.builder(
-                          itemCount: controller.todayIssues.length,
+                          itemCount: controller.todayMarkets.length,
                           controller: pageController,
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                Get.to(() => TodayMarketWebView(todayMarket: controller.todayIssues[index]));
+                                Get.to(() => TodayMarketWebView(todayMarket: controller.todayMarkets[index]));
                               },
                               child: Container(
                                 padding: primaryHorizontalPadding,
@@ -59,19 +59,19 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '#오늘의이슈',
+                                      '#${controller.todayMarkets[index].category}',
                                       style: subheadingStyle.copyWith(color: yachtViolet, fontWeight: FontWeight.w400),
                                     ),
                                     SizedBox(
                                       height: correctHeight(20.w, subheadingStyle.fontSize, sectionTitle.fontSize),
                                     ),
-                                    Text(controller.todayIssues[index].title,
+                                    Text(controller.todayMarkets[index].title,
                                         style: sectionTitle.copyWith(height: 1.35)),
                                     SizedBox(
                                       height: correctHeight(14.w, sectionTitle.fontSize, contentStyle.fontSize),
                                     ),
                                     Text(
-                                      controller.todayIssues[index].summary ?? "",
+                                      controller.todayMarkets[index].summary ?? "",
                                       style: contentStyle,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
@@ -87,7 +87,7 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: List.generate(
-                          controller.todayIssues.length,
+                          controller.todayMarkets.length,
                           (index) => Row(
                                 children: [
                                   Container(
@@ -213,7 +213,7 @@ class _TodayMarketWebViewState extends State<TodayMarketWebView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: primaryAppBar(widget.todayMarket.title),
+      appBar: primaryAppBar(widget.todayMarket.category),
       backgroundColor: primaryBackgroundColor,
       body: SafeArea(
         child: Column(

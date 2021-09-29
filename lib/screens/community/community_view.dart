@@ -238,180 +238,187 @@ class WritingNewPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          color: primaryBackgroundColor,
-          height: MediaQuery.of(context).padding.top,
-        ),
-        Container(
-          height: 60.w,
-          padding: primaryHorizontalPadding,
-          color: primaryBackgroundColor,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                flex: 1,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Image.asset('assets/icons/exit.png', width: 14.w, height: 14.w, color: yachtBlack)),
-                ),
-              ),
-              Text(
-                "글쓰기",
-                style: appBarTitle,
-              ),
-              Flexible(
-                flex: 1,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: InkWell(
-                      onTap: () async {
-                        if (_contentFormKey.currentState!.validate()) {
-                          print("OKAY");
-                          print(_contentController.value.text);
-                          await _communityViewModel.uploadPost(_contentController.value.text);
-                          await _communityViewModel.reloadPost();
-                          Get.back();
-                          yachtSnackBar("성공적으로 업로드 되었어요.");
-                        }
-                      },
-                      child: simpleTextContainerButton("올리기")),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: 52.w,
-          width: double.infinity,
-          decoration: BoxDecoration(
+    return Container(
+      color: white,
+      child: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            Container(
               color: primaryBackgroundColor,
-              border: Border(
-                bottom: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
-                top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
-              )),
-          child: Center(child: Text("피드", style: sectionTitle)),
-        ),
-        Form(
-          key: _contentFormKey,
-          child: Expanded(
-            child: Container(
-                color: primaryBackgroundColor,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        // autofocus: true,
-                        controller: _contentController,
-                        validator: (value) {
-                          if (value!.length < 4) {
-                            return '4자 이상 글을 올려주세요.';
-                          } else {
-                            return null;
-                          }
-                        },
-                        maxLines: null,
-                        decoration: InputDecoration(
-                            isDense: true,
-                            contentPadding: EdgeInsets.all(14.w),
-                            focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                            enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                            hintText: '글을 입력해주세요.',
-                            hintStyle: feedContent.copyWith(color: feedContent.color!.withOpacity(.5))),
-                      ),
-                    ),
-                    // 업로드한 이미지 미리보기하는 부분
-                    Obx(() {
-                      if (_communityViewModel.images!.length == 0) {
-                        return Container();
-                      } else {
-                        print(_communityViewModel.images![0]);
-                        return Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                            top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
-                          )),
-                          height: 100.w,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _communityViewModel.images!.length,
-                              itemBuilder: (_, index) {
-                                return Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 14.w,
-                                    ),
-                                    Stack(children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(16.w),
-                                        child: Image.file(
-                                          File(_communityViewModel.images![index].path),
-                                          height: 100.w,
-                                          width: 100.w,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 10.w,
-                                        right: 10.w,
-                                        child: InkWell(
-                                            onTap: () => _communityViewModel.images!.removeAt(index),
-                                            child: Container(
-                                              height: 20.w,
-                                              width: 20.w,
-                                              // color: Colors.red,
-                                              child: Image.asset('assets/icons/deletePhoto.png'),
-                                            )),
-                                      ),
-                                    ]),
-                                  ],
-                                );
-                              }),
-                        );
-                      }
-                    }),
-                    Container(
-                      height: 40.w,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: primaryBackgroundColor,
-                          border: Border(
-                            bottom: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
-                            top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
-                          )),
-                      // color: Colors.yellow,
+              height: MediaQuery.of(context).padding.top,
+            ),
+            Container(
+              height: 60.w,
+              padding: primaryHorizontalPadding,
+              color: primaryBackgroundColor,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
                       child: GestureDetector(
-                        onTap: () async {
-                          await _communityViewModel.getImageFromDevice();
-                          print('image length: ${_communityViewModel.images!.length}');
-                        },
-                        child: Padding(
-                          padding: primaryHorizontalPadding,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/icons/upload_photo.svg',
-                                height: 18.w,
-                                width: 18.w,
-                              ),
-                            ],
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: Image.asset('assets/icons/exit.png', width: 14.w, height: 14.w, color: yachtBlack)),
+                    ),
+                  ),
+                  Text(
+                    "글쓰기",
+                    style: appBarTitle,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                          onTap: () async {
+                            if (_contentFormKey.currentState!.validate()) {
+                              print("OKAY");
+                              print(_contentController.value.text);
+                              await _communityViewModel.uploadPost(_contentController.value.text);
+                              await _communityViewModel.reloadPost();
+                              Get.back();
+                              yachtSnackBar("성공적으로 업로드 되었어요.");
+                            }
+                          },
+                          child: simpleTextContainerButton("올리기")),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: 52.w,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: primaryBackgroundColor,
+                  border: Border(
+                    bottom: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
+                    top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
+                  )),
+              child: Center(child: Text("피드", style: sectionTitle)),
+            ),
+            Form(
+              key: _contentFormKey,
+              child: Expanded(
+                child: Container(
+                    color: white,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            // autofocus: true,
+                            controller: _contentController,
+                            validator: (value) {
+                              if (value!.length < 4) {
+                                return '4자 이상 글을 올려주세요.';
+                              } else {
+                                return null;
+                              }
+                            },
+                            maxLines: null,
+                            decoration: InputDecoration(
+                                isDense: true,
+                                contentPadding: EdgeInsets.all(14.w),
+                                focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                hintText: '투자에 관한 생각을 자유롭게 나눠주세요.',
+                                hintStyle: feedContent.copyWith(color: feedContent.color!.withOpacity(.5))),
                           ),
                         ),
-                      ),
-                    )
-                  ],
-                )),
-          ),
+                        // 업로드한 이미지 미리보기하는 부분
+                        Obx(() {
+                          if (_communityViewModel.images!.length == 0) {
+                            return Container();
+                          } else {
+                            print(_communityViewModel.images![0]);
+                            return Container(
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
+                              )),
+                              height: 128.w,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _communityViewModel.images!.length,
+                                  itemBuilder: (_, index) {
+                                    return Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 14.w,
+                                        ),
+                                        Stack(children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(8.w),
+                                            child: Image.file(
+                                              File(_communityViewModel.images![index].path),
+                                              height: 100.w,
+                                              width: 100.w,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 10.w,
+                                            right: 10.w,
+                                            child: InkWell(
+                                                onTap: () => _communityViewModel.images!.removeAt(index),
+                                                child: Container(
+                                                  height: 20.w,
+                                                  width: 20.w,
+                                                  // color: Colors.red,
+                                                  child: Image.asset('assets/icons/deletePhoto.png'),
+                                                )),
+                                          ),
+                                        ]),
+                                      ],
+                                    );
+                                  }),
+                            );
+                          }
+                        }),
+                        Container(
+                          height: 50.w,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: primaryBackgroundColor,
+                              border: Border(
+                                bottom: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
+                                top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
+                              )),
+                          // color: Colors.yellow,
+                          child: GestureDetector(
+                            onTap: () async {
+                              await _communityViewModel.getImageFromDevice();
+                              print('image length: ${_communityViewModel.images!.length}');
+                            },
+                            child: Padding(
+                              padding: primaryHorizontalPadding,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/icons/upload_photo.svg',
+                                    color: yachtBlack,
+                                    height: 26.w,
+                                    width: 26.w,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
