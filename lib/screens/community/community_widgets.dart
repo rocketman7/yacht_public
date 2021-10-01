@@ -7,6 +7,7 @@ List<PopupMenuItem> communityShowMore = [
     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     // value: index,
     height: 20.w,
+    value: 'block',
     child: Container(
         child: Center(
             child: Text(
@@ -17,6 +18,7 @@ List<PopupMenuItem> communityShowMore = [
   PopupMenuItem(
     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     // value: index,
+    value: 'report',
     height: 20.w,
     child: Container(
         child: Center(

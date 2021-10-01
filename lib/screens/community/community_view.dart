@@ -86,26 +86,26 @@ class CommunityView extends GetView<CommunityViewModel> {
           child: RefreshConfiguration(
             enableScrollWhenRefreshCompleted: true,
             child: SmartRefresher(
-              // header: CustomHeader(
-              //     builder: (_, status) {
-              //       return Container(
-              //         height: 20,
-              //         color: Colors.blue,
-              //         child: Center(child: Text(footer.value)),
-              //       );
-              //     },
-              //     height: 100,
-              //     onModeChange: (mode) {
-              //       if (mode == RefreshStatus.idle) {
-              //         footer("idle");
-              //       } else if (mode == RefreshStatus.canRefresh) {
-              //         footer("canRefresh");
-              //       } else if (mode == RefreshStatus.refreshing) {
-              //         footer("refreshing");
-              //       } else if (mode == RefreshStatus.completed) {
-              //         footer("completed");
-              //       }
-              //     }),
+              header: CustomHeader(
+                  builder: (_, status) {
+                    return Container(
+                      height: 20,
+                      color: Colors.blue,
+                      child: Center(child: Text(footer.value)),
+                    );
+                  },
+                  height: 100,
+                  onModeChange: (mode) {
+                    if (mode == RefreshStatus.idle) {
+                      footer("idle");
+                    } else if (mode == RefreshStatus.canRefresh) {
+                      footer("canRefresh");
+                    } else if (mode == RefreshStatus.refreshing) {
+                      footer("refreshing");
+                    } else if (mode == RefreshStatus.completed) {
+                      footer("completed");
+                    }
+                  }),
               // physics: AlwaysScrollableScrollPhysics(),
               controller: _refreshController,
               onRefresh: _onRefresh,

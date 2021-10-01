@@ -911,6 +911,13 @@ class FirestoreService extends GetxService {
             }).toList());
   }
 
+  // 유저 차단하기
+  Future blockThisUser(String uidToBlock) async {
+    await _firestoreService.collection('users').doc(userModelRx.value!.uid).update({
+      'blockList': FieldValue.arrayUnion([uidToBlock])
+    });
+  }
+
   //// 컨텐츠 관련
   // 읽을 거리 가져오기
   Future<List<ReadingContentModel>> getReadingContents() async {

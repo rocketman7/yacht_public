@@ -69,7 +69,15 @@ class CommunityViewModel extends GetxController {
       postAtOnceLimit,
     ));
 
+    // block list 포함된 거 삭제
+    if (userModelRx.value!.blockList != null) {
+      newPosts.removeWhere(
+        (element) => userModelRx.value!.blockList!.contains(element.writerUid),
+      );
+    }
+
     posts.assignAll(newPosts);
+
     isGettingPosts(false);
 
     update();
@@ -81,6 +89,13 @@ class CommunityViewModel extends GetxController {
     List<PostModel> newPosts = [];
     newPosts.addAll(await _firestoreService.getPosts(postAtOnceLimit,
         startAfterThisPostId: posts.length > 0 ? posts.last.writtenDateTime : null));
+
+    // block list 포함된 거 삭제
+    if (userModelRx.value!.blockList != null) {
+      newPosts.removeWhere(
+        (element) => userModelRx.value!.blockList!.contains(element.writerUid),
+      );
+    }
 
     posts.addAll(newPosts);
     if (newPosts.length < postAtOnceLimit) {
@@ -171,5 +186,9 @@ class CommunityViewModel extends GetxController {
 
   Future toggleLikeComment(PostModel post) async {
     await _firestoreService.toggleLikeComment(post, userModelRx.value!.uid);
+  }
+
+  Future blockThisUser(String uidToBlock) async {
+    await _firestoreService.blockThisUser(uidToBlock);
   }
 }

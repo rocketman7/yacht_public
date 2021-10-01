@@ -205,6 +205,124 @@ class FeedWidget extends StatelessWidget {
                                                   )));
                                         });
                                     break;
+                                  case 'block':
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return Dialog(
+                                              insetPadding: primaryHorizontalPadding,
+                                              child: Container(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text("알림", style: dialogTitle),
+                                                      SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                      SizedBox(
+                                                          height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                      Text("유저를 차단하시겠습니까?", style: dialogContent),
+                                                      // Text(
+                                                      //   "삭제 후 되돌릴 수 없습니다.",
+                                                      //   style: dialogWarning,
+                                                      // ),
+                                                      SizedBox(
+                                                          height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: GestureDetector(
+                                                                onTap: () async {
+                                                                  HapticFeedback.lightImpact();
+                                                                  await communityViewModel
+                                                                      .blockThisUser(post.writerUid);
+                                                                  await communityViewModel.reloadPost();
+                                                                  Navigator.of(context).pop();
+                                                                  yachtSnackBar("유저를 차단하였습니다");
+                                                                },
+                                                                child: textContainerButtonWithOptions(
+                                                                  text: "예",
+                                                                  isDarkBackground: true,
+                                                                  height: 44.w,
+                                                                )),
+                                                          ),
+                                                          SizedBox(width: 8.w),
+                                                          Expanded(
+                                                            child: InkWell(
+                                                                onTap: () {
+                                                                  Navigator.of(context).pop();
+                                                                  // Get.back(closeOverlays: true);
+                                                                },
+                                                                child: textContainerButtonWithOptions(
+                                                                    text: "아니오",
+                                                                    isDarkBackground: false,
+                                                                    height: 44.w)),
+                                                          )
+                                                        ],
+                                                      )
+                                                    ],
+                                                  )));
+                                        });
+                                    break;
+                                  case 'report':
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return Dialog(
+                                              insetPadding: primaryHorizontalPadding,
+                                              child: Container(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text("알림", style: dialogTitle),
+                                                      SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                      SizedBox(
+                                                          height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                      Text("유저를 신고하시겠습니까?", style: dialogContent),
+                                                      Text(
+                                                        "신고한 유저는 자동으로 차단됩니다.",
+                                                        style: dialogWarning.copyWith(color: yachtDarkGrey),
+                                                      ),
+                                                      SizedBox(
+                                                          height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: GestureDetector(
+                                                                onTap: () async {
+                                                                  HapticFeedback.lightImpact();
+                                                                  // await communityViewModel
+                                                                  //     .blockThisUser(post.writerUid);
+                                                                  await communityViewModel.reloadPost();
+                                                                  Navigator.of(context).pop();
+                                                                  yachtSnackBar("유저를 차단하였습니다");
+                                                                },
+                                                                child: textContainerButtonWithOptions(
+                                                                  text: "신고하기",
+                                                                  isDarkBackground: true,
+                                                                  height: 44.w,
+                                                                )),
+                                                          ),
+                                                          SizedBox(width: 8.w),
+                                                          Expanded(
+                                                            child: InkWell(
+                                                                onTap: () {
+                                                                  Navigator.of(context).pop();
+                                                                  // Get.back(closeOverlays: true);
+                                                                },
+                                                                child: textContainerButtonWithOptions(
+                                                                    text: "취소", isDarkBackground: false, height: 44.w)),
+                                                          )
+                                                        ],
+                                                      )
+                                                    ],
+                                                  )));
+                                        });
+                                    break;
                                   default:
                                 }
                               },
