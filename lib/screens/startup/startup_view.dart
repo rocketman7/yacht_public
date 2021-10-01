@@ -32,7 +32,7 @@ class StartupView extends GetView<StartupViewModel> {
   Widget build(BuildContext context) {
     RxList<Widget> pageList = [
       HomeView(),
-      CommunityView(),
+      // CommunityView(),
       // Container(color: Colors.red),
       // Container(color: yachtViolet),
       // ProfileView(uid: _auth.currentUser.uid) //, null value error
@@ -90,18 +90,18 @@ class StartupView extends GetView<StartupViewModel> {
                     ),
                     label: '',
                   ),
-                  BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/icons/bottom_navigation/community_unselected.png',
-                        width: iconSize,
-                        height: iconSize,
-                      ),
-                      activeIcon: Image.asset(
-                        'assets/icons/bottom_navigation/community_selected.png',
-                        width: iconSize,
-                        height: iconSize,
-                      ),
-                      label: ''),
+                  // BottomNavigationBarItem(
+                  //     icon: Image.asset(
+                  //       'assets/icons/bottom_navigation/community_unselected.png',
+                  //       width: iconSize,
+                  //       height: iconSize,
+                  //     ),
+                  //     activeIcon: Image.asset(
+                  //       'assets/icons/bottom_navigation/community_selected.png',
+                  //       width: iconSize,
+                  //       height: iconSize,
+                  //     ),
+                  //     label: ''),
                   BottomNavigationBarItem(
                       icon: Image.asset(
                         'assets/icons/bottom_navigation/my_unselected.png',

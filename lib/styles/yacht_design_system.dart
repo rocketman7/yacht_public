@@ -65,6 +65,20 @@ final List<Color> liveAreaColor2 = <Color>[graph2, graph2.withOpacity(0.05)];
 final List<Color> liveAreaColor3 = <Color>[graph3, graph3.withOpacity(0.05)];
 final List<Color> liveAreaColor4 = <Color>[graph4, graph4.withOpacity(0.05)];
 
+// FastLine Graph Color
+const Color lineChart0 = Color(0xFF856EC8);
+const Color lineChart1 = Color(0xFF2599BE);
+const Color lineChart2 = Color(0xFF90CC10);
+const Color lineChart3 = Color(0xFFFFB800);
+const Color lineChart4 = Color(0xFFD04B00);
+const List<Color> lineChartColors = [
+  lineChart0,
+  lineChart1,
+  lineChart2,
+  lineChart3,
+  lineChart4,
+];
+
 const activatedButtonColor = Color(0xFF196AB4);
 Color dividerColor = Color(0xFF94BDE0).withOpacity(0.3);
 

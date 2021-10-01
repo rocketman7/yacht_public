@@ -697,7 +697,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
               },
               controller: pageController,
               children: [
-                MyFeedView(),
+                MyFeedView(userModelRx.value!.uid),
                 Column(
                   children: [
                     Row(

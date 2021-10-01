@@ -8,18 +8,25 @@ import 'package:yachtOne/services/firestore_service.dart';
 import '../../locator.dart';
 
 class MyFeedViewModel extends GetxController {
+  final String uid;
+  MyFeedViewModel(this.uid);
+
   final FirestoreService _firestoreService = locator<FirestoreService>();
   RxList<UserPostModel> userPosts = <UserPostModel>[].obs;
+
   @override
   void onInit() async {
     // TODO: implement onInit
-    // await getMyFeed(userModelRx.value!.uid);
-    userPosts.bindStream(getMyFeedStrem(userModelRx.value!.uid));
+    await getMyFeed(uid);
+    userPosts.bindStream(getMyFeedStrem(uid));
+    // print(userPosts.length);
+    // userPosts.refresh();
     super.onInit();
   }
 
   Future getMyFeed(String uid) async {
     userPosts.addAll(await _firestoreService.getMyFeed(uid));
+    print(userPosts);
   }
 
   Stream<List<UserPostModel>> getMyFeedStrem(String uid) {

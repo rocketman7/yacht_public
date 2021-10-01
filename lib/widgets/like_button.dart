@@ -31,7 +31,7 @@ class _LikeButtonState extends State<LikeButton> {
   void initState() {
     super.initState();
     isButtonTrue.listen((value) {
-      print('listening: $value');
+      // print('listening: $value');
       smiBool?.change(value);
     });
   }

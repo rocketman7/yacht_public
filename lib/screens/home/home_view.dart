@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorState;
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
@@ -52,6 +52,16 @@ class HomeView extends StatelessWidget {
   final RxBool isCheckingUserNameDuplicated = false.obs;
   final RxBool showSmallSnackBar = false.obs;
   final RxString smallSnackBarText = "".obs;
+
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  void _onRefresh() async {
+    // monitor network fetch
+    // await Future.delayed(Duration(milliseconds: 1200));
+    todayQuests = null;
+    await homeViewModel.getAllQuests();
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,16 +117,31 @@ class HomeView extends StatelessWidget {
     //     'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
     if (userQuestModelRx.length != 0) print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
-
-    final RefreshController _refreshController = RefreshController(initialRefresh: false);
-    void _onRefresh() async {
-      _refreshController.refreshCompleted();
-    }
-
+    RxString footer = "start".obs;
     return Scaffold(
       body: RefreshConfiguration(
         enableScrollWhenRefreshCompleted: true,
         child: SmartRefresher(
+          header: CustomHeader(
+              builder: (_, status) {
+                return Container(
+                  height: 20,
+                  color: Colors.blue,
+                  child: Center(child: Text(footer.value)),
+                );
+              },
+              height: 40,
+              onModeChange: (mode) {
+                if (mode == RefreshStatus.idle) {
+                  footer("idle");
+                } else if (mode == RefreshStatus.canRefresh) {
+                  footer("canRefresh");
+                } else if (mode == RefreshStatus.refreshing) {
+                  footer("refreshing");
+                } else if (mode == RefreshStatus.completed) {
+                  footer("completed");
+                }
+              }),
           controller: _refreshController,
           onRefresh: _onRefresh,
           child: CustomScrollView(
@@ -131,11 +156,21 @@ class HomeView extends StatelessWidget {
                     delegate:
                         _GlassmorphismAppBarDelegate(MediaQuery.of(context).padding, offset.value, homeViewModel)),
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                  return homeWidgets[index];
-                }, childCount: homeWidgets.length),
-              ),
+              Obx(() => homeViewModel.isLoading.value
+                      ? SliverToBoxAdapter()
+                      : SliverList(
+                          delegate: SliverChildListDelegate(
+                            homeWidgets,
+                            // addRepaintBoundaries: false,
+                            // addAutomaticKeepAlives: true,
+                          ),
+                        )
+                  // SliverList(
+                  //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                  //       return homeWidgets[index];
+                  //     }, childCount: homeWidgets.length),
+                  //   ),
+                  ),
 
               // MyAssets(),
               // SliverToBoxAdapter(
@@ -731,8 +766,8 @@ class MyAssets extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          'assets/icons/won_pointBlue_background.svg',
+                        Image.asset(
+                          'assets/icons/won_circle.png',
                           width: 20.w,
                           height: 20.w,
                         ),

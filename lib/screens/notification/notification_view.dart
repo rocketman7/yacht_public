@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/handlers/date_time_handler.dart';
 
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
@@ -47,29 +48,73 @@ class NotificationView extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.only(left: 14.w, right: 14.w),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              height: controller.notificationList[i].category != ''
-                                  ? correctHeight(20.w, 0.w, notificationCategory.fontSize)
-                                  : 6.w,
-                            ),
-                            Text(
-                              '${controller.notificationList[i].category}',
-                              style: notificationCategory,
-                            ),
-                            SizedBox(
-                              height: correctHeight(
-                                  10.w,
-                                  controller.notificationList[i].category != '' ? notificationCategory.fontSize : 0.w,
-                                  notificationContent.fontSize),
-                            ),
-                            Text(
-                              '${controller.notificationList[i].content}',
-                              style: notificationContent,
-                            ),
-                            SizedBox(
-                              height: correctHeight(16.w, notificationContent.fontSize, 0.w),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: controller.notificationList[i].category != ''
+                                            ? correctHeight(20.w, 0.w, notificationCategory.fontSize)
+                                            : 6.w,
+                                      ),
+                                      (controller.notificationList[i].category == null ||
+                                              controller.notificationList[i].category == '')
+                                          ? Container()
+                                          : Text(
+                                              '${controller.notificationList[i].category}',
+                                              style: notificationCategory,
+                                            ),
+                                      SizedBox(
+                                        height: correctHeight(
+                                            10.w,
+                                            controller.notificationList[i].category != ''
+                                                ? notificationCategory.fontSize
+                                                : 0.w,
+                                            notificationContent.fontSize),
+                                      ),
+                                      Text(
+                                        '${controller.notificationList[i].content}',
+                                        style: notificationContent,
+                                      ),
+                                      SizedBox(
+                                        height: correctHeight(16.w, notificationContent.fontSize, 0.w),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 10.w),
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      height: controller.notificationList[i].category != ''
+                                          ? correctHeight(20.w, 0.w, notificationCategory.fontSize)
+                                          : 6.w,
+                                    ),
+                                    SizedBox(
+                                      height: correctHeight(
+                                          10.w,
+                                          controller.notificationList[i].category != ''
+                                              ? notificationCategory.fontSize
+                                              : 0.w,
+                                          notificationContent.fontSize),
+                                    ),
+                                    Container(
+                                      width: 40.w,
+                                      // height: double.infinity,
+                                      // color: Colors.blue,
+                                      child: Text(
+                                        notificationTimeHandler(
+                                            controller.notificationList[i].notificationTime.toDate()),
+                                        style: feedDateTime,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
                             Container(height: 1.w, width: 375.w - 28.w, color: yachtLine)
                           ],

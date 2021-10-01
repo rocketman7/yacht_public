@@ -9,6 +9,7 @@ import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/handlers/user_tier_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/profile/my_feed_view.dart';
 import 'package:yachtOne/screens/quest/result/quest_result_widget.dart';
 import 'package:yachtOne/screens/ranks/rank_controller.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
@@ -776,10 +777,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
             controller: pageController,
             children: [
               // MyFeedView(),
-              Container(
-                height: 200,
-                color: Colors.blue,
-              ),
+              MyFeedView(profileOthersViewModel.uid),
               Column(
                 children: [
                   Row(

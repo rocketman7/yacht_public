@@ -28,13 +28,13 @@ class RankController extends GetxController {
 
   @override
   void onInit() async {
-    ever(leagueRx, (_) async {
-      // 이 함수를 넣어준 이유는 혹시 leagueRx가 들어오기 전에 RankController가
-      // 실행되면 rank가 비어있을 것이므로. (혹은 리그가 변하는 시점도 마찬가지)
-      // 이 아래에 onInit 아래 부분을 복제
-      allRanker = await _firestoreService.getAllTopRanker(maxNumAllRanker);
-      myRanksAndPoint = await _firestoreService.getMyRanks();
-    });
+    // ever(leagueRx, (_) async {
+    //   // 이 함수를 넣어준 이유는 혹시 leagueRx가 들어오기 전에 RankController가
+    //   // 실행되면 rank가 비어있을 것이므로. (혹은 리그가 변하는 시점도 마찬가지)
+    //   // 이 아래에 onInit 아래 부분을 복제
+    //   allRanker = await _firestoreService.getAllTopRanker(maxNumAllRanker);
+    //   myRanksAndPoint = await _firestoreService.getMyRanks();
+    // });
 
     allRanker = await _firestoreService.getAllTopRanker(maxNumAllRanker);
     myRanksAndPoint = await _firestoreService.getMyRanks();

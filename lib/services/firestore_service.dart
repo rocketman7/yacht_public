@@ -294,16 +294,21 @@ class FirestoreService extends GetxService {
     List<SurveyQuestionModel> surveys = [];
     List<String> userAlltimeQuestDoneId = [];
 
-    await _firestoreService
-        .collection('users')
-        .doc(userModelRx.value!.uid)
-        .collection('userVote')
-        .doc('allTime')
-        .collection('quests')
-        .get()
-        .then((userAlltimeQuests) => userAlltimeQuests.docs.forEach((userAlltimeQuestDone) {
-              userAlltimeQuestDoneId.add(userAlltimeQuestDone.id);
-            }));
+    try {
+      await _firestoreService
+          .collection('users')
+          .doc(userModelRx.value!.uid)
+          .collection('userVote')
+          .doc('allTime')
+          .collection('quests')
+          .get()
+          .then((userAlltimeQuests) => userAlltimeQuests.docs.forEach((userAlltimeQuestDone) {
+                userAlltimeQuestDoneId.add(userAlltimeQuestDone.id);
+              }));
+    } catch (e) {
+      print(e);
+    }
+
     // alltime 리그에서는 마감기한이 없는 퀘스트나 서베이들
     await _firestoreService
         .collection('leagues')
@@ -681,6 +686,9 @@ class FirestoreService extends GetxService {
     // print(
     //   dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
     // );
+    // print('on price stream');
+    // print(investAddress.issueCode);
+    // print(dateTimeToString(questModel.liveStartDateTime.toDate(), 14));
     return _firestoreService
         .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
         .where(
@@ -880,14 +888,13 @@ class FirestoreService extends GetxService {
         .orderBy('writtenDateTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
+              print(element.data());
               userPosts.add(UserPostModel.fromMap(element.data()));
             }));
     return userPosts;
   }
 
   Stream<List<UserPostModel>> getMyFeedStream(String uid) {
-    print('stream starting');
-    print(leagueRx.value);
     return _firestoreService
         .collection('users')
         .doc(uid)

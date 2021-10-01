@@ -80,6 +80,23 @@ String feedTimeHandler(DateTime writtenDateTime) {
   }
 }
 
+// 알림 데이트타임
+String notificationTimeHandler(DateTime writtenDateTime) {
+  Duration _writtenDateTimeFromNow = DateTime.now().difference(writtenDateTime);
+
+  if (_writtenDateTimeFromNow < Duration(minutes: 1)) {
+    return "방금 전";
+  } else if (_writtenDateTimeFromNow < Duration(hours: 1)) {
+    return "${_writtenDateTimeFromNow.inMinutes}분 전";
+  } else if (_writtenDateTimeFromNow < Duration(hours: 24)) {
+    return "${_writtenDateTimeFromNow.inHours}시간 전";
+  } else if (_writtenDateTimeFromNow < Duration(days: 7)) {
+    return "${_writtenDateTimeFromNow.inDays}일 전";
+  } else {
+    return "${_writtenDateTimeFromNow.inDays ~/ 7}주 전";
+  }
+}
+
 // DB timeStamp형식을 xxxx년 0x월 0x일 형식으로 (상금 히스토리에서 쓰이는)
 String timeStampToString(Timestamp time) {
   return '${time.toDate().year}년 ${time.toDate().month}월 ${time.toDate().day}일';

@@ -26,6 +26,7 @@ class LiveQuestViewModel extends GetxController {
   /// 이를 바탕으로 라이브 위젯에서 각 가격 데이터들을 가져와서 차트로 뿌릴 수 있음
 
   List<List<Rx<LiveQuestPriceModel>>> livePrices = <List<Rx<LiveQuestPriceModel>>>[];
+
   List<List<InvestAddressModel>> investAddresses = [];
   RxList<int> eachQuestLiveDays = <int>[].obs;
   final FirestoreService _firestoreService = locator<FirestoreService>();
@@ -84,7 +85,9 @@ class LiveQuestViewModel extends GetxController {
     // livePrices = List.generate(investAddresses.length, (index) {
     //   return Rx<LiveQuestPriceModel>(initial(investAddresses[index]));
     // });
-    print(livePrices);
+    // print(livePrices);
+    // print(liveQuests);
+    // print(liveQuests[0].investAddresses![0].name);
     for (int i = 0; i < liveQuests.length; i++) {
       for (int j = 0; j < liveQuests[i].investAddresses!.length; j++) {
         livePrices[i][j].bindStream(_firestoreService.getStreamLiveQuestPrice(
@@ -92,7 +95,10 @@ class LiveQuestViewModel extends GetxController {
           liveQuests[i],
         ));
         livePrices[i][j].refresh();
+
+        // print(livePrices[i][j]);
       }
+
       print(numberOfBusinessDay(liveQuests[i].liveStartDateTime.toDate(), liveQuests[i].liveEndDateTime.toDate()));
     }
   }

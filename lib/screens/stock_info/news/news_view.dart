@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/screens/stock_info/news/news_view_model.dart';

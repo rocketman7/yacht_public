@@ -17,6 +17,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/community_widgets.dart';
 import 'package:yachtOne/screens/community/feed_widget.dart';
+import 'package:yachtOne/screens/profile/profile_my_view.dart';
+import 'package:yachtOne/screens/profile/profile_others_view.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
@@ -72,28 +74,36 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // 아바타 이미지 임시
-                              Container(
-                                  width: 36.w,
-                                  height: 36.w,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: FutureBuilder<String>(
-                                      future: detailPostViewModel
-                                          .getImageUrlFromStorage('avatars/${post.writerAvatarUrl}.png'),
-                                      builder: (context, snapshot) {
-                                        return snapshot.hasData
-                                            ? CachedNetworkImage(
-                                                imageUrl: snapshot.data!,
-                                              )
-                                            : Container();
-                                      })
+                              GestureDetector(
+                                onTap: () {
+                                  if (post.writerUid != userModelRx.value!.uid)
+                                    Get.to(() => ProfileOthersView(uid: post.writerUid));
+                                  else
+                                    Get.to(() => ProfileMyView());
+                                },
+                                child: Container(
+                                    width: 36.w,
+                                    height: 36.w,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: FutureBuilder<String>(
+                                        future: detailPostViewModel
+                                            .getImageUrlFromStorage('avatars/${post.writerAvatarUrl}.png'),
+                                        builder: (context, snapshot) {
+                                          return snapshot.hasData
+                                              ? CachedNetworkImage(
+                                                  imageUrl: snapshot.data!,
+                                                )
+                                              : Container();
+                                        })
 
-                                  // child: CachedNetworkImage(
-                                  //   imageUrl:
-                                  //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
-                                  // )
-                                  ),
+                                    // child: CachedNetworkImage(
+                                    //   imageUrl:
+                                    //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+                                    // )
+                                    ),
+                              ),
                               SizedBox(
                                 width: 6.w,
                               ),

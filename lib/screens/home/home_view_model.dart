@@ -42,7 +42,7 @@ class HomeViewModel extends GetxController {
   Rxn<UserModel> userModel = Rxn<UserModel>();
 
   late String globalString;
-  bool isLoading = true;
+  RxBool isLoading = true.obs;
   RxBool isQuestDataLoading = true.obs;
   RxBool checkIfFirstTime = false.obs;
 
@@ -60,11 +60,9 @@ class HomeViewModel extends GetxController {
   @override
   void onInit() async {
     // TODO: implement onInit
-
+    isLoading(true);
     await getAllQuests();
     await getDictionaries();
-
-    isLoading = false;
 
     _createRewardedAd();
     if (userModelRx.value != null) {
@@ -74,6 +72,8 @@ class HomeViewModel extends GetxController {
       noNeedShowUserNameDialog.refresh();
       print(noNeedShowUserNameDialog.value);
     }
+
+    isLoading(false);
 
     super.onInit();
   }
@@ -338,23 +338,28 @@ class HomeViewModel extends GetxController {
     DateTime now = DateTime.now();
     allQuests.forEach((element) {
       if (element.selectMode == 'survey') {
+        // print('surv');
         newQuests.add(element);
       } else if (element.showHomeDateTime.toDate().isBefore(now) && element.liveStartDateTime.toDate().isAfter(now)) {
         // showHome ~ liveStart: 새로나온 퀘스트
+        // print('newq');
         newQuests.add(element);
       } else if (element.liveStartDateTime.toDate().isBefore(now) && element.liveEndDateTime.toDate().isAfter(now)) {
         // liveStart ~ liveEnd: 퀘스트 생중계
-
+        // print('liveq');
         liveQuests.add(element);
       } else if (element.resultDateTime.toDate().isBefore(now) && element.closeHomeDateTime.toDate().isAfter(now)) {
         // result ~ closeHome: 퀘스트 결과보기
-        print('result: ${element.results}');
-        print('result: ${element}');
+        // print('result: ${element.results}');
+        // print('result: ${element}');
         resultQuests.add(element);
       } else {
-        print("포함 안 된 quest: $element");
+        // print("포함 안 된 quest: $element");
       }
     });
+    update();
+    // print('home view live');
+    // print(liveQuests);
   }
 
   // 유저 광고모델보기 버튼 누르면?

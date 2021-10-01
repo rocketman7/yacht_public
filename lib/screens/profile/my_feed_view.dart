@@ -10,45 +10,48 @@ import 'package:yachtOne/screens/profile/my_feed_view_model.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 class MyFeedView extends GetView<MyFeedViewModel> {
-  const MyFeedView({Key? key}) : super(key: key);
-  @override
+  final String uid;
+  const MyFeedView(this.uid, {Key? key}) : super(key: key);
+
   // TODO: implement controller
-  MyFeedViewModel get controller => Get.put(MyFeedViewModel());
   @override
   Widget build(BuildContext context) {
+    MyFeedViewModel myFeedViewModel = Get.put(MyFeedViewModel(uid), tag: uid);
     return Column(
       children: [
-        SizedBox(height: 24.w),
-        Padding(
-          padding: primaryHorizontalPadding,
-          child: Row(
-            children: [
-              Text(
-                '피드 내역',
-                style: profileHeaderTextStyle,
-              ),
-              Spacer(),
-              Image.asset(
-                'assets/icons/navigate_foward_arrow.png',
-                height: 16.w,
-                width: 9.w,
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 8.w),
+        SizedBox(height: 14.w),
+        // Padding(
+        //   padding: primaryHorizontalPadding,
+        //   child: Row(
+        //     children: [
+        //       Text(
+        //         '피드 내역',
+        //         style: profileHeaderTextStyle,
+        //       ),
+        //       Spacer(),
+        //       Image.asset(
+        //         'assets/icons/navigate_foward_arrow.png',
+        //         height: 16.w,
+        //         width: 9.w,
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // SizedBox(
+        //   height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
+        // ),
         Obx(
-          () => controller.userPosts.length > 0
+          () => myFeedViewModel.userPosts.length > 0
               ? Container(
                   // height: 140.w,
 
                   child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: min(controller.userPosts.length, 3),
+                  itemCount: min(myFeedViewModel.userPosts.length, 3),
                   itemBuilder: (_, index) {
                     return FutureBuilder<PostModel>(
-                        future: controller.getPost(controller.userPosts[index].postId),
+                        future: myFeedViewModel.getPost(myFeedViewModel.userPosts[index].postId),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Container();
