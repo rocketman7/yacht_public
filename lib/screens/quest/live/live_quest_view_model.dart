@@ -97,23 +97,23 @@ class LiveQuestViewModel extends GetxController {
         livePrices[i][j].refresh();
 
         // print(livePrices[i][j]);
+
+        print(numberOfBusinessDay(liveQuests[i].liveStartDateTime.toDate(), liveQuests[i].liveEndDateTime.toDate()));
       }
-
-      print(numberOfBusinessDay(liveQuests[i].liveStartDateTime.toDate(), liveQuests[i].liveEndDateTime.toDate()));
     }
+
+    // 1. 한 카드에 보여줄 InvestAddress List 필요 (n개 가정) Map 이용
+    // 2. 각 종목의 realtime price Stream으로 받아와야 함
+    // 3. 해당 리스트트들을 normalise 해서 새롭게 노말라이즈 된 리스트 n개 만들어야 함 (RxList)
+    // 4. View에서 그 리스트들을 dataSource로 각각 색으로 그리기
+
+    // live quest에 넣을 length: n
+    // 각 위젯에 List<LiveQuestPriceModel>를 Rx로 만든다
+    //
+    // [{issueCode: '005930', chartPrices: List<PRICES>},
+    // {issueCode: '000030', chartPrices: List<PRICES>},
+    // {issueCode: '005310', chartPrices: List<PRICES>},]
+
+    // {'005930' : List<PRICES>, '001230' : List<PRICES>, }
   }
-
-  // 1. 한 카드에 보여줄 InvestAddress List 필요 (n개 가정) Map 이용
-  // 2. 각 종목의 realtime price Stream으로 받아와야 함
-  // 3. 해당 리스트트들을 normalise 해서 새롭게 노말라이즈 된 리스트 n개 만들어야 함 (RxList)
-  // 4. View에서 그 리스트들을 dataSource로 각각 색으로 그리기
-
-  // live quest에 넣을 length: n
-  // 각 위젯에 List<LiveQuestPriceModel>를 Rx로 만든다
-  //
-  // [{issueCode: '005930', chartPrices: List<PRICES>},
-  // {issueCode: '000030', chartPrices: List<PRICES>},
-  // {issueCode: '005310', chartPrices: List<PRICES>},]
-
-  // {'005930' : List<PRICES>, '001230' : List<PRICES>, }
 }

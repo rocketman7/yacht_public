@@ -55,13 +55,14 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
                                           String imageUrl = snapshot.data!;
-                                          return Image.network(
-                                            imageUrl,
+                                          return CachedNetworkImage(
+                                            imageUrl: imageUrl,
                                             width: 270.w,
                                             height: 240.w,
-                                            loadingBuilder: (_, Widget child, ImageChunkEvent? progress) {
-                                              // print('progress: $progress');
-                                              if (progress == null) return child;
+                                            filterQuality: FilterQuality.high,
+                                            progressIndicatorBuilder: (_, __, DownloadProgress progress) {
+                                              // progress.totalSize
+                                              // if (progress == null) return child;
                                               return LoadingContainer(
                                                 width: 270.w,
                                                 height: 240.w,

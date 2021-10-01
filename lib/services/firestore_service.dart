@@ -620,64 +620,64 @@ class FirestoreService extends GetxService {
   // }
 
   // 라이브 스트림 가격차트
-  Stream<List<LiveQuestPriceModel>> getLiveQuestPrices(List<InvestAddressModel> investAddressModels) {
-    Stream<List<LiveQuestPriceModel>> realtimePrices;
+  // Stream<List<LiveQuestPriceModel>> getLiveQuestPrices(List<InvestAddressModel> investAddressModels) {
+  //   Stream<List<LiveQuestPriceModel>> realtimePrices;
 
-    final snapshot = _firestoreService
-        .collection('stocksKR/005930/historicalPrices')
-        .where('dateTime', isGreaterThan: '20210901080000')
-        .snapshots();
+  //   final snapshot = _firestoreService
+  //       .collection('stocksKR/005930/historicalPrices')
+  //       .where('dateTime', isGreaterThan: '20210901080000')
+  //       .snapshots();
 
-    var temp = investAddressModels.map((investAddress) {
-      final snapshot = _firestoreService
-          .collection('stocksKR/${investAddress.issueCode}/historicalPrices')
-          .where('dateTime', isGreaterThan: '20210901080000')
-          .snapshots();
-      return snapshot.map((event) => event.docs.map((e) => e.data()).toList());
-    });
+  //   var temp = investAddressModels.map((investAddress) {
+  //     final snapshot = _firestoreService
+  //         .collection('stocksKR/${investAddress.issueCode}/historicalPrices')
+  //         .where('dateTime', isGreaterThan: '20210901080000')
+  //         .snapshots();
+  //     return snapshot.map((event) => event.docs.map((e) => e.data()).toList());
+  //   });
 
-    return snapshot.map((element) {
-      //element는 다큐모음
-      return element.docs.map((e) {
-        // e는 하나의 다큐
-        return LiveQuestPriceModel.fromMap(
-            '005930', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
-      }).toList();
-    });
+  //   return snapshot.map((element) {
+  //     //element는 다큐모음
+  //     return element.docs.map((e) {
+  //       // e는 하나의 다큐
+  //       return LiveQuestPriceModel.fromMap(
+  //           '005930', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
+  //     }).toList();
+  //   });
 
-    // investAddressModels.forEach((element) {
-    //   return _firestoreService
-    //       // .collection('stocks${element.country}/${element.issueCode}/realtimePrices')
-    //       // .where('date', isEqualTo: '20210827')
-    //       .collection('stocksKR/005930/historicalPrices')
-    //       .where('dateTime', isGreaterThan: '20210901080000')
-    //       .snapshots()
-    //       .forEach((snapshot) {
-    //     // print(snapshot.size);
-    //     {
-    //       // var tempList = snapshot.docs.map((e) {
-    //       //   // print('stream snapshot: ${e.data()}');
-    //       //   return ChartPriceModel.fromMap(e.data());
-    //       // }).toList();
-    //       // print('tempLIst: $tempList');
+  //   // investAddressModels.forEach((element) {
+  //   //   return _firestoreService
+  //   //       // .collection('stocks${element.country}/${element.issueCode}/realtimePrices')
+  //   //       // .where('date', isEqualTo: '20210827')
+  //   //       .collection('stocksKR/005930/historicalPrices')
+  //   //       .where('dateTime', isGreaterThan: '20210901080000')
+  //   //       .snapshots()
+  //   //       .forEach((snapshot) {
+  //   //     // print(snapshot.size);
+  //   //     {
+  //   //       // var tempList = snapshot.docs.map((e) {
+  //   //       //   // print('stream snapshot: ${e.data()}');
+  //   //       //   return ChartPriceModel.fromMap(e.data());
+  //   //       // }).toList();
+  //   //       // print('tempLIst: $tempList');
 
-    //       // var tempLivePrice = LiveQuestPriceModel.fromMap('${element.issueCode}', tempList);
-    //       // // print('tempLive' + tempLivePrice.toString());
-    //       // realtimePrices.add(tempLivePrice);
+  //   //       // var tempLivePrice = LiveQuestPriceModel.fromMap('${element.issueCode}', tempList);
+  //   //       // // print('tempLive' + tempLivePrice.toString());
+  //   //       // realtimePrices.add(tempLivePrice);
 
-    //       return LiveQuestPriceModel.fromMap(
-    //           '${element.issueCode}',
-    //           snapshot.docs.map((e) {
-    //             print('stream snapshot: $e');
-    //             return ChartPriceModel.fromMap(e.data());
-    //           }).toList());
-    //       // print('real' + realtimePrices.toString());
-    //     }
-    //   });
-    // }).toList();
+  //   //       return LiveQuestPriceModel.fromMap(
+  //   //           '${element.issueCode}',
+  //   //           snapshot.docs.map((e) {
+  //   //             print('stream snapshot: $e');
+  //   //             return ChartPriceModel.fromMap(e.data());
+  //   //           }).toList());
+  //   //       // print('real' + realtimePrices.toString());
+  //   //     }
+  //   //   });
+  //   // }).toList();
 
-    // print('real' + realtimePrices.toString());
-  }
+  //   // print('real' + realtimePrices.toString());
+  // }
 
   Stream<LiveQuestPriceModel> getStreamLiveQuestPrice(
     InvestAddressModel investAddress,
@@ -689,11 +689,15 @@ class FirestoreService extends GetxService {
     // print('on price stream');
     // print(investAddress.issueCode);
     // print(dateTimeToString(questModel.liveStartDateTime.toDate(), 14));
+    print(
+      dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
+    );
     return _firestoreService
         .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
         .where(
           'dateTime',
           isGreaterThan: dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
+          // isGreaterThan: '20211001091813', //2021/10/01/81/00/00, 2021/10/01/091813
         )
         .snapshots()
         .map((element) {

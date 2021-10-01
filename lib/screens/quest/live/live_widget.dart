@@ -38,6 +38,7 @@ class LiveWidget extends StatelessWidget {
     for (int i = 0; i < prices.length; i++) {
       if (i % 40 == 0) temp.add(prices[i]);
     }
+
     return temp;
   }
 
