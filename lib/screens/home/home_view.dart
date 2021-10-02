@@ -729,7 +729,9 @@ class NewQuests extends StatelessWidget {
                                     onTap: () {
                                       homeViewModel.newQuests[index].selectMode == 'survey'
                                           ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
-                                          : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
+                                          : homeViewModel.newQuests[index].selectMode == 'tutorial'
+                                              ? Get.toNamed('/tutorial', arguments: homeViewModel.newQuests[index])
+                                              : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
                                     },
                                     child: QuestWidget(questModel: homeViewModel.newQuests[index]),
                                   ),

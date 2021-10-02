@@ -19,7 +19,7 @@ class SurveyView extends GetView<SurveyViewModel> {
 
   @override
   // TODO: implement controller
-  SurveyViewModel get controller => Get.put((SurveyViewModel(surveyQuestionPageModel: questModel.surveys!)));
+  SurveyViewModel get controller => Get.put(SurveyViewModel(surveyQuestionPageModel: questModel.surveys!));
 
   @override
   // TODO: implement controller
