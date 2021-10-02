@@ -20,7 +20,7 @@ class _EmailLoginViewState extends State<EmailLoginView> {
 
   final TextEditingController _passwordController = TextEditingController(text: "");
 
-  final EmailAuthController controller = Get.put((EmailAuthController()));
+  final EmailAuthController controller = Get.put(EmailAuthController());
 
   bool _obscureText = true;
   bool _loginButtonDisabled = true;

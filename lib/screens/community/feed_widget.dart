@@ -374,6 +374,7 @@ class FeedWidget extends StatelessWidget {
                                                       Text("알림",
                                                           style: dialogTitle),
                                                       SizedBox(
+<<<<<<< HEAD
                                                           height: correctHeight(
                                                               14.w,
                                                               0.0,
@@ -387,6 +388,10 @@ class FeedWidget extends StatelessWidget {
                                                                   .fontSize)),
                                                       Text("유저를 신고하시겠습니까?",
                                                           style: dialogContent),
+=======
+                                                          height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                      Text("이 글을 신고하시겠습니까?", style: dialogContent),
+>>>>>>> eb596c7544b49439a2da4b17aefe9fa9c0f4c7af
                                                       Text(
                                                         "신고한 유저는 자동으로 차단됩니다.",
                                                         style: dialogWarning

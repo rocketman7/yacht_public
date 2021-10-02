@@ -51,7 +51,7 @@ class DetailPostViewModel extends GetxController {
       newComment = convertCommentToCommmentModel(post.postId!, content, false);
     }
 
-    print(newComment);
+    // print(newComment);
     _firestoreService.uploadNewComment(newComment);
   }
 
@@ -71,6 +71,7 @@ class DetailPostViewModel extends GetxController {
       replyToCommentId: replyToCommentId,
       writerUid: userModelRx.value!.uid,
       writerUserName: userModelRx.value!.userName,
+      writerAvatarUrl: userModelRx.value!.avatarImage,
     );
   }
 

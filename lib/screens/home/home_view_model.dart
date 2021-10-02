@@ -337,7 +337,9 @@ class HomeViewModel extends GetxController {
     // 분리작업
     DateTime now = DateTime.now();
     allQuests.forEach((element) {
-      if (element.selectMode == 'survey') {
+      if (element.selectMode == 'tutorial') {
+        newQuests.add(element);
+      } else if (element.selectMode == 'survey') {
         // print('surv');
         newQuests.add(element);
       } else if (element.showHomeDateTime.toDate().isBefore(now) && element.liveStartDateTime.toDate().isAfter(now)) {

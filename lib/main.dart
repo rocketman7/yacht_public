@@ -19,6 +19,7 @@ import 'package:yachtOne/screens/home/home_view.dart';
 import 'package:yachtOne/screens/onboarding/onboarding_view.dart';
 import 'package:yachtOne/screens/quest/quest_view.dart';
 import 'package:yachtOne/screens/quest/survey_view.dart';
+import 'package:yachtOne/screens/quest/tutorial_view.dart';
 import 'package:yachtOne/screens/startup/loading_view.dart';
 import 'package:yachtOne/screens/startup/startup_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
@@ -146,6 +147,11 @@ class _MyAppState extends State<MyApp> {
           GetPage(
             name: '/survey',
             page: () => SurveyView(),
+            // transition: Transition.zoom
+          ),
+          GetPage(
+            name: '/tutorial',
+            page: () => TutorialView(),
             // transition: Transition.zoom
           ),
           GetPage(

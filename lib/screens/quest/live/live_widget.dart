@@ -457,7 +457,7 @@ class LiveCardHeader extends StatelessWidget {
           children: [
             Text(
               // '${questModel.category} 퀘스트',
-              '일간 퀘스트',
+              questModel.category,
               style: subheadingStyle,
             ),
             SizedBox(height: 6.w),

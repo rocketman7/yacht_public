@@ -74,8 +74,8 @@ class HomeView extends StatelessWidget {
     // });
 
     List<Widget> homeWidgets = [
-      // DialogReadyWidget(homeViewModel: homeViewModel),
-      // MyAssets(),
+      DialogReadyWidget(homeViewModel: homeViewModel),
+      MyAssets(),
       // sign out 임시
       Container(
           // color: Colors.blue,
@@ -729,7 +729,9 @@ class NewQuests extends StatelessWidget {
                                     onTap: () {
                                       homeViewModel.newQuests[index].selectMode == 'survey'
                                           ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
-                                          : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
+                                          : homeViewModel.newQuests[index].selectMode == 'tutorial'
+                                              ? Get.toNamed('/tutorial', arguments: homeViewModel.newQuests[index])
+                                              : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
                                     },
                                     child: QuestWidget(questModel: homeViewModel.newQuests[index]),
                                   ),
