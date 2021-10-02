@@ -507,9 +507,9 @@ class AwardDetailView extends StatelessWidget {
                         leagueIndex: _awardViewModel.pageIndexForUI.value,
                         isFullView: false,
                       )),
-                  SizedBox(
-                    height: 14.w,
-                  ),
+                  // SizedBox(
+                  //   height: 14.w,
+                  // ),
                 ],
               ),
             ),

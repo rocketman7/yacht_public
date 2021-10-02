@@ -3,7 +3,8 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorState;
+import 'package:flutter/material.dart'
+    hide RefreshIndicator, RefreshIndicatorState;
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,12 +49,14 @@ class HomeView extends StatelessWidget {
   RxDouble offset = 0.0.obs;
 
   final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
-  final TextEditingController userNameController = TextEditingController(text: "");
+  final TextEditingController userNameController =
+      TextEditingController(text: "");
   final RxBool isCheckingUserNameDuplicated = false.obs;
   final RxBool showSmallSnackBar = false.obs;
   final RxString smallSnackBarText = "".obs;
 
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
   void _onRefresh() async {
     // monitor network fetch
     // await Future.delayed(Duration(milliseconds: 1200));
@@ -92,7 +95,8 @@ class HomeView extends StatelessWidget {
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       RankHomeWidget(),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      ReadingContentView(homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
+      ReadingContentView(
+          homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       TodayMarketView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
@@ -109,14 +113,17 @@ class HomeView extends StatelessWidget {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
     _scrollController.addListener(() {
       // offset obs 값에 scroll controller offset 넣어주기
-      _scrollController.offset < 0 ? offset(0) : offset(_scrollController.offset);
+      _scrollController.offset < 0
+          ? offset(0)
+          : offset(_scrollController.offset);
       // print(_scrollController.offset);
     });
 
     // print(
     //     'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
-    if (userQuestModelRx.length != 0) print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
+    if (userQuestModelRx.length != 0)
+      print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
     RxString footer = "start".obs;
     return Scaffold(
       body: RefreshConfiguration(
@@ -153,8 +160,10 @@ class HomeView extends StatelessWidget {
                     floating: false,
                     pinned: true,
                     // 홈 뷰 앱바 구현
-                    delegate:
-                        _GlassmorphismAppBarDelegate(MediaQuery.of(context).padding, offset.value, homeViewModel)),
+                    delegate: _GlassmorphismAppBarDelegate(
+                        MediaQuery.of(context).padding,
+                        offset.value,
+                        homeViewModel)),
               ),
               Obx(() => homeViewModel.isLoading.value
                       ? SliverToBoxAdapter()
@@ -222,15 +231,21 @@ class HomeView extends StatelessWidget {
                         decoration: InputDecoration(
                           isDense: true,
                           contentPadding: EdgeInsets.all(0.w),
-                          focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                          enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                          focusedBorder:
+                              OutlineInputBorder(borderSide: BorderSide.none),
+                          enabledBorder:
+                              OutlineInputBorder(borderSide: BorderSide.none),
                           hintText: '${userModelRx.value!.userName}',
-                          hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                          hintStyle: profileChangeContentTextStyle.copyWith(
+                              color: yachtGrey),
                         ),
                         validator: (value) {
                           if (value != '') {
-                            final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
-                            if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
+                            final nickValidator =
+                                RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
+                            if (value!.length > 8 ||
+                                !nickValidator.hasMatch(value) ||
+                                value.contains(' ')) {
                               return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
                             } else {
                               return null;
@@ -258,7 +273,8 @@ class HomeView extends StatelessWidget {
                             if (userNameController.text == '') {
                               showSmallSnackBar(true);
                               smallSnackBarText("닉네임을 입력해주세요");
-                              Future.delayed(Duration(seconds: 1)).then((value) {
+                              Future.delayed(Duration(seconds: 1))
+                                  .then((value) {
                                 showSmallSnackBar(false);
                                 smallSnackBarText("");
                               });
@@ -273,7 +289,8 @@ class HomeView extends StatelessWidget {
                               //   barBlur: 8,
                               //   duration: const Duration(seconds: 1, milliseconds: 100),
                               // );
-                            } else if (userNameFormKey.currentState!.validate() &&
+                            } else if (userNameFormKey.currentState!
+                                    .validate() &&
                                 isCheckingUserNameDuplicated.value == false) {
                               if (userNameController.text != '') {
                                 print(userNameController.text);
@@ -281,13 +298,16 @@ class HomeView extends StatelessWidget {
                                 bool isUserNameDuplicatedVar = true;
 
                                 isUserNameDuplicatedVar =
-                                    await homeViewModel.isUserNameDuplicated(userNameController.text);
+                                    await homeViewModel.isUserNameDuplicated(
+                                        userNameController.text);
                                 print(isUserNameDuplicatedVar);
                                 if (!isUserNameDuplicatedVar) {
-                                  await homeViewModel.updateUserName(userNameController.text);
+                                  await homeViewModel
+                                      .updateUserName(userNameController.text);
                                   showSmallSnackBar(true);
                                   smallSnackBarText("닉네임이 저장되었어요");
-                                  Future.delayed(Duration(seconds: 1)).then((value) {
+                                  Future.delayed(Duration(seconds: 1))
+                                      .then((value) {
                                     showSmallSnackBar(false);
                                     smallSnackBarText("");
                                     Navigator.of(context).pop();
@@ -307,7 +327,8 @@ class HomeView extends StatelessWidget {
                                 } else {
                                   showSmallSnackBar(true);
                                   smallSnackBarText("중복된 닉네임이 있어요");
-                                  Future.delayed(Duration(seconds: 1)).then((value) {
+                                  Future.delayed(Duration(seconds: 1))
+                                      .then((value) {
                                     showSmallSnackBar(false);
                                     smallSnackBarText("");
                                   });
@@ -323,15 +344,22 @@ class HomeView extends StatelessWidget {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(70.0),
-                                    color:
-                                        isCheckingUserNameDuplicated.value == false ? yachtViolet : primaryButtonText),
+                                    color: isCheckingUserNameDuplicated.value ==
+                                            false
+                                        ? yachtViolet
+                                        : primaryButtonText),
                                 child: Center(
                                   child: Text(
-                                    isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
-                                    style: profileChangeButtonTextStyle.copyWith(
-                                        color: isCheckingUserNameDuplicated.value == false
-                                            ? primaryButtonText
-                                            : primaryButtonBackground),
+                                    isCheckingUserNameDuplicated.value == false
+                                        ? '저장하기'
+                                        : '닉네임 중복 검사 중',
+                                    style:
+                                        profileChangeButtonTextStyle.copyWith(
+                                            color: isCheckingUserNameDuplicated
+                                                        .value ==
+                                                    false
+                                                ? primaryButtonText
+                                                : primaryButtonBackground),
                                   ),
                                 ),
                               )),
@@ -378,14 +406,16 @@ class HomeView extends StatelessWidget {
 class DialogReadyWidget extends StatefulWidget {
   final HomeViewModel homeViewModel;
 
-  const DialogReadyWidget({Key? key, required this.homeViewModel}) : super(key: key);
+  const DialogReadyWidget({Key? key, required this.homeViewModel})
+      : super(key: key);
   @override
   State<DialogReadyWidget> createState() => _DialogReadyWidgetState();
 }
 
 class _DialogReadyWidgetState extends State<DialogReadyWidget> {
   final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
-  final TextEditingController userNameController = TextEditingController(text: "");
+  final TextEditingController userNameController =
+      TextEditingController(text: "");
   final RxBool isCheckingUserNameDuplicated = false.obs;
   final RxBool noNeedShowUserNameDialog = true.obs;
   final RxBool showSmallSnackBar = false.obs;
@@ -399,7 +429,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
   showChangeNameDialog(BuildContext context) async {
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      if (userModelRx.value!.isNameUpdated == null || !userModelRx.value!.isNameUpdated!) {
+      if (userModelRx.value!.isNameUpdated == null ||
+          !userModelRx.value!.isNameUpdated!) {
         await showDialog(
           context: context,
           builder: (context) => Dialog(
@@ -430,7 +461,10 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                             Container(
                               child: Text("어떤 호칭으로 불러드릴까요?",
                                   style: TextStyle(
-                                      fontSize: 18.w, letterSpacing: -1.0, height: 1.4, fontWeight: FontWeight.w600)),
+                                      fontSize: 18.w,
+                                      letterSpacing: -1.0,
+                                      height: 1.4,
+                                      fontWeight: FontWeight.w600)),
                             ),
                             SizedBox(height: 14.w),
                             Container(
@@ -446,7 +480,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                     )
                                   ]),
                               child: Padding(
-                                padding: EdgeInsets.only(left: 12.w, top: 14.w, bottom: 11.w),
+                                padding: EdgeInsets.only(
+                                    left: 12.w, top: 14.w, bottom: 11.w),
                                 child: TextFormField(
                                   controller: userNameController,
                                   textAlignVertical: TextAlignVertical.bottom,
@@ -454,15 +489,21 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                   decoration: InputDecoration(
                                     isDense: true,
                                     contentPadding: EdgeInsets.all(0.w),
-                                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
                                     hintText: '${userModelRx.value!.userName}',
-                                    hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                                    hintStyle: profileChangeContentTextStyle
+                                        .copyWith(color: yachtGrey),
                                   ),
                                   validator: (value) {
                                     if (value != '') {
-                                      final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
-                                      if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
+                                      final nickValidator =
+                                          RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
+                                      if (value!.length > 8 ||
+                                          !nickValidator.hasMatch(value) ||
+                                          value.contains(' ')) {
                                         return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
                                       } else {
                                         return null;
@@ -470,7 +511,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                     }
                                   },
                                   onChanged: (value) {
-                                    if (userNameFormKey.currentState!.validate()) {
+                                    if (userNameFormKey.currentState!
+                                        .validate()) {
                                       print('good');
                                     } else {
                                       print('bad');
@@ -492,7 +534,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                   if (userNameController.text == '') {
                                     showSmallSnackBar(true);
                                     smallSnackBarText("닉네임을 입력해주세요");
-                                    Future.delayed(Duration(seconds: 1)).then((value) {
+                                    Future.delayed(Duration(seconds: 1))
+                                        .then((value) {
                                       showSmallSnackBar(false);
                                       smallSnackBarText("");
                                     });
@@ -507,21 +550,28 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                     //   barBlur: 8,
                                     //   duration: const Duration(seconds: 1, milliseconds: 100),
                                     // );
-                                  } else if (userNameFormKey.currentState!.validate() &&
-                                      isCheckingUserNameDuplicated.value == false) {
+                                  } else if (userNameFormKey.currentState!
+                                          .validate() &&
+                                      isCheckingUserNameDuplicated.value ==
+                                          false) {
                                     if (userNameController.text != '') {
                                       print(userNameController.text);
                                       isCheckingUserNameDuplicated(true);
                                       bool isUserNameDuplicatedVar = true;
 
-                                      isUserNameDuplicatedVar =
-                                          await widget.homeViewModel.isUserNameDuplicated(userNameController.text);
+                                      isUserNameDuplicatedVar = await widget
+                                          .homeViewModel
+                                          .isUserNameDuplicated(
+                                              userNameController.text);
                                       print(isUserNameDuplicatedVar);
                                       if (!isUserNameDuplicatedVar) {
-                                        await widget.homeViewModel.updateUserName(userNameController.text);
+                                        await widget.homeViewModel
+                                            .updateUserName(
+                                                userNameController.text);
                                         showSmallSnackBar(true);
                                         smallSnackBarText("닉네임이 저장되었어요");
-                                        Future.delayed(Duration(seconds: 1)).then((value) {
+                                        Future.delayed(Duration(seconds: 1))
+                                            .then((value) {
                                           showSmallSnackBar(false);
                                           smallSnackBarText("");
                                           Navigator.of(context).pop();
@@ -541,7 +591,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                       } else {
                                         showSmallSnackBar(true);
                                         smallSnackBarText("중복된 닉네임이 있어요");
-                                        Future.delayed(Duration(seconds: 1)).then((value) {
+                                        Future.delayed(Duration(seconds: 1))
+                                            .then((value) {
                                           showSmallSnackBar(false);
                                           smallSnackBarText("");
                                         });
@@ -556,17 +607,26 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                       height: 50.w,
                                       width: double.infinity,
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(70.0),
-                                          color: isCheckingUserNameDuplicated.value == false
+                                          borderRadius:
+                                              BorderRadius.circular(70.0),
+                                          color: isCheckingUserNameDuplicated
+                                                      .value ==
+                                                  false
                                               ? yachtViolet
                                               : primaryButtonText),
                                       child: Center(
                                         child: Text(
-                                          isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
-                                          style: profileChangeButtonTextStyle.copyWith(
-                                              color: isCheckingUserNameDuplicated.value == false
-                                                  ? primaryButtonText
-                                                  : primaryButtonBackground),
+                                          isCheckingUserNameDuplicated.value ==
+                                                  false
+                                              ? '저장하기'
+                                              : '닉네임 중복 검사 중',
+                                          style: profileChangeButtonTextStyle
+                                              .copyWith(
+                                                  color: isCheckingUserNameDuplicated
+                                                              .value ==
+                                                          false
+                                                      ? primaryButtonText
+                                                      : primaryButtonBackground),
                                         ),
                                       ),
                                     )),
@@ -593,7 +653,9 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                           style: TextStyle(
                                               fontSize: 16.w,
                                               fontWeight: FontWeight.w600,
-                                              color: showSmallSnackBar.value ? yachtBlack : Colors.transparent),
+                                              color: showSmallSnackBar.value
+                                                  ? yachtBlack
+                                                  : Colors.transparent),
                                         ),
                                       )
                                     : Container(),
@@ -640,7 +702,8 @@ class NewQuests extends StatelessWidget {
             children: [
               Container(
                   // color: Colors.blue,
-                  child: Text("새로 나온 퀘스트", style: sectionTitle.copyWith(height: 1.0))),
+                  child: Text("새로 나온 퀘스트",
+                      style: sectionTitle.copyWith(height: 1.0))),
               Spacer(),
               GestureDetector(
                 onTap: () {
@@ -655,8 +718,10 @@ class NewQuests extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
-                      decoration: jogabiButtonBoxDecoration.copyWith(boxShadow: [primaryBoxShadow]),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
+                      decoration: jogabiButtonBoxDecoration
+                          .copyWith(boxShadow: [primaryBoxShadow]),
                       child: Row(
                         children: [
                           SvgPicture.asset(
@@ -670,8 +735,12 @@ class NewQuests extends StatelessWidget {
                           Obx(() {
                             // print("item changed");
                             return Text(
-                              userModelRx.value == null ? 0.toString() : userModelRx.value!.item.toString(),
-                              style: questTermTextStyle.copyWith(color: Color(0xFF4D6A87), fontWeight: FontWeight.w600),
+                              userModelRx.value == null
+                                  ? 0.toString()
+                                  : userModelRx.value!.item.toString(),
+                              style: questTermTextStyle.copyWith(
+                                  color: Color(0xFF4D6A87),
+                                  fontWeight: FontWeight.w600),
                             );
                           })
                         ],
@@ -682,7 +751,8 @@ class NewQuests extends StatelessWidget {
                       top: -10.w,
                       child: Container(
                         padding: EdgeInsets.all(3.5.w),
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.red),
                         height: 20.w,
                         width: 20.w,
                         child: SvgPicture.asset(
@@ -705,7 +775,8 @@ class NewQuests extends StatelessWidget {
         ),
         // btwHomeModuleTitleSlider,
         Obx(() {
-          return (homeViewModel.newQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
+          return (homeViewModel.newQuests.length ==
+                  0) // 로딩 중과 length 0인 걸 구분해야 함
               ? Container(
                   width: 232.w,
                   height: 344.w,
@@ -727,13 +798,25 @@ class NewQuests extends StatelessWidget {
                                       : Container(),
                                   InkWell(
                                     onTap: () {
-                                      homeViewModel.newQuests[index].selectMode == 'survey'
-                                          ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
-                                          : homeViewModel.newQuests[index].selectMode == 'tutorial'
-                                              ? Get.toNamed('/tutorial', arguments: homeViewModel.newQuests[index])
-                                              : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
+                                      homeViewModel.newQuests[index]
+                                                  .selectMode ==
+                                              'survey'
+                                          ? Get.toNamed('/survey',
+                                              arguments: homeViewModel
+                                                  .newQuests[index])
+                                          : homeViewModel.newQuests[index]
+                                                      .selectMode ==
+                                                  'tutorial'
+                                              ? Get.toNamed('/tutorial',
+                                                  arguments: homeViewModel
+                                                      .newQuests[index])
+                                              : Get.toNamed('/quest',
+                                                  arguments: homeViewModel
+                                                      .newQuests[index]);
                                     },
-                                    child: QuestWidget(questModel: homeViewModel.newQuests[index]),
+                                    child: QuestWidget(
+                                        questModel:
+                                            homeViewModel.newQuests[index]),
                                   ),
                                   SizedBox(width: primaryPaddingSize),
                                 ],
@@ -780,7 +863,9 @@ class MyAssets extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
+                    SizedBox(
+                        height: reducedPaddingWhenTextIsBelow(
+                            14.w, detailedContentTextStyle.fontSize!)),
                     GetBuilder<AssetViewModel>(
                         id: 'holdingStocks',
                         builder: (controller) {
@@ -791,7 +876,10 @@ class MyAssets extends StatelessWidget {
                                       : "0",
                                   style: myAssetAmount,
                                   children: [
-                                TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
+                                TextSpan(
+                                    text: " 원",
+                                    style: myAssetAmount.copyWith(
+                                        fontWeight: FontWeight.w300))
                               ]));
                         }),
                   ],
@@ -823,7 +911,9 @@ class MyAssets extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
+                  SizedBox(
+                      height: reducedPaddingWhenTextIsBelow(
+                          14.w, detailedContentTextStyle.fontSize!)),
                   GetBuilder<AssetViewModel>(
                       id: 'holdingStocks',
                       builder: (controller) {
@@ -834,7 +924,10 @@ class MyAssets extends StatelessWidget {
                                     : "0",
                                 style: myAssetAmount,
                                 children: [
-                              TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
+                              TextSpan(
+                                  text: " 원",
+                                  style: myAssetAmount.copyWith(
+                                      fontWeight: FontWeight.w300))
                             ]));
                       }),
                 ],
@@ -852,7 +945,8 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double offset;
   final HomeViewModel homeViewModel;
 
-  _GlassmorphismAppBarDelegate(this.safeAreaPadding, this.offset, this.homeViewModel);
+  _GlassmorphismAppBarDelegate(
+      this.safeAreaPadding, this.offset, this.homeViewModel);
 
   @override
   double get minExtent => 60.h + ScreenUtil().statusBarHeight;
@@ -861,7 +955,8 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => minExtent + kToolbarHeight - 40.h;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return ClipRect(
         child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
@@ -885,7 +980,9 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                 child: Row(
                   children: [
                     Text(
-                      userModelRx.value == null ? "" : userModelRx.value!.userName,
+                      userModelRx.value == null
+                          ? ""
+                          : userModelRx.value!.userName,
                       style: appBarTitle.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
