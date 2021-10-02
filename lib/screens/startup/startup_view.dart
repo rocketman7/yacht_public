@@ -13,7 +13,6 @@ import 'package:yachtOne/screens/home/home_view.dart';
 import 'package:yachtOne/screens/home/performance_test_home_view.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
-import 'package:yachtOne/screens/profile/profile_view.dart';
 import 'package:yachtOne/screens/ranks/rank_controller.dart';
 import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';

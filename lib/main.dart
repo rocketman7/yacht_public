@@ -32,7 +32,6 @@ import 'models/corporation_model.dart';
 import 'screens/auth/email_login_view.dart';
 import 'screens/award/award_detail_view.dart';
 import 'screens/award/award_view.dart';
-import 'screens/award_old/award_viewOld.dart';
 import 'screens/stock_info/chart/chart_view.dart';
 import 'screens/subLeague/subLeague_view.dart';
 import 'screens/subLeague/temp_home_view.dart';
@@ -90,7 +89,9 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     SizeConfig().init(context);
     ScreenUtil.init(
-        BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
         designSize: Size(375, 812),
         orientation: Orientation.portrait);
     super.didChangeDependencies();
@@ -133,7 +134,10 @@ class _MyAppState extends State<MyApp> {
           //         field: f,
           //         ),
           //     transition: Transition.zoom),
-          GetPage(name: '/designSystem', page: () => YachtDesignSystemSampleView(), transition: Transition.zoom),
+          GetPage(
+              name: '/designSystem',
+              page: () => YachtDesignSystemSampleView(),
+              transition: Transition.zoom),
           GetPage(
             name: '/quest',
             page: () => QuestView(),
@@ -158,7 +162,7 @@ class _MyAppState extends State<MyApp> {
           //     name: 'award',
           //     page: () => AwardView(),
           //     transition: Transition.rightToLeft),
-          GetPage(name: '/awardold', page: () => AwardOldView(), transition: Transition.rightToLeft),
+          // GetPage(name: '/awardold', page: () => AwardOldView(), transition: Transition.rightToLeft),
           // GetPage(
           //     name: 'tempHome',
           //     page: () => TempHomeView(leagueName: '7월',),
