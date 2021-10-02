@@ -37,7 +37,7 @@ class CommunityViewModel extends GetxController {
     print('community view model oninit');
     // TODO: implement onInit
     await getPost();
-    print('get post done');
+    // print('get post done');
     // await monitorScroll();
     // scrollController = ScrollController();
     // print('scrollcont: ' + scrollController.hasClients.toString());
@@ -99,10 +99,10 @@ class CommunityViewModel extends GetxController {
 
     posts.addAll(newPosts);
     if (newPosts.length < postAtOnceLimit) {
-      print('no more posts');
+      // print('no more posts');
       hasNextPosts(false);
     }
-    print('all posts: ${posts.length}');
+    // print('all posts: ${posts.length}');
     isGettingPosts(false);
     update();
   }
@@ -160,7 +160,7 @@ class CommunityViewModel extends GetxController {
 
     // 포스트 모델로 변환
     PostModel _newPost = convertFeedtoPostModel(content).copyWith(imageUrlList: imageUrlList);
-    print(_newPost);
+    // print(_newPost);
     // 포스트 모델 업로드
     await _firestoreService.uploadNewPost(_newPost);
 

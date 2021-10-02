@@ -74,8 +74,8 @@ class HomeView extends StatelessWidget {
     // });
 
     List<Widget> homeWidgets = [
-      // DialogReadyWidget(homeViewModel: homeViewModel),
-      // MyAssets(),
+      DialogReadyWidget(homeViewModel: homeViewModel),
+      MyAssets(),
       // sign out 임시
       Container(
           // color: Colors.blue,

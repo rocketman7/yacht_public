@@ -169,13 +169,28 @@ class FirestoreService extends GetxService {
               SetOptions(
                 merge: true,
               ));
+
+      // 참여 리워드가 있으면 반영하기
       if (questModel.expParticipationReward != null && questModel.expParticipationReward! > 0) {
         await _firestoreService
             .collection('users')
             .doc('${userModelRx.value!.uid}')
             .update({'exp': FieldValue.increment(questModel.expParticipationReward!)});
       }
+
+      // 조가비 소모시키기
+
+      // quest 다큐에 count 추가
+
     }
+    print(questModel.leagueId);
+    print(questModel.questId);
+    await _firestoreService
+        .collection('leagues')
+        .doc(questModel.leagueId)
+        .collection('quests')
+        .doc(questModel.questId)
+        .update({'counts': FieldValue.increment(1)});
   }
 
   Future updateUserSurvey(

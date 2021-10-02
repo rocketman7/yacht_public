@@ -182,7 +182,7 @@ class QuestViewModel extends GetxController {
     for (int i = 0; i < toggleList.length; i++) {
       if (toggleList[i] == true) answers.add(i);
     }
-    print(answers);
+
     switch (questModel.selectMode) {
       case 'order':
         await _firestoreService.updateUserQuest(questModel, orderList);
