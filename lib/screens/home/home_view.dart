@@ -116,30 +116,36 @@ class HomeView extends StatelessWidget {
     // print(
     //     'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
-    if (userQuestModelRx.length != 0) print('내가 참여한 퀘스트: ${userQuestModelRx[0].selectDateTime != null} ');
-    RxString footer = "start".obs;
+    RxString footer = "당겨서 새로고침".obs;
     return Scaffold(
       body: RefreshConfiguration(
         enableScrollWhenRefreshCompleted: true,
         child: SmartRefresher(
           header: CustomHeader(
               builder: (_, status) {
+                // status = RefreshStatus.
                 return Container(
-                  height: 20,
-                  color: Colors.blue,
-                  child: Center(child: Text(footer.value)),
+                  height: MediaQuery.of(context).padding.top + 10.w,
+                  // color: Colors.blue,
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      footer.value,
+                      style: TextStyle(fontSize: 14, fontFamily: 'Default'),
+                    ),
+                  ),
                 );
               },
-              height: 40,
+              height: MediaQuery.of(context).padding.top + 10.w,
               onModeChange: (mode) {
                 if (mode == RefreshStatus.idle) {
-                  footer("idle");
+                  footer("당겨서 새로고침");
                 } else if (mode == RefreshStatus.canRefresh) {
-                  footer("canRefresh");
+                  footer("놓아주세요");
                 } else if (mode == RefreshStatus.refreshing) {
-                  footer("refreshing");
+                  footer("새로고치는 중...");
                 } else if (mode == RefreshStatus.completed) {
-                  footer("completed");
+                  footer("완료!");
                 }
               }),
           controller: _refreshController,

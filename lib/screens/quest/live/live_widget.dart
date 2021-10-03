@@ -492,7 +492,8 @@ class LiveCardHeader extends StatelessWidget {
                     style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
                   )
                 : Text(
-                    '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
+                    '${questModel.counts}',
+                    // '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
                     style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
                   )
           ],

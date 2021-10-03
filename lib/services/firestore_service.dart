@@ -137,6 +137,7 @@ class FirestoreService extends GetxService {
     // print(checkIfUserAlreadyDone.exists);
 
     if (checkIfUserAlreadyDone.exists) {
+      // 예측 변경이면,
       await _firestoreService
           .collection('users/${userModelRx.value!.uid}/userVote')
           .doc(leagueRx.value)
@@ -152,6 +153,7 @@ class FirestoreService extends GetxService {
                 merge: true,
               ));
     } else {
+      // 처음 예측이면,
       await _firestoreService
           .collection('users/${userModelRx.value!.uid}/userVote')
           .doc(leagueRx.value)
@@ -178,19 +180,19 @@ class FirestoreService extends GetxService {
             .update({'exp': FieldValue.increment(questModel.expParticipationReward!)});
       }
 
-      // 조가비 소모시키기
-
       // quest 다큐에 count 추가
-
+      await _firestoreService
+          .collection('leagues')
+          .doc(questModel.leagueId)
+          .collection('quests')
+          .doc(questModel.questId)
+          .update({'counts': FieldValue.increment(1)});
     }
-    print(questModel.leagueId);
-    print(questModel.questId);
+    // 조가비 소모시키기
     await _firestoreService
-        .collection('leagues')
-        .doc(questModel.leagueId)
-        .collection('quests')
-        .doc(questModel.questId)
-        .update({'counts': FieldValue.increment(1)});
+        .collection('users')
+        .doc('${userModelRx.value!.uid}')
+        .update({'item': FieldValue.increment(-questModel.itemNeeded)});
   }
 
   Future updateUserSurvey(

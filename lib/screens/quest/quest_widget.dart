@@ -75,16 +75,50 @@ class SquareQuestWidget extends StatelessWidget {
     //     // print('userQuestModel $userQuestModel');
     //   }
     // });
-    return Obx(
-        () => (userQuestModelRx.length > 0 && userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
-            ? secondarySectionBoxWithBottomButton(
-                height: height,
-                width: width,
-                padding: EdgeInsets.all(primaryPaddingSize),
-                buttonTitle: "예측 바꾸기",
-                child: Stack(
-                  children: [
-                    Column(
+    return questModel.selectMode == 'tutorial'
+        ? SectionBoxWithBottomButtonAndBorder(
+            height: height,
+            width: width,
+            padding: EdgeInsets.all(primaryPaddingSize),
+            buttonTitle: "퀘스트 참여하기",
+            child: Column(
+              // mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
+                QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
+                QuestCardRewards(questModel: questModel),
+              ],
+            ),
+          )
+        : Obx(() =>
+            (userQuestModelRx.length > 0 && userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
+                ? secondarySectionBoxWithBottomButton(
+                    height: height,
+                    width: width,
+                    padding: EdgeInsets.all(primaryPaddingSize),
+                    buttonTitle: "예측 바꾸기",
+                    child: Stack(
+                      children: [
+                        Column(
+                          // mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
+                            QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
+                            QuestCardRewards(questModel: questModel),
+                          ],
+                        ),
+                        Container(color: Colors.white.withOpacity(.50)),
+                      ],
+                    ),
+                  )
+                : sectionBoxWithBottomButton(
+                    height: height,
+                    width: width,
+                    padding: EdgeInsets.all(primaryPaddingSize),
+                    buttonTitle: "퀘스트 참여하기",
+                    child: Column(
                       // mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -93,25 +127,7 @@ class SquareQuestWidget extends StatelessWidget {
                         QuestCardRewards(questModel: questModel),
                       ],
                     ),
-                    Container(color: Colors.white.withOpacity(.50)),
-                  ],
-                ),
-              )
-            : sectionBoxWithBottomButton(
-                height: height,
-                width: width,
-                padding: EdgeInsets.all(primaryPaddingSize),
-                buttonTitle: "퀘스트 참여하기",
-                child: Column(
-                  // mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-                    QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
-                    QuestCardRewards(questModel: questModel),
-                  ],
-                ),
-              ));
+                  ));
 
     // Stack(
     //   children: [
@@ -317,7 +333,8 @@ class QuestCardHeader extends StatelessWidget {
                     style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
                   )
                 : Text(
-                    '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
+                    '${questModel.counts}',
+                    // '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
                     style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
                   )
           ],

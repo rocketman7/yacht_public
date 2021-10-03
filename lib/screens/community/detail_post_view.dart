@@ -315,7 +315,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                         text: detailPostViewModel.thisPost.value.content,
                                         style: feedContent,
                                         linkStyle: feedContent.copyWith(color: yachtViolet),
-                                        maxLines: 5,
+                                        maxLines: 10,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
@@ -493,28 +493,38 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Container(
-                                                width: 36.w,
-                                                height: 36.w,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: FutureBuilder<String>(
-                                                    future: detailPostViewModel.getImageUrlFromStorage(
-                                                        'avatars/${detailPostViewModel.comments[index].writerAvatarUrl}.png'),
-                                                    builder: (context, snapshot) {
-                                                      return snapshot.hasData
-                                                          ? CachedNetworkImage(
-                                                              imageUrl: snapshot.data!,
-                                                            )
-                                                          : Container();
-                                                    })
+                                            GestureDetector(
+                                              onTap: () {
+                                                if (detailPostViewModel.comments[index].writerUid !=
+                                                    userModelRx.value!.uid)
+                                                  Get.to(() => ProfileOthersView(
+                                                      uid: detailPostViewModel.comments[index].writerUid));
+                                                else
+                                                  Get.to(() => ProfileMyView());
+                                              },
+                                              child: Container(
+                                                  width: 36.w,
+                                                  height: 36.w,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: FutureBuilder<String>(
+                                                      future: detailPostViewModel.getImageUrlFromStorage(
+                                                          'avatars/${detailPostViewModel.comments[index].writerAvatarUrl}.png'),
+                                                      builder: (context, snapshot) {
+                                                        return snapshot.hasData
+                                                            ? CachedNetworkImage(
+                                                                imageUrl: snapshot.data!,
+                                                              )
+                                                            : Container();
+                                                      })
 
-                                                // child: CachedNetworkImage(
-                                                //   imageUrl:
-                                                //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
-                                                // )
-                                                ),
+                                                  // child: CachedNetworkImage(
+                                                  //   imageUrl:
+                                                  //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+                                                  // )
+                                                  ),
+                                            ),
                                             SizedBox(
                                               width: 6.w,
                                             ),
@@ -1027,7 +1037,10 @@ class _CommentInputState extends State<CommentInput> {
                                     SizedBox(height: 4.w),
                                     GestureDetector(
                                         onTap: () async {
-                                          if (commentFormKey.currentState!.validate()) {
+                                          if (commentFormKey.currentState!.validate() &&
+                                              !widget.detailPostViewModel.isUploadingNewPost.value) {
+                                            HapticFeedback.lightImpact();
+                                            widget.detailPostViewModel.isUploadingNewPost(true);
                                             await widget.detailPostViewModel
                                                 .uploadComment(widget.post, commentController.value.text);
                                             await widget.detailPostViewModel.getComments(widget.post);
@@ -1036,9 +1049,16 @@ class _CommentInputState extends State<CommentInput> {
                                             commentController.clear();
                                             _focusNode.unfocus();
                                             await widget.communityViewModel.reloadPost();
+                                            widget.detailPostViewModel.isUploadingNewPost(false);
                                           }
                                         },
-                                        child: simpleTextContainerButton("답글 달기")),
+                                        child: widget.detailPostViewModel.isUploadingNewPost.value
+                                            ? simpleTextContainerButton("답글 달기",
+                                                child: CircularProgressIndicator(
+                                                  strokeWidth: 1.4.w,
+                                                  color: yachtViolet,
+                                                ))
+                                            : simpleTextContainerButton("답글 달기")),
                                   ],
                                 )
                               : Container())

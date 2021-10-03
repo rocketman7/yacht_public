@@ -99,7 +99,6 @@ class ProfileOthersViewModel extends GetxController {
   Future getUserQuestFuture(String uid) async {
     otherUserQuestModels.addAll(await _firestoreService.getUserQuestFuture(uid));
     // return await _firestoreService.getUserQuestFuture(uid);
-    print('otherUserQuestModels: $otherUserQuestModels');
   }
 
   // 유저가 참여한 퀘스트의 퀘스트 정보 가져오기
