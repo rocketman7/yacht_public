@@ -85,7 +85,8 @@ dependencies:
   syncfusion_flutter_charts: ^19.3.43
   timezone: ^0.7.0
   toggle_switch: ^0.1.8
-  tutorial_coach_mark: ^1.0.0
+  tutorial_coach_mark: ^1.1.1
+  showcaseview: ^1.1.1
   universal_io: ^2.0.4
   url_launcher: ^6.0.9
   vibration: ^1.7.4-nullsafety.0

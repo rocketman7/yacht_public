@@ -193,7 +193,8 @@ class HomeSubLeagueCarouselSlider extends StatelessWidget {
 
   HomeSubLeagueCarouselSlider({required this.leagueName, required this.leagueEndDateTime});
 
-  final AwardViewModel _awardViewModel = Get.put(AwardViewModel());
+  final AwardViewModel _awardViewModel = Get.find<AwardViewModel>();
+  // final AwardViewModel _awardViewModel = Get.put(AwardViewModel());
   final CarouselController _carouselController = CarouselController();
 
   @override

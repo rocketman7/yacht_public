@@ -1216,6 +1216,16 @@ TextStyle notificationContentForDetail = TextStyle(
   height: 1.4,
 );
 
+// 튜토리얼 설명 텍스트
+TextStyle tutorialDescriptionStyle = TextStyle(
+  fontSize: 16.w,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtViolet,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
 // Survey
 // Survey Title
 TextStyle surveyTitle = TextStyle(

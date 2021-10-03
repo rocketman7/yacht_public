@@ -12,4 +12,9 @@ class TutorialViewModel extends GetxController {
     }
     toggleList[index] = true;
   }
+
+  Future<void> endOfTutorial() async {
+    // 여기에 튜토리얼이 끝나면 실행시킬 (예를 들어 DB에 유저보트에 넣어주기, 보상주기 등) 코드 입력
+    print('end of tutorial');
+  }
 }

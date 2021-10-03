@@ -23,7 +23,8 @@ class RankHomeWidget extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Container(child: Text('랭킹', style: sectionTitle.copyWith(height: 1.0))),
+              Container(
+                  child: Text('랭킹', style: sectionTitle.copyWith(height: 1.0))),
               Spacer(),
               GestureDetector(
                   onTap: () {
@@ -57,8 +58,9 @@ class RankHomeWidget extends StatelessWidget {
           padding: EdgeInsets.only(left: 14.w, right: 14.w),
           child: Container(
             width: double.infinity,
-            decoration:
-                primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
+            decoration: primaryBoxDecoration.copyWith(
+                boxShadow: [primaryBoxShadow],
+                color: homeModuleBoxBackgroundColor),
             child: GetBuilder<RankController>(
                 id: 'ranks',
                 builder: (controller) {
@@ -94,7 +96,8 @@ class AllRankerView extends StatelessWidget {
                 id: 'ranks',
                 builder: (controller) {
                   return controller.isMyRanksAndPointLoaded
-                      ? RankShareView(leagueIndex: leagueIndex, isFullView: true)
+                      ? RankShareView(
+                          leagueIndex: leagueIndex, isFullView: true)
                       : Container();
                 }),
           ),
@@ -138,11 +141,16 @@ class RankShareView extends StatelessWidget {
                   style: rankMainBoldText,
                 ),
                 Text(
-                  rankController.myRanksAndPoint[leagueIndex]['todayRank']! != 0 ? '위' : '',
+                  rankController.myRanksAndPoint[leagueIndex]['todayRank']! != 0
+                      ? '위'
+                      : '',
                   style: rankMainText,
                 ),
                 Spacer(),
-                SizedBox(height: 22.w, width: 22.w, child: Image.asset('assets/icons/league_point_circle.png')),
+                SizedBox(
+                    height: 22.w,
+                    width: 22.w,
+                    child: Image.asset('assets/icons/league_point_circle.png')),
                 SizedBox(
                   width: 3.w,
                 ),
@@ -176,8 +184,11 @@ class RankShareView extends StatelessWidget {
                   .toList()
                   .sublist(
                       0,
-                      min(rankController.allRanker[leagueIndex].length,
-                          isFullView ? rankController.allRanker[leagueIndex].length : maxNumAllRankerForTop))
+                      min(
+                          rankController.allRanker[leagueIndex].length,
+                          isFullView
+                              ? rankController.allRanker[leagueIndex].length
+                              : maxNumAllRankerForTop))
                   .asMap()
                   .map((i, element) => MapEntry(
                       i,
@@ -205,8 +216,12 @@ class RankShareView extends StatelessWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  if (rankController.allRanker[leagueIndex][i].uid != userModelRx.value!.uid)
-                                    Get.to(() => ProfileOthersView(uid: rankController.allRanker[leagueIndex][i].uid));
+                                  if (rankController
+                                          .allRanker[leagueIndex][i].uid !=
+                                      userModelRx.value!.uid)
+                                    Get.to(() => ProfileOthersView(
+                                        uid: rankController
+                                            .allRanker[leagueIndex][i].uid));
                                   else
                                     Get.to(() => ProfileMyView());
                                 },
@@ -216,12 +231,18 @@ class RankShareView extends StatelessWidget {
                                       height: 31.w,
                                       width: 31.w,
                                       child: FutureBuilder<String>(
-                                        future: rankController.getImageUrlFromStorage('avatars/' +
-                                            (rankController.allRanker[leagueIndex][i].avatarImage ?? 'avatar001') +
-                                            '.png'),
+                                        future: rankController
+                                            .getImageUrlFromStorage('avatars/' +
+                                                (rankController
+                                                        .allRanker[leagueIndex]
+                                                            [i]
+                                                        .avatarImage ??
+                                                    'avatar001') +
+                                                '.png'),
                                         builder: (_, snapshot) {
                                           if (snapshot.hasData) {
-                                            return Image.network(snapshot.data.toString());
+                                            return Image.network(
+                                                snapshot.data.toString());
                                           } else {
                                             return Container();
                                           }
@@ -281,7 +302,8 @@ class RankShareView extends StatelessWidget {
                         color: yachtLine,
                       ),
                       SizedBox(
-                        height: correctHeight(14.w, 0.w, rankDescriptionBoldText.fontSize),
+                        height: correctHeight(
+                            14.w, 0.w, rankDescriptionBoldText.fontSize),
                       ),
                       Row(
                         children: [
@@ -289,7 +311,10 @@ class RankShareView extends StatelessWidget {
                             width: 14.w,
                           ),
                           SizedBox(
-                              height: 22.w, width: 22.w, child: Image.asset('assets/icons/league_point_circle.png')),
+                              height: 22.w,
+                              width: 22.w,
+                              child: Image.asset(
+                                  'assets/icons/league_point_circle.png')),
                           SizedBox(
                             width: 7.w,
                           ),
@@ -311,41 +336,41 @@ class RankShareView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: correctHeight(16.w, rankDescriptionBoldText.fontSize, rankDescriptionMainText.fontSize),
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 14.w,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '우승을 위한 추천 활동',
-                                style: rankDescriptionMainText,
-                              ),
-                              SizedBox(
-                                height: correctHeight(
-                                    7.5.w, rankDescriptionMainText.fontSize, rankDescriptionContentText.fontSize),
-                              ),
-                              Text(
-                                '! 퀘스트 참여하기',
-                                style: rankDescriptionContentText,
-                              ),
-                              Text(
-                                '! 커뮤니티 글 작성하기',
-                                style: rankDescriptionContentText,
-                              ),
-                              Text(
-                                '! 그 외 다양한 활동하기',
-                                style: rankDescriptionContentText,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      // SizedBox(
+                      //   height: correctHeight(16.w, rankDescriptionBoldText.fontSize, rankDescriptionMainText.fontSize),
+                      // ),
+                      // Row(
+                      //   children: [
+                      //     SizedBox(
+                      //       width: 14.w,
+                      //     ),
+                      //     Column(
+                      //       crossAxisAlignment: CrossAxisAlignment.start,
+                      //       children: [
+                      //         Text(
+                      //           '우승을 위한 추천 활동',
+                      //           style: rankDescriptionMainText,
+                      //         ),
+                      //         SizedBox(
+                      //           height: correctHeight(
+                      //               7.5.w, rankDescriptionMainText.fontSize, rankDescriptionContentText.fontSize),
+                      //         ),
+                      //         Text(
+                      //           '! 퀘스트 참여하기',
+                      //           style: rankDescriptionContentText,
+                      //         ),
+                      //         Text(
+                      //           '! 커뮤니티 글 작성하기',
+                      //           style: rankDescriptionContentText,
+                      //         ),
+                      //         Text(
+                      //           '! 그 외 다양한 활동하기',
+                      //           style: rankDescriptionContentText,
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ],
+                      // ),
                       SizedBox(
                         height: 14.w,
                       ),
@@ -357,7 +382,8 @@ class RankShareView extends StatelessWidget {
     } else {
       return Padding(
         padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 14.w),
-        child: Center(child: Text('아직 랭킹이 표시되지 않아요.', style: rankDescriptionMainText)),
+        child: Center(
+            child: Text('아직 랭킹이 표시되지 않아요.', style: rankDescriptionMainText)),
       );
     }
   }
