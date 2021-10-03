@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -54,6 +55,7 @@ void main() async {
   KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
 
   await Firebase.initializeApp();
+  await FirebaseAppCheck.instance.activate();
   await MobileAds.instance.initialize();
 
 // portrait 모드 고정
@@ -90,9 +92,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     SizeConfig().init(context);
     ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
+        BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
         designSize: Size(375, 812),
         orientation: Orientation.portrait);
     super.didChangeDependencies();
@@ -135,10 +135,7 @@ class _MyAppState extends State<MyApp> {
           //         field: f,
           //         ),
           //     transition: Transition.zoom),
-          GetPage(
-              name: '/designSystem',
-              page: () => YachtDesignSystemSampleView(),
-              transition: Transition.zoom),
+          GetPage(name: '/designSystem', page: () => YachtDesignSystemSampleView(), transition: Transition.zoom),
           GetPage(
             name: '/quest',
             page: () => QuestView(),

@@ -217,67 +217,66 @@ class HomeSubLeagueCarouselSlider extends StatelessWidget {
           itemBuilder: (context, index, realIndex) {
             return Column(
               children: [
-                SizedBox(
-                  height: 20.0.w,
-                ),
-                Flexible(
-                  flex: 1,
-                  child: GestureDetector(
-                    onTap: () {
-                      // 중앙에 있는 카드를 클릭하면 세부페이지로 가지만(if), 옆에 있는 카드를 클릭하면(else) 그 카드를 중앙에 위치시키는 애니메이션을 실행하는게 훨씬 자연스럽다.
-                      if (index == _awardViewModel.pageIndexForHomeUI.value) {
-                        // 이렇게 rx변수를 홈용 / 디테일페이지용으로 나누어 관리해야 애니메잇이 분리되는걸 막을 수 있음
-                        _awardViewModel.pageIndexForUI.value = _awardViewModel.pageIndexForHomeUI.value;
+                // SizedBox(
+                //   height: 20.0.w,
+                // ),
+                GestureDetector(
+                  onTap: () {
+                    // 중앙에 있는 카드를 클릭하면 세부페이지로 가지만(if), 옆에 있는 카드를 클릭하면(else) 그 카드를 중앙에 위치시키는 애니메이션을 실행하는게 훨씬 자연스럽다.
+                    if (index == _awardViewModel.pageIndexForHomeUI.value) {
+                      // 이렇게 rx변수를 홈용 / 디테일페이지용으로 나누어 관리해야 애니메잇이 분리되는걸 막을 수 있음
+                      _awardViewModel.pageIndexForUI.value = _awardViewModel.pageIndexForHomeUI.value;
 
-                        // main에 등록한 getpage를 써야 바인딩 포함
-                        // Get.toNamed('subLeague');
-                        Get.to(() => AwardDetailView(
-                              leagueName: leagueName,
-                              leagueEndDateTime: leagueEndDateTime,
-                            ));
-                      } else
-                        _carouselController.animateToPage(
-                          index,
-                          duration: const Duration(milliseconds: 450),
-                          curve: Curves.ease,
-                        );
-                    },
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
+                      // main에 등록한 getpage를 써야 바인딩 포함
+                      // Get.toNamed('subLeague');
+                      Get.to(() => AwardDetailView(
+                            leagueName: leagueName,
+                            leagueEndDateTime: leagueEndDateTime,
+                          ));
+                    } else
+                      _carouselController.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 450),
+                        curve: Curves.ease,
+                      );
+                  },
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                            boxShadow: [
+                              primaryBoxShadow,
+                            ],
+                            // color: _awardViewModel.colorIndex(index),
+                            gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+                              _awardViewModel.colorIndex(index, 0),
+                              _awardViewModel.colorIndex(index, 1),
+                              _awardViewModel.colorIndex(index, 0),
+                            ])),
+                        width: 275.0.w,
+                        height: 150.0.w + 8.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..,
+                      ),
+                      Positioned(
+                        top: 5.w,
+                        left: 5.w,
+                        child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0),
-                              boxShadow: [
-                                primaryBoxShadow,
-                              ],
-                              // color: _awardViewModel.colorIndex(index),
-                              gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
-                                _awardViewModel.colorIndex(index, 0),
-                                _awardViewModel.colorIndex(index, 1),
-                                _awardViewModel.colorIndex(index, 0),
+                              borderRadius: BorderRadius.circular(10.0),
+                              // color: Colors.white.withOpacity(0.7),
+                              gradient:
+                                  LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [
+                                Color(0xFFFDFEFF).withOpacity(0),
+                                Color(0xFFFDFEFF).withOpacity(1),
+                                Color(0xFFFDFEFF).withOpacity(0),
                               ])),
-                          width: 275.0.w,
-                          height: 150.0.w + 8.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..,
+                          width: 275.0.w - 10.w,
+                          height: 150.0.w + 8.w - 10.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..,
                         ),
-                        Positioned(
-                          top: 5.w,
-                          left: 5.w,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                // color: Colors.white.withOpacity(0.7),
-                                gradient:
-                                    LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [
-                                  Color(0xFFFDFEFF).withOpacity(0),
-                                  Color(0xFFFDFEFF).withOpacity(1),
-                                  Color(0xFFFDFEFF).withOpacity(0),
-                                ])),
-                            width: 275.0.w - 10.w,
-                            height: 150.0.w + 8.w - 10.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..,
-                          ),
-                        ),
-                        Container(
+                      ),
+                      Positioned.fill(
+                        child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12.0),
                             boxShadow: [
@@ -367,8 +366,8 @@ class HomeSubLeagueCarouselSlider extends StatelessWidget {
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],

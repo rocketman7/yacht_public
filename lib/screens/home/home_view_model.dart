@@ -64,16 +64,16 @@ class HomeViewModel extends GetxController {
     await getAllQuests();
     await getDictionaries();
 
+    isLoading(false);
+
     _createRewardedAd();
     if (userModelRx.value != null) {
-      print('usermodel name update' + userModelRx.value!.isNameUpdated.toString());
+      // print('usermodel name update' + userModelRx.value!.isNameUpdated.toString());
       noNeedShowUserNameDialog(userModelRx.value!.isNameUpdated ?? false);
-      print(noNeedShowUserNameDialog.value);
+      // print(noNeedShowUserNameDialog.value);
       noNeedShowUserNameDialog.refresh();
-      print(noNeedShowUserNameDialog.value);
+      // print(noNeedShowUserNameDialog.value);
     }
-
-    isLoading(false);
 
     super.onInit();
   }

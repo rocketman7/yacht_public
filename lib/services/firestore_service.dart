@@ -790,7 +790,7 @@ class FirestoreService extends GetxService {
 
     var temp = await _firestoreService.collection('posts').orderBy('writtenDateTime', descending: true).get();
 
-    print('docun length: ${temp.docs.length}');
+    // print('docun length: ${temp.docs.length}');
 
     if (startAfterThisPostId == null) {
       await getPostQuery.get().then((value) {
