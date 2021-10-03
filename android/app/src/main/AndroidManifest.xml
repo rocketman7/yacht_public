@@ -14,7 +14,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="요트"
         android:icon="@mipmap/launcher_icon"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:largeHeap="true">
        
         <activity
             android:name=".MainActivity"

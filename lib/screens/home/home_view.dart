@@ -76,13 +76,9 @@ class HomeView extends StatelessWidget {
     List<Widget> homeWidgets = [
       DialogReadyWidget(homeViewModel: homeViewModel),
       MyAssets(),
-      // sign out 임시
-      Container(
-          // color: Colors.blue,
-          width: 300.w,
-          height: correctHeight(30.w, sectionTitle.fontSize!, 0.0)),
+
       // 이달의 상금 주식
-      AwardView(leagueName: "9월 리그", leagueEndDateTime: "2021년 10월 31일까지"),
+      AwardView(leagueName: "10월 리그", leagueEndDateTime: "2021년 10월 31일까지"),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       NewQuests(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
