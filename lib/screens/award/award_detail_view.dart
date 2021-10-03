@@ -442,7 +442,7 @@ class AwardDetailView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: 14.0.w),
                     child: Text(
-                      '요트선장 코멘트',
+                      '코멘트 by 요트',
                       style: awardModuleTitleTextStyle,
                     ),
                   ),
@@ -533,9 +533,24 @@ class SubLeagueViewDetailRulesTextWidget extends StatelessWidget {
           .asMap()
           .map((i, element) => MapEntry(
                 i,
-                Text(
-                  '* ${rules[i]}'.replaceAll('\\n', '\n'),
-                  style: subLeagueAwardRulesStyle,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '* ',
+                      style: subLeagueAwardRulesStyle,
+                    ),
+                    Container(
+                      width: SizeConfig.screenWidth -
+                          28.w -
+                          31.w -
+                          textSizeGet('* ', subLeagueAwardRulesStyle).width,
+                      child: Text(
+                        '${rules[i]}'.replaceAll('\\n', '\n'),
+                        style: subLeagueAwardRulesStyle,
+                      ),
+                    ),
+                  ],
                 ),
               ))
           .values
@@ -568,57 +583,64 @@ class PortfolioLabel extends StatelessWidget {
                               labelState.NONEED)
                       ? Column(
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: (i < portfolioColors.length)
-                                        ? portfolioColors[i]
-                                        : portfolioColors[
-                                                portfolioColors.length - 1]
-                                            .withOpacity(math.max(
-                                                1.0 -
-                                                    0.4 *
-                                                        (i -
-                                                            portfolioColors
-                                                                .length +
-                                                            1),
-                                                0.0)),
-                                    borderRadius: BorderRadius.circular(2.0),
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                // 주식 세부페이지로 가는 네비게잇 필요
+                                print(i);
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: (i < portfolioColors.length)
+                                          ? portfolioColors[i]
+                                          : portfolioColors[
+                                                  portfolioColors.length - 1]
+                                              .withOpacity(math.max(
+                                                  1.0 -
+                                                      0.4 *
+                                                          (i -
+                                                              portfolioColors
+                                                                  .length +
+                                                              1),
+                                                  0.0)),
+                                      borderRadius: BorderRadius.circular(2.0),
+                                    ),
+                                    height: 18.w,
+                                    width: 18.w,
                                   ),
-                                  height: 18.w,
-                                  width: 18.w,
-                                ),
-                                SizedBox(
-                                  width: 6.w,
-                                ),
-                                Text(
-                                  '${_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks[i].name}',
-                                  style: subLeagueAwardLabelStyle,
-                                ),
-                                SizedBox(
-                                  width: 6.w,
-                                ),
-                                Flexible(
-                                  child: Container(
-                                    height: 1.w,
-                                    color: yachtBlack,
+                                  SizedBox(
+                                    width: 6.w,
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 6.w,
-                                ),
-                                SizedBox(
-                                  width: textSizeGet(
-                                          '000%', subLeagueAwardLabelStyle)
-                                      .width,
-                                  child: Text(
-                                    '${_awardViewModel.subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].roundPercentage}%',
+                                  Text(
+                                    '${_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks[i].name}',
                                     style: subLeagueAwardLabelStyle,
-                                    textAlign: TextAlign.end,
                                   ),
-                                ),
-                              ],
+                                  SizedBox(
+                                    width: 6.w,
+                                  ),
+                                  Flexible(
+                                    child: Container(
+                                      height: 1.w,
+                                      color: yachtBlack,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 6.w,
+                                  ),
+                                  SizedBox(
+                                    width: textSizeGet(
+                                            '000%', subLeagueAwardLabelStyle)
+                                        .width,
+                                    child: Text(
+                                      '${_awardViewModel.subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].roundPercentage}%',
+                                      style: subLeagueAwardLabelStyle,
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 10.w,
@@ -703,9 +725,16 @@ class PortfolioChart extends StatelessWidget {
                     _awardViewModel.pageIndexForUI.value][i]
                 .portionOffsetFromCenter!
                 .dy,
-            child: Text(
-              '${_awardViewModel.subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].roundPercentage}%',
-              style: subLeagueAwardPortionStyle,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                // 주식 세부페이지로 가는 네비게잇 필요
+                print(i);
+              },
+              child: Text(
+                '${_awardViewModel.subLeaguePortfolioUIModels[_awardViewModel.pageIndexForUI.value][i].roundPercentage}%',
+                style: subLeagueAwardPortionStyle,
+              ),
             ),
           ),
         );
@@ -724,13 +753,20 @@ class PortfolioChart extends StatelessWidget {
                       _awardViewModel.pageIndexForUI.value][i]
                   .stockNameOffsetFromCenter!
                   .dy,
-              child: Container(
-                child: Text(
-                  _awardViewModel
-                      .allSubLeagues[_awardViewModel.pageIndexForUI.value]
-                      .stocks[i]
-                      .name,
-                  style: subLeagueAwardStockNameStyle,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  // 주식 세부페이지로 가는 네비게잇 필요
+                  print(i);
+                },
+                child: Container(
+                  child: Text(
+                    _awardViewModel
+                        .allSubLeagues[_awardViewModel.pageIndexForUI.value]
+                        .stocks[i]
+                        .name,
+                    style: subLeagueAwardStockNameStyle,
+                  ),
                 ),
               )),
         );

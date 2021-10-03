@@ -46,7 +46,7 @@ class _TutorialViewState extends State<TutorialView> {
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 200), showTutorial);
+    Future.delayed(Duration(milliseconds: 300), showTutorial);
     // WidgetsBinding.instance!.addPostFrameCallback((_) {
     //   showTutorial();
     // });
@@ -289,8 +289,9 @@ class _TutorialViewState extends State<TutorialView> {
                     Container(
                         key: _step1,
                         padding: moduleBoxPadding(questTermTextStyle.fontSize!),
-                        decoration: primaryBoxDecoration
-                            .copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
+                        decoration: primaryBoxDecoration.copyWith(
+                            boxShadow: [primaryBoxShadow],
+                            color: homeModuleBoxBackgroundColor),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -300,7 +301,8 @@ class _TutorialViewState extends State<TutorialView> {
                             btwHomeModuleTitleBox,
                             QuestCardRewards(questModel: questModel),
                             SizedBox(
-                              height: correctHeight(24.w, 0.0, detailedContentTextStyle.fontSize),
+                              height: correctHeight(
+                                  24.w, 0.0, detailedContentTextStyle.fontSize),
                             ),
                             Text("퀘스트 상세 설명",
                                 style: questDescription.copyWith(
@@ -318,11 +320,13 @@ class _TutorialViewState extends State<TutorialView> {
                               style: questDescription,
                             ),
                             SizedBox(
-                              height: correctHeight(24.w, 0.0, detailedContentTextStyle.fontSize),
+                              height: correctHeight(
+                                  24.w, 0.0, detailedContentTextStyle.fontSize),
                             ),
                             questModel.rewardDescription != null
                                 ? Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text("리워드 상세 설명",
                                           style: questDescription.copyWith(
@@ -377,7 +381,8 @@ class _TutorialViewState extends State<TutorialView> {
                 bottom: 20.w,
                 child: GestureDetector(
                   onTap: () {
-                    if (tutorialViewModel.isSelectingSheetShowing.value == false) {
+                    if (tutorialViewModel.isSelectingSheetShowing.value ==
+                        false) {
                       tutorialViewModel.isSelectingSheetShowing(true);
                       // questViewModel.syncUserSelect();
                     } else {
@@ -428,14 +433,17 @@ class _TutorialViewState extends State<TutorialView> {
         duration: Duration(milliseconds: 300),
         left: 14.w,
         right: 14.w,
-        bottom: tutorialViewModel.isSelectingSheetShowing.value ? (20.w + 60.w + 20.w) : -500.w,
+        bottom: tutorialViewModel.isSelectingSheetShowing.value
+            ? (20.w + 60.w + 20.w)
+            : -500.w,
         child: Container(
           key: _step3,
           // color: Colors.white,
           width: double.infinity,
           // height: 100,
           padding: EdgeInsets.all(14.w),
-          decoration: (primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow])),
+          decoration:
+              (primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow])),
           child: Column(
             children: [
               Align(
@@ -455,7 +463,9 @@ class _TutorialViewState extends State<TutorialView> {
                           color: yachtBlack,
                           size: 30.w,
                         ),
-                        SizedBox(height: reducedPaddingWhenTextIsBelow(8.w, questTitleTextStyle.fontSize!)),
+                        SizedBox(
+                            height: reducedPaddingWhenTextIsBelow(
+                                8.w, questTitleTextStyle.fontSize!)),
                       ],
                     ),
                   ),
@@ -465,9 +475,13 @@ class _TutorialViewState extends State<TutorialView> {
               Padding(
                 padding: EdgeInsets.all(4.0.w),
                 child: Text(questModel.selectInstruction,
-                    style: questTitleTextStyle, maxLines: 3, textAlign: TextAlign.center),
+                    style: questTitleTextStyle,
+                    maxLines: 3,
+                    textAlign: TextAlign.center),
               ),
-              SizedBox(height: reducedPaddingWhenTextIsBelow(16.w, questTitleTextStyle.fontSize!)),
+              SizedBox(
+                  height: reducedPaddingWhenTextIsBelow(
+                      16.w, questTitleTextStyle.fontSize!)),
               Column(
                 children: [
                   Row(
@@ -477,7 +491,8 @@ class _TutorialViewState extends State<TutorialView> {
                         InkWell(
                           onTap: () {
                             tutorialViewModel.toggleUserSelect(index);
-                            print('$index is change to ${tutorialViewModel.toggleList}');
+                            print(
+                                '$index is change to ${tutorialViewModel.toggleList}');
                             HapticFeedback.lightImpact();
                           },
                           child: AnimatedContainer(
@@ -485,15 +500,18 @@ class _TutorialViewState extends State<TutorialView> {
                             width: 151.w,
                             height: 151.w,
                             decoration: yachtChoiceBoxDecoration.copyWith(
-                                color: index == 0 && tutorialViewModel.toggleList[0]
+                                color: index == 0 &&
+                                        tutorialViewModel.toggleList[0]
                                     ? yachtRed
-                                    : index == 1 && tutorialViewModel.toggleList[1]
+                                    : index == 1 &&
+                                            tutorialViewModel.toggleList[1]
                                         ? yachtBlue
                                         : white),
                             child: Padding(
                               padding: primaryAllPadding,
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Align(
@@ -506,15 +524,26 @@ class _TutorialViewState extends State<TutorialView> {
                                           // color: yachtDarkGrey,
                                         ),
                                         child: index == 0
-                                            ? Image.asset('assets/icons/quest_select_up.png',
-                                                color: tutorialViewModel.toggleList[0] ? white : yachtRed)
-                                            : Image.asset('assets/icons/quest_select_down.png',
-                                                color: tutorialViewModel.toggleList[1] ? white : yachtBlue)),
+                                            ? Image.asset(
+                                                'assets/icons/quest_select_up.png',
+                                                color: tutorialViewModel
+                                                        .toggleList[0]
+                                                    ? white
+                                                    : yachtRed)
+                                            : Image.asset(
+                                                'assets/icons/quest_select_down.png',
+                                                color: tutorialViewModel
+                                                        .toggleList[1]
+                                                    ? white
+                                                    : yachtBlue)),
                                   ),
                                   Text(
                                     questModel.choices![index],
                                     style: yachtChoiceBoxName.copyWith(
-                                        color: tutorialViewModel.toggleList[index] ? white : yachtBlack),
+                                        color:
+                                            tutorialViewModel.toggleList[index]
+                                                ? white
+                                                : yachtBlack),
                                   )
                                 ],
                               ),
@@ -566,7 +595,8 @@ Widget tutorialDescription(bool isAlignLeft, String description) {
       isAlignLeft ? Container() : Spacer(),
       Container(
         height: 40.w,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(54.0), color: buttonNormal),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(54.0), color: buttonNormal),
         child: Padding(
           padding: EdgeInsets.only(left: 20.w, right: 20.w),
           child: Center(
@@ -582,7 +612,8 @@ Widget tutorialDescription(bool isAlignLeft, String description) {
   );
 }
 
-Widget tutorialButton(TutorialCoachMark tutorialCoachMark, bool isAlignLeft, String description) {
+Widget tutorialButton(
+    TutorialCoachMark tutorialCoachMark, bool isAlignLeft, String description) {
   return Row(
     children: [
       isAlignLeft ? Container() : Spacer(),
@@ -592,7 +623,8 @@ Widget tutorialButton(TutorialCoachMark tutorialCoachMark, bool isAlignLeft, Str
         },
         child: Container(
           height: 40.w,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(54.0), color: yachtViolet),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(54.0), color: yachtViolet),
           child: Padding(
             padding: EdgeInsets.only(left: 20.w, right: 20.w),
             child: Center(
