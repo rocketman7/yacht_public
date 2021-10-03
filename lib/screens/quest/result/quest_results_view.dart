@@ -60,7 +60,10 @@ class QuestResultsView extends StatelessWidget {
                                   width: kHorizontalPadding.left,
                                 )
                               : Container(),
-                          QuestResultWidget(context: context, questModel: homeViewModel.resultQuests[index]),
+                          QuestResultWidget(
+                            context: context,
+                            questModel: homeViewModel.resultQuests[index],
+                          ),
                           horizontalSpaceLarge
                         ],
                       ),

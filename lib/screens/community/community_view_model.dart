@@ -32,6 +32,8 @@ class CommunityViewModel extends GetxController {
   RxBool isGettingPosts = false.obs;
   RxBool hasNextPosts = true.obs;
 
+  RxBool isUploadingNewPost = false.obs;
+
   @override
   void onInit() async {
     print('community view model oninit');

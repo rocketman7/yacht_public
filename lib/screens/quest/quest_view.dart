@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 
 import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/repositories/repository.dart';
 
 import 'package:yachtOne/screens/quest/quest_widget.dart';
 import 'package:yachtOne/screens/quest/quest_view_model.dart';
@@ -261,11 +262,18 @@ class QuestView extends StatelessWidget {
                       questViewModel.isSelectingSheetShowing(true);
                       questViewModel.syncUserSelect();
                     } else {
-                      questViewModel.updateUserQuest();
-                      Future.delayed(Duration(milliseconds: 600)).then((_) {
-                        questViewModel.isSelectingSheetShowing(false);
-                      });
-                      yachtSnackBarFromBottom("저장되었습니다.");
+                      if (questModel.itemNeeded > userModelRx.value!.item) {
+                        yachtSnackBarFromBottom(
+                          "보유 중인 조가비가 부족합니다.\n홈 화면에서 광고를 보고 조가비를 얻을 수 있어요.",
+                          longerDuration: 2000,
+                        );
+                      } else {
+                        questViewModel.updateUserQuest();
+                        Future.delayed(Duration(milliseconds: 600)).then((_) {
+                          questViewModel.isSelectingSheetShowing(false);
+                        });
+                        yachtSnackBarFromBottom("저장되었습니다.");
+                      }
                     }
                     ;
                   },

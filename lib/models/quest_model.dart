@@ -43,7 +43,7 @@ class QuestModel {
   //기본적으로 investAddresses element의 name
   //그러나 category 상승, 하락이면 따로 '상승', '하락' 표기
   final List<String>? choices;
-  final List<int>? counts;
+  final int counts;
   final List<int>? results;
   QuestModel({
     required this.questId,
@@ -75,7 +75,7 @@ class QuestModel {
     this.investAddresses,
     this.surveys,
     this.choices,
-    this.counts,
+    required this.counts,
     this.results,
   });
 
@@ -109,7 +109,7 @@ class QuestModel {
     List<InvestAddressModel>? investAddresses,
     List<SurveyQuestionModel>? surveys,
     List<String>? choices,
-    List<int>? counts,
+    int? counts,
     List<int>? results,
   }) {
     return QuestModel(
@@ -237,7 +237,7 @@ class QuestModel {
       investAddresses: investAddress,
       surveys: surveys,
       choices: map['choices'] == null ? null : List<String>.from(map['choices']),
-      counts: map['counts'] == null ? null : List<int>.from(map['counts']),
+      counts: map['counts'] ?? 0,
       results: map['results'] == null ? null : List<int>.from(map['results']),
     );
   }
@@ -285,7 +285,7 @@ class QuestModel {
         listEquals(other.investAddresses, investAddresses) &&
         listEquals(other.surveys, surveys) &&
         listEquals(other.choices, choices) &&
-        listEquals(other.counts, counts) &&
+        other.counts == counts &&
         listEquals(other.results, results);
   }
 

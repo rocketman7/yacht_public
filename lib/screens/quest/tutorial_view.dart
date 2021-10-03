@@ -222,90 +222,90 @@ class TutorialView extends StatelessWidget {
                     style: questTitleTextStyle, maxLines: 3, textAlign: TextAlign.center),
               ),
               SizedBox(height: reducedPaddingWhenTextIsBelow(16.w, questTitleTextStyle.fontSize!)),
-              // Column(
-              //   children: [
-              //     Row(
-              //         children: List.generate(2, (index) {
-              //       return Row(
-              //         children: [
-              //           InkWell(
-              //             onTap: () {
-              //               tutorialViewModel.toggleUserSelect(index);
-              //               print('$index is change to ${tutorialViewModel.toggleList}');
-              //               HapticFeedback.lightImpact();
-              //             },
-              //             child: AnimatedContainer(
-              //               duration: Duration(milliseconds: 300),
-              //               width: 151.w,
-              //               height: 151.w,
-              //               decoration: yachtChoiceBoxDecoration.copyWith(
-              //                   color: index == 0 && tutorialViewModel.toggleList[0]
-              //                       ? yachtRed
-              //                       : index == 1 && tutorialViewModel.toggleList[1]
-              //                           ? yachtBlue
-              //                           : white),
-              //               child: Padding(
-              //                 padding: primaryAllPadding,
-              //                 child: Column(
-              //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                   children: [
-              //                     Align(
-              //                       alignment: Alignment.centerRight,
-              //                       child: Container(
-              //                           width: 38.w,
-              //                           height: 38.w,
-              //                           decoration: BoxDecoration(
-              //                             shape: BoxShape.circle,
-              //                             // color: yachtDarkGrey,
-              //                           ),
-              //                           child: index == 0
-              //                               ? Image.asset('assets/icons/quest_select_up.png',
-              //                                   color: tutorialViewModel.toggleList[0] ? white : yachtRed)
-              //                               : Image.asset('assets/icons/quest_select_down.png',
-              //                                   color: tutorialViewModel.toggleList[1] ? white : yachtBlue)),
-              //                     ),
-              //                     Text(
-              //                       questModel.choices![index],
-              //                       style: yachtChoiceBoxName.copyWith(
-              //                           color: tutorialViewModel.toggleList[index] ? white : yachtBlack),
-              //                     )
-              //                   ],
-              //                 ),
-              //               ),
-              //             ),
-              //           ),
-              //           if (index == 0) SizedBox(width: primaryPaddingSize)
-              //         ],
-              //       );
-              //     })),
-              //     SizedBox(
-              //       height: 12.w,
-              //     ),
-              //     Align(
-              //         alignment: Alignment.centerRight,
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.end,
-              //           children: [
-              //             SvgPicture.asset(
-              //               'assets/icons/jogabi.svg',
-              //               height: 20.w,
-              //               width: 20.w,
-              //             ),
-              //             SizedBox(
-              //               width: 4.w,
-              //             ),
-              //             Text(
-              //               "${questModel.itemNeeded}개",
-              //               style: jogabiNumberStyle.copyWith(fontSize: 14.w),
-              //             ),
-              //             SizedBox(
-              //               width: 4.w,
-              //             ),
-              //           ],
-              //         )),
-              //   ],
-              // )
+              Column(
+                children: [
+                  Row(
+                      children: List.generate(2, (index) {
+                    return Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            tutorialViewModel.toggleUserSelect(index);
+                            print('$index is change to ${tutorialViewModel.toggleList}');
+                            HapticFeedback.lightImpact();
+                          },
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 300),
+                            width: 151.w,
+                            height: 151.w,
+                            decoration: yachtChoiceBoxDecoration.copyWith(
+                                color: index == 0 && tutorialViewModel.toggleList[0]
+                                    ? yachtRed
+                                    : index == 1 && tutorialViewModel.toggleList[1]
+                                        ? yachtBlue
+                                        : white),
+                            child: Padding(
+                              padding: primaryAllPadding,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                        width: 38.w,
+                                        height: 38.w,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          // color: yachtDarkGrey,
+                                        ),
+                                        child: index == 0
+                                            ? Image.asset('assets/icons/quest_select_up.png',
+                                                color: tutorialViewModel.toggleList[0] ? white : yachtRed)
+                                            : Image.asset('assets/icons/quest_select_down.png',
+                                                color: tutorialViewModel.toggleList[1] ? white : yachtBlue)),
+                                  ),
+                                  Text(
+                                    questModel.choices![index],
+                                    style: yachtChoiceBoxName.copyWith(
+                                        color: tutorialViewModel.toggleList[index] ? white : yachtBlack),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (index == 0) SizedBox(width: primaryPaddingSize)
+                      ],
+                    );
+                  })),
+                  SizedBox(
+                    height: 12.w,
+                  ),
+                  Align(
+                      alignment: Alignment.centerRight,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/jogabi.svg',
+                            height: 20.w,
+                            width: 20.w,
+                          ),
+                          SizedBox(
+                            width: 4.w,
+                          ),
+                          Text(
+                            "${questModel.itemNeeded}개",
+                            style: jogabiNumberStyle.copyWith(fontSize: 14.w),
+                          ),
+                          SizedBox(
+                            width: 4.w,
+                          ),
+                        ],
+                      )),
+                ],
+              )
 
               // SizedBox(height: 16.w)
             ],

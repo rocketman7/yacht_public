@@ -9,7 +9,13 @@ import 'package:yachtOne/repositories/repository.dart';
 
 class QuestResultsViewModel extends GetxController {
   final QuestModel questModel;
-  QuestResultsViewModel(this.questModel);
+  final UserQuestModel? otherUserQuestModel;
+  final int? otherUserExp;
+  QuestResultsViewModel({
+    required this.questModel,
+    this.otherUserQuestModel,
+    this.otherUserExp,
+  });
 
   final Rxn<UserQuestModel> thisUserQuestModel = Rxn<UserQuestModel>();
   Timer? _everySecond;
@@ -34,19 +40,22 @@ class QuestResultsViewModel extends GetxController {
 
 // 뷰모델의 Local userQuestModel에 userQuestModel Rx value를 받아오는데
     // 이 퀘스트의 선택만 가져온다
-    if (userQuestModelRx.length > 0) {
-      print('init');
-      if (userQuestModelRx.where((element) => element.questId == questModel.questId).length > 0) {
-        thisUserQuestModel(userQuestModelRx.where((element) => element.questId == questModel.questId).first);
-      }
-      // thisUserQuestModel.value == null
-      //     ? orderList.addAll(List.generate(questModel.investAddresses!.length, (index) => index))
-      //     : orderList(thisUserQuestModel.value!.selection);
-    }
+    if (otherUserQuestModel != null) {
+      thisUserQuestModel(otherUserQuestModel);
+      expBarStart(getBeforeTierExp(otherUserExp ?? 0));
+      expBarEnd(getNextTierExp(otherUserExp ?? 0));
+      expBarBeforeReward((otherUserExp ?? 0) -
+          ((otherUserQuestModel!.expSuccessRewarded ?? 0) + (otherUserQuestModel!.expParticipationRewarded ?? 0)));
+      expBarAfterReward(otherUserExp ?? 0);
 
-    userQuestModelRx.listen((value) {
-      // print('userQuestModel changed');
-      if (value.length > 0) {
+      print(expBarStart.value);
+      print(expBarEnd.value);
+      print(expBarBeforeReward.value);
+      print(expBarAfterReward.value);
+    } else {
+      if (userQuestModelRx.length > 0) {
+        print('init');
+        // print(uid);
         if (userQuestModelRx.where((element) => element.questId == questModel.questId).length > 0) {
           thisUserQuestModel(userQuestModelRx.where((element) => element.questId == questModel.questId).first);
         }
@@ -54,17 +63,29 @@ class QuestResultsViewModel extends GetxController {
         //     ? orderList.addAll(List.generate(questModel.investAddresses!.length, (index) => index))
         //     : orderList(thisUserQuestModel.value!.selection);
       }
-    });
-    // thisUserQuestModel.refresh();
-    // print('userquestmodel at result' + thisUserQuestModel.toString());
 
-    if (thisUserQuestModel.value != null) {
-      expBarStart(getBeforeTierExp(userModelRx.value!.exp));
-      expBarEnd(getNextTierExp(userModelRx.value!.exp));
-      expBarBeforeReward(userModelRx.value!.exp -
-          ((thisUserQuestModel.value!.expSuccessRewarded ?? 0) +
-              (thisUserQuestModel.value!.expParticipationRewarded ?? 0)));
-      expBarAfterReward(userModelRx.value!.exp);
+      userQuestModelRx.listen((value) {
+        // print('userQuestModel changed');
+        if (value.length > 0) {
+          if (userQuestModelRx.where((element) => element.questId == questModel.questId).length > 0) {
+            thisUserQuestModel(userQuestModelRx.where((element) => element.questId == questModel.questId).first);
+          }
+          // thisUserQuestModel.value == null
+          //     ? orderList.addAll(List.generate(questModel.investAddresses!.length, (index) => index))
+          //     : orderList(thisUserQuestModel.value!.selection);
+        }
+      });
+      // thisUserQuestModel.refresh();
+      // print('userquestmodel at result' + thisUserQuestModel.toString());
+
+      if (thisUserQuestModel.value != null) {
+        expBarStart(getBeforeTierExp(userModelRx.value!.exp));
+        expBarEnd(getNextTierExp(userModelRx.value!.exp));
+        expBarBeforeReward(userModelRx.value!.exp -
+            ((thisUserQuestModel.value!.expSuccessRewarded ?? 0) +
+                (thisUserQuestModel.value!.expParticipationRewarded ?? 0)));
+        expBarAfterReward(userModelRx.value!.exp);
+      }
     }
     super.onInit();
   }

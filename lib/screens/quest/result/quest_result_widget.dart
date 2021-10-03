@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/handlers/user_tier_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/quest/result/quest_results_view_model.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -13,6 +14,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 class QuestResultWidget extends StatelessWidget {
   final BuildContext context;
   final QuestModel questModel;
+
   QuestResultWidget({
     Key? key,
     required this.context,
@@ -80,15 +82,11 @@ class QuestResultWidget extends StatelessWidget {
                         color: yachtBlack,
                       ),
                       SizedBox(width: 4.w),
-                      questModel.counts == null
-                          ? Text(
-                              '0',
-                              style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
-                            )
-                          : Text(
-                              '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
-                              style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
-                            )
+                      Text(
+                        '${questModel.counts}',
+                        // '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
+                        style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                      )
                     ],
                   ),
                 ],
@@ -118,10 +116,14 @@ class ResultDialog extends StatefulWidget {
   const ResultDialog({
     Key? key,
     required this.questModel,
+    this.otherUserQuestModel,
+    this.otherUserExp,
     // required this.questResultViewModel,
   }) : super(key: key);
 
   final QuestModel questModel;
+  final UserQuestModel? otherUserQuestModel;
+  final int? otherUserExp;
 
   @override
   State<ResultDialog> createState() => _ResultDialogState();
@@ -143,7 +145,11 @@ class _ResultDialogState extends State<ResultDialog> {
 
   @override
   Widget build(BuildContext context) {
-    QuestResultsViewModel questResultViewModel = Get.put(QuestResultsViewModel(widget.questModel));
+    QuestResultsViewModel questResultViewModel = Get.put(QuestResultsViewModel(
+      questModel: widget.questModel,
+      otherUserQuestModel: widget.otherUserQuestModel,
+      otherUserExp: widget.otherUserExp,
+    ));
 
     return Dialog(
         backgroundColor: Colors.transparent,
@@ -464,7 +470,10 @@ class _ResultDialogState extends State<ResultDialog> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      simpleTierRRectBox(exp: userModelRx.value!.exp, fontSize: 14.w, width: 104.w),
+                                      simpleTierRRectBox(
+                                          exp: widget.otherUserExp ?? userModelRx.value!.exp,
+                                          fontSize: 14.w,
+                                          width: 104.w),
                                       Obx(
                                         () => questResultViewModel.thisUserQuestModel.value != null
                                             ? Text(

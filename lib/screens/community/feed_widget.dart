@@ -114,7 +114,13 @@ class FeedWidget extends StatelessWidget {
                             SizedBox(
                               width: 8.w,
                             ),
-                            simpleTierRRectBox(exp: post.writerExp ?? 0),
+                            GestureDetector(
+                                onTap: () => showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return yachtTierInfoPopUp(context, post.writerExp ?? 0);
+                                    }),
+                                child: simpleTierRRectBox(exp: post.writerExp ?? 0)),
                             Spacer(),
                             PopupMenuButton(
                               padding: EdgeInsets.symmetric(horizontal: 4),
@@ -443,7 +449,10 @@ class FeedWidget extends StatelessWidget {
                                                       return InkWell(
                                                         onTap: () {
                                                           // print(imageUrls);
-                                                          Get.dialog(buildPhotoPageView(index, imageUrls));
+                                                          showDialog(
+                                                              context: context,
+                                                              builder: (context) =>
+                                                                  buildPhotoPageView(context, index, imageUrls));
                                                         },
                                                         child: CachedNetworkImage(
                                                           imageUrl: imageUrls[index],
@@ -558,17 +567,23 @@ class FeedWidget extends StatelessWidget {
     );
   }
 
-  Dialog buildPhotoPageView(int index, List<String> imageUrls) {
+  Dialog buildPhotoPageView(BuildContext context, int index, List<String> imageUrls) {
     return Dialog(
       backgroundColor: Colors.transparent,
       clipBehavior: Clip.hardEdge,
       insetPadding: EdgeInsets.symmetric(horizontal: 0),
       child: Row(
         children: [
-          Container(
-            width: ScreenUtil().screenWidth * .12,
-            height: 200,
-            // width: 20,
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+              width: ScreenUtil().screenWidth * .10,
+              height: 200,
+              // width: 20,
+            ),
           ),
           Expanded(
             child: Container(
@@ -620,10 +635,16 @@ class FeedWidget extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: ScreenUtil().screenWidth * .12,
-            height: 200,
-            // width: 20,
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+              width: ScreenUtil().screenWidth * .10,
+              height: 200,
+              // width: 20,
+            ),
           ),
         ],
       ),

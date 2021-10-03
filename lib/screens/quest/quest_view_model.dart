@@ -14,6 +14,7 @@ import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../locator.dart';
 
@@ -177,8 +178,10 @@ class QuestViewModel extends GetxController {
 
   // userQuest에 user가 선택한 정답 업데이트하는 함수
   Future updateUserQuest() async {
+    // 조가비 체크
+
     // [2], [2,3], 이런식으로 넣게 됨.
-    List<num> answers = [];
+    List<int> answers = [];
     for (int i = 0; i < toggleList.length; i++) {
       if (toggleList[i] == true) answers.add(i);
     }

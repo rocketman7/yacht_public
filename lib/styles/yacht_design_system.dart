@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -1245,21 +1247,39 @@ TextStyle pickManyCircleName = TextStyle(
 
 // BUTTONS
 Container simpleTextContainerButton(
-  String text,
-) {
+  String text, {
+  Widget? child,
+}) {
   return Container(
-    // alignment: Alignment.center,
-    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
-    decoration: BoxDecoration(
-      color: primaryButtonText,
-      borderRadius: BorderRadius.circular(50),
-    ),
-    child: Text(
-      text,
-      textAlign: TextAlign.center,
-      style: simpleTextButtonStyle,
-    ),
-  );
+      // alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+      decoration: BoxDecoration(
+        color: primaryButtonText,
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: child == null
+          ? Text(
+              text,
+              textAlign: TextAlign.center,
+              style: simpleTextButtonStyle,
+            )
+          : Stack(
+              alignment: Alignment.center,
+              children: [
+                Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: simpleTextButtonStyle.copyWith(color: Colors.transparent),
+                ),
+                Positioned(
+                  child: SizedBox(
+                    height: simpleTextButtonStyle.fontSize,
+                    width: simpleTextButtonStyle.fontSize,
+                    child: child,
+                  ),
+                ),
+              ],
+            ));
 }
 
 Container simpleTextContainerLessRadiusButton(
@@ -1465,6 +1485,150 @@ Container secondarySectionBoxWithBottomButton({
   );
 }
 
+class SectionBoxWithBottomButtonAndBorder extends StatefulWidget {
+  final double? height;
+  final double? width;
+  final EdgeInsets? padding;
+  final String? buttonTitle;
+  final Widget child;
+
+  const SectionBoxWithBottomButtonAndBorder(
+      {Key? key, this.height, this.width, this.padding, this.buttonTitle, required this.child})
+      : super(key: key);
+
+  @override
+  _SectionBoxWithBottomButtonAndBorderState createState() => _SectionBoxWithBottomButtonAndBorderState();
+}
+
+class _SectionBoxWithBottomButtonAndBorderState extends State<SectionBoxWithBottomButtonAndBorder> {
+  RxDouble animator = 0.0.obs;
+  late Timer timer;
+  @override
+  void initState() {
+    // TODO: implement initState
+    int i = 0;
+
+    timer = Timer.periodic(Duration(milliseconds: 100), (_) {
+      animator(cos((pi / 180) * 4 * i).abs());
+      i++;
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => Container(
+        height: widget.height,
+        width: widget.width,
+        // padding: padding,
+        decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.circular(14.w),
+            boxShadow: [
+              BoxShadow(
+                color: yachtShadow,
+                blurRadius: 8.w,
+                spreadRadius: 1.w,
+              )
+            ],
+            border: Border.all(
+              width: 2.w,
+              color: yachtViolet.withOpacity(animator.value),
+            )),
+        child: Column(
+          // mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: widget.padding!,
+                child: widget.child,
+              ),
+            ),
+            Container(
+              height: 44.w,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: yachtViolet,
+                  borderRadius:
+                      BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
+              child: Center(
+                child: Text(
+                  widget.buttonTitle!,
+                  style: buttonTitleStyle,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Container sectionBoxWithBottomButtonAndBorder({
+//   double? height,
+//   double? width,
+//   EdgeInsets? padding,
+//   String? buttonTitle,
+//   // Function? onTap,
+//   required Widget child,
+// }) {
+
+//   return Container(
+//     height: height,
+//     width: width,
+//     // padding: padding,
+//     decoration: BoxDecoration(
+//         color: white,
+//         borderRadius: BorderRadius.circular(14.w),
+//         boxShadow: [
+//           BoxShadow(
+//             color: yachtShadow,
+//             blurRadius: 8.w,
+//             spreadRadius: 1.w,
+//           )
+//         ],
+//         border: Border.all(
+//           width: 2.w,
+//           color: yachtViolet.withOpacity(animator.value),
+//         )),
+//     child: Column(
+//       // mainAxisSize: MainAxisSize.max,
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       children: [
+//         Expanded(
+//           child: Padding(
+//             padding: padding!,
+//             child: child,
+//           ),
+//         ),
+//         Container(
+//           height: 44.w,
+//           width: double.infinity,
+//           decoration: BoxDecoration(
+//               color: yachtViolet,
+//               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
+//           child: Center(
+//             child: Text(
+//               buttonTitle!,
+//               style: buttonTitleStyle,
+//             ),
+//           ),
+//         )
+//       ],
+//     ),
+//   );
+// }
+
 Container simpleTierRRectBox({int exp = 0, double? fontSize, double width = 70}) {
   String tierName = getTierByExp(exp);
   String tierTitle = separateStringFromTier(tierName);
@@ -1623,7 +1787,10 @@ yachtSnackBar(String title) {
   );
 }
 
-yachtSnackBarFromBottom(String title) {
+yachtSnackBarFromBottom(
+  String title, {
+  int? longerDuration,
+}) {
   return Get.rawSnackbar(
     messageText: Center(
       child: Text(
@@ -1635,7 +1802,7 @@ yachtSnackBarFromBottom(String title) {
     backgroundColor: white.withOpacity(.7),
     barBlur: 2,
     margin: EdgeInsets.only(bottom: 80.w + SizeConfig.safeAreaBottom),
-    duration: const Duration(seconds: 1, milliseconds: 300),
+    duration: Duration(milliseconds: longerDuration ?? 1300),
     // animationDuration: const Duration(microseconds: 1000),
   );
 }

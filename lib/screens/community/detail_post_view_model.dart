@@ -14,7 +14,7 @@ class DetailPostViewModel extends GetxController {
   final PostModel post;
   final RxList<CommentModel> comments = RxList<CommentModel>();
   late final Rx<PostModel> thisPost;
-
+  RxBool isUploadingNewPost = false.obs;
   DetailPostViewModel(this.post);
   @override
   void onInit() async {

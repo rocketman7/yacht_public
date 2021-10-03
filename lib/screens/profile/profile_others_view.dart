@@ -4,14 +4,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/handlers/user_tier_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/profile/my_feed_view.dart';
 import 'package:yachtOne/screens/quest/result/quest_result_widget.dart';
 import 'package:yachtOne/screens/ranks/rank_controller.dart';
+import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../handlers/numbers_handler.dart';
@@ -981,11 +984,14 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                                                       } else {
                                                         return InkWell(
                                                           onTap: () {
-                                                            showDialog(
-                                                                context: context,
-                                                                builder: (context) => ResultDialog(
-                                                                      questModel: snapshot.data!,
-                                                                    ));
+                                                            // showDialog(
+                                                            //     context: context,
+                                                            //     builder: (context) => ResultDialog(
+                                                            //           questModel: snapshot.data!,
+                                                            //           otherUserQuestModel: profileOthersViewModel
+                                                            //               .otherUserQuestModels[index],
+                                                            //           otherUserExp: profileOthersViewModel.user.exp,
+                                                            //         ));
 
                                                             // Get.toNamed('/quest',
                                                             //     arguments:

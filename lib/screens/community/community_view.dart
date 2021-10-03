@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/community/post_model.dart';
@@ -295,18 +296,28 @@ class WritingNewPost extends StatelessWidget {
                     flex: 1,
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: InkWell(
-                          onTap: () async {
-                            if (_contentFormKey.currentState!.validate()) {
-                              print("OKAY");
-                              print(_contentController.value.text);
-                              await _communityViewModel.uploadPost(_contentController.value.text);
-                              await _communityViewModel.reloadPost();
-                              Get.back();
-                              yachtSnackBar("성공적으로 업로드 되었어요.");
-                            }
-                          },
-                          child: simpleTextContainerButton("올리기")),
+                      child: Obx(
+                        () => InkWell(
+                            onTap: () async {
+                              if (_contentFormKey.currentState!.validate() &&
+                                  !_communityViewModel.isUploadingNewPost.value) {
+                                HapticFeedback.lightImpact();
+                                _communityViewModel.isUploadingNewPost(true);
+                                await _communityViewModel.uploadPost(_contentController.value.text);
+                                await _communityViewModel.reloadPost();
+                                Get.back();
+                                _communityViewModel.isUploadingNewPost(false);
+                                yachtSnackBar("성공적으로 업로드 되었어요.");
+                              }
+                            },
+                            child: _communityViewModel.isUploadingNewPost.value
+                                ? simpleTextContainerButton("올리기",
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 1.4.w,
+                                      color: yachtViolet,
+                                    ))
+                                : simpleTextContainerButton("올리기")),
+                      ),
                     ),
                   ),
                 ],
