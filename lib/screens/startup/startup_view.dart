@@ -66,54 +66,63 @@ class StartupView extends GetView<StartupViewModel> {
       bottomNavigationBar: Obx(() => ClipRRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-              child: BottomNavigationBar(
-                // elevation: 8,
-                backgroundColor: primaryBackgroundColor.withOpacity(.65),
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                currentIndex: controller.selectedPage.value,
-                onTap: (index) {
-                  controller.selectedPage(index);
-                },
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Image.asset(
-                      'assets/icons/bottom_navigation/home_unselected.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    activeIcon: Image.asset(
-                      'assets/icons/bottom_navigation/home_selected.png',
-                      width: iconSize,
-                      height: iconSize,
-                    ),
-                    label: '',
-                  ),
-                  BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/icons/bottom_navigation/community_unselected.png',
-                        width: iconSize,
-                        height: iconSize,
+              child: SizedBox(
+                // height: 82.w,
+                child: BottomNavigationBar(
+                  selectedIconTheme: IconThemeData(size: 40),
+                  selectedFontSize: 0,
+                  unselectedFontSize: 0,
+                  // elevation: 8,
+                  backgroundColor: primaryBackgroundColor.withOpacity(.65),
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  currentIndex: controller.selectedPage.value,
+                  onTap: (index) {
+                    controller.selectedPage(index);
+                  },
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Container(
+                        // color: Colors.blue,
+                        child: Image.asset(
+                          'assets/icons/bottom_navigation/home_unselected.png',
+                          width: iconSize,
+                          height: iconSize,
+                        ),
                       ),
                       activeIcon: Image.asset(
-                        'assets/icons/bottom_navigation/community_selected.png',
+                        'assets/icons/bottom_navigation/home_selected.png',
                         width: iconSize,
                         height: iconSize,
                       ),
-                      label: ''),
-                  BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/icons/bottom_navigation/my_unselected.png',
-                        width: iconSize,
-                        height: iconSize,
-                      ),
-                      activeIcon: Image.asset(
-                        'assets/icons/bottom_navigation/my_selected.png',
-                        width: iconSize,
-                        height: iconSize,
-                      ),
-                      label: '')
-                ],
+                      label: '',
+                    ),
+                    BottomNavigationBarItem(
+                        icon: Image.asset(
+                          'assets/icons/bottom_navigation/community_unselected.png',
+                          width: iconSize,
+                          height: iconSize,
+                        ),
+                        activeIcon: Image.asset(
+                          'assets/icons/bottom_navigation/community_selected.png',
+                          width: iconSize,
+                          height: iconSize,
+                        ),
+                        label: ''),
+                    BottomNavigationBarItem(
+                        icon: Image.asset(
+                          'assets/icons/bottom_navigation/my_unselected.png',
+                          width: iconSize,
+                          height: iconSize,
+                        ),
+                        activeIcon: Image.asset(
+                          'assets/icons/bottom_navigation/my_selected.png',
+                          width: iconSize,
+                          height: iconSize,
+                        ),
+                        label: '')
+                  ],
+                ),
               ),
             ),
           )),

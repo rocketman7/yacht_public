@@ -108,7 +108,6 @@ class StatsViewModel extends GetxController {
           // 텀이 "Y"인데 맨 첫 인덱스면 그냥 쿼터에 넣는 것.
           _quarterStats.add(_stats[i]);
         } else {
-          print('stats check: ${_stats[i]}');
           StatsModel temp = _stats[i].copyWith(
               salesIS: (_stats[i].salesIS == null || _stats[i - 1].salesAccIS == null)
                   ? null

@@ -112,7 +112,7 @@ class QuestView extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                questModel.questDescription,
+                                questModel.questDescription.replaceAll('\\n', '\n'),
                                 style: questDescription,
                               ),
                               SizedBox(
@@ -134,7 +134,7 @@ class QuestView extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          questModel.rewardDescription!,
+                                          questModel.rewardDescription!.replaceAll('\\n', '\n'),
                                           style: questDescription,
                                         ), //temp
                                       ],
@@ -262,7 +262,12 @@ class QuestView extends StatelessWidget {
                       questViewModel.isSelectingSheetShowing(true);
                       questViewModel.syncUserSelect();
                     } else {
-                      if (questModel.itemNeeded > userModelRx.value!.item) {
+                      if (questModel.liveEndDateTime.toDate().isAfter(DateTime.now())) {
+                        yachtSnackBarFromBottom(
+                          "퀘스트 참여가능한 시간이 지났습니다.",
+                          // longerDuration: 2000,
+                        );
+                      } else if (questModel.itemNeeded > userModelRx.value!.item) {
                         yachtSnackBarFromBottom(
                           "보유 중인 조가비가 부족합니다.\n홈 화면에서 광고를 보고 조가비를 얻을 수 있어요.",
                           longerDuration: 2000,
@@ -275,7 +280,6 @@ class QuestView extends StatelessWidget {
                         yachtSnackBarFromBottom("저장되었습니다.");
                       }
                     }
-                    ;
                   },
                   child: ClipRect(
                     child: BackdropFilter(

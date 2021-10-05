@@ -48,6 +48,7 @@ class StatsView extends StatelessWidget {
             )
           : Column(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,85 +152,92 @@ class IncomeStatementChart extends StatelessWidget {
         //   "단위: ",
         //   style: questTermTextStyle.copyWith(fontSize: 12.w),
         // ),
-        Obx(
-          () => Container(
-            // color: Colors.yellow[200],
-            height: 130.w,
-            child: SfCartesianChart(
-              // zoomPanBehavior: ZoomPanBehavior(
-              //   zoomMode: ZoomMode.x,
-              //   enablePanning: true,
-              // ),
-              plotAreaBorderWidth: 0,
-              borderWidth: 0,
+        Obx(() {
+          if (statsViewModel!.chartStats == null || statsViewModel!.chartStats!.length == 0)
+            return Container(
+              height: 130.w,
+              child: Center(child: Text("제공된 데이터가 없습니다.")),
+            );
+          else {
+            return Container(
+              // color: Colors.yellow[200],
+              height: 130.w,
+              child: SfCartesianChart(
+                // zoomPanBehavior: ZoomPanBehavior(
+                //   zoomMode: ZoomMode.x,
+                //   enablePanning: true,
+                // ),
+                plotAreaBorderWidth: 0,
+                borderWidth: 0,
 
-              trackballBehavior: TrackballBehavior(enable: true),
-              series: statsViewModel!.selectedTerm.value == 0
-                  // 연간일 때
-                  ? _columnSeries(statsViewModel!, fieldName!, title!).sublist(3)
-                  // 분기일 때
-                  : _columnSeries(statsViewModel!, fieldName!, title!),
+                trackballBehavior: TrackballBehavior(enable: true),
+                series: statsViewModel!.selectedTerm.value == 0
+                    // 연간일 때
+                    ? _columnSeries(statsViewModel!, fieldName!, title!).sublist(3)
+                    // 분기일 때
+                    : _columnSeries(statsViewModel!, fieldName!, title!),
 
-              primaryXAxis: CategoryAxis(
-                  labelStyle: mostDetailedContentTextStyle.copyWith(fontSize: 14.w),
-                  labelAlignment: LabelAlignment.center,
-                  // edgeLabelPlacement: EdgeLabelPlacement.shift,
-                  // labelPlacement: LabelPlacement.betweenTicks,
-                  rangePadding: ChartRangePadding.none,
-                  // zoomPosition: 1,
-                  // zoomFactor: 0.85,
-                  // isInversed: true,
-                  crossesAt: 0,
-                  placeLabelsNearAxisLine: false,
-                  axisLine: AxisLine(width: 0),
-                  majorGridLines: MajorGridLines(width: 0),
-                  minorGridLines: MinorGridLines(width: 0),
-                  majorTickLines: MajorTickLines(width: 0),
-                  minorTickLines: MinorTickLines(width: 0),
-                  isVisible: true),
-              primaryYAxis: NumericAxis(
-                  labelPosition: ChartDataLabelPosition.outside,
-                  // tickPosition: TickPosition.outside,
+                primaryXAxis: CategoryAxis(
+                    labelStyle: mostDetailedContentTextStyle.copyWith(fontSize: 14.w),
+                    labelAlignment: LabelAlignment.center,
+                    // edgeLabelPlacement: EdgeLabelPlacement.shift,
+                    // labelPlacement: LabelPlacement.betweenTicks,
+                    rangePadding: ChartRangePadding.none,
+                    // zoomPosition: 1,
+                    // zoomFactor: 0.85,
+                    // isInversed: true,
+                    crossesAt: 0,
+                    placeLabelsNearAxisLine: false,
+                    axisLine: AxisLine(width: 0),
+                    majorGridLines: MajorGridLines(width: 0),
+                    minorGridLines: MinorGridLines(width: 0),
+                    majorTickLines: MajorTickLines(width: 0),
+                    minorTickLines: MinorTickLines(width: 0),
+                    isVisible: true),
+                primaryYAxis: NumericAxis(
+                    labelPosition: ChartDataLabelPosition.outside,
+                    // tickPosition: TickPosition.outside,
 
-                  majorTickLines: MajorTickLines(width: 0),
-                  numberFormat: formatPriceKRW,
-                  axisLine: AxisLine(width: 1),
-                  majorGridLines: MajorGridLines(width: 1),
-                  // maximum: fieldName == "salesIS"
-                  //     ? statsViewModel!.maxSales!
+                    majorTickLines: MajorTickLines(width: 0),
+                    numberFormat: formatPriceKRW,
+                    axisLine: AxisLine(width: 1),
+                    majorGridLines: MajorGridLines(width: 1),
+                    // maximum: fieldName == "salesIS"
+                    //     ? statsViewModel!.maxSales!
 
-                  //     : fieldName == "operatingIncomeIS"
-                  //         ? statsViewModel!.maxOperatingIncome!
-                  //         : statsViewModel!.maxNetIncome!
-                  // minimum: statsViewModel!.chartStats.length == 1
-                  //     ? 0
-                  //     : fieldName == "salesIS"
-                  //         ? statsViewModel!.minSales! -
-                  //             (statsViewModel!.maxSales! -
-                  //                     statsViewModel!.minSales!) /
-                  //                 2
-                  //         : fieldName == "operatingIncomeIS"
-                  //             ? statsViewModel!.minOperatingIncome! -
-                  //                 (statsViewModel!.maxOperatingIncome! -
-                  //                         statsViewModel!.minOperatingIncome!) /
-                  //                     2
-                  //             : statsViewModel!.minNetIncome! -
-                  //                 (statsViewModel!.maxNetIncome! -
-                  //                         statsViewModel!.minNetIncome!) /
-                  //                     3,
-                  //     85000, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
-                  // majorGridLines: MajorGridLines(width: 0),
-                  isVisible: false),
-              axes: [
-                NumericAxis(
-                  // minimum: 200000000000000,
-                  isVisible: false,
-                  name: 'yearAcc',
-                ),
-              ],
-            ),
-          ),
-        ),
+                    //     : fieldName == "operatingIncomeIS"
+                    //         ? statsViewModel!.maxOperatingIncome!
+                    //         : statsViewModel!.maxNetIncome!
+                    // minimum: statsViewModel!.chartStats.length == 1
+                    //     ? 0
+                    //     : fieldName == "salesIS"
+                    //         ? statsViewModel!.minSales! -
+                    //             (statsViewModel!.maxSales! -
+                    //                     statsViewModel!.minSales!) /
+                    //                 2
+                    //         : fieldName == "operatingIncomeIS"
+                    //             ? statsViewModel!.minOperatingIncome! -
+                    //                 (statsViewModel!.maxOperatingIncome! -
+                    //                         statsViewModel!.minOperatingIncome!) /
+                    //                     2
+                    //             : statsViewModel!.minNetIncome! -
+                    //                 (statsViewModel!.maxNetIncome! -
+                    //                         statsViewModel!.minNetIncome!) /
+                    //                     3,
+                    //     85000, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
+                    // majorGridLines: MajorGridLines(width: 0),
+                    isVisible: false),
+                axes: [
+                  NumericAxis(
+                    // minimum: 200000000000000,
+                    isVisible: false,
+                    name: 'yearAcc',
+                  ),
+                ],
+              ),
+            );
+          }
+        }),
       ],
     );
   }

@@ -4,8 +4,10 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:yachtOne/handlers/user_tier_handler.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/services/storage_service.dart';
@@ -483,7 +485,7 @@ TextStyle awardAmountKoreanTextStyle = TextStyle(
   fontSize: 24.w,
   fontWeight: FontWeight.w300,
   color: yachtViolet.withOpacity(0.3),
-  letterSpacing: 5.75,
+  letterSpacing: 3,
   height: 1.4,
 );
 
@@ -562,7 +564,7 @@ TextStyle awardModuleSliderAmountKoreanTextStyle = TextStyle(
   fontSize: 18.w,
   fontWeight: FontWeight.w300,
   color: yachtViolet,
-  // letterSpacing: 5.75,
+  letterSpacing: 3,
   height: 1.4,
 );
 // 홈-상금박스-상금기한
@@ -1989,7 +1991,6 @@ Container dashedLine({
   required Color color,
 }) {
   int numberOfDashes = length ~/ (dashedLength * 6 / 4);
-  print('numberOfDashes: $numberOfDashes');
   return Container(
     child: Column(
       children: List.generate(numberOfDashes * 2, (index) {
@@ -2007,4 +2008,111 @@ Container dashedLine({
       }),
     ),
   );
+}
+
+CustomHeader reloadHeader(bool isTopOfScreen) {
+  RxString footer = "당겨서 새로고침".obs;
+  return CustomHeader(
+      builder: (_, status) {
+        // status = RefreshStatus.
+        return Container(
+          height: isTopOfScreen ? SizeConfig.safeAreaTop + 20.w : 20.w,
+          // color: Colors.blue,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Text(
+              footer.value,
+              style: TextStyle(fontSize: 14, fontFamily: 'Default'),
+            ),
+          ),
+        );
+      },
+      height: isTopOfScreen ? SizeConfig.safeAreaTop + 20.w : 20.w,
+      onModeChange: (mode) {
+        if (mode == RefreshStatus.idle) {
+          footer("당겨서 새로고침");
+        } else if (mode == RefreshStatus.canRefresh) {
+          footer("놓아주세요");
+        } else if (mode == RefreshStatus.refreshing) {
+          footer("새로고치는 중...");
+        } else if (mode == RefreshStatus.completed) {
+          footer("완료!");
+        }
+      });
+}
+
+class PrimaryWebView extends StatelessWidget {
+  final String title;
+  final String url;
+  PrimaryWebView({Key? key, required this.title, required this.url}) : super(key: key);
+  final GlobalKey webViewKey = GlobalKey();
+  final RxDouble progessPercent = 0.0.obs;
+
+  InAppWebViewController? webViewController;
+  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
+    crossPlatform: InAppWebViewOptions(
+      useShouldOverrideUrlLoading: true,
+      mediaPlaybackRequiresUserGesture: false,
+    ),
+    android: AndroidInAppWebViewOptions(
+      useHybridComposition: true,
+    ),
+    ios: IOSInAppWebViewOptions(
+      allowsInlineMediaPlayback: true,
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: primaryAppBar(title),
+      backgroundColor: primaryBackgroundColor,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Obx(
+              () => Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: progessPercent.value < 1.0
+                      ? LinearProgressIndicator(
+                          value: progessPercent.value,
+                          backgroundColor: primaryButtonText,
+                          valueColor: AlwaysStoppedAnimation<Color>(yachtViolet),
+                        )
+                      : Container()),
+            ),
+            Expanded(
+              child: InAppWebView(
+                key: webViewKey,
+                onProgressChanged: (controller, progress) {
+                  // print('progress: $progress');
+                  progessPercent(progress / 100);
+                },
+                initialUrlRequest: URLRequest(url: Uri.parse(url)),
+                initialOptions: options,
+
+                onWebViewCreated: (controller) {
+                  webViewController = controller;
+                },
+                // onLoadStart: (controller, url) {
+                //   setState(() {
+                //     this.url = url.toString();
+                //     urlController.text = this.url;
+                //   });
+                // },
+                androidOnPermissionRequest: (controller, origin, resources) async {
+                  return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
+                },
+                // shouldOverrideUrlLoading: (controller, navigationAction) async {
+
+                onConsoleMessage: (controller, consoleMessage) {
+                  // print(consoleMessage);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -127,7 +127,14 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                               width: 8.w,
                                             ),
                                             // 티어 컨테이너
-                                            simpleTierRRectBox(exp: detailPostViewModel.post.writerExp ?? 0),
+                                            GestureDetector(
+                                                onTap: () => showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return yachtTierInfoPopUp(context, post.writerExp ?? 0);
+                                                    }),
+                                                child:
+                                                    simpleTierRRectBox(exp: detailPostViewModel.post.writerExp ?? 0)),
                                             Spacer(),
                                             PopupMenuButton(
                                               padding: EdgeInsets.symmetric(horizontal: 4),
@@ -543,8 +550,15 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                       SizedBox(
                                                         width: 4.w,
                                                       ),
-                                                      simpleTierRRectBox(
-                                                          exp: detailPostViewModel.comments[index].writerExp ?? 0),
+                                                      GestureDetector(
+                                                        onTap: () => showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return yachtTierInfoPopUp(context, post.writerExp ?? 0);
+                                                            }),
+                                                        child: simpleTierRRectBox(
+                                                            exp: detailPostViewModel.comments[index].writerExp ?? 0),
+                                                      ),
                                                       Spacer(),
                                                       PopupMenuButton(
                                                         padding: EdgeInsets.symmetric(horizontal: 4),

@@ -372,12 +372,25 @@ class _TimeToEndCounterState extends State<TimeToEndCounter> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    if (_everySecond != null && _everySecond!.isActive) _everySecond!.cancel();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   void timeLeft() {
     if (widget.questModel.questEndDateTime == null) {
       timeToEnd("마감시한 없음");
     } else {
       Duration timeLeft = widget.questModel.questEndDateTime.toDate().difference(now);
-      timeToEnd('${countDown(timeLeft)} 뒤 마감');
+      if (timeLeft.inSeconds > 0) {
+        timeToEnd('${countDown(timeLeft)} 뒤 마감');
+      } else {
+        {
+          timeToEnd('마감되었습니다');
+        }
+      }
     }
     // return countDown(timeLeft);
   }

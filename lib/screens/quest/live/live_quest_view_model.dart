@@ -98,7 +98,7 @@ class LiveQuestViewModel extends GetxController {
 
         // print(livePrices[i][j]);
 
-        print(numberOfBusinessDay(liveQuests[i].liveStartDateTime.toDate(), liveQuests[i].liveEndDateTime.toDate()));
+        // print(numberOfBusinessDay(liveQuests[i].liveStartDateTime.toDate(), liveQuests[i].liveEndDateTime.toDate()));
       }
     }
 

@@ -51,7 +51,6 @@ class LiveWidget extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        print('tap');
         Get.to(() => LiveDetailView(), arguments: [questModel, liveQuestIndex]);
       },
       child: sectionBox(
@@ -109,7 +108,6 @@ class LiveWidget extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    print('tap');
                                     Get.to(() => LiveDetailView(), arguments: [questModel, liveQuestIndex]);
                                   },
                                   child: Container(

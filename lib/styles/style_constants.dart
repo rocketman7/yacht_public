@@ -114,7 +114,8 @@ BoxDecoration primaryBoxDecoration = BoxDecoration(
 // 모듈박스 그림자
 BoxShadow primaryBoxShadow = BoxShadow(
   color: boxShadowColor,
-  blurRadius: 12,
+  blurRadius: 12.w,
+  spreadRadius: 1.w,
   offset: Offset(0, 0),
 );
 // 불투명 Glassmorphism Container

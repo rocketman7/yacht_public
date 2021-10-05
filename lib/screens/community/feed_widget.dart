@@ -79,8 +79,8 @@ class FeedWidget extends StatelessWidget {
                         future: communityViewModel.getImageUrlFromStorage('avatars/${post.writerAvatarUrl}.png'),
                         builder: (context, snapshot) {
                           return snapshot.hasData
-                              ? CachedNetworkImage(
-                                  imageUrl: snapshot.data!,
+                              ? Image.network(
+                                  snapshot.data!,
                                 )
                               : Container();
                         })

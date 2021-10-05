@@ -329,6 +329,7 @@ class HomeViewModel extends GetxController {
 
   // 현재 홈 뷰에 올려야 하는 퀘스트를 모두 가져온 뒤, 각 섹션에 맞게 분류
   Future getAllQuests() async {
+    print('triggered');
     allQuests.clear();
     newQuests.clear();
     liveQuests.clear();
@@ -359,6 +360,7 @@ class HomeViewModel extends GetxController {
         // print("포함 안 된 quest: $element");
       }
     });
+    print('triggered done');
     update();
     // print('home view live');
     // print(liveQuests);

@@ -130,11 +130,11 @@ bool isBusinessDay(DateTime dateTime) {
 DateTime closestBusinessDay(DateTime dateTime) {
   // holiday랑 주말 거르고 다음 영업일 return
   String dateTimeStr = dateTimeToString(dateTime, 8)!;
-  print("BUSINESSDAYCHECK" + dateTime.weekday.toString());
+  // print("BUSINESSDAYCHECK" + dateTime.weekday.toString());
   if (dateTime.weekday == 6 || dateTime.weekday == 7 || holidayListKR.contains(dateTimeStr)) {
     return closestBusinessDay(dateTime.add(Duration(days: 1)));
   } else {
-    print("RETURNED DATETIME" + dateTime.toString());
+    // print("RETURNED DATETIME" + dateTime.toString());
     return dateTime;
   } // return dateTime;
 }
@@ -146,7 +146,6 @@ DateTime nextNthBusinessDay(DateTime dateTime, int n) {
   // dateTime = _timezoneService.koreaTime(dateTime);
   for (int i = 0; i < n; i++) {
     dateTime = closestBusinessDay(dateTime.add(Duration(days: 1)));
-    print(dateTime);
   }
 
   return dateTime;

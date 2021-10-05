@@ -52,6 +52,24 @@ class FirestoreService extends GetxService {
         .then((value) => TierSystemModel.fromMap(value.data()!));
   }
 
+  // 리그 모델
+  Future<LeagueAddressModel> getLeagueInfo() async {
+    return await _firestoreService
+        .collection('admin')
+        .doc('leagueInfo')
+        .get()
+        .then((value) => LeagueAddressModel.fromMap(value.data()!));
+  }
+
+  // 휴일 리스트
+  Future<List<String>> getHolidayList() async {
+    List<String> holidayList = [];
+    await _firestoreService.collection('admin').doc('holiday').get().then((value) {
+      holidayList = List<String>.from(value.data()!['KR']);
+    });
+    return holidayList;
+  }
+
   //// USER 정보
   // 새 USER 만들기
 
@@ -66,6 +84,7 @@ class FirestoreService extends GetxService {
 
   Stream<String> getOpenLeague() {
     return _firestoreService.collection('admin').doc('leagueInfo').snapshots().map((snapshot) {
+      // print(snapshot.data()!['openLeague']);
       return snapshot.data()!['openLeague'];
     });
   }
@@ -83,8 +102,8 @@ class FirestoreService extends GetxService {
   Stream<List<UserQuestModel>> getUserQuestStream(
     String uid,
   ) {
-    print('stream starting');
-    print(leagueRx.value);
+    // print('stream starting');
+    // print(leagueRx.value);
     return _firestoreService
         .collection('users')
         .doc(uid)
@@ -93,7 +112,7 @@ class FirestoreService extends GetxService {
         .collection('quests')
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
-              print('user quest: ${doc.data()}');
+              // print('user quest: ${doc.data()}');
               return UserQuestModel.fromMap(doc.id, doc.data());
             }).toList());
   }
@@ -102,7 +121,7 @@ class FirestoreService extends GetxService {
   Future<List<UserQuestModel>> getUserQuestFuture(
     String uid,
   ) {
-    print('stream starting');
+    // print('stream starting');
     print(leagueRx.value);
     return _firestoreService
         .collection('users')
@@ -112,7 +131,7 @@ class FirestoreService extends GetxService {
         .collection('quests')
         .get()
         .then((value) => value.docs.map((doc) {
-              print('user quest: ${doc.data()}');
+              // print('user quest: ${doc.data()}');
               return UserQuestModel.fromMap(doc.id, doc.data());
             }).toList());
   }
@@ -215,13 +234,31 @@ class FirestoreService extends GetxService {
             ));
   }
 
+  Future updateUserAlltimeQuest(
+    QuestModel questModel,
+  ) async {
+    await _firestoreService
+        .collection('users/${userModelRx.value!.uid}/userVote')
+        .doc(questModel.leagueId ?? leagueRx.value)
+        .collection('quests')
+        .doc(questModel.questId)
+        .set(
+            {
+          'leagueId': questModel.leagueId ?? leagueRx.value,
+          'selectDateTime': FieldValue.serverTimestamp(),
+        },
+            SetOptions(
+              merge: true,
+            ));
+  }
+
   Future updateQuestParticipationReward(
     QuestModel questModel,
   ) async {
     AssetModel newAssetModel = AssetModel(
       tradeDate: Timestamp.fromDate(DateTime.now()),
       assetCategory: 'YachtPoint',
-      tradeTitle: "퀘스트 성공",
+      tradeTitle: "${questModel.category} 참여",
       yachtPoint: questModel.yachtPointParticipationReward,
     );
 
@@ -246,7 +283,7 @@ class FirestoreService extends GetxService {
 
     try {
       await _historicalPriceRef
-          .orderBy('dateTime', descending: true)
+          .orderBy('dateTime', descending: true) //최신부터 리스트 0번에
           .get()
           .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
                 // print(doc.id);  // document id 출력
@@ -402,10 +439,10 @@ class FirestoreService extends GetxService {
   // User QuestModel 업데이트
 
   // 기업 세부 정보 가져오기
-  Future<CorporationModel> getCorporationInfo(InvestAddressModel investAddressModel) async {
+  Future<CorporationModel?> getCorporationInfo(InvestAddressModel investAddressModel) async {
     return await _firestoreService.collection('stocksKR').doc('${investAddressModel.issueCode}').get().then((value) {
-      print('copr data: ${value.data()}');
-      return CorporationModel.fromMap(value.data()!);
+      // print('copr data: ${value.data()}');
+      return value.data() == null ? null : CorporationModel.fromMap(value.data()!);
     });
   }
 

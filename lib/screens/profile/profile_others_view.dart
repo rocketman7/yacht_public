@@ -950,11 +950,11 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                           style: profileHeaderTextStyle,
                         ),
                         Spacer(),
-                        Image.asset(
-                          'assets/icons/navigate_foward_arrow.png',
-                          height: 16.w,
-                          width: 9.w,
-                        )
+                        // Image.asset(
+                        //   'assets/icons/navigate_foward_arrow.png',
+                        //   height: 16.w,
+                        //   width: 9.w,
+                        // )
                       ],
                     ),
                   ),
@@ -966,7 +966,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                         ? Image.asset('assets/illusts/not_exists/no_quest_done.png', height: 150.w)
                         : Column(
                             children: List.generate(
-                                profileOthersViewModel.otherUserQuestModels.length,
+                                min(profileOthersViewModel.otherUserQuestModels.length, 5),
                                 (index) => Column(
                                       children: [
                                         Padding(

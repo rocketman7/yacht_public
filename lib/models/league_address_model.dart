@@ -1,61 +1,61 @@
 import 'dart:convert';
 
 class LeagueAddressModel {
-  final String uid;
-  final String league;
-  final String date;
+  final String openLeague;
+  final String leagueName;
+  final String leagueEndDateTime;
   LeagueAddressModel({
-    required this.uid,
-    required this.league,
-    required this.date,
+    required this.openLeague,
+    required this.leagueName,
+    required this.leagueEndDateTime,
   });
 
   LeagueAddressModel copyWith({
-    String? uid,
-    String? league,
-    String? date,
+    String? openLeague,
+    String? leagueName,
+    String? leagueEndDateTime,
   }) {
     return LeagueAddressModel(
-      uid: uid ?? this.uid,
-      league: league ?? this.league,
-      date: date ?? this.date,
+      openLeague: openLeague ?? this.openLeague,
+      leagueName: leagueName ?? this.leagueName,
+      leagueEndDateTime: leagueEndDateTime ?? this.leagueEndDateTime,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
-      'league': league,
-      'date': date,
+      'openLeague': openLeague,
+      'leagueName': leagueName,
+      'leagueEndDateTime': leagueEndDateTime,
     };
   }
 
   factory LeagueAddressModel.fromMap(Map<String, dynamic> map) {
     return LeagueAddressModel(
-      uid: map['uid'],
-      league: map['league'],
-      date: map['date'],
+      openLeague: map['openLeague'],
+      leagueName: map['leagueName'],
+      leagueEndDateTime: map['leagueEndDateTime'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory LeagueAddressModel.fromJson(String source) =>
-      LeagueAddressModel.fromMap(json.decode(source));
+  factory LeagueAddressModel.fromJson(String source) => LeagueAddressModel.fromMap(json.decode(source));
 
   @override
-  String toString() => 'AddressModel(uid: $uid, league: $league, date: $date)';
+  String toString() =>
+      'LeagueAddressModel(openLeague: $openLeague, leagueName: $leagueName, leagueEndDateTime: $leagueEndDateTime)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is LeagueAddressModel &&
-        other.uid == uid &&
-        other.league == league &&
-        other.date == date;
+        other.openLeague == openLeague &&
+        other.leagueName == leagueName &&
+        other.leagueEndDateTime == leagueEndDateTime;
   }
 
   @override
-  int get hashCode => uid.hashCode ^ league.hashCode ^ date.hashCode;
+  int get hashCode => openLeague.hashCode ^ leagueName.hashCode ^ leagueEndDateTime.hashCode;
 }

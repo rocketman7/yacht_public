@@ -36,7 +36,7 @@ class DescriptionView extends GetView<DescriptionViewModel> {
               (controller.corporationModel.value.description == "" ||
                       controller.corporationModel.value.description == null)
                   ? "기업 소개가 없습니다"
-                  : controller.corporationModel.value.description!,
+                  : controller.corporationModel.value.description!.replaceAll('\\n', '\n'),
               style: detailedContentTextStyle,
             ))
       ],

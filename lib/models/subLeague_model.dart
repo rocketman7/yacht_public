@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui'; // offset때매 잠깐 넣어놓음.
 
 import 'package:flutter/foundation.dart';
+import 'package:yachtOne/models/quest_model.dart';
 
 // 월간 리그를 구성하는 하나의 서브리그에 대한 정보를 담는 모델.
 // 예를 들어 4월 리그의 서브리그로, 소통왕이라는 서브리그가 있을 수 있고 그에 대한 정보를 담는다.
@@ -57,16 +58,14 @@ class SubLeagueModel {
       description: map['description'],
       comment: map['comment'],
       rules: List<String>.from(map['rules']),
-      stocks: List<SubLeagueStocksModel>.from(
-          map['stocks']?.map((x) => SubLeagueStocksModel.fromMap(x))),
+      stocks: List<SubLeagueStocksModel>.from(map['stocks']?.map((x) => SubLeagueStocksModel.fromMap(x))),
       // totalValue: map['totalValue'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory SubLeagueModel.fromJson(String source) =>
-      SubLeagueModel.fromMap(json.decode(source));
+  factory SubLeagueModel.fromJson(String source) => SubLeagueModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -88,11 +87,7 @@ class SubLeagueModel {
 
   @override
   int get hashCode {
-    return name.hashCode ^
-        description.hashCode ^
-        comment.hashCode ^
-        rules.hashCode ^
-        stocks.hashCode; // ^
+    return name.hashCode ^ description.hashCode ^ comment.hashCode ^ rules.hashCode ^ stocks.hashCode; // ^
     // totalValue.hashCode;
   }
 }
@@ -133,6 +128,16 @@ class SubLeagueStocksModel {
     );
   }
 
+  InvestAddressModel toInvestAddressModel() {
+    return InvestAddressModel(
+      market: field,
+      country: country,
+      isIndex: false,
+      issueCode: issueCode,
+      name: name,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'field': field,
@@ -157,8 +162,7 @@ class SubLeagueStocksModel {
 
   String toJson() => json.encode(toMap());
 
-  factory SubLeagueStocksModel.fromJson(String source) =>
-      SubLeagueStocksModel.fromMap(json.decode(source));
+  factory SubLeagueStocksModel.fromJson(String source) => SubLeagueStocksModel.fromMap(json.decode(source));
 
   @override
   String toString() {

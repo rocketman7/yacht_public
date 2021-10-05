@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:yachtOne/models/chart_price_model.dart';
+import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
@@ -21,6 +22,7 @@ UserModel? userModel;
 final Rxn<UserModel> userModelRx = Rxn<UserModel>();
 final RxList<UserQuestModel> userQuestModelRx = RxList<UserQuestModel>();
 
+final Rxn<LeagueAddressModel> leagueModel = Rxn<LeagueAddressModel>();
 final RxString leagueRx = "".obs;
 
 final Rxn<TierSystemModel> tierSystemModelRx = Rxn<TierSystemModel>();

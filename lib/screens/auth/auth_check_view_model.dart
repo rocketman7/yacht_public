@@ -1,12 +1,19 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:ntp/ntp.dart';
+import 'package:package_info/package_info.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/repositories/user_repository.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../locator.dart';
 
@@ -20,6 +27,11 @@ class AuthCheckViewModel extends GetxController {
   RxBool isLoadingData = true.obs;
   User? user;
 
+  String app_store_url = "";
+  String play_store_url = "https://play.google.com/store/apps/details?id=com.team_yacht.ggook";
+  bool isUrgentNotice = false;
+  String urgentMessage = "";
+
   Future checkTime() async {
     DateTime serverNowUtc = await NTP.now();
     DateTime deviceNowUtc = DateTime.now().toUtc();
@@ -32,11 +44,26 @@ class AuthCheckViewModel extends GetxController {
     }
   }
 
+  Future getLeagueInfo() async {
+    leagueModel(await _firestoreService.getLeagueInfo());
+    // print(leagueModel.value);
+    leagueRx(leagueModel.value!.openLeague);
+  }
+
+  Future getHolidayList() async {
+    holidayListKR.clear();
+    holidayListKR.addAll(await _firestoreService.getHolidayList());
+    // print(holidayListKR);
+  }
+
   @override
   void onInit() async {
     // await _firestoreService.getServerTime();
 
     await checkTime();
+    await getLeagueInfo();
+    await getHolidayList();
+    await versionCheck();
 
     isLoadingData(true);
     // TODO: implement onInit
@@ -44,9 +71,12 @@ class AuthCheckViewModel extends GetxController {
     user = authService.auth.currentUser;
     tierSystemModelRx(await _firestoreService.getTierSystem());
     currentUser!.bindStream(authService.auth.authStateChanges());
-    leagueRx.bindStream(_firestoreService.getOpenLeague());
-    // _authService.auth.signOut();
+
+    // leagueRx.bindStream(_firestoreService.getOpenLeague());
+    // authService.auth.signOut();
     update();
+
+    print(user);
     currentUser!.listen((user) async {
       print('listening $user');
 
@@ -84,5 +114,94 @@ class AuthCheckViewModel extends GetxController {
     //   print('currentUser value: ${currentUser!.value}');
     // });
     super.onInit();
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future versionCheck() async {
+    //Get Current installed version of app
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    final RemoteConfig remoteConfig = RemoteConfig.instance;
+    await remoteConfig.fetchAndActivate();
+    await remoteConfig.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: Duration(seconds: 10),
+      minimumFetchInterval: Duration(seconds: 1),
+    ));
+    // print(info.version.trim().replaceAll(".", ""));
+
+    double currentVersion = double.parse(info.version.trim().replaceAll(".", ""));
+    // print(currentVersion);
+    double newVersion = double.parse(remoteConfig.getString('force_update_current_version').trim().replaceAll(".", ""));
+    // print("CURRENT VERSION IS " + currentVersion.toString());
+    // print("newVersion VERSION IS " + newVersion.toString());
+
+    //Get Latest version info from firebase config
+    app_store_url = remoteConfig.getString('app_store_url');
+    play_store_url = remoteConfig.getString('play_store_url');
+    isUrgentNotice = remoteConfig.getBool('is_urgent_notice');
+    urgentMessage = remoteConfig.getString('urgent_message');
+
+    if (newVersion > currentVersion) {
+      Get.dialog(Dialog(
+        backgroundColor: primaryBackgroundColor,
+        insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+        clipBehavior: Clip.hardEdge,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Container(
+          padding: primaryHorizontalPadding,
+          height: 220.w,
+          width: 347.w,
+          child: Column(
+            children: [
+              SizedBox(height: 14.w),
+              Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
+              SizedBox(
+                height:
+                    correctHeight(35.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
+              ),
+              Center(
+                child: Text(
+                  '요트 새 버전이 출시되었습니다\n원활한 서비스 이용을 위하여 \n업데이트를 부탁드려요.',
+                  textAlign: TextAlign.center,
+                  style: yachtBadgesDescriptionDialogTitle,
+                ),
+              ),
+              SizedBox(
+                height: correctHeight(20.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+              ),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Platform.isIOS ? _launchURL(app_store_url) : _launchURL(play_store_url);
+                },
+                child: Container(
+                  height: 44.w,
+                  // width: 154.5.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(70.0),
+                    color: yachtViolet,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '요트 업데이트',
+                      style: yachtDeliveryDialogButtonText,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 14.w,
+              ),
+            ],
+          ),
+        ),
+      ));
+    }
   }
 }

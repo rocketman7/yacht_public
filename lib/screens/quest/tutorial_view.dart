@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/screens/quest/quest_widget.dart';
 import 'package:yachtOne/screens/quest/tutorial_view_model.dart';
 import 'package:yachtOne/styles/size_config.dart';
@@ -62,7 +64,7 @@ class _TutorialViewState extends State<TutorialView> {
         shape: ShapeLightFocus.RRect,
         radius: 12.w,
         paddingFocus: 5.w,
-        enableOverlayTab: false,
+        enableOverlayTab: true,
         enableTargetTab: true,
         contents: [
           TargetContent(
@@ -75,15 +77,15 @@ class _TutorialViewState extends State<TutorialView> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    tutorialDescription(true, '퀘스트 내용을 확인해볼까요?'),
+                    // tutorialDescription(true, '퀘스트 내용을 확인해볼까요?'),
                     SizedBox(
                       height: 6.w,
                     ),
-                    tutorialDescription(true, '이제 직접 참여해보세요.'),
-                    SizedBox(
-                      height: 6.w,
-                    ),
-                    tutorialButton(tutorialCoachMark, true, '다음 단계로 넘어가기'),
+                    tutorialButton(tutorialCoachMark, true, '퀘스트 내용을 확인하고 직접 참여해보세요.'),
+                    // SizedBox(
+                    //   height: 6.w,
+                    // ),
+                    // tutorialButton(tutorialCoachMark, true, '다음 단계로 넘어가기'),
                     SizedBox(
                       height: 50.w,
                     ),
@@ -144,7 +146,7 @@ class _TutorialViewState extends State<TutorialView> {
                     SizedBox(
                       height: 6.w,
                     ),
-                    tutorialDescription(true, '선택 후에는 꼭 저장 버튼을 눌러주세요.'),
+                    tutorialDescription(true, '선택 후에는 꼭 예측 확정하기 \n버튼을 눌러주세요.'),
                   ],
                 ),
               );
@@ -168,7 +170,6 @@ class _TutorialViewState extends State<TutorialView> {
         print('onClickTarget: $target');
         // print(target.targetPosition!.offset.dx);
         if (target.identify == 'STEP2') {
-          print('aaaaaaaaa');
           Get.find<TutorialViewModel>().isSelectingSheetShowing(true);
         }
       },
@@ -238,7 +239,12 @@ class _TutorialViewState extends State<TutorialView> {
       hideSkip: true,
       paddingFocus: 0,
       onFinish: () async {
-        await Get.find<TutorialViewModel>().endOfTutorial();
+        await Get.find<TutorialViewModel>().endOfTutorial(questModel);
+        todayQuests = null;
+        await Get.find<HomeViewModel>().getAllQuests();
+        Future.delayed(Duration(milliseconds: 200)).then((value) {
+          Get.back();
+        });
       },
       onClickTarget: (target) {},
       onSkip: () {},
@@ -289,9 +295,8 @@ class _TutorialViewState extends State<TutorialView> {
                     Container(
                         key: _step1,
                         padding: moduleBoxPadding(questTermTextStyle.fontSize!),
-                        decoration: primaryBoxDecoration.copyWith(
-                            boxShadow: [primaryBoxShadow],
-                            color: homeModuleBoxBackgroundColor),
+                        decoration: primaryBoxDecoration
+                            .copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -301,8 +306,7 @@ class _TutorialViewState extends State<TutorialView> {
                             btwHomeModuleTitleBox,
                             QuestCardRewards(questModel: questModel),
                             SizedBox(
-                              height: correctHeight(
-                                  24.w, 0.0, detailedContentTextStyle.fontSize),
+                              height: correctHeight(24.w, 0.0, detailedContentTextStyle.fontSize),
                             ),
                             Text("퀘스트 상세 설명",
                                 style: questDescription.copyWith(
@@ -320,13 +324,11 @@ class _TutorialViewState extends State<TutorialView> {
                               style: questDescription,
                             ),
                             SizedBox(
-                              height: correctHeight(
-                                  24.w, 0.0, detailedContentTextStyle.fontSize),
+                              height: correctHeight(24.w, 0.0, detailedContentTextStyle.fontSize),
                             ),
                             questModel.rewardDescription != null
                                 ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text("리워드 상세 설명",
                                           style: questDescription.copyWith(
@@ -381,8 +383,7 @@ class _TutorialViewState extends State<TutorialView> {
                 bottom: 20.w,
                 child: GestureDetector(
                   onTap: () {
-                    if (tutorialViewModel.isSelectingSheetShowing.value ==
-                        false) {
+                    if (tutorialViewModel.isSelectingSheetShowing.value == false) {
                       tutorialViewModel.isSelectingSheetShowing(true);
                       // questViewModel.syncUserSelect();
                     } else {
@@ -433,17 +434,14 @@ class _TutorialViewState extends State<TutorialView> {
         duration: Duration(milliseconds: 300),
         left: 14.w,
         right: 14.w,
-        bottom: tutorialViewModel.isSelectingSheetShowing.value
-            ? (20.w + 60.w + 20.w)
-            : -500.w,
+        bottom: tutorialViewModel.isSelectingSheetShowing.value ? (20.w + 60.w + 20.w) : -500.w,
         child: Container(
           key: _step3,
           // color: Colors.white,
           width: double.infinity,
           // height: 100,
           padding: EdgeInsets.all(14.w),
-          decoration:
-              (primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow])),
+          decoration: (primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow])),
           child: Column(
             children: [
               Align(
@@ -463,9 +461,7 @@ class _TutorialViewState extends State<TutorialView> {
                           color: yachtBlack,
                           size: 30.w,
                         ),
-                        SizedBox(
-                            height: reducedPaddingWhenTextIsBelow(
-                                8.w, questTitleTextStyle.fontSize!)),
+                        SizedBox(height: reducedPaddingWhenTextIsBelow(8.w, questTitleTextStyle.fontSize!)),
                       ],
                     ),
                   ),
@@ -475,13 +471,9 @@ class _TutorialViewState extends State<TutorialView> {
               Padding(
                 padding: EdgeInsets.all(4.0.w),
                 child: Text(questModel.selectInstruction,
-                    style: questTitleTextStyle,
-                    maxLines: 3,
-                    textAlign: TextAlign.center),
+                    style: questTitleTextStyle, maxLines: 3, textAlign: TextAlign.center),
               ),
-              SizedBox(
-                  height: reducedPaddingWhenTextIsBelow(
-                      16.w, questTitleTextStyle.fontSize!)),
+              SizedBox(height: reducedPaddingWhenTextIsBelow(16.w, questTitleTextStyle.fontSize!)),
               Column(
                 children: [
                   Row(
@@ -491,8 +483,7 @@ class _TutorialViewState extends State<TutorialView> {
                         InkWell(
                           onTap: () {
                             tutorialViewModel.toggleUserSelect(index);
-                            print(
-                                '$index is change to ${tutorialViewModel.toggleList}');
+                            print('$index is change to ${tutorialViewModel.toggleList}');
                             HapticFeedback.lightImpact();
                           },
                           child: AnimatedContainer(
@@ -500,18 +491,15 @@ class _TutorialViewState extends State<TutorialView> {
                             width: 151.w,
                             height: 151.w,
                             decoration: yachtChoiceBoxDecoration.copyWith(
-                                color: index == 0 &&
-                                        tutorialViewModel.toggleList[0]
+                                color: index == 0 && tutorialViewModel.toggleList[0]
                                     ? yachtRed
-                                    : index == 1 &&
-                                            tutorialViewModel.toggleList[1]
+                                    : index == 1 && tutorialViewModel.toggleList[1]
                                         ? yachtBlue
                                         : white),
                             child: Padding(
                               padding: primaryAllPadding,
                               child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Align(
@@ -524,26 +512,15 @@ class _TutorialViewState extends State<TutorialView> {
                                           // color: yachtDarkGrey,
                                         ),
                                         child: index == 0
-                                            ? Image.asset(
-                                                'assets/icons/quest_select_up.png',
-                                                color: tutorialViewModel
-                                                        .toggleList[0]
-                                                    ? white
-                                                    : yachtRed)
-                                            : Image.asset(
-                                                'assets/icons/quest_select_down.png',
-                                                color: tutorialViewModel
-                                                        .toggleList[1]
-                                                    ? white
-                                                    : yachtBlue)),
+                                            ? Image.asset('assets/icons/quest_select_up.png',
+                                                color: tutorialViewModel.toggleList[0] ? white : yachtRed)
+                                            : Image.asset('assets/icons/quest_select_down.png',
+                                                color: tutorialViewModel.toggleList[1] ? white : yachtBlue)),
                                   ),
                                   Text(
                                     questModel.choices![index],
                                     style: yachtChoiceBoxName.copyWith(
-                                        color:
-                                            tutorialViewModel.toggleList[index]
-                                                ? white
-                                                : yachtBlack),
+                                        color: tutorialViewModel.toggleList[index] ? white : yachtBlack),
                                   )
                                 ],
                               ),
@@ -594,11 +571,10 @@ Widget tutorialDescription(bool isAlignLeft, String description) {
     children: [
       isAlignLeft ? Container() : Spacer(),
       Container(
-        height: 40.w,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(54.0), color: buttonNormal),
+        // height: 40.w,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(54.0), color: buttonNormal),
         child: Padding(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.w),
           child: Center(
             child: Text(
               description,
@@ -612,8 +588,7 @@ Widget tutorialDescription(bool isAlignLeft, String description) {
   );
 }
 
-Widget tutorialButton(
-    TutorialCoachMark tutorialCoachMark, bool isAlignLeft, String description) {
+Widget tutorialButton(TutorialCoachMark tutorialCoachMark, bool isAlignLeft, String description) {
   return Row(
     children: [
       isAlignLeft ? Container() : Spacer(),
@@ -623,8 +598,7 @@ Widget tutorialButton(
         },
         child: Container(
           height: 40.w,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(54.0), color: yachtViolet),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(54.0), color: yachtViolet),
           child: Padding(
             padding: EdgeInsets.only(left: 20.w, right: 20.w),
             child: Center(

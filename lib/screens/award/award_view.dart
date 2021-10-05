@@ -67,12 +67,15 @@ class AwardView extends StatelessWidget {
             ],
           ),
         ),
-        GetBuilder<AwardViewModel>(
-          // 여기서 init 을 해주니까 위에서 굳이 Get.put 안해줘도 됨
-          init: AwardViewModel(),
-          builder: (controller) {
-            return HomeSubLeagueCarouselSlider(leagueName: leagueName, leagueEndDateTime: leagueEndDateTime);
-          },
+        Container(
+          // height: 188.w,
+          child: GetBuilder<AwardViewModel>(
+            // 여기서 init 을 해주니까 위에서 굳이 Get.put 안해줘도 됨
+            init: AwardViewModel(),
+            builder: (controller) {
+              return HomeSubLeagueCarouselSlider(leagueName: leagueName, leagueEndDateTime: leagueEndDateTime);
+            },
+          ),
         ),
       ],
     );
@@ -199,192 +202,202 @@ class HomeSubLeagueCarouselSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Positioned(
-          left: 0.0.w,
-          top: 0.0.w,
-          child: Container(
-            height: 180.0.w + 8.w, //= 카드높이150.w + 위마진20.w + 아래마진10.w
-            width: SizeConfig.screenWidth,
-            color: primaryBackgroundColor,
+    return Container(
+      height: 188.w,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: 0.0.w,
+            top: 0.0.w,
+            child: Container(
+              height: 188.w, //= 카드높이150.w + 위마진20.w + 아래마진10.w
+              width: SizeConfig.screenWidth,
+              // color: Colors.blue,
+            ),
           ),
-        ),
-        CarouselSlider.builder(
-          carouselController: _carouselController,
-          itemCount: _awardViewModel.allSubLeagues.length,
-          itemBuilder: (context, index, realIndex) {
-            return Column(
-              children: [
-                // SizedBox(
-                //   height: 20.0.w,
-                // ),
-                GestureDetector(
-                  onTap: () {
-                    // 중앙에 있는 카드를 클릭하면 세부페이지로 가지만(if), 옆에 있는 카드를 클릭하면(else) 그 카드를 중앙에 위치시키는 애니메이션을 실행하는게 훨씬 자연스럽다.
-                    if (index == _awardViewModel.pageIndexForHomeUI.value) {
-                      // 이렇게 rx변수를 홈용 / 디테일페이지용으로 나누어 관리해야 애니메잇이 분리되는걸 막을 수 있음
-                      _awardViewModel.pageIndexForUI.value = _awardViewModel.pageIndexForHomeUI.value;
+          Container(
+            height: 188.w,
+            child: CarouselSlider.builder(
+              carouselController: _carouselController,
+              itemCount: _awardViewModel.allSubLeagues.length,
+              itemBuilder: (context, index, realIndex) {
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 20.0.w,
+                      // color: Colors.yellow,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // 중앙에 있는 카드를 클릭하면 세부페이지로 가지만(if), 옆에 있는 카드를 클릭하면(else) 그 카드를 중앙에 위치시키는 애니메이션을 실행하는게 훨씬 자연스럽다.
+                        if (index == _awardViewModel.pageIndexForHomeUI.value) {
+                          // 이렇게 rx변수를 홈용 / 디테일페이지용으로 나누어 관리해야 애니메잇이 분리되는걸 막을 수 있음
+                          _awardViewModel.pageIndexForUI.value = _awardViewModel.pageIndexForHomeUI.value;
 
-                      // main에 등록한 getpage를 써야 바인딩 포함
-                      // Get.toNamed('subLeague');
-                      Get.to(() => AwardDetailView(
-                            leagueName: leagueName,
-                            leagueEndDateTime: leagueEndDateTime,
-                          ));
-                    } else
-                      _carouselController.animateToPage(
-                        index,
-                        duration: const Duration(milliseconds: 450),
-                        curve: Curves.ease,
-                      );
-                  },
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                            boxShadow: [
-                              primaryBoxShadow,
-                            ],
-                            // color: _awardViewModel.colorIndex(index),
-                            gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
-                              _awardViewModel.colorIndex(index, 0),
-                              _awardViewModel.colorIndex(index, 1),
-                              _awardViewModel.colorIndex(index, 0),
-                            ])),
-                        width: 275.0.w,
-                        height: 150.0.w + 8.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..,
-                      ),
-                      Positioned(
-                        top: 5.w,
-                        left: 5.w,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              // color: Colors.white.withOpacity(0.7),
-                              gradient:
-                                  LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [
-                                Color(0xFFFDFEFF).withOpacity(0),
-                                Color(0xFFFDFEFF).withOpacity(1),
-                                Color(0xFFFDFEFF).withOpacity(0),
-                              ])),
-                          width: 275.0.w - 10.w,
-                          height: 150.0.w + 8.w - 10.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..,
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: yachtShadow,
-                                blurRadius: 8.w,
-                                spreadRadius: 1.w,
-                              )
-                            ],
-                          ),
-                          width: 275.0.w,
-                          height: 150.0.w + 8.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..,
-                          child: Column(
-                            children: [
-                              SizedBox(height: correctHeight(16.w, 0.w, awardModuleSliderTitleTextStyle.fontSize)),
-                              Text(
-                                '${_awardViewModel.allSubLeagues[index].name}',
-                                style: awardModuleSliderTitleTextStyle,
-                              ),
-                              SizedBox(height: correctHeight(11.w, awardModuleSliderTitleTextStyle.fontSize, 0.w)),
-                              Padding(
-                                padding: EdgeInsets.only(left: 12.w, right: 12.w),
-                                child: Container(
-                                  height: 1.w,
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [
-                                      Color(0xFF798AE6).withOpacity(0),
-                                      Color(0xFF798AE6).withOpacity(0.5),
-                                      Color(0xFF798AE6).withOpacity(0),
-                                    ],
-                                  )),
-                                ),
-                              ),
-                              SizedBox(height: correctHeight(7.w, 0.w, awardModuleSliderAmountTextStyle.fontSize)),
-                              //원인지 달러인지 등도 나중에는 구분해줘야할 듯
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Spacer(),
-                                  Image.asset('assets/icons/won_mark.png',
-                                      height: 34.w, width: 34.w, color: yachtDarkGrey),
-                                  SizedBox(width: 4.0.w),
-                                  Text('${NumbersHandler.toPriceKRW(_awardViewModel.totalValue[index])}',
-                                      style: awardModuleSliderAmountTextStyle),
-                                  Spacer(),
+                          // main에 등록한 getpage를 써야 바인딩 포함
+                          // Get.toNamed('subLeague');
+                          Get.to(() => AwardDetailView(
+                                leagueName: leagueName,
+                                leagueEndDateTime: leagueEndDateTime,
+                              ));
+                        } else
+                          _carouselController.animateToPage(
+                            index,
+                            duration: const Duration(milliseconds: 450),
+                            curve: Curves.ease,
+                          );
+                      },
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12.0),
+                                boxShadow: [
+                                  primaryBoxShadow,
                                 ],
-                              ),
-                              SizedBox(
-                                  height: correctHeight(9.w, awardModuleSliderAmountTextStyle.fontSize,
-                                      awardModuleSliderAmountKoreanTextStyle.fontSize)),
-                              Text(
-                                '상금 약 ${NumbersHandler.parseNumberKRWtoApproxiKorean(_awardViewModel.totalValue[index])}',
-                                style: awardModuleSliderAmountKoreanTextStyle.copyWith(
-                                    color: awardModuleSliderAmountKoreanTextStyle.color!.withOpacity(0.3)),
-                              ),
-                              SizedBox(
-                                  height: correctHeight(8.w, awardModuleSliderAmountKoreanTextStyle.fontSize, 0.w)),
-                              Padding(
-                                padding: EdgeInsets.only(left: 12.w, right: 12.w),
-                                child: Container(
-                                  height: 1.w,
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                    colors: [
-                                      Color(0xFF798AE6).withOpacity(0),
-                                      Color(0xFF798AE6).withOpacity(0.5),
-                                      Color(0xFF798AE6).withOpacity(0),
-                                    ],
-                                  )),
-                                ),
-                              ),
-
-                              SizedBox(height: correctHeight(8.w, 0.w, awardModuleSliderEndDateTimeTextStyle.fontSize)),
-                              Text(
-                                leagueEndDateTime,
-                                style: awardModuleSliderEndDateTimeTextStyle.copyWith(
-                                    color: awardModuleSliderEndDateTimeTextStyle.color!.withOpacity(0.5)),
-                              ),
-
-                              SizedBox(
-                                  height: correctHeight(13.w, 0.w, awardModuleSliderEndDateTimeTextStyle.fontSize)),
-                            ],
+                                // color: _awardViewModel.colorIndex(index),
+                                gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+                                  _awardViewModel.colorIndex(index, 0),
+                                  _awardViewModel.colorIndex(index, 1),
+                                  _awardViewModel.colorIndex(index, 0),
+                                ])),
+                            width: 275.0.w,
+                            height: 158.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..,
                           ),
-                        ),
+                          Positioned(
+                            top: 5.w,
+                            left: 5.w,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  // color: Colors.white.withOpacity(0.7),
+                                  gradient:
+                                      LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [
+                                    Color(0xFFFDFEFF).withOpacity(0),
+                                    Color(0xFFFDFEFF).withOpacity(1),
+                                    Color(0xFFFDFEFF).withOpacity(0),
+                                  ])),
+                              width: 275.0.w - 10.w,
+                              height: 148.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..,
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: yachtShadow,
+                              //     blurRadius: 8.w,
+                              //     spreadRadius: 1.w,
+                              //   )
+                              // ],
+                            ),
+                            // color: Colors.purple.withOpacity(.3),
+                            width: 275.0.w,
+                            height: 158.w,
+                            // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // SizedBox(height: correctHeight(16.w, 0.w, awardModuleSliderTitleTextStyle.fontSize)),
+                                Text(
+                                  '${_awardViewModel.allSubLeagues[index].name}',
+                                  style: awardModuleSliderTitleTextStyle,
+                                ),
+                                SizedBox(height: correctHeight(10.w, awardModuleSliderTitleTextStyle.fontSize, 0.w)),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 12.w, right: 12.w),
+                                  child: Container(
+                                    height: 1.w,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Color(0xFF798AE6).withOpacity(0),
+                                        Color(0xFF798AE6).withOpacity(0.5),
+                                        Color(0xFF798AE6).withOpacity(0),
+                                      ],
+                                    )),
+                                  ),
+                                ),
+                                SizedBox(height: correctHeight(8.w, 0.w, awardModuleSliderAmountTextStyle.fontSize)),
+                                // //원인지 달러인지 등도 나중에는 구분해줘야할 듯
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Spacer(),
+                                    Image.asset('assets/icons/won_mark.png',
+                                        height: 34.w, width: 34.w, color: yachtDarkGrey),
+                                    SizedBox(width: 4.0.w),
+                                    Text('${NumbersHandler.toPriceKRW(_awardViewModel.totalValue[index])}',
+                                        style: awardModuleSliderAmountTextStyle),
+                                    Spacer(),
+                                  ],
+                                ),
+                                // SizedBox(
+                                //     height: correctHeight(9.w, awardModuleSliderAmountTextStyle.fontSize,
+                                //         awardModuleSliderAmountKoreanTextStyle.fontSize)),
+                                Text(
+                                  '상금 약 ${NumbersHandler.parseNumberKRWtoApproxiKorean(_awardViewModel.totalValue[index])}',
+                                  style: awardModuleSliderAmountKoreanTextStyle.copyWith(
+                                      color: awardModuleSliderAmountKoreanTextStyle.color!.withOpacity(0.3)),
+                                ),
+                                SizedBox(
+                                    height: correctHeight(8.w, awardModuleSliderAmountKoreanTextStyle.fontSize, 0.w)),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 12.w, right: 12.w),
+                                  child: Container(
+                                    height: 1.w,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Color(0xFF798AE6).withOpacity(0),
+                                        Color(0xFF798AE6).withOpacity(0.5),
+                                        Color(0xFF798AE6).withOpacity(0),
+                                      ],
+                                    )),
+                                  ),
+                                ),
+
+                                SizedBox(
+                                    height: correctHeight(10.w, 0.w, awardModuleSliderEndDateTimeTextStyle.fontSize)),
+                                Text(
+                                  leagueEndDateTime,
+                                  style: awardModuleSliderEndDateTimeTextStyle.copyWith(
+                                      color: awardModuleSliderEndDateTimeTextStyle.color!.withOpacity(0.5)),
+                                ),
+                                // Spacer(),
+                                // SizedBox(
+                                //     height: correctHeight(12.w, 0.w, awardModuleSliderEndDateTimeTextStyle.fontSize)),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
-          options: CarouselOptions(
-              aspectRatio: SizeConfig.screenWidth /
-                  188.w, // 이렇게하면 정확히 우리가 원하는 비율 나옴. 180 = 150 + 위마진20 + 아래마진10 + 8.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..
-              disableCenter: true,
-              enlargeCenterPage: true,
-              enableInfiniteScroll: false,
-              viewportFraction: 275.w / SizeConfig.screenWidth, // 이렇게하면 screenWidth 중 정확히 275.w만큼 중앙의 캐러셀 슬라이드가 화면을 차지
-              onPageChanged: (index, _) {
-                _awardViewModel.pageIndexForHomeUI = index.obs;
-              }),
-        ),
-      ],
+                    ),
+                  ],
+                );
+              },
+              options: CarouselOptions(
+                  aspectRatio: SizeConfig.screenWidth /
+                      188.w, // 이렇게하면 정확히 우리가 원하는 비율 나옴. 180 = 150 + 위마진20 + 아래마진10 + 8.w, // 뭔진 모르겠는데 자꾸 8픽셀이 오버플로우남..
+                  disableCenter: true,
+                  enlargeCenterPage: true,
+                  enableInfiniteScroll: false,
+                  viewportFraction:
+                      275.w / SizeConfig.screenWidth, // 이렇게하면 screenWidth 중 정확히 275.w만큼 중앙의 캐러셀 슬라이드가 화면을 차지
+                  onPageChanged: (index, _) {
+                    _awardViewModel.pageIndexForHomeUI = index.obs;
+                  }),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

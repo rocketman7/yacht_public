@@ -1,13 +1,16 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorState;
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/reading_content_model.dart';
@@ -54,6 +57,7 @@ class HomeView extends StatelessWidget {
   final RxString smallSnackBarText = "".obs;
 
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
   void _onRefresh() async {
     // monitor network fetch
     // await Future.delayed(Duration(milliseconds: 1200));
@@ -78,7 +82,7 @@ class HomeView extends StatelessWidget {
       MyAssets(),
 
       // 이달의 상금 주식
-      AwardView(leagueName: "10월 리그", leagueEndDateTime: "2021년 10월 31일까지"),
+      AwardView(leagueName: leagueModel.value!.leagueName, leagueEndDateTime: leagueModel.value!.leagueEndDateTime),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       NewQuests(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
@@ -112,38 +116,11 @@ class HomeView extends StatelessWidget {
     // print(
     //     'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
-    RxString footer = "당겨서 새로고침".obs;
     return Scaffold(
       body: RefreshConfiguration(
         enableScrollWhenRefreshCompleted: true,
         child: SmartRefresher(
-          header: CustomHeader(
-              builder: (_, status) {
-                // status = RefreshStatus.
-                return Container(
-                  height: MediaQuery.of(context).padding.top + 10.w,
-                  // color: Colors.blue,
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Text(
-                      footer.value,
-                      style: TextStyle(fontSize: 14, fontFamily: 'Default'),
-                    ),
-                  ),
-                );
-              },
-              height: MediaQuery.of(context).padding.top + 10.w,
-              onModeChange: (mode) {
-                if (mode == RefreshStatus.idle) {
-                  footer("당겨서 새로고침");
-                } else if (mode == RefreshStatus.canRefresh) {
-                  footer("놓아주세요");
-                } else if (mode == RefreshStatus.refreshing) {
-                  footer("새로고치는 중...");
-                } else if (mode == RefreshStatus.completed) {
-                  footer("완료!");
-                }
-              }),
+          header: reloadHeader(true),
           controller: _refreshController,
           onRefresh: _onRefresh,
           child: CustomScrollView(
@@ -393,10 +370,65 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
   final RxBool showSmallSnackBar = false.obs;
   final RxString smallSnackBarText = "".obs;
 
+  final box = GetStorage();
+  bool iosTermAgree = true;
+  String iosTermSheet = "";
+
   @override
   void initState() {
     showChangeNameDialog(context);
+    iosTermAgree = box.read('iosTermAgree') ?? false;
+    if (Platform.isIOS && !iosTermAgree) {
+      showTermDialog(context);
+    }
     super.initState();
+  }
+
+  Future showTermDialog(BuildContext context) async {
+    iosTermSheet = await rootBundle.loadString('assets/documents/termsOfUse.txt');
+    await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        String title = "서비스를 이용하기 위해\n아래에 대한 동의가 필요합니다.";
+
+        String btnLabel = "수락";
+        String btnLabelCancel = "거부";
+
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          child: WillPopScope(
+              onWillPop: () async {
+                return false;
+              },
+              child: CupertinoAlertDialog(
+                title: Text(title),
+                content: Container(
+                  height: 400,
+                  width: 180,
+                  child: SingleChildScrollView(
+                      child: Text(
+                    iosTermSheet,
+                    textAlign: TextAlign.left,
+                  )),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text(btnLabelCancel),
+                    onPressed: () => exit(0),
+                  ),
+                  CupertinoDialogAction(
+                    child: Text(btnLabel),
+                    onPressed: () {
+                      box.write('iosTermAgree', true);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              )),
+        );
+      },
+    );
   }
 
   showChangeNameDialog(BuildContext context) async {
