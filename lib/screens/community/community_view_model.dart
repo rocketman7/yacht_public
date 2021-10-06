@@ -193,4 +193,8 @@ class CommunityViewModel extends GetxController {
   Future blockThisUser(String uidToBlock) async {
     await _firestoreService.blockThisUser(uidToBlock);
   }
+
+  Future reportThisUser(PostModel post) async {
+    await _firestoreService.reportThisUser(post);
+  }
 }

@@ -70,6 +70,15 @@ class FirestoreService extends GetxService {
     return holidayList;
   }
 
+  // 오픈 리그
+
+  Stream<String> getOpenLeague() {
+    return _firestoreService.collection('admin').doc('leagueInfo').snapshots().map((snapshot) {
+      // print(snapshot.data()!['openLeague']);
+      return snapshot.data()!['openLeague'];
+    });
+  }
+
   //// USER 정보
   // 새 USER 만들기
 
@@ -82,13 +91,6 @@ class FirestoreService extends GetxService {
     return await _firestoreService.collection('users').doc(uid).get().then((value) => UserModel.fromMap(value.data()!));
   }
 
-  Stream<String> getOpenLeague() {
-    return _firestoreService.collection('admin').doc('leagueInfo').snapshots().map((snapshot) {
-      // print(snapshot.data()!['openLeague']);
-      return snapshot.data()!['openLeague'];
-    });
-  }
-
   // User Model 스트림
   Stream<UserModel> getUserStream(String uid) {
     return _firestoreService.collection('users').doc(uid).snapshots().map((snapshot) {
@@ -96,6 +98,23 @@ class FirestoreService extends GetxService {
 
       return UserModel.fromMap(snapshot.data()!);
     });
+  }
+
+  // uid로 유저 데이터 있는지 체크하기
+  Future<bool> checkIfUserDocumentExists(String uid) async {
+    return await _firestoreService.collection('users').doc(uid).get().then((value) => value.exists);
+  }
+
+  // 마지막 로그인 시간
+  Future stampLastLogin() async {
+    await _firestoreService.collection('users').doc(userModelRx.value!.uid).update({
+      'lastLoginDateTime': Timestamp.fromDate(DateTime.now()),
+    });
+  }
+
+  // 유저 탈퇴하기
+  Future deleteAccount(String uid) async {
+    await _firestoreService.collection('users').doc(uid).delete();
   }
 
   // User Quest Model 스트림
@@ -519,7 +538,7 @@ class FirestoreService extends GetxService {
       }
     });
 
-    print(allTopRankersOfSubLeagues[2]);
+    // print(allTopRankersOfSubLeagues[2]);
 
     return allTopRankersOfSubLeagues;
   }
@@ -970,6 +989,18 @@ class FirestoreService extends GetxService {
     await _firestoreService.collection('users').doc(userModelRx.value!.uid).update({
       'blockList': FieldValue.arrayUnion([uidToBlock])
     });
+  }
+
+  // 유저 신고하기
+  Future reportThisUser(PostModel post) async {
+    await _firestoreService.collection('report').add(
+      {
+        // 'reportDateTime': DateTime.now(),
+        'uidToReport': post.writerUid,
+        'postId': post.postId,
+        'reportFrom': userModelRx.value!.uid,
+      },
+    );
   }
 
   //// 컨텐츠 관련

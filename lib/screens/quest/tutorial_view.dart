@@ -8,7 +8,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/award/award_view_model.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
+import 'package:yachtOne/screens/profile/asset_view_model.dart';
 import 'package:yachtOne/screens/quest/quest_widget.dart';
 import 'package:yachtOne/screens/quest/tutorial_view_model.dart';
 import 'package:yachtOne/styles/size_config.dart';
@@ -242,7 +244,8 @@ class _TutorialViewState extends State<TutorialView> {
         await Get.find<TutorialViewModel>().endOfTutorial(questModel);
         todayQuests = null;
         await Get.find<HomeViewModel>().getAllQuests();
-        Future.delayed(Duration(milliseconds: 200)).then((value) {
+        Get.find<AssetViewModel>().onInit();
+        Future.delayed(Duration(milliseconds: 100)).then((value) {
           Get.back();
         });
       },
@@ -574,7 +577,7 @@ Widget tutorialDescription(bool isAlignLeft, String description) {
         // height: 40.w,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(54.0), color: buttonNormal),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.w),
           child: Center(
             child: Text(
               description,
@@ -604,7 +607,7 @@ Widget tutorialButton(TutorialCoachMark tutorialCoachMark, bool isAlignLeft, Str
             child: Center(
               child: Text(
                 description,
-                style: tutorialDescriptionStyle.copyWith(color: buttonNormal),
+                style: tutorialDescriptionStyle.copyWith(color: buttonNormal, height: 1.35),
               ),
             ),
           ),

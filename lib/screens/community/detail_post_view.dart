@@ -19,6 +19,7 @@ import 'package:yachtOne/screens/community/community_widgets.dart';
 import 'package:yachtOne/screens/community/feed_widget.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/profile/profile_others_view.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
@@ -36,6 +37,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
   // DetailPostView({
   //   Key? key,
   // }) : super(key: key);
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
 
   final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
@@ -459,8 +461,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                   ),
                                                 ),
                                               ),
-                                              Flexible(
-                                                  child: SvgPicture.asset('assets/icons/share.svg', color: yachtBlack)),
+                                              Flexible(child: SvgPicture.asset('assets/icons/share.svg', color: white)),
                                               Container(
                                                 width: 3,
                                               )
@@ -484,235 +485,246 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                   itemCount: detailPostViewModel.comments.length,
                                   itemBuilder: (_, index) {
                                     // 코멘트 컨테이너
-                                    return InkWell(
-                                      onTap: () {
-                                        detailPostViewModel
-                                            .replyToCommentId("${detailPostViewModel.comments[index].commentId}");
-                                        detailPostViewModel
-                                            .replyToUserUid("${detailPostViewModel.comments[index].writerUid}");
-                                        detailPostViewModel
-                                            .replyToUserName("${detailPostViewModel.comments[index].writerUserName}");
-                                      },
-                                      child: Container(
-                                        color: primaryBackgroundColor,
-                                        padding: moduleBoxPadding(feedDateTime.fontSize!),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                if (detailPostViewModel.comments[index].writerUid !=
-                                                    userModelRx.value!.uid)
-                                                  Get.to(() => ProfileOthersView(
-                                                      uid: detailPostViewModel.comments[index].writerUid));
-                                                else
-                                                  Get.to(() => ProfileMyView());
-                                              },
-                                              child: Container(
-                                                  width: 36.w,
-                                                  height: 36.w,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  child: FutureBuilder<String>(
-                                                      future: detailPostViewModel.getImageUrlFromStorage(
-                                                          'avatars/${detailPostViewModel.comments[index].writerAvatarUrl}.png'),
-                                                      builder: (context, snapshot) {
-                                                        return snapshot.hasData
-                                                            ? CachedNetworkImage(
-                                                                imageUrl: snapshot.data!,
-                                                              )
-                                                            : Container();
-                                                      })
+                                    return Column(
+                                      children: [
+                                        Container(
+                                          height: 1.w,
+                                          color: yachtLightGrey,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            detailPostViewModel
+                                                .replyToCommentId("${detailPostViewModel.comments[index].commentId}");
+                                            detailPostViewModel
+                                                .replyToUserUid("${detailPostViewModel.comments[index].writerUid}");
+                                            detailPostViewModel.replyToUserName(
+                                                "${detailPostViewModel.comments[index].writerUserName}");
+                                          },
+                                          child: Container(
+                                            padding: moduleBoxPadding(feedDateTime.fontSize!),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    if (detailPostViewModel.comments[index].writerUid !=
+                                                        userModelRx.value!.uid)
+                                                      Get.to(() => ProfileOthersView(
+                                                          uid: detailPostViewModel.comments[index].writerUid));
+                                                    else
+                                                      Get.to(() => ProfileMyView());
+                                                  },
+                                                  child: Container(
+                                                      width: 36.w,
+                                                      height: 36.w,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      child: FutureBuilder<String>(
+                                                          future: detailPostViewModel.getImageUrlFromStorage(
+                                                              'avatars/${detailPostViewModel.comments[index].writerAvatarUrl}.png'),
+                                                          builder: (context, snapshot) {
+                                                            return snapshot.hasData
+                                                                ? CachedNetworkImage(
+                                                                    imageUrl: snapshot.data!,
+                                                                  )
+                                                                : Container();
+                                                          })
 
-                                                  // child: CachedNetworkImage(
-                                                  //   imageUrl:
-                                                  //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
-                                                  // )
-                                                  ),
-                                            ),
-                                            SizedBox(
-                                              width: 6.w,
-                                            ),
-                                            Expanded(
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
+                                                      // child: CachedNetworkImage(
+                                                      //   imageUrl:
+                                                      //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+                                                      // )
+                                                      ),
+                                                ),
+                                                SizedBox(
+                                                  width: 6.w,
+                                                ),
+                                                Expanded(
+                                                  child: Column(
                                                     mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text(
-                                                        detailPostViewModel.comments[index].writerUserName,
-                                                        style: feedWriterName,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 4.w,
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () => showDialog(
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return yachtTierInfoPopUp(context, post.writerExp ?? 0);
-                                                            }),
-                                                        child: simpleTierRRectBox(
-                                                            exp: detailPostViewModel.comments[index].writerExp ?? 0),
-                                                      ),
-                                                      Spacer(),
-                                                      PopupMenuButton(
-                                                        padding: EdgeInsets.symmetric(horizontal: 4),
-                                                        child: Row(children: [
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        children: [
                                                           Text(
-                                                            feedTimeHandler(detailPostViewModel
-                                                                .comments[index].writtenDateTime
-                                                                .toDate()),
-                                                            // x초전, x분 전, 일정 이후면 날짜로
-                                                            style: feedDateTime,
+                                                            detailPostViewModel.comments[index].writerUserName,
+                                                            style: feedWriterName,
                                                           ),
                                                           SizedBox(
-                                                            width: 8.w,
+                                                            width: 4.w,
                                                           ),
-                                                          Container(
-                                                            width: 14.w,
-                                                            height: 16.w,
-                                                            // color: Colors.blue[50],
-                                                            child: SvgPicture.asset(
-                                                              'assets/icons/show_more.svg',
-                                                              color: yachtBlack,
-                                                            ),
+                                                          GestureDetector(
+                                                            onTap: () => showDialog(
+                                                                context: context,
+                                                                builder: (context) {
+                                                                  return yachtTierInfoPopUp(
+                                                                      context, post.writerExp ?? 0);
+                                                                }),
+                                                            child: simpleTierRRectBox(
+                                                                exp:
+                                                                    detailPostViewModel.comments[index].writerExp ?? 0),
                                                           ),
-                                                        ]),
-                                                        onSelected: (value) {
-                                                          switch (value) {
-                                                            case 'delete':
-                                                              showDialog(
-                                                                  context: context,
-                                                                  builder: (context) {
-                                                                    return Dialog(
-                                                                        insetPadding: primaryHorizontalPadding,
-                                                                        child: Container(
-                                                                            padding: EdgeInsets.fromLTRB(
-                                                                                14.w,
-                                                                                correctHeight(
-                                                                                    14.w, 0.0, dialogTitle.fontSize),
-                                                                                14.w,
-                                                                                14.w),
-                                                                            decoration: BoxDecoration(
-                                                                                borderRadius:
-                                                                                    BorderRadius.circular(10.w)),
-                                                                            child: Column(
-                                                                              mainAxisSize: MainAxisSize.min,
-                                                                              children: [
-                                                                                Text("알림", style: dialogTitle),
-                                                                                SizedBox(
-                                                                                    height: correctHeight(14.w, 0.0,
-                                                                                        dialogTitle.fontSize)),
-                                                                                SizedBox(
-                                                                                    height: correctHeight(24.w, 0.w,
-                                                                                        dialogContent.fontSize)),
-                                                                                Text("정말 삭제하시겠습니까?",
-                                                                                    style: dialogContent),
-                                                                                Text(
-                                                                                  "삭제 후 되돌릴 수 없습니다.",
-                                                                                  style: dialogWarning,
-                                                                                ),
-                                                                                SizedBox(
-                                                                                    height: correctHeight(24.w, 0.w,
-                                                                                        dialogContent.fontSize)),
-                                                                                Row(
+                                                          Spacer(),
+                                                          PopupMenuButton(
+                                                            padding: EdgeInsets.symmetric(horizontal: 4),
+                                                            child: Row(children: [
+                                                              Text(
+                                                                feedTimeHandler(detailPostViewModel
+                                                                    .comments[index].writtenDateTime
+                                                                    .toDate()),
+                                                                // x초전, x분 전, 일정 이후면 날짜로
+                                                                style: feedDateTime,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 8.w,
+                                                              ),
+                                                              Container(
+                                                                width: 14.w,
+                                                                height: 16.w,
+                                                                // color: Colors.blue[50],
+                                                                child: SvgPicture.asset(
+                                                                  'assets/icons/show_more.svg',
+                                                                  color: yachtBlack,
+                                                                ),
+                                                              ),
+                                                            ]),
+                                                            onSelected: (value) {
+                                                              switch (value) {
+                                                                case 'delete':
+                                                                  showDialog(
+                                                                      context: context,
+                                                                      builder: (context) {
+                                                                        return Dialog(
+                                                                            insetPadding: primaryHorizontalPadding,
+                                                                            child: Container(
+                                                                                padding: EdgeInsets.fromLTRB(
+                                                                                    14.w,
+                                                                                    correctHeight(14.w, 0.0,
+                                                                                        dialogTitle.fontSize),
+                                                                                    14.w,
+                                                                                    14.w),
+                                                                                decoration: BoxDecoration(
+                                                                                    borderRadius:
+                                                                                        BorderRadius.circular(10.w)),
+                                                                                child: Column(
+                                                                                  mainAxisSize: MainAxisSize.min,
                                                                                   children: [
-                                                                                    Expanded(
-                                                                                      child: GestureDetector(
-                                                                                          onTap: () async {
-                                                                                            HapticFeedback
-                                                                                                .lightImpact();
-                                                                                            await detailPostViewModel
-                                                                                                .deleteComment(
-                                                                                                    detailPostViewModel
-                                                                                                            .comments[
-                                                                                                        index]);
-                                                                                            await communityViewModel
-                                                                                                .getPost();
-                                                                                            await detailPostViewModel
-                                                                                                .getComments(post);
-                                                                                            Navigator.of(context).pop();
-                                                                                            yachtSnackBar(
-                                                                                                "댓글이 삭제되었습니다");
-                                                                                          },
-                                                                                          child:
-                                                                                              textContainerButtonWithOptions(
-                                                                                            text: "예",
-                                                                                            isDarkBackground: true,
-                                                                                            height: 44.w,
-                                                                                          )),
+                                                                                    Text("알림", style: dialogTitle),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(14.w, 0.0,
+                                                                                            dialogTitle.fontSize)),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(24.w, 0.w,
+                                                                                            dialogContent.fontSize)),
+                                                                                    Text("정말 삭제하시겠습니까?",
+                                                                                        style: dialogContent),
+                                                                                    Text(
+                                                                                      "삭제 후 되돌릴 수 없습니다.",
+                                                                                      style: dialogWarning,
                                                                                     ),
-                                                                                    SizedBox(width: 8.w),
-                                                                                    Expanded(
-                                                                                      child: InkWell(
-                                                                                          onTap: () {
-                                                                                            Navigator.of(context).pop();
-                                                                                            // Get.back(closeOverlays: true);
-                                                                                          },
-                                                                                          child:
-                                                                                              textContainerButtonWithOptions(
-                                                                                                  text: "아니오",
-                                                                                                  isDarkBackground:
-                                                                                                      false,
-                                                                                                  height: 44.w)),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(24.w, 0.w,
+                                                                                            dialogContent.fontSize)),
+                                                                                    Row(
+                                                                                      children: [
+                                                                                        Expanded(
+                                                                                          child: GestureDetector(
+                                                                                              onTap: () async {
+                                                                                                HapticFeedback
+                                                                                                    .lightImpact();
+                                                                                                await detailPostViewModel
+                                                                                                    .deleteComment(
+                                                                                                        detailPostViewModel
+                                                                                                                .comments[
+                                                                                                            index]);
+                                                                                                await communityViewModel
+                                                                                                    .getPost();
+                                                                                                await detailPostViewModel
+                                                                                                    .getComments(post);
+                                                                                                Navigator.of(context)
+                                                                                                    .pop();
+                                                                                                yachtSnackBar(
+                                                                                                    "댓글이 삭제되었습니다");
+                                                                                              },
+                                                                                              child:
+                                                                                                  textContainerButtonWithOptions(
+                                                                                                text: "예",
+                                                                                                isDarkBackground: true,
+                                                                                                height: 44.w,
+                                                                                              )),
+                                                                                        ),
+                                                                                        SizedBox(width: 8.w),
+                                                                                        Expanded(
+                                                                                          child: InkWell(
+                                                                                              onTap: () {
+                                                                                                Navigator.of(context)
+                                                                                                    .pop();
+                                                                                                // Get.back(closeOverlays: true);
+                                                                                              },
+                                                                                              child:
+                                                                                                  textContainerButtonWithOptions(
+                                                                                                      text: "아니오",
+                                                                                                      isDarkBackground:
+                                                                                                          false,
+                                                                                                      height: 44.w)),
+                                                                                        )
+                                                                                      ],
                                                                                     )
                                                                                   ],
-                                                                                )
-                                                                              ],
-                                                                            )));
-                                                                  });
-                                                              break;
-                                                            default:
-                                                          }
-                                                        },
-                                                        itemBuilder: (context) {
-                                                          return post.writerUid == userModelRx.value!.uid
-                                                              ? commentMyShowMore
-                                                              : communityShowMore;
-                                                        },
+                                                                                )));
+                                                                      });
+                                                                  break;
+                                                                default:
+                                                              }
+                                                            },
+                                                            itemBuilder: (context) {
+                                                              return post.writerUid == userModelRx.value!.uid
+                                                                  ? commentMyShowMore
+                                                                  : communityShowMore;
+                                                            },
+                                                          ),
+                                                        ],
                                                       ),
+                                                      SizedBox(
+                                                          height: reducedPaddingWhenTextIsBothSide(
+                                                              6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
+                                                      SizedBox(
+                                                        height: 2.w,
+                                                      ),
+                                                      // Text(
+                                                      //   (comments[index].isReply)
+                                                      //       ? "@${comments[index].replyToUserName} " +
+                                                      //           comments[index]
+                                                      //               .content
+                                                      //       : comments[index]
+                                                      //           .content,
+                                                      //   style: feedContent,
+                                                      //   maxLines: 3,
+                                                      //   overflow:
+                                                      //       TextOverflow.ellipsis,
+                                                      // ),
+                                                      RichText(
+                                                          text: TextSpan(
+                                                              text: (detailPostViewModel.comments[index].isReply)
+                                                                  ? "@${detailPostViewModel.comments[index].replyToUserName} "
+                                                                  : "",
+                                                              style: feedContent.copyWith(color: yachtViolet),
+                                                              children: [
+                                                            TextSpan(
+                                                                text: detailPostViewModel.comments[index].content,
+                                                                style: feedContent)
+                                                          ]))
                                                     ],
                                                   ),
-                                                  SizedBox(
-                                                      height: reducedPaddingWhenTextIsBothSide(
-                                                          6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
-                                                  SizedBox(
-                                                    height: 2.w,
-                                                  ),
-                                                  // Text(
-                                                  //   (comments[index].isReply)
-                                                  //       ? "@${comments[index].replyToUserName} " +
-                                                  //           comments[index]
-                                                  //               .content
-                                                  //       : comments[index]
-                                                  //           .content,
-                                                  //   style: feedContent,
-                                                  //   maxLines: 3,
-                                                  //   overflow:
-                                                  //       TextOverflow.ellipsis,
-                                                  // ),
-                                                  RichText(
-                                                      text: TextSpan(
-                                                          text: (detailPostViewModel.comments[index].isReply)
-                                                              ? "@${detailPostViewModel.comments[index].replyToUserName} "
-                                                              : "",
-                                                          style: feedContent.copyWith(color: yachtViolet),
-                                                          children: [
-                                                        TextSpan(
-                                                            text: detailPostViewModel.comments[index].content,
-                                                            style: feedContent)
-                                                      ]))
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     );
                                   }),
                         )

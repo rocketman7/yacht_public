@@ -4,15 +4,18 @@ import 'package:get/get.dart';
 import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/screens/contents/reading_content/reading_content_view_model.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:yachtOne/widgets/loading_container.dart';
 
+import '../../../locator.dart';
+
 class ReadingContentView extends GetView<ReadingContentViewModel> {
   final HomeViewModel homeViewModel;
   ReadingContentView({Key? key, required this.homeViewModel}) : super(key: key);
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   // TODO: implement controller
   get controller => Get.put(ReadingContentViewModel());
@@ -45,6 +48,8 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
                                 : Container(),
                             InkWell(
                               onTap: () {
+                                _mixpanelService.mixpanel.track('home-YachtMagazine-YachtMagazineWebView',
+                                    properties: {'magazineTitle': controller.readingContents[index].title});
                                 Get.to(() => ReadingContentWebView(readingContent: controller.readingContents[index]));
                                 // await controller.launchUrl(controller.readingContents[index].contentUrl);
                               },

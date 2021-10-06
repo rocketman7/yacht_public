@@ -3,13 +3,16 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/dictionary_model.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../locator.dart';
+
 class DictionaryView extends StatelessWidget {
   final HomeViewModel homeViewModel;
-  const DictionaryView({Key? key, required this.homeViewModel}) : super(key: key);
-
+  DictionaryView({Key? key, required this.homeViewModel}) : super(key: key);
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,6 +36,8 @@ class DictionaryView extends StatelessWidget {
                 homeViewModel.dictionaries.length,
                 (index) => InkWell(
                       onTap: () {
+                        _mixpanelService.mixpanel.track('home-Dictionary-DictionaryWebView',
+                            properties: {'todayMarketTitle': homeViewModel.dictionaries[index].title});
                         Get.to(() => DictionaryWebView(dictionaryModel: homeViewModel.dictionaries[index]));
                       },
                       child: Column(

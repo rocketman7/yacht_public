@@ -185,6 +185,22 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                           ),
                         ),
                       )),
+                SizedBox(height: 20.w),
+
+                InkWell(
+                  onTap: () async {
+                    if (_emailController.text.length > 0 && EmailValidator.validate(_emailController.text)) {
+                      yachtSnackBarFromBottom("비밀번호 재설정 이메일을 전송하였습니다.");
+                      controller.passwordRecreate(_emailController.text);
+                    }
+                  },
+                  child: Center(
+                    child: Text(
+                      '비밀번호 재설정하기',
+                      style: settingLogout,
+                    ),
+                  ),
+                )
                 // bigTextContainerButton(text: "가입 완료하기", isDisabled: false, height: 60.w),
               ],
             ),

@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/screens/auth/email_register_view.dart';
+import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import '../../locator.dart';
 import 'kakao_firebase_auth_api.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +19,7 @@ class LoginView extends StatelessWidget {
   final KakaoFirebaseAuthApi _kakaoAuthApi = KakaoFirebaseAuthApi();
   final RxBool isKakaoLoggingIn = false.obs;
   final RxBool isAppleLoggingIn = false.obs;
-
+  final FirestoreService _firestoreService = locator<FirestoreService>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,6 +149,19 @@ class LoginView extends StatelessWidget {
 
     final authResult = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
+    // 애플로그인한 uid가 기존 유저인지 체크
+    bool isThisUserExists = false;
+    if (authResult.user != null)
+      isThisUserExists = await _firestoreService.checkIfUserDocumentExists(authResult.user!.uid);
+
+    if (!isThisUserExists) {
+      UserModel newUser = newUserModel(
+        uid: authResult.user!.uid,
+        userName: "새유저",
+      );
+
+      await _firestoreService.makeNewUser(newUser);
+    }
     print('after apple signin: ${FirebaseAuth.instance.currentUser}');
     return authResult;
   }

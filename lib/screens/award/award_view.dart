@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
+import '../../locator.dart';
 import '../../styles/size_config.dart';
 import '../../styles/style_constants.dart';
 import '../../handlers/numbers_handler.dart' as NumbersHandler;
@@ -16,6 +18,7 @@ import 'award_view_model.dart';
 // 1. leagueName 인자 고려하고
 // 2. ListView의 children을 합칠 Home에 복사하면 됨.
 class AwardView extends StatelessWidget {
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   final String leagueName;
   final String leagueEndDateTime;
 
@@ -36,6 +39,7 @@ class AwardView extends StatelessWidget {
               Text("이 달의 상금 주식", style: sectionTitle),
               InkWell(
                 onTap: () {
+                  _mixpanelService.mixpanel.track('home-Award-yachtManual');
                   showDialog(
                     context: context,
                     builder: (context) => Dialog(
@@ -193,7 +197,7 @@ class AwardView extends StatelessWidget {
 class HomeSubLeagueCarouselSlider extends StatelessWidget {
   final String leagueName;
   final String leagueEndDateTime;
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   HomeSubLeagueCarouselSlider({required this.leagueName, required this.leagueEndDateTime});
 
   final AwardViewModel _awardViewModel = Get.find<AwardViewModel>();
@@ -237,6 +241,7 @@ class HomeSubLeagueCarouselSlider extends StatelessWidget {
 
                           // main에 등록한 getpage를 써야 바인딩 포함
                           // Get.toNamed('subLeague');
+                          _mixpanelService.mixpanel.track('home-AwardDetail', properties: {'index': index});
                           Get.to(() => AwardDetailView(
                                 leagueName: leagueName,
                                 leagueEndDateTime: leagueEndDateTime,

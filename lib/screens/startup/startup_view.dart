@@ -15,6 +15,7 @@ import 'package:yachtOne/screens/profile/asset_view_model.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/ranks/rank_controller.dart';
 import 'package:yachtOne/screens/startup/startup_view_model.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 class StartupView extends GetView<StartupViewModel> {
@@ -22,13 +23,14 @@ class StartupView extends GetView<StartupViewModel> {
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   final double iconSize = 30.w;
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   // TODO: implement controller
   get controller => Get.put(StartupViewModel());
 
   @override
   Widget build(BuildContext context) {
+    List<String> tabPageName = ['Home', 'Community', 'ProfileMy'];
     RxList<Widget> pageList = [
       HomeView(),
       CommunityView(),
@@ -73,11 +75,28 @@ class StartupView extends GetView<StartupViewModel> {
                   selectedFontSize: 0,
                   unselectedFontSize: 0,
                   // elevation: 8,
+
                   backgroundColor: primaryBackgroundColor.withOpacity(.65),
                   showSelectedLabels: false,
                   showUnselectedLabels: false,
                   currentIndex: controller.selectedPage.value,
                   onTap: (index) {
+                    if (controller.selectedPage.value != index) {
+                      if (controller.selectedPage.value == 0) {
+                        _mixpanelService.mixpanel.track('Home');
+                        _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
+                        // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
+                      } else if (controller.selectedPage.value == 1) {
+                        _mixpanelService.mixpanel.track('Community');
+                        _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
+                        // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
+                      } else {
+                        _mixpanelService.mixpanel.track('ProfileMy');
+                        _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
+                        // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
+                      }
+                      _mixpanelService.mixpanel.track('${tabPageName[index]}-enter');
+                    }
                     controller.selectedPage(index);
                   },
                   items: [

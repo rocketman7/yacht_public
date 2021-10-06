@@ -230,7 +230,7 @@ class LiveDetailView extends StatelessWidget {
                                                         return LineSeries<ChartPriceModel, DateTime>(
                                                           width: 1.4,
                                                           animationDuration: 0,
-                                                          dataSource: lightenChart(liveQuestViewModel
+                                                          dataSource: (liveQuestViewModel
                                                               .livePrices[liveQuestIndex][index].value.chartPrices),
                                                           xValueMapper: (ChartPriceModel chart, _) =>
                                                               stringToDateTime(chart.dateTime!),

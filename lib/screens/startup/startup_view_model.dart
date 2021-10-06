@@ -6,6 +6,7 @@ import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/push_notification_service.dart';
 
 import '../../locator.dart';
@@ -13,6 +14,7 @@ import '../../locator.dart';
 class StartupViewModel extends GetxController {
   AuthService _authService = locator<AuthService>();
   PushNotificationService _pushNotificationService = locator<PushNotificationService>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   RxInt selectedPage = 0.obs;
   late User currentUser;
   bool isNameUpdated = true;
@@ -23,7 +25,9 @@ class StartupViewModel extends GetxController {
     checkUserNameConfirm();
     // selectedPage = 0.obs;
     // get league Address
-
+    _mixpanelService.mixpanel.track('Home-enter');
+    _mixpanelService.mixpanel.timeEvent('Home');
+    _mixpanelService.mixpanel.flush();
     _pushNotificationService.initialise();
     super.onInit();
   }

@@ -6,14 +6,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/profile/profile_others_view.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 
+import '../../locator.dart';
 import 'rank_controller.dart';
 import '../../styles/style_constants.dart';
 import '../../styles/yacht_design_system.dart';
 
 class RankHomeWidget extends StatelessWidget {
   // 이미 스타트업뷰에서 put되어 있는 상태이므로 put X
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,11 +25,11 @@ class RankHomeWidget extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Container(
-                  child: Text('랭킹', style: sectionTitle.copyWith(height: 1.0))),
+              Container(child: Text('랭킹', style: sectionTitle.copyWith(height: 1.0))),
               Spacer(),
               GestureDetector(
                   onTap: () {
+                    _mixpanelService.mixpanel.track('home-RankHome-AllRankerView');
                     Get.to(() => AllRankerView(
                           leagueIndex: 0,
                         ));
@@ -58,9 +60,8 @@ class RankHomeWidget extends StatelessWidget {
           padding: EdgeInsets.only(left: 14.w, right: 14.w),
           child: Container(
             width: double.infinity,
-            decoration: primaryBoxDecoration.copyWith(
-                boxShadow: [primaryBoxShadow],
-                color: homeModuleBoxBackgroundColor),
+            decoration:
+                primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
             child: GetBuilder<RankController>(
                 id: 'ranks',
                 builder: (controller) {
@@ -96,8 +97,7 @@ class AllRankerView extends StatelessWidget {
                 id: 'ranks',
                 builder: (controller) {
                   return controller.isMyRanksAndPointLoaded
-                      ? RankShareView(
-                          leagueIndex: leagueIndex, isFullView: true)
+                      ? RankShareView(leagueIndex: leagueIndex, isFullView: true)
                       : Container();
                 }),
           ),
@@ -108,6 +108,7 @@ class AllRankerView extends StatelessWidget {
 }
 
 class RankShareView extends StatelessWidget {
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   final int leagueIndex;
   final bool isFullView;
 
@@ -141,16 +142,11 @@ class RankShareView extends StatelessWidget {
                   style: rankMainBoldText,
                 ),
                 Text(
-                  rankController.myRanksAndPoint[leagueIndex]['todayRank']! != 0
-                      ? '위'
-                      : '',
+                  rankController.myRanksAndPoint[leagueIndex]['todayRank']! != 0 ? '위' : '',
                   style: rankMainText,
                 ),
                 Spacer(),
-                SizedBox(
-                    height: 22.w,
-                    width: 22.w,
-                    child: Image.asset('assets/icons/league_point_circle.png')),
+                SizedBox(height: 22.w, width: 22.w, child: Image.asset('assets/icons/league_point_circle.png')),
                 SizedBox(
                   width: 3.w,
                 ),
@@ -184,11 +180,8 @@ class RankShareView extends StatelessWidget {
                   .toList()
                   .sublist(
                       0,
-                      min(
-                          rankController.allRanker[leagueIndex].length,
-                          isFullView
-                              ? rankController.allRanker[leagueIndex].length
-                              : maxNumAllRankerForTop))
+                      min(rankController.allRanker[leagueIndex].length,
+                          isFullView ? rankController.allRanker[leagueIndex].length : maxNumAllRankerForTop))
                   .asMap()
                   .map((i, element) => MapEntry(
                       i,
@@ -216,14 +209,13 @@ class RankShareView extends StatelessWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  if (rankController
-                                          .allRanker[leagueIndex][i].uid !=
-                                      userModelRx.value!.uid)
-                                    Get.to(() => ProfileOthersView(
-                                        uid: rankController
-                                            .allRanker[leagueIndex][i].uid));
-                                  else
+                                  if (rankController.allRanker[leagueIndex][i].uid != userModelRx.value!.uid) {
+                                    _mixpanelService.mixpanel.track('home-RankHome-ProfileOthers',
+                                        properties: {'otherUid': rankController.allRanker[leagueIndex][i].uid});
+                                    Get.to(() => ProfileOthersView(uid: rankController.allRanker[leagueIndex][i].uid));
+                                  } else {
                                     Get.to(() => ProfileMyView());
+                                  }
                                 },
                                 child: Row(
                                   children: [
@@ -231,18 +223,12 @@ class RankShareView extends StatelessWidget {
                                       height: 31.w,
                                       width: 31.w,
                                       child: FutureBuilder<String>(
-                                        future: rankController
-                                            .getImageUrlFromStorage('avatars/' +
-                                                (rankController
-                                                        .allRanker[leagueIndex]
-                                                            [i]
-                                                        .avatarImage ??
-                                                    'avatar001') +
-                                                '.png'),
+                                        future: rankController.getImageUrlFromStorage('avatars/' +
+                                            (rankController.allRanker[leagueIndex][i].avatarImage ?? 'avatar001') +
+                                            '.png'),
                                         builder: (_, snapshot) {
                                           if (snapshot.hasData) {
-                                            return Image.network(
-                                                snapshot.data.toString());
+                                            return Image.network(snapshot.data.toString());
                                           } else {
                                             return Container();
                                           }
@@ -302,8 +288,7 @@ class RankShareView extends StatelessWidget {
                         color: yachtLine,
                       ),
                       SizedBox(
-                        height: correctHeight(
-                            14.w, 0.w, rankDescriptionBoldText.fontSize),
+                        height: correctHeight(14.w, 0.w, rankDescriptionBoldText.fontSize),
                       ),
                       Row(
                         children: [
@@ -311,10 +296,7 @@ class RankShareView extends StatelessWidget {
                             width: 14.w,
                           ),
                           SizedBox(
-                              height: 22.w,
-                              width: 22.w,
-                              child: Image.asset(
-                                  'assets/icons/league_point_circle.png')),
+                              height: 22.w, width: 22.w, child: Image.asset('assets/icons/league_point_circle.png')),
                           SizedBox(
                             width: 7.w,
                           ),
@@ -382,8 +364,7 @@ class RankShareView extends StatelessWidget {
     } else {
       return Padding(
         padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 14.w),
-        child: Center(
-            child: Text('아직 랭킹이 표시되지 않아요.', style: rankDescriptionMainText)),
+        child: Center(child: Text('아직 랭킹이 표시되지 않아요.', style: rankDescriptionMainText)),
       );
     }
   }

@@ -21,6 +21,7 @@ const Color yachtViolet80 = const Color(0xFF586DE0);
 const Color yachtDarkPurple = const Color(0xFF6073B4);
 const Color yachtDarkGrey = const Color(0xFF5B6A87);
 const Color yachtGrey = const Color(0xFF879098);
+const Color yachtLightGrey = const Color(0xFFE6EAF1);
 const Color yachtRed = const Color(0xFFEE5076);
 const Color yachtBlue = Color(0xFF4A99E2);
 const Color yachtYellow = Color(0xFFFFAD4C);
@@ -31,6 +32,7 @@ const Color primaryButtonText = const Color(0xFFEFF2FA);
 const Color primaryButtonBackground = yachtViolet;
 const Color secondaryButtonText = yachtViolet;
 const Color secondaryButtonBackground = const Color(0xFFEFF2FA);
+const Color commentBackground = Color(0xFFFCFCFC);
 
 // k-Bull & Bear & Volume Color
 const bullColorKR = yachtRed;
@@ -1521,7 +1523,7 @@ class _SectionBoxWithBottomButtonAndBorderState extends State<SectionBoxWithBott
     int i = 0;
 
     timer = Timer.periodic(Duration(milliseconds: 100), (_) {
-      animator(cos((pi / 180) * 4 * i).abs());
+      animator(cos((pi / 180) * 9 * i).abs());
       i++;
     });
     super.initState();

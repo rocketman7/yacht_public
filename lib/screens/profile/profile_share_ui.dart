@@ -19,12 +19,9 @@ const int maxNumOfBadges = 4 * 3; // 최초화면에서 획득한 뱃지가 최�
 // 또 대부분의 상황에서는 MyViewModel은 떠져있는 상태일 것이므로 find는 MyViewModel걸로 해준다.
 class ProfileViewFavoritesCardWidget extends StatelessWidget {
   final List<FavoriteStockModel> favoriteStockModels;
-  final List<FavoriteStockHistoricalPriceModel>
-      favoriteStockHistoricalPriceModels;
+  final List<FavoriteStockHistoricalPriceModel> favoriteStockHistoricalPriceModels;
 
-  ProfileViewFavoritesCardWidget(
-      {required this.favoriteStockModels,
-      required this.favoriteStockHistoricalPriceModels});
+  ProfileViewFavoritesCardWidget({required this.favoriteStockModels, required this.favoriteStockHistoricalPriceModels});
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +34,7 @@ class ProfileViewFavoritesCardWidget extends StatelessWidget {
             .map((i, element) => MapEntry(
                 i,
                 Padding(
-                  padding:
-                      EdgeInsets.only(left: 14.w, right: 14.w, bottom: 10.w),
+                  padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 10.w),
                   child: Container(
                     width: double.infinity,
                     decoration: yachtBoxDecoration,
@@ -51,13 +47,11 @@ class ProfileViewFavoritesCardWidget extends StatelessWidget {
                             height: 50.w,
                             width: 50.w,
                             child: FutureBuilder<String>(
-                              future: Get.find<ProfileMyViewModel>()
-                                  .getImageUrlFromStorage(
-                                      favoriteStockModels[i].logoUrl),
+                              future:
+                                  Get.find<ProfileMyViewModel>().getImageUrlFromStorage(favoriteStockModels[i].logoUrl),
                               builder: (_, snapshot) {
                                 if (snapshot.hasData) {
-                                  return Image.network(
-                                      snapshot.data.toString());
+                                  return Image.network(snapshot.data.toString());
                                 } else {
                                   return Container();
                                 }
@@ -73,20 +67,14 @@ class ProfileViewFavoritesCardWidget extends StatelessWidget {
                               style: profileFavoritesNameTextStyle,
                             ),
                             SizedBox(
-                                height: correctHeight(
-                                    6.w,
-                                    profileFavoritesNameTextStyle.fontSize,
+                                height: correctHeight(6.w, profileFavoritesNameTextStyle.fontSize,
                                     profileFavoritesNumberTextStyle.fontSize)),
                             Text(
                                 '${toPriceKRW(favoriteStockHistoricalPriceModels[i].close)} (${toPercentageChange((favoriteStockHistoricalPriceModels[i].close - favoriteStockHistoricalPriceModels[i].prevClose) / favoriteStockHistoricalPriceModels[i].prevClose)})',
-                                style: favoriteStockHistoricalPriceModels[i]
-                                            .close >=
-                                        favoriteStockHistoricalPriceModels[i]
-                                            .prevClose
-                                    ? profileFavoritesNumberTextStyle.copyWith(
-                                        color: yachtRed)
-                                    : profileFavoritesNumberTextStyle.copyWith(
-                                        color: yachtBlue)),
+                                style: favoriteStockHistoricalPriceModels[i].close >=
+                                        favoriteStockHistoricalPriceModels[i].prevClose
+                                    ? profileFavoritesNumberTextStyle.copyWith(color: yachtRed)
+                                    : profileFavoritesNumberTextStyle.copyWith(color: yachtBlue)),
                           ],
                         ),
                         Spacer(),
@@ -135,9 +123,7 @@ class FollowersNFollowingsView extends StatelessWidget {
   final List<String> followersNFollowingsUid;
 
   FollowersNFollowingsView(
-      {required this.isMe,
-      required this.whichfollowersOrfollowings,
-      required this.followersNFollowingsUid});
+      {required this.isMe, required this.whichfollowersOrfollowings, required this.followersNFollowingsUid});
 
   @override
   Widget build(BuildContext context) {
@@ -146,8 +132,7 @@ class FollowersNFollowingsView extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: white,
           toolbarHeight: 60.w,
-          title: Text(whichfollowersOrfollowings ? '팔로워 목록' : '팔로잉 목록',
-              style: appBarTitle),
+          title: Text(whichfollowersOrfollowings ? '팔로워 목록' : '팔로잉 목록', style: appBarTitle),
         ),
         body: ListView(children: [
           Column(
@@ -162,18 +147,14 @@ class FollowersNFollowingsView extends StatelessWidget {
                         onTap: () {
                           print(followersNFollowingsUid[i]);
 
-                          if (followersNFollowingsUid[i] !=
-                              userModelRx.value!.uid)
-                            Get.to(() => ProfileOthersView(
-                                uid: followersNFollowingsUid[i]));
+                          if (followersNFollowingsUid[i] != userModelRx.value!.uid)
+                            Get.to(() => ProfileOthersView(uid: followersNFollowingsUid[i]));
                         },
                         child: Column(
                           children: [
                             SizedBox(height: 14.w),
                             FutureBuilder<UserModel>(
-                                future: Get.find<ProfileMyViewModel>()
-                                    .getOtherUserModel(
-                                        followersNFollowingsUid[i]),
+                                future: Get.find<ProfileMyViewModel>().getOtherUserModel(followersNFollowingsUid[i]),
                                 builder: (_, snapshot) {
                                   return Row(
                                     children: [
@@ -186,18 +167,11 @@ class FollowersNFollowingsView extends StatelessWidget {
                                         width: 36.w,
                                         child: snapshot.hasData
                                             ? FutureBuilder<String>(
-                                                future: Get.find<
-                                                        ProfileMyViewModel>()
-                                                    .getImageUrlFromStorage(
-                                                        'avatars/${snapshot.data!.avatarImage}.png'),
-                                                builder:
-                                                    (__, snapshotForImageURL) {
-                                                  return snapshotForImageURL
-                                                          .hasData
-                                                      ? Image.network(
-                                                          snapshotForImageURL
-                                                              .data
-                                                              .toString())
+                                                future: Get.find<ProfileMyViewModel>().getImageUrlFromStorage(
+                                                    'avatars/${snapshot.data!.avatarImage}.png'),
+                                                builder: (__, snapshotForImageURL) {
+                                                  return snapshotForImageURL.hasData
+                                                      ? Image.network(snapshotForImageURL.data.toString())
                                                       : Container();
                                                 },
                                               )
@@ -207,26 +181,17 @@ class FollowersNFollowingsView extends StatelessWidget {
                                         width: 8.w,
                                       ),
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            snapshot.hasData
-                                                ? '${snapshot.data!.userName}'
-                                                : '',
+                                            snapshot.hasData ? '${snapshot.data!.userName}' : '',
                                             style: profileFollowNickNameStyle,
                                           ),
                                           SizedBox(
-                                            height: correctHeight(
-                                                4.w,
-                                                profileFollowNickNameStyle
-                                                    .fontSize,
-                                                0.w),
+                                            height: correctHeight(4.w, profileFollowNickNameStyle.fontSize, 0.w),
                                           ),
                                           simpleTierRRectBox(
-                                            exp: snapshot.hasData
-                                                ? snapshot.data!.exp
-                                                : 0,
+                                            exp: snapshot.hasData ? snapshot.data!.exp : 0,
                                           )
                                         ],
                                       ),
@@ -286,8 +251,7 @@ class NullFollowersNFollowingsView extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: white,
           toolbarHeight: 60.w,
-          title: Text(whichNULLfollowersOrfollowings ? '팔로워 목록' : '팔로잉 목록',
-              style: appBarTitle),
+          title: Text(whichNULLfollowersOrfollowings ? '팔로워 목록' : '팔로잉 목록', style: appBarTitle),
         ),
         body: Center(
           child: Image.asset(
@@ -450,37 +414,28 @@ class BadgesGridView extends StatelessWidget {
           width: double.infinity,
           decoration: yachtBoxDecoration,
           child: Padding(
-            padding: EdgeInsets.only(
-                left: 14.w, right: 14.w, top: 20.w, bottom: 20.w),
+            padding: EdgeInsets.only(left: 14.w, right: 14.w, top: 20.w, bottom: 20.w),
             child: Column(
               children: List.generate(
-                  (((isFull
-                                  ? (localBadges.length)
-                                  : min(badges.length, maxNumOfBadges)) -
-                              1) ~/
-                          4 +
+                  (((isFull ? (localBadges.length) : min(badges.length, maxNumOfBadges)) - 1) ~/ 4 +
                       1), // 한 줄에 네 개씩 들어가므로~
                   (i) {
                 return Column(
                   children: [
                     Row(
                         children: List.generate(4, (j) {
-                      if (i * 4 + j <
-                          (isFull
-                              ? (localBadges.length)
-                              : min(badges.length, maxNumOfBadges))) {
+                      if (i * 4 + j < (isFull ? (localBadges.length) : min(badges.length, maxNumOfBadges))) {
                         return Row(
                           children: [
                             isFull
                                 ? GestureDetector(
                                     onTap: () {
-                                      badgeDialog(context, i * 4 + j);
+                                      badgeDialog(context, i * 4 + j, badges.contains(localBadges[i * 4 + j]));
                                     },
                                     child: Container(
                                       height: 76.w,
                                       width: 76.w,
-                                      child: Image.asset(badges
-                                              .contains(localBadges[i * 4 + j])
+                                      child: Image.asset(badges.contains(localBadges[i * 4 + j])
                                           ? 'assets/badges/${localBadges[i * 4 + j]}.png'
                                           : 'assets/badges/${localBadges[i * 4 + j]}_none.png'),
                                     ),
@@ -489,15 +444,13 @@ class BadgesGridView extends StatelessWidget {
                                     onTap: () {
                                       badgeDialog(
                                           context,
-                                          localBadges.indexWhere((element) =>
-                                              (element ==
-                                                  tempBadges[i * 4 + j])));
+                                          localBadges.indexWhere((element) => (element == tempBadges[i * 4 + j])),
+                                          true);
                                     },
                                     child: Container(
                                       height: 76.w,
                                       width: 76.w,
-                                      child: Image.asset(
-                                          'assets/badges/${tempBadges[i * 4 + j]}.png'),
+                                      child: Image.asset('assets/badges/${tempBadges[i * 4 + j]}.png'),
                                     ),
                                   ),
                             (j != 4 - 1)
@@ -537,8 +490,7 @@ class BadgesGridView extends StatelessWidget {
                     child: Container(
                   width: 265.w,
                   height: 86.w,
-                  child: Image.asset(
-                      'assets/illusts/not_exists/no_general_words.png'),
+                  child: Image.asset('assets/illusts/not_exists/no_general_words.png'),
                 )),
                 Positioned(
                   top: 21.w,
@@ -562,8 +514,7 @@ class BadgesGridView extends StatelessWidget {
               child: Container(
             width: 71.w,
             height: 56.w,
-            child:
-                Image.asset('assets/illusts/not_exists/no_general_illust.png'),
+            child: Image.asset('assets/illusts/not_exists/no_general_illust.png'),
           ))
         ],
       );
@@ -571,7 +522,7 @@ class BadgesGridView extends StatelessWidget {
   }
 }
 
-badgeDialog(BuildContext context, int indexOfLocalBadges) {
+badgeDialog(BuildContext context, int indexOfLocalBadges, bool hasObtained) {
   return showDialog(
       context: context,
       builder: (context) {
@@ -579,8 +530,7 @@ badgeDialog(BuildContext context, int indexOfLocalBadges) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 376.w,
             width: 347.w,
@@ -594,8 +544,7 @@ badgeDialog(BuildContext context, int indexOfLocalBadges) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
@@ -621,8 +570,7 @@ badgeDialog(BuildContext context, int indexOfLocalBadges) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -635,20 +583,19 @@ badgeDialog(BuildContext context, int indexOfLocalBadges) {
                   ],
                 ),
                 SizedBox(
-                  height:
-                      correctHeight(26.w, yachtBadgesDialogTitle.fontSize, 0.w),
+                  height: correctHeight(26.w, yachtBadgesDialogTitle.fontSize, 0.w),
                 ),
                 Center(
                   child: Container(
                     height: 200.w,
                     width: 200.w,
-                    child: Image.asset(
-                        'assets/badges/${localBadges[indexOfLocalBadges]}.png'),
+                    child: hasObtained
+                        ? Image.asset('assets/badges/${localBadges[indexOfLocalBadges]}.png')
+                        : Image.asset('assets/badges/${localBadges[indexOfLocalBadges]}_none.png'),
                   ),
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      18.w, 0.w, yachtBadgesDescriptionDialogTitle.fontSize),
+                  height: correctHeight(18.w, 0.w, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Text(
                   '${localBadgesDescription[indexOfLocalBadges]['title']}',
@@ -656,17 +603,14 @@ badgeDialog(BuildContext context, int indexOfLocalBadges) {
                 ),
                 SizedBox(
                   height: correctHeight(
-                      9.w,
-                      yachtBadgesDescriptionDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogContent.fontSize),
+                      9.w, yachtBadgesDescriptionDialogTitle.fontSize, yachtBadgesDescriptionDialogContent.fontSize),
                 ),
                 Text(
                   '${localBadgesDescription[indexOfLocalBadges]['description']}',
                   style: yachtBadgesDescriptionDialogContent,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      40.w, yachtBadgesDescriptionDialogContent.fontSize, 0.w),
+                  height: correctHeight(40.w, yachtBadgesDescriptionDialogContent.fontSize, 0.w),
                 ),
               ],
             ),

@@ -3,15 +3,17 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/today_market_model.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../locator.dart';
 import 'today_market_view_model.dart';
 
 class TodayMarketView extends GetView<TodayMarketViewModel> {
   final HomeViewModel homeViewModel;
   TodayMarketView({Key? key, required this.homeViewModel}) : super(key: key);
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   // TODO: implement controller
   get controller => Get.put(TodayMarketViewModel());
@@ -50,6 +52,8 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
+                                _mixpanelService.mixpanel.track('home-TodayMarket-TodayMarketWebView',
+                                    properties: {'todayMarketTitle': controller.todayMarkets[index].title});
                                 Get.to(() => TodayMarketWebView(todayMarket: controller.todayMarkets[index]));
                               },
                               child: Container(

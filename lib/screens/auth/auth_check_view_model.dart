@@ -148,60 +148,67 @@ class AuthCheckViewModel extends GetxController {
     urgentMessage = remoteConfig.getString('urgent_message');
 
     if (newVersion > currentVersion) {
-      Get.dialog(Dialog(
-        backgroundColor: primaryBackgroundColor,
-        insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
-        clipBehavior: Clip.hardEdge,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        child: Container(
-          padding: primaryHorizontalPadding,
-          height: 220.w,
-          width: 347.w,
-          child: Column(
-            children: [
-              SizedBox(height: 14.w),
-              Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
-              SizedBox(
-                height:
-                    correctHeight(35.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
-              ),
-              Center(
-                child: Text(
-                  '요트 새 버전이 출시되었습니다\n원활한 서비스 이용을 위하여 \n업데이트를 부탁드려요.',
-                  textAlign: TextAlign.center,
-                  style: yachtBadgesDescriptionDialogTitle,
-                ),
-              ),
-              SizedBox(
-                height: correctHeight(20.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  Platform.isIOS ? _launchURL(app_store_url) : _launchURL(play_store_url);
-                },
-                child: Container(
-                  height: 44.w,
-                  // width: 154.5.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(70.0),
-                    color: yachtViolet,
+      Get.dialog(
+          Dialog(
+            backgroundColor: primaryBackgroundColor,
+            insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+            clipBehavior: Clip.hardEdge,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: primaryHorizontalPadding,
+                  // height: 210.w,
+                  width: 347.w,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 14.w),
+                      Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
+                      SizedBox(
+                        height: correctHeight(
+                            20.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
+                      ),
+                      Center(
+                        child: Text(
+                          '요트 새 버전이 출시되었습니다\n원활한 서비스 이용을 위하여 \n업데이트를 부탁드려요.',
+                          textAlign: TextAlign.center,
+                          style: yachtBadgesDescriptionDialogTitle,
+                        ),
+                      ),
+                      SizedBox(
+                        height: correctHeight(20.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                      ),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          Platform.isIOS ? _launchURL(app_store_url) : _launchURL(play_store_url);
+                        },
+                        child: Container(
+                          height: 44.w,
+                          // width: 154.5.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(70.0),
+                            color: yachtViolet,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '업데이트하기',
+                              style: yachtDeliveryDialogButtonText,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 14.w,
+                      ),
+                    ],
                   ),
-                  child: Center(
-                    child: Text(
-                      '요트 업데이트',
-                      style: yachtDeliveryDialogButtonText,
-                    ),
-                  ),
                 ),
-              ),
-              SizedBox(
-                height: 14.w,
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ));
+          barrierDismissible: false);
     }
   }
 }

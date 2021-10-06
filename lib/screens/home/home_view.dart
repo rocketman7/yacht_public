@@ -45,8 +45,8 @@ import '../quest/quest_widget.dart';
 
 class HomeView extends StatelessWidget {
   HomeViewModel homeViewModel = Get.put(HomeViewModel());
-  AuthService _authService = locator<AuthService>();
-  final KakaoFirebaseAuthApi _kakaoApi = KakaoFirebaseAuthApi();
+
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   ScrollController _scrollController = ScrollController();
   RxDouble offset = 0.0.obs;
 
@@ -530,6 +530,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                       showSmallSnackBar(false);
                                       smallSnackBarText("");
                                     });
+
                                     // Get.rawSnackbar(
                                     //   messageText: Center(
                                     //     child: Text(
@@ -553,13 +554,15 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                       print(isUserNameDuplicatedVar);
                                       if (!isUserNameDuplicatedVar) {
                                         await widget.homeViewModel.updateUserName(userNameController.text);
-                                        showSmallSnackBar(true);
-                                        smallSnackBarText("닉네임이 저장되었어요");
-                                        Future.delayed(Duration(seconds: 1)).then((value) {
-                                          showSmallSnackBar(false);
-                                          smallSnackBarText("");
-                                          Navigator.of(context).pop();
-                                        });
+                                        Navigator.of(context).pop();
+                                        yachtSnackBar("닉네임이 저장되었어요");
+                                        // showSmallSnackBar(true);
+                                        // smallSnackBarText();
+                                        // Future.delayed(Duration(seconds: 1)).then((value) {
+                                        //   showSmallSnackBar(false);
+                                        //   smallSnackBarText("");
+                                        //   Navigator.of(context).pop();
+                                        // });
 
                                         // Get.rawSnackbar(
                                         //   messageText: Center(
@@ -652,14 +655,14 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
 class NewQuests extends StatelessWidget {
   final HomeViewModel homeViewModel;
-  const NewQuests({
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  NewQuests({
     Key? key,
     required this.homeViewModel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final MixpanelService _mixpanelService = locator<MixpanelService>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -678,7 +681,7 @@ class NewQuests extends StatelessWidget {
               Spacer(),
               GestureDetector(
                 onTap: () {
-                  _mixpanelService.mixpanel.track('Ad view');
+                  _mixpanelService.mixpanel.track('home-NewQuest-adsViewDialog');
                   if (userModelRx.value!.rewardedCnt! < maxRewardedAds) {
                     adsViewDialog(context);
                   } else {
@@ -761,6 +764,10 @@ class NewQuests extends StatelessWidget {
                                       : Container(),
                                   InkWell(
                                     onTap: () {
+                                      _mixpanelService.mixpanel.track('home-NewQuest-QuestView', properties: {
+                                        'questId': homeViewModel.newQuests[index].questId,
+                                        'questCategory': homeViewModel.newQuests[index].category
+                                      });
                                       homeViewModel.newQuests[index].selectMode == 'survey'
                                           ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
                                           : homeViewModel.newQuests[index].selectMode == 'tutorial'
@@ -780,6 +787,7 @@ class NewQuests extends StatelessWidget {
 
 class MyAssets extends StatelessWidget {
   final AssetViewModel _assetViewModel = Get.find<AssetViewModel>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   // final AssetViewModel _assetViewModel = Get.put(AssetViewModel());
 
   @override
@@ -789,6 +797,7 @@ class MyAssets extends StatelessWidget {
       height: 100.w,
       child: GestureDetector(
         onTap: () {
+          _mixpanelService.mixpanel.track('home-Asset');
           Get.to(() => AssetView());
         },
         child: Row(
@@ -882,6 +891,7 @@ class MyAssets extends StatelessWidget {
 }
 
 class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   final EdgeInsets safeAreaPadding;
   final double offset;
   final HomeViewModel homeViewModel;
@@ -918,10 +928,12 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
               Center(
                 child: Row(
                   children: [
-                    Text(
-                      userModelRx.value == null ? "" : userModelRx.value!.userName,
-                      style: appBarTitle.copyWith(
-                        fontWeight: FontWeight.w500,
+                    Obx(
+                      () => Text(
+                        userModelRx.value == null ? "" : userModelRx.value!.userName,
+                        style: appBarTitle.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     Text(
@@ -936,6 +948,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                 flex: 1,
                 child: InkWell(
                   onTap: () async {
+                    _mixpanelService.mixpanel.track('home-notification');
                     Get.to(() => NotificationView());
                   },
                   child: Align(

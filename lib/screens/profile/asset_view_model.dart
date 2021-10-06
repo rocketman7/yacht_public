@@ -190,6 +190,18 @@ class AssetViewModel extends GetxController {
 
   @override
   void onInit() async {
+    stocksNameMap = {};
+    stocksSharesNumMap = {};
+    stocksAveragePriceAtAwardMap = {};
+    //위 세 맵들을 모으자.
+    allHoldingStocks = [];
+    isHoldingStocksFutureLoad = false;
+    totalYachtPoint = 0;
+    totalHoldingStocksValue = 0.0;
+    totalDeliveriedValue = 0.0;
+    //주식 잔고 출고 페이지에서 사용자가 값을 바꾸는 obs 변수들
+    stocksDeliveryNum = [0.obs];
+    totalDeliveryValue = 0.0.obs;
     // allAssets = await getAllAssets('kakao:1518231402');
     // allAssets = await getAllAssets('kakao:1513684681');
     allAssets = await getAllAssets(userModelRx.value!.uid);

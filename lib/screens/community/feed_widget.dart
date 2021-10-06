@@ -14,6 +14,7 @@ import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/screens/community/community_widgets.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/profile/profile_others_view.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,8 +30,10 @@ import 'package:styled_widget/styled_widget.dart';
 class FeedWidget extends StatelessWidget {
   final CommunityViewModel communityViewModel;
   final PostModel post;
+
   FeedWidget({Key? key, required this.communityViewModel, required this.post}) : super(key: key);
 
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
   RxBool isTapping = false.obs;
   @override
@@ -64,6 +67,7 @@ class FeedWidget extends StatelessWidget {
               // 아바타 이미지 임시
               GestureDetector(
                 onTap: () {
+                  _mixpanelService.mixpanel.track('feed-profile');
                   if (post.writerUid != userModelRx.value!.uid)
                     Get.to(() => ProfileOthersView(uid: post.writerUid));
                   else
@@ -114,11 +118,14 @@ class FeedWidget extends StatelessWidget {
                               width: 8.w,
                             ),
                             GestureDetector(
-                                onTap: () => showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return yachtTierInfoPopUp(context, post.writerExp ?? 0);
-                                    }),
+                                onTap: () async {
+                                  _mixpanelService.mixpanel.track('feed-tierInfo');
+                                  return await showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return yachtTierInfoPopUp(context, post.writerExp ?? 0);
+                                      });
+                                },
                                 child: simpleTierRRectBox(exp: post.writerExp ?? 0)),
                             Spacer(),
                             PopupMenuButton(
@@ -299,11 +306,12 @@ class FeedWidget extends StatelessWidget {
                                                             child: GestureDetector(
                                                                 onTap: () async {
                                                                   HapticFeedback.lightImpact();
-                                                                  // await communityViewModel
-                                                                  //     .blockThisUser(post.writerUid);
+                                                                  await communityViewModel
+                                                                      .blockThisUser(post.writerUid);
+                                                                  await communityViewModel.reportThisUser(post);
                                                                   await communityViewModel.reloadPost();
                                                                   Navigator.of(context).pop();
-                                                                  yachtSnackBar("유저를 차단하였습니다");
+                                                                  yachtSnackBar("유저를 신고/차단하였습니다");
                                                                 },
                                                                 child: textContainerButtonWithOptions(
                                                                   text: "신고하기",
@@ -446,6 +454,7 @@ class FeedWidget extends StatelessWidget {
                                                       imageUrls[index] = snapshot.data!;
                                                       return InkWell(
                                                         onTap: () {
+                                                          _mixpanelService.mixpanel.track('feed-photoPage');
                                                           // print(imageUrls);
                                                           showDialog(
                                                               context: context,
@@ -496,9 +505,12 @@ class FeedWidget extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: InkWell(
-                                  onTap: () => Get.to(
-                                    () => DetailPostView(post),
-                                  ),
+                                  onTap: () {
+                                    _mixpanelService.mixpanel.track('feed-detailPost');
+                                    Get.to(
+                                      () => DetailPostView(post),
+                                    );
+                                  },
                                   child: Container(
                                     // color: Colors.blue,
                                     child: Row(
@@ -546,7 +558,7 @@ class FeedWidget extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Flexible(child: SvgPicture.asset('assets/icons/share.svg', color: yachtBlack)),
+                              Flexible(child: SvgPicture.asset('assets/icons/share.svg', color: white)),
                               Container(
                                 width: 3,
                               )

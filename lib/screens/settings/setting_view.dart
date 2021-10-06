@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/link.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/auth/auth_check_view.dart';
+import 'package:yachtOne/screens/auth/auth_check_view_model.dart';
 import 'package:yachtOne/screens/profile/profile_my_view_model.dart';
 import 'package:yachtOne/screens/profile/profile_others_view.dart';
 import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
@@ -777,25 +779,247 @@ class SettingView extends StatelessWidget {
         //   ),
         // ),
         SizedBox(
-          height: correctHeight(20.w, 0.w, settingLogout.fontSize),
+          height: correctHeight(20.w, 0.w, settingTitle.fontSize),
         ),
-        InkWell(
+        Padding(
+          padding: EdgeInsets.only(left: 13.w, right: 13.w),
+          child: Text(
+            '정보',
+            style: settingTitle,
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(10.w, settingTitle.fontSize, 0.w),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 14.w, right: 14.w),
+          child: Container(
+            height: 1.w,
+            width: double.infinity,
+            color: yachtLine,
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () {
-            _authService.auth.signOut();
-            Get.back();
-            userModelRx(null);
-            userQuestModelRx.value = [];
-            leagueRx("");
-            _kakaoApi.signOut();
-            print("signout");
+            Get.to(() => PrimaryWebView(
+                title: '회사 소개', url: 'https://brave-cinnamon-fa9.notion.site/ded059174d1743568632e83579012fcd'));
           },
-          child: Center(
+          child: Padding(
+            padding: EdgeInsets.only(left: 14.w, right: 14.w),
             child: Text(
-              '로그아웃',
-              style: settingLogout,
+              '회사 소개',
+              style: settingContent,
             ),
           ),
         ),
+
+        SizedBox(
+          height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 14.w, right: 14.w),
+          child: Container(
+            height: 1.w,
+            width: double.infinity,
+            color: yachtLine,
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Get.to(() => PrimaryWebView(
+                title: '이용 약관', url: 'https://brave-cinnamon-fa9.notion.site/2b350b53e71d47eebe88f66b4bc462a7'));
+          },
+          child: Padding(
+            padding: EdgeInsets.only(left: 14.w, right: 14.w),
+            child: Text(
+              '이용 약관',
+              style: settingContent,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 14.w, right: 14.w),
+          child: Container(
+            height: 1.w,
+            width: double.infinity,
+            color: yachtLine,
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        ),
+        SizedBox(
+          height: correctHeight(20.w, 0.w, settingTitle.fontSize),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => Dialog(
+                        insetPadding: primaryHorizontalPadding,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                                padding: EdgeInsets.fromLTRB(
+                                    14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text("알림", style: dialogTitle),
+                                    SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                    Text("정말 탈퇴하시겠습니까?", style: dialogContent),
+                                    SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                    Center(
+                                      child: Text(
+                                        "탈퇴 시 모든 데이터가 삭제되며 \n되돌릴 수 없습니다.",
+                                        style: dialogWarning,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: GestureDetector(
+                                              onTap: () async {
+                                                _authService.deleteAccount();
+
+                                                userModelRx(null);
+                                                userQuestModelRx.value = [];
+                                                leagueRx("");
+
+                                                // _kakaoApi.
+                                                _kakaoApi.signOut();
+                                                print("signout");
+                                                Navigator.of(context).pop();
+                                                await Get.offAll(() => AuthCheckView());
+                                                Get.find<AuthCheckViewModel>().onInit();
+                                              },
+                                              child: textContainerButtonWithOptions(
+                                                text: "예",
+                                                isDarkBackground: false,
+                                                height: 44.w,
+                                              )),
+                                        ),
+                                        SizedBox(width: 8.w),
+                                        Expanded(
+                                          child: InkWell(
+                                              onTap: () {
+                                                Navigator.of(context).pop();
+                                                // Get.back(closeOverlays: true);
+                                              },
+                                              child: textContainerButtonWithOptions(
+                                                  text: "아니오", isDarkBackground: true, height: 44.w)),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                )),
+                          ],
+                        )));
+              },
+              child: Center(
+                child: Text(
+                  '회원탈퇴',
+                  style: settingLogout,
+                ),
+              ),
+            ),
+            SizedBox(width: 30.w),
+            Container(
+              height: settingLogout.fontSize,
+              width: 1.w,
+              color: settingLogout.color,
+            ),
+            SizedBox(width: 30.w),
+            InkWell(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => Dialog(
+                        insetPadding: primaryHorizontalPadding,
+                        child: Container(
+                            padding:
+                                EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("알림", style: dialogTitle),
+                                SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                Text("정말 로그아웃 하시겠습니까?", style: dialogContent),
+                                SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: GestureDetector(
+                                          onTap: () async {
+                                            HapticFeedback.lightImpact();
+                                            _authService.auth.signOut();
+                                            userModelRx(null);
+                                            userQuestModelRx.value = [];
+                                            leagueRx("");
+                                            _kakaoApi.signOut();
+                                            print("signout");
+                                            Navigator.of(context).pop();
+                                            await Get.offAll(() => AuthCheckView());
+                                            Get.find<AuthCheckViewModel>().onInit();
+                                          },
+                                          child: textContainerButtonWithOptions(
+                                            text: "예",
+                                            isDarkBackground: false,
+                                            height: 44.w,
+                                          )),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Expanded(
+                                      child: InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).pop();
+                                            // Get.back(closeOverlays: true);
+                                          },
+                                          child: textContainerButtonWithOptions(
+                                              text: "아니오", isDarkBackground: true, height: 44.w)),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ))));
+                // _authService.auth.signOut();
+                // Get.back();
+                // userModelRx(null);
+                // userQuestModelRx.value = [];
+                // leagueRx("");
+                // _kakaoApi.signOut();
+                // print("signout");
+              },
+              child: Center(
+                child: Text(
+                  '로그아웃',
+                  style: settingLogout,
+                ),
+              ),
+            ),
+          ],
+        ),
+
         SizedBox(
           height: correctHeight(20.w, settingLogout.fontSize, 0.w),
         ),

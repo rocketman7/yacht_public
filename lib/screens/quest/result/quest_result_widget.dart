@@ -3,18 +3,22 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/handlers/user_tier_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/quest/result/quest_results_view_model.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+
+import '../../../locator.dart';
 
 class QuestResultWidget extends StatelessWidget {
   final BuildContext context;
   final QuestModel questModel;
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   QuestResultWidget({
     Key? key,
     required this.context,
@@ -27,6 +31,7 @@ class QuestResultWidget extends StatelessWidget {
 
     return InkWell(
       onTap: () {
+        _mixpanelService.mixpanel.track('home-QuestResult-ResultDialog');
         showDialog(
             context: context,
             builder: (context) => ResultDialog(
@@ -70,6 +75,10 @@ class QuestResultWidget extends StatelessWidget {
                   // ),
                   SizedBox(
                     height: correctHeight(7.w, sectionTitle.fontSize, questTimerStyle.fontSize),
+                  ),
+                  Text(
+                    timeStampToStringWithHourMinute(questModel.liveEndDateTime) + " 마감", // temp
+                    style: questTimerStyle.copyWith(color: yachtGrey),
                   ),
                   SizedBox(
                     height: correctHeight(10.w, questTimerStyle.fontSize, questRewardTextStyle.fontSize),

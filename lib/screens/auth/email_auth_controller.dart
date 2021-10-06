@@ -28,4 +28,8 @@ class EmailAuthController extends GetxController {
     await _authService.startWithEmail(email, password);
     isAuthProcessing(false);
   }
+
+  Future passwordRecreate(String email) async {
+    await _authService.auth.sendPasswordResetEmail(email: email);
+  }
 }
