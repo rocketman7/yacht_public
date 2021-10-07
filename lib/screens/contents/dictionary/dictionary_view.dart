@@ -37,7 +37,7 @@ class DictionaryView extends StatelessWidget {
                 (index) => InkWell(
                       onTap: () {
                         _mixpanelService.mixpanel.track('home-Dictionary-DictionaryWebView',
-                            properties: {'todayMarketTitle': homeViewModel.dictionaries[index].title});
+                            properties: {'dictionaryTitle': homeViewModel.dictionaries[index].title});
                         Get.to(() => DictionaryWebView(dictionaryModel: homeViewModel.dictionaries[index]));
                       },
                       child: Column(

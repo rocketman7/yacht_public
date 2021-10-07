@@ -835,6 +835,26 @@ class SettingView extends StatelessWidget {
           behavior: HitTestBehavior.opaque,
           onTap: () {
             Get.to(() => PrimaryWebView(
+                title: '개인정보처리방침', url: 'https://brave-cinnamon-fa9.notion.site/32727c42249b45a289b191d39ac66fa9'));
+          },
+          child: Padding(
+            padding: EdgeInsets.only(left: 14.w, right: 14.w),
+            child: Text(
+              '개인정보처리방침',
+              style: settingContent,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        ),
+        SizedBox(
+          height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Get.to(() => PrimaryWebView(
                 title: '이용 약관', url: 'https://brave-cinnamon-fa9.notion.site/2b350b53e71d47eebe88f66b4bc462a7'));
           },
           child: Padding(

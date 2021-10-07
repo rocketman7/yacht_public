@@ -437,7 +437,7 @@ class QuestCardRewards extends StatelessWidget {
                       // color: Colors.red[50],
                       children: [
                           Text(
-                            '${toPriceKRW(questModel.yachtPointSuccessReward!)}원',
+                            '${toPriceKRW((questModel.yachtPointSuccessReward ?? 0) + (questModel.yachtPointParticipationReward ?? 0))}원',
                             style: questRewardAmoutStyle.copyWith(height: 1.35),
                           ),
                           SizedBox(
@@ -494,7 +494,7 @@ class QuestCardRewards extends StatelessWidget {
               Container(
                 // color: Colors.red[50],
                 child: Text(
-                  '${questModel.leaguePointSuccessReward}점',
+                  '${(questModel.leaguePointSuccessReward ?? 0) + (questModel.leaguePointParticipationReward ?? 0)}점',
                   style: questRewardAmoutStyle.copyWith(height: 1.35),
                 ),
               )

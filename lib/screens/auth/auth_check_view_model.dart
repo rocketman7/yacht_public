@@ -10,6 +10,7 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/repositories/user_repository.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
@@ -18,13 +19,14 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../locator.dart';
 
 class AuthCheckViewModel extends GetxController {
-  AuthService authService = locator<AuthService>();
-  FirestoreService _firestoreService = locator<FirestoreService>();
+  final AuthService authService = locator<AuthService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
 
   UserRepository _userRepository = UserRepository();
   // User currentUser;
   Rxn<User>? currentUser = Rxn<User>();
-  RxBool isLoadingData = true.obs;
+  // RxBool isLoadingData = true.obs;
   User? user;
 
   String app_store_url = "";
@@ -59,13 +61,17 @@ class AuthCheckViewModel extends GetxController {
   @override
   void onInit() async {
     // await _firestoreService.getServerTime();
-
+    _mixpanelService.mixpanel.track('authCheck');
     await checkTime();
+    _mixpanelService.mixpanel.track('checkTime');
     await getLeagueInfo();
+    // _mixpanelService.mixpanel.track('getLeagueInfo');
     await getHolidayList();
-    await versionCheck();
+    // _mixpanelService.mixpanel.track('getHoliday');
+    await checkVersion();
+    _mixpanelService.mixpanel.track('checkVersion');
 
-    isLoadingData(true);
+    // isLoadingData(true);
     // TODO: implement onInit
 
     user = authService.auth.currentUser;
@@ -75,8 +81,6 @@ class AuthCheckViewModel extends GetxController {
     // leagueRx.bindStream(_firestoreService.getOpenLeague());
     // authService.auth.signOut();
     update();
-
-    print(user);
     currentUser!.listen((user) async {
       print('listening $user');
 
@@ -100,7 +104,7 @@ class AuthCheckViewModel extends GetxController {
       }
     });
 
-    isLoadingData(false);
+    // isLoadingData(false);
     // _authService.auth.signOut();
     // _authService.auth.authStateChanges().listen((event) {
     //   print(event == null);
@@ -124,7 +128,7 @@ class AuthCheckViewModel extends GetxController {
     }
   }
 
-  Future versionCheck() async {
+  Future checkVersion() async {
     //Get Current installed version of app
     final PackageInfo info = await PackageInfo.fromPlatform();
     final RemoteConfig remoteConfig = RemoteConfig.instance;

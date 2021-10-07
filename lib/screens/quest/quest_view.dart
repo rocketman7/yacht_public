@@ -100,7 +100,7 @@ class QuestView extends StatelessWidget {
                               SizedBox(
                                 height: correctHeight(24.w, 0.0, detailedContentTextStyle.fontSize),
                               ),
-                              Text("퀘스트 상세 설명",
+                              Text("퀘스트 안내",
                                   style: questDescription.copyWith(
                                     fontWeight: FontWeight.w500,
                                   )),
@@ -122,7 +122,7 @@ class QuestView extends StatelessWidget {
                                   ? Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text("리워드 상세 설명",
+                                        Text("퀘스트 보상",
                                             style: questDescription.copyWith(
                                               fontWeight: FontWeight.w500,
                                             )),
@@ -140,6 +140,163 @@ class QuestView extends StatelessWidget {
                                       ],
                                     )
                                   : Container(),
+                              SizedBox(height: 14.w),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    flex: 96,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            decoration: BoxDecoration(
+                                                color: buttonNormal,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10.w),
+                                                  bottomLeft: Radius.circular(10.w),
+                                                )),
+                                            width: double.infinity,
+                                            height: 39.w,
+                                            child: Center(
+                                              child: Text(
+                                                "퀘스트 보상",
+                                                style: questResultRewardTitle,
+                                              ),
+                                            )),
+                                        Container(
+                                            width: double.infinity,
+                                            height: 39.w,
+                                            // color: buttonNormal,
+                                            child: Center(
+                                              child: Text(
+                                                "참여 보상",
+                                                style: questResultRewardTitle.copyWith(
+                                                  fontFamily: krFont,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            )),
+                                        Container(
+                                            width: double.infinity,
+                                            height: 39.w,
+                                            // color: buttonNormal,
+                                            child: Center(
+                                              child: Text(
+                                                "성공 보상",
+                                                style: questResultRewardTitle.copyWith(
+                                                  fontFamily: krFont,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 4.w,
+                                  ),
+                                  Flexible(
+                                    flex: 109,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          color: yachtYellowBackGround,
+                                          child: SvgPicture.asset(
+                                            'assets/icons/league_point.svg',
+                                            width: 27.w,
+                                            height: 27.w,
+                                          ),
+                                        ),
+                                        Container(
+                                            width: double.infinity,
+                                            height: 39.w,
+                                            // color: buttonNormal,
+                                            child: Center(
+                                              child: Text(
+                                                "${questModel.leaguePointParticipationReward ?? 0}점",
+                                                style: questResultRewardTitle.copyWith(
+                                                    fontSize: bodyBigSize,
+                                                    fontFamily: krFont,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: yachtYellow),
+                                              ),
+                                            )),
+                                        Container(
+                                            width: double.infinity,
+                                            height: 39.w,
+                                            // color: buttonNormal,
+                                            child: Center(
+                                              child: Text(
+                                                "${questModel.leaguePointSuccessReward ?? 0}점",
+                                                style: questResultRewardTitle.copyWith(
+                                                    fontSize: bodyBigSize,
+                                                    fontFamily: krFont,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: yachtYellow),
+                                              ),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 4.w,
+                                  ),
+                                  Flexible(
+                                    flex: 109,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(10.w),
+                                              bottomRight: Radius.circular(10.w),
+                                            ),
+                                            color: yachtGreenBackGround,
+                                          ),
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          child: Image.asset(
+                                            'assets/icons/yacht_point_circle.png',
+                                            width: 27.w,
+                                            height: 27.w,
+                                          ),
+                                        ),
+                                        Container(
+                                            width: double.infinity,
+                                            height: 39.w,
+                                            // color: buttonNormal,
+                                            child: Center(
+                                              child: Text(
+                                                "${toPriceKRW(questModel.yachtPointParticipationReward ?? 0)}원",
+                                                style: questResultRewardTitle.copyWith(
+                                                    fontSize: bodyBigSize,
+                                                    fontFamily: krFont,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: yachtGreen),
+                                              ),
+                                            )),
+                                        Container(
+                                            width: double.infinity,
+                                            height: 39.w,
+                                            // color: buttonNormal,
+                                            child: Center(
+                                              child: Text(
+                                                "${toPriceKRW(questModel.yachtPointSuccessReward ?? 0)}원",
+                                                style: questResultRewardTitle.copyWith(
+                                                    fontSize: bodyBigSize,
+                                                    fontFamily: krFont,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: yachtGreen),
+                                              ),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           )),
                       // btwHomeModule,

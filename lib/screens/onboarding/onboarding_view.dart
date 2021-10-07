@@ -4,13 +4,16 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/screens/auth/auth_check_view.dart';
 import 'package:yachtOne/screens/startup/startup_view.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 class OnboardingView extends StatelessWidget {
   OnboardingView({Key? key}) : super(key: key);
 
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   List<PageViewModel> onboardingPages = [
     PageViewModel(
       titleWidget: Image.asset(
@@ -331,7 +334,7 @@ class OnboardingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(ScreenUtil().screenWidth);
+    _mixpanelService.mixpanel.track('onboarding');
     double screenRatio = ScreenUtil().screenHeight / ScreenUtil().screenWidth;
     return IntroductionScreen(
       pages: screenRatio > 1.8 ? onboardingWidePages : onboardingPages,

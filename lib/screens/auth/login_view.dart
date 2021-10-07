@@ -8,6 +8,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/screens/auth/email_register_view.dart';
 import 'package:yachtOne/services/firestore_service.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import '../../locator.dart';
 import 'kakao_firebase_auth_api.dart';
@@ -20,8 +21,10 @@ class LoginView extends StatelessWidget {
   final RxBool isKakaoLoggingIn = false.obs;
   final RxBool isAppleLoggingIn = false.obs;
   final FirestoreService _firestoreService = locator<FirestoreService>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
+    _mixpanelService.mixpanel.track('login');
     return Scaffold(
       body: Container(
         height: double.infinity,

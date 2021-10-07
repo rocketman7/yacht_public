@@ -60,7 +60,7 @@ void main() async {
 
 // portrait 모드 고정
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((value) => runApp(MaterialApp(home: MyApp())));
+      .then((value) => runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyApp())));
 }
 
 class MyApp extends StatefulWidget {
@@ -135,7 +135,6 @@ class _MyAppState extends State<MyApp> {
           //         field: f,
           //         ),
           //     transition: Transition.zoom),
-          GetPage(name: '/designSystem', page: () => YachtDesignSystemSampleView(), transition: Transition.zoom),
           GetPage(
             name: '/quest',
             page: () => QuestView(),

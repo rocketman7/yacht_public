@@ -10,6 +10,7 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/auth/email_verification_wating_view.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
@@ -27,7 +28,7 @@ class HomeViewModel extends GetxController {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthService _authService = locator<AuthService>();
   final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   QuestRepository _questRepository = QuestRepository();
   QuestModel? tempQuestModel;
   // 시즌 내에 모든 퀘스트 받아서 RxList에 저장
@@ -60,12 +61,14 @@ class HomeViewModel extends GetxController {
 
   @override
   void onInit() async {
+    _mixpanelService.mixpanel.identify(userModelRx.value!.uid);
+    print('home view model start');
     // TODO: implement onInit
     isLoading(true);
     await getAllQuests();
     await getDictionaries();
     await _firestoreService.stampLastLogin();
-    print("login method: ${_authService.auth.currentUser!.providerData}");
+
     if (_authService.auth.currentUser!.email != null) {
       print(
           'email login method:${await _authService.auth.fetchSignInMethodsForEmail(_authService.auth.currentUser!.email!)}');
@@ -100,7 +103,6 @@ class HomeViewModel extends GetxController {
   }
 
   Future updateUserNameMethod(String userName, BuildContext context) async {
-    print(userName);
     isCheckingUserNameDuplicated(true);
     bool isUserNameDuplicatedVar = true;
 

@@ -35,6 +35,6 @@ class StartupViewModel extends GetxController {
   void checkUserNameConfirm() {
     // 한번도 업뎃 한 적 없으면 null일 수도 있으니 false로 처리
     isNameUpdated = userModelRx.value!.isNameUpdated ?? false;
-    print('isNameUpdated: $isNameUpdated');
+    // print('isNameUpdated: $isNameUpdated');
   }
 }
