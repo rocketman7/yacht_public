@@ -14,7 +14,10 @@ class FirebaseStorageService extends StorageService {
   Future<String> downloadImageURL(String storageAddress) async {
     String downloadAddress = "";
     try {
+      print('start to get download url: $downloadAddress, ${DateTime.now()}');
+
       downloadAddress = await _storageReference.child(storageAddress.toString()).getDownloadURL();
+      print('url get: $downloadAddress, ${DateTime.now()}');
     } catch (e) {
       print('downloadImagURL error : ${e.toString()}');
       downloadAddress =
