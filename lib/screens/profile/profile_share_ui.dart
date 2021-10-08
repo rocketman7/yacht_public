@@ -46,17 +46,8 @@ class ProfileViewFavoritesCardWidget extends StatelessWidget {
                           child: Container(
                             height: 50.w,
                             width: 50.w,
-                            child: FutureBuilder<String>(
-                              future:
-                                  Get.find<ProfileMyViewModel>().getImageUrlFromStorage(favoriteStockModels[i].logoUrl),
-                              builder: (_, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Image.network(snapshot.data.toString());
-                                } else {
-                                  return Container();
-                                }
-                              },
-                            ),
+                            child: Image.network(
+                                "https://storage.googleapis.com/ggook-5fb08.appspot.com/${favoriteStockModels[i].logoUrl}"),
                           ),
                         ),
                         Column(
@@ -166,15 +157,8 @@ class FollowersNFollowingsView extends StatelessWidget {
                                         height: 36.w,
                                         width: 36.w,
                                         child: snapshot.hasData
-                                            ? FutureBuilder<String>(
-                                                future: Get.find<ProfileMyViewModel>().getImageUrlFromStorage(
-                                                    'avatars/${snapshot.data!.avatarImage}.png'),
-                                                builder: (__, snapshotForImageURL) {
-                                                  return snapshotForImageURL.hasData
-                                                      ? Image.network(snapshotForImageURL.data.toString())
-                                                      : Container();
-                                                },
-                                              )
+                                            ? Image.network(
+                                                "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${snapshot.data!.avatarImage}.png")
                                             : Container(),
                                       ),
                                       SizedBox(

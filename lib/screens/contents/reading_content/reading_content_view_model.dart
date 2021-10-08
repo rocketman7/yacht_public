@@ -8,8 +8,7 @@ import '../../../locator.dart';
 
 class ReadingContentViewModel extends GetxController {
   final FirestoreService _firestoreService = locator<FirestoreService>();
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
   RxList<ReadingContentModel> readingContents = <ReadingContentModel>[].obs;
 
@@ -24,9 +23,9 @@ class ReadingContentViewModel extends GetxController {
     readingContents(await _firestoreService.getReadingContents());
   }
 
-  Future<String> getImageUrlFromStorage(String imageUrl) async {
-    return await _firebaseStorageService.downloadImageURL(imageUrl);
-  }
+  // Future<String> getImageUrlFromStorage(String imageUrl) async {
+  //   return await _firebaseStorageService.downloadImageURL(imageUrl);
+  // }
 
   Future launchUrl(String url) async {
     if (await canLaunch(url)) {

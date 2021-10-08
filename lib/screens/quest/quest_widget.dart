@@ -86,7 +86,9 @@ class SquareQuestWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-                QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
+                QuestImage(
+                  questModel: questModel,
+                ),
                 QuestCardRewards(questModel: questModel),
               ],
             ),
@@ -105,7 +107,9 @@ class SquareQuestWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-                            QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
+                            QuestImage(
+                              questModel: questModel,
+                            ),
                             QuestCardRewards(questModel: questModel),
                           ],
                         ),
@@ -123,7 +127,9 @@ class SquareQuestWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-                        QuestImage(questModel: questModel, firebaseStorageService: _firebaseStorageService),
+                        QuestImage(
+                          questModel: questModel,
+                        ),
                         QuestCardRewards(questModel: questModel),
                       ],
                     ),
@@ -217,12 +223,10 @@ class QuestImage extends StatelessWidget {
   const QuestImage({
     Key? key,
     required this.questModel,
-    required FirebaseStorageService firebaseStorageService,
-  })  : _firebaseStorageService = firebaseStorageService,
-        super(key: key);
+    // required FirebaseStorageService firebaseStorageService,
+  }) : super(key: key);
 
   final QuestModel questModel;
-  final FirebaseStorageService _firebaseStorageService;
 
   @override
   Widget build(BuildContext context) {
@@ -234,25 +238,14 @@ class QuestImage extends StatelessWidget {
           color: questModel.themeColor == null ? Color(0xFFFFF3D3) : hexToColorCode(questModel.themeColor!)),
       // QuestModel 데이터가 imageUrl을 가지고 있으면 이미지 다운 받아서 표시
       child: Center(
-        child: questModel.imageUrl == null
-            ? Container()
-            : FutureBuilder<String>(
-                future: _firebaseStorageService.downloadImageURL(questModel.imageUrl!),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    String imageUrl = snapshot.data!;
-                    return Image.network(
-                      imageUrl,
-                      height: 70.w,
-                      // width: 50.w,
-                      // fit: BoxFit.fitHeight,
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
-      ),
+          child: questModel.imageUrl == null
+              ? Container()
+              : Image.network(
+                  "https://storage.googleapis.com/ggook-5fb08.appspot.com/${questModel.imageUrl!}",
+                  height: 70.w,
+                  // width: 50.w,
+                  // fit: BoxFit.fitHeight,
+                )),
     );
   }
 }

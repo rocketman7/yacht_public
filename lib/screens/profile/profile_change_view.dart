@@ -40,30 +40,21 @@ class ProfileChangeView extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  Obx(() => Container(
-                        height: 110.w,
-                        width: 110.w,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xFFC4C4C4)),
-                        child: FutureBuilder<String>(
-                          future: profileMyViewModel.getImageUrlFromStorage(
-                              'avatars/${userModelRx.value!.avatarImage}.png'),
-                          builder: (_, snapshot) {
-                            return snapshot.hasData
-                                ? CachedNetworkImage(
-                                    imageUrl: snapshot.data!,
-                                  )
-                                : Container(
-                                    color: Colors.white,
-                                  );
-                          },
-                        ),
-                      )),
+                  Obx(
+                    () => Container(
+                      height: 110.w,
+                      width: 110.w,
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: Color(0xFFC4C4C4)),
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${userModelRx.value!.avatarImage}.png",
+                      ),
+                    ),
+                  ),
                   Container(
                     height: 36.w,
                     width: 36.w,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: primaryButtonText),
+                    decoration: BoxDecoration(shape: BoxShape.circle, color: primaryButtonText),
                     child: Center(
                       child: SizedBox(
                         height: 22.w,
@@ -92,15 +83,12 @@ class ProfileChangeView extends StatelessWidget {
                     color: yachtLine,
                   ),
                   SizedBox(
-                    height: correctHeight(
-                        20.w, 0.w, profileChangeTitleTextStyle.fontSize),
+                    height: correctHeight(20.w, 0.w, profileChangeTitleTextStyle.fontSize),
                   ),
                   Text('닉네임', style: profileChangeTitleTextStyle),
                   SizedBox(
                     height: correctHeight(
-                        8.w,
-                        profileChangeTitleTextStyle.fontSize,
-                        profileChangeContentTextStyle.fontSize),
+                        8.w, profileChangeTitleTextStyle.fontSize, profileChangeContentTextStyle.fontSize),
                   ),
                   TextFormField(
                     controller: profileMyViewModel.nameChangeController,
@@ -109,21 +97,15 @@ class ProfileChangeView extends StatelessWidget {
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: EdgeInsets.all(0.w),
-                      focusedBorder:
-                          OutlineInputBorder(borderSide: BorderSide.none),
-                      enabledBorder:
-                          OutlineInputBorder(borderSide: BorderSide.none),
+                      focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                      enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                       hintText: '${userModelRx.value!.userName}',
-                      hintStyle: profileChangeContentTextStyle.copyWith(
-                          color: yachtGrey),
+                      hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
                     ),
                     validator: (value) {
                       if (value != '') {
-                        final nickValidator =
-                            RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
-                        if (value!.length > 8 ||
-                            !nickValidator.hasMatch(value) ||
-                            value.contains(' ')) {
+                        final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
+                        if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
                           return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
                         } else {
                           return null;
@@ -139,8 +121,7 @@ class ProfileChangeView extends StatelessWidget {
                     },
                   ),
                   SizedBox(
-                    height: correctHeight(
-                        20.w, profileChangeContentTextStyle.fontSize, 0.w),
+                    height: correctHeight(20.w, profileChangeContentTextStyle.fontSize, 0.w),
                   ),
                   Container(
                     height: 1.w,
@@ -148,15 +129,12 @@ class ProfileChangeView extends StatelessWidget {
                     color: yachtLine,
                   ),
                   SizedBox(
-                    height: correctHeight(
-                        20.w, 0.w, profileChangeTitleTextStyle.fontSize),
+                    height: correctHeight(20.w, 0.w, profileChangeTitleTextStyle.fontSize),
                   ),
                   Text('소개글', style: profileChangeTitleTextStyle),
                   SizedBox(
                     height: correctHeight(
-                        8.w,
-                        profileChangeTitleTextStyle.fontSize,
-                        profileChangeContentTextStyle.fontSize),
+                        8.w, profileChangeTitleTextStyle.fontSize, profileChangeContentTextStyle.fontSize),
                   ),
                   TextFormField(
                     controller: profileMyViewModel.introChangeController,
@@ -166,17 +144,12 @@ class ProfileChangeView extends StatelessWidget {
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: EdgeInsets.all(0.w),
-                      focusedBorder:
-                          OutlineInputBorder(borderSide: BorderSide.none),
-                      enabledBorder:
-                          OutlineInputBorder(borderSide: BorderSide.none),
-                      hintText: (userModelRx.value!.intro != null &&
-                              userModelRx.value!.intro != '')
-                          ? '${userModelRx.value!.intro}'
-                              .replaceAll('\\n', '\n')
+                      focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                      enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                      hintText: (userModelRx.value!.intro != null && userModelRx.value!.intro != '')
+                          ? '${userModelRx.value!.intro}'.replaceAll('\\n', '\n')
                           : '소개글이 없습니다.',
-                      hintStyle: profileChangeContentTextStyle.copyWith(
-                          color: yachtGrey),
+                      hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
                     ),
                     validator: (value) {
                       if ('\n'.allMatches(value!).length > 2) {
@@ -196,8 +169,7 @@ class ProfileChangeView extends StatelessWidget {
                     },
                   ),
                   SizedBox(
-                    height: correctHeight(
-                        20.w, profileChangeContentTextStyle.fontSize, 0.w),
+                    height: correctHeight(20.w, profileChangeContentTextStyle.fontSize, 0.w),
                   ),
                   Container(
                     height: 1.w,
@@ -233,22 +205,16 @@ class ProfileChangeView extends StatelessWidget {
                         barBlur: 8,
                         duration: const Duration(seconds: 1, milliseconds: 100),
                       );
-                    } else if (profileMyViewModel.formKey.currentState!
-                            .validate() &&
-                        profileMyViewModel.isCheckingUserNameDuplicated.value ==
-                            false) {
+                    } else if (profileMyViewModel.formKey.currentState!.validate() &&
+                        profileMyViewModel.isCheckingUserNameDuplicated.value == false) {
                       if (profileMyViewModel.nameChangeController.text != '' &&
-                          profileMyViewModel.nameChangeController.text !=
-                              userModelRx.value!.userName) {
-                        profileMyViewModel.updateUserNameMethod(context,
-                            profileMyViewModel.nameChangeController.text);
+                          profileMyViewModel.nameChangeController.text != userModelRx.value!.userName) {
+                        profileMyViewModel.updateUserNameMethod(context, profileMyViewModel.nameChangeController.text);
                       }
 
                       if (profileMyViewModel.introChangeController.text != '' &&
-                          profileMyViewModel.introChangeController.text !=
-                              userModelRx.value!.intro) {
-                        profileMyViewModel.updateUserIntroMethod(
-                            profileMyViewModel.introChangeController.text);
+                          profileMyViewModel.introChangeController.text != userModelRx.value!.intro) {
+                        profileMyViewModel.updateUserIntroMethod(profileMyViewModel.introChangeController.text);
                       }
                     }
                   },
@@ -257,23 +223,14 @@ class ProfileChangeView extends StatelessWidget {
                         width: double.infinity,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(70.0),
-                            color: profileMyViewModel
-                                        .isCheckingUserNameDuplicated.value ==
-                                    false
+                            color: profileMyViewModel.isCheckingUserNameDuplicated.value == false
                                 ? yachtViolet
                                 : primaryButtonText),
                         child: Center(
                           child: Text(
-                            profileMyViewModel
-                                        .isCheckingUserNameDuplicated.value ==
-                                    false
-                                ? '저장하기'
-                                : '닉네임 중복 검사 중',
+                            profileMyViewModel.isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
                             style: profileChangeButtonTextStyle.copyWith(
-                                color: profileMyViewModel
-                                            .isCheckingUserNameDuplicated
-                                            .value ==
-                                        false
+                                color: profileMyViewModel.isCheckingUserNameDuplicated.value == false
                                     ? primaryButtonText
                                     : primaryButtonBackground),
                           ),
@@ -306,14 +263,11 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                 child: Container(
                   height: 435.w,
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.white),
                   child: Column(
                     children: [
                       SizedBox(
-                        height: correctHeight(
-                            24.w, 0.w, profileAvatarChangeTextStyle.fontSize),
+                        height: correctHeight(24.w, 0.w, profileAvatarChangeTextStyle.fontSize),
                       ),
                       Row(
                         children: [
@@ -347,8 +301,7 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        height: correctHeight(20.w - 9.w,
-                            profileAvatarChangeTextStyle.fontSize, 0.w),
+                        height: correctHeight(20.w - 9.w, profileAvatarChangeTextStyle.fontSize, 0.w),
                       ),
                       Container(
                         height: 351.w,
@@ -356,12 +309,10 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                           future: profileMyViewModel.getAvatarImagesURLs(),
                           builder: (_, snapshot) {
                             if (snapshot.hasData) {
-                              profileMyViewModel.avatarImagesURLs =
-                                  snapshot.data!;
+                              profileMyViewModel.avatarImagesURLs = snapshot.data!;
 
                               for (int i = 0; i < snapshot.data!.length; i++) {
-                                if (snapshot.data![i] ==
-                                    userModelRx.value!.avatarImage)
+                                if (snapshot.data![i] == userModelRx.value!.avatarImage)
                                   profileMyViewModel.avatarIndex(i);
                               }
                               return AvatarImages(
@@ -412,9 +363,7 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                   child: Container(
                     height: 50.w,
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(70.0),
-                        color: primaryButtonText),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: primaryButtonText),
                     child: Center(
                       child: Text(
                         '저장하기',
@@ -469,22 +418,11 @@ class AvatarImages extends StatelessWidget {
                             top: 9.w,
                             left: 8.w,
                             child: Container(
-                              height: 68.w,
-                              width: 68.w,
-                              child: FutureBuilder<String>(
-                                future: profileMyViewModel.getImageUrlFromStorage(
-                                    'avatars/${avatarImagesURLs[i * 4 + j]}.png'),
-                                builder: (_, snapshot) {
-                                  return snapshot.hasData
-                                      ? Image.network(
-                                          '${snapshot.data!}',
-                                        )
-                                      : Container(
-                                          color: Colors.white,
-                                        );
-                                },
-                              ),
-                            ),
+                                height: 68.w,
+                                width: 68.w,
+                                child: Image.network(
+                                  "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${avatarImagesURLs[i * 4 + j]}.png",
+                                )),
                           ),
                           Positioned(
                               top: -8.w + 9.w,
@@ -493,13 +431,10 @@ class AvatarImages extends StatelessWidget {
                                     width: 68.w + 16.w,
                                     height: 68.w + 16.w,
                                     decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
+                                        borderRadius: BorderRadius.circular(100),
                                         border: Border.all(
                                             width: 4.w,
-                                            color: (i * 4 + j ==
-                                                    profileMyViewModel
-                                                        .avatarIndex.value)
+                                            color: (i * 4 + j == profileMyViewModel.avatarIndex.value)
                                                 ? yachtViolet
                                                 : Colors.transparent))),
                               )),

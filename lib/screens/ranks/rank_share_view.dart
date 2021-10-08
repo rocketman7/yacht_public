@@ -220,21 +220,17 @@ class RankShareView extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Container(
-                                      height: 31.w,
-                                      width: 31.w,
-                                      child: FutureBuilder<String>(
-                                        future: rankController.getImageUrlFromStorage('avatars/' +
-                                            (rankController.allRanker[leagueIndex][i].avatarImage ?? 'avatar001') +
-                                            '.png'),
-                                        builder: (_, snapshot) {
-                                          if (snapshot.hasData) {
-                                            return Image.network(snapshot.data.toString());
-                                          } else {
-                                            return Container();
-                                          }
-                                        },
-                                      ),
-                                    ),
+                                        height: 31.w,
+                                        width: 31.w,
+                                        child:
+                                            // FutureBuilder<String>(
+                                            //   future: rankController.getImageUrlFromStorage('avatars/' +
+                                            //       (rankController.allRanker[leagueIndex][i].avatarImage ?? 'avatar001') +
+                                            //       '.png'),
+                                            //   builder: (_, snapshot) {
+                                            //     if (snapshot.hasData) {
+                                            Image.network(
+                                                "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${(rankController.allRanker[leagueIndex][i].avatarImage) ?? 'avatar001'}.png")),
                                     SizedBox(
                                       width: 8.w,
                                     ),

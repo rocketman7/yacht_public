@@ -89,16 +89,10 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                     ),
-                                    child: FutureBuilder<String>(
-                                        future: detailPostViewModel
-                                            .getImageUrlFromStorage('avatars/${post.writerAvatarUrl}.png'),
-                                        builder: (context, snapshot) {
-                                          return snapshot.hasData
-                                              ? CachedNetworkImage(
-                                                  imageUrl: snapshot.data!,
-                                                )
-                                              : Container();
-                                        })
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${post.writerAvatarUrl}.png",
+                                    )
 
                                     // child: CachedNetworkImage(
                                     //   imageUrl:
@@ -345,34 +339,21 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                       return Row(
                                                         children: [
                                                           ClipRRect(
-                                                              borderRadius: BorderRadius.circular(5.w),
-                                                              child: FutureBuilder<String>(
-                                                                  future: detailPostViewModel.getImageUrlFromStorage(
-                                                                      detailPostViewModel.post.imageUrlList![index]),
-                                                                  builder: (context, snapshot) {
-                                                                    if (!snapshot.hasData) {
-                                                                      return LoadingContainer(
-                                                                        radius: 5.w,
-                                                                        height: 140.w,
-                                                                        width: 140.w,
-                                                                        // color: Colors.yellow,
-                                                                      );
-                                                                    } else {
-                                                                      imageUrls[index] = snapshot.data!;
-                                                                      return InkWell(
-                                                                        onTap: () {
-                                                                          Get.dialog(buildPhotoPageView(
-                                                                              index, imageUrls, detailPostViewModel));
-                                                                        },
-                                                                        child: CachedNetworkImage(
-                                                                          imageUrl: imageUrls[index],
-                                                                          height: 140.w,
-                                                                          width: 140.w,
-                                                                          fit: BoxFit.cover,
-                                                                        ),
-                                                                      );
-                                                                    }
-                                                                  })),
+                                                            borderRadius: BorderRadius.circular(5.w),
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                Get.dialog(buildPhotoPageView(
+                                                                    index, imageUrls, detailPostViewModel));
+                                                              },
+                                                              child: CachedNetworkImage(
+                                                                imageUrl:
+                                                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${detailPostViewModel.post.imageUrlList![index]}",
+                                                                height: 140.w,
+                                                                width: 140.w,
+                                                                fit: BoxFit.cover,
+                                                              ),
+                                                            ),
+                                                          ),
                                                           SizedBox(
                                                             width: 4.w,
                                                           ),
@@ -521,16 +502,10 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                       decoration: BoxDecoration(
                                                         shape: BoxShape.circle,
                                                       ),
-                                                      child: FutureBuilder<String>(
-                                                          future: detailPostViewModel.getImageUrlFromStorage(
-                                                              'avatars/${detailPostViewModel.comments[index].writerAvatarUrl}.png'),
-                                                          builder: (context, snapshot) {
-                                                            return snapshot.hasData
-                                                                ? CachedNetworkImage(
-                                                                    imageUrl: snapshot.data!,
-                                                                  )
-                                                                : Container();
-                                                          })
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${detailPostViewModel.comments[index].writerAvatarUrl}.png",
+                                                      )
 
                                                       // child: CachedNetworkImage(
                                                       //   imageUrl:
@@ -781,28 +756,17 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                     child: (imageUrls[index] == "")
                         ?
                         // image주소 로딩못했을 때만 퓨쳐빌더로
-                        FutureBuilder<String>(
-                            future: detailPostViewModel.getImageUrlFromStorage(post.imageUrlList![index]),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Container(
-                                  height: 140.w,
-                                  width: 140.w,
-                                  // color: Colors.yellow,
-                                );
-                              } else {
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(14.w),
-                                  child: Container(
-                                    width: ScreenUtil().screenWidth * .75,
-                                    child: CachedNetworkImage(
-                                      imageUrl: snapshot.data!,
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                  ),
-                                );
-                              }
-                            })
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(14.w),
+                            child: Container(
+                              width: ScreenUtil().screenWidth * .75,
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${detailPostViewModel.post.imageUrlList![index]}",
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                          )
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(14.w),
                             child: Container(
@@ -967,17 +931,10 @@ class _CommentInputState extends State<CommentInput> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
-                                  child: FutureBuilder<String>(
-                                      future: widget.detailPostViewModel
-                                          .getImageUrlFromStorage('avatars/${userModelRx.value!.avatarImage!}.png'),
-                                      builder: (context, snapshot) {
-                                        return snapshot.hasData
-                                            ? CachedNetworkImage(
-                                                imageUrl: snapshot.data!,
-                                              )
-                                            : Container();
-                                      })
-
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${userModelRx.value!.avatarImage!}.png",
+                                  )
                                   // child: CachedNetworkImage(
                                   //   imageUrl:
                                   //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",

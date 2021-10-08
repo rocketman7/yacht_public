@@ -79,15 +79,10 @@ class FeedWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                     ),
-                    child: FutureBuilder<String>(
-                        future: communityViewModel.getImageUrlFromStorage('avatars/${post.writerAvatarUrl}.png'),
-                        builder: (context, snapshot) {
-                          return snapshot.hasData
-                              ? Image.network(
-                                  snapshot.data!,
-                                )
-                              : Container();
-                        })
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${post.writerAvatarUrl}.png",
+                    )
 
                     // child: CachedNetworkImage(
                     //   imageUrl:
@@ -440,36 +435,23 @@ class FeedWidget extends StatelessWidget {
                                         children: [
                                           ClipRRect(
                                               borderRadius: BorderRadius.circular(5.w),
-                                              child: FutureBuilder<String>(
-                                                  future: getImageUrlFromStorage(post.imageUrlList![index]),
-                                                  builder: (context, snapshot) {
-                                                    if (!snapshot.hasData) {
-                                                      return LoadingContainer(
-                                                        radius: 5.w,
-                                                        height: 140.w,
-                                                        width: 140.w,
-                                                        // color: Colors.yellow,
-                                                      );
-                                                    } else {
-                                                      imageUrls[index] = snapshot.data!;
-                                                      return InkWell(
-                                                        onTap: () {
-                                                          _mixpanelService.mixpanel.track('feed-photoPage');
-                                                          // print(imageUrls);
-                                                          showDialog(
-                                                              context: context,
-                                                              builder: (context) =>
-                                                                  buildPhotoPageView(context, index, imageUrls));
-                                                        },
-                                                        child: CachedNetworkImage(
-                                                          imageUrl: imageUrls[index],
-                                                          height: 140.w,
-                                                          width: 140.w,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      );
-                                                    }
-                                                  })),
+                                              child: InkWell(
+                                                onTap: () {
+                                                  _mixpanelService.mixpanel.track('feed-photoPage');
+                                                  // print(imageUrls);
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          buildPhotoPageView(context, index, imageUrls));
+                                                },
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
+                                                  height: 140.w,
+                                                  width: 140.w,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )),
                                           SizedBox(
                                             width: 4.w,
                                           ),
@@ -608,34 +590,24 @@ class FeedWidget extends StatelessWidget {
                     child: (imageUrls[index] == "")
                         ?
                         // image주소 로딩못했을 때만 퓨쳐빌더로
-                        FutureBuilder<String>(
-                            future: getImageUrlFromStorage(post.imageUrlList![index]),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Container(
-                                  height: 140.w,
-                                  width: 140.w,
-                                  // color: Colors.yellow,
-                                );
-                              } else {
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(14.w),
-                                  child: Container(
-                                    width: ScreenUtil().screenWidth * .75,
-                                    child: CachedNetworkImage(
-                                      imageUrl: snapshot.data!,
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                  ),
-                                );
-                              }
-                            })
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(14.w),
+                            child: Container(
+                              width: ScreenUtil().screenWidth * .75,
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
+                                fit: BoxFit.fitWidth,
+                              ),
+                            ),
+                          )
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(14.w),
                             child: Container(
                               width: ScreenUtil().screenWidth * .75,
                               child: CachedNetworkImage(
-                                imageUrl: imageUrls[index],
+                                imageUrl:
+                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
                                 fit: BoxFit.fitWidth,
                               ),
                             ),
@@ -661,9 +633,9 @@ class FeedWidget extends StatelessWidget {
     );
   }
 
-  Future<String> getImageUrlFromStorage(String imageUrl) async {
-    return await _firebaseStorageService.downloadImageURL(imageUrl);
-  }
+  // Future<String> getImageUrlFromStorage(String imageUrl) async {
+  //   return await _firebaseStorageService.downloadImageURL(imageUrl);
+  // }
 }
 
 class EditingMyPost extends StatelessWidget {

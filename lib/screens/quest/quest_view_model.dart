@@ -141,9 +141,9 @@ class QuestViewModel extends GetxController {
 
   Future getImages() async {
     for (int i = 0; i < questModel.investAddresses!.length; i++) {
-      imageUrl = await _storageService.downloadImageURL(questModel.investAddresses![i].logoUrl!);
+      // imageUrl = await _storageService.downloadImageURL(questModel.investAddresses![i].logoUrl!);
       logoImage.add(Image.network(
-        imageUrl!,
+        "https://storage.googleapis.com/ggook-5fb08.appspot.com/${questModel.investAddresses![i].logoUrl!}",
         fit: BoxFit.cover,
       ));
     }

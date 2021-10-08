@@ -28,9 +28,11 @@ class FirebaseStorageService extends StorageService {
 
   // 이미지 업로드
   Future uploadImages(List<String> filePaths) async {
-    filePaths.forEach((element) {
+    filePaths.forEach((element) async {
       String fileName = basename(element);
-      _storageReference.child('posts/$fileName').putFile(File(element));
+      await _storageReference.child('posts/$fileName').putFile(File(element)).whenComplete(() => print("upload done"));
     });
   }
 }
+
+// https://storage.googleapis.com/ggook-5fb08.appspot.com/

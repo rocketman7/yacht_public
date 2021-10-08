@@ -100,43 +100,31 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                       ),
                                       child: (controller.isUserModelLoaded)
                                           ? controller.user.avatarImage != null
-                                              ? FutureBuilder<String>(
-                                                  future: controller.getImageUrlFromStorage(
-                                                      'avatars/${controller.user.avatarImage}.png'),
-                                                  builder: (context, snapshot) {
-                                                    return snapshot.hasData
-                                                        ? CachedNetworkImage(
-                                                            imageUrl: snapshot.data!,
-                                                          )
-                                                        : Container();
-                                                  })
+                                              ? CachedNetworkImage(
+                                                  imageUrl:
+                                                      "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${controller.user.avatarImage}.png",
+                                                )
                                               : Container()
                                           : Container())),
                               Positioned(
                                   top: 58.w,
                                   child: (controller.isUserModelLoaded)
-                                      ? FutureBuilder<String>(
-                                          future: controller.getImageUrlFromStorage(tierJellyBeanURL[
-                                              separateStringFromTier(getTierByExp(controller.user.exp))]!),
-                                          builder: (context, snapshot) {
-                                            return snapshot.hasData
-                                                ? Stack(
-                                                    alignment: Alignment.center,
-                                                    children: [
-                                                      Container(
-                                                        width: 78.w,
-                                                        child: CachedNetworkImage(
-                                                          imageUrl: snapshot.data!,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '${tierKorName[separateStringFromTier(getTierByExp(controller.user.exp))]} ${separateIntFromTier(getTierByExp(controller.user.exp))}',
-                                                        style: profileTierNameStyle,
-                                                      ),
-                                                    ],
-                                                  )
-                                                : Container();
-                                          })
+                                      ? Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Container(
+                                              width: 78.w,
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${tierJellyBeanURL[separateStringFromTier(getTierByExp(controller.user.exp))]!}",
+                                              ),
+                                            ),
+                                            Text(
+                                              '${tierKorName[separateStringFromTier(getTierByExp(controller.user.exp))]} ${separateIntFromTier(getTierByExp(controller.user.exp))}',
+                                              style: profileTierNameStyle,
+                                            ),
+                                          ],
+                                        )
                                       : Container()),
                             ],
                           ),

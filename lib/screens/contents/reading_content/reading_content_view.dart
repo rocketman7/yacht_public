@@ -54,35 +54,22 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
                                 // await controller.launchUrl(controller.readingContents[index].contentUrl);
                               },
                               child: Container(
-                                  child: FutureBuilder<String>(
-                                      future: controller
-                                          .getImageUrlFromStorage(controller.readingContents[index].thumbnailUrl),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          String imageUrl = snapshot.data!;
-                                          return CachedNetworkImage(
-                                            imageUrl: imageUrl,
-                                            width: 270.w,
-                                            height: 240.w,
-                                            filterQuality: FilterQuality.high,
-                                            progressIndicatorBuilder: (_, __, DownloadProgress progress) {
-                                              // progress.totalSize
-                                              // if (progress == null) return child;
-                                              return LoadingContainer(
-                                                width: 270.w,
-                                                height: 240.w,
-                                                radius: 10.w,
-                                              );
-                                            },
-                                          );
-                                        } else {
-                                          return LoadingContainer(
-                                            width: 270.w,
-                                            height: 240.w,
-                                            radius: 10.w,
-                                          );
-                                        }
-                                      })),
+                                  child: CachedNetworkImage(
+                                imageUrl:
+                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${controller.readingContents[index].thumbnailUrl}",
+                                width: 270.w,
+                                height: 240.w,
+                                filterQuality: FilterQuality.high,
+                                progressIndicatorBuilder: (_, __, DownloadProgress progress) {
+                                  // progress.totalSize
+                                  // if (progress == null) return child;
+                                  return LoadingContainer(
+                                    width: 270.w,
+                                    height: 240.w,
+                                    radius: 10.w,
+                                  );
+                                },
+                              )),
                             ),
                             SizedBox(
                               width: primaryPaddingSize,

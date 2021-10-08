@@ -52,9 +52,9 @@ class RankController extends GetxController {
     return await _firestoreService.getOtherRanks(uid);
   }
 
-  Future<String> getImageUrlFromStorage(String imageUrl) async {
-    return await _firebaseStorageService.downloadImageURL(imageUrl);
-  }
+  // Future<String> getImageUrlFromStorage(String imageUrl) async {
+  //   return await _firebaseStorageService.downloadImageURL(imageUrl);
+  // }
 
   void test() async {
     await _firestoreService.addRank();

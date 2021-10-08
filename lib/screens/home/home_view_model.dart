@@ -325,9 +325,9 @@ class HomeViewModel extends GetxController {
     dictionaries(await _firestoreService.getDictionaries());
   }
 
-  Future<String> getImageUrlFromStorage(String imageUrl) async {
-    return await _firebaseStorageService.downloadImageURL(imageUrl);
-  }
+  // Future<String> getImageUrlFromStorage(String imageUrl) async {
+  //   return await _firebaseStorageService.downloadImageURL(imageUrl);
+  // }
 
   // Future getUser() async {
   //   uid = _authService.auth.currentUser!.uid;

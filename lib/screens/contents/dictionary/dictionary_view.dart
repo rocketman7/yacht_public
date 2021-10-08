@@ -46,31 +46,17 @@ class DictionaryView extends StatelessWidget {
                             padding: primaryAllPadding,
                             child: Row(
                               children: [
-                                FutureBuilder<String>(
-                                    future: homeViewModel
-                                        .getImageUrlFromStorage(homeViewModel.dictionaries[index].imageUrl),
-                                    builder: (context, snapshot) {
-                                      return !snapshot.hasData
-                                          ? Container(
-                                              height: 50.w,
-                                              width: 50.w,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5.w),
-                                                color: white,
-                                              ),
-                                            )
-                                          : Container(
-                                              height: 50.w,
-                                              width: 50.w,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5.w),
-                                                // color: yachtRed,
-                                              ),
-                                              child: Image.network(
-                                                snapshot.data!,
-                                              ),
-                                            );
-                                    }),
+                                Container(
+                                  height: 50.w,
+                                  width: 50.w,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5.w),
+                                    // color: yachtRed,
+                                  ),
+                                  child: Image.network(
+                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${homeViewModel.dictionaries[index].imageUrl}",
+                                  ),
+                                ),
                                 SizedBox(width: 14.w),
                                 Text(homeViewModel.dictionaries[index].title,
                                     style: dictionaryKeyword.copyWith(

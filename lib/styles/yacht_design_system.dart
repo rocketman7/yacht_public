@@ -1717,6 +1717,15 @@ AppBar primaryAppBar(String title) {
   );
 }
 
+AppBar primaryAppBarWithoutBackButton(String title) {
+  return AppBar(
+    automaticallyImplyLeading: false,
+    backgroundColor: white,
+    toolbarHeight: 60.w,
+    title: Text(title, style: appBarTitle),
+  );
+}
+
 Container appBarWithCloseButton({required String title, double? height}) {
   return Container(
     height: height ?? 60.w,
@@ -1870,33 +1879,25 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: Container(
-                                    child: Center(
-                                      child: FutureBuilder<String>(
-                                          future: FirebaseStorageService().downloadImageURL(tierJellyBeanURL[
-                                              getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index]]!),
-                                          builder: (context, snapshot) {
-                                            return snapshot.hasData
-                                                ? Stack(
-                                                    alignment: Alignment.center,
-                                                    children: [
-                                                      Container(
-                                                        width: 120.w,
-                                                        child: CachedNetworkImage(
-                                                          imageUrl: snapshot.data!,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '${tierKorName[getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index]]}',
-                                                        style: feedTitle,
-                                                      ),
-                                                    ],
-                                                  )
-                                                : Container();
-                                          }),
-                                    ),
+                                    child: Container(
+                                        child: Center(
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        width: 120.w,
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "https://storage.googleapis.com/ggook-5fb08.appspot.com/${tierJellyBeanURL[getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index]]!}",
+                                        ),
+                                      ),
+                                      Text(
+                                        '${tierKorName[getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index]]}',
+                                        style: feedTitle,
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                ))),
                                 Expanded(
                                   child: Container(
                                       child: Row(

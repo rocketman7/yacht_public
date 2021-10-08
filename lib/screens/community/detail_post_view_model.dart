@@ -75,9 +75,9 @@ class DetailPostViewModel extends GetxController {
     );
   }
 
-  Future<String> getImageUrlFromStorage(String imageUrl) async {
-    return await _firebaseStorageService.downloadImageURL(imageUrl);
-  }
+  // Future<String> getImageUrlFromStorage(String imageUrl) async {
+  //   return await _firebaseStorageService.downloadImageURL(imageUrl);
+  // }
 
   Future toggleLikeComment(PostModel post) async {
     await _firestoreService.toggleLikeComment(thisPost.value, userModelRx.value!.uid);

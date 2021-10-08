@@ -67,9 +67,9 @@ class ProfileOthersViewModel extends GetxController {
     return tempStockHistoricalPriceModels;
   }
 
-  Future<String> getImageUrlFromStorage(String imageUrl) async {
-    return await _firebaseStorageService.downloadImageURL(imageUrl);
-  }
+  // Future<String> getImageUrlFromStorage(String imageUrl) async {
+  //   return await _firebaseStorageService.downloadImageURL(imageUrl);
+  // }
 
   Future followSomeoneMethod() async {
     isFollowing = true;

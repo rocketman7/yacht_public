@@ -17,12 +17,10 @@ import 'profile_share_ui.dart';
 
 class ProfileMyViewModel extends GetxController {
   FirestoreService _firestoreService = locator<FirestoreService>();
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
   late List<FavoriteStockModel> favoriteStockModels;
-  late List<FavoriteStockHistoricalPriceModel>
-      favoriteStockHistoricalPriceModels;
+  late List<FavoriteStockHistoricalPriceModel> favoriteStockHistoricalPriceModels;
   bool isUserModelLoaded = false;
   bool isFavoritesLoaded = false;
 
@@ -62,38 +60,27 @@ class ProfileMyViewModel extends GetxController {
   Future<List<FavoriteStockModel>> loadFavoriteStocks() async {
     List<FavoriteStockModel> tempStockModels = [];
     if (userModelRx.value!.favoriteStocks != null) {
-      for (int i = 0;
-          i <
-              min(maxNumOfFavoriteStocks,
-                  userModelRx.value!.favoriteStocks!.length);
-          i++) {
-        tempStockModels.add(await _firestoreService.getFavoriteStockModel(
-            'KR', userModelRx.value!.favoriteStocks![i]));
+      for (int i = 0; i < min(maxNumOfFavoriteStocks, userModelRx.value!.favoriteStocks!.length); i++) {
+        tempStockModels.add(await _firestoreService.getFavoriteStockModel('KR', userModelRx.value!.favoriteStocks![i]));
       }
     }
     return tempStockModels;
   }
 
-  Future<List<FavoriteStockHistoricalPriceModel>>
-      loadFavoriteStocksPrices() async {
+  Future<List<FavoriteStockHistoricalPriceModel>> loadFavoriteStocksPrices() async {
     List<FavoriteStockHistoricalPriceModel> tempStockHistoricalPriceModels = [];
     if (userModelRx.value!.favoriteStocks != null) {
-      for (int i = 0;
-          i <
-              min(maxNumOfFavoriteStocks,
-                  userModelRx.value!.favoriteStocks!.length);
-          i++) {
+      for (int i = 0; i < min(maxNumOfFavoriteStocks, userModelRx.value!.favoriteStocks!.length); i++) {
         tempStockHistoricalPriceModels.add(
-            await _firestoreService.getFavoriteStockHistoricalPriceModel(
-                'KR', userModelRx.value!.favoriteStocks![i]));
+            await _firestoreService.getFavoriteStockHistoricalPriceModel('KR', userModelRx.value!.favoriteStocks![i]));
       }
     }
     return tempStockHistoricalPriceModels;
   }
 
-  Future<String> getImageUrlFromStorage(String imageUrl) async {
-    return await _firebaseStorageService.downloadImageURL(imageUrl);
-  }
+  // Future<String> getImageUrlFromStorage(String imageUrl) async {
+  //   return await _firebaseStorageService.downloadImageURL(imageUrl);
+  // }
 
   Future<UserModel> getOtherUserModel(String uid) async {
     UserModel user;
@@ -162,8 +149,7 @@ class ProfileMyViewModel extends GetxController {
   // 퀘스트 참여기록 파트
   // 유저가 참여한 퀘스트의 퀘스트 정보 가져오기
   Future<QuestModel> getEachQuestModel(UserQuestModel userQuest) async {
-    return await _firestoreService.getEachQuest(
-        userQuest.leagueId!, userQuest.questId!);
+    return await _firestoreService.getEachQuest(userQuest.leagueId!, userQuest.questId!);
     // update(['userQuestRecord']);
   }
 
@@ -193,9 +179,7 @@ class ProfileMyViewModel extends GetxController {
       String makePickResult(List selection) {
         String result = "";
         for (int i = 0; i < selection.length; i++) {
-          i == selection.length - 1
-              ? result += '${selection[i]}'
-              : result += '${selection[i]}, ';
+          i == selection.length - 1 ? result += '${selection[i]}' : result += '${selection[i]}, ';
         }
         return result;
       }
@@ -214,8 +198,7 @@ userNameDuplicatedDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -229,17 +212,14 @@ userNameDuplicatedDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
                         SizedBox(
                           height: 15.w,
                         ),
-                        Text('알림',
-                            style:
-                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                        Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
                       ],
                     ),
                     Spacer(),
@@ -258,8 +238,7 @@ userNameDuplicatedDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -272,8 +251,8 @@ userNameDuplicatedDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(48.w, yachtBadgesDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogTitle.fontSize),
+                  height:
+                      correctHeight(48.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Text(
                   "이미 사용 중인 닉네임입니다!",
@@ -281,8 +260,7 @@ userNameDuplicatedDialog(BuildContext context) {
                   style: yachtBadgesDescriptionDialogTitle,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      37.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                  height: correctHeight(37.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                 ),
                 Row(
                   children: [
