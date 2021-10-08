@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:yachtOne/repositories/repository.dart';
