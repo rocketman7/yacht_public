@@ -46,20 +46,23 @@ class PushNotificationService {
     }
 
     // 처음 들어오거나 특정한 이유로 토큰이 없는 사용자들은 토큰을 저장해줘야한다 DB에. 그리고 기본적으로 모두 구독해줘야한다.
-    if (userModelRx.value!.token == null) {
-      String token;
+    // if (userModelRx.value!.token == null) {
+    String token;
 
-      await FirebaseMessaging.instance.getToken().then((value) async {
-        token = value!;
-        print('user token... and need to update DB' + token);
+    await FirebaseMessaging.instance.getToken().then((value) async {
+      token = value!;
+      print('user token... and need to update DB' + token);
 
+      if (userModelRx.value!.token == null ||
+          userModelRx.value!.token != token) {
         await _firestoreService.updateUserFCMToken(token);
-      });
 
-      for (int i = 0; i < numOfPushAlarm; i++) {
-        await FirebaseMessaging.instance.subscribeToTopic(topics[i]);
+        for (int i = 0; i < numOfPushAlarm; i++) {
+          await FirebaseMessaging.instance.subscribeToTopic(topics[i]);
+        }
       }
-    }
+    });
+    // }
   }
 
   Future subOrUnscribeToTopic(int i, bool value) async {
