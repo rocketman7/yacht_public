@@ -314,41 +314,41 @@ class RankShareView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // SizedBox(
-                      //   height: correctHeight(16.w, rankDescriptionBoldText.fontSize, rankDescriptionMainText.fontSize),
-                      // ),
-                      // Row(
-                      //   children: [
-                      //     SizedBox(
-                      //       width: 14.w,
-                      //     ),
-                      //     Column(
-                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //       children: [
-                      //         Text(
-                      //           '우승을 위한 추천 활동',
-                      //           style: rankDescriptionMainText,
-                      //         ),
-                      //         SizedBox(
-                      //           height: correctHeight(
-                      //               7.5.w, rankDescriptionMainText.fontSize, rankDescriptionContentText.fontSize),
-                      //         ),
-                      //         Text(
-                      //           '! 퀘스트 참여하기',
-                      //           style: rankDescriptionContentText,
-                      //         ),
-                      //         Text(
-                      //           '! 커뮤니티 글 작성하기',
-                      //           style: rankDescriptionContentText,
-                      //         ),
-                      //         Text(
-                      //           '! 그 외 다양한 활동하기',
-                      //           style: rankDescriptionContentText,
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ],
-                      // ),
+                      SizedBox(
+                        height: correctHeight(16.w, rankDescriptionBoldText.fontSize, rankDescriptionMainText.fontSize),
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 14.w,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '랭킹은 매 영업일 오후 4시에 집계됩니다.',
+                                style: rankDescriptionMainText,
+                              ),
+                              // SizedBox(
+                              //   height: correctHeight(
+                              //       7.5.w, rankDescriptionMainText.fontSize, rankDescriptionContentText.fontSize),
+                              // ),
+                              // Text(
+                              //   '! 퀘스트 참여하기',
+                              //   style: rankDescriptionContentText,
+                              // ),
+                              // Text(
+                              //   '! 커뮤니티 글 작성하기',
+                              //   style: rankDescriptionContentText,
+                              // ),
+                              // Text(
+                              //   '! 그 외 다양한 활동하기',
+                              //   style: rankDescriptionContentText,
+                              // ),
+                            ],
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: 14.w,
                       ),
@@ -358,10 +358,42 @@ class RankShareView extends StatelessWidget {
         ),
       );
     } else {
-      return Padding(
-        padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 14.w),
-        child: Center(child: Text('아직 랭킹이 표시되지 않아요.', style: rankDescriptionMainText)),
-      );
+      return Container(
+          width: 375.w,
+          padding: EdgeInsets.only(left: 14.w, right: 14.w, top: 14.w),
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Center(
+                    child: Image.asset(
+                      'assets/illusts/not_exists/no_general_words.png',
+                      height: 60.w,
+                    ),
+                  ),
+                  Positioned.fill(
+                    top: -14.w,
+                    child: Container(
+                      // width: double.infinity,
+                      child: Center(
+                        child: Text(
+                          '아직 집계된 랭킹이 없어요',
+                          style: notExistsText.copyWith(fontSize: 14.w),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 14.w,
+              ),
+              Image.asset(
+                'assets/illusts/not_exists/no_general_illust.png',
+                height: 70.w,
+              ),
+            ],
+          ));
     }
   }
 }

@@ -23,6 +23,7 @@ class QuestModel {
   final String title;
   final String questDescription;
   final String selectInstruction;
+  final String basePriceInstruction;
   final String? rewardDescription;
 //선택모드: updown, updown_many, pickone, pickmany, order, 로 나눠서
   final String selectMode;
@@ -62,6 +63,7 @@ class QuestModel {
     required this.title,
     required this.questDescription,
     required this.selectInstruction,
+    required this.basePriceInstruction,
     this.rewardDescription,
     required this.selectMode,
     required this.itemNeeded,
@@ -96,6 +98,7 @@ class QuestModel {
     String? title,
     String? questDescription,
     String? selectInstruction,
+    String? basePriceInstruction,
     String? rewardDescription,
     String? selectMode,
     int? itemNeeded,
@@ -129,6 +132,7 @@ class QuestModel {
       title: title ?? this.title,
       questDescription: questDescription ?? this.questDescription,
       selectInstruction: selectInstruction ?? this.selectInstruction,
+      basePriceInstruction: basePriceInstruction ?? this.basePriceInstruction,
       rewardDescription: rewardDescription ?? this.rewardDescription,
       selectMode: selectMode ?? this.selectMode,
       itemNeeded: itemNeeded ?? this.itemNeeded,
@@ -183,6 +187,7 @@ class QuestModel {
       'title': title,
       'questDescription': questDescription,
       'selectInstruction': selectInstruction,
+      'basePriceInstruction': basePriceInstruction,
       'rewardDescription': rewardDescription,
       'selectMode': selectMode,
       'itemNeeded': itemNeeded,
@@ -221,9 +226,10 @@ class QuestModel {
       liveStartDateTime: map['liveStartDateTime'],
       liveEndDateTime: map['liveEndDateTime'],
       resultDateTime: map['resultDateTime'],
-      title: map['title'],
-      questDescription: map['questDescription'],
-      selectInstruction: map['selectInstruction'],
+      title: map['title'] ?? "",
+      questDescription: map['questDescription'] ?? "",
+      selectInstruction: map['selectInstruction'] ?? "",
+      basePriceInstruction: map['basePriceInstruction'] ?? "",
       rewardDescription: map['rewardDescription'],
       selectMode: map['selectMode'],
       itemNeeded: map['itemNeeded'],
@@ -248,7 +254,7 @@ class QuestModel {
 
   @override
   String toString() {
-    return 'QuestModel(questId: $questId, leagueId: $leagueId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointSuccessReward: $yachtPointSuccessReward, leaguePointSuccessReward: $leaguePointSuccessReward, expSuccessReward: $expSuccessReward, isYachtPointOneOfN: $isYachtPointOneOfN, yachtPointParticipationReward: $yachtPointParticipationReward, leaguePointParticipationReward: $leaguePointParticipationReward, expParticipationReward: $expParticipationReward, investAddresses: $investAddresses, surveys: $surveys, choices: $choices, counts: $counts, results: $results)';
+    return 'QuestModel(questId: $questId, leagueId: $leagueId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, basePriceInstruction: $basePriceInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointSuccessReward: $yachtPointSuccessReward, leaguePointSuccessReward: $leaguePointSuccessReward, expSuccessReward: $expSuccessReward, isYachtPointOneOfN: $isYachtPointOneOfN, yachtPointParticipationReward: $yachtPointParticipationReward, leaguePointParticipationReward: $leaguePointParticipationReward, expParticipationReward: $expParticipationReward, investAddresses: $investAddresses, surveys: $surveys, choices: $choices, counts: $counts, results: $results)';
   }
 
   @override
@@ -272,6 +278,7 @@ class QuestModel {
         other.title == title &&
         other.questDescription == questDescription &&
         other.selectInstruction == selectInstruction &&
+        other.basePriceInstruction == basePriceInstruction &&
         other.rewardDescription == rewardDescription &&
         other.selectMode == selectMode &&
         other.itemNeeded == itemNeeded &&
@@ -307,6 +314,7 @@ class QuestModel {
         title.hashCode ^
         questDescription.hashCode ^
         selectInstruction.hashCode ^
+        basePriceInstruction.hashCode ^
         rewardDescription.hashCode ^
         selectMode.hashCode ^
         itemNeeded.hashCode ^

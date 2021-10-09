@@ -65,6 +65,8 @@ class QuestResultWidget extends StatelessWidget {
                   Text(
                     '${questModel.title}',
                     style: sectionTitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   // Spacer(),
                   // Obx(

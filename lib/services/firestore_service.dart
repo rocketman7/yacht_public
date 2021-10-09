@@ -1010,6 +1010,7 @@ class FirestoreService extends GetxService {
     await _firestoreService
         .collection('readingContents')
         .orderBy('updateDateTime', descending: true)
+        .where('showHome', isEqualTo: true)
         .get()
         .then((value) => value.docs.forEach((element) {
               readingContents.add(ReadingContentModel.fromMap(element.data()));
@@ -1023,6 +1024,7 @@ class FirestoreService extends GetxService {
     await _firestoreService
         .collection('todayMarkets')
         .orderBy('dateTime', descending: true)
+        .where('showHome', isEqualTo: true)
         .get()
         .then((value) => value.docs.forEach((element) {
               todayMarketModel.add(TodayMarketModel.fromMap(element.data()));

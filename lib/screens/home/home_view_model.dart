@@ -61,22 +61,26 @@ class HomeViewModel extends GetxController {
 
   @override
   void onInit() async {
+    print('uid to identify: ${userModelRx.value!.uid}');
     _mixpanelService.mixpanel.identify(userModelRx.value!.uid);
-    print('home view model start');
+    // print('home view model start');
+    _mixpanelService.mixpanel.flush();
     // TODO: implement onInit
     isLoading(true);
     await getAllQuests();
     await getDictionaries();
     await _firestoreService.stampLastLogin();
 
+    // print(_authService.auth.currentUser!.email);
     if (_authService.auth.currentUser!.email != null) {
       print(
           'email login method:${await _authService.auth.fetchSignInMethodsForEmail(_authService.auth.currentUser!.email!)}');
       List<String> methodList =
           await _authService.auth.fetchSignInMethodsForEmail(_authService.auth.currentUser!.email!);
-
-      if (methodList.first == 'password' && !_authService.auth.currentUser!.emailVerified) {
-        Get.to(() => EmailVerificationWaitingView());
+      if (methodList.length > 0) {
+        if (methodList.first == 'password' && !_authService.auth.currentUser!.emailVerified) {
+          Get.to(() => EmailVerificationWaitingView());
+        }
       }
     }
 
@@ -690,9 +694,10 @@ adsViewDialog(BuildContext context) {
           clipBehavior: Clip.hardEdge,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
-            height: 196.w,
+            // height: 196.w,
             width: 347.w,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   children: [

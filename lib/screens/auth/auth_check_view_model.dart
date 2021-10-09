@@ -86,6 +86,7 @@ class AuthCheckViewModel extends GetxController {
 
       if (user != null) {
         userModelRx.bindStream(_userRepository.getUserStream(user.uid));
+        // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
 
         leagueRx.listen((value) {
           if (value != "") {
