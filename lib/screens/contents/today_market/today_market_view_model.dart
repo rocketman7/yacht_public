@@ -23,6 +23,7 @@ class TodayMarketViewModel extends GetxController {
 
   Future getTodayMarket() async {
     // List<TodayMarketModel> todayMarkets = [];
+    todayMarkets.clear();
     todayMarkets.addAll(await _firestoreService.getTodayMarkets());
 
     // todayMarkets.forEach((element) {

@@ -593,6 +593,7 @@ class QuestView extends StatelessWidget {
                 child: Text(questModel.selectInstruction,
                     style: questTitleTextStyle, maxLines: 3, textAlign: TextAlign.center),
               ),
+              Text(questModel.basePriceInstruction),
               SizedBox(height: reducedPaddingWhenTextIsBelow(16.w, questTitleTextStyle.fontSize!)),
               questModel.selectMode == 'pickone'
                   ? Column(
