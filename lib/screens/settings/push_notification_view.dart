@@ -11,7 +11,8 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'push_notification_view_model.dart';
 
 class PushNotificationView extends StatelessWidget {
-  final PushNotificationViewModel _pushNotificationViewModel = Get.put(PushNotificationViewModel());
+  final PushNotificationViewModel _pushNotificationViewModel =
+      Get.put(PushNotificationViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,8 @@ class PushNotificationView extends StatelessWidget {
       backgroundColor: primaryBackgroundColor,
       appBar: primaryAppBar('푸시 알림 설정'),
       body: ListView(
-        children: List.generate(_pushNotificationViewModel.getPushAlarmLength(), (i) {
+        children:
+            List.generate(_pushNotificationViewModel.getPushAlarmLength(), (i) {
           return Column(
             children: [
               i == 0 ? SizedBox(height: 20.w) : Container(),
@@ -61,9 +63,11 @@ class PushNotificationView extends StatelessWidget {
                                   ? CupertinoSwitch(
                                       activeColor: primaryButtonBackground,
                                       trackColor: buttonNormal,
-                                      value: _pushNotificationViewModel.getPushAlarmValue(i),
+                                      value: _pushNotificationViewModel
+                                          .getPushAlarmValue(i),
                                       onChanged: (value) {
-                                        _pushNotificationViewModel.setPushAlarmValue(i, !value);
+                                        _pushNotificationViewModel
+                                            .setPushAlarmValue(i, !value);
                                       },
                                     )
                                   : Switch(

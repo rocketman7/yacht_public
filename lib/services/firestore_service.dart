@@ -10,6 +10,7 @@ import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/chart_price_model.dart';
 import 'package:yachtOne/models/notification_model.dart';
+import 'package:yachtOne/models/one_on_one_list_model.dart';
 import 'package:yachtOne/models/profile_models.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/rank_model.dart';
@@ -137,6 +138,16 @@ class FirestoreService extends GetxService {
         .doc(userModelRx.value!.uid)
         .update({
       'lastLoginDateTime': Timestamp.fromDate(DateTime.now()),
+    });
+  }
+
+  // 마지막 로그인 시간
+  Future stampLastNotificationCheck() async {
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .update({
+      'lastNotificationCheckDateTime': Timestamp.fromDate(DateTime.now()),
     });
   }
 
@@ -1212,6 +1223,23 @@ class FirestoreService extends GetxService {
       'content': content,
       'dateTime': timestampNow,
     });
+  }
+
+  // 1:1 문의내역 받아오기
+  Future<List<OneOnOneListModel>> getOneOnOneListList() async {
+    List<OneOnOneListModel> oneOnOneListList = [];
+
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .collection('userOneOnOne')
+        .orderBy('dateTime', descending: true)
+        .get()
+        .then((querysnapshot) => querysnapshot.docs.forEach((element) {
+              oneOnOneListList.add(OneOnOneListModel.fromData(element.data()));
+            }));
+
+    return oneOnOneListList;
   }
 
   // 유저 계좌정보 넣기

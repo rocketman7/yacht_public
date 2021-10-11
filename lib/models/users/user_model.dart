@@ -42,6 +42,8 @@ class UserModel {
   final dynamic membershipStartAt; // 멤버쉽 시작일
   final dynamic membershipEndAt; // 멤버쉽 종료일
 
+  final dynamic lastNotificationCheckDateTime; // 마지막으로 알림 확인한 일시
+
   final String? token;
   UserModel({
     required this.uid,
@@ -69,6 +71,7 @@ class UserModel {
     this.membershipStartAt,
     this.membershipEndAt,
     this.token,
+    this.lastNotificationCheckDateTime,
   });
 
   UserModel copyWith({
@@ -97,6 +100,7 @@ class UserModel {
     dynamic? membershipStartAt,
     dynamic? membershipEndAt,
     String? token,
+    dynamic lastNotificationCheckDateTime,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -110,7 +114,8 @@ class UserModel {
       friendsCode: friendsCode ?? this.friendsCode,
       friendsCodeDone: friendsCodeDone ?? this.friendsCodeDone,
       insertedFriendsCode: insertedFriendsCode ?? this.insertedFriendsCode,
-      friendsUidRecommededMe: friendsUidRecommededMe ?? this.friendsUidRecommededMe,
+      friendsUidRecommededMe:
+          friendsUidRecommededMe ?? this.friendsUidRecommededMe,
       blockList: blockList ?? this.blockList,
       rewardedCnt: rewardedCnt ?? this.rewardedCnt,
       exp: exp ?? this.exp,
@@ -124,6 +129,8 @@ class UserModel {
       membershipStartAt: membershipStartAt ?? this.membershipStartAt,
       membershipEndAt: membershipEndAt ?? this.membershipEndAt,
       token: token ?? this.token,
+      lastNotificationCheckDateTime:
+          lastNotificationCheckDateTime ?? this.lastNotificationCheckDateTime,
     );
   }
 
@@ -154,6 +161,7 @@ class UserModel {
       'membershipStartAt': membershipStartAt,
       'membershipEndAt': membershipEndAt,
       'token': token,
+      'lastNotificationCheckDateTime': lastNotificationCheckDateTime,
     };
   }
 
@@ -170,31 +178,40 @@ class UserModel {
       friendsCode: map['friendsCode'],
       friendsCodeDone: map['friendsCodeDone'],
       insertedFriendsCode: map['insertedFriendsCode'],
-      friendsUidRecommededMe:
-          map['friendsUidRecommededMe'] == null ? null : List<String>.from(map['friendsUidRecommededMe']),
-      blockList: map['blockList'] == null ? null : List<String>.from(map['blockList']),
+      friendsUidRecommededMe: map['friendsUidRecommededMe'] == null
+          ? null
+          : List<String>.from(map['friendsUidRecommededMe']),
+      blockList:
+          map['blockList'] == null ? null : List<String>.from(map['blockList']),
       rewardedCnt: map['rewardedCnt'] ?? 0,
       exp: map['exp'] ?? 0,
       tier: map['tier'],
-      followers: map['followers'] == null ? null : List<String>.from(map['followers']),
-      followings: map['followings'] == null ? null : List<String>.from(map['followings']),
+      followers:
+          map['followers'] == null ? null : List<String>.from(map['followers']),
+      followings: map['followings'] == null
+          ? null
+          : List<String>.from(map['followings']),
       intro: map['intro'],
-      favoriteStocks: map['favoriteStocks'] == null ? null : List<String>.from(map['favoriteStocks']),
+      favoriteStocks: map['favoriteStocks'] == null
+          ? null
+          : List<String>.from(map['favoriteStocks']),
       badges: map['badges'] == null ? null : List<String>.from(map['badges']),
       membership: map['membership'],
       membershipStartAt: map['membershipStartAt'],
       membershipEndAt: map['membershipEndAt'],
       token: map['token'],
+      lastNotificationCheckDateTime: map['lastNotificationCheckDateTime'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, friendsCodeDone: $friendsCodeDone, insertedFriendsCode: $insertedFriendsCode, friendsUidRecommededMe: $friendsUidRecommededMe, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, tier: $tier, followers: $followers, followings: $followings, intro: $intro, favoriteStocks: $favoriteStocks, badges: $badges, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt, token: $token)';
+    return 'UserModel(uid: $uid, userName: $userName, isNameUpdated: $isNameUpdated, email: $email, phoneNumber: $phoneNumber, account: $account, avatarImage: $avatarImage, item: $item, friendsCode: $friendsCode, friendsCodeDone: $friendsCodeDone, insertedFriendsCode: $insertedFriendsCode, friendsUidRecommededMe: $friendsUidRecommededMe, blockList: $blockList, rewardedCnt: $rewardedCnt, exp: $exp, tier: $tier, followers: $followers, followings: $followings, intro: $intro, favoriteStocks: $favoriteStocks, badges: $badges, membership: $membership, membershipStartAt: $membershipStartAt, membershipEndAt: $membershipEndAt, token: $token, lastNotificationCheckDateTime: $lastNotificationCheckDateTime)';
   }
 
   @override
@@ -226,7 +243,8 @@ class UserModel {
         other.membership == membership &&
         other.membershipStartAt == membershipStartAt &&
         other.membershipEndAt == membershipEndAt &&
-        other.token == token;
+        other.token == token &&
+        other.lastNotificationCheckDateTime == lastNotificationCheckDateTime;
   }
 
   @override
@@ -255,7 +273,8 @@ class UserModel {
         membership.hashCode ^
         membershipStartAt.hashCode ^
         membershipEndAt.hashCode ^
-        token.hashCode;
+        token.hashCode ^
+        lastNotificationCheckDateTime;
   }
 }
 
@@ -283,5 +302,6 @@ UserModel newUserModel({
       membership: false,
       membershipEndAt: null,
       membershipStartAt: null,
-      token: null);
+      token: null,
+      lastNotificationCheckDateTime: null);
 }

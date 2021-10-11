@@ -17,6 +17,7 @@ import '../../styles/yacht_design_system.dart';
 
 import 'account_view.dart';
 import 'friends_code_controller.dart';
+import 'one_on_one_list_view.dart';
 import 'one_on_one_view.dart';
 import 'push_notification_view.dart';
 
@@ -726,6 +727,33 @@ class SettingView extends StatelessWidget {
             padding: EdgeInsets.only(left: 14.w, right: 14.w),
             child: Text(
               '1:1 문의하기',
+              style: settingContent,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(17.w, settingContent.fontSize, 0.w),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 14.w, right: 14.w),
+          child: Container(
+            height: 1.w,
+            width: double.infinity,
+            color: yachtLine,
+          ),
+        ),
+        SizedBox(
+          height: correctHeight(18.w, 0.w, settingContent.fontSize),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Get.to(() => OneOnOneListView());
+          },
+          child: Padding(
+            padding: EdgeInsets.only(left: 14.w, right: 14.w),
+            child: Text(
+              '나의 1:1 문의내역',
               style: settingContent,
             ),
           ),

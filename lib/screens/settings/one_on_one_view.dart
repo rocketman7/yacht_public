@@ -193,7 +193,20 @@ class OneOnOneView extends StatelessWidget {
                                           ),
                                         ),
                                       ],
-                                    )
+                                    ),
+                                    Positioned(
+                                      left: SizeConfig.screenWidth -
+                                          14.w -
+                                          13.w -
+                                          14.w -
+                                          14.w,
+                                      top: 14.w,
+                                      child: SizedBox(
+                                          height: 7.w,
+                                          width: 14.w,
+                                          child: Image.asset(
+                                              'assets/icons/oneonedown.png')),
+                                    ),
                                   ],
                                 ),
                               )
@@ -313,7 +326,20 @@ class OneOnOneView extends StatelessWidget {
                                             .toList(),
                                       ),
                                     ],
-                                  )
+                                  ),
+                                  Positioned(
+                                    left: SizeConfig.screenWidth -
+                                        14.w -
+                                        13.w -
+                                        14.w -
+                                        14.w,
+                                    top: 14.w,
+                                    child: SizedBox(
+                                        height: 7.w,
+                                        width: 14.w,
+                                        child: Image.asset(
+                                            'assets/icons/oneoneup.png')),
+                                  ),
                                 ],
                               )),
                       ),

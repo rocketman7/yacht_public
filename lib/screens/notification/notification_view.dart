@@ -7,8 +7,24 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import 'notification_view_model.dart';
 
-class NotificationView extends StatelessWidget {
-  final NotificationViewModel notificationViewModel = Get.put(NotificationViewModel());
+class NotificationView extends StatefulWidget {
+  // final NotificationViewModel notificationViewModel = Get.put(NotificationViewModel());
+  @override
+  State<NotificationView> createState() => _NotificationViewState();
+}
+
+class _NotificationViewState extends State<NotificationView> {
+  final NotificationViewModel notificationViewModel =
+      Get.find<NotificationViewModel>();
+
+  @override
+  void initState() {
+    var a = Get.arguments;
+
+    if (a == 'NeedLoad')
+      notificationViewModel.lastNotificationCheckTimeUpdate();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +46,29 @@ class NotificationView extends StatelessWidget {
                       onTap: () {
                         if (controller.notificationList[i].url != '') {
                           //url이 있으면 두가지로 나뉜다.
-                          //1. 인터넷주소이면 웹뷰로 ㄱ
+                          //1. 인터넷주소이면 웹뷰로 ㄱx
+                          if (controller.notificationList[i].url!
+                              .startsWith('http'))
+                            Get.to(() => PrimaryWebView(
+                                title: controller
+                                            .notificationList[i].category !=
+                                        ''
+                                    ? controller.notificationList[i].category!
+                                    : controller.notificationList[i].title,
+                                url: controller.notificationList[i].url!));
                           //2. 인터넷주소가 아니면 페이지 이동 ㄱ
-                          //아직 구현 안함
+                          //아직안함
                         } else {
                           //url이 없고 moreContent가 있다면 세부 페이지로 이동.
-                          if (controller.notificationList[i].moreContent != '') {
+                          if (controller.notificationList[i].moreContent !=
+                              '') {
                             Get.to(() => NotificationDetailView(
-                                  category: controller.notificationList[i].category!,
-                                  content: controller.notificationList[i].content,
-                                  moreContent: controller.notificationList[i].moreContent!,
+                                  category:
+                                      controller.notificationList[i].category!,
+                                  content:
+                                      controller.notificationList[i].content,
+                                  moreContent: controller
+                                      .notificationList[i].moreContent!,
                                 ));
                           } else {}
                           //url도 없고 moreContent도 없다면 아무 반응 x
@@ -54,15 +83,23 @@ class NotificationView extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
-                                        height: controller.notificationList[i].category != ''
-                                            ? correctHeight(20.w, 0.w, notificationCategory.fontSize)
+                                        height: controller.notificationList[i]
+                                                    .category !=
+                                                ''
+                                            ? correctHeight(20.w, 0.w,
+                                                notificationCategory.fontSize)
                                             : 6.w,
                                       ),
-                                      (controller.notificationList[i].category == null ||
-                                              controller.notificationList[i].category == '')
+                                      (controller.notificationList[i]
+                                                      .category ==
+                                                  null ||
+                                              controller.notificationList[i]
+                                                      .category ==
+                                                  '')
                                           ? Container()
                                           : Text(
                                               '${controller.notificationList[i].category}',
@@ -71,7 +108,9 @@ class NotificationView extends StatelessWidget {
                                       SizedBox(
                                         height: correctHeight(
                                             10.w,
-                                            controller.notificationList[i].category != ''
+                                            controller.notificationList[i]
+                                                        .category !=
+                                                    ''
                                                 ? notificationCategory.fontSize
                                                 : 0.w,
                                             notificationContent.fontSize),
@@ -81,7 +120,8 @@ class NotificationView extends StatelessWidget {
                                         style: notificationContent,
                                       ),
                                       SizedBox(
-                                        height: correctHeight(16.w, notificationContent.fontSize, 0.w),
+                                        height: correctHeight(16.w,
+                                            notificationContent.fontSize, 0.w),
                                       ),
                                     ],
                                   ),
@@ -90,14 +130,19 @@ class NotificationView extends StatelessWidget {
                                 Column(
                                   children: [
                                     SizedBox(
-                                      height: controller.notificationList[i].category != ''
-                                          ? correctHeight(20.w, 0.w, notificationCategory.fontSize)
+                                      height: controller.notificationList[i]
+                                                  .category !=
+                                              ''
+                                          ? correctHeight(20.w, 0.w,
+                                              notificationCategory.fontSize)
                                           : 6.w,
                                     ),
                                     SizedBox(
                                       height: correctHeight(
                                           10.w,
-                                          controller.notificationList[i].category != ''
+                                          controller.notificationList[i]
+                                                      .category !=
+                                                  ''
                                               ? notificationCategory.fontSize
                                               : 0.w,
                                           notificationContent.fontSize),
@@ -107,8 +152,10 @@ class NotificationView extends StatelessWidget {
                                       // height: double.infinity,
                                       // color: Colors.blue,
                                       child: Text(
-                                        notificationTimeHandler(
-                                            controller.notificationList[i].notificationTime.toDate()),
+                                        notificationTimeHandler(controller
+                                            .notificationList[i]
+                                            .notificationTime
+                                            .toDate()),
                                         style: feedDateTime,
                                       ),
                                     ),
@@ -116,7 +163,10 @@ class NotificationView extends StatelessWidget {
                                 )
                               ],
                             ),
-                            Container(height: 1.w, width: 375.w - 28.w, color: yachtLine)
+                            Container(
+                                height: 1.w,
+                                width: 375.w - 28.w,
+                                color: yachtLine)
                           ],
                         ),
                       ),
@@ -136,7 +186,10 @@ class NotificationDetailView extends StatelessWidget {
   final String content;
   final String moreContent;
 
-  NotificationDetailView({required this.category, required this.content, required this.moreContent});
+  NotificationDetailView(
+      {required this.category,
+      required this.content,
+      required this.moreContent});
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +215,8 @@ class NotificationDetailView extends StatelessWidget {
                 : Container(),
             category != ''
                 ? SizedBox(
-                    height: correctHeight(10.w, notificationCategory.fontSize, notificationContentForDetail.fontSize),
+                    height: correctHeight(10.w, notificationCategory.fontSize,
+                        notificationContentForDetail.fontSize),
                   )
                 : Container(),
             Text(
@@ -170,7 +224,8 @@ class NotificationDetailView extends StatelessWidget {
               style: notificationContentForDetail,
             ),
             SizedBox(
-              height: correctHeight(10.w, notificationContentForDetail.fontSize, notificationContent.fontSize),
+              height: correctHeight(10.w, notificationContentForDetail.fontSize,
+                  notificationContent.fontSize),
             ),
             Text(
               moreContent,

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../repositories/repository.dart';
 import '../../services/firestore_service.dart';
 import '../../locator.dart';
 
 const List<String> category = [
   '앱의 업그레이드를 위한 제안',
   '버그 및 오작동 신고',
-  // '기타 궁금한 것',
+  '기타 궁금한 점',
   '특정 유저 신고',
 ];
 
@@ -41,8 +40,6 @@ class OneOnOneViewModel extends GetxController {
   }
 
   Future oneOnOneUpdate(String categoryString, String content) async {
-    // print(categoryString);
-    // print(content);
     await _firestoreService.updateOneOnOne(categoryString, content);
   }
 }
