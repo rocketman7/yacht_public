@@ -26,7 +26,7 @@ const int maxFailedLoadAttempts = 10; // 광고로딩실패하면 10번까지는
 
 class HomeViewModel extends GetxController {
   final FirestoreService _firestoreService = locator<FirestoreService>();
-  final AuthService _authService = locator<AuthService>();
+  final AuthService authService = locator<AuthService>();
   final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   QuestRepository _questRepository = QuestRepository();
@@ -58,6 +58,7 @@ class HomeViewModel extends GetxController {
   final RxBool noNeedShowUserNameDialog = true.obs;
   final RxBool showSmallSnackBar = false.obs;
   final RxString smallSnackBarText = "".obs;
+  bool onceInit = false;
 
   @override
   void onInit() async {
@@ -72,13 +73,12 @@ class HomeViewModel extends GetxController {
     await _firestoreService.stampLastLogin();
 
     // print(_authService.auth.currentUser!.email);
-    if (_authService.auth.currentUser!.email != null) {
+    if (authService.auth.currentUser!.email != null) {
       print(
-          'email login method:${await _authService.auth.fetchSignInMethodsForEmail(_authService.auth.currentUser!.email!)}');
-      List<String> methodList =
-          await _authService.auth.fetchSignInMethodsForEmail(_authService.auth.currentUser!.email!);
+          'email login method:${await authService.auth.fetchSignInMethodsForEmail(authService.auth.currentUser!.email!)}');
+      List<String> methodList = await authService.auth.fetchSignInMethodsForEmail(authService.auth.currentUser!.email!);
       if (methodList.length > 0) {
-        if (methodList.first == 'password' && !_authService.auth.currentUser!.emailVerified) {
+        if (methodList.first == 'password' && !authService.auth.currentUser!.emailVerified) {
           Get.to(() => EmailVerificationWaitingView());
         }
       }
@@ -382,6 +382,11 @@ class HomeViewModel extends GetxController {
     update();
     // print('home view live');
     // print(liveQuests);
+  }
+
+  // 약관, 개인정보처리방침 동의
+  Future agreeTerm() async {
+    await _firestoreService.stampTermAgree();
   }
 
   // 유저 광고모델보기 버튼 누르면?

@@ -18,6 +18,7 @@ import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/auth/auth_check_view.dart';
+import 'package:yachtOne/screens/auth/auth_check_view_model.dart';
 import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
 import 'package:yachtOne/screens/auth/login_view.dart';
 import 'package:yachtOne/screens/award/award_view.dart';
@@ -372,169 +373,452 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
   final box = GetStorage();
   bool iosTermAgree = true;
-  String iosTermSheet = "";
+  String termsOfUse = "";
+  String privacyPolicy = "";
+  RxBool checkTerm = false.obs;
+  RxBool checkFourteen = false.obs;
+
+  ScrollController _termScrollController = ScrollController();
+  ScrollController _privacyScrollController = ScrollController();
 
   @override
   void initState() {
-    showChangeNameDialog(context);
-    iosTermAgree = box.read('iosTermAgree') ?? false;
-    if (Platform.isIOS && !iosTermAgree) {
-      showTermDialog(context);
+    // print('DialogReadyWidget init called');
+    // print('showingtermdial: ${widget.homeViewModel.onceInit}');
+    if (!widget.homeViewModel.onceInit) {
+      widget.homeViewModel.onceInit = true;
+      print('after init: ${widget.homeViewModel.onceInit}');
+      iosTermAgree = box.read('iosTermAgree${userModelRx.value!.uid}') ?? false;
+
+      //  else {
+      if (userModelRx.value!.isNameUpdated == null || !userModelRx.value!.isNameUpdated!) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          showChangeNameDialog(context);
+        });
+      }
+      // }
+
+      if (!iosTermAgree) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) async {
+          termsOfUse = await rootBundle.loadString('assets/documents/termsOfUse.txt');
+          privacyPolicy = await rootBundle.loadString('assets/documents/privacyPolicy.txt');
+          showTermDialog(context, widget.homeViewModel);
+        });
+      }
     }
     super.initState();
   }
 
-  Future showTermDialog(BuildContext context) async {
-    iosTermSheet = await rootBundle.loadString('assets/documents/termsOfUse.txt');
-    await showDialog<String>(
+  showTermDialog(BuildContext context, HomeViewModel homeViewModel) {
+    print('show term called');
+    final KakaoFirebaseAuthApi _kakaoApi = KakaoFirebaseAuthApi();
+    String title = "서비스를 이용하기 위해\n아래에 대한 동의가 필요합니다.";
+    String btnLabel = "수락";
+    String btnLabelCancel = "거부";
+
+    showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
-        String title = "서비스를 이용하기 위해\n아래에 대한 동의가 필요합니다.";
-
-        String btnLabel = "수락";
-        String btnLabelCancel = "거부";
-
+      builder: (context) {
+        print('show term showDialog called');
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-          child: WillPopScope(
-              onWillPop: () async {
-                return false;
-              },
-              child: CupertinoAlertDialog(
-                title: Text(title),
-                content: Container(
-                  height: 400,
-                  width: 180,
-                  child: SingleChildScrollView(
-                      child: Text(
-                    iosTermSheet,
-                    textAlign: TextAlign.left,
-                  )),
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: Dialog(
+              insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Padding(
+                padding: EdgeInsets.all(14.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // padding: EdgeInsets.all(14.w),
+                    Center(
+                      child: Text(title,
+                          textAlign: TextAlign.center,
+                          style: dialogTitle.copyWith(
+                            fontSize: bodyBigSize,
+                            fontWeight: FontWeight.w600,
+                          )),
+                    ),
+                    SizedBox(
+                      height: 14.w,
+                    ),
+
+                    Text("이용약관", style: TextStyle(fontFamily: 'Default')),
+                    SizedBox(
+                      height: 8.w,
+                    ),
+
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                        color: yachtGrey,
+                        width: 0.5.w,
+                      )),
+
+                      height: ScreenUtil().screenHeight * .21,
+                      // width: 240,
+                      child: Scrollbar(
+                        isAlwaysShown: true,
+                        controller: _termScrollController,
+                        child: SingleChildScrollView(
+                            controller: _termScrollController,
+                            child: Padding(
+                              padding: EdgeInsets.all(14.w),
+                              child: Text(
+                                termsOfUse,
+                                textAlign: TextAlign.left,
+                              ),
+                            )),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16.w,
+                    ),
+                    Text("개인정보처리방침", style: TextStyle(fontFamily: 'Default')),
+                    SizedBox(
+                      height: 8.w,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                        color: yachtGrey,
+                        width: 0.5.w,
+                      )),
+
+                      height: ScreenUtil().screenHeight * .21,
+                      // width: 240,
+                      child: Scrollbar(
+                        isAlwaysShown: true,
+                        controller: _termScrollController,
+                        child: SingleChildScrollView(
+                            controller: _privacyScrollController,
+                            child: Padding(
+                              padding: EdgeInsets.all(14.w),
+                              child: Text(
+                                privacyPolicy,
+                                textAlign: TextAlign.left,
+                              ),
+                            )),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8.w,
+                    ),
+                    Obx(
+                      () => GestureDetector(
+                        onTap: () => checkTerm.value = !checkTerm.value,
+                        behavior: HitTestBehavior.opaque,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 24.0,
+                              width: 24.0,
+                              child: Checkbox(
+                                  activeColor: yachtViolet,
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  value: checkTerm.value,
+                                  onChanged: (value) {
+                                    checkTerm(value);
+                                  }),
+                            ),
+                            SizedBox(width: 4.w),
+                            Text("이용약관 및 개인정보처리방침 동의"),
+                            Text(" (필수)", style: TextStyle(color: yachtRed, fontFamily: 'Default')),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4.w,
+                    ),
+                    Obx(
+                      () => GestureDetector(
+                        onTap: () => checkFourteen.value = !checkFourteen.value,
+                        behavior: HitTestBehavior.opaque,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 24.0,
+                              width: 24.0,
+                              child: Checkbox(
+                                  activeColor: yachtViolet,
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  value: checkFourteen.value,
+                                  onChanged: (value) {
+                                    checkFourteen(value);
+                                  }),
+                            ),
+                            SizedBox(width: 4.w),
+                            Text("만 14세 이상입니다. "),
+                            Text(" (필수)", style: TextStyle(color: yachtRed, fontFamily: 'Default')),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 14.w,
+                    ),
+                    Container(
+                        height: 48.w,
+                        width: double.infinity,
+                        // color: Colors.red,
+                        child: Obx(() => Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.dialog(Dialog(
+                                        insetPadding: primaryHorizontalPadding,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text("알림", style: dialogTitle),
+                                                    SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                    Text("이용약관과 개인정보처리방침에 동의하지 않으면 요트 서비스를 이용할 수 없습니다. ",
+                                                        style: dialogContent),
+                                                    SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                    Center(
+                                                      child: Text(
+                                                        " 동의를 거부하고 정말 탈퇴하시겠습니까?",
+                                                        style: dialogWarning,
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 14.w,
+                                                    ),
+                                                    Center(
+                                                      child: Text(
+                                                        "탈퇴 시 모든 데이터가 삭제되며 되돌릴 수 없습니다.",
+                                                        style: dialogTitle.copyWith(
+                                                          fontSize: bodySmallSize,
+                                                        ),
+                                                        textAlign: TextAlign.center,
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child: GestureDetector(
+                                                              onTap: () async {
+                                                                homeViewModel.authService.deleteAccount();
+
+                                                                userModelRx(null);
+                                                                userQuestModelRx.value = [];
+                                                                leagueRx("");
+
+                                                                _kakaoApi.signOut();
+
+                                                                Navigator.of(context).pop();
+                                                                Navigator.of(context).pop();
+                                                                await Get.offAll(() => AuthCheckView());
+                                                                Get.find<AuthCheckViewModel>().onInit();
+                                                              },
+                                                              child: textContainerButtonWithOptions(
+                                                                text: "예",
+                                                                isDarkBackground: false,
+                                                                height: 44.w,
+                                                              )),
+                                                        ),
+                                                        SizedBox(width: 8.w),
+                                                        Expanded(
+                                                          child: InkWell(
+                                                              onTap: () {
+                                                                Navigator.of(context).pop();
+                                                                // Get.back(closeOverlays: true);
+                                                              },
+                                                              child: textContainerButtonWithOptions(
+                                                                  text: "아니오", isDarkBackground: true, height: 44.w)),
+                                                        )
+                                                      ],
+                                                    )
+                                                  ],
+                                                )),
+                                          ],
+                                        )));
+                                  },
+                                  child: Container(
+                                    width: 80.w,
+                                    child: bigTextContainerButton(text: "취소", isDisabled: true),
+                                  ),
+                                ),
+                                SizedBox(width: 14.w),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      if (checkTerm.value && checkFourteen.value) {
+                                        await homeViewModel.agreeTerm();
+                                        box.write('iosTermAgree', true);
+                                        Navigator.of(context).pop();
+
+                                        // if (userModelRx.value!.isNameUpdated == null ||
+                                        //     !userModelRx.value!.isNameUpdated!) {
+                                        //   WidgetsBinding.instance!.addPostFrameCallback((_) {
+                                        //     showChangeNameDialog(context);
+                                        //   });
+                                        // }
+                                      } else {
+                                        yachtSnackBar("모두 동의한 후 시작할 수 있습니다.");
+                                      }
+                                    },
+                                    child: bigTextContainerButton(
+                                        text: "시작하기", isDisabled: !(checkFourteen.value && checkTerm.value)),
+                                  ),
+                                ),
+                              ],
+                            ))),
+                  ],
                 ),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text(btnLabelCancel),
-                    onPressed: () => exit(0),
-                  ),
-                  CupertinoDialogAction(
-                    child: Text(btnLabel),
-                    onPressed: () {
-                      box.write('iosTermAgree', true);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              )),
-        );
+              ),
+            ));
       },
     );
   }
 
-  showChangeNameDialog(BuildContext context) async {
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      if (userModelRx.value!.isNameUpdated == null || !userModelRx.value!.isNameUpdated!) {
-        await showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: EdgeInsets.all(16.w),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.w),
+  showChangeNameDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.all(16.w),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.w),
+        ),
+        child: Container(
+            decoration: primaryBoxDecoration.copyWith(
+              color: white,
             ),
-            child: Container(
-                decoration: primaryBoxDecoration.copyWith(
-                  color: white,
-                ),
-                // height: double.minPositive,
+            // height: double.minPositive,
 
-                padding: primaryAllPadding,
-                child: Form(
-                  key: userNameFormKey,
-                  child: Container(
-                    // height: double.minPositive,
-                    child: Stack(
-                      alignment: Alignment.center,
+            padding: primaryAllPadding,
+            child: Form(
+              key: userNameFormKey,
+              child: Container(
+                // height: double.minPositive,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            appBarWithoutCloseButton(title: "닉네임 설정하기"),
-                            // SizedBox(height: 8.w),
-                            Container(
-                              child: Text("어떤 호칭으로 불러드릴까요?",
-                                  style: TextStyle(
-                                      fontSize: 18.w, letterSpacing: -1.0, height: 1.4, fontWeight: FontWeight.w600)),
-                            ),
-                            SizedBox(height: 14.w),
-                            Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10.w),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: yachtShadow,
-                                      blurRadius: 8.w,
-                                      spreadRadius: 1.w,
-                                    )
-                                  ]),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 12.w, top: 14.w, bottom: 11.w),
-                                child: TextFormField(
-                                  controller: userNameController,
-                                  textAlignVertical: TextAlignVertical.bottom,
-                                  keyboardType: TextInputType.name,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.all(0.w),
-                                    focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                                    enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                                    hintText: '${userModelRx.value!.userName}',
-                                    hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
-                                  ),
-                                  validator: (value) {
-                                    if (value != '') {
-                                      final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
-                                      if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
-                                        return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
-                                      } else {
-                                        return null;
-                                      }
-                                    }
-                                  },
-                                  onChanged: (value) {
-                                    if (userNameFormKey.currentState!.validate()) {
-                                      print('good');
-                                    } else {
-                                      print('bad');
-                                    }
-                                  },
-                                ),
+                        appBarWithoutCloseButton(title: "닉네임 설정하기"),
+                        // SizedBox(height: 8.w),
+                        Container(
+                          child: Text("어떤 호칭으로 불러드릴까요?",
+                              style: TextStyle(
+                                  fontSize: 18.w, letterSpacing: -1.0, height: 1.4, fontWeight: FontWeight.w600)),
+                        ),
+                        SizedBox(height: 14.w),
+                        Container(
+                          width: double.infinity,
+                          decoration:
+                              BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10.w), boxShadow: [
+                            BoxShadow(
+                              color: yachtShadow,
+                              blurRadius: 8.w,
+                              spreadRadius: 1.w,
+                            )
+                          ]),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 12.w, top: 14.w, bottom: 11.w),
+                            child: TextFormField(
+                              controller: userNameController,
+                              textAlignVertical: TextAlignVertical.bottom,
+                              keyboardType: TextInputType.name,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                contentPadding: EdgeInsets.all(0.w),
+                                focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                hintText: '${userModelRx.value!.userName}',
+                                hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
                               ),
+                              validator: (value) {
+                                if (value != '') {
+                                  final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
+                                  if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
+                                    return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
+                                  } else {
+                                    return null;
+                                  }
+                                }
+                              },
+                              onChanged: (value) {
+                                if (userNameFormKey.currentState!.validate()) {
+                                  print('good');
+                                } else {
+                                  print('bad');
+                                }
+                              },
                             ),
-                            SizedBox(height: 16.w),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: () async {
-                                  // Get.dialog(Dialog(
-                                  //   child: Text("TTT"),
-                                  // ));
-                                  // print('tap');
-                                  if (userNameController.text == '') {
-                                    showSmallSnackBar(true);
-                                    smallSnackBarText("닉네임을 입력해주세요");
-                                    Future.delayed(Duration(seconds: 1)).then((value) {
-                                      showSmallSnackBar(false);
-                                      smallSnackBarText("");
-                                    });
+                          ),
+                        ),
+                        SizedBox(height: 16.w),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () async {
+                              // Get.dialog(Dialog(
+                              //   child: Text("TTT"),
+                              // ));
+                              // print('tap');
+                              if (userNameController.text == '') {
+                                showSmallSnackBar(true);
+                                smallSnackBarText("닉네임을 입력해주세요");
+                                Future.delayed(Duration(seconds: 1)).then((value) {
+                                  showSmallSnackBar(false);
+                                  smallSnackBarText("");
+                                });
+
+                                // Get.rawSnackbar(
+                                //   messageText: Center(
+                                //     child: Text(
+                                //       "변경한 내용이 없어요.",
+                                //       style: snackBarStyle,
+                                //     ),
+                                //   ),
+                                //   backgroundColor: white.withOpacity(.5),
+                                //   barBlur: 8,
+                                //   duration: const Duration(seconds: 1, milliseconds: 100),
+                                // );
+                              } else if (userNameFormKey.currentState!.validate() &&
+                                  isCheckingUserNameDuplicated.value == false) {
+                                if (userNameController.text != '') {
+                                  print(userNameController.text);
+                                  isCheckingUserNameDuplicated(true);
+                                  bool isUserNameDuplicatedVar = true;
+
+                                  isUserNameDuplicatedVar =
+                                      await widget.homeViewModel.isUserNameDuplicated(userNameController.text);
+                                  print(isUserNameDuplicatedVar);
+                                  if (!isUserNameDuplicatedVar) {
+                                    await widget.homeViewModel.updateUserName(userNameController.text);
+                                    Navigator.of(context).pop();
+                                    yachtSnackBar("닉네임이 저장되었어요");
+                                    // showSmallSnackBar(true);
+                                    // smallSnackBarText();
+                                    // Future.delayed(Duration(seconds: 1)).then((value) {
+                                    //   showSmallSnackBar(false);
+                                    //   smallSnackBarText("");
+                                    //   Navigator.of(context).pop();
+                                    // });
 
                                     // Get.rawSnackbar(
                                     //   messageText: Center(
                                     //     child: Text(
-                                    //       "변경한 내용이 없어요.",
+                                    //       "변경한 내용이 저장되었어요.",
                                     //       style: snackBarStyle,
                                     //     ),
                                     //   ),
@@ -542,109 +826,73 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                     //   barBlur: 8,
                                     //   duration: const Duration(seconds: 1, milliseconds: 100),
                                     // );
-                                  } else if (userNameFormKey.currentState!.validate() &&
-                                      isCheckingUserNameDuplicated.value == false) {
-                                    if (userNameController.text != '') {
-                                      print(userNameController.text);
-                                      isCheckingUserNameDuplicated(true);
-                                      bool isUserNameDuplicatedVar = true;
-
-                                      isUserNameDuplicatedVar =
-                                          await widget.homeViewModel.isUserNameDuplicated(userNameController.text);
-                                      print(isUserNameDuplicatedVar);
-                                      if (!isUserNameDuplicatedVar) {
-                                        await widget.homeViewModel.updateUserName(userNameController.text);
-                                        Navigator.of(context).pop();
-                                        yachtSnackBar("닉네임이 저장되었어요");
-                                        // showSmallSnackBar(true);
-                                        // smallSnackBarText();
-                                        // Future.delayed(Duration(seconds: 1)).then((value) {
-                                        //   showSmallSnackBar(false);
-                                        //   smallSnackBarText("");
-                                        //   Navigator.of(context).pop();
-                                        // });
-
-                                        // Get.rawSnackbar(
-                                        //   messageText: Center(
-                                        //     child: Text(
-                                        //       "변경한 내용이 저장되었어요.",
-                                        //       style: snackBarStyle,
-                                        //     ),
-                                        //   ),
-                                        //   backgroundColor: white.withOpacity(.5),
-                                        //   barBlur: 8,
-                                        //   duration: const Duration(seconds: 1, milliseconds: 100),
-                                        // );
-                                      } else {
-                                        showSmallSnackBar(true);
-                                        smallSnackBarText("중복된 닉네임이 있어요");
-                                        Future.delayed(Duration(seconds: 1)).then((value) {
-                                          showSmallSnackBar(false);
-                                          smallSnackBarText("");
-                                        });
-                                        // userNameDuplicatedDialog();
-                                      }
-
-                                      isCheckingUserNameDuplicated(false);
-                                    }
+                                  } else {
+                                    showSmallSnackBar(true);
+                                    smallSnackBarText("중복된 닉네임이 있어요");
+                                    Future.delayed(Duration(seconds: 1)).then((value) {
+                                      showSmallSnackBar(false);
+                                      smallSnackBarText("");
+                                    });
+                                    // userNameDuplicatedDialog();
                                   }
-                                },
-                                child: Obx(() => Container(
-                                      height: 50.w,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(70.0),
+
+                                  isCheckingUserNameDuplicated(false);
+                                }
+                              }
+                            },
+                            child: Obx(() => Container(
+                                  height: 50.w,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(70.0),
+                                      color: isCheckingUserNameDuplicated.value == false
+                                          ? yachtViolet
+                                          : primaryButtonText),
+                                  child: Center(
+                                    child: Text(
+                                      isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
+                                      style: profileChangeButtonTextStyle.copyWith(
                                           color: isCheckingUserNameDuplicated.value == false
-                                              ? yachtViolet
-                                              : primaryButtonText),
-                                      child: Center(
-                                        child: Text(
-                                          isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
-                                          style: profileChangeButtonTextStyle.copyWith(
-                                              color: isCheckingUserNameDuplicated.value == false
-                                                  ? primaryButtonText
-                                                  : primaryButtonBackground),
-                                        ),
-                                      ),
-                                    )),
-                              ),
-                            ),
-                          ],
+                                              ? primaryButtonText
+                                              : primaryButtonBackground),
+                                    ),
+                                  ),
+                                )),
+                          ),
                         ),
-                        Positioned.fill(
-                            top: 48.w,
-                            // left: 16.w,
-                            child: Container(
-                              height: 24.w,
-                              child: Obx(
-                                () => showSmallSnackBar.value
-                                    ? AnimatedContainer(
-                                        duration: Duration(milliseconds: 300),
-
-                                        padding: EdgeInsets.all(12.w),
-                                        color: Colors.white.withOpacity(.8),
-
-                                        // width: double.infinity,
-                                        child: Text(
-                                          smallSnackBarText.value,
-                                          style: TextStyle(
-                                              fontSize: 16.w,
-                                              fontWeight: FontWeight.w600,
-                                              color: showSmallSnackBar.value ? yachtBlack : Colors.transparent),
-                                        ),
-                                      )
-                                    : Container(),
-                              ),
-                            ))
                       ],
                     ),
-                  ),
-                )),
-          ),
-          barrierDismissible: false,
-        );
-      }
-    });
+                    Positioned.fill(
+                        top: 48.w,
+                        // left: 16.w,
+                        child: Container(
+                          height: 24.w,
+                          child: Obx(
+                            () => showSmallSnackBar.value
+                                ? AnimatedContainer(
+                                    duration: Duration(milliseconds: 300),
+
+                                    padding: EdgeInsets.all(12.w),
+                                    color: Colors.white.withOpacity(.8),
+
+                                    // width: double.infinity,
+                                    child: Text(
+                                      smallSnackBarText.value,
+                                      style: TextStyle(
+                                          fontSize: 16.w,
+                                          fontWeight: FontWeight.w600,
+                                          color: showSmallSnackBar.value ? yachtBlack : Colors.transparent),
+                                    ),
+                                  )
+                                : Container(),
+                          ),
+                        ))
+                  ],
+                ),
+              ),
+            )),
+      ),
+    );
   }
 
   @override
