@@ -184,6 +184,75 @@ class SurveyView extends GetView<SurveyViewModel> {
                             ],
                           );
                         }),
+                      } else if (questModel.surveys![index].answerType == 'pickMany') ...{
+                        // 택1인 경우
+                        ...List.generate(questModel.surveys![index].answers!.length, (answerIndex) {
+                          return Column(
+                            children: [
+                              if (answerIndex == 0)
+                                SizedBox(
+                                  height: 20.w,
+                                  // color: yachtBlack.withOpacity(.4),
+                                ),
+                              GestureDetector(
+                                onTap: () async {
+                                  HapticFeedback.lightImpact();
+                                  controller.answerList[questModel.surveys![index].answersId!].contains(answerIndex)
+                                      ? controller.answerList[questModel.surveys![index].answersId!].remove(answerIndex)
+                                      : controller.answerList[questModel.surveys![index].answersId!].add(answerIndex);
+                                  controller.update();
+                                  print(controller.answerList);
+                                },
+                                child: Container(
+                                  // clipBehavior: Clip.hardEdge,
+                                  child: GetBuilder<SurveyViewModel>(builder: (controller) {
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 28.w),
+                                      child: AnimatedContainer(
+                                          duration: Duration(milliseconds: 300),
+                                          height: 56.w,
+                                          decoration: BoxDecoration(
+                                              color: controller.answerList[questModel.surveys![index].answersId!]
+                                                      .contains(answerIndex)
+                                                  ? yachtViolet.withOpacity(.7)
+                                                  : white,
+                                              borderRadius: BorderRadius.circular(12.w),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: yachtShadow,
+                                                  blurRadius: 8.w,
+                                                  spreadRadius: 1.w,
+                                                )
+                                              ]),
+                                          padding: primaryHorizontalPadding,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  questModel.surveys![index].answers![answerIndex],
+                                                  style: surveySelection.copyWith(
+                                                      color: controller
+                                                              .answerList[questModel.surveys![index].answersId!]
+                                                              .contains(answerIndex)
+                                                          ? buttonNormal
+                                                          : surveySelection.color),
+                                                  maxLines: 3,
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                    );
+                                  }),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 14.w,
+                              ),
+                            ],
+                          );
+                        }),
                       } else if (questModel.surveys![index].answerType == 'pickManyCircles') ...{
                         Padding(
                             padding: primaryHorizontalPadding,
