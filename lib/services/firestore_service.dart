@@ -114,18 +114,16 @@ class FirestoreService extends GetxService {
   }
 
   // 마지막 로그인 시간
-<<<<<<< HEAD
   Future stampLastNotificationCheck() async {
     await _firestoreService
         .collection('users')
         .doc(userModelRx.value!.uid)
-        .update({
-      'lastNotificationCheckDateTime': Timestamp.fromDate(DateTime.now()),
-=======
+        .update({'lastNotificationCheckDateTime': Timestamp.fromDate(DateTime.now())});
+  }
+
   Future stampTermAgree() async {
     await _firestoreService.collection('users').doc(userModelRx.value!.uid).update({
       'lastTermAgreeDateTime': Timestamp.fromDate(DateTime.now()),
->>>>>>> 7880c91eb14e60ab570d32d7d4bc5876339205d3
     });
   }
 

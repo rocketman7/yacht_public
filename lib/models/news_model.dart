@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 class NewsModel {
-  final dynamic dateTime;
-  final String newsUrl;
-  final String newspaper;
-  final String title;
-  final String? imageUrl;
+  final dynamic dateTime; // 뉴스시간
+  final String newsUrl; // 뉴스 URL
+  final String newspaper; // 신문사
+  final String title; // 제목
+  final String? imageUrl; // 이미지 있으면 URL, 정방형에 가까운 게 좋음
   NewsModel({
     required this.dateTime,
     required this.newsUrl,
@@ -52,8 +52,7 @@ class NewsModel {
 
   String toJson() => json.encode(toMap());
 
-  factory NewsModel.fromJson(String source) =>
-      NewsModel.fromMap(json.decode(source));
+  factory NewsModel.fromJson(String source) => NewsModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -74,10 +73,6 @@ class NewsModel {
 
   @override
   int get hashCode {
-    return dateTime.hashCode ^
-        newsUrl.hashCode ^
-        newspaper.hashCode ^
-        title.hashCode ^
-        imageUrl.hashCode;
+    return dateTime.hashCode ^ newsUrl.hashCode ^ newspaper.hashCode ^ title.hashCode ^ imageUrl.hashCode;
   }
 }
