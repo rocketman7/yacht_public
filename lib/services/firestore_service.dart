@@ -1018,6 +1018,18 @@ class FirestoreService extends GetxService {
     );
   }
 
+  // 유저 신고하기(프로필에서)
+  Future reportThisUserFromProfile(String uid) async {
+    await _firestoreService.collection('report').add(
+      {
+        // 'reportDateTime': DateTime.now(),
+        'uidToReport': uid,
+        // 'postId': post.postId,
+        'reportFrom': userModelRx.value!.uid,
+      },
+    );
+  }
+
   //// 컨텐츠 관련
   // 읽을 거리 가져오기
   Future<List<ReadingContentModel>> getReadingContents() async {

@@ -667,7 +667,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                     onTap: () async {
                                       if (checkTerm.value && checkFourteen.value) {
                                         await homeViewModel.agreeTerm();
-                                        box.write('iosTermAgree', true);
+                                        box.write('iosTermAgree${userModelRx.value!.uid}', true);
                                         Navigator.of(context).pop();
 
                                         // if (userModelRx.value!.isNameUpdated == null ||

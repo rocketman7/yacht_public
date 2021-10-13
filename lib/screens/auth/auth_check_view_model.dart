@@ -87,13 +87,13 @@ class AuthCheckViewModel extends GetxController {
       if (user != null) {
         userModelRx.bindStream(_userRepository.getUserStream(user.uid));
         // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
-
-        leagueRx.listen((value) {
-          if (value != "") {
-            print('userquest binding');
-            userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
-          }
-        });
+        userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
+        // leagueRx.listen((value) {
+        //   if (value != "") {
+        //     print('userquest binding');
+        //     userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
+        //   }
+        // });
 
         // print('this user: ${userModelRx.value}.');
         // userModelRx.listen((user) {
