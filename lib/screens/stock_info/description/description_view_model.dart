@@ -10,7 +10,7 @@ class DescriptionViewModel extends GetxController {
   final InvestAddressModel investAddressModel;
 
   DescriptionViewModel(this.investAddressModel);
-
+  RxBool showMore = false.obs;
   @override
   void onInit() {
     super.onInit();
