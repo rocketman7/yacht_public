@@ -32,12 +32,32 @@ class DescriptionView extends GetView<DescriptionViewModel> {
         SizedBox(
           height: reducedPaddingWhenTextIsBelow(20.w, detailedContentTextStyle.fontSize!),
         ),
-        Obx(() => Text(
-              (controller.corporationModel.value.description == "" ||
-                      controller.corporationModel.value.description == null)
-                  ? "기업 소개가 없습니다"
-                  : controller.corporationModel.value.description!.replaceAll('\\n', '\n'),
-              style: detailedContentTextStyle,
+        Obx(() => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  (controller.corporationModel.value.description == "" ||
+                          controller.corporationModel.value.description == null)
+                      ? "기업 소개가 없습니다"
+                      : controller.corporationModel.value.description!.replaceAll('\\n', '\n'),
+                  style: detailedContentTextStyle,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: controller.showMore.value ? 100 : 5,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      controller.showMore(!controller.showMore.value);
+                    },
+                    child: Text(controller.showMore.value ? "   간략히" : "  더보기",
+                        style: detailedContentTextStyle.copyWith(
+                          color: yachtBlue,
+                          fontSize: 12.w,
+                        )),
+                  ),
+                )
+              ],
             ))
       ],
     );

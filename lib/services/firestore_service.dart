@@ -595,6 +595,26 @@ class FirestoreService extends GetxService {
     return allSubLeagues;
   }
 
+  Future<double> getCurrentStocksPrice(String issueCode) async {
+    late double currentStocksPrice;
+
+    await firestoreService
+        .collection('stocksKR')
+        .doc(issueCode)
+        .collection('historicalPrices')
+        .where('cycle', isEqualTo: 'D')
+        .orderBy('dateTime', descending: true)
+        .limit(1)
+        .get()
+        .then((value) {
+      currentStocksPrice = value.docs[0].data()['close'].toDouble();
+    });
+
+    // print(currentStocksPrice);
+
+    return currentStocksPrice;
+  }
+
   Future<List<List<RankModel>>> getAllTopRanker(int limitDoc) async {
     List<List<RankModel>> allTopRankersOfSubLeagues = [];
     List<RankModel> tempRankList;
@@ -1122,6 +1142,18 @@ class FirestoreService extends GetxService {
         // 'reportDateTime': DateTime.now(),
         'uidToReport': post.writerUid,
         'postId': post.postId,
+        'reportFrom': userModelRx.value!.uid,
+      },
+    );
+  }
+
+  // 유저 신고하기(프로필에서)
+  Future reportThisUserFromProfile(String uid) async {
+    await _firestoreService.collection('report').add(
+      {
+        // 'reportDateTime': DateTime.now(),
+        'uidToReport': uid,
+        // 'postId': post.postId,
         'reportFrom': userModelRx.value!.uid,
       },
     );

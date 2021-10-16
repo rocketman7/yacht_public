@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/screens/stock_info/news/news_view_model.dart';
@@ -74,7 +75,7 @@ class NewsView extends GetView<NewsViewModel> {
                 ));
           },
           child: Container(
-            height: 84.w,
+            height: 85.w,
             width: double.infinity,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +99,7 @@ class NewsView extends GetView<NewsViewModel> {
                             Row(
                               children: [
                                 Text(
-                                  controller.newsList[index].dateTime.toDate().toString(),
+                                  timeStampToString(controller.newsList[index].dateTime),
                                   style: detailedContentTextStyle.copyWith(fontSize: 12.w, fontWeight: FontWeight.w300),
                                 ),
                                 SizedBox(
@@ -113,31 +114,33 @@ class NewsView extends GetView<NewsViewModel> {
                           ],
                         ),
                 )),
-                SizedBox(
-                  width: 10.w,
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.w),
-                  child: Container(
-                    height: 84.w,
-                    width: 84.w,
-                    // color: Colors.yellow[200],
-                    // decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
-                    child: controller.newsList[index].imageUrl == null
-                        ? Container()
-                        : Image.network(
-                            controller.newsList[index].imageUrl!,
-                            fit: BoxFit.cover,
-                            loadingBuilder: (_, Widget child, ImageChunkEvent? progress) {
-                              return LoadingContainer(
-                                width: 84.w,
-                                height: 84.w,
-                                radius: 10.w,
-                              );
-                            },
+                controller.newsList[index].imageUrl == null
+                    ? Container()
+                    : Row(children: [
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.w),
+                          child: Container(
+                            height: 84.w,
+                            width: 84.w,
+                            // color: Colors.yellow[200],
+                            // decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                            child: Image.network(
+                              controller.newsList[index].imageUrl!,
+                              fit: BoxFit.cover,
+                              loadingBuilder: (_, Widget child, ImageChunkEvent? progress) {
+                                return LoadingContainer(
+                                  width: 84.w,
+                                  height: 84.w,
+                                  radius: 10.w,
+                                );
+                              },
+                            ),
                           ),
-                  ),
-                ),
+                        ),
+                      ])
               ],
             ),
           ),

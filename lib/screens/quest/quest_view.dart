@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:vibration/vibration.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 
 import 'package:yachtOne/models/quest_model.dart';
@@ -419,7 +420,8 @@ class QuestView extends StatelessWidget {
                       questViewModel.isSelectingSheetShowing(true);
                       questViewModel.syncUserSelect();
                     } else {
-                      if (questModel.liveEndDateTime.toDate().isAfter(DateTime.now())) {
+                      // DateTime.now().isAfter(other)
+                      if (questModel.questEndDateTime.toDate().isBefore(DateTime.now())) {
                         yachtSnackBarFromBottom(
                           "퀘스트 참여가능한 시간이 지났습니다.",
                           // longerDuration: 2000,
@@ -801,7 +803,9 @@ class QuestView extends StatelessWidget {
                                             // dragStartBehavior: DragStartBehavior.down,
                                             physics: NeverScrollableScrollPhysics(),
                                             shrinkWrap: true,
+
                                             onReorder: (oldIndex, newIndex) {
+                                              // Vibration.vibrate();
                                               questViewModel.reorderUserSelect(oldIndex, newIndex);
                                               // print('old' + oldIndex.toString());
                                               // print('new' + newIndex.toString());

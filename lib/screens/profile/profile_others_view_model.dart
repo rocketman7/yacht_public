@@ -142,6 +142,17 @@ class ProfileOthersViewModel extends GetxController {
       return makePickResult(userSelect);
     }
   }
+
+  Future blockThisUser(String uidToBlock) async {
+    print(uidToBlock);
+    await unFollowSomeoneMethod();
+    await _firestoreService.blockThisUser(uidToBlock);
+  }
+
+  Future reportThisUserFromProfile(String uidToBlock) async {
+    print(uidToBlock);
+    await _firestoreService.reportThisUserFromProfile(uidToBlock);
+  }
 }
 
 void getRawSnackbar(String text) {

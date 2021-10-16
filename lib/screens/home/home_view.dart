@@ -23,6 +23,7 @@ import 'package:yachtOne/screens/auth/auth_check_view_model.dart';
 import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
 import 'package:yachtOne/screens/auth/login_view.dart';
 import 'package:yachtOne/screens/award/award_view.dart';
+import 'package:yachtOne/screens/award/award_view_model.dart';
 import 'package:yachtOne/screens/contents/dictionary/dictionary_view.dart';
 import 'package:yachtOne/screens/contents/reading_content/reading_content_view.dart';
 import 'package:yachtOne/screens/contents/today_market/today_market_view.dart';
