@@ -58,14 +58,16 @@ class SubLeagueModel {
       description: map['description'],
       comment: map['comment'],
       rules: List<String>.from(map['rules']),
-      stocks: List<SubLeagueStocksModel>.from(map['stocks']?.map((x) => SubLeagueStocksModel.fromMap(x))),
+      stocks: List<SubLeagueStocksModel>.from(
+          map['stocks']?.map((x) => SubLeagueStocksModel.fromMap(x))),
       // totalValue: map['totalValue'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory SubLeagueModel.fromJson(String source) => SubLeagueModel.fromMap(json.decode(source));
+  factory SubLeagueModel.fromJson(String source) =>
+      SubLeagueModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -87,7 +89,11 @@ class SubLeagueModel {
 
   @override
   int get hashCode {
-    return name.hashCode ^ description.hashCode ^ comment.hashCode ^ rules.hashCode ^ stocks.hashCode; // ^
+    return name.hashCode ^
+        description.hashCode ^
+        comment.hashCode ^
+        rules.hashCode ^
+        stocks.hashCode; // ^
     // totalValue.hashCode;
   }
 }
@@ -101,6 +107,7 @@ class SubLeagueStocksModel {
   final String name;
   final num sharesNum;
   final num standardPrice;
+  num? currentPrice; // 얘는 나중에 각각 종목정보가서 가격 불러와야되기때문에 처음에는 null일수밖에없음
   SubLeagueStocksModel({
     required this.field,
     required this.country,
@@ -108,6 +115,7 @@ class SubLeagueStocksModel {
     required this.name,
     required this.sharesNum,
     required this.standardPrice,
+    this.currentPrice,
   });
 
   SubLeagueStocksModel copyWith({
@@ -117,6 +125,7 @@ class SubLeagueStocksModel {
     String? name,
     num? sharesNum,
     num? standardPrice,
+    num? currentPrice,
   }) {
     return SubLeagueStocksModel(
       field: field ?? this.field,
@@ -125,6 +134,7 @@ class SubLeagueStocksModel {
       name: name ?? this.name,
       sharesNum: sharesNum ?? this.sharesNum,
       standardPrice: standardPrice ?? this.standardPrice,
+      currentPrice: currentPrice ?? this.currentPrice,
     );
   }
 
@@ -146,6 +156,7 @@ class SubLeagueStocksModel {
       'name': name,
       'sharesNum': sharesNum,
       'standardPrice': standardPrice,
+      'currentPrice': currentPrice,
     };
   }
 
@@ -157,16 +168,18 @@ class SubLeagueStocksModel {
       name: map['name'],
       sharesNum: map['sharesNum'],
       standardPrice: map['standardPrice'],
+      currentPrice: map['currentPrice'] ?? 0.0,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory SubLeagueStocksModel.fromJson(String source) => SubLeagueStocksModel.fromMap(json.decode(source));
+  factory SubLeagueStocksModel.fromJson(String source) =>
+      SubLeagueStocksModel.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'SubLeagueStocksModel(field: $field, country: $country, issueCode: $issueCode, name: $name, sharesNum: $sharesNum, standardPrice: $standardPrice)';
+    return 'SubLeagueStocksModel(field: $field, country: $country, issueCode: $issueCode, name: $name, sharesNum: $sharesNum, standardPrice: $standardPrice, currentPrice: $currentPrice)';
   }
 
   @override
@@ -179,7 +192,8 @@ class SubLeagueStocksModel {
         other.issueCode == issueCode &&
         other.name == name &&
         other.sharesNum == sharesNum &&
-        other.standardPrice == standardPrice;
+        other.standardPrice == standardPrice &&
+        other.currentPrice == currentPrice;
   }
 
   @override
@@ -189,7 +203,8 @@ class SubLeagueStocksModel {
         issueCode.hashCode ^
         name.hashCode ^
         sharesNum.hashCode ^
-        standardPrice.hashCode;
+        standardPrice.hashCode ^
+        currentPrice.hashCode;
   }
 }
 
