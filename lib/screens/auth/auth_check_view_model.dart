@@ -60,14 +60,13 @@ class AuthCheckViewModel extends GetxController {
 
   @override
   void onInit() async {
-    // await _firestoreService.getServerTime();
     _mixpanelService.mixpanel.track('authCheck');
     await checkTime();
     _mixpanelService.mixpanel.track('checkTime');
     await getLeagueInfo();
-    // _mixpanelService.mixpanel.track('getLeagueInfo');
+    _mixpanelService.mixpanel.track('getLeagueInfo');
     await getHolidayList();
-    // _mixpanelService.mixpanel.track('getHoliday');
+    _mixpanelService.mixpanel.track('getHoliday');
     await checkVersion();
     _mixpanelService.mixpanel.track('checkVersion');
 
@@ -75,6 +74,7 @@ class AuthCheckViewModel extends GetxController {
     // TODO: implement onInit
 
     user = authService.auth.currentUser;
+    _mixpanelService.mixpanel.track(user.toString());
     tierSystemModelRx(await _firestoreService.getTierSystem());
     currentUser!.bindStream(authService.auth.authStateChanges());
 

@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.team_yacht.ggook">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -76,10 +77,15 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3726614606720353~1645546590" />
+        <meta-data 
+            tools:replace="android:value"
+            android:name="com.facebook.sdk.ApplicationId" 
+            android:value="@string/facebook_app_id"/>
 
         <meta-data android:name="com.claimsforce.segment.WRITE_KEY" android:value="3B5Uz8WK7LzPB5nooEPwCzfgQvwcSt6R" />
         <meta-data android:name="com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS" android:value="false" />
         <meta-data android:name="com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION" android:value="false" />
         <meta-data android:name="com.claimsforce.segment.DEBUG" android:value="false" />
+        
     </application>
 </manifest>

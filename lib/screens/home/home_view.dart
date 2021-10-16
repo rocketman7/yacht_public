@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorState;
@@ -392,6 +393,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
   @override
   void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) => initPlugin());
     // print('DialogReadyWidget init called');
     // print('showingtermdial: ${widget.homeViewModel.onceInit}');
     if (!widget.homeViewModel.onceInit) {
@@ -416,6 +418,31 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
       }
     }
     super.initState();
+  }
+
+  RxString _authStatus = 'Unknown'.obs;
+  Future<void> initPlugin() async {
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
+      _authStatus(status.toString());
+      // If the system can show an authorization request dialog
+      if (status == TrackingStatus.notDetermined) {
+        // Show a custom explainer dialog before the system dialog
+        // if (await showCustomTrackingDialog(context)) {
+        //   // Wait for dialog popping animation
+        //   await Future.delayed(const Duration(milliseconds: 200));
+        // Request system's tracking authorization dialog
+        final TrackingStatus status = await AppTrackingTransparency.requestTrackingAuthorization();
+        _authStatus(status.toString());
+        // }
+      }
+    } on PlatformException {
+      _authStatus('PlatformException was thrown');
+    }
+
+    final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
+    print("UUID: $uuid");
   }
 
   showTermDialog(BuildContext context, HomeViewModel homeViewModel) {
