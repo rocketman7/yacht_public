@@ -98,7 +98,7 @@ class LoginView extends StatelessWidget {
                                       color: white,
                                     )
                                   : Text(
-                                      'Apple로 시작하기',
+                                      'Apple로 계속하기',
                                       style: socialLogin.copyWith(color: white),
                                     ),
                               loginBackgroundColor: Colors.black),

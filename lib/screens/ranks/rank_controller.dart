@@ -8,7 +8,7 @@ import '../../models/rank_model.dart';
 
 // 메인리그 = 무조건 subLeague001 고정
 const int maxNumAllRankerForTop = 3; //
-const int maxNumAllRanker = 100; // 아예 세부적으로 갔을 때 최대 몇 명 보여줄 것인지.
+const int maxNumAllRanker = 1000; // 아예 세부적으로 갔을 때 최대 몇 명 보여줄 것인지.
 
 class RankController extends GetxController {
   FirestoreService _firestoreService = locator<FirestoreService>();

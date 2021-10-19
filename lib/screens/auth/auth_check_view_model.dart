@@ -61,8 +61,8 @@ class AuthCheckViewModel extends GetxController {
   @override
   void onInit() async {
     _mixpanelService.mixpanel.track('authCheck');
-    await checkTime();
-    _mixpanelService.mixpanel.track('checkTime');
+    // await checkTime();
+    // _mixpanelService.mixpanel.track('checkTime');
     await getLeagueInfo();
     _mixpanelService.mixpanel.track('getLeagueInfo');
     await getHolidayList();
