@@ -251,6 +251,42 @@ flutter:
       fonts:
         - asset: assets/fonts/s-core/SCDream4.otf
 
+    - family: IBMPlex
+      fonts:
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Regular.ttf
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Light.ttf
+          weight: 300
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Bold.ttf
+          weight: 700
+
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/alternative/Pretendard-Regular.ttf
+        - asset: assets/fonts/alternative/Pretendard-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/alternative/Pretendard-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/alternative/Pretendard-Light.ttf
+          weight: 300
+        - asset: assets/fonts/alternative/Pretendard-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/alternative/Pretendard-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/alternative/Pretendard-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/alternative/Pretendard-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/alternative/Pretendard-Black.ttf
+          weight: 900
+
     - family: SCore
       fonts:
         # - asset: assets/fonts/s-core/SCDream4.otf

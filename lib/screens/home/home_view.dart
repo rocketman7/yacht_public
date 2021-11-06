@@ -460,7 +460,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
   Future<void> initPlugin() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
+      final TrackingStatus status =
+          await AppTrackingTransparency.trackingAuthorizationStatus;
       _authStatus(status.toString());
       // If the system can show an authorization request dialog
       if (status == TrackingStatus.notDetermined) {
@@ -469,7 +470,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
         //   // Wait for dialog popping animation
         //   await Future.delayed(const Duration(milliseconds: 200));
         // Request system's tracking authorization dialog
-        final TrackingStatus status = await AppTrackingTransparency.requestTrackingAuthorization();
+        final TrackingStatus status =
+            await AppTrackingTransparency.requestTrackingAuthorization();
         _authStatus(status.toString());
         // }
       }

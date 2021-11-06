@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -658,6 +659,14 @@ TextStyle appBarTitle = TextStyle(
   fontFamily: krFont,
   fontSize: heading4Size,
   fontWeight: FontWeight.w300,
+  color: yachtBlack,
+  height: primaryFontHeight,
+  letterSpacing: -1.0,
+);
+TextStyle newAppBarTitle = TextStyle(
+  fontFamily: 'IMBPlex',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
   color: yachtBlack,
   height: primaryFontHeight,
   letterSpacing: -1.0,
@@ -1799,6 +1808,27 @@ AppBar primaryAppBar(String title) {
     backgroundColor: white,
     toolbarHeight: 60.w,
     title: Text(title, style: appBarTitle),
+  );
+}
+
+// 투명한 앱바
+// 반드시 Scaffold(extendBodyBehindAppBar: true)와 함께 사용
+// 그리고, 그렇기 때문에 반드시 위에서부터 SizeConfig.safeAreaTop + toolbarHeight 로부터 시작해야함
+AppBar newPrimaryAppBar(String title) {
+  return AppBar(
+    backgroundColor: Colors.transparent,
+    systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: yachtBlack),
+    toolbarHeight: 60.w,
+    flexibleSpace: ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+        child: Container(
+          height: SizeConfig.safeAreaTop + 60.w,
+          color: primaryBackgroundColor.withOpacity(.65),
+        ),
+      ),
+    ),
+    title: Text(title, style: newAppBarTitle),
   );
 }
 

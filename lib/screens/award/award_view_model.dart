@@ -275,6 +275,11 @@ class AwardViewModel extends GetxController {
                         (awardColors.length - 1)) -
                 1][sideOrCenter];
   }
+
+  //지난 시즌 DB test
+  Future testLastLeaguesDB() async {
+    await _firestoreService.updateTestDBForLastLeagues(allSubLeagues[1]);
+  }
 }
 
 // portfolio UI 위한 class 및 변수

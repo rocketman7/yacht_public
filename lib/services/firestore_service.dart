@@ -6,6 +6,7 @@ import 'package:yachtOne/models/admin_standards_model.dart';
 import 'package:yachtOne/models/community/comment_model.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/models/dictionary_model.dart';
+import 'package:yachtOne/models/last_subLeague_model.dart';
 import 'package:yachtOne/models/league_address_model.dart';
 import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/chart_price_model.dart';
@@ -578,6 +579,7 @@ class FirestoreService extends GetxService {
 
     await _firestoreService
         .collection('leagues') // 변하지 않음
+        // .doc('league002') // 변함. 현재 리그를 가져올지, 다음 리그를 가져올지 등에 따라. 값 자체도 변수로 줘야
         .doc(leagueRx.value) // 변함. 현재 리그를 가져올지, 다음 리그를 가져올지 등에 따라. 값 자체도 변수로 줘야
         .collection('subLeagues') // 변하지 않음
         .get()
@@ -593,6 +595,27 @@ class FirestoreService extends GetxService {
     // print(allSubLeagues[2]);
 
     return allSubLeagues;
+  }
+
+  Future<List<LastSubLeagueModel>> getAllLastSubLeague() async {
+    final List<LastSubLeagueModel> allLastSubLeagues = [];
+
+    await _firestoreService.collection('lastSubLeagues').get().then((value) {
+      value.docs.forEach((element) {
+        allLastSubLeagues.add(LastSubLeagueModel.fromMap(element.data()));
+      });
+    });
+
+    // print(allSubLeagues.length);
+    // print(allSubLeagues[0]);
+    // print(allSubLeagues[1]);
+    // print(allSubLeagues[2]);
+
+    return allLastSubLeagues;
+  }
+
+  Future updateTestDBForLastLeagues(SubLeagueModel subLeague) async {
+    await _firestoreService.collection('lastSubLeagues').add(subLeague.toMap());
   }
 
   Future<double> getCurrentStocksPrice(String issueCode) async {

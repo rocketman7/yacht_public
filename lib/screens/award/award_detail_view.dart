@@ -14,6 +14,8 @@ import '../../styles/style_constants.dart';
 import '../../handlers/numbers_handler.dart' as NumbersHandler;
 
 import 'award_view_model.dart';
+import 'last_award_detail_view.dart';
+import 'last_award_view.dart';
 
 class AwardDetailView extends StatelessWidget {
   final String leagueName;
@@ -285,6 +287,10 @@ class AwardDetailView extends StatelessWidget {
                           title: '요트 퀘스트 규정집',
                           url:
                               'https://brave-cinnamon-fa9.notion.site/Rule-Book-65f390c24fbe4b4bbf1b95011419c0f7'));
+                      //아래는 테스트코드들이므로 반드시 주석처리
+                      // Get.to(() => LastAwardDetailView());
+                      // _awardViewModel.testLastLeaguesDB();
+                      // Get.to(() => LastAwardView());
                     },
                     child: Column(
                       children: [
@@ -574,16 +580,17 @@ class SubLeagueViewDetailRulesTextWidget extends StatelessWidget {
                   children: [
                     Text(
                       '* ',
-                      style: subLeagueAwardRulesStyle,
+                      style: lastLeagueDetailViewAwardRulesText,
                     ),
                     Container(
                       width: SizeConfig.screenWidth -
                           28.w -
                           31.w -
-                          textSizeGet('* ', subLeagueAwardRulesStyle).width,
+                          textSizeGet('* ', lastLeagueDetailViewAwardRulesText)
+                              .width,
                       child: Text(
                         '${rules[i]}'.replaceAll('\\n', '\n'),
-                        style: subLeagueAwardRulesStyle,
+                        style: lastLeagueDetailViewAwardRulesText,
                       ),
                     ),
                   ],
@@ -657,116 +664,144 @@ class PortfolioLabel extends StatelessWidget {
                               (_awardViewModel.isMaxLabel[
                                       _awardViewModel.pageIndexForUI.value] ==
                                   labelState.NONEED)
-                          ? Column(
-                              children: [
-                                SizedBox(
-                                  height: correctHeight(
-                                      9.w,
-                                      0.w,
-                                      subLeagueAwardLabelStockTextStyle
-                                          .fontSize),
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: (i < portfolioColors.length)
-                                            ? portfolioColors[i]
-                                            : portfolioColors[
-                                                    portfolioColors.length - 1]
-                                                .withOpacity(math.max(
-                                                    1.0 -
-                                                        0.4 *
-                                                            (i -
-                                                                portfolioColors
-                                                                    .length +
-                                                                1),
-                                                    0.0)),
-                                        borderRadius:
-                                            BorderRadius.circular(2.0),
+                          ? GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                Get.to(() => Scaffold(
+                                      appBar: primaryAppBar(_awardViewModel
+                                          .allSubLeagues[_awardViewModel
+                                              .pageIndexForUI.value]
+                                          .stocks[i]
+                                          .name),
+                                      body: SingleChildScrollView(
+                                        child: Padding(
+                                          padding: primaryHorizontalPadding,
+                                          child: StockInfoKRView(
+                                              investAddressModel:
+                                                  _awardViewModel
+                                                      .allSubLeagues[
+                                                          _awardViewModel
+                                                              .pageIndexForUI
+                                                              .value]
+                                                      .stocks[i]
+                                                      .toInvestAddressModel()),
+                                        ),
                                       ),
-                                      height: 25.w,
-                                      width: 25.w,
-                                    ),
-                                    SizedBox(
-                                      width: textSizeGet('총 상금',
-                                                  subLeagueAwardLabelTotalTextStyle)
-                                              .width -
-                                          25.w +
-                                          4.w,
-                                    ),
-                                    Container(
-                                      width: SizeConfig.screenWidth -
-                                          14.w -
-                                          14.w -
-                                          textSizeGet('총 상금',
-                                                  subLeagueAwardLabelTotalTextStyle)
-                                              .width -
-                                          4.w -
-                                          14.w -
-                                          14.w,
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                '${_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks[i].name}',
-                                                style:
-                                                    subLeagueAwardLabelStockTextStyle,
-                                              ),
-                                              Spacer(),
-                                              Text(
-                                                '${_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks[i].sharesNum}주',
-                                                style:
-                                                    subLeagueAwardLabelStockTextStyle,
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                '${NumbersHandler.toPriceKRW(_awardViewModel.getStockCurrentTotalValue(_awardViewModel.pageIndexForUI.value, i))}원',
-                                                style:
-                                                    subLeagueAwardLabelStockPriceTextStyle,
-                                              ),
-                                              Spacer(),
-                                              Text(
-                                                '${plusOrminusSymbol(_awardViewModel.getStockCurrentTotalValue(_awardViewModel.pageIndexForUI.value, i), _awardViewModel.getStockStandardTotalValue(_awardViewModel.pageIndexForUI.value, i))}${NumbersHandler.toPriceKRW(_awardViewModel.getStockCurrentTotalValue(_awardViewModel.pageIndexForUI.value, i) - _awardViewModel.getStockStandardTotalValue(_awardViewModel.pageIndexForUI.value, i))} (${NumbersHandler.toPercentageChange((_awardViewModel.getStockCurrentTotalValue(_awardViewModel.pageIndexForUI.value, i) - _awardViewModel.getStockStandardTotalValue(_awardViewModel.pageIndexForUI.value, i)) / _awardViewModel.getStockStandardTotalValue(_awardViewModel.pageIndexForUI.value, i))})',
-                                                style: subLeagueAwardLabelPLTextStyle.copyWith(
-                                                    color: plusOrminusColor(
-                                                        _awardViewModel
-                                                            .getStockCurrentTotalValue(
-                                                                _awardViewModel
-                                                                    .pageIndexForUI
-                                                                    .value,
-                                                                i),
-                                                        _awardViewModel
-                                                            .getStockStandardTotalValue(
-                                                                _awardViewModel
-                                                                    .pageIndexForUI
-                                                                    .value,
-                                                                i))),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                    ));
+                              },
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: correctHeight(
+                                        9.w,
+                                        0.w,
+                                        subLeagueAwardLabelStockTextStyle
+                                            .fontSize),
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: (i < portfolioColors.length)
+                                              ? portfolioColors[i]
+                                              : portfolioColors[
+                                                      portfolioColors.length -
+                                                          1]
+                                                  .withOpacity(math.max(
+                                                      1.0 -
+                                                          0.4 *
+                                                              (i -
+                                                                  portfolioColors
+                                                                      .length +
+                                                                  1),
+                                                      0.0)),
+                                          borderRadius:
+                                              BorderRadius.circular(2.0),
+                                        ),
+                                        height: 25.w,
+                                        width: 25.w,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: correctHeight(
-                                      6.w,
-                                      subLeagueAwardLabelPLTextStyle.fontSize,
-                                      0.w),
-                                ),
-                                Container(
-                                  height: 1.w,
-                                  width: double.infinity,
-                                  color: yachtLightGrey,
-                                ),
-                              ],
+                                      SizedBox(
+                                        width: textSizeGet('총 상금',
+                                                    subLeagueAwardLabelTotalTextStyle)
+                                                .width -
+                                            25.w +
+                                            4.w,
+                                      ),
+                                      Container(
+                                        width: SizeConfig.screenWidth -
+                                            14.w -
+                                            14.w -
+                                            textSizeGet('총 상금',
+                                                    subLeagueAwardLabelTotalTextStyle)
+                                                .width -
+                                            4.w -
+                                            14.w -
+                                            14.w,
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  '${_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks[i].name}',
+                                                  style:
+                                                      subLeagueAwardLabelStockTextStyle,
+                                                ),
+                                                Spacer(),
+                                                Text(
+                                                  '${_awardViewModel.allSubLeagues[_awardViewModel.pageIndexForUI.value].stocks[i].sharesNum}주',
+                                                  style:
+                                                      subLeagueAwardLabelStockTextStyle,
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  '${NumbersHandler.toPriceKRW(_awardViewModel.getStockCurrentTotalValue(_awardViewModel.pageIndexForUI.value, i))}원',
+                                                  style:
+                                                      subLeagueAwardLabelStockPriceTextStyle,
+                                                ),
+                                                Spacer(),
+                                                Text(
+                                                  '${plusOrminusSymbol(_awardViewModel.getStockCurrentTotalValue(_awardViewModel.pageIndexForUI.value, i), _awardViewModel.getStockStandardTotalValue(_awardViewModel.pageIndexForUI.value, i))}${NumbersHandler.toPriceKRW(_awardViewModel.getStockCurrentTotalValue(_awardViewModel.pageIndexForUI.value, i) - _awardViewModel.getStockStandardTotalValue(_awardViewModel.pageIndexForUI.value, i))} (${NumbersHandler.toPercentageChange((_awardViewModel.getStockCurrentTotalValue(_awardViewModel.pageIndexForUI.value, i) - _awardViewModel.getStockStandardTotalValue(_awardViewModel.pageIndexForUI.value, i)) / _awardViewModel.getStockStandardTotalValue(_awardViewModel.pageIndexForUI.value, i))})',
+                                                  style: subLeagueAwardLabelPLTextStyle.copyWith(
+                                                      color: plusOrminusColor(
+                                                          _awardViewModel
+                                                              .getStockCurrentTotalValue(
+                                                                  _awardViewModel
+                                                                      .pageIndexForUI
+                                                                      .value,
+                                                                  i),
+                                                          _awardViewModel
+                                                              .getStockStandardTotalValue(
+                                                                  _awardViewModel
+                                                                      .pageIndexForUI
+                                                                      .value,
+                                                                  i))),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: correctHeight(
+                                        6.w,
+                                        subLeagueAwardLabelPLTextStyle.fontSize,
+                                        0.w),
+                                  ),
+                                  Container(
+                                    height: 1.w,
+                                    width: double.infinity,
+                                    color: yachtLightGrey,
+                                  ),
+                                ],
+                              ),
                             )
                           // Column(
                           //     children: [
