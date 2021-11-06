@@ -8,11 +8,11 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../locator.dart';
+import 'dictionary_view_model.dart';
 
 class DictionaryView extends StatelessWidget {
-  final HomeViewModel homeViewModel;
-  DictionaryView({Key? key, required this.homeViewModel}) : super(key: key);
   final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final dictionaryViewModel = Get.put(DictionaryViewModel());
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,20 +25,20 @@ class DictionaryView extends StatelessWidget {
           child: Text("금융 백과사전", style: sectionTitle),
         ),
         SizedBox(
-          height: heightSectionTitleAndBox,
+          height: primaryPaddingSize,
         ),
         Padding(
-          padding: primaryAllPadding,
+          padding: primaryHorizontalPadding,
           child: sectionBox(
               // padding: primaryAllPadding,
               child: Column(
             children: List.generate(
-                homeViewModel.dictionaries.length,
+                dictionaryViewModel.dictionaries.length,
                 (index) => InkWell(
                       onTap: () {
                         _mixpanelService.mixpanel.track('home-Dictionary-DictionaryWebView',
-                            properties: {'dictionaryTitle': homeViewModel.dictionaries[index].title});
-                        Get.to(() => DictionaryWebView(dictionaryModel: homeViewModel.dictionaries[index]));
+                            properties: {'dictionaryTitle': dictionaryViewModel.dictionaries[index].title});
+                        Get.to(() => DictionaryWebView(dictionaryModel: dictionaryViewModel.dictionaries[index]));
                       },
                       child: Column(
                         children: [
@@ -54,19 +54,18 @@ class DictionaryView extends StatelessWidget {
                                     // color: yachtRed,
                                   ),
                                   child: Image.network(
-                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${homeViewModel.dictionaries[index].imageUrl}",
+                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${dictionaryViewModel.dictionaries[index].imageUrl}",
                                   ),
                                 ),
                                 SizedBox(width: 14.w),
-                                Text(homeViewModel.dictionaries[index].title,
-                                    style: dictionaryKeyword.copyWith(
-                                      fontFamily: 'Default',
-                                      // fontWeight: FontWeight.w400,
-                                    ))
+                                Text(
+                                  dictionaryViewModel.dictionaries[index].title,
+                                  style: dictionaryKeyword,
+                                )
                               ],
                             ),
                           ),
-                          (index != (homeViewModel.dictionaries.length - 1))
+                          (index != (dictionaryViewModel.dictionaries.length - 1))
                               ? Container(
                                   height: 1,
                                   color: thinDivider,

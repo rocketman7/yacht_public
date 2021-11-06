@@ -38,8 +38,6 @@ class HomeViewModel extends GetxController {
   final liveQuests = <QuestModel>[].obs;
   final resultQuests = <QuestModel>[].obs;
 
-  final dictionaries = <DictionaryModel>[].obs;
-
   late final String uid;
   Rxn<UserModel> userModel = Rxn<UserModel>();
 
@@ -69,7 +67,7 @@ class HomeViewModel extends GetxController {
     // TODO: implement onInit
     isLoading(true);
     await getAllQuests();
-    await getDictionaries();
+
     await _firestoreService.stampLastLogin();
 
     // print(_authService.auth.currentUser!.email);
@@ -324,10 +322,6 @@ class HomeViewModel extends GetxController {
   //     barrierDismissible: false,
   //   );
   // }
-
-  Future getDictionaries() async {
-    dictionaries(await _firestoreService.getDictionaries());
-  }
 
   // Future<String> getImageUrlFromStorage(String imageUrl) async {
   //   return await _firebaseStorageService.downloadImageURL(imageUrl);

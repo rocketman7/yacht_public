@@ -132,8 +132,7 @@ double correctHeight(double originalPadding, upperTextSize, lowerTextSize) {
 }
 
 double offsetTextHeight(double upperTextSize, double lowerTextSize) {
-  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round())
-      .toDouble();
+  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round()).toDouble();
 }
 
 // 섹션 타이틀과 박스 사이
@@ -143,15 +142,14 @@ double widthHorizontalListView = 14.w;
 // 첫 섹션과 앱바 사이
 // 섹션 안에 패딩
 double primaryPaddingSize = 14.w;
-EdgeInsets primaryHorizontalPadding =
-    EdgeInsets.symmetric(horizontal: primaryPaddingSize);
+EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(horizontal: primaryPaddingSize);
 EdgeInsets primaryAllPadding = EdgeInsets.all(primaryPaddingSize);
 // FONTS
 
-String krFont = 'SCore';
-String krFontW400 = 'Default';
-double primaryFontHeight = 1.35;
-double contentFontHeight = 1.5;
+String krFont = 'IBMPlex';
+String krFontW400 = krFont;
+double primaryFontHeight = 1;
+double contentFontHeight = 1.4;
 
 double heading1Size = 34.w;
 double heading2Size = 30.w;
@@ -190,52 +188,52 @@ InputDecoration emailRegisterInputDecoration = InputDecoration(
 /// 기업 정보
 // 기업 이름
 TextStyle stockInfoNameTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 22.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 차트 메인 가격
 TextStyle stockPriceTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 30.w,
   fontWeight: FontWeight.w600,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 퀘스트 타이틀
 TextStyle questTitleTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 스탯 각 제목
 TextStyle stockInfoStatsTitle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 자세한 내용 쓰는 텍스트
 TextStyle detailedContentTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 //// 온보딩
@@ -278,58 +276,58 @@ TextStyle skipOnboarding = TextStyle(
 
 // 소셜로그인 타이틀
 TextStyle socialLogin = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 이메일 가입
 // 타이틀
 TextStyle emailRegisterTitle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 24.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 // 필드 이름
 TextStyle emailRegisterFieldName = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 12.w,
   fontWeight: FontWeight.w500,
   color: yachtViolet,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 필드 힌트
 TextStyle emailRegisterFieldHint = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
   color: yachtGrey,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 필드 힌트
 TextStyle emailRegisterFieldInstruction = TextStyle(
-  fontFamily: 'Default',
+  fontFamily: krFont,
   fontSize: 14.w,
   // fontWeight: FontWeight.w300,
   color: yachtGrey,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 //// 프로필 페이지
 // 닉네임
 TextStyle profileTierNameStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 9.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -339,7 +337,7 @@ TextStyle profileTierNameStyle = TextStyle(
 
 // 닉네임
 TextStyle profileUserNameStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 20.w,
   fontWeight: FontWeight.w700,
   color: yachtBlack,
@@ -349,8 +347,8 @@ TextStyle profileUserNameStyle = TextStyle(
 
 // 팔로워, 팔로잉 숫자
 TextStyle profileFollowNumberStyle = TextStyle(
-  fontFamily: 'SCore',
-  fontSize: 12.w,
+  fontFamily: krFont,
+  fontSize: 16.w,
   fontWeight: FontWeight.w700,
   color: yachtBlack,
   letterSpacing: -0.01,
@@ -359,7 +357,7 @@ TextStyle profileFollowNumberStyle = TextStyle(
 
 // 팔로워,팔로잉 글자
 TextStyle profileFollowTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 12.w,
   fontWeight: FontWeight.w400,
   color: yachtBlack,
@@ -369,7 +367,7 @@ TextStyle profileFollowTextStyle = TextStyle(
 
 // 팔로워,팔로잉페이지 닉네임
 TextStyle profileFollowNickNameStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w400,
   color: yachtBlack,
@@ -379,7 +377,7 @@ TextStyle profileFollowNickNameStyle = TextStyle(
 
 // 팔로워,팔로잉페이지 삭제버튼텍스트
 TextStyle profileFollowDeleteStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 13.w,
   fontWeight: FontWeight.w400,
   color: yachtViolet,
@@ -389,7 +387,7 @@ TextStyle profileFollowDeleteStyle = TextStyle(
 
 // 버튼글자
 TextStyle profileButtonTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
   color: primaryButtonBackground,
@@ -399,7 +397,7 @@ TextStyle profileButtonTextStyle = TextStyle(
 
 //헤더
 TextStyle profileHeaderTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -409,7 +407,7 @@ TextStyle profileHeaderTextStyle = TextStyle(
 
 // 즐겨찾기종목 종목명
 TextStyle profileFavoritesNameTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -419,7 +417,7 @@ TextStyle profileFavoritesNameTextStyle = TextStyle(
 
 //즐겨찾기종목 종목명
 TextStyle profileFavoritesNumberTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -429,7 +427,7 @@ TextStyle profileFavoritesNumberTextStyle = TextStyle(
 
 // 수정 페이지
 TextStyle profileChangeTitleTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -437,7 +435,7 @@ TextStyle profileChangeTitleTextStyle = TextStyle(
   height: primaryFontHeight,
 );
 TextStyle profileChangeContentTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w400,
   color: yachtBlack,
@@ -445,7 +443,7 @@ TextStyle profileChangeContentTextStyle = TextStyle(
   height: primaryFontHeight,
 );
 TextStyle profileChangeButtonTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 20.w,
   fontWeight: FontWeight.w500,
   color: primaryButtonBackground,
@@ -453,7 +451,7 @@ TextStyle profileChangeButtonTextStyle = TextStyle(
   height: primaryFontHeight,
 );
 TextStyle profileAvatarChangeTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
@@ -465,92 +463,92 @@ TextStyle profileAvatarChangeTextStyle = TextStyle(
 // 상금 액수
 // 홈-상금-상금상세-상금타이틀
 TextStyle subLeagueTitleTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w400,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-상금액수
 TextStyle subLeagueAwardTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 40.w,
   fontWeight: FontWeight.w500,
   color: yachtDarkGrey,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 상금박스-상금액수한글
 TextStyle awardAmountKoreanTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 24.w,
   fontWeight: FontWeight.w300,
   color: yachtViolet.withOpacity(0.3),
   letterSpacing: 3,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-설명
 TextStyle subLeagueAwardDescriptionStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-룰
 TextStyle subLeagueAwardRulesStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 12.w,
   fontWeight: FontWeight.w400,
   color: yachtGrey,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오포션텍스트
 TextStyle subLeagueAwardPortionStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 22.w,
   fontWeight: FontWeight.w600,
   color: yachtBlack,
   letterSpacing: 0.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오네임텍스트
 TextStyle subLeagueAwardStockNameStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: 0.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨 텍스트
 TextStyle subLeagueAwardLabelStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w400,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오코멘트 텍스트
 TextStyle subLeagueAwardCommentStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨총상금 텍스트 new
@@ -559,7 +557,7 @@ TextStyle subLeagueAwardLabelTotalTextStyle = TextStyle(
   fontSize: 12.w,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨총상금액수 텍스트 new
@@ -569,7 +567,7 @@ TextStyle subLeagueAwardLabelTotalValueTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨개별주식 텍스트 new
@@ -578,7 +576,7 @@ TextStyle subLeagueAwardLabelStockTextStyle = TextStyle(
   fontSize: 14.w,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨개별주식가치 텍스트 new
@@ -588,7 +586,7 @@ TextStyle subLeagueAwardLabelStockPriceTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨수익률 텍스트 new
@@ -598,44 +596,44 @@ TextStyle subLeagueAwardLabelPLTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -0.5,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 홈-상금박스-상금액수
 TextStyle awardModuleSliderAmountTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 34.w,
   fontWeight: FontWeight.w500,
   color: yachtDarkGrey,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 // 홈-상금박스-상금액수한글
 TextStyle awardModuleSliderAmountKoreanTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w300,
   color: yachtViolet,
   letterSpacing: 3,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 // 홈-상금박스-상금기한
 TextStyle awardModuleSliderEndDateTimeTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 12.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -0.25,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 // 홈-섹션박스-헤더
 TextStyle awardModuleTitleTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 상금박스의 색깔.
@@ -656,7 +654,7 @@ const List<Color> portfolioColors = [
 // 앱 바 페이지 타이틀
 TextStyle appBarTitle = TextStyle(
   fontFamily: krFont,
-  fontSize: heading4Size,
+  fontSize: 22.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   height: primaryFontHeight,
@@ -702,6 +700,7 @@ TextStyle buttonTitleStyle = TextStyle(
 
 // 퀘스트 카드 내에 기간 표시
 TextStyle subheadingStyle = TextStyle(
+  fontFamily: krFont,
   fontSize: 14.w,
   color: yachtBlack,
   fontWeight: FontWeight.w300,
@@ -756,7 +755,7 @@ TextStyle simpleTextButtonStyle = TextStyle(
 TextStyle questResultRewardTitle = TextStyle(
   fontSize: bodySmallSize,
   // fontWeight: FontWeight.w500,
-  fontFamily: 'Default',
+  fontFamily: krFont,
   color: yachtBlack,
   letterSpacing: -0.5,
   height: primaryFontHeight,
@@ -791,59 +790,59 @@ TextStyle feedTitle = TextStyle(
 );
 
 TextStyle feedContent = TextStyle(
-  fontSize: 16.w,
+  fontSize: 14.w,
   fontFamily: krFont,
-  fontWeight: FontWeight.w300,
+  fontWeight: FontWeight.w400,
   color: yachtBlack,
   letterSpacing: -1.0,
   height: contentFontHeight,
 );
 
 TextStyle feedHashTag = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 12.w,
   fontWeight: FontWeight.w300,
   color: primaryButtonBackground,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle feedDateTime = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 10.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -0.5,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle feedCommentLikeCount = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -.5,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 금융백과사전
 TextStyle dictionaryKeyword = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: heading5Size,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 더보기
 TextStyle moreText = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
   color: yachtGrey,
   letterSpacing: 0.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 /// 세부 포스트 페이지
@@ -858,7 +857,7 @@ TextStyle simpleTierStyle = TextStyle(
   fontWeight: FontWeight.w600,
   color: tierName,
   letterSpacing: -0.5,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle snackBarStyle = TextStyle(
@@ -867,7 +866,7 @@ TextStyle snackBarStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -0.5,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 //// 다이얼로그
@@ -878,7 +877,7 @@ TextStyle dialogTitle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -0.5,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle dialogContent = TextStyle(
@@ -887,7 +886,7 @@ TextStyle dialogContent = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -0.5,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle dialogWarning = TextStyle(
@@ -896,7 +895,7 @@ TextStyle dialogWarning = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtRed,
   letterSpacing: -0.5,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 퀘스트카드 및 퀘스트 세부 페이지
@@ -906,7 +905,7 @@ TextStyle questDescription = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle questTerm = TextStyle(
@@ -915,7 +914,7 @@ TextStyle questTerm = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle questTitle = TextStyle(
@@ -924,65 +923,65 @@ TextStyle questTitle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle adsWarningTitle = TextStyle(
   fontSize: 16.w,
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: 0.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle adsWarningText = TextStyle(
   fontSize: 18.w,
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontWeight: FontWeight.w400,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle adsWarningButton = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 20.w,
   fontWeight: FontWeight.w500,
   color: Color(0xFFEFF2FA),
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle settingTitle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle settingContent = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle settingLogout = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
   color: yachtGrey,
   decoration: TextDecoration.underline,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle accountWarning = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w400,
   color: primaryButtonBackground,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle yachtChoiceBoxName = TextStyle(
@@ -990,7 +989,7 @@ TextStyle yachtChoiceBoxName = TextStyle(
   fontFamily: krFontW400,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle yachtChoiceReOrderableListTitle = TextStyle(
@@ -999,7 +998,7 @@ TextStyle yachtChoiceReOrderableListTitle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 마이페이지-퀘스트참여기록
@@ -1009,7 +1008,7 @@ TextStyle questRecordendDateTime = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle questRecordTitle = TextStyle(
@@ -1018,79 +1017,79 @@ TextStyle questRecordTitle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle accountVerificationTitle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle accountVerificationContent = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w400,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle accountButtonText = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 20.w,
   fontWeight: FontWeight.w500,
   color: Color(0xFFEFF2FA),
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle authNumText = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 20.w,
   fontWeight: FontWeight.w500,
   color: Colors.white,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle settingFriendsCodeDialogTitle = TextStyle(
   fontSize: 18.w,
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: 0.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle settingFriendsCodeDialogContent = TextStyle(
   fontSize: 18.w,
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle settingFriendsCodeStyle = TextStyle(
   fontSize: 18.w,
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontWeight: FontWeight.w300,
   color: yachtGrey,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle settingFriendsCodeButton1 = TextStyle(
   fontSize: 16.w,
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontWeight: FontWeight.w500,
   color: buttonNormal,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle settingFriendsCodeButton2 = TextStyle(
   fontSize: 16.w,
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontWeight: FontWeight.w500,
   color: yachtViolet,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle questRecordSelection = TextStyle(
@@ -1099,7 +1098,7 @@ TextStyle questRecordSelection = TextStyle(
   fontWeight: FontWeight.w600,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 요트 설명서 다이얼로그
@@ -1109,7 +1108,7 @@ TextStyle yachtInstructionDialogTitle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle yachtInstructionDialogSubtitle = TextStyle(
@@ -1118,7 +1117,7 @@ TextStyle yachtInstructionDialogSubtitle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle yachtInstructionDialogDescription = TextStyle(
@@ -1127,7 +1126,7 @@ TextStyle yachtInstructionDialogDescription = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 뱃지 설명서 다이얼로그
@@ -1137,7 +1136,7 @@ TextStyle yachtBadgesDialogTitle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: 0.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle yachtBadgesDescriptionDialogTitle = TextStyle(
   fontSize: 18.w,
@@ -1145,7 +1144,7 @@ TextStyle yachtBadgesDescriptionDialogTitle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle yachtBadgesDescriptionDialogContent = TextStyle(
   fontSize: 16.w,
@@ -1153,7 +1152,7 @@ TextStyle yachtBadgesDescriptionDialogContent = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 // 출고 다이얼로그
 TextStyle yachtDeliveryDialogTitle = TextStyle(
@@ -1162,7 +1161,7 @@ TextStyle yachtDeliveryDialogTitle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: 0.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle yachtDeliveryDialogText = TextStyle(
   fontSize: 18.w,
@@ -1170,22 +1169,22 @@ TextStyle yachtDeliveryDialogText = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle yachtDeliveryDialogText2 = TextStyle(
   fontSize: 18.w,
   fontFamily: krFontW400,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle yachtDeliveryDialogButtonText = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w500,
   color: buttonNormal,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 // 랭킹뷰
 TextStyle rankMainText = TextStyle(
@@ -1194,14 +1193,14 @@ TextStyle rankMainText = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle rankNameText = TextStyle(
   fontFamily: krFontW400,
   fontSize: 18.w,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle rankMainBoldText = TextStyle(
   fontFamily: krFont,
@@ -1209,7 +1208,7 @@ TextStyle rankMainBoldText = TextStyle(
   fontWeight: FontWeight.w600,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle rankDescriptionBoldText = TextStyle(
   fontFamily: krFont,
@@ -1217,7 +1216,7 @@ TextStyle rankDescriptionBoldText = TextStyle(
   fontWeight: FontWeight.w600,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle rankDescriptionMainText = TextStyle(
   fontFamily: krFont,
@@ -1225,14 +1224,14 @@ TextStyle rankDescriptionMainText = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle rankDescriptionContentText = TextStyle(
   fontFamily: krFontW400,
   fontSize: 14.w,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 TextStyle notExistsText = TextStyle(
   fontFamily: krFont,
@@ -1240,7 +1239,7 @@ TextStyle notExistsText = TextStyle(
   fontSize: 16.w,
   color: yachtDarkGrey,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 //알림뷰
 TextStyle notificationCategory = TextStyle(
@@ -1249,7 +1248,7 @@ TextStyle notificationCategory = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle notificationContent = TextStyle(
@@ -1258,7 +1257,7 @@ TextStyle notificationContent = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle notificationContentForDetail = TextStyle(
@@ -1267,7 +1266,7 @@ TextStyle notificationContentForDetail = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // 튜토리얼 설명 텍스트
@@ -1277,7 +1276,7 @@ TextStyle tutorialDescriptionStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtViolet,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // Survey
@@ -1288,7 +1287,7 @@ TextStyle surveyTitle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle surveySelection = TextStyle(
@@ -1297,7 +1296,7 @@ TextStyle surveySelection = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 TextStyle pickManyCircleName = TextStyle(
@@ -1306,7 +1305,7 @@ TextStyle pickManyCircleName = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtViolet,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: primaryFontHeight,
 );
 
 // BUTTONS
@@ -1333,8 +1332,7 @@ Container simpleTextContainerButton(
                 Text(
                   text,
                   textAlign: TextAlign.center,
-                  style:
-                      simpleTextButtonStyle.copyWith(color: Colors.transparent),
+                  style: simpleTextButtonStyle.copyWith(color: Colors.transparent),
                 ),
                 Positioned(
                   child: SizedBox(
@@ -1383,8 +1381,7 @@ Container textContainerButtonWithOptions({
       child: Text(
         text,
         style: isDarkBackground
-            ? simpleTextButtonStyle.copyWith(
-                color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
+            ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
             : simpleTextButtonStyle.copyWith(fontSize: fontSize ?? bodyBigSize),
       ),
     ),
@@ -1407,10 +1404,8 @@ Container bigTextContainerButton({
       child: Text(
         text,
         style: isDisabled
-            ? simpleTextButtonStyle.copyWith(
-                color: yachtGrey, fontSize: heading5Size)
-            : simpleTextButtonStyle.copyWith(
-                fontSize: heading5Size, color: primaryButtonText),
+            ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
+            : simpleTextButtonStyle.copyWith(fontSize: heading5Size, color: primaryButtonText),
       ),
     ),
   );
@@ -1428,43 +1423,35 @@ Container sectionBox({
     height: height,
     width: width,
     padding: padding ?? EdgeInsets.all(0),
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
     child: child,
   );
 }
 
 // 기본 박스 데코레이션
-BoxDecoration yachtBoxDecoration = BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.circular(12.w),
-    boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]);
+BoxDecoration yachtBoxDecoration = BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
 
 // 퀘스트 선택지 박스 데코레이션
-BoxDecoration yachtChoiceBoxDecoration = BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.circular(10.w),
-    boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]);
+BoxDecoration yachtChoiceBoxDecoration =
+    BoxDecoration(color: white, borderRadius: BorderRadius.circular(10.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -1479,16 +1466,13 @@ Container sectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1504,9 +1488,7 @@ Container sectionBoxWithBottomButton({
           width: double.infinity,
           decoration: BoxDecoration(
               color: yachtViolet,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12.w),
-                  bottomRight: Radius.circular(12.w))),
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -1531,16 +1513,13 @@ Container secondarySectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1556,9 +1535,7 @@ Container secondarySectionBoxWithBottomButton({
           width: double.infinity,
           decoration: BoxDecoration(
               color: buttonNormal,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12.w),
-                  bottomRight: Radius.circular(12.w))),
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -1579,21 +1556,14 @@ class SectionBoxWithBottomButtonAndBorder extends StatefulWidget {
   final Widget child;
 
   const SectionBoxWithBottomButtonAndBorder(
-      {Key? key,
-      this.height,
-      this.width,
-      this.padding,
-      this.buttonTitle,
-      required this.child})
+      {Key? key, this.height, this.width, this.padding, this.buttonTitle, required this.child})
       : super(key: key);
 
   @override
-  _SectionBoxWithBottomButtonAndBorderState createState() =>
-      _SectionBoxWithBottomButtonAndBorderState();
+  _SectionBoxWithBottomButtonAndBorderState createState() => _SectionBoxWithBottomButtonAndBorderState();
 }
 
-class _SectionBoxWithBottomButtonAndBorderState
-    extends State<SectionBoxWithBottomButtonAndBorder> {
+class _SectionBoxWithBottomButtonAndBorderState extends State<SectionBoxWithBottomButtonAndBorder> {
   RxDouble animator = 0.0.obs;
   late Timer timer;
   @override
@@ -1651,9 +1621,8 @@ class _SectionBoxWithBottomButtonAndBorderState
               width: double.infinity,
               decoration: BoxDecoration(
                   color: yachtViolet,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(12.w),
-                      bottomRight: Radius.circular(12.w))),
+                  borderRadius:
+                      BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
               child: Center(
                 child: Text(
                   widget.buttonTitle!,
@@ -1723,8 +1692,7 @@ class _SectionBoxWithBottomButtonAndBorderState
 //   );
 // }
 
-Container simpleTierRRectBox(
-    {int exp = 0, double? fontSize, double width = 70}) {
+Container simpleTierRRectBox({int exp = 0, double? fontSize, double width = 70}) {
   String tierName = getTierByExp(exp);
   String tierTitle = separateStringFromTier(tierName);
   // String tierTitle = "intern";
@@ -1767,13 +1735,11 @@ Container simpleTierRRectBox(
                 : 12.w),
     // width: width.w,
     // height: (width / 3.75).w,
-    decoration: BoxDecoration(
-        color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
+    decoration: BoxDecoration(color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
     child: Center(
       child: Text(
         '${tierKorName[tierTitle]} $tierLevel',
-        style: simpleTierStyle.copyWith(
-            fontSize: fontSize, fontWeight: FontWeight.w500),
+        style: simpleTierStyle.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
       ),
     ),
   );
@@ -1785,9 +1751,7 @@ ClipRect glassmorphismContainer({required Widget child}) {
         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
         child: Container(
           padding: EdgeInsets.all(6.w),
-          decoration: BoxDecoration(
-              color: glassmorphismBackgroundColor,
-              borderRadius: BorderRadius.circular(10.w)),
+          decoration: BoxDecoration(color: glassmorphismBackgroundColor, borderRadius: BorderRadius.circular(10.w)),
           child: child,
         )),
   );
@@ -1821,9 +1785,7 @@ Container appBarWithCloseButton({required String title, double? height}) {
         Flexible(
           child: Container(),
         ),
-        Center(
-            child: Text(title,
-                style: appBarTitle.copyWith(fontFamily: 'Default'))),
+        Center(child: Text(title, style: appBarTitle.copyWith(fontFamily: krFont))),
         Flexible(
           child: Align(
             alignment: Alignment.centerRight,
@@ -1844,8 +1806,7 @@ Container appBarWithoutCloseButton({required String title, double? height}) {
   return Container(
     height: height ?? 60.w,
     color: white,
-    child: Center(
-        child: Text(title, style: appBarTitle.copyWith(fontFamily: 'Default'))),
+    child: Center(child: Text(title, style: appBarTitle.copyWith(fontFamily: krFont))),
   );
 }
 
@@ -1933,8 +1894,7 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
           Navigator.of(context).pop();
         },
         child: Container(
-          padding: EdgeInsets.fromLTRB(
-              primaryPaddingSize, 0.0, primaryPaddingSize, primaryPaddingSize),
+          padding: EdgeInsets.fromLTRB(primaryPaddingSize, 0.0, primaryPaddingSize, primaryPaddingSize),
           width: double.infinity,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -1944,21 +1904,16 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
               Column(children: [
                 Row(
                   children: [
-                    Expanded(
-                        child: Center(child: Text("티어 엠블럼", style: feedTitle))),
-                    Expanded(
-                        child: Center(child: Text("필요 경험치", style: feedTitle)))
+                    Expanded(child: Center(child: Text("티어 엠블럼", style: feedTitle))),
+                    Expanded(child: Center(child: Text("필요 경험치", style: feedTitle)))
                   ],
                 ),
                 SizedBox(height: correctHeight(10.w, feedTitle.fontSize, 0.0)),
                 ...List.generate(
-                    tierSystemModelRx.value == null
-                        ? 0
-                        : getOnlyTierTitle(tierSystemModelRx.value!.tierNames)
-                            .length, (index) {
-                  bool isThisUserBelongthisTier = getOnlyTierTitle(
-                          tierSystemModelRx.value!.tierNames)[index] ==
-                      thisUserTierTitle;
+                    tierSystemModelRx.value == null ? 0 : getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length,
+                    (index) {
+                  bool isThisUserBelongthisTier =
+                      getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index] == thisUserTierTitle;
                   return Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -2000,62 +1955,28 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
                                       Text(
                                         index == 0
                                             ? 0.toString()
-                                            : index ==
-                                                    getOnlyTierTitle(
-                                                                tierSystemModelRx
-                                                                    .value!
-                                                                    .tierNames)
-                                                            .length -
-                                                        1
+                                            : index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
                                                 ? "상위 1%"
-                                                : getExpNeededForEachTierTitle(
-                                                        tierSystemModelRx
-                                                            .value!.tierNames,
-                                                        tierSystemModelRx.value!
-                                                            .tierStops)[index -
-                                                        1]
+                                                : getExpNeededForEachTierTitle(tierSystemModelRx.value!.tierNames,
+                                                        tierSystemModelRx.value!.tierStops)[index - 1]
                                                     .toString(),
-                                        style: buttonTitleStyle.copyWith(
-                                            color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
                                       ),
                                       Text(
-                                        index ==
-                                                getOnlyTierTitle(
-                                                            tierSystemModelRx
-                                                                .value!
-                                                                .tierNames)
-                                                        .length -
-                                                    1
+                                        index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
                                             ? ""
                                             : " ~ ",
-                                        style: buttonTitleStyle.copyWith(
-                                            color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
                                       ),
                                       Text(
-                                        index ==
-                                                getOnlyTierTitle(
-                                                            tierSystemModelRx
-                                                                .value!
-                                                                .tierNames)
-                                                        .length -
-                                                    2
+                                        index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 2
                                             ? ""
-                                            : index ==
-                                                    getOnlyTierTitle(
-                                                                tierSystemModelRx
-                                                                    .value!
-                                                                    .tierNames)
-                                                            .length -
-                                                        1
+                                            : index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
                                                 ? " "
-                                                : getExpNeededForEachTierTitle(
-                                                        tierSystemModelRx
-                                                            .value!.tierNames,
-                                                        tierSystemModelRx.value!
-                                                            .tierStops)[index]
+                                                : getExpNeededForEachTierTitle(tierSystemModelRx.value!.tierNames,
+                                                        tierSystemModelRx.value!.tierStops)[index]
                                                     .toString(),
-                                        style: buttonTitleStyle.copyWith(
-                                            color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
                                       ),
                                     ],
                                   )),
@@ -2153,7 +2074,7 @@ CustomHeader reloadHeader(bool isTopOfScreen) {
             alignment: Alignment.bottomCenter,
             child: Text(
               footer.value,
-              style: TextStyle(fontSize: 14, fontFamily: 'Default'),
+              style: TextStyle(fontSize: 14, fontFamily: krFont),
             ),
           ),
         );
@@ -2175,8 +2096,7 @@ CustomHeader reloadHeader(bool isTopOfScreen) {
 class PrimaryWebView extends StatelessWidget {
   final String title;
   final String url;
-  PrimaryWebView({Key? key, required this.title, required this.url})
-      : super(key: key);
+  PrimaryWebView({Key? key, required this.title, required this.url}) : super(key: key);
   final GlobalKey webViewKey = GlobalKey();
   final RxDouble progessPercent = 0.0.obs;
 
@@ -2209,8 +2129,7 @@ class PrimaryWebView extends StatelessWidget {
                       ? LinearProgressIndicator(
                           value: progessPercent.value,
                           backgroundColor: primaryButtonText,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(yachtViolet),
+                          valueColor: AlwaysStoppedAnimation<Color>(yachtViolet),
                         )
                       : Container()),
             ),
@@ -2233,11 +2152,8 @@ class PrimaryWebView extends StatelessWidget {
                 //     urlController.text = this.url;
                 //   });
                 // },
-                androidOnPermissionRequest:
-                    (controller, origin, resources) async {
-                  return PermissionRequestResponse(
-                      resources: resources,
-                      action: PermissionRequestResponseAction.GRANT);
+                androidOnPermissionRequest: (controller, origin, resources) async {
+                  return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
                 },
                 // shouldOverrideUrlLoading: (controller, navigationAction) async {
 
@@ -2249,6 +2165,114 @@ class PrimaryWebView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+// 왼쪽 상단에 타이틀 띄우고 스크롤 내릴 때 타이틀 사라지며 가운데에 작게 나타나는 앱바
+class YachtPrimaryAppBarDelegate extends SliverPersistentHeaderDelegate {
+  final double offset;
+  final String tabTitle;
+  final Widget? buttonWidget;
+  YachtPrimaryAppBarDelegate({
+    required this.offset,
+    required this.tabTitle,
+    this.buttonWidget,
+  });
+
+  @override
+  double get minExtent => 52.w + ScreenUtil().statusBarHeight;
+
+  @override
+  double get maxExtent => minExtent + 38.w;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    // TODO: implement shouldRebuild
+    return maxExtent != oldDelegate.maxExtent || minExtent != oldDelegate.minExtent;
+    // ||
+    // safeAreaPadding != oldDelegate.safeAreaPadding;
+  }
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    double opacity = offset > 30.w ? 1 : offset / 30.w;
+    // TODO: implement build
+    return ClipRect(
+      child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+          child: Container(
+            // Don't wrap this in any SafeArea widgets, use padding instead
+            // padding: EdgeInsets.only(top: safeAreaPadding.top),
+
+            height: maxExtent,
+            color: primaryBackgroundColor.withOpacity(.65),
+            // color: Colors.blue.withOpacity(.65),
+
+            child: Column(
+              children: [
+                SizedBox(height: ScreenUtil().statusBarHeight),
+                Expanded(
+                  child: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        primaryPaddingSize,
+                        0,
+                        primaryPaddingSize,
+                        0,
+                      ),
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  tabTitle,
+                                  style: appBarTitle.copyWith(
+                                    fontSize: 18.w,
+                                    fontWeight: FontWeight.w600,
+                                    color: appBarTitle.color!.withOpacity(
+                                      opacity,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Align(
+                                alignment: Alignment.bottomLeft,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      tabTitle,
+                                      style: appBarTitle.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: appBarTitle.color!.withOpacity(
+                                            1 - opacity,
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          buttonWidget != null
+                              ? Positioned(
+                                  top: 12.w,
+                                  right: 0,
+                                  child: buttonWidget!,
+                                )
+                              : Container(),
+                        ],
+                      )),
+                ),
+              ],
+            ),
+          )),
     );
   }
 }

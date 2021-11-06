@@ -251,6 +251,22 @@ flutter:
       fonts:
         - asset: assets/fonts/s-core/SCDream4.otf
 
+    - family: IBMPlex
+      fonts:
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Regular.ttf
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Light.ttf
+          weight: 300
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Bold.ttf
+          weight: 700
+
     - family: SCore
       fonts:
         # - asset: assets/fonts/s-core/SCDream4.otf

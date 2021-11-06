@@ -11,6 +11,7 @@ import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/screens/home/home_view.dart';
 
 import 'package:yachtOne/screens/home/performance_test_home_view.dart';
+import 'package:yachtOne/screens/insight/insight_view.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/ranks/rank_controller.dart';
@@ -22,7 +23,8 @@ class StartupView extends GetView<StartupViewModel> {
   // const StartupView({Key? key}) : super(key: key);
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final double iconSize = 30.w;
+  final double iconSize = 38.w;
+  final double unselectedOpacity = 1;
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   // TODO: implement controller
@@ -33,6 +35,7 @@ class StartupView extends GetView<StartupViewModel> {
     List<String> tabPageName = ['Home', 'Community', 'ProfileMy'];
     RxList<Widget> pageList = [
       HomeView(),
+      InsightView(),
       CommunityView(),
       // Container(color: Colors.red),
       // Container(color: yachtViolet),
@@ -75,29 +78,34 @@ class StartupView extends GetView<StartupViewModel> {
                   selectedFontSize: 0,
                   unselectedFontSize: 0,
                   // elevation: 8,
-
+                  type: BottomNavigationBarType.fixed,
                   backgroundColor: primaryBackgroundColor.withOpacity(.65),
                   showSelectedLabels: false,
                   showUnselectedLabels: false,
                   currentIndex: controller.selectedPage.value,
                   onTap: (index) {
-                    if (controller.selectedPage.value != index) {
-                      if (controller.selectedPage.value == 0) {
-                        _mixpanelService.mixpanel.track('Home');
-                        _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
-                        // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
-                      } else if (controller.selectedPage.value == 1) {
-                        _mixpanelService.mixpanel.track('Community');
-                        _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
-                        // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
-                      } else {
-                        _mixpanelService.mixpanel.track('ProfileMy');
-                        _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
-                        // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
-                      }
-                      _mixpanelService.mixpanel.track('${tabPageName[index]}-enter');
+                    // if (controller.selectedPage.value != index) {
+                    //   if (controller.selectedPage.value == 0) {
+                    //     _mixpanelService.mixpanel.track('Home');
+                    //     _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
+                    //     // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
+                    //   } else if (controller.selectedPage.value == 1) {
+                    //     _mixpanelService.mixpanel.track('Community');
+                    //     _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
+                    //     // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
+                    //   } else {
+                    //     _mixpanelService.mixpanel.track('ProfileMy');
+                    //     _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
+                    //     // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
+                    //   }
+                    //   _mixpanelService.mixpanel.track('${tabPageName[index]}-enter');
+                    // }
+                    if (index == controller.selectedPage.value) {
+                      print("same page");
+                      HomeView().goToTop();
+                    } else {
+                      controller.selectedPage(index);
                     }
-                    controller.selectedPage(index);
                   },
                   items: [
                     BottomNavigationBarItem(
@@ -107,20 +115,40 @@ class StartupView extends GetView<StartupViewModel> {
                           'assets/icons/bottom_navigation/home_unselected.png',
                           width: iconSize,
                           height: iconSize,
+                          color: yachtBlack.withOpacity(unselectedOpacity),
                         ),
                       ),
-                      activeIcon: Image.asset(
-                        'assets/icons/bottom_navigation/home_selected.png',
-                        width: iconSize,
-                        height: iconSize,
+                      activeIcon: Container(
+                        // color: Colors.blue,
+                        child: Image.asset(
+                          'assets/icons/bottom_navigation/home_selected.png',
+                          width: iconSize,
+                          height: iconSize,
+                        ),
                       ),
                       label: '',
                     ),
+                    BottomNavigationBarItem(
+                        icon: Container(
+                          // color: Colors.blue,
+                          child: Image.asset(
+                            'assets/icons/bottom_navigation/insight_unselected.png',
+                            width: iconSize,
+                            height: iconSize,
+                          ),
+                        ),
+                        activeIcon: Image.asset(
+                          'assets/icons/bottom_navigation/insight_selected.png',
+                          width: iconSize,
+                          height: iconSize,
+                        ),
+                        label: ''),
                     BottomNavigationBarItem(
                         icon: Image.asset(
                           'assets/icons/bottom_navigation/community_unselected.png',
                           width: iconSize,
                           height: iconSize,
+                          // color: yachtBlack.withOpacity(unselectedOpacity),
                         ),
                         activeIcon: Image.asset(
                           'assets/icons/bottom_navigation/community_selected.png',
@@ -133,6 +161,7 @@ class StartupView extends GetView<StartupViewModel> {
                           'assets/icons/bottom_navigation/my_unselected.png',
                           width: iconSize,
                           height: iconSize,
+                          color: yachtBlack.withOpacity(unselectedOpacity),
                         ),
                         activeIcon: Image.asset(
                           'assets/icons/bottom_navigation/my_selected.png',
