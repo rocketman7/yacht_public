@@ -13,8 +13,6 @@ import 'package:yachtOne/widgets/loading_container.dart';
 import '../../../locator.dart';
 
 class ReadingContentView extends GetView<ReadingContentViewModel> {
-  final HomeViewModel homeViewModel;
-  ReadingContentView({Key? key, required this.homeViewModel}) : super(key: key);
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   // TODO: implement controller
@@ -29,7 +27,7 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
         child: Text("요트 매거진", style: sectionTitle),
       ),
       SizedBox(
-        height: heightSectionTitleAndBox,
+        height: primaryPaddingSize,
       ),
       SingleChildScrollView(
           clipBehavior: Clip.none,

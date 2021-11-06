@@ -11,8 +11,6 @@ import '../../../locator.dart';
 import 'today_market_view_model.dart';
 
 class TodayMarketView extends GetView<TodayMarketViewModel> {
-  final HomeViewModel homeViewModel;
-  TodayMarketView({Key? key, required this.homeViewModel}) : super(key: key);
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   // TODO: implement controller
@@ -28,14 +26,15 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: primaryPaddingSize),
-          // color: Colors.red,
-          child: Text("오늘의 시장", style: sectionTitle),
-        ),
-        SizedBox(
-          height: heightSectionTitleAndBox,
-        ),
+        SizedBox(height: 14.w),
+        // Container(
+        //   padding: EdgeInsets.symmetric(horizontal: primaryPaddingSize),
+        //   // color: Colors.red,
+        //   child: Text("오늘의 시장", style: sectionTitle),
+        // ),
+        // SizedBox(
+        //   height: heightSectionTitleAndBox,
+        // ),
         Padding(
           padding: primaryHorizontalPadding,
           child: sectionBox(
@@ -57,6 +56,7 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                                 Get.to(() => TodayMarketWebView(todayMarket: controller.todayMarkets[index]));
                               },
                               child: Container(
+                                clipBehavior: Clip.none,
                                 padding: primaryHorizontalPadding,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,19 +64,31 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                                   children: [
                                     Text(
                                       '#${controller.todayMarkets[index].category}',
-                                      style: subheadingStyle.copyWith(color: yachtViolet, fontWeight: FontWeight.w400),
+                                      style: subheadingStyle.copyWith(
+                                        color: yachtViolet,
+                                        fontWeight: FontWeight.w500,
+                                        // height: 1.1,
+                                      ),
                                     ),
                                     SizedBox(
-                                      height: correctHeight(20.w, subheadingStyle.fontSize, sectionTitle.fontSize),
+                                      height: correctHeight(
+                                        20.w,
+                                        subheadingStyle.fontSize,
+                                        sectionTitle.fontSize,
+                                      ),
                                     ),
                                     Text(controller.todayMarkets[index].title,
-                                        style: sectionTitle.copyWith(height: 1.35)),
+                                        style: sectionTitle.copyWith(height: 1.4)),
                                     SizedBox(
-                                      height: correctHeight(14.w, sectionTitle.fontSize, contentStyle.fontSize),
+                                      height: correctHeight(
+                                        12.w,
+                                        sectionTitle.fontSize,
+                                        contentStyle.fontSize,
+                                      ),
                                     ),
                                     Text(
                                       controller.todayMarkets[index].summary ?? "",
-                                      style: contentStyle,
+                                      style: contentStyle.copyWith(height: 1.4),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),

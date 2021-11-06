@@ -113,347 +113,285 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              detailPostViewModel
-                                                  .post.writerUserName,
-                                              style: feedWriterName,
-                                            ),
-                                            SizedBox(
-                                              width: 8.w,
-                                            ),
-                                            // 티어 컨테이너
-                                            GestureDetector(
-                                                onTap: () => showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return yachtTierInfoPopUp(
-                                                          context,
-                                                          post.writerExp ?? 0);
-                                                    }),
-                                                child: simpleTierRRectBox(
-                                                    exp: detailPostViewModel
-                                                            .post.writerExp ??
-                                                        0)),
-                                            Spacer(),
-                                            PopupMenuButton(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 4),
-                                              child: Row(children: [
-                                                SizedBox(
-                                                  width: 8.w,
-                                                ),
-                                                Container(
-                                                  width: 14.w,
-                                                  height: 16.w,
-                                                  // color: Colors.blue[50],
-                                                  child: SvgPicture.asset(
-                                                    'assets/icons/show_more.svg',
-                                                    color: yachtBlack,
+                                    Container(
+                                      height: 36.w,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                detailPostViewModel
+                                                    .post.writerUserName,
+                                                style: feedWriterName,
+                                              ),
+                                              SizedBox(
+                                                width: 8.w,
+                                              ),
+                                              // 티어 컨테이너
+                                              GestureDetector(
+                                                  onTap: () => showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return yachtTierInfoPopUp(
+                                                            context,
+                                                            post.writerExp ??
+                                                                0);
+                                                      }),
+                                                  child: simpleTierRRectBox(
+                                                      exp: detailPostViewModel
+                                                              .post.writerExp ??
+                                                          0)),
+                                              Spacer(),
+                                              PopupMenuButton(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 4),
+                                                child: Row(children: [
+                                                  SizedBox(
+                                                    width: 8.w,
                                                   ),
-                                                ),
-                                              ]),
-                                              onSelected: (value) {
-                                                switch (value) {
-                                                  case 'edit':
-                                                    Get.bottomSheet(
-                                                      EditingMyPost(
-                                                        // contentFormKey: _contentFormKey,
-                                                        // contentController: _contentController,
-                                                        communityViewModel:
-                                                            communityViewModel,
-                                                        post: post,
-                                                      ),
-                                                      isScrollControlled: true,
-                                                      ignoreSafeArea:
-                                                          false, // add this
-                                                    );
-                                                    break;
-                                                  case 'delete':
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return Dialog(
-                                                              insetPadding:
-                                                                  primaryHorizontalPadding,
-                                                              child: Container(
-                                                                  padding: EdgeInsets.fromLTRB(
-                                                                      14.w,
-                                                                      correctHeight(
-                                                                          14.w,
-                                                                          0.0,
-                                                                          dialogTitle
-                                                                              .fontSize),
-                                                                      14.w,
-                                                                      14.w),
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10.w)),
-                                                                  child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: [
-                                                                      Text("알림",
-                                                                          style:
-                                                                              dialogTitle),
-                                                                      SizedBox(
-                                                                          height: correctHeight(
-                                                                              14.w,
-                                                                              0.0,
-                                                                              dialogTitle.fontSize)),
-                                                                      SizedBox(
-                                                                          height: correctHeight(
-                                                                              24.w,
-                                                                              0.w,
-                                                                              dialogContent.fontSize)),
-                                                                      Text(
-                                                                          "정말 삭제하시겠습니까?",
-                                                                          style:
-                                                                              dialogContent),
-                                                                      Text(
-                                                                        "삭제 후 되돌릴 수 없습니다.",
-                                                                        style:
-                                                                            dialogWarning,
-                                                                      ),
-                                                                      SizedBox(
-                                                                          height: correctHeight(
-                                                                              24.w,
-                                                                              0.w,
-                                                                              dialogContent.fontSize)),
-                                                                      Row(
-                                                                        children: [
-                                                                          Expanded(
-                                                                            child: GestureDetector(
-                                                                                onTap: () async {
-                                                                                  HapticFeedback.lightImpact();
-                                                                                  await communityViewModel.deletePost(post);
-                                                                                  await communityViewModel.getPost();
-                                                                                  await detailPostViewModel.getComments(post);
-                                                                                  Navigator.of(context).pop();
-                                                                                  Get.back();
-                                                                                  yachtSnackBar("피드가 삭제되었습니다");
-                                                                                },
-                                                                                child: textContainerButtonWithOptions(
-                                                                                  text: "예",
-                                                                                  isDarkBackground: true,
-                                                                                  height: 44.w,
-                                                                                )),
-                                                                          ),
-                                                                          SizedBox(
-                                                                              width: 8.w),
-                                                                          Expanded(
-                                                                            child: InkWell(
-                                                                                onTap: () {
-                                                                                  Navigator.of(context).pop();
-                                                                                  // Get.back(closeOverlays: true);
-                                                                                },
-                                                                                child: textContainerButtonWithOptions(text: "아니오", isDarkBackground: false, height: 44.w)),
-                                                                          )
-                                                                        ],
-                                                                      )
-                                                                    ],
-                                                                  )));
-                                                        });
-                                                    break;
-                                                  case 'block':
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return Dialog(
-                                                              insetPadding:
-                                                                  primaryHorizontalPadding,
-                                                              child: Container(
-                                                                  padding: EdgeInsets.fromLTRB(
-                                                                      14.w,
-                                                                      correctHeight(
-                                                                          14.w,
-                                                                          0.0,
-                                                                          dialogTitle
-                                                                              .fontSize),
-                                                                      14.w,
-                                                                      14.w),
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10.w)),
-                                                                  child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: [
-                                                                      Text("알림",
-                                                                          style:
-                                                                              dialogTitle),
-                                                                      SizedBox(
-                                                                          height: correctHeight(
-                                                                              14.w,
-                                                                              0.0,
-                                                                              dialogTitle.fontSize)),
-                                                                      SizedBox(
-                                                                          height: correctHeight(
-                                                                              24.w,
-                                                                              0.w,
-                                                                              dialogContent.fontSize)),
-                                                                      Text(
-                                                                          "유저를 차단하시겠습니까?",
-                                                                          style:
-                                                                              dialogContent),
-                                                                      // Text(
-                                                                      //   "삭제 후 되돌릴 수 없습니다.",
-                                                                      //   style: dialogWarning,
-                                                                      // ),
-                                                                      SizedBox(
-                                                                          height: correctHeight(
-                                                                              24.w,
-                                                                              0.w,
-                                                                              dialogContent.fontSize)),
-                                                                      Row(
-                                                                        children: [
-                                                                          Expanded(
-                                                                            child: GestureDetector(
-                                                                                onTap: () async {
-                                                                                  HapticFeedback.lightImpact();
-                                                                                  await communityViewModel.blockThisUser(post.writerUid);
-                                                                                  await communityViewModel.reloadPost();
-                                                                                  Navigator.of(context).pop();
-                                                                                  yachtSnackBar("유저를 차단하였습니다");
-                                                                                },
-                                                                                child: textContainerButtonWithOptions(
-                                                                                  text: "예",
-                                                                                  isDarkBackground: true,
-                                                                                  height: 44.w,
-                                                                                )),
-                                                                          ),
-                                                                          SizedBox(
-                                                                              width: 8.w),
-                                                                          Expanded(
-                                                                            child: InkWell(
-                                                                                onTap: () {
-                                                                                  Navigator.of(context).pop();
-                                                                                  // Get.back(closeOverlays: true);
-                                                                                },
-                                                                                child: textContainerButtonWithOptions(text: "아니오", isDarkBackground: false, height: 44.w)),
-                                                                          )
-                                                                        ],
-                                                                      )
-                                                                    ],
-                                                                  )));
-                                                        });
-                                                    break;
-                                                  case 'report':
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (context) {
-                                                          return Dialog(
-                                                              insetPadding:
-                                                                  primaryHorizontalPadding,
-                                                              child: Container(
-                                                                  padding: EdgeInsets.fromLTRB(
-                                                                      14.w,
-                                                                      correctHeight(
-                                                                          14.w,
-                                                                          0.0,
-                                                                          dialogTitle
-                                                                              .fontSize),
-                                                                      14.w,
-                                                                      14.w),
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10.w)),
-                                                                  child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .min,
-                                                                    children: [
-                                                                      Text("알림",
-                                                                          style:
-                                                                              dialogTitle),
-                                                                      SizedBox(
-                                                                          height: correctHeight(
-                                                                              24.w,
-                                                                              0.w,
-                                                                              dialogContent.fontSize)),
-                                                                      Text(
-                                                                          "이 글을 신고하시겠습니까?",
-                                                                          style:
-                                                                              dialogContent),
-                                                                      Text(
-                                                                        "신고한 유저는 자동으로 차단됩니다.",
-                                                                        style: dialogWarning.copyWith(
-                                                                            color:
-                                                                                yachtDarkGrey),
-                                                                      ),
-                                                                      SizedBox(
-                                                                          height: correctHeight(
-                                                                              24.w,
-                                                                              0.w,
-                                                                              dialogContent.fontSize)),
-                                                                      Row(
-                                                                        children: [
-                                                                          Expanded(
-                                                                            child: GestureDetector(
-                                                                                onTap: () async {
-                                                                                  HapticFeedback.lightImpact();
-                                                                                  await communityViewModel.blockThisUser(post.writerUid);
-                                                                                  await communityViewModel.reportThisUser(post);
-                                                                                  await communityViewModel.reloadPost();
-                                                                                  Navigator.of(context).pop();
-                                                                                  yachtSnackBar("유저를 신고/차단하였습니다");
-                                                                                },
-                                                                                child: textContainerButtonWithOptions(
-                                                                                  text: "신고하기",
-                                                                                  isDarkBackground: true,
-                                                                                  height: 44.w,
-                                                                                )),
-                                                                          ),
-                                                                          SizedBox(
-                                                                              width: 8.w),
-                                                                          Expanded(
-                                                                            child: InkWell(
-                                                                                onTap: () {
-                                                                                  Navigator.of(context).pop();
-                                                                                  // Get.back(closeOverlays: true);
-                                                                                },
-                                                                                child: textContainerButtonWithOptions(text: "취소", isDarkBackground: false, height: 44.w)),
-                                                                          )
-                                                                        ],
-                                                                      )
-                                                                    ],
-                                                                  )));
-                                                        });
-                                                    break;
-                                                  default:
-                                                }
-                                              },
-                                              itemBuilder: (context) {
-                                                return post.writerUid ==
-                                                        userModelRx.value!.uid
-                                                    ? communityMyShowMore
-                                                    : communityShowMore;
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        Text(
-                                          feedTimeHandler(detailPostViewModel
-                                              .post.writtenDateTime
-                                              .toDate()),
-                                          // x초전, x분 전, 일정 이후면 날짜로
-                                          style: feedDateTime,
-                                        ),
-                                      ],
+                                                  Container(
+                                                    width: 14.w,
+                                                    height: 16.w,
+                                                    // color: Colors.blue[50],
+                                                    child: SvgPicture.asset(
+                                                      'assets/icons/show_more.svg',
+                                                      color: yachtBlack,
+                                                    ),
+                                                  ),
+                                                ]),
+                                                onSelected: (value) {
+                                                  switch (value) {
+                                                    case 'edit':
+                                                      Get.bottomSheet(
+                                                        EditingMyPost(
+                                                          // contentFormKey: _contentFormKey,
+                                                          // contentController: _contentController,
+                                                          communityViewModel:
+                                                              communityViewModel,
+                                                          post: post,
+                                                        ),
+                                                        isScrollControlled:
+                                                            true,
+                                                        ignoreSafeArea:
+                                                            false, // add this
+                                                      );
+                                                      break;
+                                                    case 'delete':
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return Dialog(
+                                                                insetPadding:
+                                                                    primaryHorizontalPadding,
+                                                                child:
+                                                                    Container(
+                                                                        padding: EdgeInsets.fromLTRB(
+                                                                            14.w,
+                                                                            correctHeight(14.w, 0.0, dialogTitle.fontSize),
+                                                                            14.w,
+                                                                            14.w),
+                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                                        child: Column(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
+                                                                          children: [
+                                                                            Text("알림",
+                                                                                style: dialogTitle),
+                                                                            SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                                            Text("정말 삭제하시겠습니까?",
+                                                                                style: dialogContent),
+                                                                            Text(
+                                                                              "삭제 후 되돌릴 수 없습니다.",
+                                                                              style: dialogWarning,
+                                                                            ),
+                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                                            Row(
+                                                                              children: [
+                                                                                Expanded(
+                                                                                  child: GestureDetector(
+                                                                                      onTap: () async {
+                                                                                        HapticFeedback.lightImpact();
+                                                                                        await communityViewModel.deletePost(post);
+                                                                                        await communityViewModel.getPost();
+                                                                                        await detailPostViewModel.getComments(post);
+                                                                                        Navigator.of(context).pop();
+                                                                                        Get.back();
+                                                                                        yachtSnackBar("피드가 삭제되었습니다");
+                                                                                      },
+                                                                                      child: textContainerButtonWithOptions(
+                                                                                        text: "예",
+                                                                                        isDarkBackground: true,
+                                                                                        height: 44.w,
+                                                                                      )),
+                                                                                ),
+                                                                                SizedBox(width: 8.w),
+                                                                                Expanded(
+                                                                                  child: InkWell(
+                                                                                      onTap: () {
+                                                                                        Navigator.of(context).pop();
+                                                                                        // Get.back(closeOverlays: true);
+                                                                                      },
+                                                                                      child: textContainerButtonWithOptions(text: "아니오", isDarkBackground: false, height: 44.w)),
+                                                                                )
+                                                                              ],
+                                                                            )
+                                                                          ],
+                                                                        )));
+                                                          });
+                                                      break;
+                                                    case 'block':
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return Dialog(
+                                                                insetPadding:
+                                                                    primaryHorizontalPadding,
+                                                                child:
+                                                                    Container(
+                                                                        padding: EdgeInsets.fromLTRB(
+                                                                            14.w,
+                                                                            correctHeight(14.w, 0.0, dialogTitle.fontSize),
+                                                                            14.w,
+                                                                            14.w),
+                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                                        child: Column(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
+                                                                          children: [
+                                                                            Text("알림",
+                                                                                style: dialogTitle),
+                                                                            SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                                            Text("유저를 차단하시겠습니까?",
+                                                                                style: dialogContent),
+                                                                            // Text(
+                                                                            //   "삭제 후 되돌릴 수 없습니다.",
+                                                                            //   style: dialogWarning,
+                                                                            // ),
+                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                                            Row(
+                                                                              children: [
+                                                                                Expanded(
+                                                                                  child: GestureDetector(
+                                                                                      onTap: () async {
+                                                                                        HapticFeedback.lightImpact();
+                                                                                        await communityViewModel.blockThisUser(post.writerUid);
+                                                                                        await communityViewModel.reloadPost();
+                                                                                        Navigator.of(context).pop();
+                                                                                        yachtSnackBar("유저를 차단하였습니다");
+                                                                                      },
+                                                                                      child: textContainerButtonWithOptions(
+                                                                                        text: "예",
+                                                                                        isDarkBackground: true,
+                                                                                        height: 44.w,
+                                                                                      )),
+                                                                                ),
+                                                                                SizedBox(width: 8.w),
+                                                                                Expanded(
+                                                                                  child: InkWell(
+                                                                                      onTap: () {
+                                                                                        Navigator.of(context).pop();
+                                                                                        // Get.back(closeOverlays: true);
+                                                                                      },
+                                                                                      child: textContainerButtonWithOptions(text: "아니오", isDarkBackground: false, height: 44.w)),
+                                                                                )
+                                                                              ],
+                                                                            )
+                                                                          ],
+                                                                        )));
+                                                          });
+                                                      break;
+                                                    case 'report':
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return Dialog(
+                                                                insetPadding:
+                                                                    primaryHorizontalPadding,
+                                                                child:
+                                                                    Container(
+                                                                        padding: EdgeInsets.fromLTRB(
+                                                                            14.w,
+                                                                            correctHeight(14.w, 0.0, dialogTitle.fontSize),
+                                                                            14.w,
+                                                                            14.w),
+                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                                        child: Column(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
+                                                                          children: [
+                                                                            Text("알림",
+                                                                                style: dialogTitle),
+                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                                            Text("이 글을 신고하시겠습니까?",
+                                                                                style: dialogContent),
+                                                                            Text(
+                                                                              "신고한 유저는 자동으로 차단됩니다.",
+                                                                              style: dialogWarning.copyWith(color: yachtDarkGrey),
+                                                                            ),
+                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                                            Row(
+                                                                              children: [
+                                                                                Expanded(
+                                                                                  child: GestureDetector(
+                                                                                      onTap: () async {
+                                                                                        HapticFeedback.lightImpact();
+                                                                                        await communityViewModel.blockThisUser(post.writerUid);
+                                                                                        await communityViewModel.reportThisUser(post);
+                                                                                        await communityViewModel.reloadPost();
+                                                                                        Navigator.of(context).pop();
+                                                                                        yachtSnackBar("유저를 신고/차단하였습니다");
+                                                                                      },
+                                                                                      child: textContainerButtonWithOptions(
+                                                                                        text: "신고하기",
+                                                                                        isDarkBackground: true,
+                                                                                        height: 44.w,
+                                                                                      )),
+                                                                                ),
+                                                                                SizedBox(width: 8.w),
+                                                                                Expanded(
+                                                                                  child: InkWell(
+                                                                                      onTap: () {
+                                                                                        Navigator.of(context).pop();
+                                                                                        // Get.back(closeOverlays: true);
+                                                                                      },
+                                                                                      child: textContainerButtonWithOptions(text: "취소", isDarkBackground: false, height: 44.w)),
+                                                                                )
+                                                                              ],
+                                                                            )
+                                                                          ],
+                                                                        )));
+                                                          });
+                                                      break;
+                                                    default:
+                                                  }
+                                                },
+                                                itemBuilder: (context) {
+                                                  return post.writerUid ==
+                                                          userModelRx.value!.uid
+                                                      ? communityMyShowMore
+                                                      : communityShowMore;
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 4.w),
+                                          Text(
+                                            feedTimeHandler(detailPostViewModel
+                                                .post.writtenDateTime
+                                                .toDate()),
+                                            // x초전, x분 전, 일정 이후면 날짜로
+                                            style: feedDateTime,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     SizedBox(
                                         height:

@@ -33,6 +33,7 @@ class CommunityViewModel extends GetxController {
   RxBool hasNextPosts = true.obs;
 
   RxBool isUploadingNewPost = false.obs;
+  RxDouble offset = 0.0.obs;
 
   @override
   void onInit() async {
@@ -47,6 +48,7 @@ class CommunityViewModel extends GetxController {
       // print(scrollController.offset);
       // print(scrollController.position.maxScrollExtent);
       // print(scrollController.position);
+      scrollController.offset < 0 ? offset(0) : offset(scrollController.offset);
       if ((scrollController.offset > scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .2)) &&
           hasNextPosts.value) {
         getPost();

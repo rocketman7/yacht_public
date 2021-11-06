@@ -12,7 +12,7 @@ ThemeData theme() {
         unselectedItemColor: Colors.grey,
         unselectedLabelStyle: TextStyle(color: primaryFontColor)),
     scaffoldBackgroundColor: white,
-    fontFamily: "SCore",
+    fontFamily: krFont,
     appBarTheme: appBarTheme(),
     // textTheme: textTheme(),
     // inputDecorationTheme: inputDecorationTheme(),
