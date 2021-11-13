@@ -139,7 +139,7 @@ BoxShadow primaryBoxShadow = BoxShadow(
 /// 홈
 // 홈-헤더-닉네임
 TextStyle homeHeaderName = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 20.w,
   fontWeight: FontWeight.w700,
   color: primaryFontColor,
@@ -148,7 +148,7 @@ TextStyle homeHeaderName = TextStyle(
 );
 // 홈-헤더-닉네임뒤에
 TextStyle homeHeaderAfterName = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 20.w,
   fontWeight: FontWeight.w300,
   color: primaryFontColor,
@@ -157,7 +157,7 @@ TextStyle homeHeaderAfterName = TextStyle(
 );
 // 홈-섹션박스-헤더
 TextStyle homeModuleTitleTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w600,
   color: primaryFontColor,
@@ -166,7 +166,7 @@ TextStyle homeModuleTitleTextStyle = TextStyle(
 );
 
 TextStyle smallSubtitleTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w400,
   color: primaryFontColor,
@@ -175,7 +175,7 @@ TextStyle smallSubtitleTextStyle = TextStyle(
 );
 // 홈-상금박스-상금헤더
 TextStyle awardModuleSliderTitleTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w400,
   color: yachtBlack,
@@ -185,7 +185,7 @@ TextStyle awardModuleSliderTitleTextStyle = TextStyle(
 
 // 홈-퀘스트박스-기간헤더
 TextStyle questTermTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
@@ -196,7 +196,7 @@ TextStyle questTermTextStyle = TextStyle(
 
 // 홈-퀘스트모듈-퀘스트박스-남은시간
 TextStyle questTimeLeftTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w600,
   color: primaryPointFontColor,
@@ -206,7 +206,7 @@ TextStyle questTimeLeftTextStyle = TextStyle(
 
 // 홈-퀘스트모듈-퀘스트박스-리워드
 // TextStyle questRewardTextStyle = TextStyle(
-//   fontFamily: 'SCore',
+//   fontFamily: krFont,
 //   fontSize: 16.w,
 //   fontWeight: FontWeight.w500,
 //   color: primaryFontColor,
@@ -215,7 +215,7 @@ TextStyle questTimeLeftTextStyle = TextStyle(
 // );
 // 홈-퀘스트모듈-퀘스트박스-참여자수
 TextStyle questCountTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w700,
   color: primaryFontColor,
@@ -225,7 +225,7 @@ TextStyle questCountTextStyle = TextStyle(
 
 // 버튼 안에 들어가는 텍스트
 TextStyle buttonTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w500,
   color: buttonTextColor,
@@ -235,7 +235,7 @@ TextStyle buttonTextStyle = TextStyle(
 
 // 납작한 버튼 텍스트
 TextStyle cardButtonTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
   color: Color(0xFF335B80),
@@ -245,7 +245,7 @@ TextStyle cardButtonTextStyle = TextStyle(
 
 // 차트 세부 가격 변동 텍스트 // 차트 토글 버튼 텍스트
 TextStyle stockPriceChangeTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
   color: primaryFontColor,
@@ -255,7 +255,7 @@ TextStyle stockPriceChangeTextStyle = TextStyle(
 
 // 가장 작은 텍스트 스타일
 TextStyle mostDetailedContentTextStyle = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 10.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -268,7 +268,7 @@ TextStyle mostDetailedContentTextStyle = TextStyle(
 // 날짜 표시
 
 // TextStyle feedTitle = TextStyle(
-//   fontFamily: 'SCore',
+//   fontFamily: krFont,
 //   fontSize: 14.w,
 //   fontWeight: FontWeight.w500,
 //   color: primaryFontColor,
@@ -277,7 +277,7 @@ TextStyle mostDetailedContentTextStyle = TextStyle(
 // );
 
 // TextStyle feedContent = TextStyle(
-//   fontFamily: 'SCore',
+//   fontFamily: krFont,
 //   fontSize: 14.w,
 //   fontWeight: FontWeight.w300,
 //   color: primaryFontColor,
@@ -286,7 +286,7 @@ TextStyle mostDetailedContentTextStyle = TextStyle(
 // );
 
 TextStyle feedUserName = TextStyle(
-  fontFamily: 'SCore',
+  fontFamily: krFont,
   fontSize: 12.w,
   fontWeight: FontWeight.w400,
   color: primaryFontColor,

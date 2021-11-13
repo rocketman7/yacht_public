@@ -150,6 +150,7 @@ EdgeInsets primaryAllPadding = EdgeInsets.all(primaryPaddingSize);
 String krFont = 'IBMPlex';
 String krFontW400 = krFont;
 double primaryFontHeight = 1;
+double titleFontHeight = 1.3;
 double contentFontHeight = 1.4;
 
 double heading1Size = 34.w;
@@ -469,7 +470,7 @@ TextStyle subLeagueTitleTextStyle = TextStyle(
   fontWeight: FontWeight.w400,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 홈-상금-상금상세-상금액수
@@ -479,7 +480,7 @@ TextStyle subLeagueAwardTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtDarkGrey,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 상금박스-상금액수한글
@@ -499,7 +500,7 @@ TextStyle subLeagueAwardDescriptionStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: titleFontHeight,
 );
 
 // 홈-상금-상금상세-룰
@@ -539,7 +540,7 @@ TextStyle subLeagueAwardLabelStyle = TextStyle(
   fontWeight: FontWeight.w400,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오코멘트 텍스트
@@ -549,7 +550,7 @@ TextStyle subLeagueAwardCommentStyle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨총상금 텍스트 new
@@ -558,7 +559,7 @@ TextStyle subLeagueAwardLabelTotalTextStyle = TextStyle(
   fontSize: 12.w,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨총상금액수 텍스트 new
@@ -568,7 +569,7 @@ TextStyle subLeagueAwardLabelTotalValueTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨개별주식 텍스트 new
@@ -587,7 +588,7 @@ TextStyle subLeagueAwardLabelStockPriceTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨수익률 텍스트 new
@@ -597,7 +598,7 @@ TextStyle subLeagueAwardLabelPLTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -0.5,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 홈-상금박스-상금액수
@@ -607,7 +608,7 @@ TextStyle awardModuleSliderAmountTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtDarkGrey,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 // 홈-상금박스-상금액수한글
 TextStyle awardModuleSliderAmountKoreanTextStyle = TextStyle(
@@ -616,7 +617,7 @@ TextStyle awardModuleSliderAmountKoreanTextStyle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtViolet,
   letterSpacing: 3,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 // 홈-상금박스-상금기한
 TextStyle awardModuleSliderEndDateTimeTextStyle = TextStyle(
@@ -625,7 +626,7 @@ TextStyle awardModuleSliderEndDateTimeTextStyle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -0.25,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 // 홈-섹션박스-헤더
 TextStyle awardModuleTitleTextStyle = TextStyle(
@@ -831,7 +832,7 @@ TextStyle feedCommentLikeCount = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -.5,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 금융백과사전
@@ -932,7 +933,7 @@ TextStyle questTitle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: titleFontHeight,
 );
 
 TextStyle adsWarningTitle = TextStyle(

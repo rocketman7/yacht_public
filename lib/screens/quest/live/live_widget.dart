@@ -452,14 +452,14 @@ class LiveCardHeader extends StatelessWidget {
             Text(
               // '${questModel.category} 퀘스트',
               questModel.category,
-              style: subheadingStyle,
+              style: questTerm,
             ),
             SizedBox(height: 6.w),
             Text(
               '${questModel.title}',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: sectionTitle,
+              style: questTitle,
             )
           ],
         ),
