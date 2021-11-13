@@ -20,11 +20,13 @@ class LastAwardView extends StatelessWidget {
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       extendBodyBehindAppBar: true,
-      appBar: newPrimaryAppBarForOnlyLastLeaguesScreen('지난 리그 보기'),
+      appBar: newPrimaryAppBar('지난 리그 보기'),
+      // appBar: newPrimaryAppBarForOnlyLastLeaguesScreen('지난 리그 보기'),
       body: ListView(
         children: [
           SizedBox(
-            height: 64.w + 8.w,
+            // height: 64.w + 8.w,
+            height: 8.w,
           ),
           // GestureDetector(
           //     onTap: () {
@@ -271,11 +273,23 @@ AppBar newPrimaryAppBarForOnlyLastLeaguesScreen(String title) {
   return AppBar(
     backgroundColor: Colors.transparent,
     systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: yachtBlack),
-    toolbarHeight: 60.w,
+    toolbarHeight: 60.w + 64.w,
+    // leading: IconButton(icon: Icons,)
+    leading: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        BackButton(),
+        SizedBox(
+          height: 64.w,
+        ),
+      ],
+    ),
+    // leading: primaryback,
     flexibleSpace: Container(
-      height: SizeConfig.safeAreaTop + 60.w,
+      height: SizeConfig.safeAreaTop + 60.w + 64.w,
       child: Stack(
-        clipBehavior: Clip.none,
+        // clipBehavior: Clip.none,
+        // fit: StackFit.passthrough,
         children: [
           Positioned(
               top: 0.w,
@@ -290,249 +304,260 @@ AppBar newPrimaryAppBarForOnlyLastLeaguesScreen(String title) {
                   ),
                 ),
               )),
-          Positioned(
-            top: SizeConfig.safeAreaTop + 60.w,
-            left: 0.w,
-            child: Container(
-              height: 64.w,
-              width: SizeConfig.screenWidth,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 14.w,
-                  ),
-                  Row(
+          Obx(() => Positioned(
+                top: SizeConfig.safeAreaTop + 60.w,
+                left: 0.w,
+                child: Container(
+                  height: 64.w,
+                  width: SizeConfig.screenWidth,
+                  child: Column(
                     children: [
                       SizedBox(
-                        width: 14.w,
+                        height: 14.w,
                       ),
-                      !_lastAwardViewModel.isLeagueCategorySelect.value
-                          ? GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                print('aaaaasas');
-                              },
-                              child: Container(
-                                height: 36.w,
-                                width: 169.w,
-                                decoration: primaryBoxDecoration.copyWith(
-                                    // color: Colors.grey,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            Color(0xFFCEC4DA).withOpacity(0.3),
-                                        blurRadius: 8.w,
-                                        spreadRadius: 1.w,
-                                        offset: Offset(0, 0),
-                                      ),
-                                    ], borderRadius: BorderRadius.circular(10)),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 10.w + 18.w + 10.w,
-                                    ),
-                                    Container(
-                                      width: 121.w - 18.w - 10.w,
-                                      child: Center(
-                                          child: Text(
-                                        '${leagueCategory[_lastAwardViewModel.selectedLeagueCategoryIndex.value]}',
-                                        style: lastLeagueViewCategoryText,
-                                      )),
-                                    ),
-                                    SizedBox(
-                                      width: 10.w,
-                                    ),
-                                    SizedBox(
-                                      height: 18.w,
-                                      width: 18.w,
-                                      child: Image.asset(
-                                          'assets/icons/ic_ arrow_L.png'),
-                                    ),
-                                    SizedBox(
-                                      width: 10.w,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          : GetBuilder<LastAwardViewModel>(
-                              id: 'leagueCategory',
-                              builder: (controller) {
-                                return Container(
-                                  height: 36.w,
-                                  width: 169.w,
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Positioned(
-                                        top: 0.w,
-                                        left: 0.w,
-                                        child: Container(
-                                          // height: 36.w * 5,
-                                          height: 36.w * leagueCategory.length,
-                                          width: 169.w,
-                                          decoration: primaryBoxDecoration
-                                              .copyWith(
-                                                  boxShadow: [
-                                                BoxShadow(
-                                                  color: Color(0xFFCEC4DA)
-                                                      .withOpacity(0.3),
-                                                  blurRadius: 8.w,
-                                                  spreadRadius: 1.w,
-                                                  offset: Offset(0, 0),
-                                                ),
-                                              ],
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                          child: Column(
-                                              children: leagueCategory
-                                                  .asMap()
-                                                  .map((i, element) => MapEntry(
-                                                        i,
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            print('aaaaaaa');
-                                                          },
-                                                          child: Column(
-                                                            children: [
-                                                              SizedBox(
-                                                                height:
-                                                                    12.w - 5.w,
-                                                              ),
-                                                              Row(
-                                                                children: [
-                                                                  SizedBox(
-                                                                    width: 10
-                                                                            .w +
-                                                                        18.w +
-                                                                        10.w,
-                                                                  ),
-                                                                  Container(
-                                                                    width: 121
-                                                                            .w -
-                                                                        18.w -
-                                                                        10.w,
-                                                                    child: Center(
-                                                                        child: Container(
-                                                                      // color: Colors
-                                                                      //     .grey,
-                                                                      child:
-                                                                          Text(
-                                                                        '${leagueCategory[i]}',
-                                                                        style:
-                                                                            lastLeagueViewCategoryText,
-                                                                      ),
-                                                                    )),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 10.w,
-                                                                  ),
-                                                                  i == 0
-                                                                      ? SizedBox(
-                                                                          height:
-                                                                              18.w,
-                                                                          width:
-                                                                              18.w,
-                                                                          child:
-                                                                              Image.asset('assets/icons/ic_ arrow_L.png'),
-                                                                        )
-                                                                      : Container(
-                                                                          height:
-                                                                              18.w,
-                                                                          width:
-                                                                              18.w,
-                                                                        ),
-                                                                  SizedBox(
-                                                                    width: 10.w,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                height:
-                                                                    11.w - 5.w,
-                                                              ),
-                                                              i !=
-                                                                      leagueCategory
-                                                                              .length -
-                                                                          1
-                                                                  ? Container(
-                                                                      height:
-                                                                          1.w,
-                                                                      color:
-                                                                          yachtLightGrey,
-                                                                    )
-                                                                  : Container()
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ))
-                                                  .values
-                                                  .toList()),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              }),
-                      SizedBox(
-                        width: 9.w,
-                      ),
-                      Container(
-                        height: 36.w,
-                        width: 169.w,
-                        decoration: primaryBoxDecoration.copyWith(boxShadow: [
-                          BoxShadow(
-                            color: Color(0xFFCEC4DA).withOpacity(0.3),
-                            blurRadius: 8.w,
-                            spreadRadius: 1.w,
-                            offset: Offset(0, 0),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 14.w,
                           ),
-                        ], borderRadius: BorderRadius.circular(10)),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 10.w,
+                          !_lastAwardViewModel.isLeagueCategorySelect.value
+                              ? GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    _lastAwardViewModel
+                                        .leagueCategorySelectMethod();
+                                  },
+                                  child: Container(
+                                    height: 36.w,
+                                    width: 169.w,
+                                    decoration: primaryBoxDecoration.copyWith(
+                                        // color: Colors.grey,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color(0xFFCEC4DA)
+                                                .withOpacity(0.3),
+                                            blurRadius: 8.w,
+                                            spreadRadius: 1.w,
+                                            offset: Offset(0, 0),
+                                          ),
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 10.w + 18.w + 10.w,
+                                        ),
+                                        Container(
+                                          width: 121.w - 18.w - 10.w,
+                                          child: Center(
+                                              child: Text(
+                                            leagueCategory.length != 0
+                                                ? '${leagueCategory[_lastAwardViewModel.selectedLeagueCategoryIndex.value]}'
+                                                : '전체',
+                                            style: lastLeagueViewCategoryText,
+                                          )),
+                                        ),
+                                        SizedBox(
+                                          width: 10.w,
+                                        ),
+                                        SizedBox(
+                                          height: 18.w,
+                                          width: 18.w,
+                                          child: Image.asset(
+                                              'assets/icons/ic_ arrow_L.png'),
+                                        ),
+                                        SizedBox(
+                                          width: 10.w,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : GetBuilder<LastAwardViewModel>(
+                                  id: 'leagueCategory',
+                                  builder: (controller) {
+                                    return Container(
+                                      height: 36.w,
+                                      width: 169.w,
+                                      child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Positioned(
+                                            top: 0.w,
+                                            left: 0.w,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                _lastAwardViewModel.orderMethod(
+                                                    _lastAwardViewModel
+                                                        .selectedLeagueCategoryIndex
+                                                        .value,
+                                                    _lastAwardViewModel
+                                                        .selectedOrderByCategoryIndex
+                                                        .value);
+                                              },
+                                              child: Container(
+                                                // height: 36.w * 5,
+                                                height: 36.w *
+                                                    leagueCategory.length,
+                                                width: 169.w,
+                                                decoration: primaryBoxDecoration
+                                                    .copyWith(
+                                                        boxShadow: [
+                                                      BoxShadow(
+                                                        color: Color(0xFFCEC4DA)
+                                                            .withOpacity(0.3),
+                                                        blurRadius: 8.w,
+                                                        spreadRadius: 1.w,
+                                                        offset: Offset(0, 0),
+                                                      ),
+                                                    ],
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                child: Column(
+                                                    children: leagueCategory
+                                                        .asMap()
+                                                        .map(
+                                                            (i, element) =>
+                                                                MapEntry(
+                                                                  i,
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      print(
+                                                                          'aaaaaaa');
+                                                                    },
+                                                                    child:
+                                                                        Column(
+                                                                      children: [
+                                                                        SizedBox(
+                                                                          height:
+                                                                              12.w - 5.w,
+                                                                        ),
+                                                                        Row(
+                                                                          children: [
+                                                                            SizedBox(
+                                                                              width: 10.w + 18.w + 10.w,
+                                                                            ),
+                                                                            Container(
+                                                                              width: 121.w - 18.w - 10.w,
+                                                                              child: Center(
+                                                                                  child: Container(
+                                                                                // color: Colors
+                                                                                //     .grey,
+                                                                                child: Text(
+                                                                                  '${leagueCategory[i]}',
+                                                                                  style: lastLeagueViewCategoryText,
+                                                                                ),
+                                                                              )),
+                                                                            ),
+                                                                            SizedBox(
+                                                                              width: 10.w,
+                                                                            ),
+                                                                            i == 0
+                                                                                ? SizedBox(
+                                                                                    height: 18.w,
+                                                                                    width: 18.w,
+                                                                                    child: Image.asset('assets/icons/ic_ arrow_L.png'),
+                                                                                  )
+                                                                                : Container(
+                                                                                    height: 18.w,
+                                                                                    width: 18.w,
+                                                                                  ),
+                                                                            SizedBox(
+                                                                              width: 10.w,
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        SizedBox(
+                                                                          height:
+                                                                              11.w - 5.w,
+                                                                        ),
+                                                                        i != leagueCategory.length - 1
+                                                                            ? Container(
+                                                                                height: 1.w,
+                                                                                color: yachtLightGrey,
+                                                                              )
+                                                                            : Container()
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ))
+                                                        .values
+                                                        .toList()),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                          SizedBox(
+                            width: 9.w,
+                          ),
+                          Container(
+                            height: 36.w,
+                            width: 169.w,
+                            decoration:
+                                primaryBoxDecoration.copyWith(boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFFCEC4DA).withOpacity(0.3),
+                                blurRadius: 8.w,
+                                spreadRadius: 1.w,
+                                offset: Offset(0, 0),
+                              ),
+                            ], borderRadius: BorderRadius.circular(10)),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 10.w + 18.w + 10.w,
+                                ),
+                                Container(
+                                  width: 121.w - 18.w - 10.w,
+                                  child: Center(
+                                      child: Text(
+                                    '${orderByCategory[_lastAwardViewModel.selectedOrderByCategoryIndex.value]}',
+                                    style: lastLeagueViewCategoryText,
+                                  )),
+                                ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                SizedBox(
+                                  height: 18.w,
+                                  width: 18.w,
+                                  child: Image.asset(
+                                      'assets/icons/ic_ arrow_L.png'),
+                                ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                              ],
                             ),
-                            Container(
-                              width: 121.w,
-                              child: Center(
-                                  child: Text(
-                                '상금 높은 순',
-                                style: lastLeagueViewCategoryText,
-                              )),
-                            ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            SizedBox(
-                              height: 18.w,
-                              width: 18.w,
-                              child:
-                                  Image.asset('assets/icons/ic_ arrow_L.png'),
-                            ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(
+                            width: 14.w,
+                          ),
+                        ],
                       ),
                       SizedBox(
-                        width: 14.w,
+                        height: 14.w,
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 14.w,
-                  ),
-                ],
-              ),
-            ),
-          )
+                ),
+              ))
         ],
       ),
     ),
-    title: Text(title, style: newAppBarTitle),
+    title: Column(
+      children: [
+        Text(title, style: newAppBarTitle),
+        SizedBox(
+          height: 64.w,
+        )
+      ],
+    ),
   );
 }
 
@@ -612,5 +637,124 @@ TextStyle lastLeagueDetailViewAmountText = TextStyle(
   fontWeight: FontWeight.w600,
   color: yachtBlue,
   letterSpacing: 0.0,
-  height: 1.75,
+  height: 1.79,
+);
+
+TextStyle lastLeagueDetailViewNickNameText = TextStyle(
+  fontSize: 18.w,
+  fontFamily: 'IBMPlex',
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+//폰트페밀리바꿔야함. 까페24
+TextStyle lastLeagueDetailViewRankText = TextStyle(
+  fontSize: 20.w,
+  fontFamily: 'IBMPlex',
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle lastLeagueDetailMoreText = TextStyle(
+  fontSize: 14.w,
+  fontFamily: 'IBMPlex',
+  fontWeight: FontWeight.w300,
+  color: yachtGrey,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+// 아래는 상금주식 포트폴리오 관련된 텍스트스타일들
+TextStyle lastLeagueDetailViewPortfolioPercentage = TextStyle(
+  fontSize: 22.w,
+  fontFamily: 'IBMPlex',
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: 0.0,
+  height: 1.2,
+);
+TextStyle lastLeagueDetailViewPortfolioName = TextStyle(
+  fontSize: 14.w,
+  fontFamily: 'IBMPlex',
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: 0.0,
+  height: 1.2,
+);
+
+// 홈-상금-상금상세-포트폴리오라벨총상금 텍스트 new
+TextStyle subLeagueAwardLabelTotalTextStyleNew = TextStyle(
+  fontFamily: 'IBMPlex',
+  fontSize: 12.w,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.0,
+);
+
+// 홈-상금-상금상세-포트폴리오라벨총상금액수 텍스트 new
+TextStyle subLeagueAwardLabelTotalValueTextStyleNew = TextStyle(
+  fontFamily: 'IBMPlex',
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.0,
+);
+
+// 홈-상금-상금상세-포트폴리오라벨개별주식 텍스트 new
+TextStyle subLeagueAwardLabelStockTextStyleNew = TextStyle(
+  fontFamily: 'IBMPlex',
+  fontSize: 14.w,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.0,
+);
+
+// 홈-상금-상금상세-포트폴리오라벨개별주식가치 텍스트 new
+TextStyle subLeagueAwardLabelStockPriceTextStyleNew = TextStyle(
+  fontFamily: 'IBMPlex',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.0,
+);
+
+// 홈-상금-상금상세-포트폴리오라벨수익률 텍스트 new
+TextStyle subLeagueAwardLabelPLTextStyleNew = TextStyle(
+  fontFamily: 'IBMPlex',
+  fontSize: 14.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -0.5,
+  height: 1.0,
+);
+
+TextStyle lastLeagueDetailViewDialogTitle = TextStyle(
+  fontFamily: 'IBMPlex',
+  fontSize: 16.w,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: 0.0,
+  height: 1.0,
+);
+TextStyle lastLeagueDetailViewDialogContent = TextStyle(
+  fontFamily: 'IBMPlex',
+  fontSize: 14.w,
+  // fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.0,
+);
+TextStyle lastLeagueDetailViewDialogName = TextStyle(
+  fontFamily: 'IBMPlex',
+  fontSize: 18.w,
+  // fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.0,
 );

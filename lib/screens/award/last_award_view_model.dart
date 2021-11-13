@@ -5,7 +5,7 @@ import '../../models/last_subLeague_model.dart';
 import '../../services/firestore_service.dart';
 
 List<String> leagueCategory = [
-  '전체',
+  // '전체',
 ];
 
 const List<String> orderByCategory = [
@@ -40,25 +40,27 @@ class LastAwardViewModel extends GetxController {
         //     allLastSubLeagues[i].stocks[j].standardPrice;
         allLastSubLeagues[i].totalValue = allLastSubLeagues[i].totalValue! +
             allLastSubLeagues[i].stocks[j].sharesNum *
-                allLastSubLeagues[i].stocks[j].standardPrice;
+                // allLastSubLeagues[i].stocks[j].standardPrice;
+                allLastSubLeagues[i].stocks[j].currentPrice!;
       }
     }
 
     // orderLastSubLeagues = allLastSubLeagues;
-    for (int i = 0; i < allLastSubLeagues.length; i++) {
-      orderLastSubLeagues.add(allLastSubLeagues[i]);
-    }
+    // for (int i = 0; i < allLastSubLeagues.length; i++) {
+    //   orderLastSubLeagues.add(allLastSubLeagues[i]);
+    // }
+
+    leagueCategory.clear();
+    leagueCategory.add('전체');
+    // 이 부분 바로 바꿔야함. 지금은 테스트용.
+    leagueCategory.add('2021년 11월');
+    leagueCategory.add('2021년 10월');
+    update(['leagueCategory']);
 
     orderMethod(0, 0);
 
     isAllLastSubLeaguesLoaded = true;
 
-    update();
-
-    // 이 부분 바로 바꿔야함. 지금은 테스트용.
-    leagueCategory.add('2021년 11월');
-    leagueCategory.add('2021년 10월');
-    update(['leagueCategory']);
     update();
 
     super.onInit();
