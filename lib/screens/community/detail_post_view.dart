@@ -39,8 +39,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
   // }) : super(key: key);
   final MixpanelService _mixpanelService = locator<MixpanelService>();
 
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
   DetailPostView(this.post);
   // final GlobalKey<FormState> _commentFormKey = GlobalKey<FormState>();
@@ -53,10 +52,8 @@ class DetailPostView extends GetView<DetailPostViewModel> {
   RxDouble bottomSpace = 76.0.w.obs;
   @override
   Widget build(BuildContext context) {
-    DetailPostViewModel detailPostViewModel =
-        Get.put(DetailPostViewModel(post));
-    List<String> imageUrls = List.generate(
-        detailPostViewModel.post.imageUrlList!.length, (index) => "");
+    DetailPostViewModel detailPostViewModel = Get.put(DetailPostViewModel(post));
+    List<String> imageUrls = List.generate(detailPostViewModel.post.imageUrlList!.length, (index) => "");
     return Scaffold(
       appBar: primaryAppBar("피드"),
       body: SafeArea(
@@ -69,8 +66,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                 Padding(
                   padding: primaryHorizontalPadding,
                   child: Container(
-                    decoration: primaryBoxDecoration
-                        .copyWith(boxShadow: [primaryBoxShadow]),
+                    decoration: primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow]),
                     child: Column(
                       children: [
                         Container(
@@ -83,8 +79,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                               GestureDetector(
                                 onTap: () {
                                   if (post.writerUid != userModelRx.value!.uid)
-                                    Get.to(() =>
-                                        ProfileOthersView(uid: post.writerUid));
+                                    Get.to(() => ProfileOthersView(uid: post.writerUid));
                                   // else
                                   // Get.to(() => ProfileMyView());
                                 },
@@ -116,18 +111,14 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                     Container(
                                       height: 36.w,
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
                                               Text(
-                                                detailPostViewModel
-                                                    .post.writerUserName,
+                                                detailPostViewModel.post.writerUserName,
                                                 style: feedWriterName,
                                               ),
                                               SizedBox(
@@ -138,19 +129,13 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                   onTap: () => showDialog(
                                                       context: context,
                                                       builder: (context) {
-                                                        return yachtTierInfoPopUp(
-                                                            context,
-                                                            post.writerExp ??
-                                                                0);
+                                                        return yachtTierInfoPopUp(context, post.writerExp ?? 0);
                                                       }),
-                                                  child: simpleTierRRectBox(
-                                                      exp: detailPostViewModel
-                                                              .post.writerExp ??
-                                                          0)),
+                                                  child:
+                                                      simpleTierRRectBox(exp: detailPostViewModel.post.writerExp ?? 0)),
                                               Spacer(),
                                               PopupMenuButton(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 4),
+                                                padding: EdgeInsets.symmetric(horizontal: 4),
                                                 child: Row(children: [
                                                   SizedBox(
                                                     width: 8.w,
@@ -172,14 +157,11 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                         EditingMyPost(
                                                           // contentFormKey: _contentFormKey,
                                                           // contentController: _contentController,
-                                                          communityViewModel:
-                                                              communityViewModel,
+                                                          communityViewModel: communityViewModel,
                                                           post: post,
                                                         ),
-                                                        isScrollControlled:
-                                                            true,
-                                                        ignoreSafeArea:
-                                                            false, // add this
+                                                        isScrollControlled: true,
+                                                        ignoreSafeArea: false, // add this
                                                       );
                                                       break;
                                                     case 'delete':
@@ -187,63 +169,70 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                           context: context,
                                                           builder: (context) {
                                                             return Dialog(
-                                                                insetPadding:
-                                                                    primaryHorizontalPadding,
-                                                                child:
-                                                                    Container(
-                                                                        padding: EdgeInsets.fromLTRB(
-                                                                            14.w,
-                                                                            correctHeight(14.w, 0.0, dialogTitle.fontSize),
-                                                                            14.w,
-                                                                            14.w),
-                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
-                                                                        child: Column(
-                                                                          mainAxisSize:
-                                                                              MainAxisSize.min,
+                                                                insetPadding: primaryHorizontalPadding,
+                                                                child: Container(
+                                                                    padding: EdgeInsets.fromLTRB(
+                                                                        14.w,
+                                                                        correctHeight(14.w, 0.0, dialogTitle.fontSize),
+                                                                        14.w,
+                                                                        14.w),
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius: BorderRadius.circular(10.w)),
+                                                                    child: Column(
+                                                                      mainAxisSize: MainAxisSize.min,
+                                                                      children: [
+                                                                        Text("알림", style: dialogTitle),
+                                                                        SizedBox(
+                                                                            height: correctHeight(
+                                                                                14.w, 0.0, dialogTitle.fontSize)),
+                                                                        SizedBox(
+                                                                            height: correctHeight(
+                                                                                24.w, 0.w, dialogContent.fontSize)),
+                                                                        Text("정말 삭제하시겠습니까?", style: dialogContent),
+                                                                        Text(
+                                                                          "삭제 후 되돌릴 수 없습니다.",
+                                                                          style: dialogWarning,
+                                                                        ),
+                                                                        SizedBox(
+                                                                            height: correctHeight(
+                                                                                24.w, 0.w, dialogContent.fontSize)),
+                                                                        Row(
                                                                           children: [
-                                                                            Text("알림",
-                                                                                style: dialogTitle),
-                                                                            SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                                            Text("정말 삭제하시겠습니까?",
-                                                                                style: dialogContent),
-                                                                            Text(
-                                                                              "삭제 후 되돌릴 수 없습니다.",
-                                                                              style: dialogWarning,
+                                                                            Expanded(
+                                                                              child: GestureDetector(
+                                                                                  onTap: () async {
+                                                                                    HapticFeedback.lightImpact();
+                                                                                    await communityViewModel
+                                                                                        .deletePost(post);
+                                                                                    await communityViewModel.getPost();
+                                                                                    await detailPostViewModel
+                                                                                        .getComments(post);
+                                                                                    Navigator.of(context).pop();
+                                                                                    Get.back();
+                                                                                    yachtSnackBar("피드가 삭제되었습니다");
+                                                                                  },
+                                                                                  child: textContainerButtonWithOptions(
+                                                                                    text: "예",
+                                                                                    isDarkBackground: true,
+                                                                                    height: 44.w,
+                                                                                  )),
                                                                             ),
-                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                                            Row(
-                                                                              children: [
-                                                                                Expanded(
-                                                                                  child: GestureDetector(
-                                                                                      onTap: () async {
-                                                                                        HapticFeedback.lightImpact();
-                                                                                        await communityViewModel.deletePost(post);
-                                                                                        await communityViewModel.getPost();
-                                                                                        await detailPostViewModel.getComments(post);
-                                                                                        Navigator.of(context).pop();
-                                                                                        Get.back();
-                                                                                        yachtSnackBar("피드가 삭제되었습니다");
-                                                                                      },
-                                                                                      child: textContainerButtonWithOptions(
-                                                                                        text: "예",
-                                                                                        isDarkBackground: true,
-                                                                                        height: 44.w,
-                                                                                      )),
-                                                                                ),
-                                                                                SizedBox(width: 8.w),
-                                                                                Expanded(
-                                                                                  child: InkWell(
-                                                                                      onTap: () {
-                                                                                        Navigator.of(context).pop();
-                                                                                        // Get.back(closeOverlays: true);
-                                                                                      },
-                                                                                      child: textContainerButtonWithOptions(text: "아니오", isDarkBackground: false, height: 44.w)),
-                                                                                )
-                                                                              ],
+                                                                            SizedBox(width: 8.w),
+                                                                            Expanded(
+                                                                              child: InkWell(
+                                                                                  onTap: () {
+                                                                                    Navigator.of(context).pop();
+                                                                                    // Get.back(closeOverlays: true);
+                                                                                  },
+                                                                                  child: textContainerButtonWithOptions(
+                                                                                      text: "아니오",
+                                                                                      isDarkBackground: false,
+                                                                                      height: 44.w)),
                                                                             )
                                                                           ],
-                                                                        )));
+                                                                        )
+                                                                      ],
+                                                                    )));
                                                           });
                                                       break;
                                                     case 'block':
@@ -251,61 +240,68 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                           context: context,
                                                           builder: (context) {
                                                             return Dialog(
-                                                                insetPadding:
-                                                                    primaryHorizontalPadding,
-                                                                child:
-                                                                    Container(
-                                                                        padding: EdgeInsets.fromLTRB(
-                                                                            14.w,
-                                                                            correctHeight(14.w, 0.0, dialogTitle.fontSize),
-                                                                            14.w,
-                                                                            14.w),
-                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
-                                                                        child: Column(
-                                                                          mainAxisSize:
-                                                                              MainAxisSize.min,
+                                                                insetPadding: primaryHorizontalPadding,
+                                                                child: Container(
+                                                                    padding: EdgeInsets.fromLTRB(
+                                                                        14.w,
+                                                                        correctHeight(14.w, 0.0, dialogTitle.fontSize),
+                                                                        14.w,
+                                                                        14.w),
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius: BorderRadius.circular(10.w)),
+                                                                    child: Column(
+                                                                      mainAxisSize: MainAxisSize.min,
+                                                                      children: [
+                                                                        Text("알림", style: dialogTitle),
+                                                                        SizedBox(
+                                                                            height: correctHeight(
+                                                                                14.w, 0.0, dialogTitle.fontSize)),
+                                                                        SizedBox(
+                                                                            height: correctHeight(
+                                                                                24.w, 0.w, dialogContent.fontSize)),
+                                                                        Text("유저를 차단하시겠습니까?", style: dialogContent),
+                                                                        // Text(
+                                                                        //   "삭제 후 되돌릴 수 없습니다.",
+                                                                        //   style: dialogWarning,
+                                                                        // ),
+                                                                        SizedBox(
+                                                                            height: correctHeight(
+                                                                                24.w, 0.w, dialogContent.fontSize)),
+                                                                        Row(
                                                                           children: [
-                                                                            Text("알림",
-                                                                                style: dialogTitle),
-                                                                            SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                                            Text("유저를 차단하시겠습니까?",
-                                                                                style: dialogContent),
-                                                                            // Text(
-                                                                            //   "삭제 후 되돌릴 수 없습니다.",
-                                                                            //   style: dialogWarning,
-                                                                            // ),
-                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                                            Row(
-                                                                              children: [
-                                                                                Expanded(
-                                                                                  child: GestureDetector(
-                                                                                      onTap: () async {
-                                                                                        HapticFeedback.lightImpact();
-                                                                                        await communityViewModel.blockThisUser(post.writerUid);
-                                                                                        await communityViewModel.reloadPost();
-                                                                                        Navigator.of(context).pop();
-                                                                                        yachtSnackBar("유저를 차단하였습니다");
-                                                                                      },
-                                                                                      child: textContainerButtonWithOptions(
-                                                                                        text: "예",
-                                                                                        isDarkBackground: true,
-                                                                                        height: 44.w,
-                                                                                      )),
-                                                                                ),
-                                                                                SizedBox(width: 8.w),
-                                                                                Expanded(
-                                                                                  child: InkWell(
-                                                                                      onTap: () {
-                                                                                        Navigator.of(context).pop();
-                                                                                        // Get.back(closeOverlays: true);
-                                                                                      },
-                                                                                      child: textContainerButtonWithOptions(text: "아니오", isDarkBackground: false, height: 44.w)),
-                                                                                )
-                                                                              ],
+                                                                            Expanded(
+                                                                              child: GestureDetector(
+                                                                                  onTap: () async {
+                                                                                    HapticFeedback.lightImpact();
+                                                                                    await communityViewModel
+                                                                                        .blockThisUser(post.writerUid);
+                                                                                    await communityViewModel
+                                                                                        .reloadPost();
+                                                                                    Navigator.of(context).pop();
+                                                                                    yachtSnackBar("유저를 차단하였습니다");
+                                                                                  },
+                                                                                  child: textContainerButtonWithOptions(
+                                                                                    text: "예",
+                                                                                    isDarkBackground: true,
+                                                                                    height: 44.w,
+                                                                                  )),
+                                                                            ),
+                                                                            SizedBox(width: 8.w),
+                                                                            Expanded(
+                                                                              child: InkWell(
+                                                                                  onTap: () {
+                                                                                    Navigator.of(context).pop();
+                                                                                    // Get.back(closeOverlays: true);
+                                                                                  },
+                                                                                  child: textContainerButtonWithOptions(
+                                                                                      text: "아니오",
+                                                                                      isDarkBackground: false,
+                                                                                      height: 44.w)),
                                                                             )
                                                                           ],
-                                                                        )));
+                                                                        )
+                                                                      ],
+                                                                    )));
                                                           });
                                                       break;
                                                     case 'report':
@@ -313,69 +309,75 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                           context: context,
                                                           builder: (context) {
                                                             return Dialog(
-                                                                insetPadding:
-                                                                    primaryHorizontalPadding,
-                                                                child:
-                                                                    Container(
-                                                                        padding: EdgeInsets.fromLTRB(
-                                                                            14.w,
-                                                                            correctHeight(14.w, 0.0, dialogTitle.fontSize),
-                                                                            14.w,
-                                                                            14.w),
-                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
-                                                                        child: Column(
-                                                                          mainAxisSize:
-                                                                              MainAxisSize.min,
+                                                                insetPadding: primaryHorizontalPadding,
+                                                                child: Container(
+                                                                    padding: EdgeInsets.fromLTRB(
+                                                                        14.w,
+                                                                        correctHeight(14.w, 0.0, dialogTitle.fontSize),
+                                                                        14.w,
+                                                                        14.w),
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius: BorderRadius.circular(10.w)),
+                                                                    child: Column(
+                                                                      mainAxisSize: MainAxisSize.min,
+                                                                      children: [
+                                                                        Text("알림", style: dialogTitle),
+                                                                        SizedBox(
+                                                                            height: correctHeight(
+                                                                                24.w, 0.w, dialogContent.fontSize)),
+                                                                        Text("이 글을 신고하시겠습니까?", style: dialogContent),
+                                                                        Text(
+                                                                          "신고한 유저는 자동으로 차단됩니다.",
+                                                                          style: dialogWarning.copyWith(
+                                                                              color: yachtDarkGrey),
+                                                                        ),
+                                                                        SizedBox(
+                                                                            height: correctHeight(
+                                                                                24.w, 0.w, dialogContent.fontSize)),
+                                                                        Row(
                                                                           children: [
-                                                                            Text("알림",
-                                                                                style: dialogTitle),
-                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                                            Text("이 글을 신고하시겠습니까?",
-                                                                                style: dialogContent),
-                                                                            Text(
-                                                                              "신고한 유저는 자동으로 차단됩니다.",
-                                                                              style: dialogWarning.copyWith(color: yachtDarkGrey),
+                                                                            Expanded(
+                                                                              child: GestureDetector(
+                                                                                  onTap: () async {
+                                                                                    HapticFeedback.lightImpact();
+                                                                                    await communityViewModel
+                                                                                        .blockThisUser(post.writerUid);
+                                                                                    await communityViewModel
+                                                                                        .reportThisUser(post);
+                                                                                    await communityViewModel
+                                                                                        .reloadPost();
+                                                                                    Navigator.of(context).pop();
+                                                                                    yachtSnackBar("유저를 신고/차단하였습니다");
+                                                                                  },
+                                                                                  child: textContainerButtonWithOptions(
+                                                                                    text: "신고하기",
+                                                                                    isDarkBackground: true,
+                                                                                    height: 44.w,
+                                                                                  )),
                                                                             ),
-                                                                            SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                                            Row(
-                                                                              children: [
-                                                                                Expanded(
-                                                                                  child: GestureDetector(
-                                                                                      onTap: () async {
-                                                                                        HapticFeedback.lightImpact();
-                                                                                        await communityViewModel.blockThisUser(post.writerUid);
-                                                                                        await communityViewModel.reportThisUser(post);
-                                                                                        await communityViewModel.reloadPost();
-                                                                                        Navigator.of(context).pop();
-                                                                                        yachtSnackBar("유저를 신고/차단하였습니다");
-                                                                                      },
-                                                                                      child: textContainerButtonWithOptions(
-                                                                                        text: "신고하기",
-                                                                                        isDarkBackground: true,
-                                                                                        height: 44.w,
-                                                                                      )),
-                                                                                ),
-                                                                                SizedBox(width: 8.w),
-                                                                                Expanded(
-                                                                                  child: InkWell(
-                                                                                      onTap: () {
-                                                                                        Navigator.of(context).pop();
-                                                                                        // Get.back(closeOverlays: true);
-                                                                                      },
-                                                                                      child: textContainerButtonWithOptions(text: "취소", isDarkBackground: false, height: 44.w)),
-                                                                                )
-                                                                              ],
+                                                                            SizedBox(width: 8.w),
+                                                                            Expanded(
+                                                                              child: InkWell(
+                                                                                  onTap: () {
+                                                                                    Navigator.of(context).pop();
+                                                                                    // Get.back(closeOverlays: true);
+                                                                                  },
+                                                                                  child: textContainerButtonWithOptions(
+                                                                                      text: "취소",
+                                                                                      isDarkBackground: false,
+                                                                                      height: 44.w)),
                                                                             )
                                                                           ],
-                                                                        )));
+                                                                        )
+                                                                      ],
+                                                                    )));
                                                           });
                                                       break;
                                                     default:
                                                   }
                                                 },
                                                 itemBuilder: (context) {
-                                                  return post.writerUid ==
-                                                          userModelRx.value!.uid
+                                                  return post.writerUid == userModelRx.value!.uid
                                                       ? communityMyShowMore
                                                       : communityShowMore;
                                                 },
@@ -384,9 +386,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                           ),
                                           SizedBox(height: 4.w),
                                           Text(
-                                            feedTimeHandler(detailPostViewModel
-                                                .post.writtenDateTime
-                                                .toDate()),
+                                            feedTimeHandler(detailPostViewModel.post.writtenDateTime.toDate()),
                                             // x초전, x분 전, 일정 이후면 날짜로
                                             style: feedDateTime,
                                           ),
@@ -394,11 +394,8 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                       ),
                                     ),
                                     SizedBox(
-                                        height:
-                                            reducedPaddingWhenTextIsBothSide(
-                                                6.w,
-                                                feedUserName.fontSize!,
-                                                feedTitle.fontSize!)),
+                                        height: reducedPaddingWhenTextIsBothSide(
+                                            6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
                                     detailPostViewModel.post.title == null
                                         ? Container()
                                         : Column(
@@ -407,49 +404,29 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                 height: 6.w,
                                               ),
                                               Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   post.isPro
                                                       ? Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
                                                           children: [
                                                             Container(
-                                                                padding: EdgeInsets
-                                                                    .symmetric(
-                                                                        horizontal:
-                                                                            8.w,
-                                                                        vertical: 1
-                                                                            .w),
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color:
-                                                                      yachtRed,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              20.w),
+                                                                padding: EdgeInsets.symmetric(
+                                                                    horizontal: 8.w, vertical: 1.w),
+                                                                decoration: BoxDecoration(
+                                                                  color: yachtRed,
+                                                                  borderRadius: BorderRadius.circular(20.w),
                                                                 ),
                                                                 child: Center(
                                                                   child: Text(
                                                                     "PRO",
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          11.w,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      color:
-                                                                          white,
-                                                                      height:
-                                                                          1.4,
+                                                                    style: TextStyle(
+                                                                      fontSize: 11.w,
+                                                                      fontWeight: FontWeight.w500,
+                                                                      color: white,
+                                                                      height: 1.4,
                                                                     ),
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
+                                                                    textAlign: TextAlign.center,
                                                                   ),
                                                                 )),
                                                             SizedBox(
@@ -462,8 +439,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                     post.title!,
                                                     style: feedTitle,
                                                     maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    overflow: TextOverflow.ellipsis,
                                                   ),
                                                 ],
                                               ),
@@ -481,60 +457,42 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                             throw 'Could not launch $link';
                                           }
                                         },
-                                        text: detailPostViewModel
-                                            .thisPost.value.content,
+                                        text: detailPostViewModel.thisPost.value.content,
                                         style: feedContent,
-                                        linkStyle: feedContent.copyWith(
-                                            color: yachtViolet),
-                                        maxLines: 10,
+                                        linkStyle: feedContent.copyWith(color: yachtViolet),
+                                        maxLines: 50,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                     SizedBox(
                                       height: 8.w,
                                     ),
-                                    (detailPostViewModel.post.imageUrlList ==
-                                                null ||
-                                            detailPostViewModel.post
-                                                    .imageUrlList!.length ==
-                                                0)
+                                    (detailPostViewModel.post.imageUrlList == null ||
+                                            detailPostViewModel.post.imageUrlList!.length == 0)
                                         ? Container()
                                         : Column(
                                             children: [
                                               Container(
                                                 height: 140.w,
                                                 child: ListView.builder(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    itemCount:
-                                                        detailPostViewModel
-                                                            .post
-                                                            .imageUrlList!
-                                                            .length,
+                                                    scrollDirection: Axis.horizontal,
+                                                    itemCount: detailPostViewModel.post.imageUrlList!.length,
                                                     itemBuilder: (_, index) {
                                                       return Row(
                                                         children: [
                                                           ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5.w),
+                                                            borderRadius: BorderRadius.circular(5.w),
                                                             child: InkWell(
                                                               onTap: () {
-                                                                Get.dialog(
-                                                                    buildPhotoPageView(
-                                                                        index,
-                                                                        imageUrls,
-                                                                        detailPostViewModel));
+                                                                Get.dialog(buildPhotoPageView(
+                                                                    index, imageUrls, detailPostViewModel));
                                                               },
-                                                              child:
-                                                                  CachedNetworkImage(
+                                                              child: CachedNetworkImage(
                                                                 imageUrl:
                                                                     "https://storage.googleapis.com/ggook-5fb08.appspot.com/${detailPostViewModel.post.imageUrlList![index]}",
                                                                 height: 140.w,
                                                                 width: 140.w,
-                                                                fit: BoxFit
-                                                                    .cover,
+                                                                fit: BoxFit.cover,
                                                               ),
                                                             ),
                                                           ),
@@ -548,11 +506,8 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                               SizedBox(height: 8.w),
                                             ],
                                           ),
-                                    (detailPostViewModel.post.hashTags ==
-                                                null ||
-                                            detailPostViewModel
-                                                    .post.hashTags!.length ==
-                                                0)
+                                    (detailPostViewModel.post.hashTags == null ||
+                                            detailPostViewModel.post.hashTags!.length == 0)
                                         ? Container()
                                         : Wrap(
                                             spacing: 4.w,
@@ -561,8 +516,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                               // detailPostViewModel.post.hashTags!.length,
                                               5,
                                               (index) {
-                                                return feedHashTagContainer(
-                                                    '경제지식');
+                                                return feedHashTagContainer('경제지식');
                                               },
                                             )),
 
@@ -573,10 +527,8 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                     Container(
                                       // height: 30.w,
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           Row(
@@ -585,21 +537,15 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                 child: Container(
                                                   // color: Colors.blue,
                                                   child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
+                                                    mainAxisSize: MainAxisSize.max,
                                                     children: [
-                                                      SvgPicture.asset(
-                                                          'assets/icons/comment.svg',
-                                                          color: yachtBlack),
+                                                      SvgPicture.asset('assets/icons/comment.svg', color: yachtBlack),
                                                       SizedBox(
                                                         width: 8.w,
                                                       ),
                                                       Obx(() => Text(
-                                                            detailPostViewModel
-                                                                .comments.length
-                                                                .toString(),
-                                                            style:
-                                                                feedCommentLikeCount,
+                                                            detailPostViewModel.comments.length.toString(),
+                                                            style: feedCommentLikeCount,
                                                           )),
                                                     ],
                                                   ),
@@ -608,64 +554,37 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                               Flexible(
                                                 child: GestureDetector(
                                                   onTap: () async {
-                                                    HapticFeedback
-                                                        .lightImpact();
-                                                    await detailPostViewModel
-                                                        .toggleLikeComment(
-                                                            post);
-                                                    await detailPostViewModel
-                                                        .getThisPost(post);
-                                                    await communityViewModel
-                                                        .reloadPost();
+                                                    HapticFeedback.lightImpact();
+                                                    await detailPostViewModel.toggleLikeComment(post);
+                                                    await detailPostViewModel.getThisPost(post);
+                                                    await communityViewModel.reloadPost();
                                                   },
                                                   child: Obx(
                                                     () => Row(
                                                       children: [
                                                         LikeButton(
                                                           size: 20.w,
-                                                          isLiked: detailPostViewModel
-                                                                      .thisPost
-                                                                      .value
-                                                                      .likedBy ==
-                                                                  null
+                                                          isLiked: detailPostViewModel.thisPost.value.likedBy == null
                                                               ? false
-                                                              : detailPostViewModel
-                                                                  .thisPost
-                                                                  .value
-                                                                  .likedBy!
-                                                                  .contains(
-                                                                      userModelRx
-                                                                          .value!
-                                                                          .uid),
+                                                              : detailPostViewModel.thisPost.value.likedBy!
+                                                                  .contains(userModelRx.value!.uid),
                                                         ),
                                                         SizedBox(
                                                           width: 8.w,
                                                         ),
                                                         Text(
-                                                          detailPostViewModel
-                                                                      .thisPost
-                                                                      .value
-                                                                      .likedBy ==
-                                                                  null
+                                                          detailPostViewModel.thisPost.value.likedBy == null
                                                               ? 0.toString()
-                                                              : detailPostViewModel
-                                                                  .thisPost
-                                                                  .value
-                                                                  .likedBy!
-                                                                  .length
+                                                              : detailPostViewModel.thisPost.value.likedBy!.length
                                                                   .toString(),
-                                                          style:
-                                                              feedCommentLikeCount,
+                                                          style: feedCommentLikeCount,
                                                         ),
                                                       ],
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                              Flexible(
-                                                  child: SvgPicture.asset(
-                                                      'assets/icons/share.svg',
-                                                      color: white)),
+                                              Flexible(child: SvgPicture.asset('assets/icons/share.svg', color: white)),
                                               Container(
                                                 width: 3,
                                               )
@@ -686,8 +605,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                               : ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
-                                  itemCount:
-                                      detailPostViewModel.comments.length,
+                                  itemCount: detailPostViewModel.comments.length,
                                   itemBuilder: (_, index) {
                                     // 코멘트 컨테이너
                                     return Column(
@@ -698,34 +616,25 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                         ),
                                         InkWell(
                                           onTap: () {
-                                            detailPostViewModel.replyToCommentId(
-                                                "${detailPostViewModel.comments[index].commentId}");
-                                            detailPostViewModel.replyToUserUid(
-                                                "${detailPostViewModel.comments[index].writerUid}");
+                                            detailPostViewModel
+                                                .replyToCommentId("${detailPostViewModel.comments[index].commentId}");
+                                            detailPostViewModel
+                                                .replyToUserUid("${detailPostViewModel.comments[index].writerUid}");
                                             detailPostViewModel.replyToUserName(
                                                 "${detailPostViewModel.comments[index].writerUserName}");
                                           },
                                           child: Container(
-                                            padding: moduleBoxPadding(
-                                                feedDateTime.fontSize!),
+                                            padding: moduleBoxPadding(feedDateTime.fontSize!),
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 GestureDetector(
                                                   onTap: () {
-                                                    if (detailPostViewModel
-                                                            .comments[index]
-                                                            .writerUid !=
+                                                    if (detailPostViewModel.comments[index].writerUid !=
                                                         userModelRx.value!.uid)
                                                       Get.to(() => ProfileOthersView(
-                                                          uid:
-                                                              detailPostViewModel
-                                                                  .comments[
-                                                                      index]
-                                                                  .writerUid));
+                                                          uid: detailPostViewModel.comments[index].writerUid));
                                                     // else
                                                     // Get.to(() => ProfileMyView());
                                                   },
@@ -751,64 +660,40 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                 ),
                                                 Expanded(
                                                   child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
+                                                        mainAxisAlignment: MainAxisAlignment.start,
                                                         children: [
                                                           Text(
-                                                            detailPostViewModel
-                                                                .comments[index]
-                                                                .writerUserName,
-                                                            style:
-                                                                feedWriterName,
+                                                            detailPostViewModel.comments[index].writerUserName,
+                                                            style: feedWriterName,
                                                           ),
                                                           SizedBox(
                                                             width: 4.w,
                                                           ),
                                                           GestureDetector(
-                                                            onTap: () =>
-                                                                showDialog(
-                                                                    context:
-                                                                        context,
-                                                                    builder:
-                                                                        (context) {
-                                                                      return yachtTierInfoPopUp(
-                                                                          context,
-                                                                          post.writerExp ??
-                                                                              0);
-                                                                    }),
+                                                            onTap: () => showDialog(
+                                                                context: context,
+                                                                builder: (context) {
+                                                                  return yachtTierInfoPopUp(
+                                                                      context, post.writerExp ?? 0);
+                                                                }),
                                                             child: simpleTierRRectBox(
-                                                                exp: detailPostViewModel
-                                                                        .comments[
-                                                                            index]
-                                                                        .writerExp ??
-                                                                    0),
+                                                                exp:
+                                                                    detailPostViewModel.comments[index].writerExp ?? 0),
                                                           ),
                                                           Spacer(),
                                                           PopupMenuButton(
-                                                            padding: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        4),
-                                                            child:
-                                                                Row(children: [
+                                                            padding: EdgeInsets.symmetric(horizontal: 4),
+                                                            child: Row(children: [
                                                               Text(
-                                                                feedTimeHandler(
-                                                                    detailPostViewModel
-                                                                        .comments[
-                                                                            index]
-                                                                        .writtenDateTime
-                                                                        .toDate()),
+                                                                feedTimeHandler(detailPostViewModel
+                                                                    .comments[index].writtenDateTime
+                                                                    .toDate()),
                                                                 // x초전, x분 전, 일정 이후면 날짜로
-                                                                style:
-                                                                    feedDateTime,
+                                                                style: feedDateTime,
                                                               ),
                                                               SizedBox(
                                                                 width: 8.w,
@@ -817,55 +702,72 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                                 width: 14.w,
                                                                 height: 16.w,
                                                                 // color: Colors.blue[50],
-                                                                child:
-                                                                    SvgPicture
-                                                                        .asset(
+                                                                child: SvgPicture.asset(
                                                                   'assets/icons/show_more.svg',
-                                                                  color:
-                                                                      yachtBlack,
+                                                                  color: yachtBlack,
                                                                 ),
                                                               ),
                                                             ]),
-                                                            onSelected:
-                                                                (value) {
+                                                            onSelected: (value) {
                                                               switch (value) {
                                                                 case 'delete':
                                                                   showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (context) {
+                                                                      context: context,
+                                                                      builder: (context) {
                                                                         return Dialog(
-                                                                            insetPadding:
-                                                                                primaryHorizontalPadding,
+                                                                            insetPadding: primaryHorizontalPadding,
                                                                             child: Container(
-                                                                                padding: EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                                                padding: EdgeInsets.fromLTRB(
+                                                                                    14.w,
+                                                                                    correctHeight(14.w, 0.0,
+                                                                                        dialogTitle.fontSize),
+                                                                                    14.w,
+                                                                                    14.w),
+                                                                                decoration: BoxDecoration(
+                                                                                    borderRadius:
+                                                                                        BorderRadius.circular(10.w)),
                                                                                 child: Column(
                                                                                   mainAxisSize: MainAxisSize.min,
                                                                                   children: [
                                                                                     Text("알림", style: dialogTitle),
-                                                                                    SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                                                                    SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                                                    Text("정말 삭제하시겠습니까?", style: dialogContent),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(14.w, 0.0,
+                                                                                            dialogTitle.fontSize)),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(24.w, 0.w,
+                                                                                            dialogContent.fontSize)),
+                                                                                    Text("정말 삭제하시겠습니까?",
+                                                                                        style: dialogContent),
                                                                                     Text(
                                                                                       "삭제 후 되돌릴 수 없습니다.",
                                                                                       style: dialogWarning,
                                                                                     ),
-                                                                                    SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(24.w, 0.w,
+                                                                                            dialogContent.fontSize)),
                                                                                     Row(
                                                                                       children: [
                                                                                         Expanded(
                                                                                           child: GestureDetector(
                                                                                               onTap: () async {
-                                                                                                HapticFeedback.lightImpact();
-                                                                                                await detailPostViewModel.deleteComment(detailPostViewModel.comments[index]);
-                                                                                                await communityViewModel.getPost();
-                                                                                                await detailPostViewModel.getComments(post);
-                                                                                                Navigator.of(context).pop();
-                                                                                                yachtSnackBar("댓글이 삭제되었습니다");
+                                                                                                HapticFeedback
+                                                                                                    .lightImpact();
+                                                                                                await detailPostViewModel
+                                                                                                    .deleteComment(
+                                                                                                        detailPostViewModel
+                                                                                                                .comments[
+                                                                                                            index]);
+                                                                                                await communityViewModel
+                                                                                                    .getPost();
+                                                                                                await detailPostViewModel
+                                                                                                    .getComments(post);
+                                                                                                Navigator.of(context)
+                                                                                                    .pop();
+                                                                                                yachtSnackBar(
+                                                                                                    "댓글이 삭제되었습니다");
                                                                                               },
-                                                                                              child: textContainerButtonWithOptions(
+                                                                                              child:
+                                                                                                  textContainerButtonWithOptions(
                                                                                                 text: "예",
                                                                                                 isDarkBackground: true,
                                                                                                 height: 44.w,
@@ -875,10 +777,16 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                                                         Expanded(
                                                                                           child: InkWell(
                                                                                               onTap: () {
-                                                                                                Navigator.of(context).pop();
+                                                                                                Navigator.of(context)
+                                                                                                    .pop();
                                                                                                 // Get.back(closeOverlays: true);
                                                                                               },
-                                                                                              child: textContainerButtonWithOptions(text: "아니오", isDarkBackground: false, height: 44.w)),
+                                                                                              child:
+                                                                                                  textContainerButtonWithOptions(
+                                                                                                      text: "아니오",
+                                                                                                      isDarkBackground:
+                                                                                                          false,
+                                                                                                      height: 44.w)),
                                                                                         )
                                                                                       ],
                                                                                     )
@@ -888,40 +796,58 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                                   break;
                                                                 case 'block':
                                                                   showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (context) {
+                                                                      context: context,
+                                                                      builder: (context) {
                                                                         return Dialog(
-                                                                            insetPadding:
-                                                                                primaryHorizontalPadding,
+                                                                            insetPadding: primaryHorizontalPadding,
                                                                             child: Container(
-                                                                                padding: EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                                                padding: EdgeInsets.fromLTRB(
+                                                                                    14.w,
+                                                                                    correctHeight(14.w, 0.0,
+                                                                                        dialogTitle.fontSize),
+                                                                                    14.w,
+                                                                                    14.w),
+                                                                                decoration: BoxDecoration(
+                                                                                    borderRadius:
+                                                                                        BorderRadius.circular(10.w)),
                                                                                 child: Column(
                                                                                   mainAxisSize: MainAxisSize.min,
                                                                                   children: [
                                                                                     Text("알림", style: dialogTitle),
-                                                                                    SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                                                                    SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                                                    Text("유저를 차단하시겠습니까?", style: dialogContent),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(14.w, 0.0,
+                                                                                            dialogTitle.fontSize)),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(24.w, 0.w,
+                                                                                            dialogContent.fontSize)),
+                                                                                    Text("유저를 차단하시겠습니까?",
+                                                                                        style: dialogContent),
                                                                                     // Text(
                                                                                     //   "삭제 후 되돌릴 수 없습니다.",
                                                                                     //   style: dialogWarning,
                                                                                     // ),
-                                                                                    SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(24.w, 0.w,
+                                                                                            dialogContent.fontSize)),
                                                                                     Row(
                                                                                       children: [
                                                                                         Expanded(
                                                                                           child: GestureDetector(
                                                                                               onTap: () async {
-                                                                                                HapticFeedback.lightImpact();
-                                                                                                await communityViewModel.blockThisUser(post.writerUid);
-                                                                                                await communityViewModel.reloadPost();
-                                                                                                Navigator.of(context).pop();
-                                                                                                yachtSnackBar("유저를 차단하였습니다");
+                                                                                                HapticFeedback
+                                                                                                    .lightImpact();
+                                                                                                await communityViewModel
+                                                                                                    .blockThisUser(
+                                                                                                        post.writerUid);
+                                                                                                await communityViewModel
+                                                                                                    .reloadPost();
+                                                                                                Navigator.of(context)
+                                                                                                    .pop();
+                                                                                                yachtSnackBar(
+                                                                                                    "유저를 차단하였습니다");
                                                                                               },
-                                                                                              child: textContainerButtonWithOptions(
+                                                                                              child:
+                                                                                                  textContainerButtonWithOptions(
                                                                                                 text: "예",
                                                                                                 isDarkBackground: true,
                                                                                                 height: 44.w,
@@ -931,10 +857,16 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                                                         Expanded(
                                                                                           child: InkWell(
                                                                                               onTap: () {
-                                                                                                Navigator.of(context).pop();
+                                                                                                Navigator.of(context)
+                                                                                                    .pop();
                                                                                                 // Get.back(closeOverlays: true);
                                                                                               },
-                                                                                              child: textContainerButtonWithOptions(text: "아니오", isDarkBackground: false, height: 44.w)),
+                                                                                              child:
+                                                                                                  textContainerButtonWithOptions(
+                                                                                                      text: "아니오",
+                                                                                                      isDarkBackground:
+                                                                                                          false,
+                                                                                                      height: 44.w)),
                                                                                         )
                                                                                       ],
                                                                                     )
@@ -944,40 +876,59 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                                   break;
                                                                 case 'report':
                                                                   showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (context) {
+                                                                      context: context,
+                                                                      builder: (context) {
                                                                         return Dialog(
-                                                                            insetPadding:
-                                                                                primaryHorizontalPadding,
+                                                                            insetPadding: primaryHorizontalPadding,
                                                                             child: Container(
-                                                                                padding: EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                                                padding: EdgeInsets.fromLTRB(
+                                                                                    14.w,
+                                                                                    correctHeight(14.w, 0.0,
+                                                                                        dialogTitle.fontSize),
+                                                                                    14.w,
+                                                                                    14.w),
+                                                                                decoration: BoxDecoration(
+                                                                                    borderRadius:
+                                                                                        BorderRadius.circular(10.w)),
                                                                                 child: Column(
                                                                                   mainAxisSize: MainAxisSize.min,
                                                                                   children: [
                                                                                     Text("알림", style: dialogTitle),
-                                                                                    SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                                                    Text("이 글을 신고하시겠습니까?", style: dialogContent),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(24.w, 0.w,
+                                                                                            dialogContent.fontSize)),
+                                                                                    Text("이 글을 신고하시겠습니까?",
+                                                                                        style: dialogContent),
                                                                                     Text(
                                                                                       "신고한 유저는 자동으로 차단됩니다.",
-                                                                                      style: dialogWarning.copyWith(color: yachtDarkGrey),
+                                                                                      style: dialogWarning.copyWith(
+                                                                                          color: yachtDarkGrey),
                                                                                     ),
-                                                                                    SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                                                    SizedBox(
+                                                                                        height: correctHeight(24.w, 0.w,
+                                                                                            dialogContent.fontSize)),
                                                                                     Row(
                                                                                       children: [
                                                                                         Expanded(
                                                                                           child: GestureDetector(
                                                                                               onTap: () async {
-                                                                                                HapticFeedback.lightImpact();
-                                                                                                await communityViewModel.blockThisUser(post.writerUid);
-                                                                                                await communityViewModel.reportThisUser(post);
-                                                                                                await communityViewModel.reloadPost();
-                                                                                                Navigator.of(context).pop();
-                                                                                                yachtSnackBar("유저를 신고/차단하였습니다");
+                                                                                                HapticFeedback
+                                                                                                    .lightImpact();
+                                                                                                await communityViewModel
+                                                                                                    .blockThisUser(
+                                                                                                        post.writerUid);
+                                                                                                await communityViewModel
+                                                                                                    .reportThisUser(
+                                                                                                        post);
+                                                                                                await communityViewModel
+                                                                                                    .reloadPost();
+                                                                                                Navigator.of(context)
+                                                                                                    .pop();
+                                                                                                yachtSnackBar(
+                                                                                                    "유저를 신고/차단하였습니다");
                                                                                               },
-                                                                                              child: textContainerButtonWithOptions(
+                                                                                              child:
+                                                                                                  textContainerButtonWithOptions(
                                                                                                 text: "신고하기",
                                                                                                 isDarkBackground: true,
                                                                                                 height: 44.w,
@@ -987,10 +938,16 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                                                         Expanded(
                                                                                           child: InkWell(
                                                                                               onTap: () {
-                                                                                                Navigator.of(context).pop();
+                                                                                                Navigator.of(context)
+                                                                                                    .pop();
                                                                                                 // Get.back(closeOverlays: true);
                                                                                               },
-                                                                                              child: textContainerButtonWithOptions(text: "취소", isDarkBackground: false, height: 44.w)),
+                                                                                              child:
+                                                                                                  textContainerButtonWithOptions(
+                                                                                                      text: "취소",
+                                                                                                      isDarkBackground:
+                                                                                                          false,
+                                                                                                      height: 44.w)),
                                                                                         )
                                                                                       ],
                                                                                     )
@@ -1001,15 +958,9 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                                 default:
                                                               }
                                                             },
-                                                            itemBuilder:
-                                                                (context) {
-                                                              return detailPostViewModel
-                                                                          .comments[
-                                                                              index]
-                                                                          .writerUid ==
-                                                                      userModelRx
-                                                                          .value!
-                                                                          .uid
+                                                            itemBuilder: (context) {
+                                                              return detailPostViewModel.comments[index].writerUid ==
+                                                                      userModelRx.value!.uid
                                                                   ? commentMyShowMore
                                                                   : communityShowMore;
                                                             },
@@ -1018,11 +969,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                       ),
                                                       SizedBox(
                                                           height: reducedPaddingWhenTextIsBothSide(
-                                                              6.w,
-                                                              feedUserName
-                                                                  .fontSize!,
-                                                              feedTitle
-                                                                  .fontSize!)),
+                                                              6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
                                                       SizedBox(
                                                         height: 2.w,
                                                       ),
@@ -1040,20 +987,14 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                       // ),
                                                       RichText(
                                                           text: TextSpan(
-                                                              text: (detailPostViewModel
-                                                                      .comments[index]
-                                                                      .isReply)
+                                                              text: (detailPostViewModel.comments[index].isReply)
                                                                   ? "@${detailPostViewModel.comments[index].replyToUserName} "
                                                                   : "",
                                                               style: feedContent.copyWith(color: yachtViolet),
                                                               children: [
                                                             TextSpan(
-                                                                text: detailPostViewModel
-                                                                    .comments[
-                                                                        index]
-                                                                    .content,
-                                                                style:
-                                                                    feedContent)
+                                                                text: detailPostViewModel.comments[index].content,
+                                                                style: feedContent)
                                                           ]))
                                                     ],
                                                   ),
@@ -1094,8 +1035,7 @@ class DetailPostView extends GetView<DetailPostViewModel> {
     );
   }
 
-  Dialog buildPhotoPageView(int index, List<String> imageUrls,
-      DetailPostViewModel detailPostViewModel) {
+  Dialog buildPhotoPageView(int index, List<String> imageUrls, DetailPostViewModel detailPostViewModel) {
     return Dialog(
       backgroundColor: Colors.transparent,
       clipBehavior: Clip.hardEdge,
@@ -1250,43 +1190,28 @@ class _CommentInputState extends State<CommentInput> {
                   child: Obx(
                     () => Padding(
                       padding: primaryHorizontalPadding.copyWith(
-                          top: widget.detailPostViewModel.replyToUserName.value
-                                      .length >
-                                  0
-                              ? 0
-                              : 14.w,
-                          bottom: 14.w),
+                          top: widget.detailPostViewModel.replyToUserName.value.length > 0 ? 0 : 14.w, bottom: 14.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          widget.detailPostViewModel.replyToUserName.value
-                                      .length >
-                                  0
+                          widget.detailPostViewModel.replyToUserName.value.length > 0
                               ? Align(
                                   alignment: Alignment.centerLeft,
                                   child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 36.w + 4.w,
-                                          vertical: 4.w),
+                                      padding: EdgeInsets.symmetric(horizontal: 36.w + 4.w, vertical: 4.w),
                                       child: InkWell(
                                           onTap: () {
-                                            widget.detailPostViewModel
-                                                .replyToCommentId("");
-                                            widget.detailPostViewModel
-                                                .replyToUserUid("");
-                                            widget.detailPostViewModel
-                                                .replyToUserName("");
+                                            widget.detailPostViewModel.replyToCommentId("");
+                                            widget.detailPostViewModel.replyToUserUid("");
+                                            widget.detailPostViewModel.replyToUserName("");
                                           },
                                           child: Row(
                                               mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 Text(
                                                   ' ${widget.detailPostViewModel.replyToUserName.value} 님에게 답글',
-                                                  style: feedContent.copyWith(
-                                                      color: yachtViolet,
-                                                      fontSize: 14.w),
+                                                  style: feedContent.copyWith(color: yachtViolet, fontSize: 14.w),
                                                 ),
                                                 SizedBox(
                                                   width: 4.w,
@@ -1372,21 +1297,16 @@ class _CommentInputState extends State<CommentInput> {
                                           //               )
                                           //             ]))
                                           //     : Text(" "),
-                                          prefixIconConstraints: BoxConstraints(
-                                              minWidth: 0, minHeight: 0),
+                                          prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
                                           isDense: true,
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 14.w, vertical: 8.w),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderSide: BorderSide.none),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide.none),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.w),
+                                          focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                          enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                                           hintText:
                                               // widget.detailPostViewModel.replyToUserName.value.length > 0
                                               //     ? ""
                                               //     :
-                                              widget.detailPostViewModel
-                                                  .hintText.value,
+                                              widget.detailPostViewModel.hintText.value,
                                           hintStyle: feedContent),
                                     ),
                                   ),
@@ -1404,41 +1324,28 @@ class _CommentInputState extends State<CommentInput> {
                                     SizedBox(height: 4.w),
                                     GestureDetector(
                                         onTap: () async {
-                                          if (commentFormKey.currentState!
-                                                  .validate() &&
-                                              !widget.detailPostViewModel
-                                                  .isUploadingNewPost.value) {
+                                          if (commentFormKey.currentState!.validate() &&
+                                              !widget.detailPostViewModel.isUploadingNewPost.value) {
                                             HapticFeedback.lightImpact();
-                                            widget.detailPostViewModel
-                                                .isUploadingNewPost(true);
+                                            widget.detailPostViewModel.isUploadingNewPost(true);
                                             await widget.detailPostViewModel
-                                                .uploadComment(
-                                                    widget.post,
-                                                    commentController
-                                                        .value.text);
-                                            await widget.detailPostViewModel
-                                                .getComments(widget.post);
-                                            widget.scrollController.jumpTo(
-                                                widget.scrollController.position
-                                                    .maxScrollExtent);
+                                                .uploadComment(widget.post, commentController.value.text);
+                                            await widget.detailPostViewModel.getComments(widget.post);
+                                            widget.scrollController
+                                                .jumpTo(widget.scrollController.position.maxScrollExtent);
                                             commentController.clear();
                                             _focusNode.unfocus();
-                                            await widget.communityViewModel
-                                                .reloadPost();
-                                            widget.detailPostViewModel
-                                                .isUploadingNewPost(false);
+                                            await widget.communityViewModel.reloadPost();
+                                            widget.detailPostViewModel.isUploadingNewPost(false);
                                           }
                                         },
-                                        child: widget.detailPostViewModel
-                                                .isUploadingNewPost.value
+                                        child: widget.detailPostViewModel.isUploadingNewPost.value
                                             ? simpleTextContainerButton("답글 달기",
-                                                child:
-                                                    CircularProgressIndicator(
+                                                child: CircularProgressIndicator(
                                                   strokeWidth: 1.4.w,
                                                   color: yachtViolet,
                                                 ))
-                                            : simpleTextContainerButton(
-                                                "답글 달기")),
+                                            : simpleTextContainerButton("답글 달기")),
                                   ],
                                 )
                               : Container())
@@ -1470,8 +1377,7 @@ class EditingMyPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DetailPostViewModel detailPostViewModel =
-        Get.put(DetailPostViewModel(post));
+    DetailPostViewModel detailPostViewModel = Get.put(DetailPostViewModel(post));
     _contentController = TextEditingController(text: post.content);
     return Column(
       children: [
@@ -1495,8 +1401,7 @@ class EditingMyPost extends StatelessWidget {
                       onTap: () {
                         Get.back();
                       },
-                      child: Image.asset('assets/icons/exit.png',
-                          width: 14.w, height: 14.w, color: yachtBlack)),
+                      child: Image.asset('assets/icons/exit.png', width: 14.w, height: 14.w, color: yachtBlack)),
                 ),
               ),
               Text(
@@ -1512,8 +1417,7 @@ class EditingMyPost extends StatelessWidget {
                         if (_contentFormKey.currentState!.validate()) {
                           print("OKAY");
                           print(_contentController.value.text);
-                          await _communityViewModel.editPost(
-                              post, _contentController.value.text);
+                          await _communityViewModel.editPost(post, _contentController.value.text);
                           await _communityViewModel.getPost();
                           await detailPostViewModel.getThisPost(post);
                           Get.back();
@@ -1532,10 +1436,8 @@ class EditingMyPost extends StatelessWidget {
           decoration: BoxDecoration(
               color: primaryBackgroundColor,
               border: Border(
-                bottom: BorderSide(
-                    color: Colors.black.withOpacity(.05), width: 1.w),
-                top: BorderSide(
-                    color: Colors.black.withOpacity(.05), width: 1.w),
+                bottom: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
+                top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
               )),
           child: Center(child: Text("피드", style: sectionTitle)),
         ),
@@ -1561,13 +1463,10 @@ class EditingMyPost extends StatelessWidget {
                         decoration: InputDecoration(
                             isDense: true,
                             contentPadding: EdgeInsets.all(14.w),
-                            focusedBorder:
-                                OutlineInputBorder(borderSide: BorderSide.none),
-                            enabledBorder:
-                                OutlineInputBorder(borderSide: BorderSide.none),
+                            focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                            enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                             hintText: '글을 입력해주세요.',
-                            hintStyle: feedContent.copyWith(
-                                color: feedContent.color!.withOpacity(.5))),
+                            hintStyle: feedContent.copyWith(color: feedContent.color!.withOpacity(.5))),
                       ),
                     ),
                     // 업로드한 이미지 미리보기하는 부분
@@ -1579,9 +1478,7 @@ class EditingMyPost extends StatelessWidget {
                         return Container(
                           decoration: BoxDecoration(
                               border: Border(
-                            top: BorderSide(
-                                color: Colors.black.withOpacity(.05),
-                                width: 1.w),
+                            top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
                           )),
                           height: 100.w,
                           child: ListView.builder(
@@ -1595,11 +1492,9 @@ class EditingMyPost extends StatelessWidget {
                                     ),
                                     Stack(children: [
                                       ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(16.w),
+                                        borderRadius: BorderRadius.circular(16.w),
                                         child: Image.file(
-                                          File(_communityViewModel
-                                              .images![index].path),
+                                          File(_communityViewModel.images![index].path),
                                           height: 100.w,
                                           width: 100.w,
                                           fit: BoxFit.cover,
@@ -1609,15 +1504,12 @@ class EditingMyPost extends StatelessWidget {
                                         top: 10.w,
                                         right: 10.w,
                                         child: InkWell(
-                                            onTap: () => _communityViewModel
-                                                .images!
-                                                .removeAt(index),
+                                            onTap: () => _communityViewModel.images!.removeAt(index),
                                             child: Container(
                                               height: 20.w,
                                               width: 20.w,
                                               // color: Colors.red,
-                                              child: Image.asset(
-                                                  'assets/icons/deletePhoto.png'),
+                                              child: Image.asset('assets/icons/deletePhoto.png'),
                                             )),
                                       ),
                                     ]),
@@ -1633,19 +1525,14 @@ class EditingMyPost extends StatelessWidget {
                       decoration: BoxDecoration(
                           color: primaryBackgroundColor,
                           border: Border(
-                            bottom: BorderSide(
-                                color: Colors.black.withOpacity(.05),
-                                width: 1.w),
-                            top: BorderSide(
-                                color: Colors.black.withOpacity(.05),
-                                width: 1.w),
+                            bottom: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
+                            top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
                           )),
                       // color: Colors.yellow,
                       child: GestureDetector(
                         onTap: () async {
                           await _communityViewModel.getImageFromDevice();
-                          print(
-                              'image length: ${_communityViewModel.images!.length}');
+                          print('image length: ${_communityViewModel.images!.length}');
                         },
                         child: Padding(
                           padding: primaryHorizontalPadding,
