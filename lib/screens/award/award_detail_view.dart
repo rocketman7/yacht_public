@@ -283,14 +283,14 @@ class AwardDetailView extends StatelessWidget {
                   SizedBox(height: 10.w),
                   GestureDetector(
                     onTap: () {
-                      // Get.to(() => PrimaryWebView(
-                      //     title: '요트 퀘스트 규정집',
-                      //     url:
-                      //         'https://brave-cinnamon-fa9.notion.site/Rule-Book-65f390c24fbe4b4bbf1b95011419c0f7'));
+                      Get.to(() => PrimaryWebView(
+                          title: '요트 퀘스트 규정집',
+                          url:
+                              'https://brave-cinnamon-fa9.notion.site/Rule-Book-65f390c24fbe4b4bbf1b95011419c0f7'));
                       //아래는 테스트코드들이므로 반드시 주석처리
                       // Get.to(() => LastAwardDetailView());
                       // _awardViewModel.testLastLeaguesDB();
-                      Get.to(() => LastAwardView());
+                      // Get.to(() => LastAwardView());
                     },
                     child: Column(
                       children: [
