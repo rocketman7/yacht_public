@@ -217,7 +217,7 @@ TextStyle questTitleTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 스탯 각 제목
@@ -237,7 +237,7 @@ TextStyle detailedContentTextStyle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 //// 온보딩
@@ -917,7 +917,7 @@ TextStyle questDescription = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 TextStyle questTerm = TextStyle(
