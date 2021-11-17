@@ -833,7 +833,7 @@ class FirestoreService extends GetxService {
         )
         .snapshots()
         .map((element) {
-      print("get");
+      // print("get");
       //element는 다큐모음
       // print('${investAddress.issueCode}');
       // print('snapshot: ${element.docs.last.data()}');
