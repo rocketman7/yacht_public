@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -59,6 +57,8 @@
 	<string>요트 - 주식예측퀴즈</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-3726614606720353~1848726570</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>
@@ -78,7 +78,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>마이크를 사용하기 위해 권한이 필요합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>&quot;요트&quot;가 사진 또는 동영상을 게시글에 첨부, 프로필에 등록하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다.</string>
+	<string>"요트"가 사진 또는 동영상을 게시글에 첨부, 프로필에 등록하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다.</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>무료로 운영되는 요트는 유저에게 더 나은 서비스를 제공하고자 노력하고 있습니다. 추적을 허용하시면 맞춤형 광고를 제공 받을 수 있습니다. 추적되는 모든 정보는 익명화됩니다.</string>
 	<key>SKAdNetworkItems</key>
