@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/locator.dart';
@@ -9,11 +10,14 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/community_view.dart';
 import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/screens/home/home_view.dart';
+import 'package:yachtOne/screens/home/home_view_model.dart';
 
 import 'package:yachtOne/screens/home/performance_test_home_view.dart';
 import 'package:yachtOne/screens/insight/insight_view.dart';
+import 'package:yachtOne/screens/insight/insight_view_model.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
+import 'package:yachtOne/screens/profile/profile_my_view_model.dart';
 import 'package:yachtOne/screens/ranks/rank_controller.dart';
 import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
@@ -22,6 +26,10 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 class StartupView extends GetView<StartupViewModel> {
   // const StartupView({Key? key}) : super(key: key);
   FirebaseAuth _auth = FirebaseAuth.instance;
+  HomeViewModel homeViewModel = Get.put(HomeViewModel());
+  CommunityViewModel communityViewModel = Get.put(CommunityViewModel());
+  InsightViewModel insightViewModel = Get.put(InsightViewModel());
+  ProfileMyViewModel profileViewModel = Get.put(ProfileMyViewModel());
 
   final double iconSize = 38.w;
   final double unselectedOpacity = 1;
@@ -30,9 +38,29 @@ class StartupView extends GetView<StartupViewModel> {
   // TODO: implement controller
   get controller => Get.put(StartupViewModel());
 
+  // DateTime currentBackPressTime = DateTime(2000, 1, 1, 0, 0);
+
+  Future<bool> androidBackButtonAction() async {
+    if (controller.selectedPage.value == 0) {
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      return Future.value(false);
+    }
+    //  else if (currentBackPressTime == DateTime(2000, 1, 1, 0, 0) ||
+    //     DateTime.now().difference(currentBackPressTime) > Duration(seconds: 2)) {
+    //   currentBackPressTime = DateTime.now();
+    //   // yachtSnackBarFromBottom("뒤로 가기를 빠르게 한번 더 누르면 앱이 종료됩니다");
+    //   return Future.value(false);
+    //   // return null;
+    // }
+    else {
+      controller.selectedPage(0);
+      // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      return Future.value(false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<String> tabPageName = ['Home', 'Community', 'ProfileMy'];
     RxList<Widget> pageList = [
       HomeView(),
       InsightView(),
@@ -62,10 +90,13 @@ class StartupView extends GetView<StartupViewModel> {
 
     return Scaffold(
       extendBody: true,
-      body: Obx(
-        () => IndexedStack(
-          index: controller.selectedPage.value,
-          children: pageList,
+      body: WillPopScope(
+        onWillPop: androidBackButtonAction,
+        child: Obx(
+          () => IndexedStack(
+            index: controller.selectedPage.value,
+            children: pageList,
+          ),
         ),
       ),
       bottomNavigationBar: Obx(() => ClipRRect(
@@ -101,8 +132,45 @@ class StartupView extends GetView<StartupViewModel> {
                     //   _mixpanelService.mixpanel.track('${tabPageName[index]}-enter');
                     // }
                     if (index == controller.selectedPage.value) {
-                      print("same page");
-                      HomeView().goToTop();
+                      switch (index) {
+                        case 0:
+                          homeViewModel.scrollController.animateTo(
+                            0,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+
+                          break;
+                        case 1:
+                          insightViewModel.scrollController.animateTo(
+                            0,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          break;
+                        case 2:
+                          communityViewModel.scrollController.animateTo(
+                            0,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          break;
+                        case 3:
+                          profileViewModel.scrollController.animateTo(
+                            0,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          break;
+                        default:
+                      }
+
+                      homeViewModel.scrollController.animateTo(
+                        0,
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                      // HomeView().goToTop();
                     } else {
                       controller.selectedPage(index);
                     }

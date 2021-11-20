@@ -31,6 +31,8 @@ class ProfileMyViewModel extends GetxController {
   final TextEditingController nameChangeController = TextEditingController();
   final TextEditingController introChangeController = TextEditingController();
 
+  ScrollController scrollController = ScrollController(initialScrollOffset: 0);
+
   RxBool isCheckingUserNameDuplicated = false.obs;
 
   @override
