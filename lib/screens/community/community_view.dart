@@ -19,6 +19,7 @@ import 'community_view_model.dart';
 
 class CommunityView extends GetView<CommunityViewModel> {
   // CommunityViewModel communityViewModel = Get.put(CommunityViewModel());
+  CommunityViewModel communityViewModel = Get.find<CommunityViewModel>();
   // ScrollController _scrollController = ScrollController();
   final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
@@ -53,189 +54,183 @@ class CommunityView extends GetView<CommunityViewModel> {
     // });
 
     print("commuity view building");
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Scaffold(
-        // floatingActionButton: GestureDetector(
-        //   onTap: () {
-        //     Get.bottomSheet(
-        //       WritingNewPost(
-        //         // contentFormKey: _contentFormKey,
-        //         // contentController: _contentController,
-        //         communityViewModel: _communityViewModel,
-        //       ),
-        //       isScrollControlled: true,
-        //       ignoreSafeArea: false, // add this
-        //     );
-        //   },
-        //   child: Container(
-        //     decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
-        //       BoxShadow(
-        //         color: yachtShadow,
-        //         blurRadius: 8.w,
-        //         spreadRadius: 1.w,
-        //       )
-        //     ]),
-        //     height: 54,
-        //     width: 54,
-        //     child: Image.asset('assets/icons/writing.png'),
-        //   ),
-        // ),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    return Scaffold(
+      // floatingActionButton: GestureDetector(
+      //   onTap: () {
+      //     Get.bottomSheet(
+      //       WritingNewPost(
+      //         // contentFormKey: _contentFormKey,
+      //         // contentController: _contentController,
+      //         communityViewModel: _communityViewModel,
+      //       ),
+      //       isScrollControlled: true,
+      //       ignoreSafeArea: false, // add this
+      //     );
+      //   },
+      //   child: Container(
+      //     decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+      //       BoxShadow(
+      //         color: yachtShadow,
+      //         blurRadius: 8.w,
+      //         spreadRadius: 1.w,
+      //       )
+      //     ]),
+      //     height: 54,
+      //     width: 54,
+      //     child: Image.asset('assets/icons/writing.png'),
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
-        body: Stack(clipBehavior: Clip.none, children: [
-          RefreshConfiguration(
-            enableScrollWhenRefreshCompleted: true,
-            child: SmartRefresher(
-              header: reloadHeader(false),
-              controller: _refreshController,
-              onRefresh: _onRefresh,
-              child: CustomScrollView(
-                clipBehavior: Clip.none,
-                controller: _communityViewModel.scrollController,
-                // physics: ScrollPhysics(),
+      body: Stack(clipBehavior: Clip.none, children: [
+        RefreshConfiguration(
+          enableScrollWhenRefreshCompleted: true,
+          child: SmartRefresher(
+            header: reloadHeader(false),
+            controller: _refreshController,
+            onRefresh: _onRefresh,
+            child: CustomScrollView(
+              clipBehavior: Clip.none,
+              controller: _communityViewModel.scrollController,
+              // physics: ScrollPhysics(),
 
-                slivers: [
-                  Obx(
-                    () => SliverPersistentHeader(
-                        floating: false,
-                        pinned: true,
-                        // 홈 뷰 앱바 구현
-                        delegate:
-                            YachtPrimaryAppBarDelegate(offset: _communityViewModel.offset.value, tabTitle: "커뮤니티")),
-                  ),
-                  // 전문글만, 팔로워만 고르기
-                  // Container(
-                  //   height: 48.w,
-                  //   // color: Colors.blueGrey,
-                  //   child: Row(
-                  //     children: [
-                  //       Expanded(
-                  //         child: Center(
-                  //             child: Text(
-                  //           "프로 모아보기",
-                  //           style: subheadingStyle.copyWith(color: primaryButtonBackground),
-                  //         )),
-                  //       ),
-                  //       Container(height: 32.w, width: 1.w, color: yachtLineColor),
-                  //       Expanded(
-                  //           child: Center(
-                  //               child: Text(
-                  //         "팔로워 모아보기",
-                  //         style: subheadingStyle.copyWith(color: primaryButtonBackground),
-                  //       )))
-                  //     ],
-                  //   ),
-                  // ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      Obx(
-                        () => (_communityViewModel.posts.length == 0)
-                            ? Container(
-                                child: Text("게시글이 없습니다"),
-                              )
-
-                            // print(snapshot.data);
-                            // 임시로 0 index만. 위젯 블럭 제작 이후에는 Lazy List로
-                            :
-                            // PaginateFirestore(
-                            //     physics: NeverScrollableScrollPhysics(),
-                            //     onLoaded: (paginationLoaded) {
-                            //       print(paginationLoaded);
-                            //       print('newpageloaded');
-                            //     },
-                            //     shrinkWrap: true,
-                            //     itemsPerPage: 4,
-                            //     query: FirebaseFirestore.instance
-                            //         .collection('posts')
-                            //         .orderBy('writtenDateTime', descending: true),
-                            //     itemBuilderType: PaginateBuilderType.listView,
-                            //     itemBuilder: (index, context, DocumentSnapshot snapshot) {
-                            //       final data = snapshot.data() as Map<String, dynamic>;
-                            //       final postData = PostModel.fromMap(data);
-                            //       // return Container(
-                            //       //   height: 200,
-                            //       //   color: index % 2 == 0 ? Colors.red : Colors.blue,
-                            //       //   child: Text(postData.content),
-                            //       // );
-                            //       return Column(
-                            //         children: [
-                            //           FeedWidget(communityViewModel: _communityViewModel, post: postData),
-                            //           SizedBox(
-                            //             height: 12.w,
-                            //           )
-                            //         ],
-                            //       );
-                            //     },
-                            //   )
-                            Padding(
-                                padding: primaryHorizontalPadding,
-                                child: ListView.builder(
-                                    // clipBehavior: Clip.none,
-                                    // controller: _scrollController,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: _communityViewModel.posts.length,
-                                    itemBuilder: (_, index) {
-                                      return Column(
-                                        children: [
-                                          _communityViewModel.posts[index].isNotice
-                                              ? NoticeWidget(
-                                                  communityViewModel: _communityViewModel,
-                                                  post: _communityViewModel.posts[index])
-                                              : FeedWidget(
-                                                  communityViewModel: _communityViewModel,
-                                                  post: _communityViewModel.posts[index]),
-                                          SizedBox(
-                                            height: 12.w,
-                                          )
-                                        ],
-                                      );
-                                    }),
-                              ),
-                      )
-                    ]),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: SizeConfig.safeAreaBottom + 74.w,
-            right: 14.w,
-            child: InkWell(
-              onTap: () {
-                Get.bottomSheet(
-                  WritingNewPost(
-                    // contentFormKey: _contentFormKey,
-                    // contentController: _contentController,
-                    communityViewModel: _communityViewModel,
-                  ),
-                  isScrollControlled: true,
-                  ignoreSafeArea: false, // add this
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                  BoxShadow(
-                    color: yachtShadow,
-                    offset: Offset(1.w, 1.w),
-                    blurRadius: 3.w,
-                    spreadRadius: 1.w,
-                  )
-                ]),
-                height: 54,
-                width: 54,
-                child: Image.asset(
-                  'assets/icons/writing.png',
+              slivers: [
+                Obx(
+                  () => SliverPersistentHeader(
+                      floating: false,
+                      pinned: true,
+                      // 홈 뷰 앱바 구현
+                      delegate: YachtPrimaryAppBarDelegate(offset: _communityViewModel.offset.value, tabTitle: "커뮤니티")),
                 ),
+                // 전문글만, 팔로워만 고르기
+                // Container(
+                //   height: 48.w,
+                //   // color: Colors.blueGrey,
+                //   child: Row(
+                //     children: [
+                //       Expanded(
+                //         child: Center(
+                //             child: Text(
+                //           "프로 모아보기",
+                //           style: subheadingStyle.copyWith(color: primaryButtonBackground),
+                //         )),
+                //       ),
+                //       Container(height: 32.w, width: 1.w, color: yachtLineColor),
+                //       Expanded(
+                //           child: Center(
+                //               child: Text(
+                //         "팔로워 모아보기",
+                //         style: subheadingStyle.copyWith(color: primaryButtonBackground),
+                //       )))
+                //     ],
+                //   ),
+                // ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Obx(
+                      () => (_communityViewModel.posts.length == 0)
+                          ? Container(
+                              child: Text("게시글이 없습니다"),
+                            )
+
+                          // print(snapshot.data);
+                          // 임시로 0 index만. 위젯 블럭 제작 이후에는 Lazy List로
+                          :
+                          // PaginateFirestore(
+                          //     physics: NeverScrollableScrollPhysics(),
+                          //     onLoaded: (paginationLoaded) {
+                          //       print(paginationLoaded);
+                          //       print('newpageloaded');
+                          //     },
+                          //     shrinkWrap: true,
+                          //     itemsPerPage: 4,
+                          //     query: FirebaseFirestore.instance
+                          //         .collection('posts')
+                          //         .orderBy('writtenDateTime', descending: true),
+                          //     itemBuilderType: PaginateBuilderType.listView,
+                          //     itemBuilder: (index, context, DocumentSnapshot snapshot) {
+                          //       final data = snapshot.data() as Map<String, dynamic>;
+                          //       final postData = PostModel.fromMap(data);
+                          //       // return Container(
+                          //       //   height: 200,
+                          //       //   color: index % 2 == 0 ? Colors.red : Colors.blue,
+                          //       //   child: Text(postData.content),
+                          //       // );
+                          //       return Column(
+                          //         children: [
+                          //           FeedWidget(communityViewModel: _communityViewModel, post: postData),
+                          //           SizedBox(
+                          //             height: 12.w,
+                          //           )
+                          //         ],
+                          //       );
+                          //     },
+                          //   )
+                          Padding(
+                              padding: primaryHorizontalPadding,
+                              child: ListView.builder(
+                                  // clipBehavior: Clip.none,
+                                  // controller: _scrollController,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: _communityViewModel.posts.length,
+                                  itemBuilder: (_, index) {
+                                    return Column(
+                                      children: [
+                                        _communityViewModel.posts[index].isNotice
+                                            ? NoticeWidget(
+                                                communityViewModel: _communityViewModel,
+                                                post: _communityViewModel.posts[index])
+                                            : FeedWidget(
+                                                communityViewModel: _communityViewModel,
+                                                post: _communityViewModel.posts[index]),
+                                        SizedBox(
+                                          height: 12.w,
+                                        )
+                                      ],
+                                    );
+                                  }),
+                            ),
+                    )
+                  ]),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: SizeConfig.safeAreaBottom + 74.w,
+          right: 14.w,
+          child: InkWell(
+            onTap: () {
+              Get.bottomSheet(
+                WritingNewPost(
+                  // contentFormKey: _contentFormKey,
+                  // contentController: _contentController,
+                  communityViewModel: _communityViewModel,
+                ),
+                isScrollControlled: true,
+                ignoreSafeArea: false, // add this
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                BoxShadow(
+                  color: yachtShadow,
+                  offset: Offset(1.w, 1.w),
+                  blurRadius: 3.w,
+                  spreadRadius: 1.w,
+                )
+              ]),
+              height: 54,
+              width: 54,
+              child: Image.asset(
+                'assets/icons/writing.png',
               ),
             ),
           ),
-        ]),
-      ),
+        ),
+      ]),
     );
   }
 }

@@ -49,11 +49,11 @@ import '../../locator.dart';
 import '../quest/quest_widget.dart';
 
 class HomeView extends StatelessWidget {
-  HomeViewModel homeViewModel = Get.put(HomeViewModel());
+  HomeViewModel homeViewModel = Get.find<HomeViewModel>();
   NotificationViewModel notificationViewModel = Get.put(NotificationViewModel());
 
   final MixpanelService _mixpanelService = locator<MixpanelService>();
-  ScrollController _scrollController = ScrollController(initialScrollOffset: 0);
+
   RxDouble offset = 0.0.obs;
 
   final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
@@ -89,24 +89,6 @@ class HomeView extends StatelessWidget {
     _refreshController.refreshCompleted();
   }
 
-  DateTime currentBackPressTime = DateTime(2000, 1, 1, 0, 0);
-
-  Future<bool> androidBackButtonAction() async {
-    print('backbutton');
-    print(currentBackPressTime);
-    if (currentBackPressTime == DateTime(2000, 1, 1, 0, 0) ||
-        DateTime.now().difference(currentBackPressTime) > Duration(seconds: 2)) {
-      currentBackPressTime = DateTime.now();
-      // yachtSnackBarFromBottom("뒤로 가기를 빠르게 한번 더 누르면 앱이 종료됩니다");
-      return Future.value(false);
-      // return null;
-    } else {
-      print("TURN OFF");
-      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      return Future.value(false);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
@@ -131,16 +113,7 @@ class HomeView extends StatelessWidget {
       QuestResultsView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       RankHomeWidget(),
-      InkWell(
-          onTap: () {
-            // print(_scrollController.offset);
-            _scrollController.animateTo(
-              0,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          },
-          child: SizedBox(height: 90.w)),
+      SizedBox(height: 100.w),
       // ReadingContentView(homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
       // SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       // TodayMarketView(homeViewModel: homeViewModel),
@@ -156,9 +129,9 @@ class HomeView extends StatelessWidget {
 
     // _scrollController = ScrollController(initialScrollOffset: 0);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      _scrollController.addListener(() {
+      homeViewModel.scrollController.addListener(() {
         // offset obs 값에 scroll controller offset 넣어주기
-        _scrollController.offset < 0 ? offset(0) : offset(_scrollController.offset);
+        homeViewModel.scrollController.offset < 0 ? offset(0) : offset(homeViewModel.scrollController.offset);
         // print(_scrollController.offset);
       });
     });
@@ -167,67 +140,64 @@ class HomeView extends StatelessWidget {
     //     'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: androidBackButtonAction,
-        child: RefreshConfiguration(
-          enableScrollWhenRefreshCompleted: true,
-          child: SmartRefresher(
-            header: reloadHeader(true),
-            controller: _refreshController,
-            onRefresh: _onRefresh,
-            child: CustomScrollView(
-              controller: _scrollController,
-              slivers: [
-                // 앱바
-                Obx(
-                  () => SliverPersistentHeader(
-                      floating: false,
-                      pinned: true,
-                      // 홈 뷰 앱바 구현
-                      delegate: _GlassmorphismAppBarDelegate(
-                        MediaQuery.of(context).padding,
-                        offset.value,
-                        homeViewModel,
-                      )),
+      body: RefreshConfiguration(
+        enableScrollWhenRefreshCompleted: true,
+        child: SmartRefresher(
+          header: reloadHeader(true),
+          controller: _refreshController,
+          onRefresh: _onRefresh,
+          child: CustomScrollView(
+            controller: homeViewModel.scrollController,
+            slivers: [
+              // 앱바
+              Obx(
+                () => SliverPersistentHeader(
+                    floating: false,
+                    pinned: true,
+                    // 홈 뷰 앱바 구현
+                    delegate: _GlassmorphismAppBarDelegate(
+                      MediaQuery.of(context).padding,
+                      offset.value,
+                      homeViewModel,
+                    )),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 14.w,
                 ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 14.w,
+              ),
+              Obx(() => homeViewModel.isLoading.value
+                      ? SliverToBoxAdapter()
+                      : SliverList(
+                          delegate: SliverChildListDelegate(
+                            homeWidgets,
+                            // addRepaintBoundaries: false,
+                            // addAutomaticKeepAlives: true,
+                          ),
+                        )
+                  // SliverList(
+                  //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                  //       return homeWidgets[index];
+                  //     }, childCount: homeWidgets.length),
+                  //   ),
                   ),
-                ),
-                Obx(() => homeViewModel.isLoading.value
-                        ? SliverToBoxAdapter()
-                        : SliverList(
-                            delegate: SliverChildListDelegate(
-                              homeWidgets,
-                              // addRepaintBoundaries: false,
-                              // addAutomaticKeepAlives: true,
-                            ),
-                          )
-                    // SliverList(
-                    //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                    //       return homeWidgets[index];
-                    //     }, childCount: homeWidgets.length),
-                    //   ),
-                    ),
 
-                // MyAssets(),
-                // SliverToBoxAdapter(
-                //     child: SizedBox(
-                //         height: reducedPaddingWhenTextIsBelow(
-                //             30.w, sectionTitle.fontSize!))),
-                // // 이달의 상금 주식
-                // Awards(),
-                // SliverToBoxAdapter(child: btwHomeModule),
-                // NewQuests(homeViewModel: homeViewModel),
-                // SliverToBoxAdapter(child: btwHomeModule),
-                // LiveQuests(),
-                // SliverToBoxAdapter(child: SizedBox(height: 100)),
-                // OldLiveQuests(homeViewModel: homeViewModel),
-                // SliverToBoxAdapter(child: Container(height: 200, color: Colors.grey)),
-                // Admins(homeViewModel: homeViewModel),
-              ],
-            ),
+              // MyAssets(),
+              // SliverToBoxAdapter(
+              //     child: SizedBox(
+              //         height: reducedPaddingWhenTextIsBelow(
+              //             30.w, sectionTitle.fontSize!))),
+              // // 이달의 상금 주식
+              // Awards(),
+              // SliverToBoxAdapter(child: btwHomeModule),
+              // NewQuests(homeViewModel: homeViewModel),
+              // SliverToBoxAdapter(child: btwHomeModule),
+              // LiveQuests(),
+              // SliverToBoxAdapter(child: SizedBox(height: 100)),
+              // OldLiveQuests(homeViewModel: homeViewModel),
+              // SliverToBoxAdapter(child: Container(height: 200, color: Colors.grey)),
+              // Admins(homeViewModel: homeViewModel),
+            ],
           ),
         ),
       ),

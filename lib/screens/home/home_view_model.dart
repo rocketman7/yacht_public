@@ -49,6 +49,7 @@ class HomeViewModel extends GetxController {
   //rewardedAds 관련
   RewardedAd? _rewardedAd;
   int _numRewardedLoadAttempts = 0;
+  ScrollController scrollController = ScrollController(initialScrollOffset: 0);
 
   final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
   final TextEditingController userNameController = TextEditingController(text: "");

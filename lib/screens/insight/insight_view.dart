@@ -13,23 +13,22 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 class InsightView extends StatelessWidget {
   InsightView({Key? key}) : super(key: key);
 
-  InsightViewModel insightViewModel = Get.put(InsightViewModel());
+  InsightViewModel insightViewModel = Get.find<InsightViewModel>();
   RxDouble offset = 0.0.obs;
-  ScrollController _scrollController = ScrollController(initialScrollOffset: 0);
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _scrollController.addListener(() {
+      insightViewModel.scrollController.addListener(() {
         // offset obs 값에 scroll controller offset 넣어주기
-        _scrollController.offset < 0 ? offset(0) : offset(_scrollController.offset);
+        insightViewModel.scrollController.offset < 0 ? offset(0) : offset(insightViewModel.scrollController.offset);
         // print(_scrollController.offset);
       });
     });
 
     return Scaffold(
         body: CustomScrollView(
-      controller: _scrollController,
+      controller: insightViewModel.scrollController,
       slivers: [
         Obx(
           () => SliverPersistentHeader(
@@ -45,7 +44,7 @@ class InsightView extends StatelessWidget {
             ReadingContentView(), // showingHome 변수 구분해서 넣는 게
             SizedBox(height: 40.w),
             DictionaryView(),
-            SizedBox(height: 90.w),
+            SizedBox(height: 100.w),
           ]),
         )
 
