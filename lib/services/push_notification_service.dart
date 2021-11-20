@@ -27,8 +27,7 @@ class PushNotificationService {
   Future initialise() async {
     print("push notification init");
     if (Platform.isIOS) {
-      await FirebaseMessaging.instance
-          .setForegroundNotificationPresentationOptions(
+      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
         alert: true,
         badge: true,
         sound: true,
@@ -53,14 +52,14 @@ class PushNotificationService {
       token = value!;
       print('user token... and need to update DB' + token);
 
-      if (userModelRx.value!.token == null ||
-          userModelRx.value!.token != token) {
+      if (userModelRx.value!.token == null || userModelRx.value!.token != token) {
         await _firestoreService.updateUserFCMToken(token);
 
         for (int i = 0; i < numOfPushAlarm; i++) {
           await FirebaseMessaging.instance.subscribeToTopic(topics[i]);
         }
       }
+      await FirebaseMessaging.instance.subscribeToTopic('admintest');
     });
     // }
   }

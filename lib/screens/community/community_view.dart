@@ -298,7 +298,7 @@ class WritingNewPost extends StatelessWidget {
                                 HapticFeedback.lightImpact();
                                 _communityViewModel.isUploadingNewPost(true);
                                 await _communityViewModel.uploadPost(_contentController.value.text);
-                                print("just before reload");
+                                // print("just before reload");
                                 await _communityViewModel.reloadPost();
                                 Get.back();
                                 _communityViewModel.isUploadingNewPost(false);
@@ -362,7 +362,7 @@ class WritingNewPost extends StatelessWidget {
                           if (_communityViewModel.images!.length == 0) {
                             return Container();
                           } else {
-                            print(_communityViewModel.images![0]);
+                            // print(_communityViewModel.images![0]);
                             return Container(
                               decoration: BoxDecoration(
                                   border: Border(
@@ -420,7 +420,7 @@ class WritingNewPost extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () async {
                               await _communityViewModel.getImageFromDevice();
-                              print('image length: ${_communityViewModel.images!.length}');
+                              // print('image length: ${_communityViewModel.images!.length}');
                             },
                             child: Padding(
                               padding: primaryHorizontalPadding,
