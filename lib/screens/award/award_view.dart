@@ -13,6 +13,7 @@ import '../../handlers/numbers_handler.dart' as NumbersHandler;
 
 import 'award_detail_view.dart';
 import 'award_view_model.dart';
+import 'last_award_view.dart';
 
 // 아래 TempHomeView에서
 // 1. leagueName 인자 고려하고
@@ -35,8 +36,8 @@ class AwardView extends StatelessWidget {
         Padding(
           padding: primaryHorizontalPadding,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("이 달의 상금 주식", style: sectionTitle),
               InkWell(
@@ -56,11 +57,9 @@ class AwardView extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  width: 40.w,
-                  // height: 30.w,
-                  // color: Colors.blue,
+                  width: 36.w,
                   child: Align(
-                    alignment: Alignment.bottomRight,
+                    alignment: Alignment.bottomCenter,
                     child: Image.asset(
                       'assets/icons/question_mark.png',
                       width: 24.w,
@@ -68,6 +67,38 @@ class AwardView extends StatelessWidget {
                       color: yachtGrey,
                     ),
                   ),
+                ),
+              ),
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => LastAwardView());
+                },
+                child: Container(
+                  height: 30.w,
+                  width: 116.w,
+                  decoration: BoxDecoration(
+                      color: yachtViolet,
+                      borderRadius: BorderRadius.circular(117)),
+                  child: Center(
+                      child: Row(
+                    children: [
+                      Spacer(),
+                      Text(
+                        '지난 리그 보기',
+                        style: lastLeagueButtonText,
+                      ),
+                      SizedBox(
+                        width: 7.w,
+                      ),
+                      Container(
+                          width: 10.w,
+                          height: 14.w,
+                          child: Image.asset(
+                              'assets/icons/right_arrow_white.png')),
+                      Spacer(),
+                    ],
+                  )),
                 ),
               )
             ],
