@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/last_subLeague_model.dart';
+import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/profile/profile_others_view.dart';
 import 'package:yachtOne/screens/ranks/rank_share_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
@@ -1562,24 +1564,34 @@ rankDialog(BuildContext context, int index, int rank) {
                                     i,
                                     Column(
                                       children: [
-                                        Row(
-                                          children: [
-                                            CachedNetworkImage(
-                                              //2등들 중 대표의 아바타
-                                              imageUrl:
-                                                  "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${element.avatarImage}.png",
-                                              height: 30.w,
-                                              width: 30.w,
-                                            ),
-                                            SizedBox(
-                                              width: 8.w,
-                                            ),
-                                            Text(
-                                              '${element.userName}',
-                                              style:
-                                                  lastLeagueDetailViewDialogName,
-                                            )
-                                          ],
+                                        GestureDetector(
+                                          behavior: HitTestBehavior.opaque,
+                                          onTap: () {
+                                            if (element.uid !=
+                                                userModelRx.value!.uid) {
+                                              Navigator.of(context).pop();
+                                              Get.to(() => ProfileOthersView(
+                                                  uid: element.uid));
+                                            }
+                                          },
+                                          child: Row(
+                                            children: [
+                                              CachedNetworkImage(
+                                                imageUrl:
+                                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${element.avatarImage}.png",
+                                                height: 30.w,
+                                                width: 30.w,
+                                              ),
+                                              SizedBox(
+                                                width: 8.w,
+                                              ),
+                                              Text(
+                                                '${element.userName}',
+                                                style:
+                                                    lastLeagueDetailViewDialogName,
+                                              )
+                                            ],
+                                          ),
                                         ),
                                         SizedBox(
                                           height: 10.w,
