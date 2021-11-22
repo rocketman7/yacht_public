@@ -2097,6 +2097,7 @@ CustomHeader reloadHeader(bool isTopOfScreen) {
   RxString footer = "당겨서 새로고침".obs;
   return CustomHeader(
       builder: (_, status) {
+        print('status: $status');
         // status = RefreshStatus.
         return Container(
           height: isTopOfScreen ? SizeConfig.safeAreaTop + 20.w : 20.w,

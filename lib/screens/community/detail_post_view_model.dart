@@ -72,6 +72,7 @@ class DetailPostViewModel extends GetxController {
       writerUid: userModelRx.value!.uid,
       writerUserName: userModelRx.value!.userName,
       writerAvatarUrl: userModelRx.value!.avatarImage,
+      writerExp: userModelRx.value!.exp,
     );
   }
 

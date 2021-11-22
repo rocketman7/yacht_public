@@ -62,17 +62,7 @@ class HomeView extends StatelessWidget {
   final RxBool showSmallSnackBar = false.obs;
   final RxString smallSnackBarText = "".obs;
 
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
-
-  void goToTop() {
-    // if (_scrollController.hasClients) {
-    //   _scrollController.animateTo(
-    //     0,
-    //     duration: Duration(milliseconds: 300),
-    //     curve: Curves.easeInOut,
-    //   );
-    // }
-  }
+  final RefreshController _refreshController = RefreshController(initialRefresh: true);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -84,7 +74,7 @@ class HomeView extends StatelessWidget {
     // notificationViewModel.dispose();
     // notificationViewModel =
     //   Get.put(NotificationViewModel());
-
+    print('refreshed');
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
   }
@@ -132,7 +122,7 @@ class HomeView extends StatelessWidget {
       homeViewModel.scrollController.addListener(() {
         // offset obs 값에 scroll controller offset 넣어주기
         homeViewModel.scrollController.offset < 0 ? offset(0) : offset(homeViewModel.scrollController.offset);
-        // print(_scrollController.offset);
+        // print(homeViewModel.scrollController.offset);
       });
     });
 
@@ -181,22 +171,6 @@ class HomeView extends StatelessWidget {
                   //     }, childCount: homeWidgets.length),
                   //   ),
                   ),
-
-              // MyAssets(),
-              // SliverToBoxAdapter(
-              //     child: SizedBox(
-              //         height: reducedPaddingWhenTextIsBelow(
-              //             30.w, sectionTitle.fontSize!))),
-              // // 이달의 상금 주식
-              // Awards(),
-              // SliverToBoxAdapter(child: btwHomeModule),
-              // NewQuests(homeViewModel: homeViewModel),
-              // SliverToBoxAdapter(child: btwHomeModule),
-              // LiveQuests(),
-              // SliverToBoxAdapter(child: SizedBox(height: 100)),
-              // OldLiveQuests(homeViewModel: homeViewModel),
-              // SliverToBoxAdapter(child: Container(height: 200, color: Colors.grey)),
-              // Admins(homeViewModel: homeViewModel),
             ],
           ),
         ),

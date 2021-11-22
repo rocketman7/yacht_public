@@ -49,7 +49,7 @@ class HomeViewModel extends GetxController {
   //rewardedAds 관련
   RewardedAd? _rewardedAd;
   int _numRewardedLoadAttempts = 0;
-  ScrollController scrollController = ScrollController(initialScrollOffset: 0);
+  ScrollController scrollController = ScrollController();
 
   final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
   final TextEditingController userNameController = TextEditingController(text: "");
@@ -61,7 +61,6 @@ class HomeViewModel extends GetxController {
 
   @override
   void onInit() async {
-    print('uid to identify: ${userModelRx.value!.uid}');
     _mixpanelService.mixpanel.identify(userModelRx.value!.uid);
     // print('home view model start');
     _mixpanelService.mixpanel.flush();

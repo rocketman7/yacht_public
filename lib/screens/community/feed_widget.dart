@@ -25,7 +25,7 @@ import 'package:yachtOne/widgets/loading_container.dart';
 import '../../locator.dart';
 import 'detail_post_view.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:styled_widget/styled_widget.dart';
+import 'package:extended_image/extended_image.dart';
 
 class FeedWidget extends StatelessWidget {
   final CommunityViewModel communityViewModel;
@@ -576,17 +576,17 @@ class FeedWidget extends StatelessWidget {
       insetPadding: EdgeInsets.symmetric(horizontal: 0),
       child: Row(
         children: [
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Container(
-              width: ScreenUtil().screenWidth * .10,
-              height: 200,
-              // width: 20,
-            ),
-          ),
+          // GestureDetector(
+          //   behavior: HitTestBehavior.opaque,
+          //   onTap: () {
+          //     Navigator.of(context).pop();
+          //   },
+          //   child: Container(
+          //     width: ScreenUtil().screenWidth * .10,
+          //     height: 200,
+          //     // width: 20,
+          //   ),
+          // ),
           Expanded(
             child: Container(
               // padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -595,49 +595,55 @@ class FeedWidget extends StatelessWidget {
                 controller: PageController(initialPage: index),
                 itemCount: post.imageUrlList!.length,
                 itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: (imageUrls[index] == "")
-                        ?
-                        // image주소 로딩못했을 때만 퓨쳐빌더로
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(14.w),
-                            child: Container(
-                              width: ScreenUtil().screenWidth * .75,
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
-                                fit: BoxFit.fitWidth,
-                              ),
-                            ),
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(14.w),
-                            child: Container(
-                              width: ScreenUtil().screenWidth * .75,
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
-                                fit: BoxFit.fitWidth,
-                              ),
-                            ),
+                  return GestureDetector(
+                    onTap: () {
+                      print('tap');
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(14.w),
+                        child: Container(
+                          // width: ScreenUtil().screenWidth,
+                          child: ExtendedImage.network(
+                            "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
+                            fit: BoxFit.fitWidth,
+                            mode: ExtendedImageMode.gesture,
+                            initGestureConfigHandler: (state) {
+                              print(state.extendedImageInfo);
+                              return GestureConfig(
+                                minScale: 0.9,
+                                animationMinScale: 0.7,
+                                maxScale: 3.0,
+                                animationMaxScale: 3.5,
+                                speed: 1.0,
+                                inertialSpeed: 100.0,
+                                initialScale: 1.0,
+                                inPageView: false,
+                                initialAlignment: InitialAlignment.center,
+                              );
+                            },
                           ),
+                        ),
+                      ),
+                    ),
                   );
                 },
               ),
             ),
           ),
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Container(
-              width: ScreenUtil().screenWidth * .10,
-              height: 200,
-              // width: 20,
-            ),
-          ),
+          // GestureDetector(
+          //   behavior: HitTestBehavior.opaque,
+          //   onTap: () {
+          //     Navigator.of(context).pop();
+          //   },
+          //   child: Container(
+          //     width: ScreenUtil().screenWidth * .10,
+          //     height: 200,
+          //     // width: 20,
+          //   ),
+          // ),
         ],
       ),
     );

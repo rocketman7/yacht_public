@@ -102,11 +102,12 @@ dependencies:
   paginate_firestore: ^1.0.2
   dotted_border: ^2.0.0+1
   firebase_app_check: ^0.0.2+2
-  #facebook_app_events: ^0.14.2
+  # facebook_app_events: ^0.14.2
   facebook_app_events:
     git:
       url: https://github.com/yanivshaked/flutter_facebook_app_events.git
       ref: "fbc72fb"
+  extended_image: ^5.1.3
   # flutter_facebook_sdk: ^1.0.0
 
 flutter_icons:
