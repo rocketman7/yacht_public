@@ -132,47 +132,42 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       body: RefreshConfiguration(
         enableScrollWhenRefreshCompleted: true,
-        child: SmartRefresher(
-          header: reloadHeader(true),
-          controller: _refreshController,
-          onRefresh: _onRefresh,
-          child: CustomScrollView(
-            controller: homeViewModel.scrollController,
-            slivers: [
-              // 앱바
-              Obx(
-                () => SliverPersistentHeader(
-                    floating: false,
-                    pinned: true,
-                    // 홈 뷰 앱바 구현
-                    delegate: _GlassmorphismAppBarDelegate(
-                      MediaQuery.of(context).padding,
-                      offset.value,
-                      homeViewModel,
-                    )),
+        child: CustomScrollView(
+          controller: homeViewModel.scrollController,
+          slivers: [
+            // 앱바
+            Obx(
+              () => SliverPersistentHeader(
+                  floating: false,
+                  pinned: true,
+                  // 홈 뷰 앱바 구현
+                  delegate: _GlassmorphismAppBarDelegate(
+                    MediaQuery.of(context).padding,
+                    offset.value,
+                    homeViewModel,
+                  )),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 14.w,
               ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 14.w,
+            ),
+            Obx(() => homeViewModel.isLoading.value
+                    ? SliverToBoxAdapter()
+                    : SliverList(
+                        delegate: SliverChildListDelegate(
+                          homeWidgets,
+                          // addRepaintBoundaries: false,
+                          // addAutomaticKeepAlives: true,
+                        ),
+                      )
+                // SliverList(
+                //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                //       return homeWidgets[index];
+                //     }, childCount: homeWidgets.length),
+                //   ),
                 ),
-              ),
-              Obx(() => homeViewModel.isLoading.value
-                      ? SliverToBoxAdapter()
-                      : SliverList(
-                          delegate: SliverChildListDelegate(
-                            homeWidgets,
-                            // addRepaintBoundaries: false,
-                            // addAutomaticKeepAlives: true,
-                          ),
-                        )
-                  // SliverList(
-                  //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                  //       return homeWidgets[index];
-                  //     }, childCount: homeWidgets.length),
-                  //   ),
-                  ),
-            ],
-          ),
+          ],
         ),
       ),
     );

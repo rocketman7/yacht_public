@@ -323,7 +323,7 @@ class _TutorialViewState extends State<TutorialView> {
                               ),
                             ),
                             Text(
-                              questModel.questDescription,
+                              questModel.questDescription.replaceAll('\\n', '\n'),
                               style: questDescription,
                             ),
                             SizedBox(
@@ -345,7 +345,7 @@ class _TutorialViewState extends State<TutorialView> {
                                         ),
                                       ),
                                       Text(
-                                        questModel.rewardDescription!,
+                                        questModel.rewardDescription!.replaceAll('\\n', '\n'),
                                         style: questDescription,
                                       ), //temp
                                     ],

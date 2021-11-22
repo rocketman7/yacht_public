@@ -312,7 +312,7 @@ class LiveDetailView extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                questModel.questDescription,
+                                questModel.questDescription.replaceAll('\\n', '\n'),
                                 style: questDescription,
                               ),
                               SizedBox(
@@ -334,7 +334,7 @@ class LiveDetailView extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          questModel.rewardDescription!,
+                                          questModel.rewardDescription!.replaceAll('\\n', '\n'),
                                           style: questDescription,
                                         ), //temp
                                       ],
