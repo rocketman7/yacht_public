@@ -1030,16 +1030,18 @@ TextStyle questRecordendDateTime = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: 1.4,
+  // height: primaryFontHeight,
 );
 
 TextStyle questRecordTitle = TextStyle(
   fontSize: bodyBigSize,
   fontFamily: krFont,
-  fontWeight: FontWeight.w300,
+  // fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: 1.3,
+  // height: primaryFontHeight,
 );
 TextStyle accountVerificationTitle = TextStyle(
   fontFamily: krFont,
@@ -1121,6 +1123,15 @@ TextStyle questRecordSelection = TextStyle(
   color: yachtBlack,
   letterSpacing: -1.0,
   height: primaryFontHeight,
+);
+
+TextStyle questRecordResult = TextStyle(
+  fontSize: bodySmallSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w500,
+  color: yachtGrey,
+  letterSpacing: -1.0,
+  height: 1.3,
 );
 
 // 요트 설명서 다이얼로그

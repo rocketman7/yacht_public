@@ -179,6 +179,7 @@ class FirestoreService extends GetxService {
         .collection('userVote')
         .doc(leagueRx.value)
         .collection('quests')
+        .orderBy('selectDateTime', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
               // print('user quest: ${doc.data()}');
@@ -198,6 +199,7 @@ class FirestoreService extends GetxService {
         .collection('userVote')
         .doc(leagueRx.value)
         .collection('quests')
+        .orderBy('selectDateTime', descending: true)
         .get()
         .then((value) => value.docs.map((doc) {
               // print('user quest: ${doc.data()}');

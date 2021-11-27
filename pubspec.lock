@@ -647,9 +647,6 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "0.13.4"
-=======
     version: "0.13.3"
   http_client_helper:
     dependency: transitive
@@ -658,7 +655,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
->>>>>>> 066ce9712f10b4b53df723f095cc228eafc872db
   http_parser:
     dependency: transitive
     description:
