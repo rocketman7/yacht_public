@@ -27,6 +27,7 @@ class CommunityViewModel extends GetxController {
   RxList<XFile>? images = RxList<XFile>();
   List<String> filePaths = [];
   RxList<PostModel> posts = RxList<PostModel>();
+  RxList<PostModel> recentNotice = <PostModel>[].obs;
 
   ScrollController scrollController = ScrollController();
   int postAtOnceLimit = 20;
@@ -35,12 +36,16 @@ class CommunityViewModel extends GetxController {
 
   RxBool isUploadingNewPost = false.obs;
   RxDouble offset = 0.0.obs;
+
   final RefreshController refreshController = RefreshController(initialRefresh: false);
   @override
   void onInit() async {
     print('community view model oninit');
     // TODO: implement onInit
+    await getNotice();
     await getPost();
+    print('recentNotice $recentNotice');
+
     // print('get post done');
     // await monitorScroll();
     // scrollController = ScrollController();
@@ -62,6 +67,11 @@ class CommunityViewModel extends GetxController {
   @override
   void onClose() {
     scrollController.dispose();
+  }
+
+  Future getNotice() async {
+    var notice = await _firestoreService.getNotice();
+    if (notice != null) recentNotice.addAll([await _firestoreService.getNotice()]);
   }
 
   void onRefresh() async {
@@ -112,6 +122,7 @@ class CommunityViewModel extends GetxController {
     }
 
     posts.addAll(newPosts);
+    // posts.sort((b, a) => a.isNotice.toString().compareTo(b.isNotice.toString()));
     if (newPosts.length < postAtOnceLimit) {
       // print('no more posts');
       hasNextPosts(false);

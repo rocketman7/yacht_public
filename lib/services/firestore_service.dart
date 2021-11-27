@@ -996,16 +996,29 @@ class FirestoreService extends GetxService {
     await _firestoreService.collection('users').doc(userModelRx.value!.uid).collection('userFeed').doc(postId).delete();
   }
 
+  Future getNotice() async {
+    return await _firestoreService
+        .collection('posts')
+        .where('isNotice', isEqualTo: true)
+        .orderBy('writtenDateTime', descending: true)
+        .limit(1)
+        .get()
+        .then((value) => value.docs.length > 0 ? PostModel.fromMap(value.docs.first.data()) : null);
+  }
+
   // 포스트 받아오기
-  Future getPosts(int limit, {dynamic startAfterThisPostId}) async {
+  Future<List<PostModel>> getPosts(int limit, {dynamic startAfterThisPostId}) async {
     if (startAfterThisPostId != null)
       print(
           'getpost argu: ${Timestamp.fromMillisecondsSinceEpoch(startAfterThisPostId.toDate().toUtc().millisecondsSinceEpoch)}');
     List<PostModel> posts = [];
-    Query<Map<String, dynamic>> getPostQuery =
-        _firestoreService.collection('posts').orderBy('writtenDateTime', descending: true).limit(limit);
+    Query<Map<String, dynamic>> getPostQuery = _firestoreService
+        .collection('posts')
+        .where('isNotice', isEqualTo: false)
+        .orderBy('writtenDateTime', descending: true)
+        .limit(limit);
 
-    var temp = await _firestoreService.collection('posts').orderBy('writtenDateTime', descending: true).get();
+    // var temp = await _firestoreService.collection('posts').orderBy('writtenDateTime', descending: true).get();
 
     // print('docun length: ${temp.docs.length}');
 

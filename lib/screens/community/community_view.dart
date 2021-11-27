@@ -162,6 +162,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                           //       );
                           //     },
                           //   )
+
                           ListView.builder(
                               padding: primaryHorizontalPadding,
                               // clipBehavior: Clip.none,
@@ -173,17 +174,29 @@ class CommunityView extends GetView<CommunityViewModel> {
                                 return Column(
                                   children: [
                                     index == 0
-                                        ? SizedBox(
-                                            height: 20.w,
+                                        ? Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 20.w,
+                                              ),
+                                              _communityViewModel.recentNotice.length > 0
+                                                  ? Column(
+                                                      children: [
+                                                        NoticeWidget(
+                                                            communityViewModel: _communityViewModel,
+                                                            post: _communityViewModel.recentNotice[0]),
+                                                        SizedBox(
+                                                          height: 12.w,
+                                                        )
+                                                      ],
+                                                    )
+                                                  : Container(),
+                                            ],
                                           )
                                         : Container(),
-                                    _communityViewModel.posts[index].isNotice
-                                        ? NoticeWidget(
-                                            communityViewModel: _communityViewModel,
-                                            post: _communityViewModel.posts[index])
-                                        : FeedWidget(
-                                            communityViewModel: _communityViewModel,
-                                            post: _communityViewModel.posts[index]),
+                                    FeedWidget(
+                                        communityViewModel: _communityViewModel,
+                                        post: _communityViewModel.posts[index]),
                                     SizedBox(
                                       height: 12.w,
                                     )
