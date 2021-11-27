@@ -48,10 +48,11 @@ class MyFeedView extends GetView<MyFeedViewModel> {
                   child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: min(myFeedViewModel.userPosts.length, 3),
+                  itemCount: min(myFeedViewModel.userPosts.length, 50),
                   itemBuilder: (_, index) {
                     return FutureBuilder<PostModel>(
-                        future: myFeedViewModel.getPost(myFeedViewModel.userPosts[index].postId),
+                        future: myFeedViewModel
+                            .getPost(myFeedViewModel.userPosts[index].postId),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Container();
@@ -62,16 +63,20 @@ class MyFeedView extends GetView<MyFeedViewModel> {
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      Get.to(() => DetailPostView(snapshot.data!));
+                                      Get.to(
+                                          () => DetailPostView(snapshot.data!));
                                     },
                                     child: sectionBox(
                                         width: double.infinity,
                                         padding: primaryAllPadding,
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              timeStampToStringWithHourMinute(snapshot.data!.writtenDateTime),
+                                              timeStampToStringWithHourMinute(
+                                                  snapshot
+                                                      .data!.writtenDateTime),
                                               style: questRecordendDateTime,
                                             ),
                                             snapshot.data!.title != null
@@ -79,7 +84,8 @@ class MyFeedView extends GetView<MyFeedViewModel> {
                                                     snapshot.data!.title!,
                                                     style: feedTitle,
                                                     maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   )
                                                 : Container(),
                                             Text(

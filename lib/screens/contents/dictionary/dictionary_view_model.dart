@@ -16,5 +16,6 @@ class DictionaryViewModel extends GetxController {
 
   Future getDictionaries() async {
     dictionaries(await _firestoreService.getDictionaries());
+    update();
   }
 }

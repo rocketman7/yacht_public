@@ -19,7 +19,7 @@ class MyFeedViewModel extends GetxController {
     // TODO: implement onInit
     await getMyFeed(uid);
     userPosts.bindStream(getMyFeedStrem(uid));
-    // print(userPosts.length);
+    print('userpostlength: ${userPosts.length}');
     // userPosts.refresh();
     super.onInit();
   }

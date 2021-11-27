@@ -647,7 +647,11 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.13.4"
+=======
+    version: "0.13.3"
+>>>>>>> 74c690ca511d46401f5ab75eed44868f7c4e6e49
   http_client_helper:
     dependency: transitive
     description:

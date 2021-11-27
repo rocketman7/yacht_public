@@ -30,51 +30,52 @@ class DictionaryView extends StatelessWidget {
         Padding(
           padding: primaryHorizontalPadding,
           child: sectionBox(
-              // padding: primaryAllPadding,
-              child: Column(
-            children: List.generate(
-                dictionaryViewModel.dictionaries.length,
-                (index) => InkWell(
-                      onTap: () {
-                        _mixpanelService.mixpanel.track('home-Dictionary-DictionaryWebView',
-                            properties: {'dictionaryTitle': dictionaryViewModel.dictionaries[index].title});
-                        Get.to(() => DictionaryWebView(dictionaryModel: dictionaryViewModel.dictionaries[index]));
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: primaryAllPadding,
-                            child: Row(
+            // padding: primaryAllPadding,
+            child: Obx(() => Column(
+                  children: List.generate(
+                      dictionaryViewModel.dictionaries.length,
+                      (index) => InkWell(
+                            onTap: () {
+                              _mixpanelService.mixpanel.track('home-Dictionary-DictionaryWebView',
+                                  properties: {'dictionaryTitle': dictionaryViewModel.dictionaries[index].title});
+                              Get.to(() => DictionaryWebView(dictionaryModel: dictionaryViewModel.dictionaries[index]));
+                            },
+                            child: Column(
                               children: [
                                 Container(
-                                  height: 50.w,
-                                  width: 50.w,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.w),
-                                    // color: yachtRed,
-                                  ),
-                                  child: Image.network(
-                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${dictionaryViewModel.dictionaries[index].imageUrl}",
+                                  padding: primaryAllPadding,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: 50.w,
+                                        width: 50.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5.w),
+                                          // color: yachtRed,
+                                        ),
+                                        child: Image.network(
+                                          "https://storage.googleapis.com/ggook-5fb08.appspot.com/${dictionaryViewModel.dictionaries[index].imageUrl}",
+                                        ),
+                                      ),
+                                      SizedBox(width: 14.w),
+                                      Text(
+                                        dictionaryViewModel.dictionaries[index].title,
+                                        style: dictionaryKeyword,
+                                      )
+                                    ],
                                   ),
                                 ),
-                                SizedBox(width: 14.w),
-                                Text(
-                                  dictionaryViewModel.dictionaries[index].title,
-                                  style: dictionaryKeyword,
-                                )
+                                (index != (dictionaryViewModel.dictionaries.length - 1))
+                                    ? Container(
+                                        height: 1,
+                                        color: thinDivider,
+                                      )
+                                    : Container()
                               ],
                             ),
-                          ),
-                          (index != (dictionaryViewModel.dictionaries.length - 1))
-                              ? Container(
-                                  height: 1,
-                                  color: thinDivider,
-                                )
-                              : Container()
-                        ],
-                      ),
-                    )),
-          )),
+                          )),
+                )),
+          ),
         ),
       ],
     );

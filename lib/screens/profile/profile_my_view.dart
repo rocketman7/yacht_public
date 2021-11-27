@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,7 @@ import 'asset_view_model.dart';
 import 'profile_change_view.dart';
 import '../settings/setting_view.dart';
 import 'profile_my_view_model.dart';
+import 'quest_record_detail_view.dart';
 
 class ProfileMyView extends GetView<ProfileMyViewModel> {
   final ProfileMyViewModel profileViewModel = Get.find<ProfileMyViewModel>();
@@ -853,41 +855,45 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                       height: correctHeight(30.w, 0.0, profileHeaderTextStyle.fontSize),
                     ),
                     Padding(
-                      padding: primaryHorizontalPadding,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {},
-                        child: Row(
-                          children: [
-                            Text(
-                              '퀘스트 참여기록',
-                              style: profileHeaderTextStyle,
-                            ),
-                            Spacer(),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 28.w,
-                                ),
-                                Image.asset(
-                                  'assets/icons/navigate_foward_arrow.png',
-                                  height: 16.w,
-                                  width: 9.w,
-                                ),
-                                SizedBox(
-                                  width: 14.w,
-                                ),
-                              ],
-                            )
-                            // Image.asset(
-                            //   'assets/icons/navigate_foward_arrow.png',
-                            //   height: 16.w,
-                            //   width: 9.w,
-                            // )
-                          ],
-                        ),
+                      padding: EdgeInsets.only(left: 14.w),
+                      // padding: primaryHorizontalPadding,
+                      child: Row(
+                        children: [
+                          Text(
+                            '퀘스트 참여기록',
+                            style: profileHeaderTextStyle,
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                print('aa');
+                                Get.to(() => QuestRecordDetailView());
+                              },
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 8.w,
+                                  ),
+                                  Image.asset(
+                                    'assets/icons/navigate_foward_arrow.png',
+                                    height: 16.w,
+                                    width: 9.w,
+                                  ),
+                                  SizedBox(
+                                    width: 14.w,
+                                  ),
+                                ],
+                              )
+                              // Image.asset(
+                              //   'assets/icons/navigate_foward_arrow.png',
+                              //   height: 16.w,
+                              //   width: 9.w,
+                              )
+                        ],
                       ),
                     ),
+
                     SizedBox(
                       height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
                     ),
@@ -1013,6 +1019,13 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                       )),
                             ),
                     ),
+                    // Obx(() => userQuestModelRx.length == 0
+                    //     ? Image.asset(
+                    //         'assets/illusts/not_exists/no_quest_done.png',
+                    //         height: 150.w)
+                    //     : QuestRecordView(
+                    //         isFullView: false,
+                    //       )),
                     SizedBox(
                       height: 50.w,
                     ),
@@ -1074,6 +1087,123 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
           )
         ],
       ),
+    );
+  }
+}
+
+class QuestRecordView extends StatelessWidget {
+  final bool isFullView;
+  final int maxNum = 3;
+
+  QuestRecordView({required this.isFullView});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: List.generate(
+          isFullView ? userQuestModelRx.length : min(userQuestModelRx.length, maxNum),
+          (index) => Column(
+                children: [
+                  Padding(
+                    padding: primaryHorizontalPadding,
+                    child: Obx(
+                      () => sectionBox(
+                          padding: primaryAllPadding.copyWith(right: 8.w, bottom: 11.w),
+                          child: FutureBuilder<QuestModel>(
+                              future: Get.find<ProfileMyViewModel>().getEachQuestModel(userQuestModelRx[index]),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Container();
+                                } else {
+                                  print(snapshot.data);
+                                  return InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => ResultDialog(
+                                                questModel: snapshot.data!,
+                                              ));
+
+                                      // Get.toNamed('/quest',
+                                      //     arguments:
+                                      //         snapshot.data);
+                                    },
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                timeStampToStringWithHourMinute(snapshot.data!.questEndDateTime) +
+                                                    " 마감",
+                                                style: questRecordendDateTime,
+                                              ),
+                                              Text(snapshot.data!.title, style: questRecordTitle),
+                                              SizedBox(
+                                                  height: correctHeight(
+                                                      14.w, questRecordTitle.fontSize, questRecordSelection.fontSize)),
+                                              Text(
+                                                  Get.find<ProfileMyViewModel>()
+                                                      .getUserChioce(snapshot.data!, userQuestModelRx[index]),
+                                                  style: questRecordSelection),
+                                              // Text(userQuestModelRx[index].selection),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 14.w,
+                                        ),
+                                        snapshot.data!.results != null
+                                            ? Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+                                                decoration: BoxDecoration(
+                                                  color: buttonNormal,
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: Text(
+                                                  listEquals(snapshot.data!.results, userQuestModelRx[index].selection)
+                                                      ? '예측 성공'
+                                                      : '예측 실패',
+                                                  // '${snapshot.data!.results}, ${userQuestModelRx[index].selection}',
+                                                  textAlign: TextAlign.center,
+                                                  style: questRecordResult.copyWith(
+                                                      color: listEquals(
+                                                              snapshot.data!.results, userQuestModelRx[index].selection)
+                                                          ? yachtRed
+                                                          : yachtGrey),
+                                                ),
+                                              )
+                                            : Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.transparent,
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: Text(
+                                                  '예측 성공',
+                                                  textAlign: TextAlign.center,
+                                                  style: questRecordResult.copyWith(color: Colors.transparent),
+                                                ),
+                                              )
+                                      ],
+                                    ),
+                                  );
+                                }
+                              })),
+                    ),
+                  ),
+                  if (index !=
+                      min(userQuestModelRx.length,
+                              isFullView ? userQuestModelRx.length : min(userQuestModelRx.length, maxNum)) -
+                          1)
+                    SizedBox(
+                      height: 10.w,
+                    )
+                ],
+              )),
     );
   }
 }
