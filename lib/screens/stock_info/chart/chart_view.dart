@@ -298,13 +298,14 @@ class ChartView extends StatelessWidget {
           animationDuration: 500,
           bullColor: bullColorKR,
           bearColor: bearColorKR,
-          enableSolidCandles: true,
+
+          // enableSolidCandles: true,
           dataSource: chartPrices,
+          xValueMapper: (ChartPriceModel chart, _) => stringToDateTime(chart.dateTime!),
+          openValueMapper: (ChartPriceModel chart, _) => chart.open,
           lowValueMapper: (ChartPriceModel chart, _) => chart.low,
           highValueMapper: (ChartPriceModel chart, _) => chart.high,
-          openValueMapper: (ChartPriceModel chart, _) => chart.open,
           closeValueMapper: (ChartPriceModel chart, _) => chart.close,
-          xValueMapper: (ChartPriceModel chart, _) => stringToDateTime(chart.dateTime!),
           showIndicationForSameValues: true,
         ),
         ColumnSeries<ChartPriceModel, DateTime>(

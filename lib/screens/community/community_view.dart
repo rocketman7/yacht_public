@@ -21,16 +21,8 @@ class CommunityView extends GetView<CommunityViewModel> {
   // CommunityViewModel communityViewModel = Get.put(CommunityViewModel());
   CommunityViewModel communityViewModel = Get.find<CommunityViewModel>();
   // ScrollController _scrollController = ScrollController();
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   final CommunityViewModel _communityViewModel = Get.put(CommunityViewModel());
-  void _onRefresh() async {
-    // monitor network fetch
-    // await Future.delayed(Duration(milliseconds: 1200));
-    await _communityViewModel.reloadPost();
-    // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
-  }
 
   // void _onLoading() async {
   //   // monitor network fetch
@@ -39,7 +31,6 @@ class CommunityView extends GetView<CommunityViewModel> {
 
   //   _refreshController.loadComplete();
   // }
-  RxString footer = "start".obs;
   @override
   Widget build(BuildContext context) {
     // _scrollController = ScrollController(initialScrollOffset: 0);
@@ -85,22 +76,27 @@ class CommunityView extends GetView<CommunityViewModel> {
       body: Stack(clipBehavior: Clip.none, children: [
         RefreshConfiguration(
           enableScrollWhenRefreshCompleted: true,
+          headerTriggerDistance: 80.w,
           child: SmartRefresher(
-            header: reloadHeader(false),
-            controller: _refreshController,
-            onRefresh: _onRefresh,
+            enablePullDown: true,
+            header: YachtCustomHeader(),
+            controller: _communityViewModel.refreshController,
+            onRefresh: _communityViewModel.onRefresh,
             child: CustomScrollView(
-              clipBehavior: Clip.none,
+              // clipBehavior: Clip.none,
               controller: _communityViewModel.scrollController,
               // physics: ScrollPhysics(),
-
               slivers: [
                 Obx(
                   () => SliverPersistentHeader(
-                      floating: false,
-                      pinned: true,
-                      // 홈 뷰 앱바 구현
-                      delegate: YachtPrimaryAppBarDelegate(offset: _communityViewModel.offset.value, tabTitle: "커뮤니티")),
+                    floating: false,
+                    pinned: true,
+                    // 홈 뷰 앱바 구현
+                    delegate: YachtPrimaryAppBarDelegate(
+                      offset: _communityViewModel.offset.value,
+                      tabTitle: "커뮤니티",
+                    ),
+                  ),
                 ),
                 // 전문글만, 팔로워만 고르기
                 // Container(
@@ -166,31 +162,34 @@ class CommunityView extends GetView<CommunityViewModel> {
                           //       );
                           //     },
                           //   )
-                          Padding(
+                          ListView.builder(
                               padding: primaryHorizontalPadding,
-                              child: ListView.builder(
-                                  // clipBehavior: Clip.none,
-                                  // controller: _scrollController,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: _communityViewModel.posts.length,
-                                  itemBuilder: (_, index) {
-                                    return Column(
-                                      children: [
-                                        _communityViewModel.posts[index].isNotice
-                                            ? NoticeWidget(
-                                                communityViewModel: _communityViewModel,
-                                                post: _communityViewModel.posts[index])
-                                            : FeedWidget(
-                                                communityViewModel: _communityViewModel,
-                                                post: _communityViewModel.posts[index]),
-                                        SizedBox(
-                                          height: 12.w,
-                                        )
-                                      ],
-                                    );
-                                  }),
-                            ),
+                              // clipBehavior: Clip.none,
+                              // controller: _scrollController,
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: _communityViewModel.posts.length,
+                              itemBuilder: (_, index) {
+                                return Column(
+                                  children: [
+                                    index == 0
+                                        ? SizedBox(
+                                            height: 20.w,
+                                          )
+                                        : Container(),
+                                    _communityViewModel.posts[index].isNotice
+                                        ? NoticeWidget(
+                                            communityViewModel: _communityViewModel,
+                                            post: _communityViewModel.posts[index])
+                                        : FeedWidget(
+                                            communityViewModel: _communityViewModel,
+                                            post: _communityViewModel.posts[index]),
+                                    SizedBox(
+                                      height: 12.w,
+                                    )
+                                  ],
+                                );
+                              }),
                     )
                   ]),
                 ),

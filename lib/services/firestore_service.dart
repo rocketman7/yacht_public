@@ -1265,6 +1265,19 @@ class FirestoreService extends GetxService {
       'content': content,
       'dateTime': timestampNow,
     });
+
+    // Admin collection에도 추가
+    await _firestoreService
+        .collection('admin')
+        .doc('userOneOnOne')
+        .collection(dateTimeToString(DateTime.now(), 8)!)
+        .add({
+      'uid': userModelRx.value!.uid,
+      'userName': userModelRx.value!.userName,
+      'category': category,
+      'content': content,
+      'dateTime': timestampNow,
+    });
   }
 
   // 1:1 문의내역 받아오기

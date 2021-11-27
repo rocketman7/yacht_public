@@ -6,6 +6,7 @@ import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorState;
+import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -62,13 +63,13 @@ class HomeView extends StatelessWidget {
   final RxBool showSmallSnackBar = false.obs;
   final RxString smallSnackBarText = "".obs;
 
-  final RefreshController _refreshController = RefreshController(initialRefresh: true);
-
   void _onRefresh() async {
     // monitor network fetch
     // await Future.delayed(Duration(milliseconds: 1200));
     todayQuests = null;
     await homeViewModel.getAllQuests();
+    homeViewModel.rankController.onInit();
+    homeViewModel.awardViewModel.onInit();
 
     // 이런느낌으로 ? 근데 굳이 알림까지 새로고침할 필욘 없을듯해서 일단 주석처리
     // notificationViewModel.dispose();
@@ -76,7 +77,7 @@ class HomeView extends StatelessWidget {
     //   Get.put(NotificationViewModel());
     print('refreshed');
     // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
+    homeViewModel.refreshController.refreshCompleted();
   }
 
   @override
@@ -131,43 +132,51 @@ class HomeView extends StatelessWidget {
 
     return Scaffold(
       body: RefreshConfiguration(
+        headerTriggerDistance: 80.w,
+        // springDescription: SpringDescription(mass: 2.2, damping: 96, stiffness: 400),
         enableScrollWhenRefreshCompleted: true,
-        child: CustomScrollView(
-          controller: homeViewModel.scrollController,
-          slivers: [
-            // 앱바
-            Obx(
-              () => SliverPersistentHeader(
-                  floating: false,
-                  pinned: true,
-                  // 홈 뷰 앱바 구현
-                  delegate: _GlassmorphismAppBarDelegate(
-                    MediaQuery.of(context).padding,
-                    offset.value,
-                    homeViewModel,
-                  )),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 14.w,
+        child: SmartRefresher(
+          enablePullDown: true,
+          header: YachtCustomHeader(),
+          controller: homeViewModel.refreshController,
+          onRefresh: _onRefresh,
+          child: CustomScrollView(
+            controller: homeViewModel.scrollController,
+            slivers: [
+              // 앱바
+              Obx(
+                () => SliverPersistentHeader(
+                    floating: false,
+                    pinned: true,
+                    // 홈 뷰 앱바 구현
+                    delegate: _GlassmorphismAppBarDelegate(
+                      MediaQuery.of(context).padding,
+                      offset.value,
+                      homeViewModel,
+                    )),
               ),
-            ),
-            Obx(() => homeViewModel.isLoading.value
-                    ? SliverToBoxAdapter()
-                    : SliverList(
-                        delegate: SliverChildListDelegate(
-                          homeWidgets,
-                          // addRepaintBoundaries: false,
-                          // addAutomaticKeepAlives: true,
-                        ),
-                      )
-                // SliverList(
-                //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                //       return homeWidgets[index];
-                //     }, childCount: homeWidgets.length),
-                //   ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 14.w,
                 ),
-          ],
+              ),
+              Obx(() => homeViewModel.isLoading.value
+                      ? SliverToBoxAdapter()
+                      : SliverList(
+                          delegate: SliverChildListDelegate(
+                            homeWidgets,
+                            // addRepaintBoundaries: false,
+                            // addAutomaticKeepAlives: true,
+                          ),
+                        )
+                  // SliverList(
+                  //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                  //       return homeWidgets[index];
+                  //     }, childCount: homeWidgets.length),
+                  //   ),
+                  ),
+            ],
+          ),
         ),
       ),
     );

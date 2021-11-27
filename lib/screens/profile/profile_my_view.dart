@@ -349,7 +349,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                   ),
                 ],
               )),
-          SizedBox(height: 24.w),
+          SizedBox(height: 8.w),
           // 유저소개글
           Padding(
             padding: primaryHorizontalPadding,
@@ -854,19 +854,38 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                     ),
                     Padding(
                       padding: primaryHorizontalPadding,
-                      child: Row(
-                        children: [
-                          Text(
-                            '퀘스트 참여기록',
-                            style: profileHeaderTextStyle,
-                          ),
-                          Spacer(),
-                          // Image.asset(
-                          //   'assets/icons/navigate_foward_arrow.png',
-                          //   height: 16.w,
-                          //   width: 9.w,
-                          // )
-                        ],
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {},
+                        child: Row(
+                          children: [
+                            Text(
+                              '퀘스트 참여기록',
+                              style: profileHeaderTextStyle,
+                            ),
+                            Spacer(),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 28.w,
+                                ),
+                                Image.asset(
+                                  'assets/icons/navigate_foward_arrow.png',
+                                  height: 16.w,
+                                  width: 9.w,
+                                ),
+                                SizedBox(
+                                  width: 14.w,
+                                ),
+                              ],
+                            )
+                            // Image.asset(
+                            //   'assets/icons/navigate_foward_arrow.png',
+                            //   height: 16.w,
+                            //   width: 9.w,
+                            // )
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -907,8 +926,9 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                                             child: Row(
                                                               crossAxisAlignment: CrossAxisAlignment.start,
                                                               children: [
-                                                                Expanded(
+                                                                Flexible(
                                                                   child: Column(
+                                                                    mainAxisSize: MainAxisSize.min,
                                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                                     mainAxisAlignment: MainAxisAlignment.start,
                                                                     children: [
@@ -918,6 +938,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                                                             " 마감",
                                                                         style: questRecordendDateTime,
                                                                       ),
+                                                                      SizedBox(height: 6.w),
                                                                       Text(snapshot.data!.title,
                                                                           style: questRecordTitle),
                                                                       SizedBox(
@@ -932,6 +953,46 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                                                       // Text(userQuestModelRx[index].selection),
                                                                     ],
                                                                   ),
+                                                                ),
+                                                                SizedBox(width: 8.w),
+                                                                Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                                  mainAxisSize: MainAxisSize.max,
+                                                                  children: [
+                                                                    // Spacer(),
+                                                                    Container(
+                                                                      // alignment: Alignment.bottomCenter,
+                                                                      padding: EdgeInsets.symmetric(
+                                                                        horizontal: 10.w,
+                                                                        vertical: 5.w,
+                                                                      ),
+                                                                      decoration: BoxDecoration(
+                                                                        color: buttonNormal,
+                                                                        borderRadius: BorderRadius.circular(8.w),
+                                                                      ),
+
+                                                                      // height: 300,
+                                                                      child: Center(
+                                                                        child: Text(
+                                                                          userQuestModelRx[index].hasSucceeded == null
+                                                                              ? "진행 중"
+                                                                              : userQuestModelRx[index].hasSucceeded!
+                                                                                  ? "예측 성공"
+                                                                                  : "예측 실패",
+                                                                          style: questRecordSelection.copyWith(
+                                                                            fontWeight: FontWeight.w500,
+                                                                            color: userQuestModelRx[index]
+                                                                                        .hasSucceeded ==
+                                                                                    null
+                                                                                ? yachtBlack
+                                                                                : userQuestModelRx[index].hasSucceeded!
+                                                                                    ? yachtRed
+                                                                                    : yachtGrey,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                                 // SizedBox(
                                                                 //   width: 30.w,

@@ -177,75 +177,7 @@ class LiveDetailView extends StatelessWidget {
                                                 height: double.infinity,
                                                 width: double.infinity,
                                                 child: Obx(
-                                                  () => SfCartesianChart(
-                                                      margin: EdgeInsets.all(0),
-                                                      borderWidth: 0,
-                                                      plotAreaBorderWidth: 0,
-                                                      primaryXAxis: DateTimeAxis(
-                                                          minimum: DateTime(
-                                                            liveChartDays[liveChartDayIndex].year,
-                                                            liveChartDays[liveChartDayIndex].month,
-                                                            liveChartDays[liveChartDayIndex].day,
-                                                            questModel.liveStartDateTime.toDate().hour,
-                                                            questModel.liveStartDateTime.toDate().minute,
-                                                            questModel.liveStartDateTime.toDate().second,
-                                                          ),
-
-                                                          //  homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate().hour, ,
-                                                          maximum: DateTime(
-                                                            liveChartDays[liveChartDayIndex].year,
-                                                            liveChartDays[liveChartDayIndex].month,
-                                                            liveChartDays[liveChartDayIndex].day,
-                                                            questModel.liveEndDateTime.toDate().hour,
-                                                            questModel.liveEndDateTime.toDate().minute,
-                                                            questModel.liveEndDateTime.toDate().second,
-                                                          ),
-                                                          majorGridLines: MajorGridLines(
-                                                            width: 0,
-                                                          ),
-                                                          // intervalType: DateTimeIntervalType.days,
-                                                          // interval: 10,
-                                                          isVisible: false),
-                                                      primaryYAxis: NumericAxis(
-                                                          // maximum: 176000,
-                                                          // minimum: 168000,
-                                                          // maximum: chartViewModel.maxPrice!,
-                                                          // minimum: (5 * chartViewModel.minPrice! -
-                                                          //         chartViewModel.maxPrice!) /
-                                                          //     4,
-                                                          // chartViewModel.minPrice! *
-                                                          //     0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
-                                                          majorGridLines: MajorGridLines(width: 0),
-                                                          isVisible: false),
-                                                      axes: List.generate(
-                                                          questModel.investAddresses!.length,
-                                                          (index) => NumericAxis(
-                                                              name: index.toString(),
-                                                              // maximum: 101,
-                                                              // minimum: 97,
-                                                              majorGridLines: MajorGridLines(width: 0),
-                                                              isVisible: false)),
-                                                      series:
-                                                          List.generate(questModel.investAddresses!.length, (index) {
-                                                        return LineSeries<ChartPriceModel, DateTime>(
-                                                          width: 1.4,
-                                                          animationDuration: 0,
-                                                          dataSource: (liveQuestViewModel
-                                                              .livePrices[liveQuestIndex][index].value.chartPrices),
-                                                          xValueMapper: (ChartPriceModel chart, _) =>
-                                                              stringToDateTime(chart.dateTime!),
-                                                          color: lineChartColors[index],
-                                                          // gradient: LinearGradient(
-                                                          //     colors: areaGraphColors[index],
-                                                          //     stops: stops,
-                                                          //     begin: Alignment.topCenter,
-                                                          //     end: Alignment.bottomCenter),
-                                                          yAxisName: index.toString(),
-                                                          yValueMapper: (ChartPriceModel chart, _) =>
-                                                              chart.normalizedClose,
-                                                          // gradient: gradientColors0,
-                                                        );
-                                                      })),
+                                                  () => liveChart(liveChartDays, liveChartDayIndex, liveQuestViewModel),
                                                 ),
                                               ),
 
@@ -498,5 +430,74 @@ class LiveDetailView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  SfCartesianChart liveChart(
+      List<DateTime> liveChartDays, int liveChartDayIndex, LiveQuestViewModel liveQuestViewModel) {
+    return SfCartesianChart(
+        margin: EdgeInsets.all(0),
+        borderWidth: 0,
+        plotAreaBorderWidth: 0,
+        primaryXAxis: DateTimeAxis(
+            minimum: DateTime(
+              liveChartDays[liveChartDayIndex].year,
+              liveChartDays[liveChartDayIndex].month,
+              liveChartDays[liveChartDayIndex].day,
+              questModel.liveStartDateTime.toDate().hour,
+              questModel.liveStartDateTime.toDate().minute,
+              questModel.liveStartDateTime.toDate().second,
+            ),
+
+            //  homeViewModel.liveQuests[liveQuestIndex].liveStartDateTime.toDate().hour, ,
+            maximum: DateTime(
+              liveChartDays[liveChartDayIndex].year,
+              liveChartDays[liveChartDayIndex].month,
+              liveChartDays[liveChartDayIndex].day,
+              questModel.liveEndDateTime.toDate().hour,
+              questModel.liveEndDateTime.toDate().minute,
+              questModel.liveEndDateTime.toDate().second,
+            ),
+            majorGridLines: MajorGridLines(
+              width: 0,
+            ),
+            // intervalType: DateTimeIntervalType.days,
+            // interval: 10,
+            isVisible: false),
+        primaryYAxis: NumericAxis(
+            maximum: 130,
+            minimum: 70,
+            // maximum: chartViewModel.maxPrice!,
+            // minimum: (5 * chartViewModel.minPrice! -
+            //         chartViewModel.maxPrice!) /
+            //     4,
+            // chartViewModel.minPrice! *
+            //     0.97, // 차트에 그려지는 PriceChartModel의 low중 min값 받아서 영역의 상단 4/5에만 그려지도록 maximum 값 설정
+            majorGridLines: MajorGridLines(width: 0),
+            isVisible: false),
+        axes: List.generate(
+            questModel.investAddresses!.length,
+            (index) => NumericAxis(
+                name: index.toString(),
+                maximum: 130,
+                minimum: 70,
+                majorGridLines: MajorGridLines(width: 0),
+                isVisible: false)),
+        series: List.generate(questModel.investAddresses!.length, (index) {
+          return LineSeries<ChartPriceModel, DateTime>(
+            width: 1.4,
+            animationDuration: 0,
+            dataSource: (liveQuestViewModel.livePrices[liveQuestIndex][index].value.chartPrices),
+            xValueMapper: (ChartPriceModel chart, _) => stringToDateTime(chart.dateTime!),
+            color: lineChartColors[index],
+            // gradient: LinearGradient(
+            //     colors: areaGraphColors[index],
+            //     stops: stops,
+            //     begin: Alignment.topCenter,
+            //     end: Alignment.bottomCenter),
+            yAxisName: index.toString(),
+            yValueMapper: (ChartPriceModel chart, _) => chart.normalizedClose,
+            // gradient: gradientColors0,
+          );
+        }));
   }
 }

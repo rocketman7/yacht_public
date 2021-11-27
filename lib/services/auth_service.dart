@@ -58,7 +58,8 @@ class AuthService {
   }
 
   Future deleteAccount() async {
-    _firestoreService.deleteAccount(auth.currentUser!.uid);
+    String uid = auth.currentUser!.uid;
     auth.currentUser!.delete();
+    _firestoreService.deleteAccount(uid);
   }
 }

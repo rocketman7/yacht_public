@@ -574,78 +574,104 @@ class FeedWidget extends StatelessWidget {
       backgroundColor: Colors.transparent,
       clipBehavior: Clip.hardEdge,
       insetPadding: EdgeInsets.symmetric(horizontal: 0),
-      child: Row(
-        children: [
-          // GestureDetector(
-          //   behavior: HitTestBehavior.opaque,
-          //   onTap: () {
-          //     Navigator.of(context).pop();
-          //   },
-          //   child: Container(
-          //     width: ScreenUtil().screenWidth * .10,
-          //     height: 200,
-          //     // width: 20,
-          //   ),
-          // ),
-          Expanded(
-            child: Container(
-              // padding: EdgeInsets.symmetric(horizontal: 10.w),
-              // width: double.infinity,
-              child: ExpandablePageView.builder(
-                controller: PageController(initialPage: index),
-                itemCount: post.imageUrlList!.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
+      child: Column(children: [
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            padding: EdgeInsets.all(14.w),
+            alignment: Alignment.topLeft,
+            // height: 100,
+            // color: Colors.white,
+            child: Image.asset(
+              'assets/icons/pic_close.png',
+              width: 24.w,
+              height: 24.w,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              // GestureDetector(
+              //   behavior: HitTestBehavior.opaque,
+              //   onTap: () {
+              //     Navigator.of(context).pop();
+              //   },
+              //   child: Container(
+              //     width: ScreenUtil().screenWidth * .10,
+              //     height: 200,
+              //     // width: 20,
+              //   ),
+              // ),
+              Expanded(
+                child: Container(
+                  // padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  // width: double.infinity,
+                  child: GestureDetector(
                     onTap: () {
                       print('tap');
                       Navigator.of(context).pop();
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(14.w),
-                        child: Container(
-                          // width: ScreenUtil().screenWidth,
-                          child: ExtendedImage.network(
-                            "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
-                            fit: BoxFit.fitWidth,
-                            mode: ExtendedImageMode.gesture,
-                            initGestureConfigHandler: (state) {
-                              print(state.extendedImageInfo);
-                              return GestureConfig(
-                                minScale: 0.9,
-                                animationMinScale: 0.7,
-                                maxScale: 3.0,
-                                animationMaxScale: 3.5,
-                                speed: 1.0,
-                                inertialSpeed: 100.0,
-                                initialScale: 1.0,
-                                inPageView: false,
-                                initialAlignment: InitialAlignment.center,
-                              );
-                            },
-                          ),
+                      child: ExtendedImageGesturePageView.builder(
+                        controller: ExtendedPageController(
+                          initialPage: index,
+                          viewportFraction: 1.0,
                         ),
+                        itemCount: post.imageUrlList!.length,
+                        itemBuilder: (context, index) {
+                          return ClipRRect(
+                              borderRadius: BorderRadius.circular(14.w),
+                              child: ExtendedImage.network(
+                                "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
+                                fit: BoxFit.fitWidth,
+                                mode: ExtendedImageMode.gesture,
+                                shape: BoxShape.rectangle,
+                                clipBehavior: Clip.hardEdge,
+                                borderRadius: BorderRadius.circular(20.w),
+                                initGestureConfigHandler: (state) {
+                                  return GestureConfig(
+                                    minScale: 0.9,
+                                    animationMinScale: 0.7,
+                                    maxScale: 3.0,
+                                    animationMaxScale: 3.5,
+                                    speed: 1.0,
+                                    inertialSpeed: 100.0,
+                                    initialScale: 1.0,
+                                    inPageView: true,
+                                    initialAlignment: InitialAlignment.center,
+                                  );
+                                },
+                              ));
+                        },
                       ),
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
+
+              // GestureDetector(
+              //   behavior: HitTestBehavior.opaque,
+              //   onTap: () {
+              //     Navigator.of(context).pop();
+              //   },
+              //   child: Container(
+              //     width: ScreenUtil().screenWidth * .10,
+              //     height: 200,
+              //     // width: 20,
+              //   ),
+              // ),
+            ],
           ),
-          // GestureDetector(
-          //   behavior: HitTestBehavior.opaque,
-          //   onTap: () {
-          //     Navigator.of(context).pop();
-          //   },
-          //   child: Container(
-          //     width: ScreenUtil().screenWidth * .10,
-          //     height: 200,
-          //     // width: 20,
-          //   ),
-          // ),
-        ],
-      ),
+        ),
+        Container(
+          height: 14.w,
+        ),
+      ]),
     );
   }
 

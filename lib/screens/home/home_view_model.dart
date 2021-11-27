@@ -1,13 +1,17 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:yachtOne/models/dictionary_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/repositories/quest_repository.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/auth/email_verification_wating_view.dart';
+import 'package:yachtOne/screens/award/award_view_model.dart';
+import 'package:yachtOne/screens/ranks/rank_controller.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
@@ -57,6 +61,10 @@ class HomeViewModel extends GetxController {
   final RxBool noNeedShowUserNameDialog = true.obs;
   final RxBool showSmallSnackBar = false.obs;
   final RxString smallSnackBarText = "".obs;
+  final RefreshController refreshController = RefreshController();
+
+  final RankController rankController = Get.put(RankController());
+  final AwardViewModel awardViewModel = Get.put(AwardViewModel());
   bool onceInit = false;
 
   @override
@@ -347,6 +355,9 @@ class HomeViewModel extends GetxController {
     liveQuests.clear();
     resultQuests.clear();
     allQuests.assignAll(await _questRepository.getQuestForHomeView());
+
+    // allQuests.sort((a, b) => (a.questEndDateTime ?? Timestamp.fromDate(DateTime.now()))
+    //     .compareTo(b.questEndDateTime ?? Timestamp.fromDate(DateTime.now())));
     // 분리작업
     DateTime now = DateTime.now();
     allQuests.forEach((element) {
@@ -372,8 +383,17 @@ class HomeViewModel extends GetxController {
         // print("포함 안 된 quest: $element");
       }
     });
+
+    newQuests.sort((a, b) => (a.questEndDateTime ?? Timestamp.fromDate(DateTime.now()))
+        .compareTo(b.questEndDateTime ?? Timestamp.fromDate(DateTime.now())));
+
+    liveQuests.sort((a, b) => (a.liveEndDateTime ?? Timestamp.fromDate(DateTime.now()))
+        .compareTo(b.liveEndDateTime ?? Timestamp.fromDate(DateTime.now())));
+
+    resultQuests.sort((a, b) => (a.liveEndDateTime ?? Timestamp.fromDate(DateTime.now()))
+        .compareTo(b.liveEndDateTime ?? Timestamp.fromDate(DateTime.now())));
     // print('triggered done');
-    update();
+    // update();
     // print('home view live');
     // print(liveQuests);
   }

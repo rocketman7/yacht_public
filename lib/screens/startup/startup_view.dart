@@ -92,12 +92,12 @@ class StartupView extends GetView<StartupViewModel> {
       extendBody: true,
       body: WillPopScope(
         onWillPop: androidBackButtonAction,
-        child: Obx(
-          () => IndexedStack(
-            index: controller.selectedPage.value,
-            children: pageList,
-          ),
-        ),
+        child: Obx(() => pageList[controller.selectedPage.value]
+            // IndexedStack(
+            //   index: controller.selectedPage.value,
+            //   children: pageList,
+            // ),
+            ),
       ),
       bottomNavigationBar: Obx(() => ClipRRect(
             child: BackdropFilter(

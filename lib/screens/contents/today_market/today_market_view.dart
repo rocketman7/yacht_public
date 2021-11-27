@@ -26,7 +26,11 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(height: 14.w),
+        // SizedBox(height: 14.w),
+        Container(
+          height: 20.w,
+          // color: Colors.blue,
+        ),
         // Container(
         //   padding: EdgeInsets.symmetric(horizontal: primaryPaddingSize),
         //   // color: Colors.red,

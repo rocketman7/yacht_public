@@ -73,7 +73,6 @@ class QuestViewModel extends GetxController {
     // 뷰모델의 Local userQuestModel에 userQuestModel Rx value를 받아오는데
     // 이 퀘스트의 선택만 가져온다
     if (userQuestModelRx.length > 0) {
-      print('init');
       if (userQuestModelRx.where((element) => element.questId == questModel.questId).length > 0) {
         thisUserQuestModel(userQuestModelRx.where((element) => element.questId == questModel.questId).first);
       }
@@ -115,6 +114,14 @@ class QuestViewModel extends GetxController {
     update();
     super.onInit();
     // return
+  }
+
+  bool checkIfUserSelectedAny() {
+    bool checking = false;
+    toggleList.forEach((element) {
+      element = checking || element;
+    });
+    return checking;
   }
 
   void syncUserSelect() {

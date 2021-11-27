@@ -28,6 +28,7 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
         print('isUserNull? : $isUserNull');
         print('isUserModelReady? : $isUserModelReady');
         print('current User: ${userModelRx.value}');
+        print('authcheckworking');
 
         if (controller.authService.auth.currentUser == null) {
           return LoginView();
@@ -35,6 +36,7 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
           return LoadingView();
         } else {
           return StartupView();
+          // Get.offNamed('startup');
         }
 
         // // currentUser는 authStateChange와 관련.

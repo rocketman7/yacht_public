@@ -3,7 +3,9 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorState;
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -133,8 +135,7 @@ double correctHeight(double originalPadding, upperTextSize, lowerTextSize) {
 }
 
 double offsetTextHeight(double upperTextSize, double lowerTextSize) {
-  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round())
-      .toDouble();
+  return ((upperTextSize * 0.175).round() + (lowerTextSize * 0.175).round()).toDouble();
 }
 
 // 섹션 타이틀과 박스 사이
@@ -144,8 +145,7 @@ double widthHorizontalListView = 14.w;
 // 첫 섹션과 앱바 사이
 // 섹션 안에 패딩
 double primaryPaddingSize = 14.w;
-EdgeInsets primaryHorizontalPadding =
-    EdgeInsets.symmetric(horizontal: primaryPaddingSize);
+EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(horizontal: primaryPaddingSize);
 EdgeInsets primaryAllPadding = EdgeInsets.all(primaryPaddingSize);
 // FONTS
 
@@ -562,7 +562,7 @@ TextStyle subLeagueAwardCommentStyle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: 1.4,
+  height: contentFontHeight,
 );
 
 // 홈-상금-상금상세-포트폴리오라벨총상금 텍스트 new
@@ -1039,7 +1039,7 @@ TextStyle questRecordTitle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 TextStyle accountVerificationTitle = TextStyle(
   fontFamily: krFont,
@@ -1120,7 +1120,7 @@ TextStyle questRecordSelection = TextStyle(
   fontWeight: FontWeight.w600,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 요트 설명서 다이얼로그
@@ -1130,7 +1130,7 @@ TextStyle yachtInstructionDialogTitle = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 TextStyle yachtInstructionDialogSubtitle = TextStyle(
@@ -1139,7 +1139,7 @@ TextStyle yachtInstructionDialogSubtitle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 TextStyle yachtInstructionDialogDescription = TextStyle(
@@ -1148,7 +1148,7 @@ TextStyle yachtInstructionDialogDescription = TextStyle(
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: contentFontHeight,
 );
 
 // 뱃지 설명서 다이얼로그
@@ -1354,8 +1354,7 @@ Container simpleTextContainerButton(
                 Text(
                   text,
                   textAlign: TextAlign.center,
-                  style:
-                      simpleTextButtonStyle.copyWith(color: Colors.transparent),
+                  style: simpleTextButtonStyle.copyWith(color: Colors.transparent),
                 ),
                 Positioned(
                   child: SizedBox(
@@ -1404,8 +1403,7 @@ Container textContainerButtonWithOptions({
       child: Text(
         text,
         style: isDarkBackground
-            ? simpleTextButtonStyle.copyWith(
-                color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
+            ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
             : simpleTextButtonStyle.copyWith(fontSize: fontSize ?? bodyBigSize),
       ),
     ),
@@ -1428,10 +1426,8 @@ Container bigTextContainerButton({
       child: Text(
         text,
         style: isDisabled
-            ? simpleTextButtonStyle.copyWith(
-                color: yachtGrey, fontSize: heading5Size)
-            : simpleTextButtonStyle.copyWith(
-                fontSize: heading5Size, color: primaryButtonText),
+            ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
+            : simpleTextButtonStyle.copyWith(fontSize: heading5Size, color: primaryButtonText),
       ),
     ),
   );
@@ -1449,43 +1445,35 @@ Container sectionBox({
     height: height,
     width: width,
     padding: padding ?? EdgeInsets.all(0),
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
     child: child,
   );
 }
 
 // 기본 박스 데코레이션
-BoxDecoration yachtBoxDecoration = BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.circular(12.w),
-    boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]);
+BoxDecoration yachtBoxDecoration = BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
 
 // 퀘스트 선택지 박스 데코레이션
-BoxDecoration yachtChoiceBoxDecoration = BoxDecoration(
-    color: white,
-    borderRadius: BorderRadius.circular(10.w),
-    boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
-      )
-    ]);
+BoxDecoration yachtChoiceBoxDecoration =
+    BoxDecoration(color: white, borderRadius: BorderRadius.circular(10.w), boxShadow: [
+  BoxShadow(
+    color: yachtShadow,
+    blurRadius: 8.w,
+    spreadRadius: 1.w,
+  )
+]);
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -1500,16 +1488,13 @@ Container sectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1525,9 +1510,7 @@ Container sectionBoxWithBottomButton({
           width: double.infinity,
           decoration: BoxDecoration(
               color: yachtViolet,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12.w),
-                  bottomRight: Radius.circular(12.w))),
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -1552,16 +1535,13 @@ Container secondarySectionBoxWithBottomButton({
     height: height,
     width: width,
     // padding: padding,
-    decoration: BoxDecoration(
-        color: white,
-        borderRadius: BorderRadius.circular(12.w),
-        boxShadow: [
-          BoxShadow(
-            color: yachtShadow,
-            blurRadius: 8.w,
-            spreadRadius: 1.w,
-          )
-        ]),
+    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+      BoxShadow(
+        color: yachtShadow,
+        blurRadius: 8.w,
+        spreadRadius: 1.w,
+      )
+    ]),
     child: Column(
       // mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1577,9 +1557,7 @@ Container secondarySectionBoxWithBottomButton({
           width: double.infinity,
           decoration: BoxDecoration(
               color: buttonNormal,
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12.w),
-                  bottomRight: Radius.circular(12.w))),
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
           child: Center(
             child: Text(
               buttonTitle!,
@@ -1600,21 +1578,14 @@ class SectionBoxWithBottomButtonAndBorder extends StatefulWidget {
   final Widget child;
 
   const SectionBoxWithBottomButtonAndBorder(
-      {Key? key,
-      this.height,
-      this.width,
-      this.padding,
-      this.buttonTitle,
-      required this.child})
+      {Key? key, this.height, this.width, this.padding, this.buttonTitle, required this.child})
       : super(key: key);
 
   @override
-  _SectionBoxWithBottomButtonAndBorderState createState() =>
-      _SectionBoxWithBottomButtonAndBorderState();
+  _SectionBoxWithBottomButtonAndBorderState createState() => _SectionBoxWithBottomButtonAndBorderState();
 }
 
-class _SectionBoxWithBottomButtonAndBorderState
-    extends State<SectionBoxWithBottomButtonAndBorder> {
+class _SectionBoxWithBottomButtonAndBorderState extends State<SectionBoxWithBottomButtonAndBorder> {
   RxDouble animator = 0.0.obs;
   late Timer timer;
   @override
@@ -1672,9 +1643,8 @@ class _SectionBoxWithBottomButtonAndBorderState
               width: double.infinity,
               decoration: BoxDecoration(
                   color: yachtViolet,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(12.w),
-                      bottomRight: Radius.circular(12.w))),
+                  borderRadius:
+                      BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
               child: Center(
                 child: Text(
                   widget.buttonTitle!,
@@ -1744,8 +1714,7 @@ class _SectionBoxWithBottomButtonAndBorderState
 //   );
 // }
 
-Container simpleTierRRectBox(
-    {int exp = 0, double? fontSize, double width = 70}) {
+Container simpleTierRRectBox({int exp = 0, double? fontSize, double width = 70}) {
   String tierName = getTierByExp(exp);
   String tierTitle = separateStringFromTier(tierName);
   // String tierTitle = "intern";
@@ -1788,13 +1757,11 @@ Container simpleTierRRectBox(
                 : 12.w),
     // width: width.w,
     // height: (width / 3.75).w,
-    decoration: BoxDecoration(
-        color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
+    decoration: BoxDecoration(color: tierColor[tierTitle], borderRadius: BorderRadius.circular(50)),
     child: Center(
       child: Text(
         '${tierKorName[tierTitle]} $tierLevel',
-        style: simpleTierStyle.copyWith(
-            fontSize: fontSize, fontWeight: FontWeight.w500),
+        style: simpleTierStyle.copyWith(fontSize: fontSize, fontWeight: FontWeight.w500),
       ),
     ),
   );
@@ -1806,9 +1773,7 @@ ClipRect glassmorphismContainer({required Widget child}) {
         filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
         child: Container(
           padding: EdgeInsets.all(6.w),
-          decoration: BoxDecoration(
-              color: glassmorphismBackgroundColor,
-              borderRadius: BorderRadius.circular(10.w)),
+          decoration: BoxDecoration(color: glassmorphismBackgroundColor, borderRadius: BorderRadius.circular(10.w)),
           child: child,
         )),
   );
@@ -1863,9 +1828,7 @@ Container appBarWithCloseButton({required String title, double? height}) {
         Flexible(
           child: Container(),
         ),
-        Center(
-            child:
-                Text(title, style: appBarTitle.copyWith(fontFamily: krFont))),
+        Center(child: Text(title, style: appBarTitle.copyWith(fontFamily: krFont))),
         Flexible(
           child: Align(
             alignment: Alignment.centerRight,
@@ -1886,8 +1849,7 @@ Container appBarWithoutCloseButton({required String title, double? height}) {
   return Container(
     height: height ?? 60.w,
     color: white,
-    child: Center(
-        child: Text(title, style: appBarTitle.copyWith(fontFamily: krFont))),
+    child: Center(child: Text(title, style: appBarTitle.copyWith(fontFamily: krFont))),
   );
 }
 
@@ -1975,8 +1937,7 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
           Navigator.of(context).pop();
         },
         child: Container(
-          padding: EdgeInsets.fromLTRB(
-              primaryPaddingSize, 0.0, primaryPaddingSize, primaryPaddingSize),
+          padding: EdgeInsets.fromLTRB(primaryPaddingSize, 0.0, primaryPaddingSize, primaryPaddingSize),
           width: double.infinity,
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -1986,21 +1947,16 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
               Column(children: [
                 Row(
                   children: [
-                    Expanded(
-                        child: Center(child: Text("티어 엠블럼", style: feedTitle))),
-                    Expanded(
-                        child: Center(child: Text("필요 경험치", style: feedTitle)))
+                    Expanded(child: Center(child: Text("티어 엠블럼", style: feedTitle))),
+                    Expanded(child: Center(child: Text("필요 경험치", style: feedTitle)))
                   ],
                 ),
                 SizedBox(height: correctHeight(10.w, feedTitle.fontSize, 0.0)),
                 ...List.generate(
-                    tierSystemModelRx.value == null
-                        ? 0
-                        : getOnlyTierTitle(tierSystemModelRx.value!.tierNames)
-                            .length, (index) {
-                  bool isThisUserBelongthisTier = getOnlyTierTitle(
-                          tierSystemModelRx.value!.tierNames)[index] ==
-                      thisUserTierTitle;
+                    tierSystemModelRx.value == null ? 0 : getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length,
+                    (index) {
+                  bool isThisUserBelongthisTier =
+                      getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index] == thisUserTierTitle;
                   return Stack(
                     clipBehavior: Clip.none,
                     children: [
@@ -2042,62 +1998,28 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
                                       Text(
                                         index == 0
                                             ? 0.toString()
-                                            : index ==
-                                                    getOnlyTierTitle(
-                                                                tierSystemModelRx
-                                                                    .value!
-                                                                    .tierNames)
-                                                            .length -
-                                                        1
+                                            : index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
                                                 ? "상위 1%"
-                                                : getExpNeededForEachTierTitle(
-                                                        tierSystemModelRx
-                                                            .value!.tierNames,
-                                                        tierSystemModelRx.value!
-                                                            .tierStops)[index -
-                                                        1]
+                                                : getExpNeededForEachTierTitle(tierSystemModelRx.value!.tierNames,
+                                                        tierSystemModelRx.value!.tierStops)[index - 1]
                                                     .toString(),
-                                        style: buttonTitleStyle.copyWith(
-                                            color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
                                       ),
                                       Text(
-                                        index ==
-                                                getOnlyTierTitle(
-                                                            tierSystemModelRx
-                                                                .value!
-                                                                .tierNames)
-                                                        .length -
-                                                    1
+                                        index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
                                             ? ""
                                             : " ~ ",
-                                        style: buttonTitleStyle.copyWith(
-                                            color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
                                       ),
                                       Text(
-                                        index ==
-                                                getOnlyTierTitle(
-                                                            tierSystemModelRx
-                                                                .value!
-                                                                .tierNames)
-                                                        .length -
-                                                    2
+                                        index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 2
                                             ? ""
-                                            : index ==
-                                                    getOnlyTierTitle(
-                                                                tierSystemModelRx
-                                                                    .value!
-                                                                    .tierNames)
-                                                            .length -
-                                                        1
+                                            : index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
                                                 ? " "
-                                                : getExpNeededForEachTierTitle(
-                                                        tierSystemModelRx
-                                                            .value!.tierNames,
-                                                        tierSystemModelRx.value!
-                                                            .tierStops)[index]
+                                                : getExpNeededForEachTierTitle(tierSystemModelRx.value!.tierNames,
+                                                        tierSystemModelRx.value!.tierStops)[index]
                                                     .toString(),
-                                        style: buttonTitleStyle.copyWith(
-                                            color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
                                       ),
                                     ],
                                   )),
@@ -2183,43 +2105,138 @@ Container dashedLine({
   );
 }
 
-CustomHeader reloadHeader(bool isTopOfScreen) {
-  RxString footer = "당겨서 새로고침".obs;
-  return CustomHeader(
-      builder: (_, status) {
-        print('status: $status');
-        // status = RefreshStatus.
-        return Container(
-          height: isTopOfScreen ? SizeConfig.safeAreaTop + 20.w : 20.w,
-          // color: Colors.blue,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Text(
-              footer.value,
-              style: TextStyle(fontSize: 14, fontFamily: krFont),
-            ),
-          ),
+class YachtCustomHeader extends RefreshIndicator {
+  final OuterBuilder? outerBuilder;
+  final String? releaseText, idleText, refreshingText, completeText, failedText, canTwoLevelText;
+  final Widget? releaseIcon, idleIcon, refreshingIcon, completeIcon, failedIcon, canTwoLevelIcon, twoLevelView;
+
+  /// icon and text middle margin
+  final double spacing;
+  final IconPosition iconPos;
+
+  final TextStyle textStyle;
+
+  const YachtCustomHeader({
+    Key? key,
+    RefreshStyle refreshStyle: RefreshStyle.Follow,
+    // double height: 80.w,
+    Duration completeDuration: const Duration(milliseconds: 600),
+    this.outerBuilder,
+    this.textStyle: const TextStyle(color: Colors.grey),
+    this.releaseText,
+    this.refreshingText,
+    this.canTwoLevelIcon,
+    this.twoLevelView,
+    this.canTwoLevelText,
+    this.completeText,
+    this.failedText,
+    this.idleText,
+    this.iconPos: IconPosition.left,
+    this.spacing: 15.0,
+    this.refreshingIcon,
+    this.failedIcon: const Icon(Icons.error, color: Colors.grey),
+    this.completeIcon: const Icon(Icons.done, color: Colors.grey),
+    this.idleIcon = const Icon(Icons.arrow_downward, color: Colors.grey),
+    this.releaseIcon = const Icon(Icons.refresh, color: Colors.grey),
+  }) : super(
+          key: key,
+          refreshStyle: refreshStyle,
+          completeDuration: completeDuration,
+          // height: height,
         );
-      },
-      height: isTopOfScreen ? SizeConfig.safeAreaTop + 20.w : 20.w,
-      onModeChange: (mode) {
-        if (mode == RefreshStatus.idle) {
-          footer("당겨서 새로고침");
-        } else if (mode == RefreshStatus.canRefresh) {
-          footer("놓아주세요");
-        } else if (mode == RefreshStatus.refreshing) {
-          footer("새로고치는 중...");
-        } else if (mode == RefreshStatus.completed) {
-          footer("완료!");
-        }
-      });
+
+  @override
+  State createState() {
+    // TODO: implement createState
+    return _YachtCustomHeaderState();
+  }
+}
+
+class _YachtCustomHeaderState extends RefreshIndicatorState<YachtCustomHeader> {
+  Widget _buildText(mode) {
+    RefreshString strings = KrRefreshString();
+    return Text(
+        mode == RefreshStatus.canRefresh
+            ? widget.releaseText ?? strings.canRefreshText!
+            : mode == RefreshStatus.completed
+                ? widget.completeText ?? strings.refreshCompleteText!
+                : mode == RefreshStatus.failed
+                    ? widget.failedText ?? strings.refreshFailedText!
+                    : mode == RefreshStatus.refreshing
+                        ? widget.refreshingText ?? strings.refreshingText!
+                        : mode == RefreshStatus.idle
+                            ? widget.idleText ?? strings.idleRefreshText!
+                            : mode == RefreshStatus.canTwoLevel
+                                ? widget.canTwoLevelText ?? strings.canTwoLevelText!
+                                : "",
+        style: widget.textStyle.copyWith(color: yachtGrey));
+  }
+
+  Widget _buildIcon(mode) {
+    Widget? icon = mode == RefreshStatus.canRefresh
+        ? widget.releaseIcon
+        : mode == RefreshStatus.idle
+            ? widget.idleIcon
+            : mode == RefreshStatus.completed
+                ? widget.completeIcon
+                : mode == RefreshStatus.failed
+                    ? widget.failedIcon
+                    : mode == RefreshStatus.canTwoLevel
+                        ? widget.canTwoLevelIcon
+                        : mode == RefreshStatus.canTwoLevel
+                            ? widget.canTwoLevelIcon
+                            : mode == RefreshStatus.refreshing
+                                ? widget.refreshingIcon ??
+                                    SizedBox(
+                                      width: 25.0,
+                                      height: 25.0,
+                                      child: defaultTargetPlatform == TargetPlatform.iOS
+                                          ? const CupertinoActivityIndicator()
+                                          : const CircularProgressIndicator(strokeWidth: 2.0),
+                                    )
+                                : widget.twoLevelView;
+    return icon ?? Container();
+  }
+
+  @override
+  bool needReverseAll() {
+    // TODO: implement needReverseAll
+    return false;
+  }
+
+  @override
+  Widget buildContent(BuildContext context, RefreshStatus? mode) {
+    // TODO: implement buildContent
+    Widget textWidget = _buildText(mode);
+    Widget iconWidget = _buildIcon(mode);
+    List<Widget> children = <Widget>[iconWidget, textWidget];
+    final Widget container = Wrap(
+      spacing: widget.spacing,
+      textDirection: widget.iconPos == IconPosition.left ? TextDirection.ltr : TextDirection.rtl,
+      direction:
+          widget.iconPos == IconPosition.bottom || widget.iconPos == IconPosition.top ? Axis.vertical : Axis.horizontal,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      verticalDirection: widget.iconPos == IconPosition.bottom ? VerticalDirection.up : VerticalDirection.down,
+      alignment: WrapAlignment.center,
+      children: children,
+    );
+    return widget.outerBuilder != null
+        ? widget.outerBuilder!(container)
+        : Container(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: container,
+            ),
+            // color: Colors.blue,
+            height: ScreenUtil().statusBarHeight + 80.w,
+          );
+  }
 }
 
 class PrimaryWebView extends StatelessWidget {
   final String title;
   final String url;
-  PrimaryWebView({Key? key, required this.title, required this.url})
-      : super(key: key);
+  PrimaryWebView({Key? key, required this.title, required this.url}) : super(key: key);
   final GlobalKey webViewKey = GlobalKey();
   final RxDouble progessPercent = 0.0.obs;
 
@@ -2252,8 +2269,7 @@ class PrimaryWebView extends StatelessWidget {
                       ? LinearProgressIndicator(
                           value: progessPercent.value,
                           backgroundColor: primaryButtonText,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(yachtViolet),
+                          valueColor: AlwaysStoppedAnimation<Color>(yachtViolet),
                         )
                       : Container()),
             ),
@@ -2276,11 +2292,8 @@ class PrimaryWebView extends StatelessWidget {
                 //     urlController.text = this.url;
                 //   });
                 // },
-                androidOnPermissionRequest:
-                    (controller, origin, resources) async {
-                  return PermissionRequestResponse(
-                      resources: resources,
-                      action: PermissionRequestResponseAction.GRANT);
+                androidOnPermissionRequest: (controller, origin, resources) async {
+                  return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
                 },
                 // shouldOverrideUrlLoading: (controller, navigationAction) async {
 
@@ -2316,21 +2329,21 @@ class YachtPrimaryAppBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     // TODO: implement shouldRebuild
-    return maxExtent != oldDelegate.maxExtent ||
-        minExtent != oldDelegate.minExtent;
+    return maxExtent != oldDelegate.maxExtent || minExtent != oldDelegate.minExtent;
     // ||
     // safeAreaPadding != oldDelegate.safeAreaPadding;
   }
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     double opacity = offset > 30.w ? 1 : offset / 30.w;
     // TODO: implement build
+    // print(offset);
     return ClipRect(
       child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
           child: Container(
+            // color: Colors.blue,
             // Don't wrap this in any SafeArea widgets, use padding instead
             // padding: EdgeInsets.only(top: safeAreaPadding.top),
 

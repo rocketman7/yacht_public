@@ -416,12 +416,19 @@ class QuestView extends StatelessWidget {
                 bottom: 20.w,
                 child: GestureDetector(
                   onTap: () {
+                    print(questViewModel.checkIfUserSelectedAny());
                     if (questViewModel.isSelectingSheetShowing.value == false) {
                       questViewModel.isSelectingSheetShowing(true);
                       questViewModel.syncUserSelect();
                     } else {
                       // DateTime.now().isAfter(other)
-                      if (questModel.questEndDateTime.toDate().isBefore(DateTime.now())) {
+
+                      if (!questViewModel.checkIfUserSelectedAny()) {
+                        yachtSnackBarFromBottom(
+                          "선택을 완료한 후 확정할 수 있습니다.",
+                          // longerDuration: 2000,
+                        );
+                      } else if (questModel.questEndDateTime.toDate().isBefore(DateTime.now())) {
                         yachtSnackBarFromBottom(
                           "퀘스트 참여가능한 시간이 지났습니다.",
                           // longerDuration: 2000,
@@ -807,8 +814,6 @@ class QuestView extends StatelessWidget {
                                             onReorder: (oldIndex, newIndex) {
                                               // Vibration.vibrate();
                                               questViewModel.reorderUserSelect(oldIndex, newIndex);
-                                              // print('old' + oldIndex.toString());
-                                              // print('new' + newIndex.toString());
                                             },
                                             children: List.generate(questModel.investAddresses!.length, (index) {
                                               return Container(

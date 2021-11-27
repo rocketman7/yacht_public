@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:yachtOne/models/community/comment_model.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
@@ -34,7 +35,7 @@ class CommunityViewModel extends GetxController {
 
   RxBool isUploadingNewPost = false.obs;
   RxDouble offset = 0.0.obs;
-
+  final RefreshController refreshController = RefreshController(initialRefresh: false);
   @override
   void onInit() async {
     print('community view model oninit');
@@ -63,6 +64,15 @@ class CommunityViewModel extends GetxController {
     scrollController.dispose();
   }
 
+  void onRefresh() async {
+    // monitor network fetch
+    // await Future.delayed(Duration(milliseconds: 1200));
+    await reloadPost();
+    // if failed,use refreshFailed()
+    refreshController.refreshCompleted();
+    // await Future.delayed(Duration(milliseconds: 1200));
+  }
+
   Future reloadPost() async {
     if (isGettingPosts.value) return;
     isGettingPosts(true);
@@ -84,7 +94,7 @@ class CommunityViewModel extends GetxController {
 
     isGettingPosts(false);
 
-    update();
+    // update();
   }
 
   Future getPost() async {

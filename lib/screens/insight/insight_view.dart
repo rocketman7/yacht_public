@@ -34,7 +34,10 @@ class InsightView extends StatelessWidget {
           () => SliverPersistentHeader(
             floating: false,
             pinned: true,
-            delegate: YachtPrimaryAppBarDelegate(offset: offset.value, tabTitle: "요트 인사이트"),
+            delegate: YachtPrimaryAppBarDelegate(
+              offset: offset.value,
+              tabTitle: "요트 인사이트",
+            ),
           ),
         ),
         SliverList(

@@ -48,17 +48,17 @@ class NewsView extends GetView<NewsViewModel> {
                 ...List.generate(controller.newsList.length, (index) {
                   return buildNewsWidget(index);
                 }),
-                controller.newsList.length != 0
-                    ? Align(
-                        alignment: Alignment.centerRight,
-                        child: Obx(
-                          () => Text(
-                            "${controller.corporationName} 뉴스 더보기",
-                            style: detailedContentTextStyle.copyWith(
-                                color: deepBlue, fontSize: 14.w, fontWeight: FontWeight.w600),
-                          ),
-                        ))
-                    : Container()
+                // controller.newsList.length != 0
+                //     ? Align(
+                //         alignment: Alignment.centerRight,
+                //         child: Obx(
+                //           () => Text(
+                //             "${controller.corporationName} 뉴스 더보기",
+                //             style: detailedContentTextStyle.copyWith(
+                //                 color: deepBlue, fontSize: 14.w, fontWeight: FontWeight.w600),
+                //           ),
+                //         ))
+                //     : Container()
               ],
             ),
     );
@@ -75,7 +75,7 @@ class NewsView extends GetView<NewsViewModel> {
                 ));
           },
           child: Container(
-            height: 85.w,
+            // height: 85.w,
             width: double.infinity,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,6 +96,7 @@ class NewsView extends GetView<NewsViewModel> {
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
+                            SizedBox(height: 6.w),
                             Row(
                               children: [
                                 Text(

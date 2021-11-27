@@ -42,9 +42,23 @@ class LiveQuestView extends StatelessWidget {
             return Padding(
               padding: primaryHorizontalPadding,
               child: sectionBox(
-                height: 250.w,
                 width: 232.w,
+                // height: 180.w,
+                height: 250.w,
                 child: Image.asset('assets/illusts/not_exists/no_live.png'),
+                // child: Padding(
+                //   padding: primaryAllPadding,
+                //   child: Column(
+                //     children: [
+                //       LiveCardHeader(questModel: homeViewModel.newQuests[1]),
+                //       Divider(
+                //         height: 8.w,
+                //         thickness: 1.w,
+                //         color: yachtLightGrey,
+                //       ),
+                //     ],
+                //   ),
+                // )
                 // height: 340.w,
               ),
             );
