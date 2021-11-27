@@ -28,6 +28,7 @@ import 'profile_change_view.dart';
 import '../settings/setting_view.dart';
 import 'profile_others_view_model.dart';
 import 'profile_share_ui.dart';
+import 'quest_record_detail_view.dart';
 
 class ProfileOthersView extends GetView<ProfileOthersViewModel> {
   final String uid;
@@ -1182,19 +1183,20 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                   ),
                   Padding(
                     padding: primaryHorizontalPadding,
-                    child: Row(
-                      children: [
-                        Text(
-                          '퀘스트 참여기록',
-                          style: profileHeaderTextStyle,
-                        ),
-                        Spacer(),
-                        GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () {
-                            print('aa');
-                          },
-                          child: Row(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        Get.to(
+                            () => QuestRecordOthersDetailView(tag: widget.tag));
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            '퀘스트 참여기록',
+                            style: profileHeaderTextStyle,
+                          ),
+                          Spacer(),
+                          Row(
                             children: [
                               Container(
                                 width: 8.w,
@@ -1208,126 +1210,128 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                                 width: 14.w,
                               ),
                             ],
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: correctHeight(
                         20.w, profileHeaderTextStyle.fontSize, 0.0),
                   ),
-                  Obx(
-                    () =>
-                        profileOthersViewModel.otherUserQuestModels.length == 0
-                            ? Image.asset(
-                                'assets/illusts/not_exists/no_quest_done.png',
-                                height: 150.w)
-                            : Column(
-                                children: List.generate(
-                                    min(
-                                        profileOthersViewModel
-                                            .otherUserQuestModels.length,
-                                        3),
-                                    (index) => Column(
-                                          children: [
-                                            Padding(
-                                              padding: primaryHorizontalPadding,
-                                              child: Obx(
-                                                () => sectionBox(
-                                                    padding: primaryAllPadding,
-                                                    child: FutureBuilder<
-                                                            QuestModel>(
-                                                        future: profileOthersViewModel
-                                                            .getEachQuestModel(
-                                                                profileOthersViewModel
-                                                                        .otherUserQuestModels[
-                                                                    index]),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          if (!snapshot
-                                                              .hasData) {
-                                                            return Container();
-                                                          } else {
-                                                            return InkWell(
-                                                              onTap: () {
-                                                                // showDialog(
-                                                                //     context: context,
-                                                                //     builder: (context) => ResultDialog(
-                                                                //           questModel: snapshot.data!,
-                                                                //           otherUserQuestModel: profileOthersViewModel
-                                                                //               .otherUserQuestModels[index],
-                                                                //           otherUserExp: profileOthersViewModel.user.exp,
-                                                                //         ));
+                  Obx(() =>
+                          profileOthersViewModel.otherUserQuestModels.length ==
+                                  0
+                              ? Image.asset(
+                                  'assets/illusts/not_exists/no_quest_done.png',
+                                  height: 150.w)
+                              : QuestRecordOthersView(
+                                  isFullView: false, tag: widget.tag)
+                      // Column(
+                      //     children: List.generate(
+                      //         min(
+                      //             profileOthersViewModel
+                      //                 .otherUserQuestModels.length,
+                      //             3),
+                      //         (index) => Column(
+                      //               children: [
+                      //                 Padding(
+                      //                   padding: primaryHorizontalPadding,
+                      //                   child: Obx(
+                      //                     () => sectionBox(
+                      //                         padding: primaryAllPadding,
+                      //                         child: FutureBuilder<
+                      //                                 QuestModel>(
+                      //                             future: profileOthersViewModel
+                      //                                 .getEachQuestModel(
+                      //                                     profileOthersViewModel
+                      //                                             .otherUserQuestModels[
+                      //                                         index]),
+                      //                             builder: (context,
+                      //                                 snapshot) {
+                      //                               if (!snapshot
+                      //                                   .hasData) {
+                      //                                 return Container();
+                      //                               } else {
+                      //                                 return InkWell(
+                      //                                   onTap: () {
+                      //                                     // showDialog(
+                      //                                     //     context: context,
+                      //                                     //     builder: (context) => ResultDialog(
+                      //                                     //           questModel: snapshot.data!,
+                      //                                     //           otherUserQuestModel: profileOthersViewModel
+                      //                                     //               .otherUserQuestModels[index],
+                      //                                     //           otherUserExp: profileOthersViewModel.user.exp,
+                      //                                     //         ));
 
-                                                                // Get.toNamed('/quest',
-                                                                //     arguments:
-                                                                //         snapshot.data);
-                                                              },
-                                                              child: Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Expanded(
-                                                                    child:
-                                                                        Column(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Text(
-                                                                          timeStampToStringWithHourMinute(snapshot.data!.questEndDateTime) +
-                                                                              " 마감",
-                                                                          style:
-                                                                              questRecordendDateTime,
-                                                                        ),
-                                                                        Text(
-                                                                            snapshot
-                                                                                .data!.title,
-                                                                            style:
-                                                                                questRecordTitle),
-                                                                        SizedBox(
-                                                                            height: correctHeight(
-                                                                                14.w,
-                                                                                questRecordTitle.fontSize,
-                                                                                questRecordSelection.fontSize)),
-                                                                        Text(
-                                                                            profileOthersViewModel.getUserChioce(snapshot.data!,
-                                                                                profileOthersViewModel.otherUserQuestModels[index]),
-                                                                            style: questRecordSelection),
-                                                                        // Text(userQuestModelRx[index].selection),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  // SizedBox(
-                                                                  //   width: 30.w,
-                                                                  // ),
-                                                                  // simpleTextContainerLessRadiusButton("퀘스트 보기")
-                                                                ],
-                                                              ),
-                                                            );
-                                                          }
-                                                        })),
-                                              ),
-                                            ),
-                                            if (index !=
-                                                min(
-                                                        profileOthersViewModel
-                                                            .otherUserQuestModels
-                                                            .length,
-                                                        3) -
-                                                    1)
-                                              SizedBox(
-                                                height: 10.w,
-                                              )
-                                          ],
-                                        )),
-                              ),
-                  ),
+                      //                                     // Get.toNamed('/quest',
+                      //                                     //     arguments:
+                      //                                     //         snapshot.data);
+                      //                                   },
+                      //                                   child: Row(
+                      //                                     crossAxisAlignment:
+                      //                                         CrossAxisAlignment
+                      //                                             .start,
+                      //                                     children: [
+                      //                                       Expanded(
+                      //                                         child:
+                      //                                             Column(
+                      //                                           crossAxisAlignment:
+                      //                                               CrossAxisAlignment
+                      //                                                   .start,
+                      //                                           mainAxisAlignment:
+                      //                                               MainAxisAlignment
+                      //                                                   .start,
+                      //                                           children: [
+                      //                                             Text(
+                      //                                               timeStampToStringWithHourMinute(snapshot.data!.questEndDateTime) +
+                      //                                                   " 마감",
+                      //                                               style:
+                      //                                                   questRecordendDateTime,
+                      //                                             ),
+                      //                                             Text(
+                      //                                                 snapshot
+                      //                                                     .data!.title,
+                      //                                                 style:
+                      //                                                     questRecordTitle),
+                      //                                             SizedBox(
+                      //                                                 height: correctHeight(
+                      //                                                     14.w,
+                      //                                                     questRecordTitle.fontSize,
+                      //                                                     questRecordSelection.fontSize)),
+                      //                                             Text(
+                      //                                                 profileOthersViewModel.getUserChioce(snapshot.data!,
+                      //                                                     profileOthersViewModel.otherUserQuestModels[index]),
+                      //                                                 style: questRecordSelection),
+                      //                                             // Text(userQuestModelRx[index].selection),
+                      //                                           ],
+                      //                                         ),
+                      //                                       ),
+                      //                                       // SizedBox(
+                      //                                       //   width: 30.w,
+                      //                                       // ),
+                      //                                       // simpleTextContainerLessRadiusButton("퀘스트 보기")
+                      //                                     ],
+                      //                                   ),
+                      //                                 );
+                      //                               }
+                      //                             })),
+                      //                   ),
+                      //                 ),
+                      //                 if (index !=
+                      //                     min(
+                      //                             profileOthersViewModel
+                      //                                 .otherUserQuestModels
+                      //                                 .length,
+                      //                             3) -
+                      //                         1)
+                      //                   SizedBox(
+                      //                     height: 10.w,
+                      //                   )
+                      //               ],
+                      //             )),
+                      //   ),
+                      ),
                   SizedBox(
                     height: 50.w,
                   ),
@@ -1403,6 +1407,200 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
           ),
         ),
       ]),
+    );
+  }
+}
+
+class QuestRecordOthersView extends StatelessWidget {
+  final bool isFullView;
+  final String tag;
+  final int maxNum = 3;
+
+  QuestRecordOthersView({required this.isFullView, required this.tag});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: List.generate(
+          isFullView
+              ? Get.find<ProfileOthersViewModel>(tag: tag)
+                  .otherUserQuestModels
+                  .length
+              : min(
+                  Get.find<ProfileOthersViewModel>(tag: tag)
+                      .otherUserQuestModels
+                      .length,
+                  maxNum),
+          (index) => Column(
+                children: [
+                  Padding(
+                    padding: primaryHorizontalPadding,
+                    child: Obx(
+                      () => sectionBox(
+                          padding: primaryAllPadding,
+                          child: FutureBuilder<QuestModel>(
+                              future: Get.find<ProfileOthersViewModel>(tag: tag)
+                                  .getEachQuestModel(
+                                      Get.find<ProfileOthersViewModel>(tag: tag)
+                                          .otherUserQuestModels[index]),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Container();
+                                } else {
+                                  return InkWell(
+                                    onTap: () {
+                                      // showDialog(
+                                      //     context: context,
+                                      //     builder: (context) => ResultDialog(
+                                      //           questModel: snapshot.data!,
+                                      //         ));
+
+                                      // Get.toNamed('/quest',
+                                      //     arguments:
+                                      //         snapshot.data);
+                                    },
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Flexible(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                timeStampToStringWithHourMinute(
+                                                        snapshot.data!
+                                                            .questEndDateTime) +
+                                                    " 마감",
+                                                style: questRecordendDateTime,
+                                              ),
+                                              SizedBox(height: 6.w),
+                                              Text(snapshot.data!.title,
+                                                  style: questRecordTitle),
+                                              SizedBox(
+                                                  height: correctHeight(
+                                                      14.w,
+                                                      questRecordTitle.fontSize,
+                                                      questRecordSelection
+                                                          .fontSize)),
+                                              Text(
+                                                  Get.find<ProfileOthersViewModel>(
+                                                          tag: tag)
+                                                      .getUserChioce(
+                                                          snapshot.data!,
+                                                          Get.find<ProfileOthersViewModel>(
+                                                                      tag: tag)
+                                                                  .otherUserQuestModels[
+                                                              index]),
+                                                  style: questRecordSelection),
+                                              // Text(userQuestModelRx[index].selection),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(width: 8.w),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            // Spacer(),
+                                            Container(
+                                              // alignment: Alignment.bottomCenter,
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 10.w,
+                                                vertical: 5.w,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: buttonNormal,
+                                                borderRadius:
+                                                    BorderRadius.circular(8.w),
+                                              ),
+
+                                              // height: 300,
+                                              child: Center(
+                                                child: Text(
+                                                  snapshot.data!.results == null
+                                                      ? "진행 중"
+                                                      : Get.find<ProfileOthersViewModel>(
+                                                                      tag: tag)
+                                                                  .otherUserQuestModels[
+                                                                      index]
+                                                                  .hasSucceeded ==
+                                                              true
+                                                          ? "예측 성공"
+                                                          : "예측 실패",
+                                                  style: questRecordSelection
+                                                      .copyWith(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: snapshot.data!
+                                                                .results ==
+                                                            null
+                                                        ? yachtBlack
+                                                        : Get.find<ProfileOthersViewModel>(
+                                                                        tag:
+                                                                            tag)
+                                                                    .otherUserQuestModels[
+                                                                        index]
+                                                                    .hasSucceeded ==
+                                                                true
+                                                            ? yachtRed
+                                                            : yachtGrey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 10.w,
+                                                vertical: 5.w,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: Colors.transparent,
+                                                borderRadius:
+                                                    BorderRadius.circular(8.w),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "예측 실패",
+                                                  style: questRecordSelection
+                                                      .copyWith(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.transparent,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // SizedBox(
+                                        //   width: 30.w,
+                                        // ),
+                                        // simpleTextContainerLessRadiusButton("퀘스트 보기")
+                                      ],
+                                    ),
+                                  );
+                                }
+                              })),
+                    ),
+                  ),
+                  if (index !=
+                      min(
+                              userQuestModelRx.length,
+                              isFullView
+                                  ? userQuestModelRx.length
+                                  : min(userQuestModelRx.length, maxNum)) -
+                          1)
+                    SizedBox(
+                      height: 10.w,
+                    )
+                ],
+              )),
     );
   }
 }

@@ -39,7 +39,9 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       profileViewModel.scrollController.addListener(() {
         // offset obs 값에 scroll controller offset 넣어주기
-        profileViewModel.scrollController.offset < 0 ? offset(0) : offset(profileViewModel.scrollController.offset);
+        profileViewModel.scrollController.offset < 0
+            ? offset(0)
+            : offset(profileViewModel.scrollController.offset);
         // print(_scrollController.offset);
       });
     });
@@ -118,7 +120,8 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                           onTap: () => showDialog(
                               context: context,
                               builder: (context) {
-                                return yachtTierInfoPopUp(context, userModelRx.value!.exp);
+                                return yachtTierInfoPopUp(
+                                    context, userModelRx.value!.exp);
                               }),
                           child: Container(
                             width: 79.w,
@@ -130,13 +133,18 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                   width: 79.w,
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      gradient:
-                                          LinearGradient(begin: Alignment(0.0, 0.0), end: Alignment(0.0, 1.0), colors: [
-                                        (controller.isUserModelLoaded)
-                                            ? tierColor[separateStringFromTier(getTierByExp(userModelRx.value!.exp))]!
-                                            : tierColor['newbie']!,
-                                        primaryBackgroundColor
-                                      ])),
+                                      gradient: LinearGradient(
+                                          begin: Alignment(0.0, 0.0),
+                                          end: Alignment(0.0, 1.0),
+                                          colors: [
+                                            (controller.isUserModelLoaded)
+                                                ? tierColor[
+                                                    separateStringFromTier(
+                                                        getTierByExp(userModelRx
+                                                            .value!.exp))]!
+                                                : tierColor['newbie']!,
+                                            primaryBackgroundColor
+                                          ])),
                                 ),
                                 Positioned(
                                   left: 1.w,
@@ -144,7 +152,9 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                   child: Container(
                                       height: 77.w,
                                       width: 77.w,
-                                      decoration: BoxDecoration(shape: BoxShape.circle, color: primaryBackgroundColor)),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: primaryBackgroundColor)),
                                 ),
                                 Positioned(
                                     left: 5.w,
@@ -155,7 +165,8 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                         ),
-                                        child: userModelRx.value!.avatarImage != null
+                                        child: userModelRx.value!.avatarImage !=
+                                                null
                                             ? CachedNetworkImage(
                                                 imageUrl:
                                                     "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${userModelRx.value!.avatarImage!}.png",
@@ -224,13 +235,22 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      userModelRx.value!.followers != null && userModelRx.value!.followers!.length != 0
-                                          ? Get.to(() => FollowersNFollowingsView(
-                                              isMe: true,
-                                              whichfollowersOrfollowings: true,
-                                              followersNFollowingsUid: userModelRx.value!.followers!))
-                                          : Get.to(() => NullFollowersNFollowingsView(
-                                                whichNULLfollowersOrfollowings: true,
+                                      userModelRx.value!.followers != null &&
+                                              userModelRx.value!.followers!
+                                                      .length !=
+                                                  0
+                                          ? Get.to(() =>
+                                              FollowersNFollowingsView(
+                                                  isMe: true,
+                                                  whichfollowersOrfollowings:
+                                                      true,
+                                                  followersNFollowingsUid:
+                                                      userModelRx
+                                                          .value!.followers!))
+                                          : Get.to(() =>
+                                              NullFollowersNFollowingsView(
+                                                whichNULLfollowersOrfollowings:
+                                                    true,
                                               ));
                                     },
                                     child: Column(
@@ -240,10 +260,13 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                           builder: (controller) {
                                             if (controller.isUserModelLoaded) {
                                               return Obx(() => Text(
-                                                    userModelRx.value!.followers == null
+                                                    userModelRx.value!
+                                                                .followers ==
+                                                            null
                                                         ? '0'
                                                         : '${userModelRx.value!.followers!.length}',
-                                                    style: profileFollowNumberStyle,
+                                                    style:
+                                                        profileFollowNumberStyle,
                                                   ));
                                             } else {
                                               return Text(
@@ -267,13 +290,21 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                   GestureDetector(
                                     onTap: () {
                                       userModelRx.value!.followings != null &&
-                                              userModelRx.value!.followings!.length != 0
-                                          ? Get.to(() => FollowersNFollowingsView(
-                                              isMe: true,
-                                              whichfollowersOrfollowings: false,
-                                              followersNFollowingsUid: userModelRx.value!.followings!))
-                                          : Get.to(() => NullFollowersNFollowingsView(
-                                                whichNULLfollowersOrfollowings: false,
+                                              userModelRx.value!.followings!
+                                                      .length !=
+                                                  0
+                                          ? Get.to(() =>
+                                              FollowersNFollowingsView(
+                                                  isMe: true,
+                                                  whichfollowersOrfollowings:
+                                                      false,
+                                                  followersNFollowingsUid:
+                                                      userModelRx
+                                                          .value!.followings!))
+                                          : Get.to(() =>
+                                              NullFollowersNFollowingsView(
+                                                whichNULLfollowersOrfollowings:
+                                                    false,
                                               ));
                                     },
                                     child: Column(
@@ -283,10 +314,13 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                           builder: (controller) {
                                             if (controller.isUserModelLoaded) {
                                               return Obx(() => Text(
-                                                    userModelRx.value!.followings == null
+                                                    userModelRx.value!
+                                                                .followings ==
+                                                            null
                                                         ? '0'
                                                         : '${userModelRx.value!.followings!.length}',
-                                                    style: profileFollowNumberStyle,
+                                                    style:
+                                                        profileFollowNumberStyle,
                                                   ));
                                             } else {
                                               return Text(
@@ -320,7 +354,9 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                               width: 100.w,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(70.0),
-                                border: Border.all(color: primaryButtonBackground, width: 1.5.w),
+                                border: Border.all(
+                                    color: primaryButtonBackground,
+                                    width: 1.5.w),
                               ),
                               child: Center(
                                 child: GetBuilder<ProfileMyViewModel>(
@@ -360,16 +396,20 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
               builder: (controller) {
                 if (controller.isUserModelLoaded) {
                   return Obx(() => Text(
-                        (userModelRx.value!.intro == null || userModelRx.value!.intro == '')
+                        (userModelRx.value!.intro == null ||
+                                userModelRx.value!.intro == '')
                             ? '소개글이 없습니다.'
-                            : '${userModelRx.value!.intro}'.replaceAll('\\n', '\n'),
-                        style: subLeagueAwardCommentStyle.copyWith(letterSpacing: -0.01),
+                            : '${userModelRx.value!.intro}'
+                                .replaceAll('\\n', '\n'),
+                        style: subLeagueAwardCommentStyle.copyWith(
+                            letterSpacing: -0.01),
                         maxLines: 3,
                       ));
                 } else {
                   return Text(
                     '',
-                    style: subLeagueAwardCommentStyle.copyWith(letterSpacing: -0.01),
+                    style: subLeagueAwardCommentStyle.copyWith(
+                        letterSpacing: -0.01),
                   );
                 }
               },
@@ -651,7 +691,8 @@ class ProfileTabBarView extends StatefulWidget {
   _ProfileTabBarViewState createState() => _ProfileTabBarViewState();
 }
 
-class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTickerProviderStateMixin {
+class _ProfileTabBarViewState extends State<ProfileTabBarView>
+    with SingleTickerProviderStateMixin {
   late TabController tabController;
   late PageController pageController;
   final ProfileMyViewModel profileViewModel = Get.find<ProfileMyViewModel>();
@@ -679,7 +720,9 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
     return Container(
       child: Column(
         children: [
-          SizedBox(height: correctHeight(35.w, subLeagueAwardCommentStyle.fontSize, profileButtonTextStyle.fontSize)),
+          SizedBox(
+              height: correctHeight(35.w, subLeagueAwardCommentStyle.fontSize,
+                  profileButtonTextStyle.fontSize)),
           Obx(
             () => TabBar(
               indicatorColor: yachtViolet,
@@ -699,7 +742,9 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                     child: Text(
                       '피드',
                       style: profileButtonTextStyle.copyWith(
-                          color: tabIndex.value == 0 ? profileButtonTextStyle.color : yachtGrey),
+                          color: tabIndex.value == 0
+                              ? profileButtonTextStyle.color
+                              : yachtGrey),
                     ),
                   ),
                 ),
@@ -709,7 +754,9 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                     child: Text(
                       '활동',
                       style: profileButtonTextStyle.copyWith(
-                          color: tabIndex.value == 1 ? profileButtonTextStyle.color : yachtGrey),
+                          color: tabIndex.value == 1
+                              ? profileButtonTextStyle.color
+                              : yachtGrey),
                     ),
                   ),
                 ),
@@ -749,9 +796,12 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text('보유 자산', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
+                                    Text('보유 자산',
+                                        style: subLeagueAwardCommentStyle
+                                            .copyWith(fontSize: 16.w)),
                                     SizedBox(
-                                      height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize),
+                                      height: correctHeight(10.w, 16.w,
+                                          subLeagueAwardLabelStyle.fontSize),
                                     ),
                                     // *보유자산
                                     GetBuilder<ProfileMyViewModel>(
@@ -761,19 +811,30 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                             return GetBuilder<AssetViewModel>(
                                                 id: 'holdingStocks',
                                                 builder: (assetController) {
-                                                  if (assetController.isHoldingStocksFutureLoad) {
+                                                  if (assetController
+                                                      .isHoldingStocksFutureLoad) {
                                                     return Text(
                                                       '${toPriceKRW(assetController.totalHoldingStocksValue + assetController.totalYachtPoint)}원',
-                                                      style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                                                      style:
+                                                          subLeagueAwardLabelStyle
+                                                              .copyWith(
+                                                                  letterSpacing:
+                                                                      -0.01),
                                                     );
                                                   } else {
                                                     return Text('',
-                                                        style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01));
+                                                        style:
+                                                            subLeagueAwardLabelStyle
+                                                                .copyWith(
+                                                                    letterSpacing:
+                                                                        -0.01));
                                                   }
                                                 });
                                           } else {
                                             return Text('???',
-                                                style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01));
+                                                style: subLeagueAwardLabelStyle
+                                                    .copyWith(
+                                                        letterSpacing: -0.01));
                                           }
                                         }),
                                   ],
@@ -803,31 +864,51 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                     height: 90.w,
                                     child: Center(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Text('순위', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
+                                          Text('순위',
+                                              style: subLeagueAwardCommentStyle
+                                                  .copyWith(fontSize: 16.w)),
                                           SizedBox(
-                                              height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize)),
+                                              height: correctHeight(
+                                                  10.w,
+                                                  16.w,
+                                                  subLeagueAwardLabelStyle
+                                                      .fontSize)),
                                           // *현재 리그 순위 및 승점
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                rankController.myRanksAndPoint[0]['todayRank'] == null
+                                                rankController.myRanksAndPoint[
+                                                            0]['todayRank'] ==
+                                                        null
                                                     ? ""
-                                                    : rankController.myRanksAndPoint[0]['todayRank']! != 0
+                                                    : rankController.myRanksAndPoint[
+                                                                    0][
+                                                                'todayRank']! !=
+                                                            0
                                                         ? '${rankController.myRanksAndPoint[0]['todayRank']!}위 |'
                                                         : '없음 |',
-                                                style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                                                style: subLeagueAwardLabelStyle
+                                                    .copyWith(
+                                                        letterSpacing: -0.01),
                                               ),
                                               Text(
                                                 ' ${rankController.myRanksAndPoint[0]['todayPoint'] ?? 0}',
-                                                style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                                                style: subLeagueAwardLabelStyle
+                                                    .copyWith(
+                                                        letterSpacing: -0.01),
                                               ),
                                               Text(
                                                 '점',
-                                                style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
+                                                style: subLeagueAwardLabelStyle
+                                                    .copyWith(
+                                                        letterSpacing: -0.01),
                                               ),
                                             ],
                                           ),
@@ -852,173 +933,55 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                       color: dividerColor,
                     ),
                     SizedBox(
-                      height: correctHeight(30.w, 0.0, profileHeaderTextStyle.fontSize),
+                      height: correctHeight(
+                          30.w, 0.0, profileHeaderTextStyle.fontSize),
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 14.w),
                       // padding: primaryHorizontalPadding,
-                      child: Row(
-                        children: [
-                          Text(
-                            '퀘스트 참여기록',
-                            style: profileHeaderTextStyle,
-                          ),
-                          Spacer(),
-                          GestureDetector(
-                              behavior: HitTestBehavior.opaque,
-                              onTap: () {
-                                print('aa');
-                                Get.to(() => QuestRecordDetailView());
-                              },
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 8.w,
-                                  ),
-                                  Image.asset(
-                                    'assets/icons/navigate_foward_arrow.png',
-                                    height: 16.w,
-                                    width: 9.w,
-                                  ),
-                                  SizedBox(
-                                    width: 14.w,
-                                  ),
-                                ],
-                              )
-                              // Image.asset(
-                              //   'assets/icons/navigate_foward_arrow.png',
-                              //   height: 16.w,
-                              //   width: 9.w,
-                              )
-                        ],
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          Get.to(() => QuestRecordDetailView());
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              '퀘스트 참여기록',
+                              style: profileHeaderTextStyle,
+                            ),
+                            Spacer(),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 8.w,
+                                ),
+                                Image.asset(
+                                  'assets/icons/navigate_foward_arrow.png',
+                                  height: 16.w,
+                                  width: 9.w,
+                                ),
+                                SizedBox(
+                                  width: 14.w,
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
 
                     SizedBox(
-                      height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
+                      height: correctHeight(
+                          20.w, profileHeaderTextStyle.fontSize, 0.0),
                     ),
-                    Obx(
-                      () => userQuestModelRx.length == 0
-                          ? Image.asset('assets/illusts/not_exists/no_quest_done.png', height: 150.w)
-                          : Column(
-                              children: List.generate(
-                                  userQuestModelRx.length,
-                                  (index) => Column(
-                                        children: [
-                                          Padding(
-                                            padding: primaryHorizontalPadding,
-                                            child: Obx(
-                                              () => sectionBox(
-                                                  padding: primaryAllPadding,
-                                                  child: FutureBuilder<QuestModel>(
-                                                      future:
-                                                          profileViewModel.getEachQuestModel(userQuestModelRx[index]),
-                                                      builder: (context, snapshot) {
-                                                        if (!snapshot.hasData) {
-                                                          return Container();
-                                                        } else {
-                                                          return InkWell(
-                                                            onTap: () {
-                                                              showDialog(
-                                                                  context: context,
-                                                                  builder: (context) => ResultDialog(
-                                                                        questModel: snapshot.data!,
-                                                                      ));
-
-                                                              // Get.toNamed('/quest',
-                                                              //     arguments:
-                                                              //         snapshot.data);
-                                                            },
-                                                            child: Row(
-                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Flexible(
-                                                                  child: Column(
-                                                                    mainAxisSize: MainAxisSize.min,
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                                    children: [
-                                                                      Text(
-                                                                        timeStampToStringWithHourMinute(
-                                                                                snapshot.data!.questEndDateTime) +
-                                                                            " 마감",
-                                                                        style: questRecordendDateTime,
-                                                                      ),
-                                                                      SizedBox(height: 6.w),
-                                                                      Text(snapshot.data!.title,
-                                                                          style: questRecordTitle),
-                                                                      SizedBox(
-                                                                          height: correctHeight(
-                                                                              14.w,
-                                                                              questRecordTitle.fontSize,
-                                                                              questRecordSelection.fontSize)),
-                                                                      Text(
-                                                                          profileViewModel.getUserChioce(
-                                                                              snapshot.data!, userQuestModelRx[index]),
-                                                                          style: questRecordSelection),
-                                                                      // Text(userQuestModelRx[index].selection),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                SizedBox(width: 8.w),
-                                                                Column(
-                                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                                  mainAxisSize: MainAxisSize.max,
-                                                                  children: [
-                                                                    // Spacer(),
-                                                                    Container(
-                                                                      // alignment: Alignment.bottomCenter,
-                                                                      padding: EdgeInsets.symmetric(
-                                                                        horizontal: 10.w,
-                                                                        vertical: 5.w,
-                                                                      ),
-                                                                      decoration: BoxDecoration(
-                                                                        color: buttonNormal,
-                                                                        borderRadius: BorderRadius.circular(8.w),
-                                                                      ),
-
-                                                                      // height: 300,
-                                                                      child: Center(
-                                                                        child: Text(
-                                                                          userQuestModelRx[index].hasSucceeded == null
-                                                                              ? "진행 중"
-                                                                              : userQuestModelRx[index].hasSucceeded!
-                                                                                  ? "예측 성공"
-                                                                                  : "예측 실패",
-                                                                          style: questRecordSelection.copyWith(
-                                                                            fontWeight: FontWeight.w500,
-                                                                            color: userQuestModelRx[index]
-                                                                                        .hasSucceeded ==
-                                                                                    null
-                                                                                ? yachtBlack
-                                                                                : userQuestModelRx[index].hasSucceeded!
-                                                                                    ? yachtRed
-                                                                                    : yachtGrey,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                // SizedBox(
-                                                                //   width: 30.w,
-                                                                // ),
-                                                                // simpleTextContainerLessRadiusButton("퀘스트 보기")
-                                                              ],
-                                                            ),
-                                                          );
-                                                        }
-                                                      })),
-                                            ),
-                                          ),
-                                          if (index != userQuestModelRx.length)
-                                            SizedBox(
-                                              height: 10.w,
-                                            )
-                                        ],
-                                      )),
-                            ),
-                    ),
+                    Obx(() => userQuestModelRx.length == 0
+                        ? Image.asset(
+                            'assets/illusts/not_exists/no_quest_done.png',
+                            height: 150.w)
+                        : QuestRecordView(
+                            isFullView: false,
+                          )),
                     // Obx(() => userQuestModelRx.length == 0
                     //     ? Image.asset(
                     //         'assets/illusts/not_exists/no_quest_done.png',
@@ -1030,12 +993,15 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                       height: 50.w,
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 14.w, right: 0.w, bottom: 20.w),
+                      padding:
+                          EdgeInsets.only(left: 14.w, right: 0.w, bottom: 20.w),
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
                           Get.to(() => BadgesFullGridView(
-                                badges: userModelRx.value!.badges != null ? userModelRx.value!.badges! : [],
+                                badges: userModelRx.value!.badges != null
+                                    ? userModelRx.value!.badges!
+                                    : [],
                               ));
                         },
                         child: Row(
@@ -1067,8 +1033,11 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                     GetBuilder<ProfileMyViewModel>(
                       id: 'profile',
                       builder: (controller) {
-                        if (userModelRx.value!.badges != null && controller.isUserModelLoaded) {
-                          return BadgesGridView(isFull: false, badges: userModelRx.value!.badges!);
+                        if (userModelRx.value!.badges != null &&
+                            controller.isUserModelLoaded) {
+                          return BadgesGridView(
+                              isFull: false,
+                              badges: userModelRx.value!.badges!);
                         } else {
                           return BadgesGridView(
                             isFull: false,
@@ -1101,21 +1070,23 @@ class QuestRecordView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: List.generate(
-          isFullView ? userQuestModelRx.length : min(userQuestModelRx.length, maxNum),
+          isFullView
+              ? userQuestModelRx.length
+              : min(userQuestModelRx.length, maxNum),
           (index) => Column(
                 children: [
                   Padding(
                     padding: primaryHorizontalPadding,
                     child: Obx(
                       () => sectionBox(
-                          padding: primaryAllPadding.copyWith(right: 8.w, bottom: 11.w),
+                          padding: primaryAllPadding,
                           child: FutureBuilder<QuestModel>(
-                              future: Get.find<ProfileMyViewModel>().getEachQuestModel(userQuestModelRx[index]),
+                              future: Get.find<ProfileMyViewModel>()
+                                  .getEachQuestModel(userQuestModelRx[index]),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) {
                                   return Container();
                                 } else {
-                                  print(snapshot.data);
                                   return InkWell(
                                     onTap: () {
                                       showDialog(
@@ -1129,65 +1100,119 @@ class QuestRecordView extends StatelessWidget {
                                       //         snapshot.data);
                                     },
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Expanded(
+                                        Flexible(
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
                                             children: [
                                               Text(
-                                                timeStampToStringWithHourMinute(snapshot.data!.questEndDateTime) +
+                                                timeStampToStringWithHourMinute(
+                                                        snapshot.data!
+                                                            .questEndDateTime) +
                                                     " 마감",
                                                 style: questRecordendDateTime,
                                               ),
-                                              Text(snapshot.data!.title, style: questRecordTitle),
+                                              SizedBox(height: 6.w),
+                                              Text(snapshot.data!.title,
+                                                  style: questRecordTitle),
                                               SizedBox(
                                                   height: correctHeight(
-                                                      14.w, questRecordTitle.fontSize, questRecordSelection.fontSize)),
+                                                      14.w,
+                                                      questRecordTitle.fontSize,
+                                                      questRecordSelection
+                                                          .fontSize)),
                                               Text(
                                                   Get.find<ProfileMyViewModel>()
-                                                      .getUserChioce(snapshot.data!, userQuestModelRx[index]),
+                                                      .getUserChioce(
+                                                          snapshot.data!,
+                                                          userQuestModelRx[
+                                                              index]),
                                                   style: questRecordSelection),
                                               // Text(userQuestModelRx[index].selection),
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 14.w,
+                                        SizedBox(width: 8.w),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            // Spacer(),
+                                            Container(
+                                              // alignment: Alignment.bottomCenter,
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 10.w,
+                                                vertical: 5.w,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: buttonNormal,
+                                                borderRadius:
+                                                    BorderRadius.circular(8.w),
+                                              ),
+
+                                              // height: 300,
+                                              child: Center(
+                                                child: Text(
+                                                  snapshot.data!.results == null
+                                                      ? "진행 중"
+                                                      : userQuestModelRx[index]
+                                                                  .hasSucceeded ==
+                                                              true
+                                                          ? "예측 성공"
+                                                          : "예측 실패",
+                                                  style: questRecordSelection
+                                                      .copyWith(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: snapshot.data!
+                                                                .results ==
+                                                            null
+                                                        ? yachtBlack
+                                                        : userQuestModelRx[
+                                                                        index]
+                                                                    .hasSucceeded ==
+                                                                true
+                                                            ? yachtRed
+                                                            : yachtGrey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 10.w,
+                                                vertical: 5.w,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: Colors.transparent,
+                                                borderRadius:
+                                                    BorderRadius.circular(8.w),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "예측 실패",
+                                                  style: questRecordSelection
+                                                      .copyWith(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Colors.transparent,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        snapshot.data!.results != null
-                                            ? Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
-                                                decoration: BoxDecoration(
-                                                  color: buttonNormal,
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                                child: Text(
-                                                  listEquals(snapshot.data!.results, userQuestModelRx[index].selection)
-                                                      ? '예측 성공'
-                                                      : '예측 실패',
-                                                  // '${snapshot.data!.results}, ${userQuestModelRx[index].selection}',
-                                                  textAlign: TextAlign.center,
-                                                  style: questRecordResult.copyWith(
-                                                      color: listEquals(
-                                                              snapshot.data!.results, userQuestModelRx[index].selection)
-                                                          ? yachtRed
-                                                          : yachtGrey),
-                                                ),
-                                              )
-                                            : Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.transparent,
-                                                  borderRadius: BorderRadius.circular(8),
-                                                ),
-                                                child: Text(
-                                                  '예측 성공',
-                                                  textAlign: TextAlign.center,
-                                                  style: questRecordResult.copyWith(color: Colors.transparent),
-                                                ),
-                                              )
+                                        // SizedBox(
+                                        //   width: 30.w,
+                                        // ),
+                                        // simpleTextContainerLessRadiusButton("퀘스트 보기")
                                       ],
                                     ),
                                   );
@@ -1196,8 +1221,11 @@ class QuestRecordView extends StatelessWidget {
                     ),
                   ),
                   if (index !=
-                      min(userQuestModelRx.length,
-                              isFullView ? userQuestModelRx.length : min(userQuestModelRx.length, maxNum)) -
+                      min(
+                              userQuestModelRx.length,
+                              isFullView
+                                  ? userQuestModelRx.length
+                                  : min(userQuestModelRx.length, maxNum)) -
                           1)
                     SizedBox(
                       height: 10.w,
