@@ -93,7 +93,7 @@ class StartupView extends GetView<StartupViewModel> {
       body: WillPopScope(
         onWillPop: androidBackButtonAction,
         child: Obx(() => pageList[controller.selectedPage.value]
-            // IndexedStack(
+            //     IndexedStack(
             //   index: controller.selectedPage.value,
             //   children: pageList,
             // ),
