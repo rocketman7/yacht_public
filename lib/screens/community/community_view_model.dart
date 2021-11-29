@@ -36,10 +36,12 @@ class CommunityViewModel extends GetxController {
 
   RxBool isUploadingNewPost = false.obs;
   RxDouble offset = 0.0.obs;
+  RefreshController refreshController = RefreshController();
 
-  final RefreshController refreshController = RefreshController(initialRefresh: false);
   @override
   void onInit() async {
+    refreshController = RefreshController(initialRefreshStatus: RefreshStatus.idle);
+    scrollController = ScrollController(initialScrollOffset: 0);
     print('community view model oninit');
     // TODO: implement onInit
     await getNotice();

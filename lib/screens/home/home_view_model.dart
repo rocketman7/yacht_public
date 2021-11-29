@@ -31,8 +31,7 @@ const int maxFailedLoadAttempts = 10; // 광고로딩실패하면 10번까지는
 class HomeViewModel extends GetxController {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthService authService = locator<AuthService>();
-  final FirebaseStorageService _firebaseStorageService =
-      locator<FirebaseStorageService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   QuestRepository _questRepository = QuestRepository();
   QuestModel? tempQuestModel;
@@ -57,8 +56,7 @@ class HomeViewModel extends GetxController {
   ScrollController scrollController = ScrollController();
 
   final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
-  final TextEditingController userNameController =
-      TextEditingController(text: "");
+  final TextEditingController userNameController = TextEditingController(text: "");
   final RxBool isCheckingUserNameDuplicated = false.obs;
   final RxBool noNeedShowUserNameDialog = true.obs;
   final RxBool showSmallSnackBar = false.obs;
@@ -84,11 +82,9 @@ class HomeViewModel extends GetxController {
     if (authService.auth.currentUser!.email != null) {
       print(
           'email login method:${await authService.auth.fetchSignInMethodsForEmail(authService.auth.currentUser!.email!)}');
-      List<String> methodList = await authService.auth
-          .fetchSignInMethodsForEmail(authService.auth.currentUser!.email!);
+      List<String> methodList = await authService.auth.fetchSignInMethodsForEmail(authService.auth.currentUser!.email!);
       if (methodList.length > 0) {
-        if (methodList.first == 'password' &&
-            !authService.auth.currentUser!.emailVerified) {
+        if (methodList.first == 'password' && !authService.auth.currentUser!.emailVerified) {
           Get.to(() => EmailVerificationWaitingView());
         }
       }
@@ -370,18 +366,15 @@ class HomeViewModel extends GetxController {
       } else if (element.selectMode == 'survey') {
         // print('surv');
         newQuests.add(element);
-      } else if (element.showHomeDateTime.toDate().isBefore(now) &&
-          element.liveStartDateTime.toDate().isAfter(now)) {
+      } else if (element.showHomeDateTime.toDate().isBefore(now) && element.liveStartDateTime.toDate().isAfter(now)) {
         // showHome ~ liveStart: 새로나온 퀘스트
         // print('newq');
         newQuests.add(element);
-      } else if (element.liveStartDateTime.toDate().isBefore(now) &&
-          element.liveEndDateTime.toDate().isAfter(now)) {
+      } else if (element.liveStartDateTime.toDate().isBefore(now) && element.liveEndDateTime.toDate().isAfter(now)) {
         // liveStart ~ liveEnd: 퀘스트 생중계
         // print('liveq');
         liveQuests.add(element);
-      } else if (element.resultDateTime.toDate().isBefore(now) &&
-          element.closeHomeDateTime.toDate().isAfter(now)) {
+      } else if (element.resultDateTime.toDate().isBefore(now) && element.closeHomeDateTime.toDate().isAfter(now)) {
         // result ~ closeHome: 퀘스트 결과보기
         // print('result: ${element.results}');
         // print('result: ${element}');
@@ -402,7 +395,8 @@ class HomeViewModel extends GetxController {
     // print('triggered done');
     // update();
     // print('home view live');
-    // print(liveQuests);
+    liveQuests.refresh();
+    print('liveQuests from homeViewModel $liveQuests');
   }
 
   // 약관, 개인정보처리방침 동의
@@ -454,15 +448,13 @@ class HomeViewModel extends GetxController {
     }
 
     _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (RewardedAd ad) =>
-          print('ad onAdShowedFullScreenContent.'),
+      onAdShowedFullScreenContent: (RewardedAd ad) => print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (RewardedAd ad) {
         print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
         _createRewardedAd();
 
-        if (currentItem < userModelRx.value!.item.toInt())
-          doneAdsGetRawSnackbar();
+        if (currentItem < userModelRx.value!.item.toInt()) doneAdsGetRawSnackbar();
       },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
         print('$ad onAdFailedToShowFullScreenContent: $error');
@@ -472,8 +464,7 @@ class HomeViewModel extends GetxController {
     );
 
     // _rewardedAd!.setImmersiveMode(true); // ??
-    _rewardedAd!.show(
-        onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
+    _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
       print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
       // 광고 정상적으로 잘 보면 ~
       // Navigator.of(context).pop();
@@ -495,8 +486,7 @@ rewardedNotLoadDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -510,17 +500,14 @@ rewardedNotLoadDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
                         SizedBox(
                           height: 15.w,
                         ),
-                        Text('알림',
-                            style:
-                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                        Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
                       ],
                     ),
                     Spacer(),
@@ -539,8 +526,7 @@ rewardedNotLoadDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -553,8 +539,8 @@ rewardedNotLoadDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(35.w, yachtBadgesDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogTitle.fontSize),
+                  height:
+                      correctHeight(35.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Text(
                   "광고가 아직 로딩되지 않았어요.\n잠시 후 다시 시도해주세요!",
@@ -562,8 +548,7 @@ rewardedNotLoadDialog(BuildContext context) {
                   style: yachtBadgesDescriptionDialogTitle,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -614,8 +599,7 @@ maxRewardedAdsDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -629,17 +613,14 @@ maxRewardedAdsDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
                         SizedBox(
                           height: 15.w,
                         ),
-                        Text('알림',
-                            style:
-                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                        Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
                       ],
                     ),
                     Spacer(),
@@ -658,8 +639,7 @@ maxRewardedAdsDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -672,8 +652,8 @@ maxRewardedAdsDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(35.w, yachtBadgesDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogTitle.fontSize),
+                  height:
+                      correctHeight(35.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Text(
                   "오늘은 $maxRewardedAds개의 광고를 모두 보셨어요!\n내일 다시 볼 수 있어요!",
@@ -681,8 +661,7 @@ maxRewardedAdsDialog(BuildContext context) {
                   style: yachtBadgesDescriptionDialogTitle,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -733,8 +712,7 @@ adsViewDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             // height: 196.w,
             width: 347.w,
@@ -749,17 +727,14 @@ adsViewDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
                         SizedBox(
                           height: 15.w,
                         ),
-                        Text('알림',
-                            style:
-                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                        Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
                       ],
                     ),
                     Spacer(),
@@ -778,8 +753,7 @@ adsViewDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -792,8 +766,8 @@ adsViewDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(35.w, yachtBadgesDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogTitle.fontSize),
+                  height:
+                      correctHeight(35.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Center(
                   child: Text(
@@ -803,8 +777,7 @@ adsViewDialog(BuildContext context) {
                   ),
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                  height: correctHeight(25.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -850,8 +823,7 @@ adsViewDialog(BuildContext context) {
                         child: Center(
                           child: Text(
                             '다음에 보기',
-                            style: yachtDeliveryDialogButtonText.copyWith(
-                                color: yachtViolet),
+                            style: yachtDeliveryDialogButtonText.copyWith(color: yachtViolet),
                           ),
                         ),
                       ),
@@ -895,8 +867,7 @@ doneAdsDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 196.w,
             width: 347.w,
@@ -910,17 +881,14 @@ doneAdsDialog(BuildContext context) {
                     SizedBox(
                         height: 15.w,
                         width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
                         SizedBox(
                           height: 15.w,
                         ),
-                        Text('알림',
-                            style:
-                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                        Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
                       ],
                     ),
                     Spacer(),
@@ -939,8 +907,7 @@ doneAdsDialog(BuildContext context) {
                               SizedBox(
                                   height: 15.w,
                                   width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -953,8 +920,8 @@ doneAdsDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(48.w, yachtBadgesDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogTitle.fontSize),
+                  height:
+                      correctHeight(48.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Text(
                   "조가비 1개 획득 완료!",
@@ -962,8 +929,7 @@ doneAdsDialog(BuildContext context) {
                   style: yachtBadgesDescriptionDialogTitle,
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      37.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                  height: correctHeight(37.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                 ),
                 Row(
                   children: [

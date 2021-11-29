@@ -72,7 +72,7 @@ class AuthCheckViewModel extends GetxController {
     // _mixpanelService.mixpanel.track(user!.uid);
     tierSystemModelRx(await _firestoreService.getTierSystem());
     currentUser!.bindStream(authService.auth.authStateChanges());
-
+    currentUser!.refresh();
     // leagueRx.bindStream(_firestoreService.getOpenLeague());
     // authService.auth.signOut();
     update();

@@ -416,7 +416,7 @@ class QuestView extends StatelessWidget {
                 bottom: 20.w,
                 child: GestureDetector(
                   onTap: () {
-                    print(questViewModel.checkIfUserSelectedAny());
+                    // print(questViewModel.checkIfUserSelectedAny());
                     if (questViewModel.isSelectingSheetShowing.value == false) {
                       questViewModel.isSelectingSheetShowing(true);
                       questViewModel.syncUserSelect();

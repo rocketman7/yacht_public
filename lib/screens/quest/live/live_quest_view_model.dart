@@ -68,6 +68,7 @@ class LiveQuestViewModel extends GetxController {
       investAddresses.add(tempAddress);
       livePrices.add(tempPrices);
     }
+    // print('after make investaddresslist $livePrices');
   }
 
   // Stream<List<LiveQuestPriceModel>> realTimePriceStream(List<InvestAddressModel> investAddresses) {
@@ -77,7 +78,7 @@ class LiveQuestViewModel extends GetxController {
   // }
 
   getListStreamPriceModel(List<QuestModel> liveQuests) {
-    print("get stream price model");
+    print("get stream price model $liveQuests");
 
     // print('stream triggered');
     // print(liveQuests);

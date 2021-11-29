@@ -99,7 +99,7 @@ class HomeView extends StatelessWidget {
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       NewQuests(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      LiveQuestView(homeViewModel: homeViewModel),
+      LiveQuestView(),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       QuestResultsView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
@@ -160,21 +160,18 @@ class HomeView extends StatelessWidget {
                   height: 14.w,
                 ),
               ),
-              Obx(() => homeViewModel.isLoading.value
-                      ? SliverToBoxAdapter()
-                      : SliverList(
-                          delegate: SliverChildListDelegate(
-                            homeWidgets,
-                            // addRepaintBoundaries: false,
-                            // addAutomaticKeepAlives: true,
-                          ),
-                        )
-                  // SliverList(
-                  //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-                  //       return homeWidgets[index];
-                  //     }, childCount: homeWidgets.length),
-                  //   ),
-                  ),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  homeWidgets,
+                  // addRepaintBoundaries: false,
+                  // addAutomaticKeepAlives: true,
+                ),
+              )
+              // SliverList(
+              //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+              //       return homeWidgets[index];
+              //     }, childCount: homeWidgets.length),
+              //   ),
             ],
           ),
         ),
@@ -482,14 +479,12 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                     SizedBox(
                       height: 8.w,
                     ),
-
                     Container(
                       decoration: BoxDecoration(
                           border: Border.all(
                         color: yachtGrey,
                         width: 0.5.w,
                       )),
-
                       height: ScreenUtil().screenHeight * .21,
                       // width: 240,
                       child: Scrollbar(

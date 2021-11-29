@@ -9,9 +9,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LiveQuestView extends StatelessWidget {
-  final HomeViewModel homeViewModel;
-
-  LiveQuestView({Key? key, required this.homeViewModel}) : super(key: key);
+  final HomeViewModel homeViewModel = Get.find<HomeViewModel>();
 
   @override
   Widget build(BuildContext context) {
