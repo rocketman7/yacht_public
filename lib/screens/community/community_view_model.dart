@@ -69,6 +69,8 @@ class CommunityViewModel extends GetxController {
   @override
   void onClose() {
     scrollController.dispose();
+    refreshController.dispose();
+    super.onClose();
   }
 
   Future getNotice() async {

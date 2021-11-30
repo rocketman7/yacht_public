@@ -59,9 +59,19 @@ class AuthCheckViewModel extends GetxController {
     // print(holidayListKR);
   }
 
+  authCheck() async {
+    String uid = authService.auth.currentUser!.uid;
+    bool isUserModelExists = await _firestoreService.checkIfUserDocumentExists(uid);
+    if (!isUserModelExists) {
+      authService.auth.signOut();
+      // authService.auth.currentUser!.delete();
+      // print(authService.auth.currentUser!.uid);
+    }
+  }
+
   @override
   void onInit() async {
-    await checkTime();
+    // await checkTime();
     await getLeagueInfo();
     await getHolidayList();
     await checkVersion();
@@ -81,6 +91,8 @@ class AuthCheckViewModel extends GetxController {
 
       if (user != null) {
         userModelRx.bindStream(_userRepository.getUserStream(user.uid));
+        userModelRx.refresh();
+        update();
         // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
         userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
         // leagueRx.listen((value) {

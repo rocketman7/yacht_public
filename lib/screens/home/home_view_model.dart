@@ -68,6 +68,14 @@ class HomeViewModel extends GetxController {
   bool onceInit = false;
 
   @override
+  void onClose() {
+    // TODO: implement onClose
+    scrollController.dispose();
+    refreshController.dispose();
+    super.onClose();
+  }
+
+  @override
   void onInit() async {
     _mixpanelService.mixpanel.identify(userModelRx.value!.uid);
     // print('home view model start');
@@ -80,8 +88,8 @@ class HomeViewModel extends GetxController {
 
     // print(_authService.auth.currentUser!.email);
     if (authService.auth.currentUser!.email != null) {
-      print(
-          'email login method:${await authService.auth.fetchSignInMethodsForEmail(authService.auth.currentUser!.email!)}');
+      // print(
+      //     'email login method:${await authService.auth.fetchSignInMethodsForEmail(authService.auth.currentUser!.email!)}');
       List<String> methodList = await authService.auth.fetchSignInMethodsForEmail(authService.auth.currentUser!.email!);
       if (methodList.length > 0) {
         if (methodList.first == 'password' && !authService.auth.currentUser!.emailVerified) {
@@ -396,7 +404,7 @@ class HomeViewModel extends GetxController {
     // update();
     // print('home view live');
     liveQuests.refresh();
-    print('liveQuests from homeViewModel $liveQuests');
+    // print('liveQuests from homeViewModel $liveQuests');
   }
 
   // 약관, 개인정보처리방침 동의

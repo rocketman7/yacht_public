@@ -56,12 +56,9 @@ class FirestoreService extends GetxService {
 
   // 리그 모델
   Future<LeagueAddressModel> getLeagueInfo() async {
-    return await _firestoreService
-        .collection('admin')
-        .doc('leagueInfo')
-        .get()
-        .then((value) => LeagueAddressModel.fromMap(value.data()!));
-    // LeagueAddressModel(openLeague: 'league002', leagueName: '11월 리그', leagueEndDateTime: '20211130'));
+    return await _firestoreService.collection('admin').doc('leagueInfo').get().then((value) =>
+        //  LeagueAddressModel.fromMap(value.data()!));
+        LeagueAddressModel(openLeague: 'league002', leagueName: '11월 리그', leagueEndDateTime: '20211130'));
   }
 
   // 휴일 리스트
@@ -101,6 +98,17 @@ class FirestoreService extends GetxService {
 
       return UserModel.fromMap(snapshot.data()!);
     });
+  }
+
+  Stream<String> getNameCheckResult(uid) {
+    return _firestoreService.collection('checkName').doc(uid).snapshots().map((snapshot) {
+      // print("GETNAME STREAM" + snapshot.data()['return'].toString());
+      return snapshot.data()!['return'];
+    });
+  }
+
+  Future<String> checkNameUrl() async {
+    return _firestoreService.collection('admin').doc('adminPost').get().then((value) => value.data()!['checkNameUrl']);
   }
 
   // uid로 유저 데이터 있는지 체크하기

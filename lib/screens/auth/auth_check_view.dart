@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/repositories/repository.dart';
@@ -7,6 +8,8 @@ import 'package:yachtOne/screens/community/community_view_model.dart';
 import 'package:yachtOne/screens/startup/loading_view.dart';
 import 'package:yachtOne/screens/startup/startup_view.dart';
 import 'package:yachtOne/screens/startup/startup_view_model.dart';
+import 'package:yachtOne/services/firestore_service.dart';
+import '../../locator.dart';
 import '../../services/auth_service.dart';
 import 'login_view.dart';
 
@@ -17,6 +20,8 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
   // TODO: implement controller
   AuthCheckViewModel get controller => Get.put(AuthCheckViewModel());
   UserRepository _userRepository = UserRepository();
+  final AuthService authService = locator<AuthService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => CommunityViewModel());
@@ -27,8 +32,12 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
         bool isUserModelReady = userModelRx.value != null;
         print('isUserNull? : $isUserNull');
         print('isUserModelReady? : $isUserModelReady');
-        print('current User: ${userModelRx.value}');
+        print('current UserModel: ${userModelRx.value}');
         print('authcheckworking');
+        if (!isUserNull && userModelRx.value == null) {
+          // print('wrong user');
+          controller.authCheck();
+        }
 
         if (controller.authService.auth.currentUser == null) {
           return LoginView();

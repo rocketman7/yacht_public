@@ -11,10 +11,10 @@ import 'package:yachtOne/services/firestore_service.dart';
 import '../../../locator.dart';
 
 class LiveQuestViewModel extends GetxController {
-  final HomeViewModel homeViewModel;
-  LiveQuestViewModel({
-    required this.homeViewModel,
-  });
+  final HomeViewModel homeViewModel = Get.find<HomeViewModel>();
+  // LiveQuestViewModel({
+  //   required this.homeViewModel,
+  // });
 
   //// 라이브 위젯에 가격을 받아오기 위해서 해야 하는 것들
   /// 1. livePrices를 List of List로 설정
@@ -40,6 +40,7 @@ class LiveQuestViewModel extends GetxController {
     ]);
   }
 
+  RxBool isLiveLoading = true.obs;
   @override
   void onInit() async {
     getListStreamPriceModel(homeViewModel.liveQuests);
@@ -51,7 +52,7 @@ class LiveQuestViewModel extends GetxController {
     //   }
     // });
     // getListStreamPriceModel(homeViewModel.liveQuests[0].investAddresses);
-
+    isLiveLoading(false);
     super.onInit();
   }
 

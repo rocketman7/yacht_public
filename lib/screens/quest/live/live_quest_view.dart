@@ -9,16 +9,16 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LiveQuestView extends StatelessWidget {
-  final HomeViewModel homeViewModel = Get.find<HomeViewModel>();
+  // final HomeViewModel homeViewModel = Get.find<HomeViewModel>();
 
   @override
   Widget build(BuildContext context) {
     print("live quest view built");
-    print(homeViewModel.liveQuests);
+    // print(homeViewModel.liveQuests);
     final LiveQuestViewModel liveQuestViewModel = Get.put(
       LiveQuestViewModel(
-        homeViewModel: homeViewModel,
-      ),
+          // homeViewModel: homeViewModel,
+          ),
     );
 
     return Column(
@@ -35,7 +35,7 @@ class LiveQuestView extends StatelessWidget {
         ),
         Obx(() {
           // print(homeViewModel.liveQuests.length);
-          if (homeViewModel.liveQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
+          if (liveQuestViewModel.homeViewModel.liveQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
           {
             return Padding(
               padding: primaryHorizontalPadding,
@@ -67,7 +67,7 @@ class LiveQuestView extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                     children: List.generate(
-                        homeViewModel.liveQuests.length,
+                        liveQuestViewModel.homeViewModel.liveQuests.length,
                         // 1,
                         (index) => Row(
                               children: [
@@ -76,9 +76,17 @@ class LiveQuestView extends StatelessWidget {
                                         width: primaryHorizontalPadding.left,
                                       )
                                     : Container(),
-                                LiveWidget(
-                                  questModel: homeViewModel.liveQuests[index],
-                                  liveQuestIndex: index,
+                                Obx(
+                                  () => liveQuestViewModel.isLiveLoading.value
+                                      ? Container(
+                                          color: Colors.blue,
+                                          height: 100,
+                                          width: 100,
+                                        )
+                                      : LiveWidget(
+                                          questModel: liveQuestViewModel.homeViewModel.liveQuests[index],
+                                          liveQuestIndex: index,
+                                        ),
                                 ),
                                 SizedBox(width: widthHorizontalListView),
                               ],
