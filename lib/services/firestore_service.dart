@@ -56,9 +56,12 @@ class FirestoreService extends GetxService {
 
   // 리그 모델
   Future<LeagueAddressModel> getLeagueInfo() async {
-    return await _firestoreService.collection('admin').doc('leagueInfo').get().then((value) =>
-        //  LeagueAddressModel.fromMap(value.data()!));
-        LeagueAddressModel(openLeague: 'league002', leagueName: '11월 리그', leagueEndDateTime: '20211130'));
+    return await _firestoreService
+        .collection('admin')
+        .doc('leagueInfo')
+        .get()
+        .then((value) => LeagueAddressModel.fromMap(value.data()!));
+    // LeagueAddressModel(openLeague: 'league002', leagueName: '11월 리그', leagueEndDateTime: '20211130'));
   }
 
   // 휴일 리스트
@@ -102,7 +105,10 @@ class FirestoreService extends GetxService {
 
   Stream<String> getNameCheckResult(uid) {
     return _firestoreService.collection('checkName').doc(uid).snapshots().map((snapshot) {
-      // print("GETNAME STREAM" + snapshot.data()['return'].toString());
+      if (snapshot.data() == null || snapshot.data()!['return'] == null) {
+        print("GETNAME STREAM" + snapshot.data().toString());
+        return "0";
+      }
       return snapshot.data()!['return'];
     });
   }

@@ -28,12 +28,11 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
     // Get.put(AuthCheckViewModel());
     return Scaffold(
       body: Obx(() {
-        bool isUserNull = controller.currentUser == null ? true : controller.currentUser!.value == null;
+        bool isUserNull = currentUser.value == null;
         bool isUserModelReady = userModelRx.value != null;
         print('isUserNull? : $isUserNull');
         print('isUserModelReady? : $isUserModelReady');
         print('current UserModel: ${userModelRx.value}');
-        print('authcheckworking');
         if (!isUserNull && userModelRx.value == null) {
           // print('wrong user');
           controller.authCheck();

@@ -66,7 +66,7 @@ class HomeViewModel extends GetxController {
   final RankController rankController = Get.put(RankController());
   final AwardViewModel awardViewModel = Get.put(AwardViewModel());
   bool onceInit = false;
-
+  final RxBool isGettingQuests = true.obs;
   @override
   void onClose() {
     // TODO: implement onClose
@@ -78,12 +78,13 @@ class HomeViewModel extends GetxController {
   @override
   void onInit() async {
     _mixpanelService.mixpanel.identify(userModelRx.value!.uid);
-    // print('home view model start');
+
     _mixpanelService.mixpanel.flush();
     // TODO: implement onInit
     isLoading(true);
+    isGettingQuests(true);
     await getAllQuests();
-
+    isGettingQuests(false);
     await _firestoreService.stampLastLogin();
 
     // print(_authService.auth.currentUser!.email);

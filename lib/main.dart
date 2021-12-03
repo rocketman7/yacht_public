@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+
 import 'package:firebase_app_check/firebase_app_check.dart';
 
 import 'package:get/get.dart';
@@ -16,31 +16,22 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/screens/auth/auth_check_view.dart';
 import 'package:yachtOne/screens/auth/email_register_view.dart';
-import 'package:yachtOne/screens/home/home_view.dart';
+
 import 'package:yachtOne/screens/onboarding/onboarding_view.dart';
 import 'package:yachtOne/screens/quest/quest_view.dart';
 import 'package:yachtOne/screens/quest/survey_view.dart';
 import 'package:yachtOne/screens/quest/tutorial_view.dart';
-import 'package:yachtOne/screens/startup/loading_view.dart';
+
 import 'package:yachtOne/screens/startup/startup_view.dart';
-import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
+
 import 'package:yachtOne/services/mixpanel_service.dart';
-import 'package:yachtOne/services_binding.dart';
+
 import 'package:yachtOne/styles/theme.dart';
-import 'package:yachtOne/styles/yacht_design_system_sample_view.dart';
 
 import 'locator.dart';
-import 'models/corporation_model.dart';
-import 'screens/auth/email_login_view.dart';
-import 'screens/award/award_detail_view.dart';
-import 'screens/award/award_view.dart';
-import 'screens/stock_info/chart/chart_view.dart';
-import 'screens/subLeague/subLeague_view.dart';
-import 'screens/subLeague/temp_home_view.dart';
-import 'screens/test_view.dart';
-import 'styles/size_config.dart';
 
-import 'screens/subLeague/subLeague_controller.dart';
+import 'screens/auth/email_login_view.dart';
+import 'styles/size_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,13 +68,11 @@ class _MyAppState extends State<MyApp> {
     // GetStorage 지울 때 erase
     // box.erase();
     hasSeenOnboarding = box.read('hasSeenOnboarding') ?? false;
-    print('hasSeenOnboarding:' + hasSeenOnboarding.toString());
-    // mixpanel.track('AppOpen');
 
     _mixpanelService.mixpanel.track('App Open');
-    // _mixpanelService.mixpanel.flush();
+
     super.initState();
-    // initMixpanel();
+
     // _connectionCheckService.checkConnection(context);
   }
 

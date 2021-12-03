@@ -32,7 +32,7 @@ class LoadingView extends StatelessWidget {
 
     // void _pressLike() => isLiked?.change(likeThis.value);
 
-    _mixpanelService.mixpanel.track('loading');
+    // _mixpanelService.mixpanel.track('loading');
     return Scaffold(
       body: Container(
         // height: 20,

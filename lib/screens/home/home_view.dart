@@ -34,6 +34,7 @@ import 'package:yachtOne/screens/notification/notification_view_model.dart';
 import 'package:yachtOne/screens/quest/live/live_quest_view.dart';
 import 'package:yachtOne/screens/profile/asset_view.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
+import 'package:yachtOne/screens/quest/live/live_quest_view_model.dart';
 import 'package:yachtOne/screens/quest/result/quest_results_view.dart';
 import 'package:yachtOne/screens/ranks/rank_share_view.dart';
 import 'package:yachtOne/screens/settings/push_notification_view_model.dart';
@@ -99,7 +100,7 @@ class HomeView extends StatelessWidget {
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       NewQuests(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      LiveQuestView(),
+      Obx(() => homeViewModel.isGettingQuests.value ? Container() : LiveQuestView()),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       QuestResultsView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),

@@ -11,7 +11,7 @@ import 'package:yachtOne/repositories/user_repository.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
-import 'package:yachtOne/services/storage_service.dart';
+
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,7 +25,7 @@ class AuthCheckViewModel extends GetxController {
 
   UserRepository _userRepository = UserRepository();
   // User currentUser;
-  Rxn<User>? currentUser = Rxn<User>();
+  // Rxn<User>? currentUser = Rxn<User>();
   // RxBool isLoadingData = true.obs;
   User? user;
 
@@ -71,22 +71,22 @@ class AuthCheckViewModel extends GetxController {
 
   @override
   void onInit() async {
-    // await checkTime();
+    await checkTime();
     await getLeagueInfo();
     await getHolidayList();
     await checkVersion();
 
     // isLoadingData(true);
 
-    user = authService.auth.currentUser;
+    currentUser(authService.auth.currentUser);
     // _mixpanelService.mixpanel.track(user!.uid);
     tierSystemModelRx(await _firestoreService.getTierSystem());
-    currentUser!.bindStream(authService.auth.authStateChanges());
-    currentUser!.refresh();
+    currentUser.bindStream(authService.auth.authStateChanges());
+    currentUser.refresh();
     // leagueRx.bindStream(_firestoreService.getOpenLeague());
     // authService.auth.signOut();
     update();
-    currentUser!.listen((user) async {
+    currentUser.listen((user) async {
       print('listening $user');
 
       if (user != null) {

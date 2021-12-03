@@ -57,6 +57,7 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                               onTap: () {
                                 _mixpanelService.mixpanel.track('home-TodayMarket-TodayMarketWebView',
                                     properties: {'todayMarketTitle': controller.todayMarkets[index].title});
+                                _mixpanelService.mixpanel.flush();
                                 Get.to(() => TodayMarketWebView(todayMarket: controller.todayMarkets[index]));
                               },
                               child: Container(
