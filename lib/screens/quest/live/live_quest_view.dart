@@ -61,7 +61,7 @@ class LiveQuestView extends StatelessWidget {
               ),
             );
           } else {
-            print("live quest view rebuilt");
+            // print("live quest view rebuilt");
             return SingleChildScrollView(
                 clipBehavior: Clip.none,
                 scrollDirection: Axis.horizontal,

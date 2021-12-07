@@ -57,7 +57,8 @@ class LastAwardViewModel extends GetxController {
     leagueCategory.add('2021년 10월');
     update(['leagueCategory']);
 
-    orderMethod(0, 0);
+    // orderMethod(0, 0);
+    orderLastSubLeagues = allLastSubLeagues;
 
     isAllLastSubLeaguesLoaded = true;
 

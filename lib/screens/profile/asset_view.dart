@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 import 'package:yachtOne/screens/profile/award_history_view.dart';
 import 'package:yachtOne/screens/profile/stocks_delivery_view.dart';
 import 'package:yachtOne/screens/profile/yacht_shop_view.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../handlers/numbers_handler.dart';
+import '../../locator.dart';
 import '../../styles/size_config.dart';
 import '../../styles/style_constants.dart';
 
@@ -56,7 +58,7 @@ TextStyle assetViewTextStyle5 = TextStyle(
 
 class AssetView extends StatelessWidget {
   final AssetViewModel assetViewModel = Get.find<AssetViewModel>();
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,14 +82,12 @@ class AssetView extends StatelessWidget {
             padding: EdgeInsets.only(left: 15.w, right: 15.w),
             child: Container(
               width: double.infinity,
-              decoration: primaryBoxDecoration.copyWith(
-                  boxShadow: [primaryBoxShadow],
-                  color: homeModuleBoxBackgroundColor),
+              decoration:
+                  primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
               child: Column(
                 children: [
                   SizedBox(
-                    height: 14.w -
-                        reducePaddingOneSide(assetViewTextStyle2.fontSize!),
+                    height: 14.w - reducePaddingOneSide(assetViewTextStyle2.fontSize!),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 15.w, right: 15.w),
@@ -114,15 +114,13 @@ class AssetView extends StatelessWidget {
                             }),
                         Text(
                           ' 원',
-                          style: assetViewTextStyle3.copyWith(
-                              fontWeight: FontWeight.w300),
+                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
                         )
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: 10.w -
-                        reducePaddingOneSide(assetViewTextStyle2.fontSize!),
+                    height: 10.w - reducePaddingOneSide(assetViewTextStyle2.fontSize!),
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,8 +140,7 @@ class AssetView extends StatelessWidget {
                       Column(
                         children: [
                           Container(
-                            width: SizeConfig.screenWidth -
-                                82.w, // 15, (26, 2, 9, 15), 15
+                            width: SizeConfig.screenWidth - 82.w, // 15, (26, 2, 9, 15), 15
                             child: Row(
                               children: [
                                 Image.asset(
@@ -156,8 +153,7 @@ class AssetView extends StatelessWidget {
                                 ),
                                 Text(
                                   '주식 잔고',
-                                  style: assetViewTextStyle2.copyWith(
-                                      fontWeight: FontWeight.w300),
+                                  style: assetViewTextStyle2.copyWith(fontWeight: FontWeight.w300),
                                 ),
                                 Spacer(),
                                 GetBuilder<AssetViewModel>(
@@ -166,13 +162,11 @@ class AssetView extends StatelessWidget {
                                       if (controller.isHoldingStocksFutureLoad)
                                         return Text(
                                           '${toPriceKRW(controller.totalHoldingStocksValue)} 원',
-                                          style: assetViewTextStyle3.copyWith(
-                                              fontWeight: FontWeight.w300),
+                                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
                                         );
                                       else
                                         return Text('',
-                                            style: assetViewTextStyle3.copyWith(
-                                                fontWeight: FontWeight.w300));
+                                            style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300));
                                     }),
                               ],
                             ),
@@ -181,8 +175,7 @@ class AssetView extends StatelessWidget {
                             height: 10.w,
                           ),
                           Container(
-                            width: SizeConfig.screenWidth -
-                                82.w, // 15, (26, 2, 9, 15), 15
+                            width: SizeConfig.screenWidth - 82.w, // 15, (26, 2, 9, 15), 15
                             child: Row(
                               children: [
                                 Image.asset(
@@ -195,8 +188,7 @@ class AssetView extends StatelessWidget {
                                 ),
                                 Text(
                                   '요트 포인트',
-                                  style: assetViewTextStyle2.copyWith(
-                                      fontWeight: FontWeight.w300),
+                                  style: assetViewTextStyle2.copyWith(fontWeight: FontWeight.w300),
                                 ),
                                 Spacer(),
                                 GetBuilder<AssetViewModel>(
@@ -205,14 +197,12 @@ class AssetView extends StatelessWidget {
                                       if (controller.isHoldingStocksFutureLoad)
                                         return Text(
                                           '${toPriceKRW(controller.totalYachtPoint)} 원',
-                                          style: assetViewTextStyle3.copyWith(
-                                              fontWeight: FontWeight.w300),
+                                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
                                         );
                                       else
                                         return Text(
                                           '',
-                                          style: assetViewTextStyle3.copyWith(
-                                              fontWeight: FontWeight.w300),
+                                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
                                         );
                                     }),
                               ],
@@ -226,8 +216,7 @@ class AssetView extends StatelessWidget {
                     ],
                   ),
                   SizedBox(
-                    height: 20.w -
-                        reducePaddingOneSide(assetViewTextStyle2.fontSize!),
+                    height: 20.w - reducePaddingOneSide(assetViewTextStyle2.fontSize!),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 15.w, right: 15.w),
@@ -248,8 +237,7 @@ class AssetView extends StatelessWidget {
                             }),
                         Text(
                           ' 원',
-                          style: assetViewTextStyle3.copyWith(
-                              fontWeight: FontWeight.w300),
+                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
                         )
                       ],
                     ),
@@ -263,8 +251,7 @@ class AssetView extends StatelessWidget {
                     ,
                   ),
                   SizedBox(
-                    height: 14.w -
-                        reducePaddingOneSide(assetViewTextStyle2.fontSize!),
+                    height: 14.w - reducePaddingOneSide(assetViewTextStyle2.fontSize!),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 15.w, right: 15.w),
@@ -291,15 +278,13 @@ class AssetView extends StatelessWidget {
                             }),
                         Text(
                           ' 원',
-                          style: assetViewTextStyle3.copyWith(
-                              fontWeight: FontWeight.w300),
+                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
                         )
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: 14.w -
-                        reducePaddingOneSide(assetViewTextStyle2.fontSize!),
+                    height: 14.w - reducePaddingOneSide(assetViewTextStyle2.fontSize!),
                   ),
                 ],
               ),
@@ -316,12 +301,14 @@ class AssetView extends StatelessWidget {
               Flexible(
                 child: Container(
                   height: 40.w,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(70.0),
-                      color: Color(0xFFECF3FF)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: Color(0xFFECF3FF)),
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
+                      _mixpanelService.mixpanel.track(
+                        "Stock Withdraw Select View",
+                      );
+                      _mixpanelService.mixpanel.flush();
                       Get.to(() => StocksDeliveryView());
                     },
                     child: Row(
@@ -334,8 +321,7 @@ class AssetView extends StatelessWidget {
                         ),
                         Text(
                           '주식 잔고 출고',
-                          style: assetViewTextStyle4.copyWith(
-                              color: Color(0xFF4A99E2)),
+                          style: assetViewTextStyle4.copyWith(color: Color(0xFF4A99E2)),
                         ),
                         SizedBox(
                           width: 8.w,
@@ -351,9 +337,7 @@ class AssetView extends StatelessWidget {
               Flexible(
                 child: Container(
                   height: 40.w,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(70.0),
-                      color: Color(0xFFE6F7F1)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: Color(0xFFE6F7F1)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -365,12 +349,14 @@ class AssetView extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           // print(assetViewModel.totalHoldingStocksValue);
+                          _mixpanelService.mixpanel.track(
+                            'Yacht Point Store',
+                          );
                           Get.to(() => YachtShopView());
                         },
                         child: Text(
                           '요트포인트스토어',
-                          style: assetViewTextStyle4.copyWith(
-                              color: Color(0xFF61CCA6)),
+                          style: assetViewTextStyle4.copyWith(color: Color(0xFF61CCA6)),
                         ),
                       ),
                       SizedBox(
@@ -403,6 +389,7 @@ class AssetView extends StatelessWidget {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
+                    _mixpanelService.mixpanel.track('My Asset History');
                     Get.to(() => AwardHistoryView());
                   },
                   child: Row(

@@ -959,7 +959,7 @@ class NewQuests extends StatelessWidget {
               Spacer(),
               GestureDetector(
                 onTap: () {
-                  _mixpanelService.mixpanel.track('home-NewQuest-adsViewDialog');
+                  _mixpanelService.mixpanel.track('Jogabi Get');
                   if (userModelRx.value!.rewardedCnt! < maxRewardedAds) {
                     adsViewDialog(context);
                   } else {
@@ -1042,9 +1042,12 @@ class NewQuests extends StatelessWidget {
                                       : Container(),
                                   InkWell(
                                     onTap: () {
-                                      _mixpanelService.mixpanel.track('home-NewQuest-QuestView', properties: {
-                                        'questId': homeViewModel.newQuests[index].questId,
-                                        'questCategory': homeViewModel.newQuests[index].category
+                                      _mixpanelService.mixpanel.track('New Quest', properties: {
+                                        'New Quest ID': homeViewModel.newQuests[index].questId,
+                                        'New Quest League ID': homeViewModel.newQuests[index].leagueId,
+                                        'New Quest Title': homeViewModel.newQuests[index].title,
+                                        'New Quest Category': homeViewModel.newQuests[index].category,
+                                        'New Quest Select Mode': homeViewModel.newQuests[index].selectMode,
                                       });
                                       homeViewModel.newQuests[index].selectMode == 'survey'
                                           ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
@@ -1073,14 +1076,17 @@ class MyAssets extends StatelessWidget {
     return Container(
       // height: offset.w > 100.w ? 0 : 100.w - offset.w,
       height: 100.w,
-      child: GestureDetector(
-        onTap: () {
-          _mixpanelService.mixpanel.track('home-Asset');
-          Get.to(() => AssetView());
-        },
-        child: Row(
-          children: [
-            Expanded(
+      child: Row(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                _mixpanelService.mixpanel.track(
+                  'My Asset',
+                  properties: {'My Asset Tab From': "주식 잔고"},
+                );
+                Get.to(() => AssetView());
+              },
               child: Container(
                 // color: Colors.blue,
                 child: Column(
@@ -1119,13 +1125,22 @@ class MyAssets extends StatelessWidget {
                 ),
               ),
             ),
-            VerticalDivider(
-              color: primaryFontColor.withOpacity(.5),
-              indent: 16.w,
-              endIndent: 16.w,
-            ),
-            Expanded(
-                child: Container(
+          ),
+          VerticalDivider(
+            color: primaryFontColor.withOpacity(.5),
+            indent: 16.w,
+            endIndent: 16.w,
+          ),
+          Expanded(
+              child: GestureDetector(
+            onTap: () {
+              _mixpanelService.mixpanel.track(
+                'My Asset',
+                properties: {'My Asset Tab From': "요트 포인트"},
+              );
+              Get.to(() => AssetView());
+            },
+            child: Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -1160,9 +1175,9 @@ class MyAssets extends StatelessWidget {
                       }),
                 ],
               ),
-            ))
-          ],
-        ),
+            ),
+          ))
+        ],
       ),
     );
   }
@@ -1266,7 +1281,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                         right: 0,
                         child: InkWell(
                           onTap: () async {
-                            _mixpanelService.mixpanel.track('home-notification');
+                            _mixpanelService.mixpanel.track('Notification');
                             if (userModelRx.value!.lastNotificationCheckDateTime == null) {
                               Get.to(() => NotificationView(), arguments: 'NeedLoad');
                             } else {
@@ -1354,7 +1369,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                   //       child:
                   // InkWell(
                   //         onTap: () async {
-                  //           _mixpanelService.mixpanel.track('home-notification');
+                  //
                   //           if (userModelRx.value!.lastNotificationCheckDateTime == null) {
                   //             Get.to(() => NotificationView(), arguments: 'NeedLoad');
                   //           } else {

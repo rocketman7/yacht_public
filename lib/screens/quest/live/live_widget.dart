@@ -55,6 +55,16 @@ class LiveWidget extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
+        _mixpanelService.mixpanel.track('Live Quest', properties: {
+          'Live Quest ID': questModel.questId,
+          'Live League ID': questModel.leagueId,
+          'Live Quest Title': questModel.title,
+          'Live Quest Category': questModel.category,
+          'Live Quest Select Mode': questModel.selectMode,
+          'Live Quest Item Used': questModel.itemNeeded,
+          'Live Quest Yacht Point Success Reward': questModel.yachtPointSuccessReward,
+          'Live Quest League Point Success Reward': questModel.leaguePointSuccessReward,
+        });
         Get.to(() => LiveDetailView(), arguments: [questModel, liveQuestIndex]);
       },
       child: sectionBox(
@@ -102,8 +112,16 @@ class LiveWidget extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              _mixpanelService.mixpanel.track('home-LiveQuests-LiveDetail',
-                                  properties: {'questId': questModel.questId, 'questCategory': questModel.category});
+                              _mixpanelService.mixpanel.track('Live Quest', properties: {
+                                'Live Quest ID': questModel.questId,
+                                'Live League ID': questModel.leagueId,
+                                'Live Quest Title': questModel.title,
+                                'Live Quest Category': questModel.category,
+                                'Live Quest Select Mode': questModel.selectMode,
+                                'Live Quest Item Used': questModel.itemNeeded,
+                                'Live Quest Yacht Point Success Reward': questModel.yachtPointSuccessReward,
+                                'Live Quest League Point Success Reward': questModel.leaguePointSuccessReward,
+                              });
                               Get.to(() => LiveDetailView(), arguments: [questModel, liveQuestIndex]);
                             },
                             child: Container(

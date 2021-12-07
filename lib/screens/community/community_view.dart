@@ -6,15 +6,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/community/post_model.dart';
+import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/feed_widget.dart';
 import 'package:yachtOne/screens/community/notice_widget.dart';
 import 'package:yachtOne/services/firestore_service.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
+import '../../locator.dart';
 import 'community_view_model.dart';
 
 class CommunityView extends GetView<CommunityViewModel> {
@@ -257,6 +260,7 @@ class WritingNewPost extends StatelessWidget {
   final GlobalKey<FormState> _contentFormKey = GlobalKey<FormState>();
   final _contentController = TextEditingController();
   final CommunityViewModel _communityViewModel;
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
 
   @override
   Widget build(BuildContext context) {
@@ -302,6 +306,10 @@ class WritingNewPost extends StatelessWidget {
                             onTap: () async {
                               if (_contentFormKey.currentState!.validate() &&
                                   !_communityViewModel.isUploadingNewPost.value) {
+                                _mixpanelService.mixpanel.track('Post Upload', properties: {
+                                  'New Post Writer Uid': userModelRx.value!.uid,
+                                  'New Post Writer User Name': userModelRx.value!.userName,
+                                });
                                 HapticFeedback.lightImpact();
                                 _communityViewModel.isUploadingNewPost(true);
                                 await _communityViewModel.uploadPost(_contentController.value.text);
@@ -399,7 +407,9 @@ class WritingNewPost extends StatelessWidget {
                                             top: 10.w,
                                             right: 10.w,
                                             child: InkWell(
-                                                onTap: () => _communityViewModel.images!.removeAt(index),
+                                                onTap: () {
+                                                  _communityViewModel.images!.removeAt(index);
+                                                },
                                                 child: Container(
                                                   height: 20.w,
                                                   width: 20.w,

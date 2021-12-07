@@ -79,7 +79,6 @@ class AuthCheckViewModel extends GetxController {
     // isLoadingData(true);
 
     currentUser(authService.auth.currentUser);
-    // _mixpanelService.mixpanel.track(user!.uid);
     tierSystemModelRx(await _firestoreService.getTierSystem());
     currentUser.bindStream(authService.auth.authStateChanges());
     currentUser.refresh();

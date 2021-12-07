@@ -546,7 +546,12 @@ class FirestoreService extends GetxService {
   Future<List<LastSubLeagueModel>> getAllLastSubLeague() async {
     final List<LastSubLeagueModel> allLastSubLeagues = [];
 
-    await _firestoreService.collection('lastSubLeagues').get().then((value) {
+    await _firestoreService
+        .collection('lastSubLeagues')
+        .orderBy('leagueUid', descending: true)
+        .orderBy('subLeagueUid')
+        .get()
+        .then((value) {
       value.docs.forEach((element) {
         allLastSubLeagues.add(LastSubLeagueModel.fromMap(element.data(), element.id));
       });

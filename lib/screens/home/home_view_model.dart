@@ -100,6 +100,7 @@ class HomeViewModel extends GetxController {
     }
 
     isLoading(false);
+    _mixpanelService.mixpanel.track('Home');
 
     _createRewardedAd();
     if (userModelRx.value != null) {
@@ -714,6 +715,7 @@ maxRewardedAdsDialog(BuildContext context) {
 
 // 광고 볼지말지 다이얼로그
 adsViewDialog(BuildContext context) {
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   showDialog(
       context: context,
       builder: (context) {
@@ -796,6 +798,30 @@ adsViewDialog(BuildContext context) {
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        height: 44.w,
+                        width: 154.5.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(70.0),
+                          color: buttonNormal,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '다음에 보기',
+                            style: yachtDeliveryDialogButtonText.copyWith(color: yachtViolet),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        _mixpanelService.mixpanel.track('Ad Watch');
                         Get.find<HomeViewModel>().rewardedAdsButtonTap(context);
                         Navigator.of(context).pop();
                       },
@@ -810,29 +836,6 @@ adsViewDialog(BuildContext context) {
                           child: Text(
                             '광고 보기',
                             style: yachtDeliveryDialogButtonText,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        height: 44.w,
-                        width: 154.5.w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(70.0),
-                          color: buttonNormal,
-                        ),
-                        child: Center(
-                          child: Text(
-                            '다음에 보기',
-                            style: yachtDeliveryDialogButtonText.copyWith(color: yachtViolet),
                           ),
                         ),
                       ),

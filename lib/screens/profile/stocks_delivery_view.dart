@@ -6,9 +6,11 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/settings/account_view.dart';
 import 'package:yachtOne/screens/startup/startup_view.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../handlers/numbers_handler.dart';
+import '../../locator.dart';
 import '../../styles/size_config.dart';
 import '../../styles/style_constants.dart';
 
@@ -306,7 +308,7 @@ class StocksDeliveryView extends StatelessWidget {
                   if (assetViewModel.stocksDeliveryNum.any((element) => (element.value != 0))) {
                     if (assetViewModel.totalDeliveryValue.value < 50000 ||
                         (assetViewModel.checkNameExists.value == "1")) {
-                      deliveryDialog(context);
+                      deliveryDialog(context, assetViewModel);
                     } else {
                       showDialog(
                           context: context,
@@ -388,7 +390,11 @@ class StocksDeliveryView extends StatelessWidget {
   }
 }
 
-deliveryDialog(BuildContext context) {
+deliveryDialog(
+  BuildContext context,
+  AssetViewModel assetViewModel,
+) {
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   return showDialog(
       context: context,
       builder: (context) {
@@ -470,6 +476,8 @@ deliveryDialog(BuildContext context) {
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () async {
+                        _mixpanelService.mixpanel.track('Stock Withdraw To Me',
+                            properties: {'Stock WIthdraw Total Value': assetViewModel.totalDeliveryValue.value});
                         await Get.find<AssetViewModel>().deliveryToME();
                         await Get.find<AssetViewModel>().reloadUserAsset();
                         Navigator.of(context).pop();

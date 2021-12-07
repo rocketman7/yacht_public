@@ -63,6 +63,12 @@ class StartupView extends GetView<StartupViewModel> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> mixpanelBottomBarTrackList = [
+      "Home",
+      "Yacht Insight",
+      "Community",
+      "My Page",
+    ];
     RxList<Widget> pageList = [
       HomeView(),
       InsightView(),
@@ -174,6 +180,13 @@ class StartupView extends GetView<StartupViewModel> {
                       );
                       // HomeView().goToTop();
                     } else {
+                      // _mixpanelService.mixpanel.track('${pageList[controller.selectedPage.value]} timeEvent');
+                      // _mixpanelService.mixpanel.timeEvent('${pageList[index].toString()} timeEvent');
+                      // _mixpanelService.mixpanel.flush();
+
+                      _mixpanelService.mixpanel.track(mixpanelBottomBarTrackList[index], properties: {
+                        "Previous Bottom Tab": mixpanelBottomBarTrackList[controller.selectedPage.value],
+                      });
                       controller.selectedPage(index);
                     }
                   },

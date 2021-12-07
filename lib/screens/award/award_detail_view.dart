@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/screens/ranks/rank_share_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/widgets/appbar_back_button.dart';
 
 import 'dart:math' as math;
 
+import '../../locator.dart';
 import '../../styles/size_config.dart';
 import '../../styles/style_constants.dart';
 import '../../handlers/numbers_handler.dart' as NumbersHandler;
@@ -24,6 +26,7 @@ class AwardDetailView extends StatelessWidget {
   AwardDetailView({required this.leagueName, required this.leagueEndDateTime});
 
   final AwardViewModel _awardViewModel = Get.find<AwardViewModel>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +131,14 @@ class AwardDetailView extends StatelessWidget {
                                     behavior: HitTestBehavior.opaque,
                                     onTap: () {
                                       _awardViewModel.pageNavigateToLeft();
+                                      _mixpanelService.mixpanel.track(
+                                        'Award Detail Swipe',
+                                        properties: {
+                                          'Award Detail Swipe Page To Sub League Name': _awardViewModel
+                                              .allSubLeagues[_awardViewModel.pageIndexForUI.value].name
+                                              .toString(),
+                                        },
+                                      );
                                     },
                                     child: Column(
                                       children: [
@@ -164,6 +175,14 @@ class AwardDetailView extends StatelessWidget {
                                     behavior: HitTestBehavior.opaque,
                                     onTap: () {
                                       _awardViewModel.pageNavigateToRight();
+                                      _mixpanelService.mixpanel.track(
+                                        'Award Detail Swipe',
+                                        properties: {
+                                          'Award Detail Swipe Page To Sub League Name': _awardViewModel
+                                              .allSubLeagues[_awardViewModel.pageIndexForUI.value].name
+                                              .toString(),
+                                        },
+                                      );
                                     },
                                     child: Column(
                                       children: [
@@ -430,6 +449,9 @@ class AwardDetailView extends StatelessWidget {
                         Spacer(),
                         GestureDetector(
                             onTap: () {
+                              _mixpanelService.mixpanel.track('League Ranking', properties: {
+                                'Sub League Index': _awardViewModel.pageIndexForUI.value,
+                              });
                               Get.to(() => AllRankerView(
                                     leagueIndex: _awardViewModel.pageIndexForUI.value,
                                   ));

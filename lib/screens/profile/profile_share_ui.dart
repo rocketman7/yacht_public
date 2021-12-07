@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 
 import '../../handlers/numbers_handler.dart';
+import '../../locator.dart';
 import '../../models/profile_models.dart';
 import '../../models/users/user_model.dart';
 import '../../styles/yacht_design_system.dart';
@@ -381,7 +383,7 @@ class BadgesFullGridView extends StatelessWidget {
 class BadgesGridView extends StatelessWidget {
   final bool isFull;
   final List<String> badges;
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   BadgesGridView({required this.isFull, required this.badges});
 
   @override
@@ -414,6 +416,7 @@ class BadgesGridView extends StatelessWidget {
                             isFull
                                 ? GestureDetector(
                                     onTap: () {
+                                      _mixpanelService.mixpanel.track('Badge Each');
                                       badgeDialog(context, i * 4 + j, badges.contains(localBadges[i * 4 + j]));
                                     },
                                     child: Container(
@@ -426,6 +429,7 @@ class BadgesGridView extends StatelessWidget {
                                   )
                                 : GestureDetector(
                                     onTap: () {
+                                      _mixpanelService.mixpanel.track('Badge Each');
                                       badgeDialog(
                                           context,
                                           localBadges.indexWhere((element) => (element == tempBadges[i * 4 + j])),

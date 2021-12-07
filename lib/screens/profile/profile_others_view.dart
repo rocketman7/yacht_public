@@ -16,10 +16,12 @@ import 'package:yachtOne/screens/profile/my_feed_view.dart';
 import 'package:yachtOne/screens/quest/result/quest_result_widget.dart';
 import 'package:yachtOne/screens/ranks/rank_controller.dart';
 import 'package:yachtOne/screens/ranks/rank_share_view.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../handlers/numbers_handler.dart';
+import '../../locator.dart';
 import '../../styles/size_config.dart';
 
 import 'asset_view.dart';
@@ -41,8 +43,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    final ProfileOthersViewModel profileViewModel =
-        Get.put(ProfileOthersViewModel(uid: uid), tag: uid);
+    final ProfileOthersViewModel profileViewModel = Get.put(ProfileOthersViewModel(uid: uid), tag: uid);
 
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
@@ -65,8 +66,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                         onTap: () => showDialog(
                             context: context,
                             builder: (context) {
-                              return yachtTierInfoPopUp(
-                                  context, controller.user.exp);
+                              return yachtTierInfoPopUp(context, controller.user.exp);
                             }),
                         child: Container(
                           width: 79.w,
@@ -78,18 +78,13 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                 width: 79.w,
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    gradient: LinearGradient(
-                                        begin: Alignment(0.0, 0.0),
-                                        end: Alignment(0.0, 1.0),
-                                        colors: [
-                                          (controller.isUserModelLoaded)
-                                              ? tierColor[
-                                                  separateStringFromTier(
-                                                      getTierByExp(controller
-                                                          .user.exp))]!
-                                              : tierColor['newbie']!,
-                                          primaryBackgroundColor
-                                        ])),
+                                    gradient:
+                                        LinearGradient(begin: Alignment(0.0, 0.0), end: Alignment(0.0, 1.0), colors: [
+                                      (controller.isUserModelLoaded)
+                                          ? tierColor[separateStringFromTier(getTierByExp(controller.user.exp))]!
+                                          : tierColor['newbie']!,
+                                      primaryBackgroundColor
+                                    ])),
                               ),
                               Positioned(
                                 left: 1.w,
@@ -97,9 +92,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                 child: Container(
                                     height: 77.w,
                                     width: 77.w,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: primaryBackgroundColor)),
+                                    decoration: BoxDecoration(shape: BoxShape.circle, color: primaryBackgroundColor)),
                               ),
                               Positioned(
                                   left: 5.w,
@@ -152,8 +145,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        height: correctHeight(
-                            5.w, 0.0, profileUserNameStyle.fontSize),
+                        height: correctHeight(5.w, 0.0, profileUserNameStyle.fontSize),
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,38 +172,23 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                 },
                               ),
                               SizedBox(
-                                height: correctHeight(
-                                    10.w,
-                                    profileUserNameStyle.fontSize,
-                                    profileFollowTextStyle.fontSize),
+                                height:
+                                    correctHeight(10.w, profileUserNameStyle.fontSize, profileFollowTextStyle.fontSize),
                               ),
                               // 팔로워 숫자 / 팔로잉 숫자
                               Row(
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      Get.find<ProfileOthersViewModel>(tag: uid)
-                                                      .user
-                                                      .followers !=
-                                                  null &&
-                                              Get.find<ProfileOthersViewModel>(
-                                                          tag: uid)
-                                                      .user
-                                                      .followers!
-                                                      .length !=
-                                                  0
+                                      Get.find<ProfileOthersViewModel>(tag: uid).user.followers != null &&
+                                              Get.find<ProfileOthersViewModel>(tag: uid).user.followers!.length != 0
                                           ? Get.to(() => FollowersNFollowingsView(
                                               isMe: false,
                                               whichfollowersOrfollowings: true,
-                                              followersNFollowingsUid: Get.find<
-                                                          ProfileOthersViewModel>(
-                                                      tag: uid)
-                                                  .user
-                                                  .followers!))
-                                          : Get.to(() =>
-                                              NullFollowersNFollowingsView(
-                                                whichNULLfollowersOrfollowings:
-                                                    true,
+                                              followersNFollowingsUid:
+                                                  Get.find<ProfileOthersViewModel>(tag: uid).user.followers!))
+                                          : Get.to(() => NullFollowersNFollowingsView(
+                                                whichNULLfollowersOrfollowings: true,
                                               ));
                                     },
                                     child: Row(
@@ -226,8 +203,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                           builder: (controller) {
                                             if (controller.isUserModelLoaded) {
                                               return Text(
-                                                controller.user.followers ==
-                                                        null
+                                                controller.user.followers == null
                                                     ? '0'
                                                     : '${controller.user.followers!.length}',
                                                 style: profileFollowNumberStyle,
@@ -248,28 +224,15 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Get.find<ProfileOthersViewModel>(tag: uid)
-                                                      .user
-                                                      .followings !=
-                                                  null &&
-                                              Get.find<ProfileOthersViewModel>(
-                                                          tag: uid)
-                                                      .user
-                                                      .followings!
-                                                      .length !=
-                                                  0
+                                      Get.find<ProfileOthersViewModel>(tag: uid).user.followings != null &&
+                                              Get.find<ProfileOthersViewModel>(tag: uid).user.followings!.length != 0
                                           ? Get.to(() => FollowersNFollowingsView(
                                               isMe: false,
                                               whichfollowersOrfollowings: false,
-                                              followersNFollowingsUid: Get.find<
-                                                          ProfileOthersViewModel>(
-                                                      tag: uid)
-                                                  .user
-                                                  .followings!))
-                                          : Get.to(() =>
-                                              NullFollowersNFollowingsView(
-                                                whichNULLfollowersOrfollowings:
-                                                    false,
+                                              followersNFollowingsUid:
+                                                  Get.find<ProfileOthersViewModel>(tag: uid).user.followings!))
+                                          : Get.to(() => NullFollowersNFollowingsView(
+                                                whichNULLfollowersOrfollowings: false,
                                               ));
                                     },
                                     child: Row(
@@ -284,8 +247,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                           builder: (controller) {
                                             if (controller.isUserModelLoaded) {
                                               return Text(
-                                                controller.user.followings ==
-                                                        null
+                                                controller.user.followings == null
                                                     ? '0'
                                                     : '${controller.user.followings!.length}',
                                                 style: profileFollowNumberStyle,
@@ -310,16 +272,11 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                           GestureDetector(
                               onTap: () async {
                                 if (profileViewModel.isFollowing)
-                                  await Get.find<ProfileOthersViewModel>(
-                                          tag: uid)
-                                      .unFollowSomeoneMethod();
+                                  await Get.find<ProfileOthersViewModel>(tag: uid).unFollowSomeoneMethod();
                                 else
-                                  await Get.find<ProfileOthersViewModel>(
-                                          tag: uid)
-                                      .followSomeoneMethod();
+                                  await Get.find<ProfileOthersViewModel>(tag: uid).followSomeoneMethod();
 
-                                Get.find<ProfileOthersViewModel>(tag: uid)
-                                    .reloadUserModel();
+                                Get.find<ProfileOthersViewModel>(tag: uid).reloadUserModel();
                               },
                               child: GetBuilder<ProfileOthersViewModel>(
                                 id: 'profile',
@@ -331,14 +288,10 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                         height: 30.w,
                                         width: 100.w,
                                         decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(70.0),
-                                            border: Border.all(
-                                                color: primaryButtonBackground,
-                                                width: 1.5.w)),
+                                            borderRadius: BorderRadius.circular(70.0),
+                                            border: Border.all(color: primaryButtonBackground, width: 1.5.w)),
                                         child: Center(
-                                          child: Text('팔로우 중',
-                                              style: profileButtonTextStyle),
+                                          child: Text('팔로우 중', style: profileButtonTextStyle),
                                         ),
                                       );
                                     } else {
@@ -347,16 +300,11 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                         width: 100.w,
                                         decoration: BoxDecoration(
                                             color: primaryButtonBackground,
-                                            borderRadius:
-                                                BorderRadius.circular(70.0),
-                                            border: Border.all(
-                                                color: primaryButtonBackground,
-                                                width: 1.5.w)),
+                                            borderRadius: BorderRadius.circular(70.0),
+                                            border: Border.all(color: primaryButtonBackground, width: 1.5.w)),
                                         child: Center(
-                                          child: Text('팔로우',
-                                              style: profileButtonTextStyle
-                                                  .copyWith(
-                                                      color: Colors.white)),
+                                          child:
+                                              Text('팔로우', style: profileButtonTextStyle.copyWith(color: Colors.white)),
                                         ),
                                       );
                                     }
@@ -365,14 +313,10 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                       height: 30.w,
                                       width: 100.w,
                                       decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(70.0),
-                                          border: Border.all(
-                                              color: primaryButtonBackground,
-                                              width: 1.5.w)),
+                                          borderRadius: BorderRadius.circular(70.0),
+                                          border: Border.all(color: primaryButtonBackground, width: 1.5.w)),
                                       child: Center(
-                                        child: Text('',
-                                            style: profileButtonTextStyle),
+                                        child: Text('', style: profileButtonTextStyle),
                                       ),
                                     );
                                   }
@@ -382,9 +326,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                       ),
                       SizedBox(
                           height: correctHeight(
-                              14.w,
-                              profileFollowTextStyle.fontSize,
-                              subLeagueAwardCommentStyle.fontSize)),
+                              14.w, profileFollowTextStyle.fontSize, subLeagueAwardCommentStyle.fontSize)),
                       // 유저소개글
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,20 +338,16 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                               builder: (controller) {
                                 if (controller.isUserModelLoaded) {
                                   return Text(
-                                    (controller.user.intro == null ||
-                                            controller.user.intro == '')
+                                    (controller.user.intro == null || controller.user.intro == '')
                                         ? '소개글이 없습니다.'
-                                        : '${controller.user.intro}'
-                                            .replaceAll('\\n', '\n'),
-                                    style: subLeagueAwardCommentStyle.copyWith(
-                                        letterSpacing: -0.01),
+                                        : '${controller.user.intro}'.replaceAll('\\n', '\n'),
+                                    style: subLeagueAwardCommentStyle.copyWith(letterSpacing: -0.01),
                                     maxLines: 3,
                                   );
                                 } else {
                                   return Text(
                                     '',
-                                    style: subLeagueAwardCommentStyle.copyWith(
-                                        letterSpacing: -0.01),
+                                    style: subLeagueAwardCommentStyle.copyWith(letterSpacing: -0.01),
                                   );
                                 }
                               },
@@ -425,63 +363,34 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                         insetPadding: primaryHorizontalPadding,
                                         child: Container(
                                             padding: EdgeInsets.fromLTRB(
-                                                14.w,
-                                                correctHeight(14.w, 0.0,
-                                                    dialogTitle.fontSize),
-                                                14.w,
-                                                14.w),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        10.w)),
+                                                14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Text("알림", style: dialogTitle),
-                                                SizedBox(
-                                                    height: correctHeight(
-                                                        24.w,
-                                                        0.w,
-                                                        dialogContent
-                                                            .fontSize)),
-                                                Text("이 유저를 신고하시겠습니까?",
-                                                    style: dialogContent),
+                                                SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                Text("이 유저를 신고하시겠습니까?", style: dialogContent),
                                                 Text(
                                                   "신고한 유저는 자동으로 차단되며\n해당 유저의 콘텐츠를 볼 수 없습니다.",
-                                                  style: dialogWarning.copyWith(
-                                                      color: yachtDarkGrey),
+                                                  style: dialogWarning.copyWith(color: yachtDarkGrey),
                                                 ),
-                                                SizedBox(
-                                                    height: correctHeight(
-                                                        24.w,
-                                                        0.w,
-                                                        dialogContent
-                                                            .fontSize)),
+                                                SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
                                                 Row(
                                                   children: [
                                                     Expanded(
                                                       child: GestureDetector(
                                                           onTap: () async {
-                                                            HapticFeedback
-                                                                .lightImpact();
-                                                            await profileViewModel
-                                                                .blockThisUser(
-                                                                    uid);
-                                                            await profileViewModel
-                                                                .reportThisUserFromProfile(
-                                                                    uid);
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
+                                                            HapticFeedback.lightImpact();
+                                                            await profileViewModel.blockThisUser(uid);
+                                                            await profileViewModel.reportThisUserFromProfile(uid);
+                                                            Navigator.of(context).pop();
                                                             Get.back();
-                                                            yachtSnackBar(
-                                                                "유저를 신고/차단하였습니다");
+                                                            yachtSnackBar("유저를 신고/차단하였습니다");
                                                           },
-                                                          child:
-                                                              textContainerButtonWithOptions(
+                                                          child: textContainerButtonWithOptions(
                                                             text: "신고하기",
-                                                            isDarkBackground:
-                                                                true,
+                                                            isDarkBackground: true,
                                                             height: 44.w,
                                                           )),
                                                     ),
@@ -489,16 +398,11 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                                     Expanded(
                                                       child: InkWell(
                                                           onTap: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
+                                                            Navigator.of(context).pop();
                                                             // Get.back(closeOverlays: true);
                                                           },
                                                           child: textContainerButtonWithOptions(
-                                                              text: "취소",
-                                                              isDarkBackground:
-                                                                  false,
-                                                              height: 44.w)),
+                                                              text: "취소", isDarkBackground: false, height: 44.w)),
                                                     )
                                                   ],
                                                 )
@@ -867,12 +771,11 @@ class OtherProfileTabBarView extends StatefulWidget {
   State<OtherProfileTabBarView> createState() => _OtherProfileTabBarViewState();
 }
 
-class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
-    with SingleTickerProviderStateMixin {
+class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with SingleTickerProviderStateMixin {
   late TabController tabController;
   late PageController pageController;
   final RankController rankController = Get.find<RankController>();
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   void initState() {
     print('otherProfileTabBarView init');
@@ -893,8 +796,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
 
   @override
   Widget build(BuildContext context) {
-    final ProfileOthersViewModel profileOthersViewModel =
-        Get.find<ProfileOthersViewModel>(tag: widget.tag);
+    final ProfileOthersViewModel profileOthersViewModel = Get.find<ProfileOthersViewModel>(tag: widget.tag);
     // widget.profileOthersViewModel;
 
     // TODO: implement build
@@ -919,9 +821,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                   child: Text(
                     '피드',
                     style: profileButtonTextStyle.copyWith(
-                        color: tabIndex.value == 0
-                            ? profileButtonTextStyle.color
-                            : yachtGrey),
+                        color: tabIndex.value == 0 ? profileButtonTextStyle.color : yachtGrey),
                   ),
                 ),
               ),
@@ -931,9 +831,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                   child: Text(
                     '활동',
                     style: profileButtonTextStyle.copyWith(
-                        color: tabIndex.value == 1
-                            ? profileButtonTextStyle.color
-                            : yachtGrey),
+                        color: tabIndex.value == 1 ? profileButtonTextStyle.color : yachtGrey),
                   ),
                 ),
               ),
@@ -966,6 +864,10 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                       Flexible(
                         child: InkWell(
                           onTap: () {
+                            _mixpanelService.mixpanel.track(
+                              'My Asset',
+                              properties: {'My Asset Tab From': "유저 프로필-보유자산"},
+                            );
                             yachtSnackBar("다른 유저의 보유 자산은 볼 수 없어요.");
                             // Get.to(() => AssetView());
                           },
@@ -976,17 +878,13 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text('보유 자산',
-                                      style: subLeagueAwardCommentStyle
-                                          .copyWith(fontSize: 16.w)),
+                                  Text('보유 자산', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
                                   SizedBox(
-                                    height: correctHeight(10.w, 16.w,
-                                        subLeagueAwardLabelStyle.fontSize),
+                                    height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize),
                                   ),
                                   Text(
                                     '??? 원',
-                                    style: subLeagueAwardLabelStyle.copyWith(
-                                        letterSpacing: -0.01),
+                                    style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
                                   ),
                                   // *보유자산
                                   // GetBuilder<ProfileOthersViewModel>(
@@ -1028,8 +926,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                           builder: (rankController) {
                             return Flexible(
                               child: FutureBuilder<List<Map<String, int>>>(
-                                  future: rankController.getOtherUserRanks(
-                                      profileOthersViewModel.uid),
+                                  future: rankController.getOtherUserRanks(profileOthersViewModel.uid),
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
                                       return InkWell(
@@ -1043,59 +940,32 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                                           height: 90.w,
                                           child: Center(
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
-                                                Text('순위',
-                                                    style:
-                                                        subLeagueAwardCommentStyle
-                                                            .copyWith(
-                                                                fontSize:
-                                                                    16.w)),
+                                                Text('순위', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
                                                 SizedBox(
-                                                    height: correctHeight(
-                                                        10.w,
-                                                        16.w,
-                                                        subLeagueAwardLabelStyle
-                                                            .fontSize)),
+                                                    height:
+                                                        correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize)),
                                                 // *현재 리그 순위 및 승점
                                                 Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
+                                                  mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      snapshot.data![0][
-                                                                  'todayRank'] ==
-                                                              null
+                                                      snapshot.data![0]['todayRank'] == null
                                                           ? ""
-                                                          : snapshot.data![0][
-                                                                      'todayRank']! !=
-                                                                  0
+                                                          : snapshot.data![0]['todayRank']! != 0
                                                               ? '${snapshot.data![0]['todayRank']!}위 |'
                                                               : '없음 |',
-                                                      style:
-                                                          subLeagueAwardLabelStyle
-                                                              .copyWith(
-                                                                  letterSpacing:
-                                                                      -0.01),
+                                                      style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
                                                     ),
                                                     Text(
                                                       ' ${snapshot.data![0]['todayPoint'] ?? 0}',
-                                                      style:
-                                                          subLeagueAwardLabelStyle
-                                                              .copyWith(
-                                                                  letterSpacing:
-                                                                      -0.01),
+                                                      style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
                                                     ),
                                                     Text(
                                                       '점',
-                                                      style:
-                                                          subLeagueAwardLabelStyle
-                                                              .copyWith(
-                                                                  letterSpacing:
-                                                                      -0.01),
+                                                      style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
                                                     ),
                                                   ],
                                                 ),
@@ -1116,42 +986,23 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                                         height: 90.w,
                                         child: Center(
                                           child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text('순위',
-                                                  style:
-                                                      subLeagueAwardCommentStyle
-                                                          .copyWith(
-                                                              fontSize: 16.w)),
+                                              Text('순위', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
                                               SizedBox(
-                                                  height: correctHeight(
-                                                      10.w,
-                                                      16.w,
-                                                      subLeagueAwardLabelStyle
-                                                          .fontSize)),
+                                                  height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize)),
                                               // *현재 리그 순위 및 승점
                                               Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Text(
                                                     '- | ',
-                                                    style:
-                                                        subLeagueAwardLabelStyle
-                                                            .copyWith(
-                                                                letterSpacing:
-                                                                    -0.01),
+                                                    style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
                                                   ),
                                                   Text(
                                                     '-',
-                                                    style:
-                                                        subLeagueAwardLabelStyle
-                                                            .copyWith(
-                                                                letterSpacing:
-                                                                    -0.01),
+                                                    style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
                                                   ),
                                                 ],
                                               ),
@@ -1178,16 +1029,14 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                     color: dividerColor,
                   ),
                   SizedBox(
-                    height: correctHeight(
-                        30.w, 0.0, profileHeaderTextStyle.fontSize),
+                    height: correctHeight(30.w, 0.0, profileHeaderTextStyle.fontSize),
                   ),
                   Padding(
                     padding: primaryHorizontalPadding,
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
-                        Get.to(
-                            () => QuestRecordOthersDetailView(tag: widget.tag));
+                        Get.to(() => QuestRecordOthersDetailView(tag: widget.tag));
                       },
                       child: Row(
                         children: [
@@ -1216,17 +1065,11 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                     ),
                   ),
                   SizedBox(
-                    height: correctHeight(
-                        20.w, profileHeaderTextStyle.fontSize, 0.0),
+                    height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
                   ),
-                  Obx(() =>
-                          profileOthersViewModel.otherUserQuestModels.length ==
-                                  0
-                              ? Image.asset(
-                                  'assets/illusts/not_exists/no_quest_done.png',
-                                  height: 150.w)
-                              : QuestRecordOthersView(
-                                  isFullView: false, tag: widget.tag)
+                  Obx(() => profileOthersViewModel.otherUserQuestModels.length == 0
+                          ? Image.asset('assets/illusts/not_exists/no_quest_done.png', height: 150.w)
+                          : QuestRecordOthersView(isFullView: false, tag: widget.tag)
                       // Column(
                       //     children: List.generate(
                       //         min(
@@ -1336,8 +1179,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView>
                     height: 50.w,
                   ),
                   Padding(
-                    padding:
-                        EdgeInsets.only(left: 14.w, right: 0.w, bottom: 20.w),
+                    padding: EdgeInsets.only(left: 14.w, right: 0.w, bottom: 20.w),
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
@@ -1423,14 +1265,8 @@ class QuestRecordOthersView extends StatelessWidget {
     return Column(
       children: List.generate(
           isFullView
-              ? Get.find<ProfileOthersViewModel>(tag: tag)
-                  .otherUserQuestModels
-                  .length
-              : min(
-                  Get.find<ProfileOthersViewModel>(tag: tag)
-                      .otherUserQuestModels
-                      .length,
-                  maxNum),
+              ? Get.find<ProfileOthersViewModel>(tag: tag).otherUserQuestModels.length
+              : min(Get.find<ProfileOthersViewModel>(tag: tag).otherUserQuestModels.length, maxNum),
           (index) => Column(
                 children: [
                   Padding(
@@ -1439,10 +1275,8 @@ class QuestRecordOthersView extends StatelessWidget {
                       () => sectionBox(
                           padding: primaryAllPadding,
                           child: FutureBuilder<QuestModel>(
-                              future: Get.find<ProfileOthersViewModel>(tag: tag)
-                                  .getEachQuestModel(
-                                      Get.find<ProfileOthersViewModel>(tag: tag)
-                                          .otherUserQuestModels[index]),
+                              future: Get.find<ProfileOthersViewModel>(tag: tag).getEachQuestModel(
+                                  Get.find<ProfileOthersViewModel>(tag: tag).otherUserQuestModels[index]),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) {
                                   return Container();
@@ -1460,42 +1294,29 @@ class QuestRecordOthersView extends StatelessWidget {
                                       //         snapshot.data);
                                     },
                                     child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Flexible(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
                                               Text(
-                                                timeStampToStringWithHourMinute(
-                                                        snapshot.data!
-                                                            .questEndDateTime) +
+                                                timeStampToStringWithHourMinute(snapshot.data!.questEndDateTime) +
                                                     " 마감",
                                                 style: questRecordendDateTime,
                                               ),
                                               SizedBox(height: 6.w),
-                                              Text(snapshot.data!.title,
-                                                  style: questRecordTitle),
+                                              Text(snapshot.data!.title, style: questRecordTitle),
                                               SizedBox(
                                                   height: correctHeight(
-                                                      14.w,
-                                                      questRecordTitle.fontSize,
-                                                      questRecordSelection
-                                                          .fontSize)),
+                                                      14.w, questRecordTitle.fontSize, questRecordSelection.fontSize)),
                                               Text(
-                                                  Get.find<ProfileOthersViewModel>(
-                                                          tag: tag)
-                                                      .getUserChioce(
-                                                          snapshot.data!,
-                                                          Get.find<ProfileOthersViewModel>(
-                                                                      tag: tag)
-                                                                  .otherUserQuestModels[
-                                                              index]),
+                                                  Get.find<ProfileOthersViewModel>(tag: tag).getUserChioce(
+                                                      snapshot.data!,
+                                                      Get.find<ProfileOthersViewModel>(tag: tag)
+                                                          .otherUserQuestModels[index]),
                                                   style: questRecordSelection),
                                               // Text(userQuestModelRx[index].selection),
                                             ],
@@ -1503,10 +1324,8 @@ class QuestRecordOthersView extends StatelessWidget {
                                         ),
                                         SizedBox(width: 8.w),
                                         Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          mainAxisAlignment: MainAxisAlignment.end,
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             // Spacer(),
@@ -1518,8 +1337,7 @@ class QuestRecordOthersView extends StatelessWidget {
                                               ),
                                               decoration: BoxDecoration(
                                                 color: buttonNormal,
-                                                borderRadius:
-                                                    BorderRadius.circular(8.w),
+                                                borderRadius: BorderRadius.circular(8.w),
                                               ),
 
                                               // height: 300,
@@ -1527,26 +1345,18 @@ class QuestRecordOthersView extends StatelessWidget {
                                                 child: Text(
                                                   snapshot.data!.results == null
                                                       ? "진행 중"
-                                                      : Get.find<ProfileOthersViewModel>(
-                                                                      tag: tag)
-                                                                  .otherUserQuestModels[
-                                                                      index]
+                                                      : Get.find<ProfileOthersViewModel>(tag: tag)
+                                                                  .otherUserQuestModels[index]
                                                                   .hasSucceeded ==
                                                               true
                                                           ? "예측 성공"
                                                           : "예측 실패",
-                                                  style: questRecordSelection
-                                                      .copyWith(
+                                                  style: questRecordSelection.copyWith(
                                                     fontWeight: FontWeight.w500,
-                                                    color: snapshot.data!
-                                                                .results ==
-                                                            null
+                                                    color: snapshot.data!.results == null
                                                         ? yachtBlack
-                                                        : Get.find<ProfileOthersViewModel>(
-                                                                        tag:
-                                                                            tag)
-                                                                    .otherUserQuestModels[
-                                                                        index]
+                                                        : Get.find<ProfileOthersViewModel>(tag: tag)
+                                                                    .otherUserQuestModels[index]
                                                                     .hasSucceeded ==
                                                                 true
                                                             ? yachtRed
@@ -1562,14 +1372,12 @@ class QuestRecordOthersView extends StatelessWidget {
                                               ),
                                               decoration: BoxDecoration(
                                                 color: Colors.transparent,
-                                                borderRadius:
-                                                    BorderRadius.circular(8.w),
+                                                borderRadius: BorderRadius.circular(8.w),
                                               ),
                                               child: Center(
                                                 child: Text(
                                                   "예측 실패",
-                                                  style: questRecordSelection
-                                                      .copyWith(
+                                                  style: questRecordSelection.copyWith(
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.transparent,
                                                   ),
@@ -1590,11 +1398,8 @@ class QuestRecordOthersView extends StatelessWidget {
                     ),
                   ),
                   if (index !=
-                      min(
-                              userQuestModelRx.length,
-                              isFullView
-                                  ? userQuestModelRx.length
-                                  : min(userQuestModelRx.length, maxNum)) -
+                      min(userQuestModelRx.length,
+                              isFullView ? userQuestModelRx.length : min(userQuestModelRx.length, maxNum)) -
                           1)
                     SizedBox(
                       height: 10.w,

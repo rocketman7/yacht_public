@@ -46,7 +46,7 @@ class CommunityViewModel extends GetxController {
     // TODO: implement onInit
     await getNotice();
     await getPost();
-    print('recentNotice $recentNotice');
+    // print('recentNotice $recentNotice');
 
     // print('get post done');
     // await monitorScroll();

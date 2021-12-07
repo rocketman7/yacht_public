@@ -18,8 +18,10 @@ import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view_model.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/widgets/loading_container.dart';
+import '../../locator.dart';
 import 'quest_widget.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 
@@ -47,7 +49,7 @@ class QuestView extends StatelessWidget {
   Widget build(BuildContext context) {
     // 뷰 모델에 퀘스트 데이터 모델 넣어주기
     final QuestViewModel questViewModel = Get.put(QuestViewModel(questModel));
-
+    final MixpanelService _mixpanelService = locator<MixpanelService>();
     final stockInfoViewModel = Get.put(
         StockInfoKRViewModel(investAddressModel: questModel.investAddresses![questViewModel.stockInfoIndex.value]));
     // questViewModel.init(questModel);
@@ -440,6 +442,16 @@ class QuestView extends StatelessWidget {
                         );
                       } else {
                         questViewModel.updateUserQuest();
+                        _mixpanelService.mixpanel.track('Quest Participate', properties: {
+                          'Participate Quest ID': questModel.questId,
+                          'Participate League ID': questModel.leagueId,
+                          'Participate Quest Title': questModel.title,
+                          'Participate Quest Category': questModel.category,
+                          'Participate Quest Select Mode': questModel.selectMode,
+                          'Participate Quest Item Used': questModel.itemNeeded,
+                          'Participate Quest Yacht Point Success Reward': questModel.yachtPointSuccessReward,
+                          'Participate Quest League Point Success Reward': questModel.leaguePointSuccessReward,
+                        });
                         Future.delayed(Duration(milliseconds: 600)).then((_) {
                           questViewModel.isSelectingSheetShowing(false);
                         });

@@ -8,7 +8,10 @@ import 'package:yachtOne/screens/contents/dictionary/dictionary_view.dart';
 import 'package:yachtOne/screens/contents/reading_content/reading_content_view.dart';
 import 'package:yachtOne/screens/contents/today_market/today_market_view.dart';
 import 'package:yachtOne/screens/insight/insight_view_model.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+
+import '../../locator.dart';
 
 class InsightView extends StatelessWidget {
   InsightView({Key? key}) : super(key: key);

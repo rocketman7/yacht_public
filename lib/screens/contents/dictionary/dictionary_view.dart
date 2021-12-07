@@ -36,8 +36,13 @@ class DictionaryView extends StatelessWidget {
                       dictionaryViewModel.dictionaries.length,
                       (index) => InkWell(
                             onTap: () {
-                              _mixpanelService.mixpanel.track('home-Dictionary-DictionaryWebView',
-                                  properties: {'dictionaryTitle': dictionaryViewModel.dictionaries[index].title});
+                              _mixpanelService.mixpanel.track('Dictionary', properties: {
+                                'Dictionary Title': dictionaryViewModel.dictionaries[index].title,
+                                'Dictionary Image Url': dictionaryViewModel.dictionaries[index].imageUrl,
+                                'Dictionary Url': dictionaryViewModel.dictionaries[index].dictionaryUrl,
+                                'Dictionary Update DateTime':
+                                    dictionaryViewModel.dictionaries[index].updateDateTime.toDate().toIso8601String(),
+                              });
                               Get.to(() => DictionaryWebView(dictionaryModel: dictionaryViewModel.dictionaries[index]));
                             },
                             child: Column(

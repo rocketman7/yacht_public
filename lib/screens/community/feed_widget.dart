@@ -67,7 +67,11 @@ class FeedWidget extends StatelessWidget {
               // 아바타 이미지 임시
               GestureDetector(
                 onTap: () {
-                  _mixpanelService.mixpanel.track('feed-profile');
+                  _mixpanelService.mixpanel.track('Profile From Feed', properties: {
+                    'Feed Profile Name': post.writerUserName,
+                    'Feed Profile UID': post.writerUid,
+                    'Feed Profile Post ID': post.postId,
+                  });
                   if (post.writerUid != userModelRx.value!.uid) Get.to(() => ProfileOthersView(uid: post.writerUid));
                   // else
                   // Get.to(() => ProfileMyView());
@@ -115,7 +119,7 @@ class FeedWidget extends StatelessWidget {
                               ),
                               GestureDetector(
                                   onTap: () async {
-                                    _mixpanelService.mixpanel.track('feed-tierInfo');
+                                    _mixpanelService.mixpanel.track('Tier Pop Up');
                                     return await showDialog(
                                         context: context,
                                         builder: (context) {
@@ -447,7 +451,21 @@ class FeedWidget extends StatelessWidget {
                                               borderRadius: BorderRadius.circular(5.w),
                                               child: InkWell(
                                                 onTap: () {
-                                                  _mixpanelService.mixpanel.track('feed-photoPage');
+                                                  _mixpanelService.mixpanel.track('Image From Post', properties: {
+                                                    'Image From Post ID': post.postId,
+                                                    'Image From Post Write DateTime':
+                                                        post.writtenDateTime.toDate().toIso8601String(),
+                                                    'Image From Post Edit DateTime': post.editedDateTime == null
+                                                        ? post.writtenDateTime.toDate().toIso8601String()
+                                                        : post.editedDateTime.toDate().toIso8601String(),
+                                                    'Image From Post Title': post.title ?? "",
+                                                    'Image From Is Pro Post': post.isPro,
+                                                    'Image From Is Notice': post.isNotice,
+                                                    'Image From Post Writer Uid': post.writerUid,
+                                                    'Image From Post Writer User Name': post.writerUserName,
+                                                    'Image From Post Writer Exp': post.writerExp,
+                                                    'Image From Page': "Community",
+                                                  });
                                                   // print(imageUrls);
                                                   showDialog(
                                                       context: context,
@@ -498,7 +516,22 @@ class FeedWidget extends StatelessWidget {
                               Flexible(
                                 child: InkWell(
                                   onTap: () {
-                                    _mixpanelService.mixpanel.track('feed-detailPost');
+                                    _mixpanelService.mixpanel.track('Post Detail', properties: {
+                                      'Post ID': post.postId,
+                                      'Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
+                                      'Post Edit DateTime': post.editedDateTime.toDate().toIso8601String(),
+                                      'Post Title': post.title ?? "",
+                                      'Is Pro Post': post.isPro,
+                                      'Is Notice': post.isNotice,
+                                      'Post Writer Uid': post.writerUid,
+                                      'Post Writer User Name': post.writerUserName,
+                                      'Post Writer Exp': post.writerExp,
+                                      'Post Has Image': post.imageUrlList == null
+                                          ? false
+                                          : post.imageUrlList!.length > 0
+                                              ? true
+                                              : false,
+                                    });
                                     Get.to(
                                       () => DetailPostView(post),
                                     );
@@ -527,6 +560,8 @@ class FeedWidget extends StatelessWidget {
                               Flexible(
                                 child: GestureDetector(
                                   onTap: () {
+                                    _mixpanelService.mixpanel.track('Post Like',
+                                        properties: {'Like Post ID': post.postId, 'Like Post From Page': "Community"});
                                     HapticFeedback.lightImpact();
                                     communityViewModel.toggleLikeComment(post);
                                     communityViewModel.reloadPost();
