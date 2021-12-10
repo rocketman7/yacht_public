@@ -878,12 +878,12 @@ class SettingView extends StatelessWidget {
                                                 _mixpanelService.mixpanel.track('Unregister Confirm');
                                                 _authService.deleteAccount();
 
+                                                _kakaoApi.signOut();
                                                 userModelRx(null);
                                                 userQuestModelRx.value = [];
                                                 leagueRx("");
 
                                                 // _kakaoApi.
-                                                _kakaoApi.signOut();
                                                 print("signout");
                                                 Navigator.of(context).pop();
                                                 await Get.offAll(() => AuthCheckView());

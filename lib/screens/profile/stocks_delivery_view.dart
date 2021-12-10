@@ -284,7 +284,7 @@ class StocksDeliveryView extends StatelessWidget {
                       height: 14.w,
                     ),
                     Text(
-                      '* 출고하신 주식은 최대 3영업일 후 오후 3시이내에 입고됩니다.\n* 오후 1시 이전 신청은 당일 3시 부근 입고됩니다.',
+                      '* 출고하신 주식은 최대 7영업일 후 오후 3시이내에 입고됩니다.',
                       style: stocksDeliveryViewTextStyle8,
                     ),
                     SizedBox(

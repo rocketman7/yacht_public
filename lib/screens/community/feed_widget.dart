@@ -519,7 +519,9 @@ class FeedWidget extends StatelessWidget {
                                     _mixpanelService.mixpanel.track('Post Detail', properties: {
                                       'Post ID': post.postId,
                                       'Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
-                                      'Post Edit DateTime': post.editedDateTime.toDate().toIso8601String(),
+                                      'Post Edit DateTime': post.editedDateTime == null
+                                          ? post.writtenDateTime.toDate().toIso8601String()
+                                          : post.editedDateTime.toDate().toIso8601String(),
                                       'Post Title': post.title ?? "",
                                       'Is Pro Post': post.isPro,
                                       'Is Notice': post.isNotice,
