@@ -16,6 +16,7 @@ import '../../locator.dart';
 import '../../styles/yacht_design_system.dart';
 
 import 'account_view.dart';
+import 'admin_mode_view.dart';
 import 'friends_code_controller.dart';
 import 'one_on_one_list_view.dart';
 import 'one_on_one_view.dart';
@@ -882,7 +883,31 @@ class SettingView extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: correctHeight(18.w, 0.w, settingContent.fontSize),
+          height: correctHeight(18.w - 8.w, 0.w, settingContent.fontSize),
+        ),
+        GestureDetector(
+          onTap: () {
+            //kakao:1513684681
+            //kakao:1518231402
+            //kakao:1518411965
+            //kakao:1531290810
+            if (userModelRx.value!.uid == 'kakao:1513684681' ||
+                userModelRx.value!.uid == 'kakao:1518231402' ||
+                userModelRx.value!.uid == 'kakao:1518411965' ||
+                userModelRx.value!.uid == 'kakao:1531290810') {
+              print('운영진모드');
+              Get.to(() => AdminModeView());
+            }
+          },
+          child: Container(
+            height: 8.w,
+            color: userModelRx.value!.uid == 'kakao:1513684681' ||
+                    userModelRx.value!.uid == 'kakao:1518231402' ||
+                    userModelRx.value!.uid == 'kakao:1518411965' ||
+                    userModelRx.value!.uid == 'kakao:1531290810'
+                ? Colors.grey.withOpacity(0.1)
+                : Colors.transparent,
+          ),
         ),
         SizedBox(
           height: correctHeight(20.w, 0.w, settingTitle.fontSize),
