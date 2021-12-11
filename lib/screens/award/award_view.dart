@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
@@ -42,7 +43,7 @@ class AwardView extends StatelessWidget {
               Text("이 달의 상금 주식", style: sectionTitle),
               InkWell(
                 onTap: () {
-                  _mixpanelService.mixpanel.track('home-Award-yachtManual');
+                  _mixpanelService.mixpanel.track('Award Question Mark');
                   showDialog(
                     context: context,
                     builder: (context) => Dialog(
@@ -72,6 +73,7 @@ class AwardView extends StatelessWidget {
               Spacer(),
               GestureDetector(
                 onTap: () {
+                  _mixpanelService.mixpanel.track('Previous League');
                   Get.to(() => LastAwardView());
                 },
                 child: Container(
@@ -273,7 +275,17 @@ class HomeSubLeagueCarouselSlider extends StatelessWidget {
 
                           // main에 등록한 getpage를 써야 바인딩 포함
                           // Get.toNamed('subLeague');
-                          _mixpanelService.mixpanel.track('home-AwardDetail', properties: {'index': index});
+                          // print(leagueModel.value!.openLeague);
+                          // print(leagueName);
+                          // print('${_awardViewModel.allSubLeagues[index].name}');
+                          _mixpanelService.mixpanel.track(
+                            'Award Detail',
+                            properties: {
+                              'Award Detail League ID': leagueModel.value!.openLeague,
+                              'Award Detail League Name': leagueName,
+                              'Award Detail Sub League Name': '${_awardViewModel.allSubLeagues[index].name}',
+                            },
+                          );
                           Get.to(() => AwardDetailView(
                                 leagueName: leagueName,
                                 leagueEndDateTime: leagueEndDateTime,

@@ -119,8 +119,10 @@ class QuestViewModel extends GetxController {
   bool checkIfUserSelectedAny() {
     bool checking = false;
     toggleList.forEach((element) {
-      element = checking || element;
+      // print(element);
+      checking = checking || element;
     });
+    // print('check $checking');
     return checking;
   }
 

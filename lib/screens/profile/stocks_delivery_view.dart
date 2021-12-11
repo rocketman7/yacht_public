@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/settings/account_view.dart';
 import 'package:yachtOne/screens/startup/startup_view.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../handlers/numbers_handler.dart';
+import '../../locator.dart';
 import '../../styles/size_config.dart';
 import '../../styles/style_constants.dart';
 
@@ -98,6 +101,14 @@ TextStyle stocksDeliveryViewTextStyle10 = TextStyle(
 class StocksDeliveryView extends StatelessWidget {
   final AssetViewModel assetViewModel = Get.find<AssetViewModel>();
   // final AssetViewModel assetViewModel = Get.put(AssetViewModel());
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +284,7 @@ class StocksDeliveryView extends StatelessWidget {
                       height: 14.w,
                     ),
                     Text(
-                      '* 출고하신 주식은 최대 3영업일 후 오후 3시이내에 입고됩니다.\n* 오후 1시 이전 신청은 당일 3시 부근 입고됩니다.',
+                      '* 출고하신 주식은 최대 7영업일 후 오후 3시이내에 입고됩니다.',
                       style: stocksDeliveryViewTextStyle8,
                     ),
                     SizedBox(
@@ -294,9 +305,49 @@ class StocksDeliveryView extends StatelessWidget {
                 if (userModelRx.value!.account['accNumber'] == null)
                   notAccountDialog(context);
                 else {
-                  if (assetViewModel.stocksDeliveryNum.any((element) => (element.value != 0)))
-                    deliveryDialog(context);
-                  else
+                  if (assetViewModel.stocksDeliveryNum.any((element) => (element.value != 0))) {
+                    if (assetViewModel.totalDeliveryValue.value < 50000 ||
+                        (assetViewModel.checkNameExists.value == "1")) {
+                      deliveryDialog(context, assetViewModel);
+                    } else {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            String title = "주민등록번호 인증이 필요합니다.";
+                            String content =
+                                "주민등록번호 인증이 왜 필요한가요?\n\n상금으로 지급되는 주식은 사용자에게 기타소득이 됩니다. 1회의 기타소득 가치가 5만원이 넘을 경우, 기타소득 지급자인 주식회사 팀요트는 원천징수 의무자로서 기타소득 지급명세서 제출을 위해 사용자의 주민등록번호를 수집할 수 있습니다 (관련 법령 하단 참조). \n당사는 수집한 주민등록번호를 오직 기타소득 원천징수 지급명세서 작성 용도로만 활용한 후 즉시 폐기합니다.\n\n*관련 법령\n1) 소득세법 제145조(기타소득에 대한 원천징수 시기와 방법 및 원천징수영수증의 발급) ① 원천징수의무자가 기타소득을 지급할 때에는 그 기타소득금액에 원천징수세율을 적용하여 계산한 소득세를 원천징수한다. \n2) 제164조(지급명세서의 제출) ① 제2조에 따라 소득세 납세의무가 있는 개인에게 다음 각 호의 어느 하나에 해당하는 소득을 국내에서 지급하는 자는 대통령령으로 정하는 바에 따라 지급명세서를 그 지급일이 속하는 과세기간의 다음 연도 2월 말일까지 원천징수 관할 세무서장, 지방국세청장 또는 국세청장에게 제출하여야 한다.";
+                            String goCheckName = "인증하러 가기";
+                            String checkNameUrl = assetViewModel.checkNameUrl + userModelRx.value!.uid;
+                            return MediaQuery(
+                              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                              child: AlertDialog(
+                                title: Text(title),
+                                content: SingleChildScrollView(child: Text(content)),
+                                actions: [
+                                  TextButton(
+                                    child: Text("닫기"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text(goCheckName),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      // print(checkNameUrl);
+                                      _launchURL(checkNameUrl);
+
+                                      // _navigationService
+                                      //     .navigateTo('portfolio');
+                                    },
+                                  )
+                                ],
+                              ),
+                            );
+                          });
+                    }
+                  } else
                     noChoiceStocksDialog(context);
                 }
               },
@@ -339,7 +390,11 @@ class StocksDeliveryView extends StatelessWidget {
   }
 }
 
-deliveryDialog(BuildContext context) {
+deliveryDialog(
+  BuildContext context,
+  AssetViewModel assetViewModel,
+) {
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   return showDialog(
       context: context,
       builder: (context) {
@@ -421,6 +476,8 @@ deliveryDialog(BuildContext context) {
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () async {
+                        _mixpanelService.mixpanel.track('Stock Withdraw To Me',
+                            properties: {'Stock WIthdraw Total Value': assetViewModel.totalDeliveryValue.value});
                         await Get.find<AssetViewModel>().deliveryToME();
                         await Get.find<AssetViewModel>().reloadUserAsset();
                         Navigator.of(context).pop();

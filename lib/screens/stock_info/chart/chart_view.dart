@@ -299,7 +299,7 @@ class ChartView extends StatelessWidget {
           bullColor: bullColorKR,
           bearColor: bearColorKR,
 
-          // enableSolidCandles: true,
+          enableSolidCandles: true,
           dataSource: chartPrices,
           xValueMapper: (ChartPriceModel chart, _) => stringToDateTime(chart.dateTime!),
           openValueMapper: (ChartPriceModel chart, _) => chart.open,

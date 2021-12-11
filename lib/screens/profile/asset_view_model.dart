@@ -5,7 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+
+import '../../locator.dart';
 
 // XX * update 필요부분
 // XX 자산의 종가가 나오면 (ex, 한국시장 15:30 종가), 모든 user 의 userAsset 콜렉션의
@@ -119,6 +122,7 @@ class HoldingAwardModel {
 class AssetViewModel extends GetxController {
   //////////////////////// database service 부분 ////////////////////////
   final FirebaseFirestore firestoreService = FirebaseFirestore.instance;
+  final FirestoreService _firestoreService = locator<FirestoreService>();
 
   Future<List<AssetModel>> getAllAssets(String uid) async {
     final List<AssetModel> allAssets = [];
@@ -187,6 +191,8 @@ class AssetViewModel extends GetxController {
   RxDouble totalDeliveryValue = 0.0.obs;
   //상금 히스토리 더보기 화면 전 최대 보여줄 갯수
   int maxHistoryVisibleNum = 3;
+  String checkNameUrl = "";
+  RxString checkNameExists = "0".obs;
 
   @override
   void onInit() async {
@@ -206,6 +212,8 @@ class AssetViewModel extends GetxController {
     // allAssets = await getAllAssets('kakao:1513684681');
     allAssets = await getAllAssets(userModelRx.value!.uid);
 
+    checkNameUrl = await _firestoreService.checkNameUrl();
+    checkNameExists.bindStream(_firestoreService.getNameCheckResult(userModelRx.value!.uid));
     update(['assets']);
 
     calcHoldingStocksAndYachtPoint();

@@ -127,6 +127,20 @@ class FirestoreService extends GetxService {
     });
   }
 
+  Stream<String> getNameCheckResult(uid) {
+    return _firestoreService.collection('checkName').doc(uid).snapshots().map((snapshot) {
+      if (snapshot.data() == null || snapshot.data()!['return'] == null) {
+        print("GETNAME STREAM" + snapshot.data().toString());
+        return "0";
+      }
+      return snapshot.data()!['return'];
+    });
+  }
+
+  Future<String> checkNameUrl() async {
+    return _firestoreService.collection('admin').doc('adminPost').get().then((value) => value.data()!['checkNameUrl']);
+  }
+
   // uid로 유저 데이터 있는지 체크하기
   Future<bool> checkIfUserDocumentExists(String uid) async {
     return await _firestoreService
@@ -607,7 +621,12 @@ class FirestoreService extends GetxService {
   Future<List<LastSubLeagueModel>> getAllLastSubLeague() async {
     final List<LastSubLeagueModel> allLastSubLeagues = [];
 
-    await _firestoreService.collection('lastSubLeagues').get().then((value) {
+    await _firestoreService
+        .collection('lastSubLeagues')
+        .orderBy('leagueUid', descending: true)
+        .orderBy('subLeagueUid')
+        .get()
+        .then((value) {
       value.docs.forEach((element) {
         allLastSubLeagues
             .add(LastSubLeagueModel.fromMap(element.data(), element.id));
@@ -1214,6 +1233,10 @@ class FirestoreService extends GetxService {
         .delete()
         .then((value) => print("user delete"))
         .catchError((error) => print("Failed to delete user: $error"));
+
+    await _firestoreService.collection('posts').doc(postId).update({
+      'commentedBy': FieldValue.arrayRemove([commentId])
+    });
   }
 
   // 코멘트 좋아요 버튼

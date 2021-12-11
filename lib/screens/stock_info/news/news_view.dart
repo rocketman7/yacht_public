@@ -6,13 +6,17 @@ import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/news_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/screens/stock_info/news/news_view_model.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/widgets/loading_container.dart';
 
+import '../../../locator.dart';
+
 class NewsView extends GetView<NewsViewModel> {
   final InvestAddressModel investAddressModel;
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   NewsView({
     required this.investAddressModel,
   });
@@ -69,6 +73,12 @@ class NewsView extends GetView<NewsViewModel> {
       children: [
         GestureDetector(
           onTap: () {
+            _mixpanelService.mixpanel.track('Corporate News', properties: {
+              'Corporate News Corp. Name': controller.corporationName.value,
+              'Corporate News Title': controller.newsList[index].title,
+              'Corporate News Url': controller.newsList[index].newsUrl,
+              'Corporate News DateTime': controller.newsList[index].dateTime.toDate().toIso8601String(),
+            });
             Get.to(() => NewsWebView(
                   news: controller.newsList[index],
                   // url: controller.newsList[index].newsUrl,

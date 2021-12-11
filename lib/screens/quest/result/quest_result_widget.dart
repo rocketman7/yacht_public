@@ -31,7 +31,16 @@ class QuestResultWidget extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        _mixpanelService.mixpanel.track('home-QuestResult-ResultDialog');
+        _mixpanelService.mixpanel.track('Quest Result', properties: {
+          'Result Quest ID': questModel.questId,
+          'Result League ID': questModel.leagueId,
+          'Result Quest Title': questModel.title,
+          'Result Quest Category': questModel.category,
+          'Result Quest Select Mode': questModel.selectMode,
+          'Result Quest Item Used': questModel.itemNeeded,
+          'Result Quest Yacht Point Success Reward': questModel.yachtPointSuccessReward,
+          'Result Quest League Point Success Reward': questModel.leaguePointSuccessReward,
+        });
         showDialog(
             context: context,
             builder: (context) => ResultDialog(
@@ -76,18 +85,14 @@ class QuestResultWidget extends StatelessWidget {
                   //   ),
                   // ),
                   SizedBox(
-                    height: correctHeight(
-                        7.w, sectionTitle.fontSize, questTimerStyle.fontSize),
+                    height: correctHeight(7.w, sectionTitle.fontSize, questTimerStyle.fontSize),
                   ),
                   Text(
-                    timeStampToStringWithHourMinute(
-                            questModel.liveEndDateTime) +
-                        " 마감", // temp
+                    timeStampToStringWithHourMinute(questModel.liveEndDateTime) + " 마감", // temp
                     style: questTimerStyle.copyWith(color: yachtGrey),
                   ),
                   SizedBox(
-                    height: correctHeight(10.w, questTimerStyle.fontSize,
-                        questRewardTextStyle.fontSize),
+                    height: correctHeight(10.w, questTimerStyle.fontSize, questRewardTextStyle.fontSize),
                   ),
                   Row(
                     children: [
@@ -100,8 +105,7 @@ class QuestResultWidget extends StatelessWidget {
                       Text(
                         '${questModel.counts}',
                         // '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
-                        style: questRewardAmoutStyle.copyWith(
-                            fontSize: captionSize),
+                        style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
                       )
                     ],
                   ),
@@ -113,9 +117,8 @@ class QuestResultWidget extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                     color: yachtViolet,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(12.w),
-                        bottomRight: Radius.circular(12.w))),
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(12.w), bottomRight: Radius.circular(12.w))),
                 child: Center(
                   child: Text(
                     "결과 확인",
@@ -236,9 +239,7 @@ class _ResultDialogState extends State<ResultDialog> {
                                 widget.questModel.category,
                                 style: questTerm,
                               ),
-                              SizedBox(
-                                  height: correctHeight(8.w, questTerm.fontSize,
-                                      questTitle.fontSize)),
+                              SizedBox(height: correctHeight(8.w, questTerm.fontSize, questTitle.fontSize)),
                               Text(
                                 '${widget.questModel.title}',
                                 style: questTitle,
@@ -252,12 +253,9 @@ class _ResultDialogState extends State<ResultDialog> {
                         Image.asset(
                           questResultViewModel.thisUserQuestModel.value == null
                               ? 'assets/icons/quest_not_joined.png'
-                              : questResultViewModel.thisUserQuestModel.value!
-                                          .hasSucceeded ==
-                                      null
+                              : questResultViewModel.thisUserQuestModel.value!.hasSucceeded == null
                                   ? 'assets/icons/quest_waiting.png'
-                                  : !questResultViewModel.thisUserQuestModel
-                                          .value!.hasSucceeded!
+                                  : !questResultViewModel.thisUserQuestModel.value!.hasSucceeded!
                                       ? 'assets/icons/quest_failed.png'
                                       : 'assets/icons/quest_success.png',
                           width: 72.w,
@@ -287,188 +285,159 @@ class _ResultDialogState extends State<ResultDialog> {
                                 )
                               : Text(
                                   questResultViewModel.showUserSelection(
-                                      questResultViewModel
-                                          .thisUserQuestModel.value!,
-                                      widget.questModel),
+                                      questResultViewModel.thisUserQuestModel.value!, widget.questModel),
                                   style: questTitle.copyWith(
-                                      fontSize: widget.questModel.selectMode ==
-                                              "order"
-                                          ? 18.w
-                                          : 24.w),
+                                      fontSize: widget.questModel.selectMode == "order" ? 18.w : 24.w),
                                 ),
                           SizedBox(height: 14.w),
-                          Text("결과",
-                              style: questTerm.copyWith(color: yachtViolet)),
+                          Text("결과", style: questTerm.copyWith(color: yachtViolet)),
                           Text(
                             widget.questModel.showResults(),
-                            style: questTitle.copyWith(
-                                fontSize: 24.w, color: yachtViolet),
+                            style: questTitle.copyWith(fontSize: 24.w, color: yachtViolet),
                           )
                         ],
                       ),
                     ),
-                    SizedBox(
-                        height: reducedPaddingWhenTextIsBelow(
-                            30.w, smallSubtitleTextStyle.fontSize!)),
+                    SizedBox(height: reducedPaddingWhenTextIsBelow(30.w, smallSubtitleTextStyle.fontSize!)),
                     Obx(
-                      () =>
-                          questResultViewModel.thisUserQuestModel.value != null
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                      flex: 96,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                              width: double.infinity,
-                                              height: 39.w,
-                                              color: buttonNormal,
-                                              child: Center(
-                                                child: Text(
-                                                  "퀘스트 보상",
-                                                  style: questResultRewardTitle,
-                                                ),
-                                              )),
-                                          Container(
-                                              width: double.infinity,
-                                              height: 39.w,
-                                              // color: buttonNormal,
-                                              child: Center(
-                                                child: Text(
-                                                  "참여 보상",
-                                                  style: questResultRewardTitle
-                                                      .copyWith(
-                                                    fontFamily: krFont,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              )),
-                                          Container(
-                                              width: double.infinity,
-                                              height: 39.w,
-                                              // color: buttonNormal,
-                                              child: Center(
-                                                child: Text(
-                                                  "성공 보상",
-                                                  style: questResultRewardTitle
-                                                      .copyWith(
-                                                    fontFamily: krFont,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 2.w,
-                                    ),
-                                    Flexible(
-                                      flex: 109,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            width: double.infinity,
-                                            height: 39.w,
-                                            color: yachtYellowBackGround,
-                                            child: SvgPicture.asset(
-                                              'assets/icons/league_point.svg',
-                                              width: 27.w,
-                                              height: 27.w,
+                      () => questResultViewModel.thisUserQuestModel.value != null
+                          ? Row(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  flex: 96,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "퀘스트 보상",
+                                              style: questResultRewardTitle,
                                             ),
-                                          ),
-                                          Container(
-                                              width: double.infinity,
-                                              height: 39.w,
-                                              // color: buttonNormal,
-                                              child: Center(
-                                                child: Text(
-                                                  "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.leaguePointParticipationRewarded ?? "-"}",
-                                                  style: questResultRewardTitle
-                                                      .copyWith(
-                                                          fontFamily: krFont,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: yachtYellow),
-                                                ),
-                                              )),
-                                          Container(
-                                              width: double.infinity,
-                                              height: 39.w,
-                                              // color: buttonNormal,
-                                              child: Center(
-                                                child: Text(
-                                                  "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.leaguePointSuccessRewarded ?? "-"}",
-                                                  style: questResultRewardTitle
-                                                      .copyWith(
-                                                          fontFamily: krFont,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: yachtYellow),
-                                                ),
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 2.w,
-                                    ),
-                                    Flexible(
-                                      flex: 109,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            color: yachtGreenBackGround,
-                                            width: double.infinity,
-                                            height: 39.w,
-                                            child: Image.asset(
-                                              'assets/icons/yacht_point_circle.png',
-                                              width: 27.w,
-                                              height: 27.w,
+                                          )),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "참여 보상",
+                                              style: questResultRewardTitle.copyWith(
+                                                fontFamily: krFont,
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
-                                          ),
-                                          Container(
-                                              width: double.infinity,
-                                              height: 39.w,
-                                              // color: buttonNormal,
-                                              child: Center(
-                                                child: Text(
-                                                  "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.yachtPointParticipationRewarded ?? "-"}",
-                                                  style: questResultRewardTitle
-                                                      .copyWith(
-                                                          fontFamily: krFont,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: yachtGreen),
-                                                ),
-                                              )),
-                                          Container(
-                                              width: double.infinity,
-                                              height: 39.w,
-                                              // color: buttonNormal,
-                                              child: Center(
-                                                child: Text(
-                                                  "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.yachtPointSuccessRewarded ?? "-"}",
-                                                  style: questResultRewardTitle
-                                                      .copyWith(
-                                                          fontFamily: krFont,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: yachtGreen),
-                                                ),
-                                              )),
-                                        ],
+                                          )),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "성공 보상",
+                                              style: questResultRewardTitle.copyWith(
+                                                fontFamily: krFont,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Flexible(
+                                  flex: 109,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        height: 39.w,
+                                        color: yachtYellowBackGround,
+                                        child: SvgPicture.asset(
+                                          'assets/icons/league_point.svg',
+                                          width: 27.w,
+                                          height: 27.w,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              : Container(),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.leaguePointParticipationRewarded ?? "-"}",
+                                              style: questResultRewardTitle.copyWith(
+                                                  fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtYellow),
+                                            ),
+                                          )),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.leaguePointSuccessRewarded ?? "-"}",
+                                              style: questResultRewardTitle.copyWith(
+                                                  fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtYellow),
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 2.w,
+                                ),
+                                Flexible(
+                                  flex: 109,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        color: yachtGreenBackGround,
+                                        width: double.infinity,
+                                        height: 39.w,
+                                        child: Image.asset(
+                                          'assets/icons/yacht_point_circle.png',
+                                          width: 27.w,
+                                          height: 27.w,
+                                        ),
+                                      ),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.yachtPointParticipationRewarded ?? "-"}",
+                                              style: questResultRewardTitle.copyWith(
+                                                  fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtGreen),
+                                            ),
+                                          )),
+                                      Container(
+                                          width: double.infinity,
+                                          height: 39.w,
+                                          // color: buttonNormal,
+                                          child: Center(
+                                            child: Text(
+                                              "${questResultViewModel.thisUserQuestModel.value == null ? 0 : questResultViewModel.thisUserQuestModel.value!.yachtPointSuccessRewarded ?? "-"}",
+                                              style: questResultRewardTitle.copyWith(
+                                                  fontFamily: krFont, fontWeight: FontWeight.w500, color: yachtGreen),
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
                     ),
                     SizedBox(
-                      height: reducedPaddingWhenTextIsBothSide(
-                          20.w, smallSubtitleTextStyle.fontSize!, 0),
+                      height: reducedPaddingWhenTextIsBothSide(20.w, smallSubtitleTextStyle.fontSize!, 0),
                     ),
                     Column(
                       children: [
@@ -515,28 +484,21 @@ class _ResultDialogState extends State<ResultDialog> {
                         // SizedBox(
                         //   height: 14.w,
                         // ),
-                        Obx(() => questResultViewModel
-                                    .thisUserQuestModel.value !=
-                                null
+                        Obx(() => questResultViewModel.thisUserQuestModel.value != null
                             ? Column(
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       simpleTierRRectBox(
-                                          exp: widget.otherUserExp ??
-                                              userModelRx.value!.exp,
+                                          exp: widget.otherUserExp ?? userModelRx.value!.exp,
                                           fontSize: 14.w,
                                           width: 104.w),
                                       Obx(
-                                        () => questResultViewModel
-                                                    .thisUserQuestModel.value !=
-                                                null
+                                        () => questResultViewModel.thisUserQuestModel.value != null
                                             ? Text(
                                                 '경험치 보상 +${(questResultViewModel.thisUserQuestModel.value!.expSuccessRewarded ?? 0) + (questResultViewModel.thisUserQuestModel.value!.expParticipationRewarded ?? 0)}',
-                                                style: questRewardTextStyle
-                                                    .copyWith(
+                                                style: questRewardTextStyle.copyWith(
                                                   fontWeight: FontWeight.w500,
                                                   color: yachtDarkGrey,
                                                 ),
@@ -573,9 +535,7 @@ class _ResultDialogState extends State<ResultDialog> {
                                     ],
                                   ),
                                   SizedBox(height: 6.w),
-                                  Obx(() => questResultViewModel
-                                              .thisUserQuestModel.value !=
-                                          null
+                                  Obx(() => questResultViewModel.thisUserQuestModel.value != null
                                       ? Stack(
                                           alignment: Alignment.center,
                                           children: [
@@ -583,8 +543,7 @@ class _ResultDialogState extends State<ResultDialog> {
                                               height: 14.w,
                                               width: double.infinity,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20.w),
+                                                borderRadius: BorderRadius.circular(20.w),
                                                 color: yachtLine,
                                               ),
                                             ),
@@ -593,28 +552,20 @@ class _ResultDialogState extends State<ResultDialog> {
                                               child: Row(
                                                 children: [
                                                   Flexible(
-                                                    flex: questResultViewModel
-                                                        .expBarAfterReward
-                                                        .value,
+                                                    flex: questResultViewModel.expBarAfterReward.value,
                                                     child: AnimatedContainer(
-                                                      duration:
-                                                          Duration(seconds: 1),
+                                                      duration: Duration(seconds: 1),
                                                       width: double.infinity,
                                                       height: 12.w,
                                                       decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20.w),
+                                                        borderRadius: BorderRadius.circular(20.w),
                                                         color: yachtDarkGrey,
                                                       ),
                                                     ),
                                                   ),
                                                   Flexible(
-                                                      flex: questResultViewModel
-                                                              .expBarEnd.value -
-                                                          questResultViewModel
-                                                              .expBarAfterReward
-                                                              .value,
+                                                      flex: questResultViewModel.expBarEnd.value -
+                                                          questResultViewModel.expBarAfterReward.value,
                                                       child: Container(
                                                         width: double.infinity,
                                                         height: 12.w,
@@ -627,26 +578,19 @@ class _ResultDialogState extends State<ResultDialog> {
                                               child: Row(
                                                 children: [
                                                   Flexible(
-                                                    flex: questResultViewModel
-                                                        .expBarBeforeReward
-                                                        .value,
+                                                    flex: questResultViewModel.expBarBeforeReward.value,
                                                     child: Container(
                                                       width: double.infinity,
                                                       height: 12.w,
                                                       decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20.w),
+                                                        borderRadius: BorderRadius.circular(20.w),
                                                         color: white,
                                                       ),
                                                     ),
                                                   ),
                                                   Flexible(
-                                                      flex: questResultViewModel
-                                                              .expBarEnd.value -
-                                                          questResultViewModel
-                                                              .expBarBeforeReward
-                                                              .value,
+                                                      flex: questResultViewModel.expBarEnd.value -
+                                                          questResultViewModel.expBarBeforeReward.value,
                                                       child: Container(
                                                         width: double.infinity,
                                                         height: 12.w,

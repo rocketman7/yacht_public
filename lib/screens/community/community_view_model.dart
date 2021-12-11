@@ -11,11 +11,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:yachtOne/models/community/comment_model.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/services/adManager_service.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
-
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../locator.dart';
 
 class CommunityViewModel extends GetxController {
@@ -36,15 +37,25 @@ class CommunityViewModel extends GetxController {
 
   RxBool isUploadingNewPost = false.obs;
   RxDouble offset = 0.0.obs;
+  RefreshController refreshController = RefreshController();
 
-  final RefreshController refreshController = RefreshController(initialRefresh: false);
+//    final NativeAd myNative = NativeAd(
+//   adUnitId: AdManager.nativeAdUnitId,
+//   factoryId: 'adFactoryExample',
+//   request: AdRequest(),
+//   listener: NativeAdListener(),
+// );
+
+  RxBool isAdLoaded = false.obs;
   @override
   void onInit() async {
+    refreshController = RefreshController(initialRefreshStatus: RefreshStatus.idle);
+    scrollController = ScrollController(initialScrollOffset: 0);
     print('community view model oninit');
     // TODO: implement onInit
     await getNotice();
     await getPost();
-    print('recentNotice $recentNotice');
+    // print('recentNotice $recentNotice');
 
     // print('get post done');
     // await monitorScroll();
@@ -61,13 +72,21 @@ class CommunityViewModel extends GetxController {
       }
     });
 
+    // _createNativeAd();
+
     super.onInit();
   }
 
   @override
   void onClose() {
     scrollController.dispose();
+    refreshController.dispose();
+    super.onClose();
   }
+
+  // _createNativeAd() {
+  //   NativeAd
+  // }
 
   Future getNotice() async {
     var notice = await _firestoreService.getNotice();

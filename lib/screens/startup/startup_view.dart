@@ -18,6 +18,7 @@ import 'package:yachtOne/screens/insight/insight_view_model.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/profile/profile_my_view_model.dart';
+import 'package:yachtOne/screens/quest/live/live_quest_view_model.dart';
 import 'package:yachtOne/screens/ranks/rank_controller.dart';
 import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
@@ -30,6 +31,7 @@ class StartupView extends GetView<StartupViewModel> {
   CommunityViewModel communityViewModel = Get.put(CommunityViewModel());
   InsightViewModel insightViewModel = Get.put(InsightViewModel());
   ProfileMyViewModel profileViewModel = Get.put(ProfileMyViewModel());
+  // LiveQuestViewModel liveQuestViewModel = Get.put(LiveQuestViewModel());
 
   final double iconSize = 38.w;
   final double unselectedOpacity = 1;
@@ -61,6 +63,12 @@ class StartupView extends GetView<StartupViewModel> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> mixpanelBottomBarTrackList = [
+      "Home",
+      "Yacht Insight",
+      "Community",
+      "My Page",
+    ];
     RxList<Widget> pageList = [
       HomeView(),
       InsightView(),
@@ -172,6 +180,13 @@ class StartupView extends GetView<StartupViewModel> {
                       );
                       // HomeView().goToTop();
                     } else {
+                      // _mixpanelService.mixpanel.track('${pageList[controller.selectedPage.value]} timeEvent');
+                      // _mixpanelService.mixpanel.timeEvent('${pageList[index].toString()} timeEvent');
+                      // _mixpanelService.mixpanel.flush();
+
+                      _mixpanelService.mixpanel.track(mixpanelBottomBarTrackList[index], properties: {
+                        "Previous Bottom Tab": mixpanelBottomBarTrackList[controller.selectedPage.value],
+                      });
                       controller.selectedPage(index);
                     }
                   },

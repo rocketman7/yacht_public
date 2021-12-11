@@ -27,7 +27,8 @@ class StartupViewModel extends GetxController {
     // get league Address
     _mixpanelService.mixpanel.track('Home-enter');
     _mixpanelService.mixpanel.timeEvent('Home');
-    _mixpanelService.mixpanel.flush();
+
+    // _mixpanelService.mixpanel.flush();
     _pushNotificationService.initialise();
     super.onInit();
   }

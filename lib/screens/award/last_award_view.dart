@@ -4,16 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import '../../handlers/numbers_handler.dart' as NumbersHandler;
 
+import '../../locator.dart';
 import '../../styles/yacht_design_system.dart';
 import 'last_award_detail_view.dart';
 import 'last_award_view_model.dart';
 
 class LastAwardView extends StatelessWidget {
   final LastAwardViewModel _lastAwardViewModel = Get.put(LastAwardViewModel());
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +54,11 @@ class LastAwardView extends StatelessWidget {
                                   padding: EdgeInsets.only(left: 14.w, right: 14.w),
                                   child: GestureDetector(
                                     onTap: () {
+                                      _mixpanelService.mixpanel.track('Previous League Detail', properties: {
+                                        'Previous League ID': '${controller.orderLastSubLeagues[i].leagueName}',
+                                        'Previous League Name': '${controller.orderLastSubLeagues[i].leagueUid}',
+                                        'Previous Sub League ID': '${controller.orderLastSubLeagues[i].subLeagueUid}',
+                                      });
                                       Get.to(
                                           () => LastAwardDetailView(lastSubLeague: controller.orderLastSubLeagues[i]));
                                     },

@@ -29,7 +29,9 @@ class RankHomeWidget extends StatelessWidget {
               Spacer(),
               GestureDetector(
                   onTap: () {
-                    _mixpanelService.mixpanel.track('home-RankHome-AllRankerView');
+                    _mixpanelService.mixpanel.track('League Ranking', properties: {
+                      'Sub League Index': 0,
+                    });
                     Get.to(() => AllRankerView(
                           leagueIndex: 0,
                         ));
@@ -210,8 +212,14 @@ class RankShareView extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {
                                   if (rankController.allRanker[leagueIndex][i].uid != userModelRx.value!.uid) {
-                                    _mixpanelService.mixpanel.track('home-RankHome-ProfileOthers',
-                                        properties: {'otherUid': rankController.allRanker[leagueIndex][i].uid});
+                                    _mixpanelService.mixpanel.track(
+                                      'Profile From Ranking',
+                                      properties: {
+                                        'Profile UID': rankController.allRanker[leagueIndex][i].uid,
+                                        'Profile Name': rankController.allRanker[leagueIndex][i].userName,
+                                        'Profile Current Rank': rankController.allRanker[leagueIndex][i].todayRank,
+                                      },
+                                    );
                                     Get.to(() => ProfileOthersView(uid: rankController.allRanker[leagueIndex][i].uid));
                                   } else {
                                     // Get.to(() => ProfileMyView());

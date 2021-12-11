@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -80,8 +81,14 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                   ? Container()
                                   : GestureDetector(
                                       onTap: () {
-                                        if (post.writerUid != userModelRx.value!.uid)
+                                        if (post.writerUid != userModelRx.value!.uid) {
+                                          _mixpanelService.mixpanel.track('Profile From Feed', properties: {
+                                            'Feed Profile Name': post.writerUserName,
+                                            'Feed Profile UID': post.writerUid,
+                                            'Feed Post ID': post.postId,
+                                          });
                                           Get.to(() => ProfileOthersView(uid: post.writerUid));
+                                        }
                                         // else
                                         // Get.to(() => ProfileMyView());
                                       },
@@ -512,8 +519,31 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                                             borderRadius: BorderRadius.circular(5.w),
                                                             child: InkWell(
                                                               onTap: () {
-                                                                Get.dialog(buildPhotoPageView(
-                                                                    index, imageUrls, detailPostViewModel));
+                                                                _mixpanelService.mixpanel
+                                                                    .track('Image From Post', properties: {
+                                                                  'Image From Post ID': post.postId,
+                                                                  'Image From Post Write DateTime':
+                                                                      post.writtenDateTime.toDate().toIso8601String(),
+                                                                  'Image From Post Edit DateTime': post
+                                                                              .editedDateTime ==
+                                                                          null
+                                                                      ? post.writtenDateTime.toDate().toIso8601String()
+                                                                      : post.editedDateTime.toDate().toIso8601String(),
+                                                                  'Image From Post Title': post.title ?? "",
+                                                                  'Image From Is Pro Post': post.isPro,
+                                                                  'Image From Is Notice': post.isNotice,
+                                                                  'Image From Post Writer Uid': post.writerUid,
+                                                                  'Image From Post Writer User Name':
+                                                                      post.writerUserName,
+                                                                  'Image From Post Writer Exp': post.writerExp,
+                                                                  'Image From Page': "Post Detail",
+                                                                });
+                                                                showDialog(
+                                                                    context: context,
+                                                                    builder: (context) =>
+                                                                        buildPhotoPageView(context, index, imageUrls));
+                                                                // Get.dialog(buildPhotoPageView(
+                                                                //     index, imageUrls, detailPostViewModel));
                                                               },
                                                               child: CachedNetworkImage(
                                                                 imageUrl:
@@ -582,6 +612,10 @@ class DetailPostView extends GetView<DetailPostViewModel> {
                                               Flexible(
                                                 child: GestureDetector(
                                                   onTap: () async {
+                                                    _mixpanelService.mixpanel.track('Post Like', properties: {
+                                                      'Like Post ID': post.postId,
+                                                      'Like Post From Page': "Post Detail"
+                                                    });
                                                     HapticFeedback.lightImpact();
                                                     await detailPostViewModel.toggleLikeComment(post);
                                                     await detailPostViewModel.getThisPost(post);
@@ -1063,66 +1097,172 @@ class DetailPostView extends GetView<DetailPostViewModel> {
     );
   }
 
-  Dialog buildPhotoPageView(int index, List<String> imageUrls, DetailPostViewModel detailPostViewModel) {
+  Dialog buildPhotoPageView(BuildContext context, int index, List<String> imageUrls) {
     return Dialog(
       backgroundColor: Colors.transparent,
       clipBehavior: Clip.hardEdge,
       insetPadding: EdgeInsets.symmetric(horizontal: 0),
-      child: Row(
-        children: [
-          Container(
-            width: ScreenUtil().screenWidth * .12,
-            height: 200,
-            // width: 20,
-          ),
-          Expanded(
-            child: Container(
-              // padding: EdgeInsets.symmetric(horizontal: 10.w),
-              // width: double.infinity,
-              child: ExpandablePageView.builder(
-                controller: PageController(initialPage: index),
-                itemCount: post.imageUrlList!.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: (imageUrls[index] == "")
-                        ?
-                        // image주소 로딩못했을 때만 퓨쳐빌더로
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(14.w),
-                            child: Container(
-                              width: ScreenUtil().screenWidth * .75,
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${detailPostViewModel.post.imageUrlList![index]}",
-                                fit: BoxFit.fitWidth,
-                              ),
-                            ),
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(14.w),
-                            child: Container(
-                              width: ScreenUtil().screenWidth * .75,
-                              child: CachedNetworkImage(
-                                imageUrl: imageUrls[index],
-                                fit: BoxFit.fitWidth,
-                              ),
-                            ),
-                          ),
-                  );
-                },
-              ),
+      child: Column(children: [
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            padding: EdgeInsets.all(14.w),
+            alignment: Alignment.topLeft,
+            // height: 100,
+            // color: Colors.white,
+            child: Image.asset(
+              'assets/icons/pic_close.png',
+              width: 24.w,
+              height: 24.w,
             ),
           ),
-          Container(
-            width: ScreenUtil().screenWidth * .12,
-            height: 200,
-            // width: 20,
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              // GestureDetector(
+              //   behavior: HitTestBehavior.opaque,
+              //   onTap: () {
+              //     Navigator.of(context).pop();
+              //   },
+              //   child: Container(
+              //     width: ScreenUtil().screenWidth * .10,
+              //     height: 200,
+              //     // width: 20,
+              //   ),
+              // ),
+              Expanded(
+                child: Container(
+                  // padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  // width: double.infinity,
+                  child: GestureDetector(
+                    onTap: () {
+                      print('tap');
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: ExtendedImageGesturePageView.builder(
+                        controller: ExtendedPageController(
+                          initialPage: index,
+                          viewportFraction: 1.0,
+                        ),
+                        itemCount: post.imageUrlList!.length,
+                        itemBuilder: (context, index) {
+                          return ClipRRect(
+                              borderRadius: BorderRadius.circular(14.w),
+                              child: ExtendedImage.network(
+                                "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
+                                fit: BoxFit.fitWidth,
+                                mode: ExtendedImageMode.gesture,
+                                shape: BoxShape.rectangle,
+                                clipBehavior: Clip.hardEdge,
+                                borderRadius: BorderRadius.circular(20.w),
+                                initGestureConfigHandler: (state) {
+                                  return GestureConfig(
+                                    minScale: 0.9,
+                                    animationMinScale: 0.7,
+                                    maxScale: 3.0,
+                                    animationMaxScale: 3.5,
+                                    speed: 1.0,
+                                    inertialSpeed: 100.0,
+                                    initialScale: 1.0,
+                                    inPageView: true,
+                                    initialAlignment: InitialAlignment.center,
+                                  );
+                                },
+                              ));
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              // GestureDetector(
+              //   behavior: HitTestBehavior.opaque,
+              //   onTap: () {
+              //     Navigator.of(context).pop();
+              //   },
+              //   child: Container(
+              //     width: ScreenUtil().screenWidth * .10,
+              //     height: 200,
+              //     // width: 20,
+              //   ),
+              // ),
+            ],
           ),
-        ],
-      ),
+        ),
+        Container(
+          height: 14.w,
+        ),
+      ]),
     );
   }
+
+  // Dialog buildPhotoPageView(int index, List<String> imageUrls, DetailPostViewModel detailPostViewModel) {
+  //   return Dialog(
+  //     backgroundColor: Colors.transparent,
+  //     clipBehavior: Clip.hardEdge,
+  //     insetPadding: EdgeInsets.symmetric(horizontal: 0),
+  //     child: Row(
+  //       children: [
+  //         Container(
+  //           width: ScreenUtil().screenWidth * .12,
+  //           height: 200,
+  //           // width: 20,
+  //         ),
+  //         Expanded(
+  //           child: Container(
+  //             // padding: EdgeInsets.symmetric(horizontal: 10.w),
+  //             // width: double.infinity,
+  //             child: ExpandablePageView.builder(
+  //               controller: PageController(initialPage: index),
+  //               itemCount: post.imageUrlList!.length,
+  //               itemBuilder: (context, index) {
+  //                 return Container(
+  //                   padding: EdgeInsets.symmetric(horizontal: 8.w),
+  //                   child: (imageUrls[index] == "")
+  //                       ?
+  //                       // image주소 로딩못했을 때만 퓨쳐빌더로
+  //                       ClipRRect(
+  //                           borderRadius: BorderRadius.circular(14.w),
+  //                           child: Container(
+  //                             width: ScreenUtil().screenWidth * .75,
+  //                             child: CachedNetworkImage(
+  //                               imageUrl:
+  //                                   "https://storage.googleapis.com/ggook-5fb08.appspot.com/${detailPostViewModel.post.imageUrlList![index]}",
+  //                               fit: BoxFit.fitWidth,
+  //                             ),
+  //                           ),
+  //                         )
+  //                       : ClipRRect(
+  //                           borderRadius: BorderRadius.circular(14.w),
+  //                           child: Container(
+  //                             width: ScreenUtil().screenWidth * .75,
+  //                             child: CachedNetworkImage(
+  //                               imageUrl: imageUrls[index],
+  //                               fit: BoxFit.fitWidth,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                 );
+  //               },
+  //             ),
+  //           ),
+  //         ),
+  //         Container(
+  //           width: ScreenUtil().screenWidth * .12,
+  //           height: 200,
+  //           // width: 20,
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 class CommentInput extends StatefulWidget {
@@ -1156,6 +1296,7 @@ class _CommentInputState extends State<CommentInput> {
   RxBool isFocused = false.obs;
 
   final renderManager = RenderParametersManager<dynamic>();
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   void initState() {
     // TODO: implement initState
@@ -1354,6 +1495,14 @@ class _CommentInputState extends State<CommentInput> {
                                         onTap: () async {
                                           if (commentFormKey.currentState!.validate() &&
                                               !widget.detailPostViewModel.isUploadingNewPost.value) {
+                                            _mixpanelService.mixpanel.track('Comment Upload', properties: {
+                                              'New Comment Writer Uid': userModelRx.value!.uid,
+                                              'New Comment Writer User Name': userModelRx.value!.userName,
+                                              'Post Uid To Comment': widget.post.postId,
+// 'Reply To UserName':,
+// 'Reply To Uid':,
+// 'Reply To Commnet Id':,
+                                            });
                                             HapticFeedback.lightImpact();
                                             widget.detailPostViewModel.isUploadingNewPost(true);
                                             await widget.detailPostViewModel

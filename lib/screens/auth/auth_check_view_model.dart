@@ -11,7 +11,7 @@ import 'package:yachtOne/repositories/user_repository.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
-import 'package:yachtOne/services/storage_service.dart';
+
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,7 +25,7 @@ class AuthCheckViewModel extends GetxController {
 
   UserRepository _userRepository = UserRepository();
   // User currentUser;
-  Rxn<User>? currentUser = Rxn<User>();
+  // Rxn<User>? currentUser = Rxn<User>();
   // RxBool isLoadingData = true.obs;
   User? user;
 
@@ -59,6 +59,16 @@ class AuthCheckViewModel extends GetxController {
     // print(holidayListKR);
   }
 
+  authCheck() async {
+    String uid = authService.auth.currentUser!.uid;
+    bool isUserModelExists = await _firestoreService.checkIfUserDocumentExists(uid);
+    if (!isUserModelExists) {
+      authService.auth.signOut();
+      // authService.auth.currentUser!.delete();
+      // print(authService.auth.currentUser!.uid);
+    }
+  }
+
   @override
   void onInit() async {
     await checkTime();
@@ -68,19 +78,20 @@ class AuthCheckViewModel extends GetxController {
 
     // isLoadingData(true);
 
-    user = authService.auth.currentUser;
-    // _mixpanelService.mixpanel.track(user!.uid);
+    currentUser(authService.auth.currentUser);
     tierSystemModelRx(await _firestoreService.getTierSystem());
-    currentUser!.bindStream(authService.auth.authStateChanges());
-
+    currentUser.bindStream(authService.auth.authStateChanges());
+    currentUser.refresh();
     // leagueRx.bindStream(_firestoreService.getOpenLeague());
     // authService.auth.signOut();
     update();
-    currentUser!.listen((user) async {
+    currentUser.listen((user) async {
       print('listening $user');
 
       if (user != null) {
         userModelRx.bindStream(_userRepository.getUserStream(user.uid));
+        userModelRx.refresh();
+        update();
         // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
         userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
         // leagueRx.listen((value) {

@@ -5,16 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/models/community/post_model.dart';
+import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/feed_widget.dart';
 import 'package:yachtOne/screens/community/notice_widget.dart';
+import 'package:yachtOne/services/adManager_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
+import '../../locator.dart';
 import 'community_view_model.dart';
 
 class CommunityView extends GetView<CommunityViewModel> {
@@ -174,7 +179,15 @@ class CommunityView extends GetView<CommunityViewModel> {
                                 return Column(
                                   children: [
                                     index == 0
-                                        ? Column(
+                                        ?
+
+                                        //  Obx(() =>
+
+                                        // _communityViewModel.isAdLoaded.value
+                                        //     ? androidAd()
+                                        //     : Container(child: Text("ad loading")))
+
+                                        Column(
                                             children: [
                                               SizedBox(
                                                 height: 20.w,
@@ -194,6 +207,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                                             ],
                                           )
                                         : Container(),
+                                    ((index + 1) % 6 == 2 && Platform.isAndroid) ? androidAd() : Container(),
                                     FeedWidget(
                                         communityViewModel: _communityViewModel,
                                         post: _communityViewModel.posts[index]),
@@ -245,6 +259,57 @@ class CommunityView extends GetView<CommunityViewModel> {
       ]),
     );
   }
+
+  Widget androidAd() {
+    RxBool isAdLoaded = false.obs;
+    NativeAd ad = NativeAd(
+      adUnitId: AdManager.nativeAdUnitId,
+      factoryId: 'listTile',
+      request: AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (_) {
+          // setState(() {
+          isAdLoaded(true);
+          // });
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
+
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    );
+
+    ad.load();
+    return StatefulBuilder(builder: (context, setState) {
+      return Column(
+        children: [
+          // SizedBox(
+          //   height: 20.w,
+          // ),
+          Container(
+            padding: moduleBoxPadding(feedDateTime.fontSize!),
+            decoration: primaryBoxDecoration.copyWith(
+              boxShadow: [primaryBoxShadow],
+              color: primaryBoxDecoration.color,
+            ),
+            child: Obx(
+              () => isAdLoaded.value
+                  ? AdWidget(
+                      ad: ad,
+                    )
+                  : Container(),
+            ),
+            height: 80.w,
+          ),
+          SizedBox(
+            height: 12.w,
+          ),
+        ],
+      );
+    });
+  }
 }
 
 class WritingNewPost extends StatelessWidget {
@@ -257,6 +322,7 @@ class WritingNewPost extends StatelessWidget {
   final GlobalKey<FormState> _contentFormKey = GlobalKey<FormState>();
   final _contentController = TextEditingController();
   final CommunityViewModel _communityViewModel;
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
 
   @override
   Widget build(BuildContext context) {
@@ -302,6 +368,10 @@ class WritingNewPost extends StatelessWidget {
                             onTap: () async {
                               if (_contentFormKey.currentState!.validate() &&
                                   !_communityViewModel.isUploadingNewPost.value) {
+                                _mixpanelService.mixpanel.track('Post Upload', properties: {
+                                  'New Post Writer Uid': userModelRx.value!.uid,
+                                  'New Post Writer User Name': userModelRx.value!.userName,
+                                });
                                 HapticFeedback.lightImpact();
                                 _communityViewModel.isUploadingNewPost(true);
                                 await _communityViewModel.uploadPost(_contentController.value.text);
@@ -399,7 +469,9 @@ class WritingNewPost extends StatelessWidget {
                                             top: 10.w,
                                             right: 10.w,
                                             child: InkWell(
-                                                onTap: () => _communityViewModel.images!.removeAt(index),
+                                                onTap: () {
+                                                  _communityViewModel.images!.removeAt(index);
+                                                },
                                                 child: Container(
                                                   height: 20.w,
                                                   width: 20.w,

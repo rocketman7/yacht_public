@@ -46,8 +46,14 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
                                 : Container(),
                             InkWell(
                               onTap: () {
-                                _mixpanelService.mixpanel.track('home-YachtMagazine-YachtMagazineWebView',
-                                    properties: {'magazineTitle': controller.readingContents[index].title});
+                                _mixpanelService.mixpanel.track('Yacht Magazine', properties: {
+                                  'Magazine Title': controller.readingContents[index].title,
+                                  'Magazine Category': controller.readingContents[index].category,
+                                  'Magazine Content Url': controller.readingContents[index].contentUrl,
+                                  'Magazine Thumbnail Url': controller.readingContents[index].thumbnailUrl,
+                                  'Magazine Update DateTime':
+                                      controller.readingContents[index].updateDateTime.toDate().toIso8601String(),
+                                });
                                 Get.to(() => ReadingContentWebView(readingContent: controller.readingContents[index]));
                                 // await controller.launchUrl(controller.readingContents[index].contentUrl);
                               },

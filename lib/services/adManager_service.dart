@@ -30,12 +30,10 @@ class AdManager {
   static String get nativeAdUnitId {
     if (Platform.isAndroid) {
       return "ca-app-pub-3726614606720353/3671140756";
-      // 아래 testId로 먼저.
-      // return "ca-app-pub-3940256099942544/2247696110";
+      // return "ca-app-pub-3940256099942544/2247696110" // test id
     } else if (Platform.isIOS) {
       return "ca-app-pub-3726614606720353/2848820155";
-      // 아래 testId로 먼저.
-      // return "ca-app-pub-3940256099942544/3986624511";
+      // return "ca-app-pub-3940256099942544/3986624511"; test id
     } else {
       throw new UnsupportedError("Unsupported platform");
     }
