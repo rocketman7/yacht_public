@@ -1129,6 +1129,10 @@ class FirestoreService extends GetxService {
         .delete()
         .then((value) => print("user delete"))
         .catchError((error) => print("Failed to delete user: $error"));
+
+    await _firestoreService.collection('posts').doc(postId).update({
+      'commentedBy': FieldValue.arrayRemove([commentId])
+    });
   }
 
   // 코멘트 좋아요 버튼

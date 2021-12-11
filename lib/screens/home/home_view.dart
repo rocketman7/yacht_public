@@ -105,6 +105,9 @@ class HomeView extends StatelessWidget {
       QuestResultsView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       RankHomeWidget(),
+      // SvgPicture.asset(
+      //   'assets/badges/svg.svg',
+      // ),
       SizedBox(height: 100.w),
       // ReadingContentView(homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
       // SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
