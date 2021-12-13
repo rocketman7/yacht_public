@@ -179,15 +179,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                                 return Column(
                                   children: [
                                     index == 0
-                                        ?
-
-                                        //  Obx(() =>
-
-                                        // _communityViewModel.isAdLoaded.value
-                                        //     ? androidAd()
-                                        //     : Container(child: Text("ad loading")))
-
-                                        Column(
+                                        ? Column(
                                             children: [
                                               SizedBox(
                                                 height: 20.w,
@@ -207,7 +199,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                                             ],
                                           )
                                         : Container(),
-                                    ((index + 1) % 6 == 2 && Platform.isAndroid) ? androidAd() : Container(),
+                                    ((index + 1) % 6 == 2) ? communityAd() : Container(),
                                     FeedWidget(
                                         communityViewModel: _communityViewModel,
                                         post: _communityViewModel.posts[index]),
@@ -260,7 +252,7 @@ class CommunityView extends GetView<CommunityViewModel> {
     );
   }
 
-  Widget androidAd() {
+  Widget communityAd() {
     RxBool isAdLoaded = false.obs;
     NativeAd ad = NativeAd(
       adUnitId: AdManager.nativeAdUnitId,
@@ -283,30 +275,31 @@ class CommunityView extends GetView<CommunityViewModel> {
 
     ad.load();
     return StatefulBuilder(builder: (context, setState) {
-      return Column(
-        children: [
-          // SizedBox(
-          //   height: 20.w,
-          // ),
-          Container(
-            padding: moduleBoxPadding(feedDateTime.fontSize!),
-            decoration: primaryBoxDecoration.copyWith(
-              boxShadow: [primaryBoxShadow],
-              color: primaryBoxDecoration.color,
-            ),
-            child: Obx(
-              () => isAdLoaded.value
-                  ? AdWidget(
+      return Obx(
+        () => isAdLoaded.value
+            ? Column(
+                children: [
+                  // SizedBox(
+                  //   height: 20.w,
+                  // ),
+                  Container(
+                    padding: moduleBoxPadding(feedDateTime.fontSize!),
+                    decoration: primaryBoxDecoration.copyWith(
+                      boxShadow: [primaryBoxShadow],
+                      color: primaryBoxDecoration.color,
+                    ),
+                    height: Platform.isAndroid ? 80.w : 110.w,
+                    child: AdWidget(
                       ad: ad,
-                    )
-                  : Container(),
-            ),
-            height: 80.w,
-          ),
-          SizedBox(
-            height: 12.w,
-          ),
-        ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 12.w,
+                  ),
+                ],
+              )
+            : Container(),
       );
     });
   }

@@ -34,41 +34,6 @@ class AuthCheckViewModel extends GetxController {
   bool isUrgentNotice = false;
   String urgentMessage = "";
 
-  Future checkTime() async {
-    DateTime serverNowUtc = await NTP.now();
-    DateTime deviceNowUtc = DateTime.now().toUtc();
-
-    if (serverNowUtc.difference(deviceNowUtc).abs() > Duration(minutes: 5)) {
-      Get.dialog(
-        Dialog(child: Text("기기의 시간을 임의로 변경하면 요트를 이용할 수 없습니다.")),
-        barrierDismissible: false,
-      );
-    }
-  }
-
-  Future getLeagueInfo() async {
-    leagueModel(await _firestoreService.getLeagueInfo());
-    // print(leagueModel.value);
-    // leagueRx('league002');
-    leagueRx(leagueModel.value!.openLeague);
-  }
-
-  Future getHolidayList() async {
-    holidayListKR.clear();
-    holidayListKR.addAll(await _firestoreService.getHolidayList());
-    // print(holidayListKR);
-  }
-
-  authCheck() async {
-    String uid = authService.auth.currentUser!.uid;
-    bool isUserModelExists = await _firestoreService.checkIfUserDocumentExists(uid);
-    if (!isUserModelExists) {
-      authService.auth.signOut();
-      // authService.auth.currentUser!.delete();
-      // print(authService.auth.currentUser!.uid);
-    }
-  }
-
   @override
   void onInit() async {
     await checkTime();
@@ -76,7 +41,7 @@ class AuthCheckViewModel extends GetxController {
     await getHolidayList();
     await checkVersion();
 
-    // isLoadingData(true);
+    print('oninit: ${authService.auth.currentUser}');
 
     currentUser(authService.auth.currentUser);
     tierSystemModelRx(await _firestoreService.getTierSystem());
@@ -127,11 +92,38 @@ class AuthCheckViewModel extends GetxController {
     super.onInit();
   }
 
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+  Future checkTime() async {
+    DateTime serverNowUtc = await NTP.now();
+    DateTime deviceNowUtc = DateTime.now().toUtc();
+
+    if (serverNowUtc.difference(deviceNowUtc).abs() > Duration(minutes: 5)) {
+      Get.dialog(
+        Dialog(child: Text("기기의 시간을 임의로 변경하면 요트를 이용할 수 없습니다.")),
+        barrierDismissible: false,
+      );
+    }
+  }
+
+  Future getLeagueInfo() async {
+    leagueModel(await _firestoreService.getLeagueInfo());
+    // print(leagueModel.value);
+    // leagueRx('league002');
+    leagueRx(leagueModel.value!.openLeague);
+  }
+
+  Future getHolidayList() async {
+    holidayListKR.clear();
+    holidayListKR.addAll(await _firestoreService.getHolidayList());
+    // print(holidayListKR);
+  }
+
+  authCheck() async {
+    String uid = authService.auth.currentUser!.uid;
+    bool isUserModelExists = await _firestoreService.checkIfUserDocumentExists(uid);
+    if (!isUserModelExists) {
+      authService.auth.signOut();
+      // authService.auth.currentUser!.delete();
+      // print(authService.auth.currentUser!.uid);
     }
   }
 
@@ -220,6 +212,14 @@ class AuthCheckViewModel extends GetxController {
             ),
           ),
           barrierDismissible: false);
+    }
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 }
