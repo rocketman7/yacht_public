@@ -199,7 +199,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                                             ],
                                           )
                                         : Container(),
-                                    ((index + 1) % 6 == 2) ? communityAd() : Container(),
+                                    ((index + 1) % 5 == 2) ? CommunityAd() : Container(),
                                     FeedWidget(
                                         communityViewModel: _communityViewModel,
                                         post: _communityViewModel.posts[index]),
@@ -254,6 +254,63 @@ class CommunityView extends GetView<CommunityViewModel> {
 
   Widget communityAd() {
     RxBool isAdLoaded = false.obs;
+    NativeAd ad = NativeAd(
+      adUnitId: AdManager.nativeAdUnitId,
+      factoryId: 'listTile',
+      request: AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (_) {
+          // setState(() {
+          isAdLoaded(true);
+          // });
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
+
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    );
+
+    ad.load();
+    return StatefulBuilder(builder: (context, setState) {
+      return Obx(
+        () => isAdLoaded.value
+            ? Column(
+                children: [
+                  // SizedBox(
+                  //   height: 20.w,
+                  // ),
+                  Container(
+                    padding: moduleBoxPadding(feedDateTime.fontSize!),
+                    decoration: primaryBoxDecoration.copyWith(
+                      boxShadow: [primaryBoxShadow],
+                      color: primaryBoxDecoration.color,
+                    ),
+                    height: Platform.isAndroid ? 80.w : 110.w,
+                    child: AdWidget(
+                      ad: ad,
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 12.w,
+                  ),
+                ],
+              )
+            : Container(),
+      );
+    });
+  }
+}
+
+class CommunityAd extends StatelessWidget {
+  CommunityAd({Key? key}) : super(key: key);
+  RxBool isAdLoaded = false.obs;
+
+  @override
+  Widget build(BuildContext context) {
     NativeAd ad = NativeAd(
       adUnitId: AdManager.nativeAdUnitId,
       factoryId: 'listTile',
