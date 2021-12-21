@@ -13,7 +13,6 @@ import '../../locator.dart';
 
 class StartupViewModel extends GetxController {
   AuthService _authService = locator<AuthService>();
-  PushNotificationService _pushNotificationService = locator<PushNotificationService>();
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   RxInt selectedPage = 0.obs;
   late User currentUser;
@@ -29,7 +28,6 @@ class StartupViewModel extends GetxController {
     _mixpanelService.mixpanel.timeEvent('Home');
 
     // _mixpanelService.mixpanel.flush();
-    _pushNotificationService.initialise();
     super.onInit();
   }
 

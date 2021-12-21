@@ -1036,3 +1036,123 @@ exports.sendFCM2 = functions.region('asia-northeast3').https.onCall((data, conte
   var result = admin.messaging().sendToTopic(mytopic, mypayload);
   return result;
 })
+
+
+
+//fcm 알림부분. starte dat 2021.12.18
+exports.newOneOnOne = functions.region('asia-northeast3').firestore.document('/admin/userOneOnOne/userOneOnOne/{docId}').onWrite(async (change, context) => {
+  // change includes changed data in firestore (before -> after)
+  // console.log('change: ', change );
+  // context includes params
+  // console.log('context: ', context );
+  // const sender = context.params.docId;
+  // get the changed data
+  const data = change.after.data();
+  console.log('message : ', data);
+
+  const payload = {
+    notification: {
+      title: '1:1 문의 발생 from ' + data['userName'],
+      body: data['content']
+    }
+  };
+
+  //kakao:1513684681  7번방의선물옵션
+  //kakao:1518231402  칼레오스콥
+  //kakao:1518411965  여수밤빠다
+  //kakao:1531290810  테스형
+
+  // const getAdminPushTokensPromise = admin.database()
+  // .ref(`/users/${followedUid}/notificationTokens`).once('value');
+
+  const db = admin.firestore();
+  const usersRef = db.collection("users");
+  const adminPushTokenSnapshot = await usersRef.doc("kakao:1518231402").get();
+  const adminPushToken = adminPushTokenSnapshot.data().token;
+
+  const adminPushTokens = [adminPushToken, adminPushToken];
+
+  console.log(adminPushTokens[0], adminPushTokens[1])
+
+  // pushTokens = ['fEpRNr9_jEc-h3-eTWbmun:APA91bFP-yhn8bM1098PWPDqopFDxW3bNvF-V-HDcho9_ReXQMZ2FcTS53RbMT59CCbfK8iSFwUPP2WmTsUu2vnVsHCuEcYwwllxMzN5a4FfGvyDIQsaNYr_K4JkXSK_m5k4AHjCcn1H'];
+
+  // console.log('sending message..', pushToken, payload);
+
+  const response = await admin.messaging().sendToDevice(adminPushTokens, payload);
+
+  response.results.forEach(
+    (result, index) => {
+      const error = result.error;
+      if(error) {
+        console.log('Failure sending notification');
+      }
+    }
+  );
+
+  console.log(response);
+  // get users collection
+  // const users = admin.firestore().collection('users');
+  // build push notification
+  // const payload = {
+  //   notification: {
+  //   title: 'title',
+  //   body: data.message
+  //   }
+  // };
+
+  // await users.get()
+  // .then(snapshot => {
+  //   snapshot.forEach(doc => {
+  //     console.log('doc.id', doc.id);
+  //     console.log('sender', sender);
+  //     console.log('doc', doc);
+  //     // do not send notification to the sender
+  //     if (doc.id !== sender) {
+  //       // get the push token of a user
+  //       pushToken = doc.data().pushToken;
+  //       console.log('token, sending message', pushToken, payload);
+  //       // send notification trhough firebase cloud messaging (fcm)
+  //       admin.messaging().sendToDevice(pushToken, payload);
+  //     } else {
+  //       console.log( 'the sender is the same', doc.id, sender);
+  //     }
+  //   });
+  //   return 'sent message to all users';
+  // })
+  // .catch(err => {
+  //   console.log('Error getting documents', err);
+  // });
+});
+
+exports.newCommentsTest5 = functions.region('asia-northeast3').firestore.document('/posts/{docId1}/comments/{docId2}').onCreate(async (snapshot, context) => {
+  const data = snapshot.data();
+
+  const postId = context.params.docId1; // 원글의 uid
+  const commentId = context.params.docId2; // 댓글의 uid
+
+  const db = admin.firestore();
+  const postsRef = db.collection('posts');
+  const usersRef = db.collection('users');
+
+  const writerUidSnapshot = await postsRef.doc(postId).get();
+  const writerUid = writerUidSnapshot.data().writerUid;
+
+  const fcmTokenSnapshot = await usersRef.doc(writerUid).get();
+  const fcmToken = fcmTokenSnapshot.data().token;
+  
+  console.log('postId : ', postId);
+  console.log('commentId : ', commentId);
+  console.log('writerUid : ', writerUid);
+  console.log('fcmToken of writer : ', fcmToken);
+
+  const payload = {
+    notification: {
+      title: data['writerUserName'] + '님이 답글을 달았어요!',
+      body: data['content'],
+    },
+  };
+
+  const response = await admin.messaging().sendToDevice('e7HK0LmhrER1lIYlsJeCak:APA91bEtYj2TN1VFzB0NS1Flckl0UKU_tJ1bL9I11DZo-5aByv_Ldu1cOa_Pxdkf9lIY-o-ePvg8xlHNuDDASIaHTddNNm5LGg5AiF_qlrXA8HdIjZvwp4gEET5agMOhCA6fTywymm2X', payload);
+
+  console.log(response);
+});

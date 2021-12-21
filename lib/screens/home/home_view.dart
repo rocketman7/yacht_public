@@ -5,7 +5,8 @@ import 'dart:ui';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorState;
+import 'package:flutter/material.dart'
+    hide RefreshIndicator, RefreshIndicatorState;
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -52,14 +53,16 @@ import '../quest/quest_widget.dart';
 
 class HomeView extends StatelessWidget {
   HomeViewModel homeViewModel = Get.find<HomeViewModel>();
-  NotificationViewModel notificationViewModel = Get.put(NotificationViewModel());
+  NotificationViewModel notificationViewModel =
+      Get.put(NotificationViewModel());
 
   final MixpanelService _mixpanelService = locator<MixpanelService>();
 
   RxDouble offset = 0.0.obs;
 
   final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
-  final TextEditingController userNameController = TextEditingController(text: "");
+  final TextEditingController userNameController =
+      TextEditingController(text: "");
   final RxBool isCheckingUserNameDuplicated = false.obs;
   final RxBool showSmallSnackBar = false.obs;
   final RxString smallSnackBarText = "".obs;
@@ -96,11 +99,14 @@ class HomeView extends StatelessWidget {
       MyAssets(),
       SizedBox(height: correctHeight(30.w, 0.0, sectionTitle.fontSize)),
       // 이달의 상금 주식
-      AwardView(leagueName: leagueModel.value!.leagueName, leagueEndDateTime: leagueModel.value!.leagueEndDateTime),
+      AwardView(
+          leagueName: leagueModel.value!.leagueName,
+          leagueEndDateTime: leagueModel.value!.leagueEndDateTime),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       NewQuests(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      Obx(() => homeViewModel.isGettingQuests.value ? Container() : LiveQuestView()),
+      Obx(() =>
+          homeViewModel.isGettingQuests.value ? Container() : LiveQuestView()),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       QuestResultsView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
@@ -126,7 +132,9 @@ class HomeView extends StatelessWidget {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       homeViewModel.scrollController.addListener(() {
         // offset obs 값에 scroll controller offset 넣어주기
-        homeViewModel.scrollController.offset < 0 ? offset(0) : offset(homeViewModel.scrollController.offset);
+        homeViewModel.scrollController.offset < 0
+            ? offset(0)
+            : offset(homeViewModel.scrollController.offset);
         // print(homeViewModel.scrollController.offset);
       });
     });
@@ -211,15 +219,21 @@ class HomeView extends StatelessWidget {
                         decoration: InputDecoration(
                           isDense: true,
                           contentPadding: EdgeInsets.all(0.w),
-                          focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                          enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                          focusedBorder:
+                              OutlineInputBorder(borderSide: BorderSide.none),
+                          enabledBorder:
+                              OutlineInputBorder(borderSide: BorderSide.none),
                           hintText: '${userModelRx.value!.userName}',
-                          hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                          hintStyle: profileChangeContentTextStyle.copyWith(
+                              color: yachtGrey),
                         ),
                         validator: (value) {
                           if (value != '') {
-                            final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
-                            if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
+                            final nickValidator =
+                                RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
+                            if (value!.length > 8 ||
+                                !nickValidator.hasMatch(value) ||
+                                value.contains(' ')) {
                               return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
                             } else {
                               return null;
@@ -247,7 +261,8 @@ class HomeView extends StatelessWidget {
                             if (userNameController.text == '') {
                               showSmallSnackBar(true);
                               smallSnackBarText("닉네임을 입력해주세요");
-                              Future.delayed(Duration(seconds: 1)).then((value) {
+                              Future.delayed(Duration(seconds: 1))
+                                  .then((value) {
                                 showSmallSnackBar(false);
                                 smallSnackBarText("");
                               });
@@ -262,7 +277,8 @@ class HomeView extends StatelessWidget {
                               //   barBlur: 8,
                               //   duration: const Duration(seconds: 1, milliseconds: 100),
                               // );
-                            } else if (userNameFormKey.currentState!.validate() &&
+                            } else if (userNameFormKey.currentState!
+                                    .validate() &&
                                 isCheckingUserNameDuplicated.value == false) {
                               if (userNameController.text != '') {
                                 print(userNameController.text);
@@ -270,13 +286,16 @@ class HomeView extends StatelessWidget {
                                 bool isUserNameDuplicatedVar = true;
 
                                 isUserNameDuplicatedVar =
-                                    await homeViewModel.isUserNameDuplicated(userNameController.text);
+                                    await homeViewModel.isUserNameDuplicated(
+                                        userNameController.text);
                                 print(isUserNameDuplicatedVar);
                                 if (!isUserNameDuplicatedVar) {
-                                  await homeViewModel.updateUserName(userNameController.text);
+                                  await homeViewModel
+                                      .updateUserName(userNameController.text);
                                   showSmallSnackBar(true);
                                   smallSnackBarText("닉네임이 저장되었어요");
-                                  Future.delayed(Duration(seconds: 1)).then((value) {
+                                  Future.delayed(Duration(seconds: 1))
+                                      .then((value) {
                                     showSmallSnackBar(false);
                                     smallSnackBarText("");
                                     Navigator.of(context).pop();
@@ -296,7 +315,8 @@ class HomeView extends StatelessWidget {
                                 } else {
                                   showSmallSnackBar(true);
                                   smallSnackBarText("중복된 닉네임이 있어요");
-                                  Future.delayed(Duration(seconds: 1)).then((value) {
+                                  Future.delayed(Duration(seconds: 1))
+                                      .then((value) {
                                     showSmallSnackBar(false);
                                     smallSnackBarText("");
                                   });
@@ -312,15 +332,22 @@ class HomeView extends StatelessWidget {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(70.0),
-                                    color:
-                                        isCheckingUserNameDuplicated.value == false ? yachtViolet : primaryButtonText),
+                                    color: isCheckingUserNameDuplicated.value ==
+                                            false
+                                        ? yachtViolet
+                                        : primaryButtonText),
                                 child: Center(
                                   child: Text(
-                                    isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
-                                    style: profileChangeButtonTextStyle.copyWith(
-                                        color: isCheckingUserNameDuplicated.value == false
-                                            ? primaryButtonText
-                                            : primaryButtonBackground),
+                                    isCheckingUserNameDuplicated.value == false
+                                        ? '저장하기'
+                                        : '닉네임 중복 검사 중',
+                                    style:
+                                        profileChangeButtonTextStyle.copyWith(
+                                            color: isCheckingUserNameDuplicated
+                                                        .value ==
+                                                    false
+                                                ? primaryButtonText
+                                                : primaryButtonBackground),
                                   ),
                                 ),
                               )),
@@ -367,14 +394,16 @@ class HomeView extends StatelessWidget {
 class DialogReadyWidget extends StatefulWidget {
   final HomeViewModel homeViewModel;
 
-  const DialogReadyWidget({Key? key, required this.homeViewModel}) : super(key: key);
+  const DialogReadyWidget({Key? key, required this.homeViewModel})
+      : super(key: key);
   @override
   State<DialogReadyWidget> createState() => _DialogReadyWidgetState();
 }
 
 class _DialogReadyWidgetState extends State<DialogReadyWidget> {
   final GlobalKey<FormState> userNameFormKey = GlobalKey<FormState>();
-  final TextEditingController userNameController = TextEditingController(text: "");
+  final TextEditingController userNameController =
+      TextEditingController(text: "");
   final RxBool isCheckingUserNameDuplicated = false.obs;
   final RxBool noNeedShowUserNameDialog = true.obs;
   final RxBool showSmallSnackBar = false.obs;
@@ -392,7 +421,11 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) => initPlugin());
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      await initPlugin();
+
+      await Get.find<HomeViewModel>().pushNotificationService.initialise();
+    });
     // print('DialogReadyWidget init called');
     // print('showingtermdial: ${widget.homeViewModel.onceInit}');
     if (!widget.homeViewModel.onceInit) {
@@ -401,7 +434,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
       iosTermAgree = box.read('iosTermAgree${userModelRx.value!.uid}') ?? false;
 
       //  else {
-      if (userModelRx.value!.isNameUpdated == null || !userModelRx.value!.isNameUpdated!) {
+      if (userModelRx.value!.isNameUpdated == null ||
+          !userModelRx.value!.isNameUpdated!) {
         WidgetsBinding.instance!.addPostFrameCallback((_) {
           showChangeNameDialog(context);
         });
@@ -410,8 +444,10 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
       if (!iosTermAgree) {
         WidgetsBinding.instance!.addPostFrameCallback((_) async {
-          termsOfUse = await rootBundle.loadString('assets/documents/termsOfUse.txt');
-          privacyPolicy = await rootBundle.loadString('assets/documents/privacyPolicy.txt');
+          termsOfUse =
+              await rootBundle.loadString('assets/documents/termsOfUse.txt');
+          privacyPolicy =
+              await rootBundle.loadString('assets/documents/privacyPolicy.txt');
           showTermDialog(context, widget.homeViewModel);
         });
       }
@@ -423,7 +459,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
   Future<void> initPlugin() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
+      final TrackingStatus status =
+          await AppTrackingTransparency.trackingAuthorizationStatus;
       _authStatus(status.toString());
       // If the system can show an authorization request dialog
       if (status == TrackingStatus.notDetermined) {
@@ -432,7 +469,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
         //   // Wait for dialog popping animation
         //   await Future.delayed(const Duration(milliseconds: 200));
         // Request system's tracking authorization dialog
-        final TrackingStatus status = await AppTrackingTransparency.requestTrackingAuthorization();
+        final TrackingStatus status =
+            await AppTrackingTransparency.requestTrackingAuthorization();
         _authStatus(status.toString());
         // }
       }
@@ -550,7 +588,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                               width: 24.0,
                               child: Checkbox(
                                   activeColor: yachtViolet,
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
                                   value: checkTerm.value,
                                   onChanged: (value) {
                                     checkTerm(value);
@@ -558,7 +597,9 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                             ),
                             SizedBox(width: 4.w),
                             Text("이용약관 및 개인정보처리방침 동의"),
-                            Text(" (필수)", style: TextStyle(color: yachtRed, fontFamily: 'Default')),
+                            Text(" (필수)",
+                                style: TextStyle(
+                                    color: yachtRed, fontFamily: 'Default')),
                           ],
                         ),
                       ),
@@ -578,7 +619,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                               width: 24.0,
                               child: Checkbox(
                                   activeColor: yachtViolet,
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
                                   value: checkFourteen.value,
                                   onChanged: (value) {
                                     checkFourteen(value);
@@ -586,7 +628,9 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                             ),
                             SizedBox(width: 4.w),
                             Text("만 14세 이상입니다. "),
-                            Text(" (필수)", style: TextStyle(color: yachtRed, fontFamily: 'Default')),
+                            Text(" (필수)",
+                                style: TextStyle(
+                                    color: yachtRed, fontFamily: 'Default')),
                           ],
                         ),
                       ),
@@ -609,21 +653,42 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                           children: [
                                             Container(
                                                 padding: EdgeInsets.fromLTRB(
-                                                    14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                    14.w,
+                                                    correctHeight(14.w, 0.0,
+                                                        dialogTitle.fontSize),
+                                                    14.w,
+                                                    14.w),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.w)),
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
-                                                    Text("알림", style: dialogTitle),
-                                                    SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                                    Text("이용약관과 개인정보처리방침에 동의하지 않으면 요트 서비스를 이용할 수 없습니다. ",
+                                                    Text("알림",
+                                                        style: dialogTitle),
+                                                    SizedBox(
+                                                        height: correctHeight(
+                                                            14.w,
+                                                            0.0,
+                                                            dialogTitle
+                                                                .fontSize)),
+                                                    Text(
+                                                        "이용약관과 개인정보처리방침에 동의하지 않으면 요트 서비스를 이용할 수 없습니다. ",
                                                         style: dialogContent),
-                                                    SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                    SizedBox(
+                                                        height: correctHeight(
+                                                            14.w,
+                                                            0.0,
+                                                            dialogTitle
+                                                                .fontSize)),
                                                     Center(
                                                       child: Text(
                                                         " 동의를 거부하고 정말 탈퇴하시겠습니까?",
                                                         style: dialogWarning,
-                                                        textAlign: TextAlign.center,
+                                                        textAlign:
+                                                            TextAlign.center,
                                                       ),
                                                     ),
                                                     SizedBox(
@@ -632,34 +697,56 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                                     Center(
                                                       child: Text(
                                                         "탈퇴 시 모든 데이터가 삭제되며 되돌릴 수 없습니다.",
-                                                        style: dialogTitle.copyWith(
-                                                          fontSize: bodySmallSize,
+                                                        style: dialogTitle
+                                                            .copyWith(
+                                                          fontSize:
+                                                              bodySmallSize,
                                                         ),
-                                                        textAlign: TextAlign.center,
+                                                        textAlign:
+                                                            TextAlign.center,
                                                       ),
                                                     ),
-                                                    SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                    SizedBox(
+                                                        height: correctHeight(
+                                                            24.w,
+                                                            0.w,
+                                                            dialogContent
+                                                                .fontSize)),
                                                     Row(
                                                       children: [
                                                         Expanded(
                                                           child: GestureDetector(
                                                               onTap: () async {
-                                                                homeViewModel.authService.deleteAccount();
+                                                                homeViewModel
+                                                                    .authService
+                                                                    .deleteAccount();
 
-                                                                userModelRx(null);
-                                                                userQuestModelRx.value = [];
+                                                                userModelRx(
+                                                                    null);
+                                                                userQuestModelRx
+                                                                    .value = [];
                                                                 leagueRx("");
 
-                                                                _kakaoApi.signOut();
+                                                                _kakaoApi
+                                                                    .signOut();
 
-                                                                Navigator.of(context).pop();
-                                                                Navigator.of(context).pop();
-                                                                await Get.offAll(() => AuthCheckView());
-                                                                Get.find<AuthCheckViewModel>().onInit();
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                await Get.offAll(
+                                                                    () =>
+                                                                        AuthCheckView());
+                                                                Get.find<
+                                                                        AuthCheckViewModel>()
+                                                                    .onInit();
                                                               },
                                                               child: textContainerButtonWithOptions(
                                                                 text: "예",
-                                                                isDarkBackground: false,
+                                                                isDarkBackground:
+                                                                    false,
                                                                 height: 44.w,
                                                               )),
                                                         ),
@@ -667,11 +754,17 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                                         Expanded(
                                                           child: InkWell(
                                                               onTap: () {
-                                                                Navigator.of(context).pop();
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
                                                                 // Get.back(closeOverlays: true);
                                                               },
                                                               child: textContainerButtonWithOptions(
-                                                                  text: "아니오", isDarkBackground: true, height: 44.w)),
+                                                                  text: "아니오",
+                                                                  isDarkBackground:
+                                                                      true,
+                                                                  height:
+                                                                      44.w)),
                                                         )
                                                       ],
                                                     )
@@ -682,16 +775,20 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                   },
                                   child: Container(
                                     width: 80.w,
-                                    child: bigTextContainerButton(text: "취소", isDisabled: true),
+                                    child: bigTextContainerButton(
+                                        text: "취소", isDisabled: true),
                                   ),
                                 ),
                                 SizedBox(width: 14.w),
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () async {
-                                      if (checkTerm.value && checkFourteen.value) {
+                                      if (checkTerm.value &&
+                                          checkFourteen.value) {
                                         await homeViewModel.agreeTerm();
-                                        box.write('iosTermAgree${userModelRx.value!.uid}', true);
+                                        box.write(
+                                            'iosTermAgree${userModelRx.value!.uid}',
+                                            true);
                                         Navigator.of(context).pop();
 
                                         // if (userModelRx.value!.isNameUpdated == null ||
@@ -705,7 +802,9 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                       }
                                     },
                                     child: bigTextContainerButton(
-                                        text: "시작하기", isDisabled: !(checkFourteen.value && checkTerm.value)),
+                                        text: "시작하기",
+                                        isDisabled: !(checkFourteen.value &&
+                                            checkTerm.value)),
                                   ),
                                 ),
                               ],
@@ -750,21 +849,27 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                         Container(
                           child: Text("어떤 호칭으로 불러드릴까요?",
                               style: TextStyle(
-                                  fontSize: 18.w, letterSpacing: -1.0, height: 1.4, fontWeight: FontWeight.w600)),
+                                  fontSize: 18.w,
+                                  letterSpacing: -1.0,
+                                  height: 1.4,
+                                  fontWeight: FontWeight.w600)),
                         ),
                         SizedBox(height: 14.w),
                         Container(
                           width: double.infinity,
-                          decoration:
-                              BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10.w), boxShadow: [
-                            BoxShadow(
-                              color: yachtShadow,
-                              blurRadius: 8.w,
-                              spreadRadius: 1.w,
-                            )
-                          ]),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.w),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: yachtShadow,
+                                  blurRadius: 8.w,
+                                  spreadRadius: 1.w,
+                                )
+                              ]),
                           child: Padding(
-                            padding: EdgeInsets.only(left: 12.w, top: 14.w, bottom: 11.w),
+                            padding: EdgeInsets.only(
+                                left: 12.w, top: 14.w, bottom: 11.w),
                             child: TextFormField(
                               controller: userNameController,
                               textAlignVertical: TextAlignVertical.bottom,
@@ -772,15 +877,21 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                               decoration: InputDecoration(
                                 isDense: true,
                                 contentPadding: EdgeInsets.all(0.w),
-                                focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                                enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none),
                                 hintText: '${userModelRx.value!.userName}',
-                                hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                                hintStyle: profileChangeContentTextStyle
+                                    .copyWith(color: yachtGrey),
                               ),
                               validator: (value) {
                                 if (value != '') {
-                                  final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
-                                  if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
+                                  final nickValidator =
+                                      RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
+                                  if (value!.length > 8 ||
+                                      !nickValidator.hasMatch(value) ||
+                                      value.contains(' ')) {
                                     return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
                                   } else {
                                     return null;
@@ -810,7 +921,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                               if (userNameController.text == '') {
                                 showSmallSnackBar(true);
                                 smallSnackBarText("닉네임을 입력해주세요");
-                                Future.delayed(Duration(seconds: 1)).then((value) {
+                                Future.delayed(Duration(seconds: 1))
+                                    .then((value) {
                                   showSmallSnackBar(false);
                                   smallSnackBarText("");
                                 });
@@ -826,18 +938,22 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                 //   barBlur: 8,
                                 //   duration: const Duration(seconds: 1, milliseconds: 100),
                                 // );
-                              } else if (userNameFormKey.currentState!.validate() &&
+                              } else if (userNameFormKey.currentState!
+                                      .validate() &&
                                   isCheckingUserNameDuplicated.value == false) {
                                 if (userNameController.text != '') {
                                   print(userNameController.text);
                                   isCheckingUserNameDuplicated(true);
                                   bool isUserNameDuplicatedVar = true;
 
-                                  isUserNameDuplicatedVar =
-                                      await widget.homeViewModel.isUserNameDuplicated(userNameController.text);
+                                  isUserNameDuplicatedVar = await widget
+                                      .homeViewModel
+                                      .isUserNameDuplicated(
+                                          userNameController.text);
                                   print(isUserNameDuplicatedVar);
                                   if (!isUserNameDuplicatedVar) {
-                                    await widget.homeViewModel.updateUserName(userNameController.text);
+                                    await widget.homeViewModel.updateUserName(
+                                        userNameController.text);
                                     Navigator.of(context).pop();
                                     yachtSnackBar("닉네임이 저장되었어요");
                                     // showSmallSnackBar(true);
@@ -862,7 +978,8 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                   } else {
                                     showSmallSnackBar(true);
                                     smallSnackBarText("중복된 닉네임이 있어요");
-                                    Future.delayed(Duration(seconds: 1)).then((value) {
+                                    Future.delayed(Duration(seconds: 1))
+                                        .then((value) {
                                       showSmallSnackBar(false);
                                       smallSnackBarText("");
                                     });
@@ -878,16 +995,24 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(70.0),
-                                      color: isCheckingUserNameDuplicated.value == false
-                                          ? yachtViolet
-                                          : primaryButtonText),
+                                      color:
+                                          isCheckingUserNameDuplicated.value ==
+                                                  false
+                                              ? yachtViolet
+                                              : primaryButtonText),
                                   child: Center(
                                     child: Text(
-                                      isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
-                                      style: profileChangeButtonTextStyle.copyWith(
-                                          color: isCheckingUserNameDuplicated.value == false
-                                              ? primaryButtonText
-                                              : primaryButtonBackground),
+                                      isCheckingUserNameDuplicated.value ==
+                                              false
+                                          ? '저장하기'
+                                          : '닉네임 중복 검사 중',
+                                      style:
+                                          profileChangeButtonTextStyle.copyWith(
+                                              color: isCheckingUserNameDuplicated
+                                                          .value ==
+                                                      false
+                                                  ? primaryButtonText
+                                                  : primaryButtonBackground),
                                     ),
                                   ),
                                 )),
@@ -914,7 +1039,9 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                       style: TextStyle(
                                           fontSize: 16.w,
                                           fontWeight: FontWeight.w600,
-                                          color: showSmallSnackBar.value ? yachtBlack : Colors.transparent),
+                                          color: showSmallSnackBar.value
+                                              ? yachtBlack
+                                              : Colors.transparent),
                                     ),
                                   )
                                 : Container(),
@@ -958,7 +1085,8 @@ class NewQuests extends StatelessWidget {
             children: [
               Container(
                   // color: Colors.blue,
-                  child: Text("새로 나온 퀘스트", style: sectionTitle.copyWith(height: 1.0))),
+                  child: Text("새로 나온 퀘스트",
+                      style: sectionTitle.copyWith(height: 1.0))),
               Spacer(),
               GestureDetector(
                 onTap: () {
@@ -973,8 +1101,10 @@ class NewQuests extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
-                      decoration: jogabiButtonBoxDecoration.copyWith(boxShadow: [primaryBoxShadow]),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
+                      decoration: jogabiButtonBoxDecoration
+                          .copyWith(boxShadow: [primaryBoxShadow]),
                       child: Row(
                         children: [
                           SvgPicture.asset(
@@ -988,8 +1118,12 @@ class NewQuests extends StatelessWidget {
                           Obx(() {
                             // print("item changed");
                             return Text(
-                              userModelRx.value == null ? 0.toString() : userModelRx.value!.item.toString(),
-                              style: questTermTextStyle.copyWith(color: Color(0xFF4D6A87), fontWeight: FontWeight.w600),
+                              userModelRx.value == null
+                                  ? 0.toString()
+                                  : userModelRx.value!.item.toString(),
+                              style: questTermTextStyle.copyWith(
+                                  color: Color(0xFF4D6A87),
+                                  fontWeight: FontWeight.w600),
                             );
                           })
                         ],
@@ -1000,7 +1134,8 @@ class NewQuests extends StatelessWidget {
                       top: -10.w,
                       child: Container(
                         padding: EdgeInsets.all(3.5.w),
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.red),
                         height: 20.w,
                         width: 20.w,
                         child: SvgPicture.asset(
@@ -1023,7 +1158,8 @@ class NewQuests extends StatelessWidget {
         ),
         // btwHomeModuleTitleSlider,
         Obx(() {
-          return (homeViewModel.newQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
+          return (homeViewModel.newQuests.length ==
+                  0) // 로딩 중과 length 0인 걸 구분해야 함
               ? Container(
                   width: 232.w,
                   height: 344.w,
@@ -1045,20 +1181,38 @@ class NewQuests extends StatelessWidget {
                                       : Container(),
                                   InkWell(
                                     onTap: () {
-                                      _mixpanelService.mixpanel.track('New Quest', properties: {
-                                        'New Quest ID': homeViewModel.newQuests[index].questId,
-                                        'New Quest League ID': homeViewModel.newQuests[index].leagueId,
-                                        'New Quest Title': homeViewModel.newQuests[index].title,
-                                        'New Quest Category': homeViewModel.newQuests[index].category,
-                                        'New Quest Select Mode': homeViewModel.newQuests[index].selectMode,
+                                      _mixpanelService.mixpanel
+                                          .track('New Quest', properties: {
+                                        'New Quest ID': homeViewModel
+                                            .newQuests[index].questId,
+                                        'New Quest League ID': homeViewModel
+                                            .newQuests[index].leagueId,
+                                        'New Quest Title': homeViewModel
+                                            .newQuests[index].title,
+                                        'New Quest Category': homeViewModel
+                                            .newQuests[index].category,
+                                        'New Quest Select Mode': homeViewModel
+                                            .newQuests[index].selectMode,
                                       });
-                                      homeViewModel.newQuests[index].selectMode == 'survey'
-                                          ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
-                                          : homeViewModel.newQuests[index].selectMode == 'tutorial'
-                                              ? Get.toNamed('/tutorial', arguments: homeViewModel.newQuests[index])
-                                              : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
+                                      homeViewModel.newQuests[index]
+                                                  .selectMode ==
+                                              'survey'
+                                          ? Get.toNamed('/survey',
+                                              arguments: homeViewModel
+                                                  .newQuests[index])
+                                          : homeViewModel.newQuests[index]
+                                                      .selectMode ==
+                                                  'tutorial'
+                                              ? Get.toNamed('/tutorial',
+                                                  arguments: homeViewModel
+                                                      .newQuests[index])
+                                              : Get.toNamed('/quest',
+                                                  arguments: homeViewModel
+                                                      .newQuests[index]);
                                     },
-                                    child: QuestWidget(questModel: homeViewModel.newQuests[index]),
+                                    child: QuestWidget(
+                                        questModel:
+                                            homeViewModel.newQuests[index]),
                                   ),
                                   SizedBox(width: primaryPaddingSize),
                                 ],
@@ -1110,7 +1264,9 @@ class MyAssets extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
+                    SizedBox(
+                        height: reducedPaddingWhenTextIsBelow(
+                            14.w, detailedContentTextStyle.fontSize!)),
                     GetBuilder<AssetViewModel>(
                         id: 'holdingStocks',
                         builder: (controller) {
@@ -1121,7 +1277,10 @@ class MyAssets extends StatelessWidget {
                                       : "0",
                                   style: myAssetAmount,
                                   children: [
-                                TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
+                                TextSpan(
+                                    text: " 원",
+                                    style: myAssetAmount.copyWith(
+                                        fontWeight: FontWeight.w300))
                               ]));
                         }),
                   ],
@@ -1162,7 +1321,9 @@ class MyAssets extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
+                  SizedBox(
+                      height: reducedPaddingWhenTextIsBelow(
+                          14.w, detailedContentTextStyle.fontSize!)),
                   GetBuilder<AssetViewModel>(
                       id: 'holdingStocks',
                       builder: (controller) {
@@ -1173,7 +1334,10 @@ class MyAssets extends StatelessWidget {
                                     : "0",
                                 style: myAssetAmount,
                                 children: [
-                              TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
+                              TextSpan(
+                                  text: " 원",
+                                  style: myAssetAmount.copyWith(
+                                      fontWeight: FontWeight.w300))
                             ]));
                       }),
                 ],
@@ -1192,7 +1356,8 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double offset;
   final HomeViewModel homeViewModel;
 
-  _GlassmorphismAppBarDelegate(this.safeAreaPadding, this.offset, this.homeViewModel);
+  _GlassmorphismAppBarDelegate(
+      this.safeAreaPadding, this.offset, this.homeViewModel);
 
   @override
   double get minExtent => 52.w + ScreenUtil().statusBarHeight;
@@ -1201,7 +1366,8 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => minExtent + 38.w;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     double opacity = offset > 30.w ? 1 : offset / 30.w;
     // print(offset);
     return ClipRect(
@@ -1234,7 +1400,9 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              userModelRx.value == null ? "" : userModelRx.value!.userName,
+                              userModelRx.value == null
+                                  ? ""
+                                  : userModelRx.value!.userName,
                               style: appBarTitle.copyWith(
                                   fontSize: 18.w,
                                   fontWeight: FontWeight.w600,
@@ -1260,7 +1428,9 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                           children: [
                             Obx(
                               () => Text(
-                                userModelRx.value == null ? "" : userModelRx.value!.userName,
+                                userModelRx.value == null
+                                    ? ""
+                                    : userModelRx.value!.userName,
                                 style: appBarTitle.copyWith(
                                     fontWeight: FontWeight.w600,
                                     color: appBarTitle.color!.withOpacity(
@@ -1285,14 +1455,19 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                         child: InkWell(
                           onTap: () async {
                             _mixpanelService.mixpanel.track('Notification');
-                            if (userModelRx.value!.lastNotificationCheckDateTime == null) {
-                              Get.to(() => NotificationView(), arguments: 'NeedLoad');
+                            if (userModelRx
+                                    .value!.lastNotificationCheckDateTime ==
+                                null) {
+                              Get.to(() => NotificationView(),
+                                  arguments: 'NeedLoad');
                             } else {
                               if (Get.find<NotificationViewModel>()
                                       .lastNotificationTimeForNavigate()
-                                      .compareTo(userModelRx.value!.lastNotificationCheckDateTime) >
+                                      .compareTo(userModelRx.value!
+                                          .lastNotificationCheckDateTime) >
                                   0) {
-                                Get.to(() => NotificationView(), arguments: 'NeedLoad');
+                                Get.to(() => NotificationView(),
+                                    arguments: 'NeedLoad');
                               } else {
                                 Get.to(() => NotificationView());
                               }
@@ -1312,18 +1487,25 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                                     builder: (controller) {
                                       if (controller.isNotificationListLoaded) {
                                         return Obx(() {
-                                          if (userModelRx.value!.lastNotificationCheckDateTime != null) {
+                                          if (userModelRx.value!
+                                                  .lastNotificationCheckDateTime !=
+                                              null) {
                                             if (controller
                                                     .lastNotificationTime()
-                                                    .compareTo(userModelRx.value!.lastNotificationCheckDateTime) >
+                                                    .compareTo(userModelRx
+                                                        .value!
+                                                        .lastNotificationCheckDateTime) >
                                                 0) {
-                                              return Image.asset('assets/icons/notification_new.png');
+                                              return Image.asset(
+                                                  'assets/icons/notification_new.png');
                                             } else {
-                                              return Image.asset('assets/icons/notification.png');
+                                              return Image.asset(
+                                                  'assets/icons/notification.png');
                                             }
                                           } else {
                                             print('last모시기 null');
-                                            return Image.asset('assets/icons/notification_new.png');
+                                            return Image.asset(
+                                                'assets/icons/notification_new.png');
                                           }
                                         });
                                       } else {
