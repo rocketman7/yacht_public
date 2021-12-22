@@ -355,7 +355,7 @@ PODS:
     - Firebase/Firestore (= 8.9.0)
     - firebase_core
     - Flutter
-  - cloud_functions (3.2.3):
+  - cloud_functions (3.2.4):
     - Firebase/Functions (= 8.9.0)
     - firebase_core
     - Flutter
@@ -403,16 +403,16 @@ PODS:
     - Firebase/Analytics (= 8.9.0)
     - firebase_core
     - Flutter
-  - firebase_app_check (0.0.6-2):
+  - firebase_app_check (0.0.6-3):
     - Firebase/AppCheck (~> 8.9.0)
     - Firebase/CoreOnly (~> 8.9.0)
     - firebase_core
     - Flutter
-  - firebase_auth (3.3.3):
+  - firebase_auth (3.3.4):
     - Firebase/Auth (= 8.9.0)
     - firebase_core
     - Flutter
-  - firebase_core (1.10.5):
+  - firebase_core (1.10.6):
     - Firebase/CoreOnly (= 8.9.0)
     - Flutter
   - firebase_in_app_messaging (0.5.0-14):
@@ -427,7 +427,7 @@ PODS:
     - Firebase/RemoteConfig (= 8.9.0)
     - firebase_core
     - Flutter
-  - firebase_storage (10.2.3):
+  - firebase_storage (10.2.4):
     - Firebase/Storage (= 8.9.0)
     - firebase_core
     - Flutter
@@ -625,6 +625,9 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - native_admob_flutter (1.5.0):
+    - Flutter
+    - Google-Mobile-Ads-SDK
   - OrderedSet (5.0.0)
   - package_info (0.0.1):
     - Flutter
@@ -672,6 +675,7 @@ DEPENDENCIES:
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - kakao_flutter_sdk (from `.symlinks/plugins/kakao_flutter_sdk/ios`)
   - mixpanel_flutter (from `.symlinks/plugins/mixpanel_flutter/ios`)
+  - native_admob_flutter (from `.symlinks/plugins/native_admob_flutter/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
@@ -766,6 +770,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/kakao_flutter_sdk/ios"
   mixpanel_flutter:
     :path: ".symlinks/plugins/mixpanel_flutter/ios"
+  native_admob_flutter:
+    :path: ".symlinks/plugins/native_admob_flutter/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   package_info_plus:
@@ -791,20 +797,20 @@ SPEC CHECKSUMS:
   app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 0c744725c0d1544d77db2c8eb35ef919cb19a176
-  cloud_functions: 786d5b5ebbb7b16daa9d4a2e302a76816cadf42f
+  cloud_functions: d06612b3b0f30419e8305620f1382df43bdf4003
   facebook_app_events: 7b4bf3ceb2115c280223361fd224505651f36c1a
   FBAEMKit: 56c0bb9b42e3747cd82b67934f0c2b19325382ea
   FBSDKCoreKit: 75368765d9c2303073145a7925dfaa9d60bcd77b
   FBSDKCoreKit_Basics: 39865aff97e5f6951a78fb3e89dc4460e35e1895
   Firebase: 13d8d96499e2635428d5bf0ec675df21f95d9a95
   firebase_analytics: 7a7528bb2abf4ca22cff7a57bbf909dcab73e13d
-  firebase_app_check: 13156770232a308ae85f02184064519405b070aa
-  firebase_auth: fe3a1deb12ebd850295344234abc15588d086baf
-  firebase_core: dfcae4c150a5e24436a0b7677c470478a234d5bf
+  firebase_app_check: 83c63d94a5e5f8880ddcbb0909da8829f7d8f54e
+  firebase_auth: e875a50b81aefb20f305dfede425647e9675c19e
+  firebase_core: c263d7daf1dc92fcd9895e6abdc04872b0ee07ff
   firebase_in_app_messaging: f81d838e861b61e5e1a89965bdc76de5cecfc4c5
   firebase_messaging: 1109f5449638254c47fb5904d24e11a4d7736c77
   firebase_remote_config: 64af2ad097186f4831a7095b2b03599276eb8a64
-  firebase_storage: 41d59adeff37c548e167ecbfa834d2d038e6ad87
+  firebase_storage: 2ed331c6bd5bfa6d64f1a6c57f01151f4f146c16
   FirebaseABTesting: 9de50b34bf9eb4a07d4edb7af82c14152fd905aa
   FirebaseAnalytics: 4ab446ce08a3fe52e8a4303dd997cf26276bf968
   FirebaseAppCheck: eb4c5c6984804b728f71ae89711455dcf6a21054
@@ -839,6 +845,7 @@ SPEC CHECKSUMS:
   Mixpanel-swift: 4e367aaff204bf7262e9ed665e7b380580cc06c1
   mixpanel_flutter: f6c4326a6d67ef5998615ee23a1e38cb6a171527
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  native_admob_flutter: 147f3efc0cb5eb500e26de8828b85e2bfd10f2ec
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e

@@ -58,10 +58,15 @@ dependencies:
   flutter_svg: ^1.0.0
   fluttertoast: ^8.0.7
   font_awesome_flutter: ^9.0.0
-  get: ^4.3.8
+  get: ^4.6.1
   get_it: ^6.1.1
   get_storage:
-  google_mobile_ads: ^1.0.1
+  # google_mobile_ads: ^1.0.1
+  google_mobile_ads:
+    git:
+      url: https://github.com/SuaMusica/googleads-mobile-flutter.git
+      path: packages/google_mobile_ads
+      ref: feature/suamusica
   http: ^0.13.3
   image_picker: ^0.8.3
   intl: ^0.17.0
@@ -102,6 +107,8 @@ dependencies:
   paginate_firestore: ^1.0.2
   dotted_border: ^2.0.0+1
   firebase_app_check: ^0.0.2+2
+  native_admob_flutter:
+    path: packages/native_admob_flutter-master
   # facebook_app_events: ^0.14.2
   extended_image:
     git:

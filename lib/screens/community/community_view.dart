@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/feed_widget.dart';
@@ -19,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
+import 'package:native_admob_flutter/native_admob_flutter.dart';
 import '../../locator.dart';
 import 'community_view_model.dart';
 
@@ -199,7 +200,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                                             ],
                                           )
                                         : Container(),
-                                    ((index + 1) % 5 == 2) ? CommunityAd() : Container(),
+                                    ((index + 1) % 5 == 2 && Platform.isAndroid) ? CommunityAd() : Container(),
                                     FeedWidget(
                                         communityViewModel: _communityViewModel,
                                         post: _communityViewModel.posts[index]),
@@ -252,113 +253,242 @@ class CommunityView extends GetView<CommunityViewModel> {
     );
   }
 
-  Widget communityAd() {
-    RxBool isAdLoaded = false.obs;
-    NativeAd ad = NativeAd(
-      adUnitId: AdManager.nativeAdUnitId,
-      factoryId: 'listTile',
-      request: AdRequest(),
-      listener: NativeAdListener(
-        onAdLoaded: (_) {
-          // setState(() {
-          isAdLoaded(true);
-          // });
-        },
-        onAdFailedToLoad: (ad, error) {
-          // Releases an ad resource when it fails to load
-          ad.dispose();
+  // Widget communityAd() {
+  //   RxBool isAdLoaded = false.obs;
+  //   NativeAd ad = NativeAd(
+  //     adUnitId: AdManager.nativeAdUnitId,
+  //     factoryId: 'listTile',
+  //     request: AdRequest(),
+  //     listener: NativeAdListener(
+  //       onAdLoaded: (_) {
+  //         // setState(() {
+  //         isAdLoaded(true);
+  //         // });
+  //       },
+  //       onAdFailedToLoad: (ad, error) {
+  //         // Releases an ad resource when it fails to load
+  //         ad.dispose();
 
-          print('Ad load failed (code=${error.code} message=${error.message})');
-        },
-      ),
-    );
+  //         print('Ad load failed (code=${error.code} message=${error.message})');
+  //       },
+  //     ),
+  //   );
 
-    ad.load();
-    return StatefulBuilder(builder: (context, setState) {
-      return Obx(
-        () => isAdLoaded.value
-            ? Column(
-                children: [
-                  // SizedBox(
-                  //   height: 20.w,
-                  // ),
-                  Container(
-                    padding: moduleBoxPadding(feedDateTime.fontSize!),
-                    decoration: primaryBoxDecoration.copyWith(
-                      boxShadow: [primaryBoxShadow],
-                      color: primaryBoxDecoration.color,
-                    ),
-                    height: Platform.isAndroid ? 80.w : 110.w,
-                    child: AdWidget(
-                      ad: ad,
-                    ),
-                  ),
+  //   ad.load();
+  //   return StatefulBuilder(builder: (context, setState) {
+  //     return Obx(
+  //       () => isAdLoaded.value
+  //           ? Column(
+  //               children: [
+  //                 // SizedBox(
+  //                 //   height: 20.w,
+  //                 // ),
+  //                 Container(
+  //                   padding: moduleBoxPadding(feedDateTime.fontSize!),
+  //                   decoration: primaryBoxDecoration.copyWith(
+  //                     boxShadow: [primaryBoxShadow],
+  //                     color: primaryBoxDecoration.color,
+  //                   ),
+  //                   height: Platform.isAndroid ? 80.w : 110.w,
+  //                   child: AdWidget(
+  //                     ad: ad,
+  //                   ),
+  //                 ),
 
-                  SizedBox(
-                    height: 12.w,
-                  ),
-                ],
-              )
-            : Container(),
-      );
-    });
-  }
+  //                 SizedBox(
+  //                   height: 12.w,
+  //                 ),
+  //               ],
+  //             )
+  //           : Container(),
+  //     );
+  //   });
+  // }
 }
 
-class CommunityAd extends StatelessWidget {
-  CommunityAd({Key? key}) : super(key: key);
+// class CommunityAd extends StatelessWidget {
+//   CommunityAd({Key? key}) : super(key: key);
+//   RxBool isAdLoaded = false.obs;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     NativeAd ad = NativeAd(
+//       adUnitId: AdManager.nativeAdUnitId,
+//       factoryId: 'listTile',
+//       request: AdRequest(),
+//       listener: NativeAdListener(
+//         onAdLoaded: (_) {
+//           // setState(() {
+//           isAdLoaded(true);
+//           // });
+//         },
+//         onAdFailedToLoad: (ad, error) {
+//           // Releases an ad resource when it fails to load
+//           ad.dispose();
+
+//           print('Ad load failed (code=${error.code} message=${error.message})');
+//         },
+//       ),
+//     );
+
+//     ad.load();
+//     return StatefulBuilder(builder: (context, setState) {
+//       return Obx(
+//         () => isAdLoaded.value
+//             ? Column(
+//                 children: [
+//                   // SizedBox(
+//                   //   height: 20.w,
+//                   // ),
+//                   Container(
+//                     padding: moduleBoxPadding(feedDateTime.fontSize!),
+//                     decoration: primaryBoxDecoration.copyWith(
+//                       boxShadow: [primaryBoxShadow],
+//                       color: primaryBoxDecoration.color,
+//                     ),
+//                     height: Platform.isAndroid ? 80.w : 110.w,
+//                     child: AdWidget(
+//                       ad: ad,
+//                     ),
+//                   ),
+
+//                   SizedBox(
+//                     height: 12.w,
+//                   ),
+//                 ],
+//               )
+//             : Container(),
+//       );
+//     });
+//   }
+// }
+
+class CommunityAd extends StatefulWidget {
+  @override
+  State<CommunityAd> createState() => _CommunityAdState();
+}
+
+class _CommunityAdState extends State<CommunityAd> {
+  final controller = NativeAdController();
   RxBool isAdLoaded = false.obs;
+  @override
+  void initState() {
+    super.initState();
+    controller.load(keywords: ['fortnite']);
+    controller.onEvent.listen((event) {
+      if (event.keys.first == NativeAdEvent.loaded) {
+        isAdLoaded(true);
+        printAdDetails(controller);
+      }
+      // setState(() {});
+    });
+  }
+
+  void printAdDetails(NativeAdController controller) async {
+    /// Just for showcasing the ability to access
+    /// NativeAd's details via its controller.
+    print("------- NATIVE AD DETAILS: -------");
+    print(controller.headline);
+    print(controller.body);
+    print(controller.price);
+    print(controller.store);
+    print(controller.callToAction);
+    print(controller.advertiser);
+    print(controller.iconUri);
+    print(controller.imagesUri);
+  }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  AdLayoutBuilder get myCustomLayoutBuilder =>
+      (ratingBar, media, icon, headline, advertiser, body, price, store, attribution, button) {
+        return AdLinearLayout(
+          decoration: AdDecoration(backgroundColor: Colors.white),
+          width: MATCH_PARENT,
+          height: MATCH_PARENT,
+          gravity: LayoutGravity.center_vertical,
+          // padding: EdgeInsets.all(8.0),
+          children: [
+            attribution,
+            AdLinearLayout(
+              margin: EdgeInsets.only(top: 6.0),
+              orientation: HORIZONTAL,
+              children: [
+                icon,
+                AdExpanded(
+                  flex: 2,
+                  child: AdLinearLayout(
+                    width: WRAP_CONTENT,
+                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    children: [
+                      headline,
+                      advertiser,
+                      body,
+                    ],
+                  ),
+                ),
+                AdExpanded(flex: 4, child: button),
+              ],
+            ),
+          ],
+        );
+      };
+
+// native_admob_flutter
+  @override
   Widget build(BuildContext context) {
-    NativeAd ad = NativeAd(
-      adUnitId: AdManager.nativeAdUnitId,
-      factoryId: 'listTile',
-      request: AdRequest(),
-      listener: NativeAdListener(
-        onAdLoaded: (_) {
-          // setState(() {
-          isAdLoaded(true);
-          // });
-        },
-        onAdFailedToLoad: (ad, error) {
-          // Releases an ad resource when it fails to load
-          ad.dispose();
+    // controller.load();
+    return Obx(() => isAdLoaded.value
+        ? Column(
+            children: [
+              Container(
+                padding: moduleBoxPadding(0),
+                decoration: primaryBoxDecoration.copyWith(
+                  boxShadow: [primaryBoxShadow],
+                  color: primaryBoxDecoration.color,
+                ),
+                child: NativeAd(
+                  controller: controller,
+                  // buildLayout: smallAdTemplateLayoutBuilder,
+                  buildLayout: myCustomLayoutBuilder,
+                  height: 100.w,
 
-          print('Ad load failed (code=${error.code} message=${error.message})');
-        },
-      ),
-    );
-
-    ad.load();
-    return StatefulBuilder(builder: (context, setState) {
-      return Obx(
-        () => isAdLoaded.value
-            ? Column(
-                children: [
-                  // SizedBox(
-                  //   height: 20.w,
-                  // ),
-                  Container(
-                    padding: moduleBoxPadding(feedDateTime.fontSize!),
-                    decoration: primaryBoxDecoration.copyWith(
-                      boxShadow: [primaryBoxShadow],
-                      color: primaryBoxDecoration.color,
+                  attribution: AdTextView(
+                      width: WRAP_CONTENT,
+                      height: WRAP_CONTENT,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 6.w,
+                        vertical: 2.w,
+                      ),
+                      decoration: AdDecoration(
+                        backgroundColor: yachtViolet,
+                        borderRadius: AdBorderRadius.all(10.w),
+                      ),
+                      style: TextStyle(
+                        fontFamily: krFont,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontSize: 10.w,
+                      )),
+                  headline: AdTextView(
+                    style: TextStyle(
+                      fontSize: 14.w,
+                      fontFamily: 'ibm_plex',
+                      fontWeight: FontWeight.bold,
+                      color: yachtBlack,
                     ),
-                    height: Platform.isAndroid ? 80.w : 110.w,
-                    child: AdWidget(
-                      ad: ad,
-                    ),
+                    maxLines: 1,
                   ),
-
-                  SizedBox(
-                    height: 12.w,
-                  ),
-                ],
-              )
-            : Container(),
-      );
-    });
+                ),
+              ),
+              SizedBox(height: 12.w),
+            ],
+          )
+        : Container());
   }
 }
 
