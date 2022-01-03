@@ -206,8 +206,7 @@ class NativeAd extends StatefulWidget {
   _NativeAdState createState() => _NativeAdState();
 }
 
-class _NativeAdState extends State<NativeAd>
-    with AutomaticKeepAliveClientMixin<NativeAd> {
+class _NativeAdState extends State<NativeAd> with AutomaticKeepAliveClientMixin<NativeAd> {
   late NativeAdController controller;
   NativeAdEvent state = NativeAdEvent.loading;
 
@@ -215,8 +214,7 @@ class _NativeAdState extends State<NativeAd>
   void didUpdateWidget(NativeAd oldWidget) {
     super.didUpdateWidget(oldWidget);
     // reload if options changed
-    if (widget.reloadWhenOptionsChange &&
-        (oldWidget.options?.toString() != widget.options?.toString())) {
+    if (widget.reloadWhenOptionsChange && (oldWidget.options?.toString() != widget.options?.toString())) {
       _load();
     }
     if (layout(oldWidget).toString() != layout(widget).toString()) {
@@ -350,8 +348,8 @@ class _NativeAdState extends State<NativeAd>
     final advertiser = AdTextView().copyWith(widget.advertiser);
     final attribution = AdTextView(
       width: WRAP_CONTENT,
-      height: WRAP_CONTENT,
-      padding: EdgeInsets.symmetric(horizontal: 2, vertical: 0),
+      // height: WRAP_CONTENT,
+      padding: EdgeInsets.symmetric(vertical: 14),
       style: TextStyle(color: Colors.black),
       text: 'Ad',
       margin: EdgeInsets.only(right: 2),

@@ -347,8 +347,17 @@ fun TextView.applyText(data: Map<*, *>, context: Context) {
     }
     (data["maxLines"] as? Int?)?.let { view.maxLines = it }
     (data["minLines"] as? Int?)?.let { view.minLines = it }
-    (data["bold"] as? Boolean)?.let { if (it) view.setTypeface(view.typeface, Typeface.BOLD) }
+    (data["bold"] as? Boolean)?.let { 
+        if (it) 
+        {
+            view.setTypeface(Typeface.createFromAsset(context.getAssets(), "font/ibm_plex_sanskr_medium.ttf"))
+        } else {
+            view.setTypeface(Typeface.createFromAsset(context.getAssets(), "font/ibm_plex_sanskr_regular.ttf"))
+        } }
     (data["text"] as? String)?.let { view.text = it }
-    // view.setTypeface(view.typeface, "font/ibm_plex_sanskr_bold")
+    // (data["text"] as? String)?.let {view.setTypeface(view.typeface, "font/ibm_plex_sanskr_bold")}
     view.ellipsize = TextUtils.TruncateAt.END
+    view.setGravity(Gravity.CENTER_VERTICAL);
+    
+    // view.setTypeface(Typeface.createFromAsset(context.getAssets(), "font/ibm_plex_sanskr_bold.ttf"));
 }

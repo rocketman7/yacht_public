@@ -407,35 +407,68 @@ class _CommunityAdState extends State<CommunityAd> {
   AdLayoutBuilder get myCustomLayoutBuilder =>
       (ratingBar, media, icon, headline, advertiser, body, price, store, attribution, button) {
         return AdLinearLayout(
-          decoration: AdDecoration(backgroundColor: Colors.white),
-          width: MATCH_PARENT,
-          height: MATCH_PARENT,
-          gravity: LayoutGravity.center_vertical,
-          // padding: EdgeInsets.all(8.0),
+          orientation: HORIZONTAL,
           children: [
-            attribution,
             AdLinearLayout(
-              margin: EdgeInsets.only(top: 6.0),
-              orientation: HORIZONTAL,
+              padding: EdgeInsets.only(right: 14.w),
+              width: WRAP_CONTENT,
+              orientation: VERTICAL,
+              children: [attribution, icon],
+            ),
+            AdLinearLayout(
+              width: MATCH_PARENT,
+              height: WRAP_CONTENT,
+              orientation: VERTICAL,
               children: [
-                icon,
-                AdExpanded(
-                  flex: 2,
-                  child: AdLinearLayout(
+                headline,
+                AdLinearLayout(width: MATCH_PARENT, orientation: HORIZONTAL, children: [
+                  AdLinearLayout(
                     width: WRAP_CONTENT,
-                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    orientation: VERTICAL,
                     children: [
-                      headline,
                       advertiser,
                       body,
                     ],
                   ),
-                ),
-                AdExpanded(flex: 4, child: button),
+                  button
+                ])
               ],
-            ),
+            )
           ],
         );
+
+        // AdLinearLayout(
+        //   decoration: AdDecoration(backgroundColor: Colors.white),
+        //   width: MATCH_PARENT,
+        //   height: MATCH_PARENT,
+        //   gravity: LayoutGravity.top,
+        //   // padding: EdgeInsets.all(8.0),
+        //   children: [
+        //     attribution,
+        //     AdLinearLayout(
+        //       margin: EdgeInsets.only(top: 6.0),
+        //       orientation: HORIZONTAL,
+        //       children: [
+        //         icon,
+        //         AdExpanded(
+        //           flex: 2,
+        //           child: AdLinearLayout(
+        //             width: WRAP_CONTENT,
+        //             // height: WRAP_CONTENT,
+        //             gravity: LayoutGravity.top,
+        //             margin: EdgeInsets.symmetric(horizontal: 4),
+        //             children: [
+        //               headline,
+        //               advertiser,
+        //               body,
+        //             ],
+        //           ),
+        //         ),
+        //         AdExpanded(flex: 5, child: button),
+        //       ],
+        //     ),
+        //   ],
+        // );
       };
 
 // native_admob_flutter
@@ -459,30 +492,44 @@ class _CommunityAdState extends State<CommunityAd> {
 
                   attribution: AdTextView(
                       width: WRAP_CONTENT,
-                      height: WRAP_CONTENT,
+                      height: 18.w,
                       padding: EdgeInsets.symmetric(
                         horizontal: 6.w,
-                        vertical: 2.w,
+                        // vertical: 1.w,
                       ),
                       decoration: AdDecoration(
                         backgroundColor: yachtViolet,
                         borderRadius: AdBorderRadius.all(10.w),
                       ),
                       style: TextStyle(
-                        fontFamily: krFont,
-                        fontWeight: FontWeight.w700,
+                        // fontFamily: krFont,
+                        // fontWeight: FontWeight.w500,
                         color: Colors.white,
-                        fontSize: 10.w,
+                        fontSize: 9.w,
                       )),
                   headline: AdTextView(
                     style: TextStyle(
                       fontSize: 14.w,
-                      fontFamily: 'ibm_plex',
-                      fontWeight: FontWeight.bold,
+                      // fontWeight: FontWeight.bold,
                       color: yachtBlack,
                     ),
                     maxLines: 1,
                   ),
+                  button: AdButtonView(
+                      width: WRAP_CONTENT,
+                      height: 30.w,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 1.w,
+                        vertical: 1.w,
+                      ),
+                      decoration: AdDecoration(
+                        backgroundColor: yachtViolet,
+                      ),
+                      textStyle: TextStyle(color: white)),
+                  // body: AdTextView(
+                  //   height: 1.0,
+                  //   maxLines: 3,
+                  // ),
                 ),
               ),
               SizedBox(height: 12.w),
