@@ -1,0 +1,6 @@
+R_DEF: Internal format may change without notice
+local
+font ibm_plex
+font ibm_plex_sanskr_bold
+font ibm_plex_sanskr_medium
+font ibm_plex_sanskr_regular

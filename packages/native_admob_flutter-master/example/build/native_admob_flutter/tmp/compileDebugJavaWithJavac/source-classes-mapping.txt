@@ -1,0 +1,2 @@
+com/bruno/native_admob_flutter/BuildConfig.java
+ com.bruno.native_admob_flutter.BuildConfig

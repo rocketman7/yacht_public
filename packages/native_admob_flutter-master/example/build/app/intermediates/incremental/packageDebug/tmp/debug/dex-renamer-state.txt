@@ -1,0 +1,4 @@
+#Wed Jan 05 06:27:18 KST 2022
+base.0=/Users/Mac/Documents/jk_develop/flutter/teamYacht.nosync/yachtOne/packages/native_admob_flutter-master/example/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
