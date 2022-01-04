@@ -363,7 +363,7 @@ class _NativeAdState extends State<NativeAd> with AutomaticKeepAliveClientMixin<
     final button = AdButtonView(
       pressColor: Colors.red,
       decoration: AdDecoration(backgroundColor: Colors.yellow),
-      margin: EdgeInsets.only(top: 6),
+      // margin: EdgeInsets.only(top: 6),
     ).copyWith(widget.button);
     final icon = AdImageView().copyWith(widget.icon);
     final media = AdMediaView().copyWith(widget.media);
