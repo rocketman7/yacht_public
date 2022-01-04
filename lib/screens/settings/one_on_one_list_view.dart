@@ -106,6 +106,7 @@ class OneOnOneListView extends StatelessWidget {
                                                         .answer !=
                                                     ''
                                                 ? '${controller.oneOnOneListList[i].answer}'
+                                                    .replaceAll('\\n', '\n')
                                                 : '아직 답변이 등록되지 않았습니다.\n조금만 더 기다려주시면 친절히 답변드릴게요!',
                                             style: feedContent,
                                             maxLines: 3,
@@ -189,6 +190,7 @@ class OneOnOneListDetailView extends StatelessWidget {
                           Text(
                             controller.oneOnOneListList[index].answer != ''
                                 ? '${controller.oneOnOneListList[index].answer}'
+                                    .replaceAll('\\n', '\n')
                                 : '아직 답변이 등록되지 않았습니다.\n조금만 더 기다려주시면 친절히 답변드릴게요!',
                             style: feedContent,
                           ),

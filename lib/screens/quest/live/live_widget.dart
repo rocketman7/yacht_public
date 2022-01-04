@@ -413,8 +413,8 @@ class LiveWidget extends StatelessWidget {
             // interval: 10,
             isVisible: false),
         primaryYAxis: NumericAxis(
-            maximum: 120,
-            minimum: 80,
+            maximum: 115,
+            minimum: 85,
             // maximum: chartViewModel.maxPrice!,
             // minimum: (5 * chartViewModel.minPrice! -
             //         chartViewModel.maxPrice!) /
@@ -427,8 +427,8 @@ class LiveWidget extends StatelessWidget {
             questModel.investAddresses!.length,
             (index) => NumericAxis(
                 name: index.toString(),
-                maximum: 120,
-                minimum: 80,
+                maximum: 115,
+                minimum: 85,
                 majorGridLines: MajorGridLines(width: 0),
                 isVisible: false)),
         series: List.generate(questModel.investAddresses!.length, (index) {

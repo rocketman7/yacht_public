@@ -425,7 +425,7 @@ class QuestView extends StatelessWidget {
                     } else {
                       // DateTime.now().isAfter(other)
 
-                      if (!questViewModel.checkIfUserSelectedAny()) {
+                      if (!questViewModel.checkIfUserSelectedAny() && questModel.selectMode != "order") {
                         yachtSnackBarFromBottom(
                           "선택을 완료한 후 확정할 수 있습니다.",
                           // longerDuration: 2000,

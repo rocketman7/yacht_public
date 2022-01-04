@@ -70,7 +70,7 @@ class _AccountViewState extends State<AccountView> {
           builder: (controller) {
             return ListView(
               children: [
-                userModelRx.value!.account['accNumber'] == null
+                (userModelRx.value!.account == null || userModelRx.value!.account['accNumber'] == null)
                     ? GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
@@ -134,7 +134,7 @@ class _AccountViewState extends State<AccountView> {
                   ),
                   child: Column(
                     children: [
-                      userModelRx.value!.account['accNumber'] == null
+                      (userModelRx.value!.account == null || userModelRx.value!.account['accNumber'] == null)
                           ? controller.visibleAuthNumProcess
                               ? authNumProcess()
                               : forNotVerificationUser()

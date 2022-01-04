@@ -7,8 +7,7 @@ import '../../locator.dart';
 
 class AccountViewModel extends GetxController {
   final FirestoreService _firestoreService = locator<FirestoreService>();
-  final AccountVerificationService _accountVerificationService =
-      locator<AccountVerificationService>();
+  final AccountVerificationService _accountVerificationService = locator<AccountVerificationService>();
 
   // 차례대로 계좌인증 성공여부, 에러메세지 를 담는다.
   List accOwnerResp = [false, ''];
@@ -40,12 +39,10 @@ class AccountViewModel extends GetxController {
   // method
   @override
   void onInit() async {
-    if (userModelRx.value!.account['secName'] != null) {
-      for (int i = 0;
-          i < _accountVerificationService.getBankListLength();
-          i++) {
-        if (_accountVerificationService.getBankList().keys.toList()[i] ==
-            userModelRx.value!.account['secName']) selectSecLogo = i;
+    if (userModelRx.value!.account == null || userModelRx.value!.account['secName'] != null) {
+      for (int i = 0; i < _accountVerificationService.getBankListLength(); i++) {
+        if (_accountVerificationService.getBankList().keys.toList()[i] == userModelRx.value!.account['secName'])
+          selectSecLogo = i;
       }
     }
 
@@ -55,8 +52,7 @@ class AccountViewModel extends GetxController {
   Future<String> accOwnerVerificationRequest() async {
     bankCode = _accountVerificationService.getBankList()['$secName']!;
 
-    accOwnerResp = await _accountVerificationService.accOwnerVerification(
-        accNumber, bankCode, accName);
+    accOwnerResp = await _accountVerificationService.accOwnerVerification(accNumber, bankCode, accName);
 
     // notifyListeners();
 
@@ -71,8 +67,7 @@ class AccountViewModel extends GetxController {
 
     bankCode = _accountVerificationService.getBankList()['$secName']!;
 
-    accOccupyResp = await _accountVerificationService.accOccupyVerification(
-        accNumber, bankCode, authNum.toString());
+    accOccupyResp = await _accountVerificationService.accOccupyVerification(accNumber, bankCode, authNum.toString());
 
     // notifyListeners();
 
@@ -119,15 +114,12 @@ class AccountViewModel extends GetxController {
   // }
 
   Future setAccInformations() async {
-    await _firestoreService.setAccInformations(
-        accNumber, accName, secName, userModelRx.value!.uid);
+    await _firestoreService.setAccInformations(accNumber, accName, secName, userModelRx.value!.uid);
   }
 
   int getBankListLength() => _accountVerificationService.getBankListLength();
 
-  Map<String, String> getBankList() =>
-      _accountVerificationService.getBankList();
+  Map<String, String> getBankList() => _accountVerificationService.getBankList();
 
-  Map<String, String> getBankLogoList() =>
-      _accountVerificationService.getBankLogoList();
+  Map<String, String> getBankLogoList() => _accountVerificationService.getBankLogoList();
 }

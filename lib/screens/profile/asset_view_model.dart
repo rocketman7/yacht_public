@@ -221,7 +221,7 @@ class AssetViewModel extends GetxController {
     stocksDeliveryNum.clear();
 
     await calcAllHoldingStocks();
-
+    print('totalHoldingStocksValue: $totalHoldingStocksValue');
     super.onInit();
   }
 

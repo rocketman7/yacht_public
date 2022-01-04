@@ -31,7 +31,9 @@ import 'package:yachtOne/styles/theme.dart';
 import 'locator.dart';
 
 import 'screens/auth/email_login_view.dart';
+import 'services/adManager_service.dart';
 import 'styles/size_config.dart';
+import 'package:native_admob_flutter/native_admob_flutter.dart' as NativeAds;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +50,9 @@ void main() async {
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate();
   await MobileAds.instance.initialize();
+  await NativeAds.MobileAds.initialize(
+    nativeAdUnitId: AdManager.nativeAdUnitId,
+  );
 
 // portrait 모드 고정
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
