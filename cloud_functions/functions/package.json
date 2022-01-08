@@ -10,7 +10,7 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "10"
+    "node": "14"
   },
   "main": "index.js",
   "dependencies": {
@@ -18,7 +18,8 @@
     "firebase-admin": "^8.10.0",
     "firebase-functions": "^3.6.1",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "telegraf": "^4.5.2"
   },
   "devDependencies": {
     "eslint": "^5.12.0",

@@ -2,6 +2,7 @@
 const fetch = require("node-fetch");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const { Telegraf } = require('telegraf')
 const { user } = require("firebase-functions/lib/providers/auth");
 // const kakao = require("./kakao");
 admin.initializeApp({
@@ -1188,3 +1189,51 @@ exports.newComments = functions.region('asia-northeast3').firestore.document('/p
     console.log('feed topic : unsubscribe')
   }
 });
+
+exports.newPost = functions.region('asia-northeast3').firestore.document('/posts/{docId}').onCreate(async (snapshot, context) =>{
+  const data = snapshot.data();
+  const postId = context.params.docId;
+  const tel_token = '1559530541:AAEWKpjUTT-ICPx32oxvSjgH8qUQhT5G-z4';
+
+  const bot = new Telegraf(tel_token);
+  
+  // console.log(data['writerUserName']);
+  bot.launch();
+  const chat_id = '71048145';
+  bot.telegram.sendMessage(chat_id, data['writerUserName'] + '님의 글: ' + data['content']);
+})
+
+exports.newUserRequest = functions.region('asia-northeast3').firestore.document('/admin/userOneOnOne/{date}/{doc}').onCreate(async (snapshot, context) =>{
+  const data = snapshot.data();
+  const tel_token = '5066842147:AAHNEtMSQxPWyXo8kxX5Bky5E9Dixc6vKNA';
+  const db = admin.firestore();
+  const usersRef = db.collection('users');
+  const bot = new Telegraf(tel_token);
+  const jk = '71048145';
+  const kyutae = '266861929';
+  const long = '191245328';
+  const csejun = '359260852';
+  const userName = await usersRef.doc(data['uid']).get().then((doc)=>doc.data().userName);
+  
+
+  const youngjas = [jk, kyutae, long, csejun];
+  
+  bot.launch();
+  youngjas.forEach((chat_id) => {
+    bot.telegram.sendMessage(chat_id,userName +'('+ data['uid']+')' + ' 님의 문의: ' + data['content']);
+  });
+})
+
+exports.manageUserRequest = functions.region('asia-northeast3').https.onRequest(async (req, res) => {
+  const tel_token = '1559530541:AAEWKpjUTT-ICPx32oxvSjgH8qUQhT5G-z4';
+  const jk = '71048145';
+  // bot.launch();
+  bot.command('/show', (ctx) => {    
+  ctx.reply('Hello! 무엇을 보여드릴까요?');})
+  return await bot.handleUpdate(request.body, response).then((rv) => {
+    // if it's not a request from the telegram, rv will be undefined, but we should respond with 200
+    return !rv && response.sendStatus(200)
+  })
+
+
+})

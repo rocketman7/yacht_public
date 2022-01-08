@@ -74,11 +74,6 @@ class HomeView extends StatelessWidget {
     await homeViewModel.getAllQuests();
     homeViewModel.rankController.onInit();
     homeViewModel.awardViewModel.onInit();
-
-    // 이런느낌으로 ? 근데 굳이 알림까지 새로고침할 필욘 없을듯해서 일단 주석처리
-    // notificationViewModel.dispose();
-    // notificationViewModel =
-    //   Get.put(NotificationViewModel());
     print('refreshed');
     // if failed,use refreshFailed()
     homeViewModel.refreshController.refreshCompleted();
@@ -86,14 +81,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) async {
-    //   print('triggered' + homeViewModel.noNeedShowUserNameDialog.value.toString());
-    //   if (!homeViewModel.noNeedShowUserNameDialog.value) {
-    //     print('triggered');
-    //     await showChangeNameDialog(context);
-    //   }
-    // });
-
     List<Widget> homeWidgets = [
       DialogReadyWidget(homeViewModel: homeViewModel),
       MyAssets(),

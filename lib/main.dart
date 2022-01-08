@@ -31,7 +31,9 @@ import 'package:yachtOne/styles/theme.dart';
 import 'locator.dart';
 
 import 'screens/auth/email_login_view.dart';
+import 'services/adManager_service.dart';
 import 'styles/size_config.dart';
+import 'package:native_admob_flutter/native_admob_flutter.dart' as NativeAds;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,10 +50,14 @@ void main() async {
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate();
   await MobileAds.instance.initialize();
+  await NativeAds.MobileAds.initialize(
+    nativeAdUnitId: AdManager.nativeAdUnitId,
+  );
 
 // portrait 모드 고정
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((value) => runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyApp())));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
+      (value) => runApp(
+          MaterialApp(debugShowCheckedModeBanner: false, home: MyApp())));
 }
 
 class MyApp extends StatefulWidget {
@@ -81,7 +87,9 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     SizeConfig().init(context);
     ScreenUtil.init(
-        BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
         designSize: Size(375, 812),
         orientation: Orientation.portrait);
     super.didChangeDependencies();
