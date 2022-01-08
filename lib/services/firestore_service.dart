@@ -128,7 +128,11 @@ class FirestoreService extends GetxService {
   }
 
   Stream<String> getNameCheckResult(uid) {
-    return _firestoreService.collection('checkName').doc(uid).snapshots().map((snapshot) {
+    return _firestoreService
+        .collection('checkName')
+        .doc(uid)
+        .snapshots()
+        .map((snapshot) {
       if (snapshot.data() == null || snapshot.data()!['return'] == null) {
         print("GETNAME STREAM" + snapshot.data().toString());
         return "0";
@@ -138,7 +142,11 @@ class FirestoreService extends GetxService {
   }
 
   Future<String> checkNameUrl() async {
-    return _firestoreService.collection('admin').doc('adminPost').get().then((value) => value.data()!['checkNameUrl']);
+    return _firestoreService
+        .collection('admin')
+        .doc('adminPost')
+        .get()
+        .then((value) => value.data()!['checkNameUrl']);
   }
 
   // uid로 유저 데이터 있는지 체크하기
@@ -600,7 +608,7 @@ class FirestoreService extends GetxService {
 
     await _firestoreService
         .collection('leagues') // 변하지 않음
-        // .doc('league002') // 변함. 현재 리그를 가져올지, 다음 리그를 가져올지 등에 따라. 값 자체도 변수로 줘야
+        // .doc('league003') // 변함. 현재 리그를 가져올지, 다음 리그를 가져올지 등에 따라. 값 자체도 변수로 줘야
         .doc(leagueRx.value) // 변함. 현재 리그를 가져올지, 다음 리그를 가져올지 등에 따라. 값 자체도 변수로 줘야
         .collection('subLeagues') // 변하지 않음
         .get()
@@ -668,12 +676,12 @@ class FirestoreService extends GetxService {
 
     await _firestoreService
         .collection('leagues')
-        .doc('league002')
+        .doc('league003')
         .collection('subLeagues')
         .doc('subLeague003')
         .collection('ranks')
         .orderBy('todayRank', descending: false)
-        .limit(34)
+        .limit(40)
         .get()
         .then((value) {
       value.docs.forEach((element) {
@@ -686,15 +694,15 @@ class FirestoreService extends GetxService {
 
       finalRank['awarded'] = true;
       finalRank['award'] = [
-        // {'isStock': true, 'sharesNum': 1, 'stocksIndex': 0},
-        // {'isStock': true, 'sharesNum': 1, 'stocksIndex': 1},
-        // {'isStock': true, 'sharesNum': 1, 'stocksIndex': 2},
-        {'isStock': false, 'yachtPoint': 10648},
+        {'isStock': true, 'sharesNum': 1, 'stocksIndex': 0},
+        {'isStock': true, 'sharesNum': 1, 'stocksIndex': 1},
+        // {'isStock': true, 'sharesNum': 5, 'stocksIndex': 2},
+        // {'isStock': false, 'yachtPoint': 9400},
       ];
 
       await _firestoreService
           .collection('lastSubLeagues')
-          .doc('dtuA5q9lXnrZKT7bKvmr')
+          .doc('XQHaogJQbY8M1vEWFT8e')
           .collection('finalRanks')
           .add(finalRank);
     });
