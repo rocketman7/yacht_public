@@ -357,7 +357,13 @@ fun TextView.applyText(data: Map<*, *>, context: Context) {
     (data["text"] as? String)?.let { view.text = it }
     // (data["text"] as? String)?.let {view.setTypeface(view.typeface, "font/ibm_plex_sanskr_bold")}
     view.ellipsize = TextUtils.TruncateAt.END
-    view.setGravity(Gravity.CENTER_VERTICAL);
+
+    if (data["viewType"] == "button_view"){
+          view.setGravity(Gravity.CENTER);}
+    else {
+         view.setGravity(Gravity.CENTER_VERTICAL);
+    }
+    // view.setGravity(Gravity.CENTER_HORIZONTAL);
     
     // view.setTypeface(Typeface.createFromAsset(context.getAssets(), "font/ibm_plex_sanskr_bold.ttf"));
 }

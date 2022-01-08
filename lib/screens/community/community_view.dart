@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
@@ -374,7 +376,7 @@ class _CommunityAdState extends State<CommunityAd> {
   @override
   void initState() {
     super.initState();
-    controller.load(keywords: ['fortnite']);
+    controller.load();
     controller.onEvent.listen((event) {
       if (event.keys.first == NativeAdEvent.loaded) {
         isAdLoaded(true);
@@ -387,15 +389,15 @@ class _CommunityAdState extends State<CommunityAd> {
   void printAdDetails(NativeAdController controller) async {
     /// Just for showcasing the ability to access
     /// NativeAd's details via its controller.
-    print("------- NATIVE AD DETAILS: -------");
-    print(controller.headline);
-    print(controller.body);
-    print(controller.price);
-    print(controller.store);
-    print(controller.callToAction);
-    print(controller.advertiser);
-    print(controller.iconUri);
-    print(controller.imagesUri);
+    // print("------- NATIVE AD DETAILS: -------");
+    // print(controller.headline);
+    // print(controller.body);
+    // print(controller.price);
+    // print(controller.store);
+    // print(controller.callToAction);
+    // print(controller.advertiser);
+    // print(controller.iconUri);
+    // print(controller.imagesUri);
   }
 
   @override
@@ -416,24 +418,41 @@ class _CommunityAdState extends State<CommunityAd> {
               children: [attribution, icon],
             ),
             AdLinearLayout(
-              width: MATCH_PARENT,
+              width: WRAP_CONTENT,
               height: WRAP_CONTENT,
               orientation: VERTICAL,
+              gravity: LayoutGravity.left,
               children: [
                 headline,
-                AdLinearLayout(width: MATCH_PARENT, orientation: HORIZONTAL, children: [
-                  AdLinearLayout(
-                    width: WRAP_CONTENT,
-                    orientation: VERTICAL,
-                    children: [
-                      advertiser,
-                      body,
-                    ],
-                  ),
-                  button
-                ])
+                AdLinearLayout(
+                  width: MATCH_PARENT,
+                  orientation: HORIZONTAL,
+                  gravity: LayoutGravity.left,
+                  children: [
+                    AdExpanded(
+                      flex: 1,
+                      child: AdLinearLayout(
+                        width: WRAP_CONTENT,
+                        orientation: VERTICAL,
+                        gravity: LayoutGravity.left,
+                        children: [
+                          advertiser,
+                          body,
+                        ],
+                      ),
+                    ),
+                    AdExpanded(flex: 7, child: button)
+                    // AdLinearLayout(
+                    //   height: MATCH_PARENT,
+                    //   width: MATCH_PARENT,
+                    //   orientation: VERTICAL,
+                    //   gravity: LayoutGravity.center_vertical,
+                    //   children: [button],
+                    // ),
+                  ],
+                ),
               ],
-            )
+            ),
           ],
         );
 
@@ -488,7 +507,7 @@ class _CommunityAdState extends State<CommunityAd> {
                   controller: controller,
                   // buildLayout: smallAdTemplateLayoutBuilder,
                   buildLayout: myCustomLayoutBuilder,
-                  height: 100.w,
+                  height: 90.w,
 
                   attribution: AdTextView(
                       width: WRAP_CONTENT,
@@ -507,6 +526,14 @@ class _CommunityAdState extends State<CommunityAd> {
                         color: Colors.white,
                         fontSize: 9.w,
                       )),
+                  body: AdTextView(
+                    style: TextStyle(
+                      fontSize: 12.w,
+                      // fontWeight: FontWeight.bold,
+                      color: yachtBlack,
+                    ),
+                    maxLines: 1,
+                  ),
                   headline: AdTextView(
                     style: TextStyle(
                       fontSize: 14.w,
@@ -516,16 +543,18 @@ class _CommunityAdState extends State<CommunityAd> {
                     maxLines: 1,
                   ),
                   button: AdButtonView(
-                      width: WRAP_CONTENT,
+                      width: MATCH_PARENT,
                       height: 30.w,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 1.w,
-                        vertical: 1.w,
-                      ),
+                      // padding: EdgeInsets.symmetric(
+                      //   horizontal: 10.w,
+                      //   vertical: 1.w,
+                      // ),
                       decoration: AdDecoration(
                         backgroundColor: yachtViolet,
                       ),
-                      textStyle: TextStyle(color: white)),
+                      textStyle: TextStyle(
+                        color: white,
+                      )),
                   // body: AdTextView(
                   //   height: 1.0,
                   //   maxLines: 3,

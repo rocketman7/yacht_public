@@ -66,7 +66,8 @@ class CommunityViewModel extends GetxController {
       // print(scrollController.position.maxScrollExtent);
       // print(scrollController.position);
       scrollController.offset < 0 ? offset(0) : offset(scrollController.offset);
-      if ((scrollController.offset > scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .2)) &&
+      if ((scrollController.offset + 60.w >
+              scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .2)) &&
           hasNextPosts.value) {
         getPost();
       }
