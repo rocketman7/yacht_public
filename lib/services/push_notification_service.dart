@@ -4,6 +4,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/community/community_view.dart';
+import 'package:yachtOne/screens/community/detail_post_view.dart';
+import 'package:yachtOne/screens/startup/startup_view_model.dart';
 
 import '../locator.dart';
 import 'firestore_service.dart';
@@ -67,6 +70,55 @@ class PushNotificationService {
       // await FirebaseMessaging.instance.subscribeToTopic('admintest');
     });
     // }
+
+    //
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   Map<String, dynamic> data = message.data;
+
+    //   print(data);
+
+    //   if (data['action'] == 'navigate') {
+    //     if (data['route'] == 'community') {
+    //       Get.find<StartupViewModel>().selectedPage(2);
+    //       _firestoreService.getThisPost(data['option']).then((data) {
+    //         Get.to(() => DetailPostView(data!));
+    //       });
+    //     }
+    //   }
+    // });
+
+    // //
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   Map<String, dynamic> data = message.data;
+
+    //   print(data);
+
+    //   if (data['action'] == 'navigate') {
+    //     if (data['route'] == 'community') {
+    //       Get.find<StartupViewModel>().selectedPage(2);
+    //       _firestoreService.getThisPost(data['option']).then((data) {
+    //         Get.to(() => DetailPostView(data!));
+    //       });
+    //     }
+    //   }
+    // });
+
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        Map<String, dynamic> data = message.data;
+
+        print(data);
+
+        if (data['action'] == 'navigate') {
+          if (data['route'] == 'community') {
+            Get.find<StartupViewModel>().selectedPage(2);
+            _firestoreService.getThisPost(data['option']).then((data) {
+              Get.to(() => DetailPostView(data!));
+            });
+          }
+        }
+      }
+    });
   }
 
   Future subOrUnscribeToTopic(int i, bool value) async {
