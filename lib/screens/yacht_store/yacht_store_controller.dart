@@ -14,6 +14,9 @@ class YachtStoreController extends GetxController {
   // DB로부터 상품들을 모두 따온 후, 순서를 가공해준다. 또, YachtStoreCategory만큼 나누어져있어야 한다.
   late List<List<YachtStoreGoodsModel>> yachtStoreGoodsLists = [];
 
+  // goods list 정렬되어 준비됐는가?
+  bool isOrderingList = false;
+
   @override
   void onInit() async {
     // TODO: implement onInit
@@ -26,9 +29,8 @@ class YachtStoreController extends GetxController {
     // 그 후에 goods 순서를 가공해준다.
     orderGoods();
 
-    print(yachtStoreGoodsLists[0]);
-    print(yachtStoreGoodsLists[1]);
-    print(yachtStoreGoodsLists[2]);
+    isOrderingList = true;
+    update();
 
     super.onInit();
   }
@@ -61,6 +63,23 @@ class YachtStoreController extends GetxController {
           yachtStoreGoodsLists[n].add(yachtStoreGoodsListFromDB[i]);
 
           break;
+        }
+      }
+    }
+
+    //// 각 카테고리별로 정렬을 시작한다.
+    //// 정렬기준이 추가되면 아래 for 문 안에서 추가해주면 됨
+    for (int n = 0; n < yachtStoreCategories.length; n++) {
+      // 1. yachtPointPrice 싼->비싼순 정렬
+      YachtStoreGoodsModel tempYachtStoreGoodsModel;
+      for (int i = 0; i < yachtStoreGoodsLists[n].length; i++) {
+        for (int j = i + 1; j < yachtStoreGoodsLists[n].length; j++) {
+          if (yachtStoreGoodsLists[n][i].yachtPointPrice >
+              yachtStoreGoodsLists[n][j].yachtPointPrice) {
+            tempYachtStoreGoodsModel = yachtStoreGoodsLists[n][i];
+            yachtStoreGoodsLists[n][i] = yachtStoreGoodsLists[n][j];
+            yachtStoreGoodsLists[n][j] = tempYachtStoreGoodsModel;
+          }
         }
       }
     }
