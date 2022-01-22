@@ -55,9 +55,8 @@ void main() async {
   );
 
 // portrait 모드 고정
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-      (value) => runApp(
-          MaterialApp(debugShowCheckedModeBanner: false, home: MyApp())));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyApp())));
 }
 
 class MyApp extends StatefulWidget {
@@ -87,9 +86,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     SizeConfig().init(context);
     ScreenUtil.init(
-        BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width,
-            maxHeight: MediaQuery.of(context).size.height),
+        BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
         designSize: Size(375, 812),
         orientation: Orientation.portrait);
     super.didChangeDependencies();

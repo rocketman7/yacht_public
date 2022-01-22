@@ -173,10 +173,22 @@ class YachtStoreView extends StatelessWidget {
               )),
           SliverList(
               delegate: SliverChildListDelegate([
-            //     GetBuilder<>(builder: builder)
-            // Column(
-            //   children: [],
-            // )
+            Column(
+              children: [
+                Container(
+                  height: 400.w,
+                  color: Colors.red,
+                ),
+                Container(
+                  height: 400.w,
+                  color: Colors.blue,
+                ),
+                Container(
+                  height: 400.w,
+                  color: Colors.grey,
+                ),
+              ],
+            )
           ])),
         ],
       ),
