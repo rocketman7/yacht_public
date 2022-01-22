@@ -380,14 +380,11 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = MBLAMJ4LWV;
 				ENABLE_BITCODE = NO;
-<<<<<<< HEAD
-=======
 				FLUTTER_ROOT = /Users/csejun/Developer/flutter;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
->>>>>>> 41b6e2a23a411feb7be51158d0b2f2c1b806b5ad
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -521,14 +518,11 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = MBLAMJ4LWV;
 				ENABLE_BITCODE = NO;
-<<<<<<< HEAD
-=======
 				FLUTTER_ROOT = /Users/csejun/Developer/flutter;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
->>>>>>> 41b6e2a23a411feb7be51158d0b2f2c1b806b5ad
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -554,14 +548,11 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = MBLAMJ4LWV;
 				ENABLE_BITCODE = NO;
-<<<<<<< HEAD
-=======
 				FLUTTER_ROOT = /Users/csejun/Developer/flutter;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
->>>>>>> 41b6e2a23a411feb7be51158d0b2f2c1b806b5ad
 				INFOPLIST_FILE = Runner/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
