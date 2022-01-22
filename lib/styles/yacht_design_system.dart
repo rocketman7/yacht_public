@@ -25,6 +25,7 @@ const Color yachtDarkPurple = const Color(0xFF6073B4);
 const Color yachtDarkGrey = const Color(0xFF5B6A87);
 const Color yachtGrey = const Color(0xFF879098);
 const Color yachtLightGrey = const Color(0xFFE6EAF1);
+const Color yachtPaleGrey = const Color(0xFFEFF2FA);
 const Color yachtRed = const Color(0xFFEE5076);
 const Color yachtBlue = Color(0xFF4A99E2);
 const Color yachtYellow = Color(0xFFFFAD4C);
@@ -64,6 +65,8 @@ Color graph1 = Color(0xFF55C0CF).withOpacity(.55);
 Color graph2 = Color(0xFF9255CF).withOpacity(.55);
 Color graph3 = Color(0xFF55CF69).withOpacity(.55);
 Color graph4 = Color(0xFF558DCF).withOpacity(.55);
+
+List<Color> graphColors = [graph0, graph1, graph2, graph3, graph4];
 
 // Area 차트에 쓰일 색상들
 final List<double> stops = <double>[0.0, 1.0];
@@ -1341,6 +1344,12 @@ TextStyle pickManyCircleName = TextStyle(
   height: primaryFontHeight,
 );
 
+TextStyle seeMore = TextStyle(
+  fontSize: 16.w,
+  fontWeight: FontWeight.w500,
+  color: Color(0xFF5A6987),
+);
+
 // BUTTONS
 Container simpleTextContainerButton(
   String text, {
@@ -2325,10 +2334,12 @@ class YachtPrimaryAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double offset;
   final String tabTitle;
   final Widget? buttonWidget;
+  final String? buttonPosition;
   YachtPrimaryAppBarDelegate({
     required this.offset,
     required this.tabTitle,
     this.buttonWidget,
+    this.buttonPosition,
   });
 
   @override
@@ -2414,11 +2425,17 @@ class YachtPrimaryAppBarDelegate extends SliverPersistentHeaderDelegate {
                             ],
                           ),
                           buttonWidget != null
-                              ? Positioned(
-                                  top: 12.w,
-                                  right: 0,
-                                  child: buttonWidget!,
-                                )
+                              ? buttonPosition == 'left'
+                                  ? Positioned(
+                                      top: 12.w,
+                                      left: 0,
+                                      child: buttonWidget!,
+                                    )
+                                  : Positioned(
+                                      top: 12.w,
+                                      right: 0,
+                                      child: buttonWidget!,
+                                    )
                               : Container(),
                         ],
                       )),

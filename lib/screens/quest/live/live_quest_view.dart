@@ -65,7 +65,8 @@ class LiveQuestView extends StatelessWidget {
                                           width: primaryHorizontalPadding.left,
                                         )
                                       : Container(),
-                                  NewLiveWidget(questModel: homeViewModel.liveQuests[index])
+                                  NewLiveWidget(questModel: homeViewModel.liveQuests[index]),
+                                  SizedBox(width: primaryPaddingSize),
                                 ],
                               )
 

@@ -176,7 +176,7 @@ class FirestoreService extends GetxService {
         .orderBy('selectDateTime', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
-              // print('user quest: ${doc.data()}');
+              print('user quest: ${UserQuestModel.fromMap(doc.id, doc.data())}');
               return UserQuestModel.fromMap(doc.id, doc.data());
             }).toList());
   }
@@ -200,6 +200,11 @@ class FirestoreService extends GetxService {
               return UserQuestModel.fromMap(doc.id, doc.data());
             }).toList());
   }
+
+  // userQuest 특정 퀘스트 가져오기
+  // Future getUserQuest() {
+
+  // }
 
   // user가 선택한 정답 UserQuest에 넣기
   Future updateUserQuest(
