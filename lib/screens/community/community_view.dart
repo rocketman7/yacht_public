@@ -140,37 +140,43 @@ class CommunityView extends GetView<CommunityViewModel> {
                           // print(snapshot.data);
                           // 임시로 0 index만. 위젯 블럭 제작 이후에는 Lazy List로
                           :
-                          // PaginateFirestore(
-                          //     physics: NeverScrollableScrollPhysics(),
-                          //     onLoaded: (paginationLoaded) {
-                          //       print(paginationLoaded);
-                          //       print('newpageloaded');
-                          //     },
-                          //     shrinkWrap: true,
-                          //     itemsPerPage: 4,
-                          //     query: FirebaseFirestore.instance
-                          //         .collection('posts')
-                          //         .orderBy('writtenDateTime', descending: true),
-                          //     itemBuilderType: PaginateBuilderType.listView,
-                          //     itemBuilder: (index, context, DocumentSnapshot snapshot) {
-                          //       final data = snapshot.data() as Map<String, dynamic>;
-                          //       final postData = PostModel.fromMap(data);
-                          //       // return Container(
-                          //       //   height: 200,
-                          //       //   color: index % 2 == 0 ? Colors.red : Colors.blue,
-                          //       //   child: Text(postData.content),
-                          //       // );
+
+                          // SliverList(
+                          //     delegate: SliverChildBuilderDelegate((context, index) {
                           //       return Column(
                           //         children: [
-                          //           FeedWidget(communityViewModel: _communityViewModel, post: postData),
+                          //           index == 0
+                          //               ? Column(
+                          //                   children: [
+                          //                     SizedBox(
+                          //                       height: 20.w,
+                          //                     ),
+                          //                     _communityViewModel.recentNotice.length > 0
+                          //                         ? Column(
+                          //                             children: [
+                          //                               NoticeWidget(
+                          //                                   communityViewModel: _communityViewModel,
+                          //                                   post: _communityViewModel.recentNotice[0]),
+                          //                               SizedBox(
+                          //                                 height: 12.w,
+                          //                               )
+                          //                             ],
+                          //                           )
+                          //                         : Container(),
+                          //                   ],
+                          //                 )
+                          //               : Container(),
+                          //           // ((index + 1) % 5 == 2 && Platform.isAndroid) ? CommunityAd() : Container(),
+                          //           FeedWidget(
+                          //               communityViewModel: _communityViewModel,
+                          //               post: _communityViewModel.posts[index]),
                           //           SizedBox(
                           //             height: 12.w,
                           //           )
                           //         ],
                           //       );
-                          //     },
-                          //   )
-
+                          //     }),
+                          //   ),
                           ListView.builder(
                               padding: primaryHorizontalPadding,
                               // clipBehavior: Clip.none,
