@@ -362,12 +362,12 @@ PODS:
   - facebook_app_events (0.0.1):
     - FBSDKCoreKit (~> 12.0)
     - Flutter
-  - FBAEMKit (12.2.1):
-    - FBSDKCoreKit_Basics (= 12.2.1)
-  - FBSDKCoreKit (12.2.1):
-    - FBAEMKit (= 12.2.1)
-    - FBSDKCoreKit_Basics (= 12.2.1)
-  - FBSDKCoreKit_Basics (12.2.1)
+  - FBAEMKit (12.3.1):
+    - FBSDKCoreKit_Basics (= 12.3.1)
+  - FBSDKCoreKit (12.3.1):
+    - FBAEMKit (= 12.3.1)
+    - FBSDKCoreKit_Basics (= 12.3.1)
+  - FBSDKCoreKit_Basics (12.3.1)
   - Firebase/Analytics (8.10.0):
     - Firebase/Core
   - Firebase/AppCheck (8.10.0):
@@ -431,7 +431,7 @@ PODS:
     - Firebase/Storage (= 8.10.0)
     - firebase_core
     - Flutter
-  - FirebaseABTesting (8.10.0):
+  - FirebaseABTesting (8.11.0):
     - FirebaseCore (~> 8.0)
   - FirebaseAnalytics (8.10.0):
     - FirebaseAnalytics/AdIdSupport (= 8.10.0)
@@ -464,10 +464,10 @@ PODS:
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.6)
     - GoogleUtilities/Logger (~> 7.6)
-  - FirebaseCoreDiagnostics (8.10.0):
+  - FirebaseCoreDiagnostics (8.11.0):
     - GoogleDataTransport (~> 9.1)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GoogleUtilities/Logger (~> 7.6)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Logger (~> 7.7)
     - nanopb (~> 2.30908.0)
   - FirebaseFirestore (8.10.0):
     - abseil/algorithm (= 0.20200225.0)
@@ -491,10 +491,10 @@ PODS:
     - FirebaseInstallations (~> 8.0)
     - GoogleUtilities/Environment (~> 7.6)
     - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (8.10.0):
+  - FirebaseInstallations (8.11.0):
     - FirebaseCore (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GoogleUtilities/UserDefaults (~> 7.6)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
     - PromisesObjC (< 3.0, >= 1.2)
   - FirebaseMessaging (8.10.0):
     - FirebaseCore (~> 8.0)
@@ -614,12 +614,12 @@ PODS:
   - kakao_flutter_sdk (0.8.2):
     - Flutter
   - leveldb-library (1.22.1)
-  - Mixpanel-swift (3.0.0):
-    - Mixpanel-swift/Complete (= 3.0.0)
-  - Mixpanel-swift/Complete (3.0.0)
-  - mixpanel_flutter (1.4.2):
+  - Mixpanel-swift (3.1.0):
+    - Mixpanel-swift/Complete (= 3.1.0)
+  - Mixpanel-swift/Complete (3.1.0)
+  - mixpanel_flutter (1.4.3):
     - Flutter
-    - Mixpanel-swift (= 3.0.0)
+    - Mixpanel-swift (= 3.1.0)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -799,9 +799,9 @@ SPEC CHECKSUMS:
   cloud_firestore: 8a183be37e2e2d9f6a48e2c082cfb344196f6823
   cloud_functions: acab801c51eb2c8772dc2f61397eb8b92012b81c
   facebook_app_events: 7b4bf3ceb2115c280223361fd224505651f36c1a
-  FBAEMKit: 4cea610d0bc1680572f2aad7b25db7a2f2690d82
-  FBSDKCoreKit: 5b1992fe65802ca26be7e68bc4fac5f59fa39908
-  FBSDKCoreKit_Basics: a6a92ca628e05f86f458a4721574c5ddfb058ba3
+  FBAEMKit: 98e4afc9f867c6db3d1c0e7e3727d94a630b5f59
+  FBSDKCoreKit: 4f348872eae956c922aca1a13771b9c2d4602088
+  FBSDKCoreKit_Basics: b832439de7a8262ee17495889264e75785af54de
   Firebase: 44213362f1dcc52555b935dc925ed35ac55f1b20
   firebase_analytics: 60091c45d7fdd33085359ccfce99403ec3fb6f2b
   firebase_app_check: 42198dc31c7fadef8d75fb02ca71b21380795d37
@@ -811,16 +811,16 @@ SPEC CHECKSUMS:
   firebase_messaging: 8aa01a51da5f0cc5e1a8f7f6660c126d1aac3ef4
   firebase_remote_config: 8e0f2c24063d1951d063986f64b8562c436e4769
   firebase_storage: 740e81d4bef3360d50447dda37da9b8914a2acc0
-  FirebaseABTesting: fc7255f7e96d3cf7a1131fd68636c47e312cef76
+  FirebaseABTesting: aac00a5472250a45f1462675792030e44df025c7
   FirebaseAnalytics: 319c9b3b1bdd400d60e2f415dff0c5f6959e6760
   FirebaseAppCheck: 4bb7c14da666a15dd7b4d55df2728832da9e7c72
   FirebaseAuth: 59a2d2b933b5b79e18fb1e6ad230c6abdaa73d26
   FirebaseCore: 04186597c095da37d90ff9fd3e53bc61a1ff2440
-  FirebaseCoreDiagnostics: 56fb7216d87e0e6ec2feddefa9d8a392fe8b2c18
+  FirebaseCoreDiagnostics: 64d9709d804a6c25bd77841371c1fcfd909d5601
   FirebaseFirestore: 0e7321a508cc9de54316ec45400caba6b5719beb
   FirebaseFunctions: 9c406f9b2deb72719437565c106ca4a439d2a661
   FirebaseInAppMessaging: 4cc32b975626b0905f77ed7cb3ebd57612ac5d5c
-  FirebaseInstallations: 830327b45345ffc859eaa9c17bcd5ae893fd5425
+  FirebaseInstallations: 044eede8a049bce71c4541ee68d6e4364fcbe774
   FirebaseMessaging: b0aeba17332ee1ee610662b4d1e02a86db82f08f
   FirebaseRemoteConfig: 84d3397887d95587f0ee7a0a3989b2756dc2bbf9
   FirebaseStorage: 815410224b548172c578f02554a86bbc8f817f50
@@ -842,8 +842,8 @@ SPEC CHECKSUMS:
   image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
   kakao_flutter_sdk: 99c58edf8b0996fb735cbe9e610096555ef7472e
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
-  Mixpanel-swift: c95542f428c7c58f85a3608d7bd5ad5230d4251c
-  mixpanel_flutter: 7d43c16e832b28eb0ae372373027fa87974c4934
+  Mixpanel-swift: 843e0f1beac9037044e5d30a5e7da80dd799a0a0
+  mixpanel_flutter: 66b7c6c6f8de1a020af913e0a67391376a11f067
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   native_admob_flutter: 147f3efc0cb5eb500e26de8828b85e2bfd10f2ec
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c

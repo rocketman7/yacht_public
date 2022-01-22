@@ -94,8 +94,8 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     _mixpanelService.mixpanel.track('Setting');
-                    Get.to(() => SettingView());
-                    // Get.to(() => YachtStoreView());
+                    // Get.to(() => SettingView());
+                    Get.to(() => YachtStoreView());
                   },
                   child: Row(
                     children: [

@@ -27,7 +27,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "나의 예측이 주식이 된다!\n요트에 대해 함께 알아볼까요?",
@@ -53,7 +54,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "매일 제시되는 흥미진진한\n주식 예측 주제들!\n기업에 대해 공부하고\n예측에 참여하세요.",
@@ -79,7 +81,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "월간 리그에 참여하고 주식받자!\n진짜 주식으로 교환가능한 요트 포인트,\n그리고 다양한 이벤트를 통한\n추가적인 보상까지!",
@@ -105,7 +108,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "하고 싶은 이야기를 주고 받으며\n투자에 대한 시야를 함께 넓혀가요.\n그리고 ‘프로'들만 쓸 수 있는\n요트만의 진짜 프리미엄 컨텐츠!",
@@ -131,7 +135,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "검증된 정보와 금융 지식을\n재미있게 접해보세요!",
@@ -157,7 +162,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "이제 요트를 타고\n투자 항해를 시작해보세요.",
@@ -186,7 +192,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "나의 예측이 주식이 된다!\n요트에 대해 함께 알아볼까요?",
@@ -212,7 +219,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "매일 제시되는 흥미진진한\n주식 예측 주제들!\n기업에 대해 공부하고\n예측에 참여하세요.",
@@ -238,7 +246,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "월간 리그에 참여하고 주식받자!\n진짜 주식으로 교환가능한 요트 포인트,\n그리고 다양한 이벤트를 통한\n추가적인 보상까지!",
@@ -264,7 +273,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "하고 싶은 이야기를 주고 받으며\n투자에 대한 시야를 함께 넓혀가요.\n그리고 ‘프로'들만 쓸 수 있는\n요트만의 진짜 프리미엄 컨텐츠!",
@@ -290,7 +300,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "검증된 정보와 금융 지식을\n재미있게 접해보세요!",
@@ -316,7 +327,8 @@ class OnboardingView extends StatelessWidget {
             style: onboardingTitle,
           ),
           SizedBox(
-            height: correctHeight(20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
+            height: correctHeight(
+                20.w, onboardingTitle.fontSize, onboardingContent.fontSize),
           ),
           Text(
             "이제 요트를 타고\n투자 항해를 시작해보세요.",
