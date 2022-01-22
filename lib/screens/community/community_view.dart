@@ -202,7 +202,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                                             ],
                                           )
                                         : Container(),
-                                    ((index + 1) % 5 == 2 && Platform.isAndroid) ? CommunityAd() : Container(),
+                                    // ((index + 1) % 5 == 2 && Platform.isAndroid) ? CommunityAd() : Container(),
                                     FeedWidget(
                                         communityViewModel: _communityViewModel,
                                         post: _communityViewModel.posts[index]),
@@ -365,208 +365,208 @@ class CommunityView extends GetView<CommunityViewModel> {
 //   }
 // }
 
-class CommunityAd extends StatefulWidget {
-  @override
-  State<CommunityAd> createState() => _CommunityAdState();
-}
+// class CommunityAd extends StatefulWidget {
+//   @override
+//   State<CommunityAd> createState() => _CommunityAdState();
+// }
 
-class _CommunityAdState extends State<CommunityAd> {
-  final controller = NativeAdController();
-  RxBool isAdLoaded = false.obs;
-  @override
-  void initState() {
-    super.initState();
-    controller.load();
-    controller.onEvent.listen((event) {
-      if (event.keys.first == NativeAdEvent.loaded) {
-        isAdLoaded(true);
-        printAdDetails(controller);
-      }
-      // setState(() {});
-    });
-  }
+// class _CommunityAdState extends State<CommunityAd> {
+//   final controller = NativeAdController();
+//   RxBool isAdLoaded = false.obs;
+//   @override
+//   void initState() {
+//     super.initState();
+//     controller.load();
+//     controller.onEvent.listen((event) {
+//       if (event.keys.first == NativeAdEvent.loaded) {
+//         isAdLoaded(true);
+//         printAdDetails(controller);
+//       }
+//       // setState(() {});
+//     });
+//   }
 
-  void printAdDetails(NativeAdController controller) async {
-    /// Just for showcasing the ability to access
-    /// NativeAd's details via its controller.
-    // print("------- NATIVE AD DETAILS: -------");
-    // print(controller.headline);
-    // print(controller.body);
-    // print(controller.price);
-    // print(controller.store);
-    // print(controller.callToAction);
-    // print(controller.advertiser);
-    // print(controller.iconUri);
-    // print(controller.imagesUri);
-  }
+//   void printAdDetails(NativeAdController controller) async {
+//     /// Just for showcasing the ability to access
+//     /// NativeAd's details via its controller.
+//     // print("------- NATIVE AD DETAILS: -------");
+//     // print(controller.headline);
+//     // print(controller.body);
+//     // print(controller.price);
+//     // print(controller.store);
+//     // print(controller.callToAction);
+//     // print(controller.advertiser);
+//     // print(controller.iconUri);
+//     // print(controller.imagesUri);
+//   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     controller.dispose();
+//     super.dispose();
+//   }
 
-  AdLayoutBuilder get myCustomLayoutBuilder =>
-      (ratingBar, media, icon, headline, advertiser, body, price, store, attribution, button) {
-        return AdLinearLayout(
-          orientation: HORIZONTAL,
-          children: [
-            AdLinearLayout(
-              padding: EdgeInsets.only(right: 14.w),
-              width: WRAP_CONTENT,
-              orientation: VERTICAL,
-              children: [attribution, icon],
-            ),
-            AdLinearLayout(
-              width: WRAP_CONTENT,
-              height: WRAP_CONTENT,
-              orientation: VERTICAL,
-              gravity: LayoutGravity.left,
-              children: [
-                headline,
-                AdLinearLayout(
-                  width: MATCH_PARENT,
-                  orientation: HORIZONTAL,
-                  gravity: LayoutGravity.left,
-                  children: [
-                    AdExpanded(
-                      flex: 1,
-                      child: AdLinearLayout(
-                        width: WRAP_CONTENT,
-                        orientation: VERTICAL,
-                        gravity: LayoutGravity.left,
-                        children: [
-                          advertiser,
-                          body,
-                        ],
-                      ),
-                    ),
-                    AdExpanded(flex: 7, child: button)
-                    // AdLinearLayout(
-                    //   height: MATCH_PARENT,
-                    //   width: MATCH_PARENT,
-                    //   orientation: VERTICAL,
-                    //   gravity: LayoutGravity.center_vertical,
-                    //   children: [button],
-                    // ),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        );
+//   AdLayoutBuilder get myCustomLayoutBuilder =>
+//       (ratingBar, media, icon, headline, advertiser, body, price, store, attribution, button) {
+//         return AdLinearLayout(
+//           orientation: HORIZONTAL,
+//           children: [
+//             AdLinearLayout(
+//               padding: EdgeInsets.only(right: 14.w),
+//               width: WRAP_CONTENT,
+//               orientation: VERTICAL,
+//               children: [attribution, icon],
+//             ),
+//             AdLinearLayout(
+//               width: WRAP_CONTENT,
+//               height: WRAP_CONTENT,
+//               orientation: VERTICAL,
+//               gravity: LayoutGravity.left,
+//               children: [
+//                 headline,
+//                 AdLinearLayout(
+//                   width: MATCH_PARENT,
+//                   orientation: HORIZONTAL,
+//                   gravity: LayoutGravity.left,
+//                   children: [
+//                     AdExpanded(
+//                       flex: 1,
+//                       child: AdLinearLayout(
+//                         width: WRAP_CONTENT,
+//                         orientation: VERTICAL,
+//                         gravity: LayoutGravity.left,
+//                         children: [
+//                           advertiser,
+//                           body,
+//                         ],
+//                       ),
+//                     ),
+//                     AdExpanded(flex: 7, child: button)
+//                     // AdLinearLayout(
+//                     //   height: MATCH_PARENT,
+//                     //   width: MATCH_PARENT,
+//                     //   orientation: VERTICAL,
+//                     //   gravity: LayoutGravity.center_vertical,
+//                     //   children: [button],
+//                     // ),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           ],
+//         );
 
-        // AdLinearLayout(
-        //   decoration: AdDecoration(backgroundColor: Colors.white),
-        //   width: MATCH_PARENT,
-        //   height: MATCH_PARENT,
-        //   gravity: LayoutGravity.top,
-        //   // padding: EdgeInsets.all(8.0),
-        //   children: [
-        //     attribution,
-        //     AdLinearLayout(
-        //       margin: EdgeInsets.only(top: 6.0),
-        //       orientation: HORIZONTAL,
-        //       children: [
-        //         icon,
-        //         AdExpanded(
-        //           flex: 2,
-        //           child: AdLinearLayout(
-        //             width: WRAP_CONTENT,
-        //             // height: WRAP_CONTENT,
-        //             gravity: LayoutGravity.top,
-        //             margin: EdgeInsets.symmetric(horizontal: 4),
-        //             children: [
-        //               headline,
-        //               advertiser,
-        //               body,
-        //             ],
-        //           ),
-        //         ),
-        //         AdExpanded(flex: 5, child: button),
-        //       ],
-        //     ),
-        //   ],
-        // );
-      };
+//         // AdLinearLayout(
+//         //   decoration: AdDecoration(backgroundColor: Colors.white),
+//         //   width: MATCH_PARENT,
+//         //   height: MATCH_PARENT,
+//         //   gravity: LayoutGravity.top,
+//         //   // padding: EdgeInsets.all(8.0),
+//         //   children: [
+//         //     attribution,
+//         //     AdLinearLayout(
+//         //       margin: EdgeInsets.only(top: 6.0),
+//         //       orientation: HORIZONTAL,
+//         //       children: [
+//         //         icon,
+//         //         AdExpanded(
+//         //           flex: 2,
+//         //           child: AdLinearLayout(
+//         //             width: WRAP_CONTENT,
+//         //             // height: WRAP_CONTENT,
+//         //             gravity: LayoutGravity.top,
+//         //             margin: EdgeInsets.symmetric(horizontal: 4),
+//         //             children: [
+//         //               headline,
+//         //               advertiser,
+//         //               body,
+//         //             ],
+//         //           ),
+//         //         ),
+//         //         AdExpanded(flex: 5, child: button),
+//         //       ],
+//         //     ),
+//         //   ],
+//         // );
+//       };
 
-// native_admob_flutter
-  @override
-  Widget build(BuildContext context) {
-    // controller.load();
-    return Obx(() => isAdLoaded.value
-        ? Column(
-            children: [
-              Container(
-                padding: moduleBoxPadding(0),
-                decoration: primaryBoxDecoration.copyWith(
-                  boxShadow: [primaryBoxShadow],
-                  color: primaryBoxDecoration.color,
-                ),
-                child: NativeAd(
-                  controller: controller,
-                  // buildLayout: smallAdTemplateLayoutBuilder,
-                  buildLayout: myCustomLayoutBuilder,
-                  height: 90.w,
+// // native_admob_flutter
+//   @override
+//   Widget build(BuildContext context) {
+//     // controller.load();
+//     return Obx(() => isAdLoaded.value
+//         ? Column(
+//             children: [
+//               Container(
+//                 padding: moduleBoxPadding(0),
+//                 decoration: primaryBoxDecoration.copyWith(
+//                   boxShadow: [primaryBoxShadow],
+//                   color: primaryBoxDecoration.color,
+//                 ),
+//                 child: NativeAd(
+//                   controller: controller,
+//                   // buildLayout: smallAdTemplateLayoutBuilder,
+//                   buildLayout: myCustomLayoutBuilder,
+//                   height: 90.w,
 
-                  attribution: AdTextView(
-                      width: WRAP_CONTENT,
-                      height: 18.w,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 6.w,
-                        // vertical: 1.w,
-                      ),
-                      decoration: AdDecoration(
-                        backgroundColor: yachtViolet,
-                        borderRadius: AdBorderRadius.all(10.w),
-                      ),
-                      style: TextStyle(
-                        // fontFamily: krFont,
-                        // fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        fontSize: 9.w,
-                      )),
-                  body: AdTextView(
-                    style: TextStyle(
-                      fontSize: 12.w,
-                      // fontWeight: FontWeight.bold,
-                      color: yachtBlack,
-                    ),
-                    maxLines: 1,
-                  ),
-                  headline: AdTextView(
-                    style: TextStyle(
-                      fontSize: 14.w,
-                      // fontWeight: FontWeight.bold,
-                      color: yachtBlack,
-                    ),
-                    maxLines: 1,
-                  ),
-                  button: AdButtonView(
-                      width: MATCH_PARENT,
-                      height: 30.w,
-                      // padding: EdgeInsets.symmetric(
-                      //   horizontal: 10.w,
-                      //   vertical: 1.w,
-                      // ),
-                      decoration: AdDecoration(
-                        backgroundColor: yachtViolet,
-                      ),
-                      textStyle: TextStyle(
-                        color: white,
-                      )),
-                  // body: AdTextView(
-                  //   height: 1.0,
-                  //   maxLines: 3,
-                  // ),
-                ),
-              ),
-              SizedBox(height: 12.w),
-            ],
-          )
-        : Container());
-  }
-}
+//                   attribution: AdTextView(
+//                       width: WRAP_CONTENT,
+//                       height: 18.w,
+//                       padding: EdgeInsets.symmetric(
+//                         horizontal: 6.w,
+//                         // vertical: 1.w,
+//                       ),
+//                       decoration: AdDecoration(
+//                         backgroundColor: yachtViolet,
+//                         borderRadius: AdBorderRadius.all(10.w),
+//                       ),
+//                       style: TextStyle(
+//                         // fontFamily: krFont,
+//                         // fontWeight: FontWeight.w500,
+//                         color: Colors.white,
+//                         fontSize: 9.w,
+//                       )),
+//                   body: AdTextView(
+//                     style: TextStyle(
+//                       fontSize: 12.w,
+//                       // fontWeight: FontWeight.bold,
+//                       color: yachtBlack,
+//                     ),
+//                     maxLines: 1,
+//                   ),
+//                   headline: AdTextView(
+//                     style: TextStyle(
+//                       fontSize: 14.w,
+//                       // fontWeight: FontWeight.bold,
+//                       color: yachtBlack,
+//                     ),
+//                     maxLines: 1,
+//                   ),
+//                   button: AdButtonView(
+//                       width: MATCH_PARENT,
+//                       height: 30.w,
+//                       // padding: EdgeInsets.symmetric(
+//                       //   horizontal: 10.w,
+//                       //   vertical: 1.w,
+//                       // ),
+//                       decoration: AdDecoration(
+//                         backgroundColor: yachtViolet,
+//                       ),
+//                       textStyle: TextStyle(
+//                         color: white,
+//                       )),
+//                   // body: AdTextView(
+//                   //   height: 1.0,
+//                   //   maxLines: 3,
+//                   // ),
+//                 ),
+//               ),
+//               SizedBox(height: 12.w),
+//             ],
+//           )
+//         : Container());
+//   }
+// }
 
 class WritingNewPost extends StatelessWidget {
   WritingNewPost({

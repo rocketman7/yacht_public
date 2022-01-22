@@ -8,13 +8,13 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 class LoadingContainer extends StatefulWidget {
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
   final double radius;
   LoadingContainer({
     Key? key,
-    required this.height,
-    required this.width,
+    this.height,
+    this.width,
     required this.radius,
   }) : super(key: key);
 
@@ -42,8 +42,8 @@ class _LoadingContainerState extends State<LoadingContainer> {
       children: [
         Obx(
           () => Container(
-            height: widget.height,
-            width: widget.width,
+            height: widget.height ?? double.infinity,
+            width: widget.width ?? double.infinity,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(widget.radius),
                 gradient: painting.LinearGradient(
