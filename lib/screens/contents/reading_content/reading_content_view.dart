@@ -3,7 +3,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/screens/contents/reading_content/reading_content_view_model.dart';
-import 'package:yachtOne/screens/contents/reading_content/redaing_content_see_all_view.dart';
+import 'package:yachtOne/screens/contents/reading_content/reading_content_see_all_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
