@@ -115,6 +115,10 @@ class PushNotificationService {
             _firestoreService.getThisPost(data['option']).then((data) {
               Get.to(() => DetailPostView(data!));
             });
+          } else if (data['route'] == 'insight') {
+            Get.find<StartupViewModel>().selectedPage(1);
+          } else if (data['route'] == 'home') {
+            Get.find<StartupViewModel>().selectedPage(0);
           }
         }
         // 어차피 좀 더 세분화될거고 처음에 걸릴 것들이 많을 것 같으니 스위치문으로 바꾸는게 ??
