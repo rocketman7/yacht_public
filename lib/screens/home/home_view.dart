@@ -1288,7 +1288,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   SizedBox(
-                                      height: 26.w,
+                                      height: 24.w,
                                       // width: 24.w,
                                       child: Image.asset(
                                         'assets/icons/yachtpointstore.png',
@@ -1300,7 +1300,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                               ),
                             ),
                             SizedBox(
-                              width: 4.w,
+                              width: 14.w,
                             ),
                             InkWell(
                               onTap: () async {
@@ -1326,7 +1326,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                                 children: [
                                   SizedBox(
                                       height: 28.w,
-                                      // width: 24.w,
+                                      width: 28.w,
                                       child: GetBuilder<NotificationViewModel>(
                                         id: 'notificationList',
                                         builder: (controller) {

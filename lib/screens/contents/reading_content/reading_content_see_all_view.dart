@@ -63,6 +63,7 @@ class ReadingContentSeeAll extends GetView<ReadingContentViewModel> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 14.w,
+                mainAxisSpacing: 12.w,
               ),
               itemBuilder: (context, index) {
                 return InkWell(
@@ -100,7 +101,12 @@ class ReadingContentSeeAll extends GetView<ReadingContentViewModel> {
                 );
               },
             )
-          ]))
+          ])),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: ScreenUtil().bottomBarHeight + 14.w,
+            ),
+          )
         ],
       ),
     );
