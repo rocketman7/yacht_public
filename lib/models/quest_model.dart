@@ -25,6 +25,7 @@ class QuestModel {
   final String selectInstruction;
   final String basePriceInstruction;
   final String? rewardDescription;
+  final List<int>? choiceCounts;
 //선택모드: updown, updown_many, pickone, pickmany, order, 로 나눠서
   final String selectMode;
 
@@ -65,6 +66,7 @@ class QuestModel {
     required this.selectInstruction,
     required this.basePriceInstruction,
     this.rewardDescription,
+    this.choiceCounts,
     required this.selectMode,
     required this.itemNeeded,
     this.yachtPointSuccessReward,
@@ -100,6 +102,7 @@ class QuestModel {
     String? selectInstruction,
     String? basePriceInstruction,
     String? rewardDescription,
+    List<int>? choiceCounts,
     String? selectMode,
     int? itemNeeded,
     int? yachtPointSuccessReward,
@@ -134,6 +137,7 @@ class QuestModel {
       selectInstruction: selectInstruction ?? this.selectInstruction,
       basePriceInstruction: basePriceInstruction ?? this.basePriceInstruction,
       rewardDescription: rewardDescription ?? this.rewardDescription,
+      choiceCounts: choiceCounts ?? this.choiceCounts,
       selectMode: selectMode ?? this.selectMode,
       itemNeeded: itemNeeded ?? this.itemNeeded,
       yachtPointSuccessReward: yachtPointSuccessReward ?? this.yachtPointSuccessReward,
@@ -231,6 +235,7 @@ class QuestModel {
       selectInstruction: map['selectInstruction'] ?? "",
       basePriceInstruction: map['basePriceInstruction'] ?? "",
       rewardDescription: map['rewardDescription'],
+      choiceCounts: map['choiceCounts'] == null ? null : List<int>.from(map['choiceCounts']),
       selectMode: map['selectMode'],
       itemNeeded: map['itemNeeded'],
       yachtPointSuccessReward: map['yachtPointSuccessReward'],
@@ -254,7 +259,7 @@ class QuestModel {
 
   @override
   String toString() {
-    return 'QuestModel(questId: $questId, leagueId: $leagueId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, basePriceInstruction: $basePriceInstruction, rewardDescription: $rewardDescription, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointSuccessReward: $yachtPointSuccessReward, leaguePointSuccessReward: $leaguePointSuccessReward, expSuccessReward: $expSuccessReward, isYachtPointOneOfN: $isYachtPointOneOfN, yachtPointParticipationReward: $yachtPointParticipationReward, leaguePointParticipationReward: $leaguePointParticipationReward, expParticipationReward: $expParticipationReward, investAddresses: $investAddresses, surveys: $surveys, choices: $choices, counts: $counts, results: $results)';
+    return 'QuestModel(questId: $questId, leagueId: $leagueId, category: $category, themeColor: $themeColor, imageUrl: $imageUrl, uploadDateTime: $uploadDateTime, showHomeDateTime: $showHomeDateTime, closeHomeDateTime: $closeHomeDateTime, questStartDateTime: $questStartDateTime, questEndDateTime: $questEndDateTime, liveStartDateTime: $liveStartDateTime, liveEndDateTime: $liveEndDateTime, resultDateTime: $resultDateTime, title: $title, questDescription: $questDescription, selectInstruction: $selectInstruction, basePriceInstruction: $basePriceInstruction, rewardDescription: $rewardDescription, choiceCounts: $choiceCounts, selectMode: $selectMode, itemNeeded: $itemNeeded, yachtPointSuccessReward: $yachtPointSuccessReward, leaguePointSuccessReward: $leaguePointSuccessReward, expSuccessReward: $expSuccessReward, isYachtPointOneOfN: $isYachtPointOneOfN, yachtPointParticipationReward: $yachtPointParticipationReward, leaguePointParticipationReward: $leaguePointParticipationReward, expParticipationReward: $expParticipationReward, investAddresses: $investAddresses, surveys: $surveys, choices: $choices, counts: $counts, results: $results)';
   }
 
   @override
@@ -280,6 +285,7 @@ class QuestModel {
         other.selectInstruction == selectInstruction &&
         other.basePriceInstruction == basePriceInstruction &&
         other.rewardDescription == rewardDescription &&
+        other.choiceCounts == choiceCounts &&
         other.selectMode == selectMode &&
         other.itemNeeded == itemNeeded &&
         other.yachtPointSuccessReward == yachtPointSuccessReward &&
@@ -316,6 +322,7 @@ class QuestModel {
         selectInstruction.hashCode ^
         basePriceInstruction.hashCode ^
         rewardDescription.hashCode ^
+        choiceCounts.hashCode ^
         selectMode.hashCode ^
         itemNeeded.hashCode ^
         yachtPointSuccessReward.hashCode ^

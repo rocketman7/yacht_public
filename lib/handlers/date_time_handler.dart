@@ -7,6 +7,7 @@ import 'package:yachtOne/repositories/repository.dart';
 DateFormat dateInString = DateFormat("yyyyMMdd");
 DateFormat dateTimeInString = DateFormat("yyyyMMddHHmmSS");
 DateFormat feedDateTimeInString = DateFormat("yyyy.MM.dd HH:mm");
+DateFormat dateTimeShortened = DateFormat("yy.MM.dd");
 
 DateTime? stringToDateTime(String dateTimeInString) {
   int length = dateTimeInString.length;
@@ -113,6 +114,10 @@ String dateTimeToStringKorean(DateTime dateTime, bool toMinute) {
   } else {
     return '${dateTime.year}.${dateTime.month}.${dateTime.day}';
   }
+}
+
+String dateTimeToStringShortened(Timestamp time) {
+  return dateTimeShortened.format(time.toDate());
 }
 
 bool isHoliday(DateTime dateTime) {

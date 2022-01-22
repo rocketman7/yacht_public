@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:yachtOne/models/reading_content_model.dart';
@@ -11,7 +12,7 @@ class ReadingContentViewModel extends GetxController {
   final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
   RxList<ReadingContentModel> readingContents = <ReadingContentModel>[].obs;
-
+  ScrollController scrollController = ScrollController(initialScrollOffset: 0);
   @override
   void onInit() async {
     await getReadingContents();
