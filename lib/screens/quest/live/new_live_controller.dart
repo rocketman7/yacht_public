@@ -32,11 +32,9 @@ class NewLiveController extends GetxController {
   void onInit() async {
     investmentModelLength = questModel.investAddresses!.length;
     investAddresses.addAll(questModel.investAddresses!);
-    // TODO: implement onInit
+
     await getLivePrice();
     await getUserQuest();
-
-    // print('investAddresses: $investAddresses');
 
     super.onInit();
   }
