@@ -32,6 +32,7 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
       ),
       Obx(() => controller.readingContents.length > 0
           ? GridView.builder(
+              clipBehavior: Clip.none,
               padding: EdgeInsets.symmetric(
                 horizontal: 14.w,
               ),
@@ -42,6 +43,8 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 14.w,
+                mainAxisSpacing: 14.w,
+                childAspectRatio: 166 / 148,
               ),
               itemBuilder: (context, index) {
                 return InkWell(
@@ -58,24 +61,39 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
                     // await controller.launchUrl(controller.readingContents[index].contentUrl);
                   },
                   child: Container(
+                      // padding: EdgeInsets.all(4.w),
+                      decoration: yachtBoxDecoration.copyWith(
+                          borderRadius: BorderRadius.circular(12.w),
+                          border: Border.all(
+                            color: white,
+                            width: 4.w,
+                          )),
+                      //  BoxDecoration(
+
+                      //     borderRadius: BorderRadius.circular(12.w),
+                      //     color: Colors.blue,
+                      //     border: Border.all(
+                      //       color: yachtBlack,
+                      //       width: 4.w,
+                      //     )),
                       child: CachedNetworkImage(
-                    imageUrl:
-                        "https://storage.googleapis.com/ggook-5fb08.appspot.com/${controller.readingContents[index].thumbnailUrl}",
-                    width: 270.w,
-                    height: 240.w,
-                    filterQuality: FilterQuality.high,
-                    progressIndicatorBuilder: (_, __, DownloadProgress progress) {
-                      // progress.totalSize
-                      // if (progress == null) return child;
-                      return LayoutBuilder(builder: (context, constraints) {
-                        return LoadingContainer(
-                          width: constraints.maxWidth,
-                          height: constraints.maxHeight,
-                          radius: 10.w,
-                        );
-                      });
-                    },
-                  )),
+                        imageUrl:
+                            "https://storage.googleapis.com/ggook-5fb08.appspot.com/${controller.readingContents[index].thumbnailUrl}",
+                        // width: 270.w,
+                        // height: 240.w,
+                        filterQuality: FilterQuality.high,
+                        progressIndicatorBuilder: (_, __, DownloadProgress progress) {
+                          // progress.totalSize
+                          // if (progress == null) return child;
+                          return LayoutBuilder(builder: (context, constraints) {
+                            return LoadingContainer(
+                              width: constraints.maxWidth,
+                              height: constraints.maxHeight,
+                              radius: 10.w,
+                            );
+                          });
+                        },
+                      )),
                 );
               },
             )

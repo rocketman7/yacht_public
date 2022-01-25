@@ -123,6 +123,7 @@ class HomeView extends StatelessWidget {
     //     'screen width: ${ScreenUtil().screenWidth} / screen height: ${ScreenUtil().screenHeight} / ratio: ${(ScreenUtil().screenHeight / ScreenUtil().screenWidth)}');
 
     return Scaffold(
+      // backgroundColor: Colors.red,
       body: RefreshConfiguration(
         headerTriggerDistance: 80.w,
         // springDescription: SpringDescription(mass: 2.2, damping: 96, stiffness: 400),
