@@ -57,7 +57,7 @@ class NewLiveWidget extends StatelessWidget {
                     // "pickone || order 일 때"
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("현재 1위", style: TextStyle(color: yachtGrey, fontSize: 12.w)),
+                      // Text("현재 1위", style: TextStyle(color: yachtGrey, fontSize: 12.w)),
                       Text(
                         controller.investAddresses[controller.winnerIndex.value].name,
                         style: stockPriceTextStyle.copyWith(
@@ -75,7 +75,9 @@ class NewLiveWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-
+                      Text(
+                        '실시간 결과: ${controller.investAddresses[controller.winnerIndex.value].name}',
+                      ),
                       // Text(
                       //   controller.livePricesOfThisQuest[controller.getWinnerIndex()].value.chartPrices.last.toString(),
                       //   style: stockPriceTextStyle.copyWith(
@@ -89,7 +91,25 @@ class NewLiveWidget extends StatelessWidget {
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("현재 주가", style: TextStyle(color: yachtGrey, fontSize: 12.w)),
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(
+                      //     horizontal: 4.w,
+                      //     vertical: 2.w,
+                      //   ),
+                      //   decoration: BoxDecoration(
+                      //     color: yachtRed,
+                      //     borderRadius: BorderRadius.circular(6.w),
+                      //   ),
+                      //   child: Text("LIVE",
+                      //       style: TextStyle(
+                      //         color: white,
+                      //         fontSize: 12.w,
+                      //       )),
+                      // ),
+                      // SizedBox(
+                      //   height: 4.w,
+                      // ),
+                      // Text("현재 주가", style: TextStyle(color: yachtGrey, fontSize: 12.w)),
                       Text(
                         controller.investAddresses[controller.winnerIndex.value].name,
                         style: stockPriceTextStyle.copyWith(
@@ -279,6 +299,23 @@ class NewLiveWidget extends StatelessWidget {
                           )),
                 )
               ],
+            ),
+            SizedBox(
+              height: 14.w,
+            ),
+            Container(
+              width: double.infinity,
+              height: 44.w,
+              decoration: BoxDecoration(
+                color: yachtViolet,
+                borderRadius: BorderRadius.circular(8.w),
+              ),
+              child: Center(
+                child: Text(
+                  "자세히 보기",
+                  style: buttonTitleStyle.copyWith(height: 1.4),
+                ),
+              ),
             )
           ],
         ));
