@@ -1,8 +1,11 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/handlers/numbers_handler.dart';
+import 'package:yachtOne/screens/yacht_store/yacht_store_goods_view.dart';
 
 import '../../styles/yacht_design_system.dart';
 
@@ -48,147 +51,281 @@ class YachtStoreView extends StatelessWidget {
           Obx(() => SliverPersistentHeader(
                 pinned: true,
                 delegate: YachtStoreSectionHeaderDelegate(
-                    offset: yachtStoreController.offset.value,
-                    child: Container(
-                      height: 150.w,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 14.w, right: 14.w, top: 8.w, bottom: 8.w),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: yachtPaleGreen,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Padding(
-                                padding: EdgeInsets.all(14.w),
-                                child: Container(
-                                  height: 24.w,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '나의 요트 포인트',
-                                        style: yachtStoreTextStyle,
-                                      ),
-                                      Spacer(),
-                                      Image.asset(
-                                        'assets/icons/yachtGem.png',
-                                        width: 24.w,
-                                        height: 24.w,
-                                      ),
-                                      Text(
-                                        '250,000원',
-                                        style: yachtStoreTextStyle,
-                                      ),
-                                    ],
-                                  ),
+                  offset: yachtStoreController.offset.value,
+                  child: Container(
+                    height: 150.w,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 14.w, right: 14.w, top: 8.w, bottom: 8.w),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: yachtPaleGreen,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding: EdgeInsets.all(14.w),
+                              child: Container(
+                                height: 24.w,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '나의 요트 포인트',
+                                      style: yachtStoreTextStyle,
+                                    ),
+                                    Spacer(),
+                                    Image.asset(
+                                      'assets/icons/yachtGem.png',
+                                      width: 24.w,
+                                      height: 24.w,
+                                    ),
+                                    Text(
+                                      '250,000원',
+                                      style: yachtStoreTextStyle,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                          Container(
-                              height: 74.w,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: yachtStoreCategories.length,
-                                  itemBuilder: (context, index) {
-                                    return Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 14.w,
-                                        ),
-                                        GestureDetector(
-                                            onTap: () {
-                                              yachtStoreController
-                                                  .categorySelect(index);
-                                            },
-                                            child: Obx(
-                                              () => Container(
-                                                width: 80.w,
-                                                height: 74.w,
-                                                decoration: BoxDecoration(
-                                                  color: index ==
-                                                          yachtStoreController
-                                                              .categoryIndex
-                                                              .value
-                                                      ? yachtPaleGrey
-                                                          .withOpacity(0.3)
-                                                      : Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    Image.asset(
-                                                      yachtStoreCategories[
-                                                              index]
-                                                          .categoryImgDir,
-                                                      width: 50.w,
-                                                      height: 50.w,
-                                                    ),
-                                                    Container(
-                                                      height: 20.w,
-                                                      child: Text(
-                                                        '${yachtStoreCategories[index].categoryName}',
-                                                        style: yachtStoreCategoryTextStyle.copyWith(
-                                                            color: index ==
-                                                                    yachtStoreController
-                                                                        .categoryIndex
-                                                                        .value
-                                                                ? yachtGreen
-                                                                : yachtGrey),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 4.w,
-                                                    ),
-                                                  ],
-                                                ),
+                        ),
+                        Container(
+                            height: 74.w,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: yachtStoreCategories.length,
+                                itemBuilder: (context, index) {
+                                  return Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 14.w,
+                                      ),
+                                      GestureDetector(
+                                          onTap: () {
+                                            yachtStoreController
+                                                .categorySelect(index);
+                                          },
+                                          child: Obx(
+                                            () => Container(
+                                              width: 80.w,
+                                              height: 74.w,
+                                              decoration: BoxDecoration(
+                                                color: index ==
+                                                        yachtStoreController
+                                                            .categoryIndex.value
+                                                    ? yachtPaleGrey
+                                                        .withOpacity(0.3)
+                                                    : Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                               ),
-                                            )),
-                                        SizedBox(
-                                          width: index ==
-                                                  yachtStoreCategories.length -
-                                                      1
-                                              ? 14.w
-                                              : 0.w,
-                                        )
-                                      ],
-                                    );
-                                  })),
-                          SizedBox(
-                            height: 8.w - 1.w,
+                                              child: Column(
+                                                children: [
+                                                  Image.asset(
+                                                    yachtStoreCategories[index]
+                                                        .categoryImgDir,
+                                                    width: 50.w,
+                                                    height: 50.w,
+                                                  ),
+                                                  Container(
+                                                    height: 20.w,
+                                                    child: Text(
+                                                      '${yachtStoreCategories[index].categoryName}',
+                                                      style: yachtStoreCategoryTextStyle
+                                                          .copyWith(
+                                                              color: index ==
+                                                                      yachtStoreController
+                                                                          .categoryIndex
+                                                                          .value
+                                                                  ? yachtGreen
+                                                                  : yachtGrey),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 4.w,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )),
+                                      SizedBox(
+                                        width: index ==
+                                                yachtStoreCategories.length - 1
+                                            ? 14.w
+                                            : 0.w,
+                                      )
+                                    ],
+                                  );
+                                })),
+                        SizedBox(
+                          height: 8.w - 1.w,
+                        ),
+                        Container(
+                          height: 1.w,
+                          color: yachtLightGrey,
+                        )
+                      ],
+                    ),
+                  ),
+                  height: 150.w,
+                ),
+              )),
+          SliverList(
+              delegate: SliverChildListDelegate([
+            Obx(
+              () => yachtStoreController.giftishowList.length == 0
+                  ? Container()
+                  : GridView.builder(
+                      padding: primaryAllPadding,
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 14.w,
+                        mainAxisSpacing: 14.w,
+                        childAspectRatio: 166.w / 229.w,
+                      ),
+                      itemCount: 7,
+                      itemBuilder: (_, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () => YachtStoreGoodsView(
+                                giftishowModel:
+                                    yachtStoreController.giftishowList[index],
+                                yachtStoreController: yachtStoreController,
+                              ),
+                            );
+                          },
+                          child: Container(
+                            // color: yachtPaleGrey,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20.w,
+                                vertical: primaryPaddingSize,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: CachedNetworkImage(
+                                      imageUrl: yachtStoreController
+                                          .giftishowList[index].goodsImgS,
+                                      width: 123.w,
+                                      height: 123.w,
+                                      fit: BoxFit.fill,
+                                      // color: Colors.red,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.w),
+                                  Text(
+                                    yachtStoreController
+                                        .giftishowList[index].brandName,
+                                    style: yachtStoreBrandTextStyle,
+                                  ),
+                                  SizedBox(
+                                    height: 4.w,
+                                  ),
+                                  Text(
+                                    yachtStoreController
+                                        .giftishowList[index].goodsName,
+                                    style: yachtStoreGoodsTextStyle,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Expanded(
+                                    child: Container(),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/icons/yacht_point_circle.png',
+                                        height: 20.w,
+                                        width: 20.w,
+                                      ),
+                                      SizedBox(
+                                        width: 4.w,
+                                      ),
+                                      Text(
+                                        toPriceKRW(
+                                          yachtStoreController
+                                              .giftishowList[index].realPrice,
+                                        ),
+                                        style: yachtStoreGoodsPriceStyle,
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
+                        );
+                      }),
+            ),
+            Container(
+              height: 18.w,
+              color: yachtPaleGrey,
+            ),
+            GridView.builder(
+                padding: primaryAllPadding,
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 14.w,
+                  mainAxisSpacing: 14.w,
+                  childAspectRatio: 166.w / 229.w,
+                ),
+                itemCount: 7,
+                itemBuilder: (_, index) {
+                  return Container(
+                    color: yachtPaleGreen,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20.w,
+                        vertical: primaryPaddingSize,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Container(
-                            height: 1.w,
-                            color: yachtLightGrey,
+                            height: 123.w,
+                            color: Colors.red,
+                          ),
+                          SizedBox(height: 8.w),
+                          Text("Brand"),
+                          Text("상품명"),
+                          Row(
+                            children: [
+                              Text("가격"),
+                            ],
                           )
                         ],
                       ),
                     ),
-                    height: 150.w),
-              )),
-          SliverList(
-              delegate: SliverChildListDelegate([
-            Column(
-              children: [
-                Container(
-                  height: 400.w,
-                  color: Colors.red,
-                ),
-                Container(
-                  height: 400.w,
-                  color: Colors.blue,
-                ),
-                Container(
-                  height: 400.w,
-                  color: Colors.grey,
-                ),
-              ],
+                  );
+                }),
+            SizedBox(
+              height: ScreenUtil().bottomBarHeight + 20.w,
             )
+            // Column(
+            //   children: [
+            //     Container(
+            //       height: 400.w,
+            //       color: Colors.red,
+            //     ),
+            //     Container(
+            //       height: 400.w,
+            //       color: Colors.blue,
+            //     ),
+            //     Container(
+            //       height: 400.w,
+            //       color: Colors.grey,
+            //     ),
+            //   ],
+            // )
           ])),
         ],
       ),

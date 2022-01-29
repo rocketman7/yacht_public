@@ -97,7 +97,7 @@ class FirestoreService extends GetxService {
     return await _firestoreService
         .collection('users')
         .doc(uid)
-        // .doc('IKNYOcaLDlcXSmUEKcAs4LmkcxJ2')
+        // .doc('kakao:2088646822')
         .get()
         .then((value) => UserModel.fromMap(value.data()!));
   }

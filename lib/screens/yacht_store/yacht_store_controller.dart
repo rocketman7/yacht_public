@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/models/yacht_store/giftishow_model.dart';
+import 'package:yachtOne/services/giftishow_api_service.dart';
 
+import '../../locator.dart';
 import 'yacht_store_local_DB.dart';
 
 class YachtStoreController extends GetxController {
+  final GiftishowApiService giftishowApiService =
+      locator<GiftishowApiService>();
   // SliverPersistentHeader -> YachtStoreAppBarDelegate & YachtStoreSectionHeaderDelegate 앱바 스타일 쓰기 위한 변수
   ScrollController scrollController = ScrollController(initialScrollOffset: 0);
   RxDouble offset = 0.0.obs;
@@ -17,6 +22,7 @@ class YachtStoreController extends GetxController {
   // goods list 정렬되어 준비됐는가?
   bool isOrderingList = false;
 
+  RxList<GiftishowModel> giftishowList = <GiftishowModel>[].obs;
   @override
   void onInit() async {
     // TODO: implement onInit
@@ -28,6 +34,7 @@ class YachtStoreController extends GetxController {
 
     // 그 후에 goods 순서를 가공해준다.
     orderGoods();
+    await getGoodsList();
 
     isOrderingList = true;
     update();
@@ -42,6 +49,14 @@ class YachtStoreController extends GetxController {
 
     super.onClose();
   }
+
+  Future getGoodsList() async {
+    giftishowList.addAll(await giftishowApiService.getGoodsList());
+  }
+
+  // Future getGoodsDetail(String goodsCode) async {
+  //   return await giftishowApiService.getGoodsDetail(goodsCode);
+  // }
 
   // 카테고리 클릭하면,
   void categorySelect(int index) {

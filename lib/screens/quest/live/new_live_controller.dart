@@ -20,23 +20,48 @@ class NewLiveController extends GetxController {
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
   List<InvestAddressModel> investAddresses = [];
-  List<Rx<LiveQuestPriceModel>> livePricesOfThisQuest = <Rx<LiveQuestPriceModel>>[];
+  RxList<Rx<LiveQuestPriceModel>> livePricesOfThisQuest = <Rx<LiveQuestPriceModel>>[].obs;
 
   RxBool isPriceLoading = true.obs;
   int investmentModelLength = 0;
   RxInt winnerIndex = 0.obs;
   RxBool isUserAlreadyDone = false.obs;
   RxList userQuestChoice = [].obs;
+  RxList livePriceRankByIndex = [].obs;
 
   @override
   void onInit() async {
     investmentModelLength = questModel.investAddresses!.length;
     investAddresses.addAll(questModel.investAddresses!);
 
+    livePriceRankByIndex = List.generate(investmentModelLength, (index) => null).obs;
+
     await getLivePrice();
     await getUserQuest();
-
+    ever(livePricesOfThisQuest.first, (_) {
+      print('ever triggered');
+      Future.delayed(Duration(milliseconds: 300)).then((_) {
+        if (investmentModelLength > 1) sortLivePricesOfThisQuest();
+      });
+    });
+    // livePricesOfThisQuest.listen((p0) {
+    //   print('liveprice changed');
+    //   getWinnerIndex();
+    // });
     super.onInit();
+  }
+
+  sortLivePricesOfThisQuest() {
+    livePricesOfThisQuest.sort((a, b) =>
+        (a.value.chartPrices.last.normalizedClose ?? 100).compareTo(b.value.chartPrices.last.normalizedClose ?? 100));
+    // Map<int, num> mapping = Map<int, num>();
+    // for (int i = 0; i < investmentModelLength; i++) {
+    //   mapping[i] = livePricesOfThisQuest[i].value.chartPrices.last.normalizedClose ?? 100;
+    // }
+
+    livePricesOfThisQuest.refresh();
+    print(
+        'mapping: ${livePricesOfThisQuest[0].value.chartPrices.last.normalizedClose}, ${livePricesOfThisQuest[1].value.chartPrices.last.normalizedClose}');
   }
 
   getUserQuest() {
@@ -62,6 +87,7 @@ class NewLiveController extends GetxController {
   }
 
   getWinnerIndex() {
+    // normalized 된 가격 가장 큰 숫자
     var maxValue = livePricesOfThisQuest.map((e) => e.value.chartPrices.last.normalizedClose ?? 100).reduce(max);
     winnerIndex(
         livePricesOfThisQuest.map((e) => e.value.chartPrices.last.normalizedClose ?? 100).toList().indexOf(maxValue));
@@ -91,10 +117,9 @@ class NewLiveController extends GetxController {
       );
       livePricesOfThisQuest[i].refresh();
     }
-    getWinnerIndex();
+
+    // sortLivePrices();
 
     // print('livePricesOfThisQuest: ${livePricesOfThisQuest[0].value.chartPrices}');
   }
-
-  getMyQuestParticipation() {}
 }
