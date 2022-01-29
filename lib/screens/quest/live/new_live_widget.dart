@@ -46,98 +46,10 @@ class NewLiveWidget extends StatelessWidget {
                 height: 20.w,
               ),
               (controller.questModel.selectMode == "pickone" || controller.questModel.selectMode == "order")
-                  ? Column(
-                      // "pickone || order 일 때"
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Text("현재 1위", style: TextStyle(color: yachtGrey, fontSize: 12.w)),
-                        Text(
-                          controller.investAddresses[controller.winnerIndex.value].name,
-                          style: stockPriceTextStyle.copyWith(
-                            fontSize: 18.w,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Obx(
-                          () => Text(
-                            toPriceKRW(controller
-                                    .livePricesOfThisQuest[controller.winnerIndex.value].value.chartPrices.last.close ??
-                                0),
-                            style: stockPriceTextStyle.copyWith(
-                              fontSize: 22.w,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '실시간 결과: ${controller.investAddresses[controller.winnerIndex.value].name}',
-                        ),
-                        // Text(
-                        //   controller.livePricesOfThisQuest[controller.getWinnerIndex()].value.chartPrices.last.toString(),
-                        //   style: stockPriceTextStyle.copyWith(
-                        //     fontSize: 22.w,
-                        //   ),
-                        // ),
-                      ],
-                    )
+                  ? PickoneOrderLivePriceWidget(controller: controller)
                   :
                   // "updown 일 때"
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          controller.investAddresses[controller.winnerIndex.value].name,
-                          style: stockPriceTextStyle.copyWith(
-                            fontSize: 18.w,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Obx(
-                          () => Text(
-                            toPriceKRW(controller
-                                    .livePricesOfThisQuest[controller.winnerIndex.value].value.chartPrices.last.close ??
-                                0),
-                            style: stockPriceTextStyle.copyWith(
-                              fontSize: 22.w,
-                            ),
-                          ),
-                        ),
-                        controller.questModel.investAddresses![controller.winnerIndex.value].basePrice == null
-                            ? Container()
-                            :
-                            // Text(
-                            //     toPriceKRW(
-                            //         controller.questModel.investAddresses![controller.getWinnerIndex()].basePrice!),
-                            //     style: stockPriceTextStyle.copyWith(
-                            //       fontSize: 22.w,
-                            //     ),
-                            //   ),
-                            Text(
-                                controller.getPickoneByBasePrice()
-                                    ? '실시간 결과: ${controller.questModel.choices![0]}'
-                                    : '실시간 결과: ${controller.questModel.choices![1]}',
-                              ),
-                        // Text(controller.getPickoneByBasePrice().toString()),
-                        // Text(controller.questModel.investAddresses![0].basePrice.toString())
-                      ],
-                    ),
-              // Container(
-              //   // height: 80.w,
-              //   // color: Colors.blue,
-              //   child: Obx(
-              //     () => Column(
-              //       children: List.generate(controller.investmentModelLength, (index) {
-              //         return Text(
-              //           controller.livePricesOfThisQuest[index].value.chartPrices.last.normalizedClose.toString(),
-              //         );
-              //       })
-
-              //       // Text(controller.livePricesOfThisQuest[1].value.chartPrices.last.toString()),
-              //       ,
-              //     ),
-              //   ),
-              // ),
-              // Text(controller.investAddresses[0].basePrice.toString()),
-
+                  UpdownLivePriceWidget(controller: controller),
               Divider(
                 height: 20.w,
                 thickness: 1.w,
@@ -162,6 +74,102 @@ class NewLiveWidget extends StatelessWidget {
               )
             ],
           )),
+    );
+  }
+}
+
+class UpdownLivePriceWidget extends StatelessWidget {
+  const UpdownLivePriceWidget({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final NewLiveController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          controller.investAddresses[controller.winnerIndex.value].name,
+          style: stockPriceTextStyle.copyWith(
+            fontSize: 18.w,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        Obx(
+          () => Text(
+            toPriceKRW(
+                controller.livePricesOfThisQuest[controller.winnerIndex.value].value.chartPrices.last.close ?? 0),
+            style: stockPriceTextStyle.copyWith(
+              fontSize: 22.w,
+            ),
+          ),
+        ),
+        controller.questModel.investAddresses![controller.winnerIndex.value].basePrice == null
+            ? Container()
+            :
+            // Text(
+            //     toPriceKRW(
+            //         controller.questModel.investAddresses![controller.getWinnerIndex()].basePrice!),
+            //     style: stockPriceTextStyle.copyWith(
+            //       fontSize: 22.w,
+            //     ),
+            //   ),
+            Text(
+                controller.getPickoneByBasePrice()
+                    ? '실시간 결과: ${controller.questModel.choices![0]}'
+                    : '실시간 결과: ${controller.questModel.choices![1]}',
+              ),
+        // Text(controller.getPickoneByBasePrice().toString()),
+        // Text(controller.questModel.investAddresses![0].basePrice.toString())
+      ],
+    );
+  }
+}
+
+class PickoneOrderLivePriceWidget extends StatelessWidget {
+  const PickoneOrderLivePriceWidget({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final NewLiveController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      // "pickone || order 일 때"
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Text("현재 1위", style: TextStyle(color: yachtGrey, fontSize: 12.w)),
+        Text(
+          controller.investAddresses[controller.winnerIndex.value].name,
+          style: stockPriceTextStyle.copyWith(
+            fontSize: 18.w,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        Obx(
+          () => Text(
+            toPriceKRW(
+                controller.livePricesOfThisQuest[controller.winnerIndex.value].value.chartPrices.last.close ?? 0),
+            style: stockPriceTextStyle.copyWith(
+              fontSize: 22.w,
+            ),
+          ),
+        ),
+        Text(
+          '실시간 결과: ${controller.investAddresses[controller.winnerIndex.value].name}',
+        ),
+        // Text(
+        //   controller.livePricesOfThisQuest[controller.getWinnerIndex()].value.chartPrices.last.toString(),
+        //   style: stockPriceTextStyle.copyWith(
+        //     fontSize: 22.w,
+        //   ),
+        // ),
+      ],
     );
   }
 }

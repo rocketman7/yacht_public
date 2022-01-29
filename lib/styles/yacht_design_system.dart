@@ -1363,6 +1363,34 @@ TextStyle yachtStoreCategoryTextStyle = TextStyle(
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
+
+TextStyle yachtStoreBrandTextStyle = TextStyle(
+  fontFamily: krFont,
+  fontSize: 14.w,
+  // fontWeight: FontWeight.w400,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+TextStyle yachtStoreGoodsTextStyle = TextStyle(
+  fontFamily: krFont,
+  fontSize: 16.w,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+TextStyle yachtStoreGoodsPriceStyle = TextStyle(
+  fontFamily: krFont,
+  fontSize: 16.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
 TextStyle seeMore = TextStyle(
   fontSize: 16.w,
   fontWeight: FontWeight.w500,

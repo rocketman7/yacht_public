@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
+import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/screens/quest/live/new_live_controller.dart';
 import 'package:yachtOne/screens/quest/live/new_live_widget.dart';
@@ -35,6 +37,7 @@ class NewLiveDetailView extends StatelessWidget {
                 child: sectionBox(
                   padding: primaryAllPadding,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       NewLiveDetailHeader(
                         questModel: questModel,
@@ -51,8 +54,36 @@ class NewLiveDetailView extends StatelessWidget {
                         height: 20.w,
                       ),
                       Column(
-                        children: [],
-                      )
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List.generate(
+                            controller.investmentModelLength,
+                            (index) => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      controller.investAddresses[index].name,
+                                      style: stockPriceTextStyle.copyWith(
+                                        fontSize: 18.w,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Obx(
+                                      () => Text(
+                                        toPriceKRW(
+                                            controller.livePricesOfThisQuest[index].value.chartPrices.last.close ?? 0),
+                                        style: stockPriceTextStyle.copyWith(
+                                          fontSize: 22.w,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                      ),
+                      // (controller.questModel.selectMode == "pickone" || controller.questModel.selectMode == "order")
+                      //     ? PickoneOrderLivePriceWidget(controller: controller)
+                      //     :
+                      //     // "updown 일 때"
+                      //     UpdownLivePriceWidget(controller: controller),
                     ],
                   ),
                 ),
