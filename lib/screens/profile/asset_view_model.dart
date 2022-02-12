@@ -32,6 +32,8 @@ class AssetModel {
   final Timestamp tradeDate;
   final String tradeTitle;
   List<AwardModel>? awards;
+  String? phoneNumber;
+  String? userRealName;
   num? yachtPoint;
 
   AssetModel({
@@ -40,18 +42,17 @@ class AssetModel {
     required this.tradeTitle,
     this.awards,
     this.yachtPoint,
+    this.phoneNumber,
+    this.userRealName,
   });
 
   factory AssetModel.fromMap(Map<String, dynamic> map) {
-    if (map['assetCategory'] == "Award" ||
-        map['assetCategory'] == "Delivery" ||
-        map['assetCategory'] == "Ing")
+    if (map['assetCategory'] == "Award" || map['assetCategory'] == "Delivery" || map['assetCategory'] == "Ing")
       return AssetModel(
         assetCategory: map['assetCategory'],
         tradeDate: map['tradeDate'],
         tradeTitle: map['tradeTitle'],
-        awards: List<AwardModel>.from(
-            map['awards']?.map((x) => AwardModel.fromMap(x))),
+        awards: List<AwardModel>.from(map['awards']?.map((x) => AwardModel.fromMap(x))),
       );
     else
       return AssetModel(
@@ -68,7 +69,9 @@ class AssetModel {
       'tradeDate': tradeDate,
       'tradeTitle': tradeTitle,
       'awards': awards == null ? null : awards!.map((x) => x.toMap()).toList(),
-      'yachtPoint': yachtPoint
+      'yachtPoint': yachtPoint,
+      'phoneNumber': phoneNumber,
+      'userRealName': userRealName,
     };
   }
 }
@@ -167,11 +170,9 @@ class AssetViewModel extends GetxController {
 
   Future<bool> updateUserAsset(String uid, AssetModel ingAssetModel) async {
     try {
-      await firestoreService
-          .collection('users')
-          .doc(uid)
-          .collection('userAsset')
-          .add(ingAssetModel.toMapAwards());
+      await firestoreService.collection('users').doc(uid).collection('userAsset').add(
+            ingAssetModel.toMapAwards(),
+          );
     } catch (e) {
       return false;
     }
@@ -222,8 +223,7 @@ class AssetViewModel extends GetxController {
     allAssets = await getAllAssets(userModelRx.value!.uid);
 
     checkNameUrl = await _firestoreService.checkNameUrl();
-    checkNameExists.bindStream(
-        _firestoreService.getNameCheckResult(userModelRx.value!.uid));
+    checkNameExists.bindStream(_firestoreService.getNameCheckResult(userModelRx.value!.uid));
     update(['assets']);
 
     calcHoldingStocksAndYachtPoint();
@@ -243,60 +243,46 @@ class AssetViewModel extends GetxController {
     for (int i = 0; i < allAssets.length; i++) {
       if (allAssets[i].assetCategory == "Award") {
         for (int j = 0; j < allAssets[i].awards!.length; j++) {
-          if (!stocksNameMap
-              .containsKey('${allAssets[i].awards![j].issueCode}')) {
-            stocksNameMap['${allAssets[i].awards![j].issueCode}'] =
-                allAssets[i].awards![j].name;
+          if (!stocksNameMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksNameMap['${allAssets[i].awards![j].issueCode}'] = allAssets[i].awards![j].name;
           }
 
-          if (stocksSharesNumMap
-              .containsKey('${allAssets[i].awards![j].issueCode}')) {
-            stocksSharesNumMap.update('${allAssets[i].awards![j].issueCode}',
-                (value) => (value + allAssets[i].awards![j].sharesNum.toInt()));
+          if (stocksSharesNumMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksSharesNumMap.update(
+                '${allAssets[i].awards![j].issueCode}', (value) => (value + allAssets[i].awards![j].sharesNum.toInt()));
           } else {
-            stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] =
-                allAssets[i].awards![j].sharesNum.toInt();
+            stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] = allAssets[i].awards![j].sharesNum.toInt();
           }
         }
       } else if (allAssets[i].assetCategory == "Delivery") {
         for (int j = 0; j < allAssets[i].awards!.length; j++) {
-          if (!stocksNameMap
-              .containsKey('${allAssets[i].awards![j].issueCode}')) {
-            stocksNameMap['${allAssets[i].awards![j].issueCode}'] =
-                allAssets[i].awards![j].name;
+          if (!stocksNameMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksNameMap['${allAssets[i].awards![j].issueCode}'] = allAssets[i].awards![j].name;
           }
 
-          if (stocksSharesNumMap
-              .containsKey('${allAssets[i].awards![j].issueCode}')) {
-            stocksSharesNumMap.update('${allAssets[i].awards![j].issueCode}',
-                (value) => (value - allAssets[i].awards![j].sharesNum.toInt()));
+          if (stocksSharesNumMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksSharesNumMap.update(
+                '${allAssets[i].awards![j].issueCode}', (value) => (value - allAssets[i].awards![j].sharesNum.toInt()));
           } else {
-            stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] =
-                -allAssets[i].awards![j].sharesNum.toInt();
+            stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] = -allAssets[i].awards![j].sharesNum.toInt();
           }
 
-          totalDeliveriedValue += allAssets[i].awards![j].priceAtTrade *
-              allAssets[i].awards![j].sharesNum;
+          totalDeliveriedValue += allAssets[i].awards![j].priceAtTrade * allAssets[i].awards![j].sharesNum;
         }
       } else if (allAssets[i].assetCategory == "Ing") {
         for (int j = 0; j < allAssets[i].awards!.length; j++) {
-          if (!stocksNameMap
-              .containsKey('${allAssets[i].awards![j].issueCode}')) {
-            stocksNameMap['${allAssets[i].awards![j].issueCode}'] =
-                allAssets[i].awards![j].name;
+          if (!stocksNameMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksNameMap['${allAssets[i].awards![j].issueCode}'] = allAssets[i].awards![j].name;
           }
 
-          if (stocksSharesNumMap
-              .containsKey('${allAssets[i].awards![j].issueCode}')) {
-            stocksSharesNumMap.update('${allAssets[i].awards![j].issueCode}',
-                (value) => (value - allAssets[i].awards![j].sharesNum.toInt()));
+          if (stocksSharesNumMap.containsKey('${allAssets[i].awards![j].issueCode}')) {
+            stocksSharesNumMap.update(
+                '${allAssets[i].awards![j].issueCode}', (value) => (value - allAssets[i].awards![j].sharesNum.toInt()));
           } else {
-            stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] =
-                -allAssets[i].awards![j].sharesNum.toInt();
+            stocksSharesNumMap['${allAssets[i].awards![j].issueCode}'] = -allAssets[i].awards![j].sharesNum.toInt();
           }
 
-          totalDeliveriedValue += allAssets[i].awards![j].priceAtTrade *
-              allAssets[i].awards![j].sharesNum;
+          totalDeliveriedValue += allAssets[i].awards![j].priceAtTrade * allAssets[i].awards![j].sharesNum;
         }
       } else if (allAssets[i].assetCategory == "YachtPoint") {
         totalYachtPoint += allAssets[i].yachtPoint!.toInt();
@@ -317,21 +303,15 @@ class AssetViewModel extends GetxController {
     for (int i = 0; i < allAssets.length; i++) {
       if (allAssets[i].assetCategory == "Award") {
         for (int j = 0; j < allAssets[i].awards!.length; j++) {
-          stocksAccumPrice.update(
-              '${allAssets[i].awards![j].issueCode}',
-              (value) => (value +
-                  allAssets[i].awards![j].priceAtTrade *
-                      allAssets[i].awards![j].sharesNum.toInt()));
-          stocksSharesNum.update('${allAssets[i].awards![j].issueCode}',
-              (value) => (value + allAssets[i].awards![j].sharesNum.toInt()));
+          stocksAccumPrice.update('${allAssets[i].awards![j].issueCode}',
+              (value) => (value + allAssets[i].awards![j].priceAtTrade * allAssets[i].awards![j].sharesNum.toInt()));
+          stocksSharesNum.update(
+              '${allAssets[i].awards![j].issueCode}', (value) => (value + allAssets[i].awards![j].sharesNum.toInt()));
         }
       }
     }
     stocksAveragePriceAtAwardMap.forEach((key, value) {
-      stocksAveragePriceAtAwardMap.update(
-          key,
-          (value) =>
-              (stocksAccumPrice[key]! / (stocksSharesNum[key]!.toInt())));
+      stocksAveragePriceAtAwardMap.update(key, (value) => (stocksAccumPrice[key]! / (stocksSharesNum[key]!.toInt())));
     });
   }
 
@@ -360,18 +340,16 @@ class AssetViewModel extends GetxController {
   }
 
   void tapPlusButton(int index) {
-    stocksDeliveryNum[index](
-        stocksDeliveryNum[index].value < allHoldingStocks[index].sharesNum
-            ? stocksDeliveryNum[index].value + 1
-            : stocksDeliveryNum[index].value);
+    stocksDeliveryNum[index](stocksDeliveryNum[index].value < allHoldingStocks[index].sharesNum
+        ? stocksDeliveryNum[index].value + 1
+        : stocksDeliveryNum[index].value);
 
     calcTotalDeliveryValue();
   }
 
   void tapMinusButton(int index) {
-    stocksDeliveryNum[index](stocksDeliveryNum[index].value > 0
-        ? stocksDeliveryNum[index].value - 1
-        : stocksDeliveryNum[index].value);
+    stocksDeliveryNum[index](
+        stocksDeliveryNum[index].value > 0 ? stocksDeliveryNum[index].value - 1 : stocksDeliveryNum[index].value);
 
     calcTotalDeliveryValue();
   }
@@ -380,8 +358,7 @@ class AssetViewModel extends GetxController {
     totalDeliveryValue(0);
 
     for (int i = 0; i < allHoldingStocks.length; i++) {
-      totalDeliveryValue(totalDeliveryValue.value +
-          allHoldingStocks[i].currentPrice * stocksDeliveryNum[i].value);
+      totalDeliveryValue(totalDeliveryValue.value + allHoldingStocks[i].currentPrice * stocksDeliveryNum[i].value);
     }
   }
 
@@ -396,8 +373,7 @@ class AssetViewModel extends GetxController {
           AssetModel ingAssetModel = AssetModel(
               assetCategory: 'Ing',
               tradeDate: Timestamp.fromDate(DateTime.now()),
-              tradeTitle:
-                  '${allHoldingStocks[i].name} ${stocksDeliveryNum[i].value}주 출고',
+              tradeTitle: '${allHoldingStocks[i].name} ${stocksDeliveryNum[i].value}주 출고',
               awards: [
                 AwardModel(
                   issueCode: '${allHoldingStocks[i].issueCode}',
@@ -445,11 +421,8 @@ class AssetViewModel extends GetxController {
   String getStringTradeDetail(int index) {
     switch (allAssets[index].assetCategory) {
       case "Award":
-        String temp = (allAssets[index].awards!.length > 1)
-            ? " 외 ${allAssets[index].awards!.length - 1}건"
-            : "";
-        return "${allAssets[index].awards![0].name} ${allAssets[index].awards![0].sharesNum}주" +
-            temp;
+        String temp = (allAssets[index].awards!.length > 1) ? " 외 ${allAssets[index].awards!.length - 1}건" : "";
+        return "${allAssets[index].awards![0].name} ${allAssets[index].awards![0].sharesNum}주" + temp;
       case "Ing":
         return "출고 대기중";
       case "Delivery":

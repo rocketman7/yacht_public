@@ -25,6 +25,7 @@ import 'package:yachtOne/models/today_market_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/models/users/user_post_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
+import 'package:yachtOne/models/yacht_store/giftishow_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
 
@@ -224,7 +225,6 @@ class FirestoreService extends GetxService {
         .get();
 
     // print(checkIfUserAlreadyDone.exists);
-
     if (checkIfUserAlreadyDone.exists) {
       // 예측 변경이면,
       await _firestoreService
@@ -276,7 +276,32 @@ class FirestoreService extends GetxService {
           .collection('quests')
           .doc(questModel.questId)
           .update({'counts': FieldValue.increment(1)});
+
+      // quest 다큐에 choiceCounts 추가
+      await _firestoreService
+          .collection('leagues')
+          .doc(questModel.leagueId)
+          .collection('quests')
+          .doc(questModel.questId)
+          .get()
+          .then((value) async {
+        var choiceCounts = value.data()!['choiceCounts'] == null
+            ? List<int>.filled(questModel.choices!.length, 0)
+            : List<int>.from(value.data()!['choiceCounts']);
+
+        answers.forEach((element) {
+          choiceCounts[element] += 1;
+        });
+        await _firestoreService
+            .collection('leagues')
+            .doc(questModel.leagueId)
+            .collection('quests')
+            .doc(questModel.questId)
+            .update({'choiceCounts': choiceCounts});
+        // print(choiceCounts);
+      });
     }
+
     // 조가비 소모시키기
     await _firestoreService
         .collection('users')
@@ -343,6 +368,55 @@ class FirestoreService extends GetxService {
         questModel.expParticipationReward as int,
       )
     });
+  }
+
+  Future<num> calculateYachtPoint() async {
+    num yachtPoint = 0;
+    await _firestoreService.collection('users/${userModelRx.value!.uid}/userAsset').get().then((docSnapshot) {
+      docSnapshot.docs.forEach((element) {
+        if (element.data()['yachtPoint'] != null) {
+          if (element.data()['assetCategory'] == 'YachtPoint') {
+            yachtPoint += element.data()['yachtPoint'];
+          } else if (element.data()['assetCategory'] == 'UseYachtPoint') {
+            yachtPoint -= element.data()['yachtPoint'];
+          } else {}
+        }
+      });
+    });
+    print('yachtPoint: $yachtPoint');
+    return yachtPoint;
+  }
+
+  // 요트포인트 스토어 상품리스트 가져오기
+  Future<List<GiftishowModel>> getGoodsList() async {
+    return firestoreService
+        .collection('yachtPointStore/yachtPointStore/giftishows')
+        .orderBy('index')
+        .get()
+        .then((snapshot) {
+      return snapshot.docs.map((e) => GiftishowModel.fromMap(e.data())).toList();
+    });
+  }
+
+  // 요트 포인트 스토어에서 포인트 사용
+  Future useYachtPointToGiftishow(
+    GiftishowModel giftishowModel,
+    String phoneNumber,
+    String userRealName,
+  ) async {
+    AssetModel newAssetModel = AssetModel(
+      assetCategory: 'UseYachtPoint',
+      tradeDate: Timestamp.fromDate(DateTime.now()),
+      tradeTitle: "요트 포인트 스토어 교환: ${giftishowModel.brandName} ${giftishowModel.goodsName}",
+      yachtPoint: giftishowModel.realPrice,
+      phoneNumber: phoneNumber,
+      userRealName: userRealName,
+    );
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .collection('userAsset')
+        .add(newAssetModel.toMapAwards());
   }
 
   // 차트 그리기 위한 Historical Price

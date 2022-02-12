@@ -772,7 +772,7 @@ TextStyle contentStyle = TextStyle(
 // 심플 텍스트 버튼 스타일
 TextStyle simpleTextButtonStyle = TextStyle(
   fontSize: bodySmallSize,
-  fontWeight: FontWeight.w500,
+  fontWeight: FontWeight.w600,
   color: primaryButtonBackground,
   letterSpacing: -0.5,
   height: primaryFontHeight,
@@ -1353,7 +1353,7 @@ TextStyle yachtStoreTextStyle = TextStyle(
   fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
-  height: primaryFontHeight,
+  height: 1.4,
 );
 TextStyle yachtStoreCategoryTextStyle = TextStyle(
   fontFamily: krFont,
@@ -1364,7 +1364,7 @@ TextStyle yachtStoreCategoryTextStyle = TextStyle(
   height: primaryFontHeight,
 );
 
-TextStyle yachtStoreBrandTextStyle = TextStyle(
+TextStyle yachtStoreBrandMain = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   // fontWeight: FontWeight.w400,
@@ -1373,7 +1373,16 @@ TextStyle yachtStoreBrandTextStyle = TextStyle(
   height: primaryFontHeight,
 );
 
-TextStyle yachtStoreGoodsTextStyle = TextStyle(
+TextStyle yachtStoreBrandDetail = TextStyle(
+  fontFamily: krFont,
+  fontSize: 18.w,
+  // fontWeight: FontWeight.w400,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+TextStyle yachtStoreGoodsNameMain = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w600,
@@ -1382,10 +1391,37 @@ TextStyle yachtStoreGoodsTextStyle = TextStyle(
   height: primaryFontHeight,
 );
 
-TextStyle yachtStoreGoodsPriceStyle = TextStyle(
+TextStyle yachtStoreGoodsNameDetail = TextStyle(
+  fontFamily: krFont,
+  fontSize: 20.w,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+TextStyle yachtStoreGoodsPriceMain = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtStoreGoodsPriceDetail = TextStyle(
+  fontFamily: krFont,
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtStoreGoodsDescription = TextStyle(
+  fontFamily: krFont,
+  fontSize: 16.w,
+  // fontWeight: FontWeight.w500,
   color: yachtBlack,
   letterSpacing: -1.0,
   height: 1.4,
@@ -1464,7 +1500,7 @@ Container textContainerButtonWithOptions({
     padding: padding ?? EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
       color: isDarkBackground ? primaryButtonBackground : primaryButtonText,
-      borderRadius: BorderRadius.circular(50),
+      borderRadius: BorderRadius.circular(8.w),
     ),
     child: Center(
       child: Text(
@@ -1473,6 +1509,45 @@ Container textContainerButtonWithOptions({
             ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
             : simpleTextButtonStyle.copyWith(fontSize: fontSize ?? bodyBigSize),
       ),
+    ),
+  );
+}
+
+Container conditionalButton({
+  required String text,
+  required bool isEnable,
+  bool isPrimary = true,
+  double? fontSize,
+  EdgeInsets? padding,
+  double? height,
+}) {
+  return Container(
+    height: height,
+    padding: padding ?? EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+    decoration: BoxDecoration(
+      color: !isEnable
+          ? yachtLightGrey
+          : isPrimary
+              ? primaryButtonBackground
+              : yachtPaleGrey,
+      borderRadius: BorderRadius.circular(4.w),
+    ),
+    child: Center(
+      child: Text(text,
+          style: !isEnable
+              ? simpleTextButtonStyle.copyWith(
+                  color: yachtGrey,
+                  fontSize: fontSize ?? bodyBigSize,
+                )
+              : isPrimary
+                  ? simpleTextButtonStyle.copyWith(
+                      color: primaryButtonText,
+                      fontSize: fontSize ?? bodyBigSize,
+                    )
+                  : simpleTextButtonStyle.copyWith(
+                      color: yachtViolet,
+                      fontSize: fontSize ?? bodyBigSize,
+                    )),
     ),
   );
 }
@@ -1541,6 +1616,16 @@ BoxDecoration yachtChoiceBoxDecoration =
     spreadRadius: 1.w,
   )
 ]);
+
+// 포인트 스토어 상품 이미지 테두리
+BoxDecoration yachtStoreGoodsBoxDecoration = BoxDecoration(
+    border: Border.all(
+      width: 1.w,
+      color: yachtPaleGrey,
+    ),
+    borderRadius: BorderRadius.circular(
+      2.w,
+    ));
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -2142,6 +2227,111 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
         )),
   );
 }
+
+// Dialog yachtPrimaryDialog({
+//   required BuildContext context,
+//   required String title,
+//   String? description,
+// }) {
+//   return Dialog(
+//     backgroundColor: primaryBackgroundColor,
+//     insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+//     clipBehavior: Clip.hardEdge,
+//     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+//     child: Column(
+//       mainAxisSize: MainAxisSize.min,
+//       children: [
+//         Container(
+//           padding: primaryHorizontalPadding,
+//           // height: 210.w,
+//           width: 347.w,
+//           child: Column(
+//             children: [
+//               SizedBox(height: 14.w),
+//               Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
+//               SizedBox(
+//                 height:
+//                     correctHeight(20.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
+//               ),
+//               Center(
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.center,
+//                   children: [
+//                     Text(
+//                       title,
+//                       textAlign: TextAlign.center,
+//                       style: yachtBadgesDescriptionDialogTitle,
+//                     ),
+//                     SizedBox(
+//                       height: 4.w,
+//                     ),
+//                     Text(
+//                       description,
+//                       textAlign: TextAlign.center,
+//                       // style: yachtBadgesDescriptionDialogTitle,
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: correctHeight(20.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+//               ),
+//               Padding(
+//                 padding: EdgeInsets.symmetric(
+//                   horizontal: primaryPaddingSize,
+//                 ),
+//                 child: Row(
+//                   children: [
+//                     Expanded(
+//                       child: GestureDetector(
+//                           behavior: HitTestBehavior.opaque,
+//                           onTap: () {
+//                             Navigator.of(context).pop();
+//                           },
+//                           child: conditionalButton(
+//                             height: 44.w,
+//                             text: '취소',
+//                             isEnable: false,
+//                           )
+//                           // style: yachtDeliveryDialogButtonText,
+
+//                           ),
+//                     ),
+//                     SizedBox(
+//                       width: 10.w,
+//                     ),
+//                     Expanded(
+//                       child: GestureDetector(
+//                           behavior: HitTestBehavior.opaque,
+//                           onTap: () {
+//                             if (!yachtStoreController.isExchanging.value) {
+//                               yachtStoreController.confirmExchange(
+//                                 giftishowModel,
+//                                 _phoneNumberController.text.replaceAll('-', '').trim(),
+//                                 _nameController.text,
+//                               );
+//                               Navigator.of(context).pop();
+//                             }
+//                           },
+//                           child: conditionalButton(
+//                             height: 44.w,
+//                             text: '교환하기',
+//                             isEnable: true,
+//                           )),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 14.w,
+//               ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     ),
+//   );
+// }
 
 //// 잡 위젯
 // Dashed Line

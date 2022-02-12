@@ -46,10 +46,10 @@ class NewLiveWidget extends StatelessWidget {
                 height: 20.w,
               ),
               (controller.questModel.selectMode == "pickone" || controller.questModel.selectMode == "order")
+                  // "pickone" 이나 "order" 일 때
                   ? PickoneOrderLivePriceWidget(controller: controller)
-                  :
                   // "updown 일 때"
-                  UpdownLivePriceWidget(controller: controller),
+                  : UpdownLivePriceWidget(controller: controller),
               Divider(
                 height: 20.w,
                 thickness: 1.w,
@@ -107,17 +107,10 @@ class UpdownLivePriceWidget extends StatelessWidget {
             ),
           ),
         ),
+        // updown에 base price가 있는지 체크
         controller.questModel.investAddresses![controller.winnerIndex.value].basePrice == null
             ? Container()
-            :
-            // Text(
-            //     toPriceKRW(
-            //         controller.questModel.investAddresses![controller.getWinnerIndex()].basePrice!),
-            //     style: stockPriceTextStyle.copyWith(
-            //       fontSize: 22.w,
-            //     ),
-            //   ),
-            Text(
+            : Text(
                 controller.getPickoneByBasePrice()
                     ? '실시간 결과: ${controller.questModel.choices![0]}'
                     : '실시간 결과: ${controller.questModel.choices![1]}',

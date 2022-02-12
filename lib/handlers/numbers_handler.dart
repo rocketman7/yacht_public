@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:intl/intl.dart';
 
 // 숫자 표현하는 각종 포맷 모음
@@ -201,4 +203,17 @@ String toPercentageChange(num number) {
 
 String toSimplePercentage(num number) {
   return simplePercentage.format(number);
+}
+
+// random 생성기
+
+String randomSmsCode() {
+  num intCode = 0;
+  String code = '000000';
+  for (int i = 0; i < 6; i++) {
+    intCode += Random().nextInt(9) * pow(10, i);
+  }
+  // print(intCode.toString().padLeft(6, '0'));
+  code = intCode.toString().padLeft(6, '0');
+  return code;
 }

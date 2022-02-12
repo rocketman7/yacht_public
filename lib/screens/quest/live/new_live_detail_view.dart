@@ -8,6 +8,8 @@ import 'package:yachtOne/screens/quest/live/new_live_controller.dart';
 import 'package:yachtOne/screens/quest/live/new_live_widget.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
+import '../quest_view.dart';
+
 class NewLiveDetailView extends StatelessWidget {
   const NewLiveDetailView({
     Key? key,
@@ -76,8 +78,22 @@ class NewLiveDetailView extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                    (index != controller.investmentModelLength - 1)
+                                        ? Divider(
+                                            height: 20.w,
+                                          )
+                                        : Container()
                                   ],
                                 )),
+                      ),
+                      SizedBox(
+                        height: 40.w,
+                      ),
+                      QuestDescription(
+                        questModel: questModel,
+                      ),
+                      SizedBox(
+                        height: 10.w,
                       ),
                       // (controller.questModel.selectMode == "pickone" || controller.questModel.selectMode == "order")
                       //     ? PickoneOrderLivePriceWidget(controller: controller)
@@ -87,6 +103,11 @@ class NewLiveDetailView extends StatelessWidget {
                     ],
                   ),
                 ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 30.w,
               ),
             )
           ],

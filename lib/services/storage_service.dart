@@ -30,7 +30,14 @@ class FirebaseStorageService extends StorageService {
   Future uploadImages(List<String> filePaths) async {
     filePaths.forEach((element) async {
       String fileName = basename(element);
-      await _storageReference.child('posts/$fileName').putFile(File(element)).whenComplete(() => print("upload done"));
+      try {
+        await _storageReference
+            .child('posts/$fileName')
+            .putFile(File(element))
+            .whenComplete(() => print("upload done"));
+      } on FirebaseException catch (e) {
+        print(e.message);
+      }
     });
   }
 }

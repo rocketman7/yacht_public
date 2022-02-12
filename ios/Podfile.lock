@@ -362,8 +362,12 @@ PODS:
   - facebook_app_events (0.0.1):
     - FBSDKCoreKit (~> 12.0)
     - Flutter
+  - facebook_audience_network (0.0.1):
+    - FBAudienceNetwork (~> 6.3)
+    - Flutter
   - FBAEMKit (12.3.1):
     - FBSDKCoreKit_Basics (= 12.3.1)
+  - FBAudienceNetwork (6.9.0)
   - FBSDKCoreKit (12.3.1):
     - FBAEMKit (= 12.3.1)
     - FBSDKCoreKit_Basics (= 12.3.1)
@@ -655,6 +659,7 @@ DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - facebook_app_events (from `.symlinks/plugins/facebook_app_events/ios`)
+  - facebook_audience_network (from `.symlinks/plugins/facebook_audience_network/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_app_check (from `.symlinks/plugins/firebase_app_check/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
@@ -689,6 +694,7 @@ SPEC REPOS:
     - Analytics
     - BoringSSL-GRPC
     - FBAEMKit
+    - FBAudienceNetwork
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
     - Firebase
@@ -733,6 +739,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/cloud_functions/ios"
   facebook_app_events:
     :path: ".symlinks/plugins/facebook_app_events/ios"
+  facebook_audience_network:
+    :path: ".symlinks/plugins/facebook_audience_network/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_app_check:
@@ -796,7 +804,9 @@ SPEC CHECKSUMS:
   cloud_firestore: b6f2881c2ab05197836bf773780c1b9ba4411156
   cloud_functions: 82094959d8145378c8c7a8ebd883d9c87635c1db
   facebook_app_events: 7b4bf3ceb2115c280223361fd224505651f36c1a
+  facebook_audience_network: bb22bdda913d419d8c3247c9570bda4563302417
   FBAEMKit: 98e4afc9f867c6db3d1c0e7e3727d94a630b5f59
+  FBAudienceNetwork: 83096d73433759c10f9cf9b3bad5e5cff58694cb
   FBSDKCoreKit: 4f348872eae956c922aca1a13771b9c2d4602088
   FBSDKCoreKit_Basics: b832439de7a8262ee17495889264e75785af54de
   Firebase: 44dd9724c84df18b486639e874f31436eaa9a20c

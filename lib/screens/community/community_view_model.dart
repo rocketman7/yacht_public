@@ -212,9 +212,10 @@ class CommunityViewModel extends GetxController {
     await _firestoreService.uploadNewPost(_newPost);
 
     // 이미지 있으면 스토리지에 업로드
-    await _firebaseStorageService.uploadImages(filePaths);
-    images!.clear();
-    filePaths = [];
+    await _firebaseStorageService.uploadImages(filePaths).then((value) {
+      images!.clear();
+      filePaths = [];
+    });
   }
 
   Future editPost(PostModel post, String content) async {

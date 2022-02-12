@@ -1292,8 +1292,8 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                                       height: 24.w,
                                       // width: 24.w,
                                       child: Image.asset(
-                                        'assets/icons/yachtpointstore.png',
-                                        color: yachtBlack,
+                                        'assets/icons/yachtpointstore_color3.png',
+                                        // color: yachtBlack,
                                       )
                                       // Image.asset('assets/icons/notification.png'),
                                       ),

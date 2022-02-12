@@ -38,9 +38,11 @@ class NewLiveController extends GetxController {
 
     await getLivePrice();
     await getUserQuest();
+
     ever(livePricesOfThisQuest.first, (_) {
       print('ever triggered');
       Future.delayed(Duration(milliseconds: 300)).then((_) {
+        getWinnerIndex();
         if (investmentModelLength > 1) sortLivePricesOfThisQuest();
       });
     });
@@ -52,7 +54,7 @@ class NewLiveController extends GetxController {
   }
 
   sortLivePricesOfThisQuest() {
-    livePricesOfThisQuest.sort((a, b) =>
+    livePricesOfThisQuest.sort((b, a) =>
         (a.value.chartPrices.last.normalizedClose ?? 100).compareTo(b.value.chartPrices.last.normalizedClose ?? 100));
     // Map<int, num> mapping = Map<int, num>();
     // for (int i = 0; i < investmentModelLength; i++) {
@@ -87,6 +89,7 @@ class NewLiveController extends GetxController {
   }
 
   getWinnerIndex() {
+    // print('re calculate current winner');
     // normalized 된 가격 가장 큰 숫자
     var maxValue = livePricesOfThisQuest.map((e) => e.value.chartPrices.last.normalizedClose ?? 100).reduce(max);
     winnerIndex(

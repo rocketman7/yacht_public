@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:yachtOne/screens/profile/award_history_view.dart';
 import 'package:yachtOne/screens/profile/stocks_delivery_view.dart';
 import 'package:yachtOne/screens/profile/yacht_shop_view.dart';
+import 'package:yachtOne/screens/yacht_store/yacht_store_view.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
@@ -17,7 +18,7 @@ import 'asset_view_model.dart';
 
 // style constants text style
 TextStyle assetViewTextStyle1 = TextStyle(
-  fontFamily: 'SCore',
+  // fontFamily: 'SCore',
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -25,7 +26,7 @@ TextStyle assetViewTextStyle1 = TextStyle(
   height: 1.4,
 );
 TextStyle assetViewTextStyle2 = TextStyle(
-  fontFamily: 'SCore',
+  // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -33,7 +34,7 @@ TextStyle assetViewTextStyle2 = TextStyle(
   height: 1.4,
 );
 TextStyle assetViewTextStyle3 = TextStyle(
-  fontFamily: 'SCore',
+  // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -41,14 +42,14 @@ TextStyle assetViewTextStyle3 = TextStyle(
   height: 1.4,
 );
 TextStyle assetViewTextStyle4 = TextStyle(
-  fontFamily: 'SCore',
+  // fontFamily: 'SCore',
   fontSize: 16.w,
   fontWeight: FontWeight.w500,
   letterSpacing: -0.1,
   height: 1.4,
 );
 TextStyle assetViewTextStyle5 = TextStyle(
-  fontFamily: 'SCore',
+  // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
   color: Color(0xFF879098), // yacht grey
@@ -352,7 +353,7 @@ class AssetView extends StatelessWidget {
                           _mixpanelService.mixpanel.track(
                             'Yacht Point Store',
                           );
-                          Get.to(() => YachtShopView());
+                          Get.to(() => YachtStoreView());
                         },
                         child: Text(
                           '요트포인트스토어',
