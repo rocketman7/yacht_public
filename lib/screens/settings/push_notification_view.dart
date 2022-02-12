@@ -72,9 +72,22 @@ class PushNotificationView extends StatelessWidget {
                                     )
                                   : Switch(
                                       activeColor: primaryButtonBackground,
-                                      // trackColor: buttonNormal,
-                                      value: true,
-                                      onChanged: (value) {},
+                                      trackColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) {
+                                        if (states
+                                            .contains(MaterialState.pressed)) {
+                                          return buttonNormal;
+                                        } else {
+                                          return buttonNormal;
+                                        }
+                                      }),
+                                      value: _pushNotificationViewModel
+                                          .getPushAlarmValue(i),
+                                      onChanged: (value) {
+                                        _pushNotificationViewModel
+                                            .setPushAlarmValue(i, !value);
+                                      },
                                       // value: !model.pushAlarm[pushAlarmIndex],
                                       // onChanged: (bool value) {
                                       //   model.setSharedPreference(pushAlarmIndex, !value);

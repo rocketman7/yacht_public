@@ -4,6 +4,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/community/community_view.dart';
+import 'package:yachtOne/screens/community/detail_post_view.dart';
+import 'package:yachtOne/screens/startup/startup_view_model.dart';
 
 import '../locator.dart';
 import 'firestore_service.dart';
@@ -67,6 +70,61 @@ class PushNotificationService {
       // await FirebaseMessaging.instance.subscribeToTopic('admintest');
     });
     // }
+
+    //
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   Map<String, dynamic> data = message.data;
+
+    //   print(data);
+
+    //   if (data['action'] == 'navigate') {
+    //     if (data['route'] == 'community') {
+    //       Get.find<StartupViewModel>().selectedPage(2);
+    //       _firestoreService.getThisPost(data['option']).then((data) {
+    //         Get.to(() => DetailPostView(data!));
+    //       });
+    //     }
+    //   }
+    // });
+
+    // //
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    //   Map<String, dynamic> data = message.data;
+
+    //   print(data);
+
+    //   if (data['action'] == 'navigate') {
+    //     if (data['route'] == 'community') {
+    //       Get.find<StartupViewModel>().selectedPage(2);
+    //       _firestoreService.getThisPost(data['option']).then((data) {
+    //         Get.to(() => DetailPostView(data!));
+    //       });
+    //     }
+    //   }
+    // });
+
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        Map<String, dynamic> data = message.data;
+
+        print(data);
+
+        if (data['action'] == 'navigate') {
+          if (data['route'] == 'community') {
+            Get.find<StartupViewModel>().selectedPage(2);
+            _firestoreService.getThisPost(data['option']).then((data) {
+              Get.to(() => DetailPostView(data!));
+            });
+          } else if (data['route'] == 'insight') {
+            Get.find<StartupViewModel>().selectedPage(1);
+          } else if (data['route'] == 'home') {
+            Get.find<StartupViewModel>().selectedPage(0);
+          }
+        }
+        // 어차피 좀 더 세분화될거고 처음에 걸릴 것들이 많을 것 같으니 스위치문으로 바꾸는게 ??
+
+      }
+    });
   }
 
   Future subOrUnscribeToTopic(int i, bool value) async {

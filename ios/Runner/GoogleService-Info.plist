@@ -7,7 +7,7 @@
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.1042219718966-fng8jhkulikbmp9cqurqkbi39l2n333g</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>1042219718966-hfli51i38ds82a16na7gmp8694vk4gjv.apps.googleusercontent.com</string>
+	<string>1042219718966-feeiidjc8k5lvb59o30rhplk5ht67frp.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBpkunRiTRyihlKCgjQR06FLHTCAt1TxNA</string>
 	<key>GCM_SENDER_ID</key>
@@ -34,5 +34,7 @@
 	<string>1:1042219718966:ios:e58d75623ef2ae336a7b97</string>
 	<key>DATABASE_URL</key>
 	<string>https://ggook-5fb08.firebaseio.com</string>
+	<key>ADMOB_APP_ID</key>
+	<string>ca-app-pub-3726614606720353~1848726570</string>
 </dict>
 </plist>

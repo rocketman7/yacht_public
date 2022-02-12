@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:intl/intl.dart';
 
 // 숫자 표현하는 각종 포맷 모음
@@ -12,6 +14,7 @@ NumberFormat formatPriceChangeUSD = NumberFormat("+#,##0.00; -#,##0.00");
 // 퍼센티지
 NumberFormat formatPercentage = NumberFormat("##.0%");
 NumberFormat formatPercentageChange = NumberFormat("+0.00%;-0.00%");
+NumberFormat simplePercentage = NumberFormat("##%");
 // 큰 숫자 처리
 String parseBigNumberKRW(num bigNumber) {
   bool isNegative = false;
@@ -28,13 +31,9 @@ String parseBigNumberKRW(num bigNumber) {
         formatPriceKRW.format((mod / 100000000).floor()) +
         "억";
   } else if (bigNumber.abs() >= 100000000) {
-    return (isNegative ? "-" : "") +
-        formatPriceKRW.format((bigNumber.abs() / 100000000).floor()) +
-        "억";
+    return (isNegative ? "-" : "") + formatPriceKRW.format((bigNumber.abs() / 100000000).floor()) + "억";
   } else if (bigNumber.abs() >= 10000) {
-    return (isNegative ? "-" : "") +
-        formatPriceKRW.format((bigNumber.abs() / 10000).floor()) +
-        "만";
+    return (isNegative ? "-" : "") + formatPriceKRW.format((bigNumber.abs() / 10000).floor()) + "만";
   } else {
     return (isNegative ? "-" : "") + formatPriceKRW.format(bigNumber.abs());
   }
@@ -57,13 +56,9 @@ String parseBigNumberShortKRW(num bigNumber) {
         formatPriceKRW.format((mod / 100000000000).floor()) +
         "천억";
   } else if (bigNumber.abs() >= 100000000) {
-    return (isNegative ? "-" : "") +
-        formatPriceKRW.format((bigNumber.abs() / 100000000).floor()) +
-        "억";
+    return (isNegative ? "-" : "") + formatPriceKRW.format((bigNumber.abs() / 100000000).floor()) + "억";
   } else if (bigNumber.abs() >= 10000) {
-    return (isNegative ? "-" : "") +
-        formatPriceKRW.format((bigNumber.abs() / 10000).floor()) +
-        "만";
+    return (isNegative ? "-" : "") + formatPriceKRW.format((bigNumber.abs() / 10000).floor()) + "만";
   } else {
     return (isNegative ? "-" : "") + formatPriceKRW.format(bigNumber.abs());
   }
@@ -204,4 +199,21 @@ String toPercentage(num number) {
 
 String toPercentageChange(num number) {
   return formatPercentageChange.format(number);
+}
+
+String toSimplePercentage(num number) {
+  return simplePercentage.format(number);
+}
+
+// random 생성기
+
+String randomSmsCode() {
+  num intCode = 0;
+  String code = '000000';
+  for (int i = 0; i < 6; i++) {
+    intCode += Random().nextInt(9) * pow(10, i);
+  }
+  // print(intCode.toString().padLeft(6, '0'));
+  code = intCode.toString().padLeft(6, '0');
+  return code;
 }

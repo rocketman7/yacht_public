@@ -78,7 +78,7 @@ class ChartPriceModel {
       close: map['close'],
       tradeVolume: map['tradeVolume'],
       tradeAmount: map['tradeAmount'],
-      normalizedClose: map['normalizedClose'],
+      normalizedClose: map['normalizedClose'] ?? 100,
     );
   }
 

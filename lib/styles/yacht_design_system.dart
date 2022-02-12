@@ -25,12 +25,15 @@ const Color yachtDarkPurple = const Color(0xFF6073B4);
 const Color yachtDarkGrey = const Color(0xFF5B6A87);
 const Color yachtGrey = const Color(0xFF879098);
 const Color yachtLightGrey = const Color(0xFFE6EAF1);
+const Color yachtPaleGrey = const Color(0xFFEFF2FA);
 const Color yachtRed = const Color(0xFFEE5076);
 const Color yachtBlue = Color(0xFF4A99E2);
 const Color yachtYellow = Color(0xFFFFAD4C);
 const Color yachtYellowBackGround = Color(0xFFFFF1D5);
 const Color yachtGreen = Color(0xFF61CCA6);
 const Color yachtGreenBackGround = Color(0xFFE6F7F1);
+const Color yachtPaleGreen = const Color(0xFFE5F6F0);
+// const Color yachtPaleGrey = const Color(0xFFEFF2FA);
 const Color primaryButtonText = const Color(0xFFEFF2FA);
 const Color primaryButtonBackground = yachtViolet;
 const Color secondaryButtonText = yachtViolet;
@@ -46,7 +49,7 @@ Color thinDivider = Color(0xFF879098).withOpacity(.05);
 
 const Color buttonDisabled = const Color(0xFFE6E6E6);
 const Color buttonNormal = const Color(0xFFEFF2FA);
-Color yachtShadow = Color(0xFFCEC4DA).withOpacity(.3);
+Color yachtShadow = Color(0xFFCDC4D9).withOpacity(.2);
 const Color yachtLine = Color(0xFFE6EAF1);
 const Color white = Colors.white;
 
@@ -64,6 +67,8 @@ Color graph1 = Color(0xFF55C0CF).withOpacity(.55);
 Color graph2 = Color(0xFF9255CF).withOpacity(.55);
 Color graph3 = Color(0xFF55CF69).withOpacity(.55);
 Color graph4 = Color(0xFF558DCF).withOpacity(.55);
+
+List<Color> graphColors = [graph0, graph1, graph2, graph3, graph4];
 
 // Area 차트에 쓰일 색상들
 final List<double> stops = <double>[0.0, 1.0];
@@ -767,7 +772,7 @@ TextStyle contentStyle = TextStyle(
 // 심플 텍스트 버튼 스타일
 TextStyle simpleTextButtonStyle = TextStyle(
   fontSize: bodySmallSize,
-  fontWeight: FontWeight.w500,
+  fontWeight: FontWeight.w600,
   color: primaryButtonBackground,
   letterSpacing: -0.5,
   height: primaryFontHeight,
@@ -1341,6 +1346,93 @@ TextStyle pickManyCircleName = TextStyle(
   height: primaryFontHeight,
 );
 
+// yacht store
+TextStyle yachtStoreTextStyle = TextStyle(
+  fontFamily: krFont,
+  fontSize: 16.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+TextStyle yachtStoreCategoryTextStyle = TextStyle(
+  fontFamily: krFont,
+  fontSize: 14.w,
+  fontWeight: FontWeight.w600,
+  color: yachtGrey,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+TextStyle yachtStoreBrandMain = TextStyle(
+  fontFamily: krFont,
+  fontSize: 14.w,
+  // fontWeight: FontWeight.w400,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+TextStyle yachtStoreBrandDetail = TextStyle(
+  fontFamily: krFont,
+  fontSize: 18.w,
+  // fontWeight: FontWeight.w400,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+TextStyle yachtStoreGoodsNameMain = TextStyle(
+  fontFamily: krFont,
+  fontSize: 16.w,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+TextStyle yachtStoreGoodsNameDetail = TextStyle(
+  fontFamily: krFont,
+  fontSize: 20.w,
+  fontWeight: FontWeight.w600,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: primaryFontHeight,
+);
+
+TextStyle yachtStoreGoodsPriceMain = TextStyle(
+  fontFamily: krFont,
+  fontSize: 16.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtStoreGoodsPriceDetail = TextStyle(
+  fontFamily: krFont,
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle yachtStoreGoodsDescription = TextStyle(
+  fontFamily: krFont,
+  fontSize: 16.w,
+  // fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -1.0,
+  height: 1.4,
+);
+
+TextStyle seeMore = TextStyle(
+  fontSize: 16.w,
+  fontWeight: FontWeight.w500,
+  color: Color(0xFF5A6987),
+);
+
 // BUTTONS
 Container simpleTextContainerButton(
   String text, {
@@ -1408,7 +1500,7 @@ Container textContainerButtonWithOptions({
     padding: padding ?? EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
       color: isDarkBackground ? primaryButtonBackground : primaryButtonText,
-      borderRadius: BorderRadius.circular(50),
+      borderRadius: BorderRadius.circular(8.w),
     ),
     child: Center(
       child: Text(
@@ -1417,6 +1509,45 @@ Container textContainerButtonWithOptions({
             ? simpleTextButtonStyle.copyWith(color: primaryButtonText, fontSize: fontSize ?? bodyBigSize)
             : simpleTextButtonStyle.copyWith(fontSize: fontSize ?? bodyBigSize),
       ),
+    ),
+  );
+}
+
+Container conditionalButton({
+  required String text,
+  required bool isEnable,
+  bool isPrimary = true,
+  double? fontSize,
+  EdgeInsets? padding,
+  double? height,
+}) {
+  return Container(
+    height: height,
+    padding: padding ?? EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+    decoration: BoxDecoration(
+      color: !isEnable
+          ? yachtLightGrey
+          : isPrimary
+              ? primaryButtonBackground
+              : yachtPaleGrey,
+      borderRadius: BorderRadius.circular(4.w),
+    ),
+    child: Center(
+      child: Text(text,
+          style: !isEnable
+              ? simpleTextButtonStyle.copyWith(
+                  color: yachtGrey,
+                  fontSize: fontSize ?? bodyBigSize,
+                )
+              : isPrimary
+                  ? simpleTextButtonStyle.copyWith(
+                      color: primaryButtonText,
+                      fontSize: fontSize ?? bodyBigSize,
+                    )
+                  : simpleTextButtonStyle.copyWith(
+                      color: yachtViolet,
+                      fontSize: fontSize ?? bodyBigSize,
+                    )),
     ),
   );
 }
@@ -1471,7 +1602,7 @@ Container sectionBox({
 BoxDecoration yachtBoxDecoration = BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
   BoxShadow(
     color: yachtShadow,
-    blurRadius: 8.w,
+    blurRadius: 4.w,
     spreadRadius: 1.w,
   )
 ]);
@@ -1485,6 +1616,16 @@ BoxDecoration yachtChoiceBoxDecoration =
     spreadRadius: 1.w,
   )
 ]);
+
+// 포인트 스토어 상품 이미지 테두리
+BoxDecoration yachtStoreGoodsBoxDecoration = BoxDecoration(
+    border: Border.all(
+      width: 1.w,
+      color: yachtPaleGrey,
+    ),
+    borderRadius: BorderRadius.circular(
+      2.w,
+    ));
 
 // 아래 기본 형태 텍스트 버튼이 있는 섹션 박스
 Container sectionBoxWithBottomButton({
@@ -2087,6 +2228,111 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
   );
 }
 
+// Dialog yachtPrimaryDialog({
+//   required BuildContext context,
+//   required String title,
+//   String? description,
+// }) {
+//   return Dialog(
+//     backgroundColor: primaryBackgroundColor,
+//     insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+//     clipBehavior: Clip.hardEdge,
+//     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+//     child: Column(
+//       mainAxisSize: MainAxisSize.min,
+//       children: [
+//         Container(
+//           padding: primaryHorizontalPadding,
+//           // height: 210.w,
+//           width: 347.w,
+//           child: Column(
+//             children: [
+//               SizedBox(height: 14.w),
+//               Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
+//               SizedBox(
+//                 height:
+//                     correctHeight(20.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
+//               ),
+//               Center(
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.center,
+//                   children: [
+//                     Text(
+//                       title,
+//                       textAlign: TextAlign.center,
+//                       style: yachtBadgesDescriptionDialogTitle,
+//                     ),
+//                     SizedBox(
+//                       height: 4.w,
+//                     ),
+//                     Text(
+//                       description,
+//                       textAlign: TextAlign.center,
+//                       // style: yachtBadgesDescriptionDialogTitle,
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: correctHeight(20.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+//               ),
+//               Padding(
+//                 padding: EdgeInsets.symmetric(
+//                   horizontal: primaryPaddingSize,
+//                 ),
+//                 child: Row(
+//                   children: [
+//                     Expanded(
+//                       child: GestureDetector(
+//                           behavior: HitTestBehavior.opaque,
+//                           onTap: () {
+//                             Navigator.of(context).pop();
+//                           },
+//                           child: conditionalButton(
+//                             height: 44.w,
+//                             text: '취소',
+//                             isEnable: false,
+//                           )
+//                           // style: yachtDeliveryDialogButtonText,
+
+//                           ),
+//                     ),
+//                     SizedBox(
+//                       width: 10.w,
+//                     ),
+//                     Expanded(
+//                       child: GestureDetector(
+//                           behavior: HitTestBehavior.opaque,
+//                           onTap: () {
+//                             if (!yachtStoreController.isExchanging.value) {
+//                               yachtStoreController.confirmExchange(
+//                                 giftishowModel,
+//                                 _phoneNumberController.text.replaceAll('-', '').trim(),
+//                                 _nameController.text,
+//                               );
+//                               Navigator.of(context).pop();
+//                             }
+//                           },
+//                           child: conditionalButton(
+//                             height: 44.w,
+//                             text: '교환하기',
+//                             isEnable: true,
+//                           )),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 14.w,
+//               ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     ),
+//   );
+// }
+
 //// 잡 위젯
 // Dashed Line
 Container dashedLine({
@@ -2325,10 +2571,12 @@ class YachtPrimaryAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double offset;
   final String tabTitle;
   final Widget? buttonWidget;
+  final String? buttonPosition;
   YachtPrimaryAppBarDelegate({
     required this.offset,
     required this.tabTitle,
     this.buttonWidget,
+    this.buttonPosition,
   });
 
   @override
@@ -2414,11 +2662,17 @@ class YachtPrimaryAppBarDelegate extends SliverPersistentHeaderDelegate {
                             ],
                           ),
                           buttonWidget != null
-                              ? Positioned(
-                                  top: 12.w,
-                                  right: 0,
-                                  child: buttonWidget!,
-                                )
+                              ? buttonPosition == 'left'
+                                  ? Positioned(
+                                      top: 12.w,
+                                      left: 0,
+                                      child: buttonWidget!,
+                                    )
+                                  : Positioned(
+                                      top: 12.w,
+                                      right: 0,
+                                      child: buttonWidget!,
+                                    )
                               : Container(),
                         ],
                       )),

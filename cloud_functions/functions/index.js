@@ -1,3 +1,5 @@
+// import fetch from "node-fetch";
+const fetch = require("node-fetch");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const { Telegraf } = require('telegraf')
@@ -1125,7 +1127,7 @@ exports.newOneOnOne = functions.region('asia-northeast3').firestore.document('/a
   // });
 });
 
-exports.newCommentsTest5 = functions.region('asia-northeast3').firestore.document('/posts/{docId1}/comments/{docId2}').onCreate(async (snapshot, context) => {
+exports.newComments = functions.region('asia-northeast3').firestore.document('/posts/{docId1}/comments/{docId2}').onCreate(async (snapshot, context) => {
   const data = snapshot.data();
 
   const postId = context.params.docId1; // 원글의 uid
@@ -1141,21 +1143,51 @@ exports.newCommentsTest5 = functions.region('asia-northeast3').firestore.documen
   const fcmTokenSnapshot = await usersRef.doc(writerUid).get();
   const fcmToken = fcmTokenSnapshot.data().token;
   
-  console.log('postId : ', postId);
-  console.log('commentId : ', commentId);
-  console.log('writerUid : ', writerUid);
-  console.log('fcmToken of writer : ', fcmToken);
+  // console.log('postId : ', postId);
+  // console.log('commentId : ', commentId);
+  // console.log('writerUid : ', writerUid);
+  // console.log('fcmToken of writer : ', fcmToken);
 
   const payload = {
     notification: {
       title: data['writerUserName'] + '님이 답글을 달았어요!',
       body: data['content'],
     },
+    data: {
+      'action': 'navigate',
+      'route': 'community',
+      'option': postId,
+    }
   };
 
-  const response = await admin.messaging().sendToDevice('e7HK0LmhrER1lIYlsJeCak:APA91bEtYj2TN1VFzB0NS1Flckl0UKU_tJ1bL9I11DZo-5aByv_Ldu1cOa_Pxdkf9lIY-o-ePvg8xlHNuDDASIaHTddNNm5LGg5AiF_qlrXA8HdIjZvwp4gEET5agMOhCA6fTywymm2X', payload);
+  const deviceToken = fcmToken;
+  // const deviceToken = 'e7HK0LmhrER1lIYlsJeCak:APA91bEtYj2TN1VFzB0NS1Flckl0UKU_tJ1bL9I11DZo-5aByv_Ldu1cOa_Pxdkf9lIY-o-ePvg8xlHNuDDASIaHTddNNm5LGg5AiF_qlrXA8HdIjZvwp4gEET5agMOhCA6fTywymm2X';
 
-  console.log(response);
+  const response2 = await fetch('https://iid.googleapis.com/iid/info/' + deviceToken + '?details=true',
+  {
+    method: 'GET',
+    headers: {
+      'Authorization': 'key=' + 'AAAA8qki2TY:APA91bFO6iE9SmMrzvaOCuddjiTKqONs_5C0iRsj_ytSUVCAyI0HBWBSh0a3V-irHzks227g5CqBnN7r-fr788MEn43Lfe9bGcVPcy3mVyEXC4Mso2eOGDxpZqbBk-fbXQJO7fcjANQ0',
+    },
+  });
+
+  const data2 = await response2.json();
+  // console.log(data2);
+
+  if('feed' in data2.rel.topics)
+  {
+    // if(fcmToken === 'dh7Rk7B29kjSlq0IvcUPzB:APA91bFUftZhD8yMaCK96Yu5q3XDlVrRC7vb79cZKXI3AVoaDTpaW7V67SPkDh24VPujal4wS34bSrLm0PO48WgGZndWor1kHG5LXyCiIZNtlERQgNoicSkjqIohtjV2j_gIju2_J2Fd')
+    // // if(fcmToken === 'e7HK0LmhrER1lIYlsJeCak:APA91bEtYj2TN1VFzB0NS1Flckl0UKU_tJ1bL9I11DZo-5aByv_Ldu1cOa_Pxdkf9lIY-o-ePvg8xlHNuDDASIaHTddNNm5LGg5AiF_qlrXA8HdIjZvwp4gEET5agMOhCA6fTywymm2X')
+    // // if(fcmToken === 'fvWpj9sJSLW3Czhq_osxqY:APA91bHgBrfI9AhlPnLcjTkL2YHidWFUplueysKQvo6iHfDgUnD5Ue6VtpHDCqcAsgAypc7e0eeVp3eCeara9pGWuksVtR7d-bBqeKGmQviwjkTA3Vtsig9TtXBWH7lWbaJTR5leb7rM')
+    // {
+      console.log('feed topic : subscribe');
+
+      const response = await admin.messaging().sendToDevice(deviceToken, payload);
+      console.log(response);
+    // }
+  } else {
+    console.log('feed topic : unsubscribe')
+  }
 });
 
 exports.newPost = functions.region('asia-northeast3').firestore.document('/posts/{docId}').onCreate(async (snapshot, context) =>{

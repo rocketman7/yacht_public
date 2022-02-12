@@ -15,7 +15,7 @@ import 'asset_view_model.dart';
 
 // style constants text style
 TextStyle awardHistoryViewTextStyle1 = TextStyle(
-  fontFamily: 'SCore',
+  // fontFamily: 'SCore',
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
@@ -23,7 +23,7 @@ TextStyle awardHistoryViewTextStyle1 = TextStyle(
   height: 1.4,
 );
 TextStyle awardHistoryViewTextStyle2 = TextStyle(
-  fontFamily: 'SCore',
+  // fontFamily: 'SCore',
   fontSize: 30.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -31,7 +31,7 @@ TextStyle awardHistoryViewTextStyle2 = TextStyle(
   height: 1.4,
 );
 TextStyle awardHistoryViewTextStyle3 = TextStyle(
-  fontFamily: 'SCore',
+  // fontFamily: 'SCore',
   fontSize: 12.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
@@ -39,7 +39,7 @@ TextStyle awardHistoryViewTextStyle3 = TextStyle(
   height: 1.4,
 );
 TextStyle awardHistoryViewTextStyle4 = TextStyle(
-  fontFamily: 'SCore',
+  // fontFamily: 'SCore',
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
@@ -47,7 +47,7 @@ TextStyle awardHistoryViewTextStyle4 = TextStyle(
   height: 1.4,
 );
 TextStyle awardHistoryViewTextStyle5 = TextStyle(
-  fontFamily: 'SCore',
+  // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
   color: Color(0xFF879098), // yacht grey
@@ -129,89 +129,91 @@ class AwardHistoryColumnWidget extends StatelessWidget {
             padding: EdgeInsets.only(left: 14.w, right: 14.w),
             child: Container(
               width: double.infinity,
+              // height: 30,
               decoration:
                   primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
               child: controller.allAssets.length > 0
-                  ? Column(
-                      children: [
-                        // SizedBox(
-                        //   height: 30.w,
-                        // ),
-                        // Container(
-                        //   height: 1.w, width: double.infinity,
-                        //   color: Color(0xFFE6EAF1), //yacht-line 색임
-                        // )
-                        Column(
-                          children: controller.allAssets
-                              .toList()
-                              .asMap()
-                              .map((i, element) => MapEntry(
-                                  i,
-                                  (isFullHistory || i < controller.maxHistoryVisibleNum)
-                                      ? Padding(
-                                          padding: EdgeInsets.only(left: 14.w, right: 14.w),
-                                          child: Column(
+                  ?
+                  // SizedBox(
+                  //   height: 30.w,
+                  // ),
+                  // Container(
+                  //   height: 1.w, width: double.infinity,
+                  //   color: Color(0xFFE6EAF1), //yacht-line 색임
+                  // )
+                  Column(
+                      children: controller.allAssets
+                          .toList()
+                          .asMap()
+                          .map((i, element) => MapEntry(
+                              i,
+                              (isFullHistory || i < controller.maxHistoryVisibleNum)
+                                  ? Padding(
+                                      padding: EdgeInsets.only(left: 14.w, right: 14.w),
+                                      child: Column(
+                                        children: [
+                                          Row(
                                             children: [
-                                              Row(
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: 14.w -
-                                                            reducePaddingOneSide(awardHistoryViewTextStyle3.fontSize!),
-                                                      ),
-                                                      Text(
-                                                        '${timeStampToString(controller.allAssets[i].tradeDate)}',
-                                                        style: awardHistoryViewTextStyle3,
-                                                      ),
-                                                      SizedBox(
-                                                          height: 4.w -
-                                                              reducePaddingOneSide(
-                                                                  awardHistoryViewTextStyle3.fontSize!)),
-                                                      Text(
-                                                        '${controller.allAssets[i].tradeTitle}',
-                                                        style: awardHistoryViewTextStyle4,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 14.w -
-                                                            reducePaddingOneSide(awardHistoryViewTextStyle4.fontSize!) -
-                                                            reducePaddingOneSide(awardHistoryViewTextStyle5.fontSize!),
-                                                      ),
-                                                      Text(
-                                                        '${controller.getStringTradeDetail(i)}',
-                                                        style: awardHistoryViewTextStyle5,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 14.w -
-                                                            reducePaddingOneSide(awardHistoryViewTextStyle5.fontSize!),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Spacer(),
-                                                  Text(
-                                                    '${controller.plusSymbolReturn(i)}${toPriceKRW(controller.getNumTotalAwardsOrYachtPoint(i))}',
-                                                    style: awardHistoryViewTextStyle6.copyWith(
-                                                        color: controller.getColorTotalAwardsOrYachtPointNum(i)),
-                                                  ),
-                                                ],
-                                              ),
-                                              (isFullHistory && i == controller.allAssets.length - 1) ||
-                                                      (!isFullHistory && i == controller.maxHistoryVisibleNum - 1)
-                                                  ? Container()
-                                                  : Container(
-                                                      height: 1.w,
-                                                      width: SizeConfig.screenWidth - 28.w - 30.w,
-                                                      color: Color(0xFFE6EAF1), //yacht-line 색임
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 14.w -
+                                                          reducePaddingOneSide(awardHistoryViewTextStyle3.fontSize!),
                                                     ),
+                                                    Text(
+                                                      '${timeStampToString(controller.allAssets[i].tradeDate)}',
+                                                      style: awardHistoryViewTextStyle3,
+                                                    ),
+                                                    SizedBox(
+                                                        height: 4.w -
+                                                            reducePaddingOneSide(awardHistoryViewTextStyle3.fontSize!)),
+                                                    Text(
+                                                      '${controller.allAssets[i].tradeTitle}',
+                                                      style: awardHistoryViewTextStyle4,
+                                                      // maxLines: 2,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 14.w -
+                                                          reducePaddingOneSide(awardHistoryViewTextStyle4.fontSize!) -
+                                                          reducePaddingOneSide(awardHistoryViewTextStyle5.fontSize!),
+                                                    ),
+                                                    Text(
+                                                      '${controller.getStringTradeDetail(i)}',
+                                                      style: awardHistoryViewTextStyle5,
+                                                    ),
+                                                    SizedBox(
+                                                      height: 14.w -
+                                                          reducePaddingOneSide(awardHistoryViewTextStyle5.fontSize!),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 8.w,
+                                              ),
+                                              Text(
+                                                '${controller.plusSymbolReturn(i)}${toPriceKRW(controller.getNumTotalAwardsOrYachtPoint(i))}',
+                                                style: awardHistoryViewTextStyle6.copyWith(
+                                                    color: controller.getColorTotalAwardsOrYachtPointNum(i)),
+                                              ),
                                             ],
                                           ),
-                                        )
-                                      : Container()))
-                              .values
-                              .toList(),
-                        ),
-                      ],
+                                          (isFullHistory && i == controller.allAssets.length - 1) ||
+                                                  (!isFullHistory && i == controller.maxHistoryVisibleNum - 1)
+                                              ? Container()
+                                              : Container(
+                                                  height: 1.w,
+                                                  width: SizeConfig.screenWidth - 28.w - 30.w,
+                                                  color: Color(0xFFE6EAF1), //yacht-line 색임
+                                                ),
+                                        ],
+                                      ),
+                                    )
+                                  : Container()))
+                          .values
+                          .toList(),
                     )
                   : Column(
                       children: [

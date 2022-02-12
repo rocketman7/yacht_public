@@ -3,6 +3,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/screens/contents/reading_content/reading_content_view_model.dart';
+import 'package:yachtOne/screens/contents/reading_content/reading_content_see_all_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
@@ -29,65 +30,152 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
       SizedBox(
         height: primaryPaddingSize,
       ),
-      SingleChildScrollView(
-          clipBehavior: Clip.none,
-          scrollDirection: Axis.horizontal,
-          child: Obx(() {
-            if (controller.readingContents.length > 0) {
-              return Row(
-                children: List.generate(
-                    controller.readingContents.length,
-                    (index) => Row(
-                          children: [
-                            index == 0
-                                ? SizedBox(
-                                    width: primaryPaddingSize,
-                                  )
-                                : Container(),
-                            InkWell(
-                              onTap: () {
-                                _mixpanelService.mixpanel.track('Yacht Magazine', properties: {
-                                  'Magazine Title': controller.readingContents[index].title,
-                                  'Magazine Category': controller.readingContents[index].category,
-                                  'Magazine Content Url': controller.readingContents[index].contentUrl,
-                                  'Magazine Thumbnail Url': controller.readingContents[index].thumbnailUrl,
-                                  'Magazine Update DateTime':
-                                      controller.readingContents[index].updateDateTime.toDate().toIso8601String(),
-                                });
-                                Get.to(() => ReadingContentWebView(readingContent: controller.readingContents[index]));
-                                // await controller.launchUrl(controller.readingContents[index].contentUrl);
-                              },
-                              child: Container(
-                                  child: CachedNetworkImage(
-                                imageUrl:
-                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${controller.readingContents[index].thumbnailUrl}",
-                                width: 270.w,
-                                height: 240.w,
-                                filterQuality: FilterQuality.high,
-                                progressIndicatorBuilder: (_, __, DownloadProgress progress) {
-                                  // progress.totalSize
-                                  // if (progress == null) return child;
-                                  return LoadingContainer(
-                                    width: 270.w,
-                                    height: 240.w,
-                                    radius: 10.w,
-                                  );
-                                },
-                              )),
-                            ),
-                            SizedBox(
-                              width: primaryPaddingSize,
-                            )
-                          ],
-                        )),
-              );
-            } else {
-              return Container(
-                width: 270.w,
-                height: 240.w,
-              );
-            }
-          }))
+      Obx(() => controller.readingContents.length > 0
+          ? GridView.builder(
+              clipBehavior: Clip.none,
+              padding: EdgeInsets.symmetric(
+                horizontal: 14.w,
+              ),
+              physics: ClampingScrollPhysics(),
+              itemCount: 6,
+              shrinkWrap: true,
+              // primary: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 14.w,
+                mainAxisSpacing: 14.w,
+                childAspectRatio: 166 / 148,
+              ),
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () {
+                    _mixpanelService.mixpanel.track('Yacht Magazine', properties: {
+                      'Magazine Title': controller.readingContents[index].title,
+                      'Magazine Category': controller.readingContents[index].category,
+                      'Magazine Content Url': controller.readingContents[index].contentUrl,
+                      'Magazine Thumbnail Url': controller.readingContents[index].thumbnailUrl,
+                      'Magazine Update DateTime':
+                          controller.readingContents[index].updateDateTime.toDate().toIso8601String(),
+                    });
+                    Get.to(() => ReadingContentWebView(readingContent: controller.readingContents[index]));
+                    // await controller.launchUrl(controller.readingContents[index].contentUrl);
+                  },
+                  child: Container(
+                      // padding: EdgeInsets.all(4.w),
+                      decoration: yachtBoxDecoration.copyWith(
+                          borderRadius: BorderRadius.circular(12.w),
+                          border: Border.all(
+                            color: white,
+                            width: 4.w,
+                          )),
+                      //  BoxDecoration(
+
+                      //     borderRadius: BorderRadius.circular(12.w),
+                      //     color: Colors.blue,
+                      //     border: Border.all(
+                      //       color: yachtBlack,
+                      //       width: 4.w,
+                      //     )),
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            "https://storage.googleapis.com/ggook-5fb08.appspot.com/${controller.readingContents[index].thumbnailUrl}",
+                        // width: 270.w,
+                        // height: 240.w,
+                        filterQuality: FilterQuality.high,
+                        progressIndicatorBuilder: (_, __, DownloadProgress progress) {
+                          // progress.totalSize
+                          // if (progress == null) return child;
+                          return LayoutBuilder(builder: (context, constraints) {
+                            return LoadingContainer(
+                              width: constraints.maxWidth,
+                              height: constraints.maxHeight,
+                              radius: 10.w,
+                            );
+                          });
+                        },
+                      )),
+                );
+              },
+            )
+          : Container()),
+      GestureDetector(
+        onTap: () {
+          // _mixpanelService.mixpanel.track('Yacht Magazine - See All');
+          Get.to(ReadingContentSeeAll());
+        },
+        child: Padding(
+          padding: primaryAllPadding,
+          child: Container(
+            width: double.infinity,
+            height: 50.w,
+            decoration: yachtBoxDecoration,
+            child: Center(
+                child: Text(
+              "모두 보기",
+              style: seeMore,
+            )),
+          ),
+        ),
+      )
+      // SingleChildScrollView(
+      //     clipBehavior: Clip.none,
+      //     scrollDirection: Axis.horizontal,
+      //     child: Obx(() {
+      //       if (controller.readingContents.length > 0) {
+      //         return Row(
+      //           children: List.generate(
+      //               controller.readingContents.length,
+      //               (index) => Row(
+      //                     children: [
+      //                       index == 0
+      //                           ? SizedBox(
+      //                               width: primaryPaddingSize,
+      //                             )
+      //                           : Container(),
+      //                       InkWell(
+      //                         onTap: () {
+      //                           _mixpanelService.mixpanel.track('Yacht Magazine', properties: {
+      //                             'Magazine Title': controller.readingContents[index].title,
+      //                             'Magazine Category': controller.readingContents[index].category,
+      //                             'Magazine Content Url': controller.readingContents[index].contentUrl,
+      //                             'Magazine Thumbnail Url': controller.readingContents[index].thumbnailUrl,
+      //                             'Magazine Update DateTime':
+      //                                 controller.readingContents[index].updateDateTime.toDate().toIso8601String(),
+      //                           });
+      //                           Get.to(() => ReadingContentWebView(readingContent: controller.readingContents[index]));
+      //                           // await controller.launchUrl(controller.readingContents[index].contentUrl);
+      //                         },
+      //                         child: Container(
+      //                             child: CachedNetworkImage(
+      //                           imageUrl:
+      //                               "https://storage.googleapis.com/ggook-5fb08.appspot.com/${controller.readingContents[index].thumbnailUrl}",
+      //                           width: 270.w,
+      //                           height: 240.w,
+      //                           filterQuality: FilterQuality.high,
+      //                           progressIndicatorBuilder: (_, __, DownloadProgress progress) {
+      //                             // progress.totalSize
+      //                             // if (progress == null) return child;
+      //                             return LoadingContainer(
+      //                               width: 270.w,
+      //                               height: 240.w,
+      //                               radius: 10.w,
+      //                             );
+      //                           },
+      //                         )),
+      //                       ),
+      //                       SizedBox(
+      //                         width: primaryPaddingSize,
+      //                       )
+      //                     ],
+      //                   )),
+      //         );
+      //       } else {
+      //         return Container(
+      //           width: 270.w,
+      //           height: 240.w,
+      //         );
+      //       }
+      //     }))
     ]);
   }
 }

@@ -32,6 +32,8 @@ class AssetModel {
   final Timestamp tradeDate;
   final String tradeTitle;
   List<AwardModel>? awards;
+  String? phoneNumber;
+  String? userRealName;
   num? yachtPoint;
 
   AssetModel({
@@ -40,6 +42,8 @@ class AssetModel {
     required this.tradeTitle,
     this.awards,
     this.yachtPoint,
+    this.phoneNumber,
+    this.userRealName,
   });
 
   factory AssetModel.fromMap(Map<String, dynamic> map) {
@@ -65,7 +69,9 @@ class AssetModel {
       'tradeDate': tradeDate,
       'tradeTitle': tradeTitle,
       'awards': awards == null ? null : awards!.map((x) => x.toMap()).toList(),
-      'yachtPoint': yachtPoint
+      'yachtPoint': yachtPoint,
+      'phoneNumber': phoneNumber,
+      'userRealName': userRealName,
     };
   }
 }
@@ -164,7 +170,9 @@ class AssetViewModel extends GetxController {
 
   Future<bool> updateUserAsset(String uid, AssetModel ingAssetModel) async {
     try {
-      await firestoreService.collection('users').doc(uid).collection('userAsset').add(ingAssetModel.toMapAwards());
+      await firestoreService.collection('users').doc(uid).collection('userAsset').add(
+            ingAssetModel.toMapAwards(),
+          );
     } catch (e) {
       return false;
     }
@@ -193,6 +201,8 @@ class AssetViewModel extends GetxController {
   int maxHistoryVisibleNum = 3;
   String checkNameUrl = "";
   RxString checkNameExists = "0".obs;
+  //
+  RxBool isDeliveryIng = false.obs;
 
   @override
   void onInit() async {
@@ -355,23 +365,29 @@ class AssetViewModel extends GetxController {
   Future deliveryToME() async {
     // print('deliveryToME');
 
-    for (int i = 0; i < allHoldingStocks.length; i++) {
-      if (stocksDeliveryNum[i].value != 0) {
-        AssetModel ingAssetModel = AssetModel(
-            assetCategory: 'Ing',
-            tradeDate: Timestamp.fromDate(DateTime.now()),
-            tradeTitle: '${allHoldingStocks[i].name} ${stocksDeliveryNum[i].value}주 출고',
-            awards: [
-              AwardModel(
-                issueCode: '${allHoldingStocks[i].issueCode}',
-                name: '${allHoldingStocks[i].name}',
-                sharesNum: stocksDeliveryNum[i].value,
-                priceAtTrade: allHoldingStocks[i].currentPrice,
-              )
-            ]);
+    if (!isDeliveryIng.value) {
+      isDeliveryIng(true);
 
-        await updateUserAsset(userModelRx.value!.uid, ingAssetModel);
+      for (int i = 0; i < allHoldingStocks.length; i++) {
+        if (stocksDeliveryNum[i].value != 0) {
+          AssetModel ingAssetModel = AssetModel(
+              assetCategory: 'Ing',
+              tradeDate: Timestamp.fromDate(DateTime.now()),
+              tradeTitle: '${allHoldingStocks[i].name} ${stocksDeliveryNum[i].value}주 출고',
+              awards: [
+                AwardModel(
+                  issueCode: '${allHoldingStocks[i].issueCode}',
+                  name: '${allHoldingStocks[i].name}',
+                  sharesNum: stocksDeliveryNum[i].value,
+                  priceAtTrade: allHoldingStocks[i].currentPrice,
+                )
+              ]);
+
+          await updateUserAsset(userModelRx.value!.uid, ingAssetModel);
+        }
       }
+
+      // isDeliveryIng(false);
     }
   }
 

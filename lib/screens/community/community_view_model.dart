@@ -63,13 +63,15 @@ class CommunityViewModel extends GetxController {
     // print('scrollcont: ' + scrollController.hasClients.toString());
     scrollController.addListener(() {
       // print(scrollController.offset);
-      // print(scrollController.position.maxScrollExtent);
+      // print('max: ${scrollController.position.maxScrollExtent}');
       // print(scrollController.position);
       scrollController.offset < 0 ? offset(0) : offset(scrollController.offset);
       if ((scrollController.offset + 60.w >
-              scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .2)) &&
+              scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .5)) &&
           hasNextPosts.value) {
-        getPost();
+        if (!isGettingPosts.value) {
+          getPost();
+        }
       }
     });
 
@@ -210,9 +212,10 @@ class CommunityViewModel extends GetxController {
     await _firestoreService.uploadNewPost(_newPost);
 
     // 이미지 있으면 스토리지에 업로드
-    await _firebaseStorageService.uploadImages(filePaths);
-    images!.clear();
-    filePaths = [];
+    await _firebaseStorageService.uploadImages(filePaths).then((value) {
+      images!.clear();
+      filePaths = [];
+    });
   }
 
   Future editPost(PostModel post, String content) async {

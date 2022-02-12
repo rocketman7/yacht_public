@@ -88,6 +88,7 @@ class _MyAppState extends State<MyApp> {
     ScreenUtil.init(
         BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
         designSize: Size(375, 812),
+        context: context,
         orientation: Orientation.portrait);
     super.didChangeDependencies();
   }
