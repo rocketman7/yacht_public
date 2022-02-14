@@ -65,7 +65,7 @@ class HomeView extends StatelessWidget {
   final RxBool showSmallSnackBar = false.obs;
   final RxString smallSnackBarText = "".obs;
 
-  void _onRefresh() async {
+  void onRefresh() async {
     // monitor network fetch
     // await Future.delayed(Duration(milliseconds: 1200));
     todayQuests = null;
@@ -132,7 +132,7 @@ class HomeView extends StatelessWidget {
           enablePullDown: true,
           header: YachtCustomHeader(),
           controller: homeViewModel.refreshController,
-          onRefresh: _onRefresh,
+          onRefresh: onRefresh,
           child: CustomScrollView(
             controller: homeViewModel.scrollController,
             slivers: [
