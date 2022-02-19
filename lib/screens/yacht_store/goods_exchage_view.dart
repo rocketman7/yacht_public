@@ -132,6 +132,7 @@ class GoodsExchangeView extends StatelessWidget {
                                 },
                                 textAlignVertical: TextAlignVertical.center,
                                 controller: _phoneNumberController,
+                                keyboardType: TextInputType.number,
                                 textAlign: TextAlign.end,
                                 style: yachtStoreGoodsPriceDetail.copyWith(height: 1.4),
                                 decoration: InputDecoration(
@@ -203,6 +204,7 @@ class GoodsExchangeView extends StatelessWidget {
                                               }
                                             },
                                             controller: _smsCodeController,
+                                            keyboardType: TextInputType.number,
                                             readOnly: yachtStoreController.isVerificationComplete.value,
                                             textAlign: TextAlign.end,
                                             textAlignVertical: TextAlignVertical.center,
