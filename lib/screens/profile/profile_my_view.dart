@@ -43,9 +43,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       profileViewModel.scrollController.addListener(() {
         // offset obs 값에 scroll controller offset 넣어주기
-        profileViewModel.scrollController.offset < 0
-            ? offset(0)
-            : offset(profileViewModel.scrollController.offset);
+        profileViewModel.scrollController.offset < 0 ? offset(0) : offset(profileViewModel.scrollController.offset);
         // print(_scrollController.offset);
       });
     });
@@ -94,8 +92,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
                     _mixpanelService.mixpanel.track('Setting');
-                    // Get.to(() => SettingView());
-                    Get.to(() => YachtStoreView());
+                    Get.to(() => SettingView());
                   },
                   child: Row(
                     children: [
@@ -126,8 +123,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                           onTap: () => showDialog(
                               context: context,
                               builder: (context) {
-                                return yachtTierInfoPopUp(
-                                    context, userModelRx.value!.exp);
+                                return yachtTierInfoPopUp(context, userModelRx.value!.exp);
                               }),
                           child: Container(
                             width: 79.w,
@@ -139,18 +135,13 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                   width: 79.w,
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      gradient: LinearGradient(
-                                          begin: Alignment(0.0, 0.0),
-                                          end: Alignment(0.0, 1.0),
-                                          colors: [
-                                            (controller.isUserModelLoaded)
-                                                ? tierColor[
-                                                    separateStringFromTier(
-                                                        getTierByExp(userModelRx
-                                                            .value!.exp))]!
-                                                : tierColor['newbie']!,
-                                            primaryBackgroundColor
-                                          ])),
+                                      gradient:
+                                          LinearGradient(begin: Alignment(0.0, 0.0), end: Alignment(0.0, 1.0), colors: [
+                                        (controller.isUserModelLoaded)
+                                            ? tierColor[separateStringFromTier(getTierByExp(userModelRx.value!.exp))]!
+                                            : tierColor['newbie']!,
+                                        primaryBackgroundColor
+                                      ])),
                                 ),
                                 Positioned(
                                   left: 1.w,
@@ -158,9 +149,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                   child: Container(
                                       height: 77.w,
                                       width: 77.w,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: primaryBackgroundColor)),
+                                      decoration: BoxDecoration(shape: BoxShape.circle, color: primaryBackgroundColor)),
                                 ),
                                 Positioned(
                                     left: 5.w,
@@ -171,8 +160,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                         ),
-                                        child: userModelRx.value!.avatarImage !=
-                                                null
+                                        child: userModelRx.value!.avatarImage != null
                                             ? CachedNetworkImage(
                                                 imageUrl:
                                                     "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${userModelRx.value!.avatarImage!}.png",
@@ -241,22 +229,13 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      userModelRx.value!.followers != null &&
-                                              userModelRx.value!.followers!
-                                                      .length !=
-                                                  0
-                                          ? Get.to(() =>
-                                              FollowersNFollowingsView(
-                                                  isMe: true,
-                                                  whichfollowersOrfollowings:
-                                                      true,
-                                                  followersNFollowingsUid:
-                                                      userModelRx
-                                                          .value!.followers!))
-                                          : Get.to(() =>
-                                              NullFollowersNFollowingsView(
-                                                whichNULLfollowersOrfollowings:
-                                                    true,
+                                      userModelRx.value!.followers != null && userModelRx.value!.followers!.length != 0
+                                          ? Get.to(() => FollowersNFollowingsView(
+                                              isMe: true,
+                                              whichfollowersOrfollowings: true,
+                                              followersNFollowingsUid: userModelRx.value!.followers!))
+                                          : Get.to(() => NullFollowersNFollowingsView(
+                                                whichNULLfollowersOrfollowings: true,
                                               ));
                                     },
                                     child: Column(
@@ -266,13 +245,10 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                           builder: (controller) {
                                             if (controller.isUserModelLoaded) {
                                               return Obx(() => Text(
-                                                    userModelRx.value!
-                                                                .followers ==
-                                                            null
+                                                    userModelRx.value!.followers == null
                                                         ? '0'
                                                         : '${userModelRx.value!.followers!.length}',
-                                                    style:
-                                                        profileFollowNumberStyle,
+                                                    style: profileFollowNumberStyle,
                                                   ));
                                             } else {
                                               return Text(
@@ -296,21 +272,13 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                   GestureDetector(
                                     onTap: () {
                                       userModelRx.value!.followings != null &&
-                                              userModelRx.value!.followings!
-                                                      .length !=
-                                                  0
-                                          ? Get.to(() =>
-                                              FollowersNFollowingsView(
-                                                  isMe: true,
-                                                  whichfollowersOrfollowings:
-                                                      false,
-                                                  followersNFollowingsUid:
-                                                      userModelRx
-                                                          .value!.followings!))
-                                          : Get.to(() =>
-                                              NullFollowersNFollowingsView(
-                                                whichNULLfollowersOrfollowings:
-                                                    false,
+                                              userModelRx.value!.followings!.length != 0
+                                          ? Get.to(() => FollowersNFollowingsView(
+                                              isMe: true,
+                                              whichfollowersOrfollowings: false,
+                                              followersNFollowingsUid: userModelRx.value!.followings!))
+                                          : Get.to(() => NullFollowersNFollowingsView(
+                                                whichNULLfollowersOrfollowings: false,
                                               ));
                                     },
                                     child: Column(
@@ -320,13 +288,10 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                                           builder: (controller) {
                                             if (controller.isUserModelLoaded) {
                                               return Obx(() => Text(
-                                                    userModelRx.value!
-                                                                .followings ==
-                                                            null
+                                                    userModelRx.value!.followings == null
                                                         ? '0'
                                                         : '${userModelRx.value!.followings!.length}',
-                                                    style:
-                                                        profileFollowNumberStyle,
+                                                    style: profileFollowNumberStyle,
                                                   ));
                                             } else {
                                               return Text(
@@ -360,9 +325,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                               width: 100.w,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(70.0),
-                                border: Border.all(
-                                    color: primaryButtonBackground,
-                                    width: 1.5.w),
+                                border: Border.all(color: primaryButtonBackground, width: 1.5.w),
                               ),
                               child: Center(
                                 child: GetBuilder<ProfileMyViewModel>(
@@ -402,20 +365,16 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
               builder: (controller) {
                 if (controller.isUserModelLoaded) {
                   return Obx(() => Text(
-                        (userModelRx.value!.intro == null ||
-                                userModelRx.value!.intro == '')
+                        (userModelRx.value!.intro == null || userModelRx.value!.intro == '')
                             ? '소개글이 없습니다.'
-                            : '${userModelRx.value!.intro}'
-                                .replaceAll('\\n', '\n'),
-                        style: subLeagueAwardCommentStyle.copyWith(
-                            letterSpacing: -0.01),
+                            : '${userModelRx.value!.intro}'.replaceAll('\\n', '\n'),
+                        style: subLeagueAwardCommentStyle.copyWith(letterSpacing: -0.01),
                         maxLines: 3,
                       ));
                 } else {
                   return Text(
                     '',
-                    style: subLeagueAwardCommentStyle.copyWith(
-                        letterSpacing: -0.01),
+                    style: subLeagueAwardCommentStyle.copyWith(letterSpacing: -0.01),
                   );
                 }
               },
@@ -697,8 +656,7 @@ class ProfileTabBarView extends StatefulWidget {
   _ProfileTabBarViewState createState() => _ProfileTabBarViewState();
 }
 
-class _ProfileTabBarViewState extends State<ProfileTabBarView>
-    with SingleTickerProviderStateMixin {
+class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTickerProviderStateMixin {
   late TabController tabController;
   late PageController pageController;
   final ProfileMyViewModel profileViewModel = Get.find<ProfileMyViewModel>();
@@ -727,9 +685,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
     return Container(
       child: Column(
         children: [
-          SizedBox(
-              height: correctHeight(35.w, subLeagueAwardCommentStyle.fontSize,
-                  profileButtonTextStyle.fontSize)),
+          SizedBox(height: correctHeight(35.w, subLeagueAwardCommentStyle.fontSize, profileButtonTextStyle.fontSize)),
           Obx(
             () => TabBar(
               indicatorColor: yachtViolet,
@@ -752,9 +708,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                     child: Text(
                       '피드',
                       style: profileButtonTextStyle.copyWith(
-                          color: tabIndex.value == 0
-                              ? profileButtonTextStyle.color
-                              : yachtGrey),
+                          color: tabIndex.value == 0 ? profileButtonTextStyle.color : yachtGrey),
                     ),
                   ),
                 ),
@@ -764,9 +718,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                     child: Text(
                       '활동',
                       style: profileButtonTextStyle.copyWith(
-                          color: tabIndex.value == 1
-                              ? profileButtonTextStyle.color
-                              : yachtGrey),
+                          color: tabIndex.value == 1 ? profileButtonTextStyle.color : yachtGrey),
                     ),
                   ),
                 ),
@@ -799,9 +751,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                             onTap: () {
                               _mixpanelService.mixpanel.track(
                                 'My Asset',
-                                properties: {
-                                  'My Asset Tab From': "마이 페이지-보유 자산"
-                                },
+                                properties: {'My Asset Tab From': "마이 페이지-보유 자산"},
                               );
                               Get.to(() => AssetView());
                             },
@@ -812,12 +762,9 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text('보유 자산',
-                                        style: subLeagueAwardCommentStyle
-                                            .copyWith(fontSize: 16.w)),
+                                    Text('보유 자산', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
                                     SizedBox(
-                                      height: correctHeight(10.w, 16.w,
-                                          subLeagueAwardLabelStyle.fontSize),
+                                      height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize),
                                     ),
                                     // *보유자산
                                     GetBuilder<ProfileMyViewModel>(
@@ -827,30 +774,19 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                                             return GetBuilder<AssetViewModel>(
                                                 id: 'holdingStocks',
                                                 builder: (assetController) {
-                                                  if (assetController
-                                                      .isHoldingStocksFutureLoad) {
+                                                  if (assetController.isHoldingStocksFutureLoad) {
                                                     return Text(
                                                       '${toPriceKRW(assetController.totalHoldingStocksValue + assetController.totalYachtPoint)}원',
-                                                      style:
-                                                          subLeagueAwardLabelStyle
-                                                              .copyWith(
-                                                                  letterSpacing:
-                                                                      -0.01),
+                                                      style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
                                                     );
                                                   } else {
                                                     return Text('',
-                                                        style:
-                                                            subLeagueAwardLabelStyle
-                                                                .copyWith(
-                                                                    letterSpacing:
-                                                                        -0.01));
+                                                        style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01));
                                                   }
                                                 });
                                           } else {
                                             return Text('???',
-                                                style: subLeagueAwardLabelStyle
-                                                    .copyWith(
-                                                        letterSpacing: -0.01));
+                                                style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01));
                                           }
                                         }),
                                   ],
@@ -880,51 +816,31 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                                     height: 90.w,
                                     child: Center(
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          Text('순위',
-                                              style: subLeagueAwardCommentStyle
-                                                  .copyWith(fontSize: 16.w)),
+                                          Text('순위', style: subLeagueAwardCommentStyle.copyWith(fontSize: 16.w)),
                                           SizedBox(
-                                              height: correctHeight(
-                                                  10.w,
-                                                  16.w,
-                                                  subLeagueAwardLabelStyle
-                                                      .fontSize)),
+                                              height: correctHeight(10.w, 16.w, subLeagueAwardLabelStyle.fontSize)),
                                           // *현재 리그 순위 및 승점
                                           Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                rankController.myRanksAndPoint[
-                                                            0]['todayRank'] ==
-                                                        null
+                                                rankController.myRanksAndPoint[0]['todayRank'] == null
                                                     ? ""
-                                                    : rankController.myRanksAndPoint[
-                                                                    0][
-                                                                'todayRank']! !=
-                                                            0
+                                                    : rankController.myRanksAndPoint[0]['todayRank']! != 0
                                                         ? '${rankController.myRanksAndPoint[0]['todayRank']!}위 |'
                                                         : '없음 |',
-                                                style: subLeagueAwardLabelStyle
-                                                    .copyWith(
-                                                        letterSpacing: -0.01),
+                                                style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
                                               ),
                                               Text(
                                                 ' ${rankController.myRanksAndPoint[0]['todayPoint'] ?? 0}',
-                                                style: subLeagueAwardLabelStyle
-                                                    .copyWith(
-                                                        letterSpacing: -0.01),
+                                                style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
                                               ),
                                               Text(
                                                 '점',
-                                                style: subLeagueAwardLabelStyle
-                                                    .copyWith(
-                                                        letterSpacing: -0.01),
+                                                style: subLeagueAwardLabelStyle.copyWith(letterSpacing: -0.01),
                                               ),
                                             ],
                                           ),
@@ -949,8 +865,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                       color: dividerColor,
                     ),
                     SizedBox(
-                      height: correctHeight(
-                          30.w, 0.0, profileHeaderTextStyle.fontSize),
+                      height: correctHeight(30.w, 0.0, profileHeaderTextStyle.fontSize),
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 14.w),
@@ -958,8 +873,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
-                          _mixpanelService.mixpanel
-                              .track('Quest Record Detail');
+                          _mixpanelService.mixpanel.track('Quest Record Detail');
                           Get.to(() => QuestRecordDetailView());
                         },
                         child: Row(
@@ -990,13 +904,10 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                     ),
 
                     SizedBox(
-                      height: correctHeight(
-                          20.w, profileHeaderTextStyle.fontSize, 0.0),
+                      height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
                     ),
                     Obx(() => userQuestModelRx.length == 0
-                        ? Image.asset(
-                            'assets/illusts/not_exists/no_quest_done.png',
-                            height: 150.w)
+                        ? Image.asset('assets/illusts/not_exists/no_quest_done.png', height: 150.w)
                         : QuestRecordView(
                             isFullView: false,
                           )),
@@ -1010,61 +921,55 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView>
                     SizedBox(
                       height: 50.w,
                     ),
-                    Padding(
-                      padding:
-                          EdgeInsets.only(left: 14.w, right: 0.w, bottom: 20.w),
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          _mixpanelService.mixpanel.track('Badge Detail');
-                          Get.to(() => BadgesFullGridView(
-                                badges: userModelRx.value!.badges != null
-                                    ? userModelRx.value!.badges!
-                                    : [],
-                              ));
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              '획득한 뱃지',
-                              style: profileHeaderTextStyle,
-                            ),
-                            Spacer(),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 28.w,
-                                ),
-                                Image.asset(
-                                  'assets/icons/navigate_foward_arrow.png',
-                                  height: 16.w,
-                                  width: 9.w,
-                                ),
-                                SizedBox(
-                                  width: 14.w,
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    GetBuilder<ProfileMyViewModel>(
-                      id: 'profile',
-                      builder: (controller) {
-                        if (userModelRx.value!.badges != null &&
-                            controller.isUserModelLoaded) {
-                          return BadgesGridView(
-                              isFull: false,
-                              badges: userModelRx.value!.badges!);
-                        } else {
-                          return BadgesGridView(
-                            isFull: false,
-                            badges: [],
-                          );
-                        }
-                      },
-                    ),
+                    // Padding(
+                    //   padding: EdgeInsets.only(left: 14.w, right: 0.w, bottom: 20.w),
+                    //   child: GestureDetector(
+                    //     behavior: HitTestBehavior.opaque,
+                    //     onTap: () {
+                    //       _mixpanelService.mixpanel.track('Badge Detail');
+                    //       Get.to(() => BadgesFullGridView(
+                    //             badges: userModelRx.value!.badges != null ? userModelRx.value!.badges! : [],
+                    //           ));
+                    //     },
+                    //     child: Row(
+                    //       children: [
+                    //         Text(
+                    //           '획득한 뱃지',
+                    //           style: profileHeaderTextStyle,
+                    //         ),
+                    //         Spacer(),
+                    //         Row(
+                    //           children: [
+                    //             SizedBox(
+                    //               width: 28.w,
+                    //             ),
+                    //             Image.asset(
+                    //               'assets/icons/navigate_foward_arrow.png',
+                    //               height: 16.w,
+                    //               width: 9.w,
+                    //             ),
+                    //             SizedBox(
+                    //               width: 14.w,
+                    //             ),
+                    //           ],
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    // GetBuilder<ProfileMyViewModel>(
+                    //   id: 'profile',
+                    //   builder: (controller) {
+                    //     if (userModelRx.value!.badges != null && controller.isUserModelLoaded) {
+                    //       return BadgesGridView(isFull: false, badges: userModelRx.value!.badges!);
+                    //     } else {
+                    //       return BadgesGridView(
+                    //         isFull: false,
+                    //         badges: [],
+                    //       );
+                    //     }
+                    //   },
+                    // ),
                     SizedBox(
                       height: 100.w,
                     ),
@@ -1089,9 +994,7 @@ class QuestRecordView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: List.generate(
-          isFullView
-              ? userQuestModelRx.length
-              : min(userQuestModelRx.length, maxNum),
+          isFullView ? userQuestModelRx.length : min(userQuestModelRx.length, maxNum),
           (index) => Column(
                 children: [
                   Padding(
@@ -1100,8 +1003,7 @@ class QuestRecordView extends StatelessWidget {
                       () => sectionBox(
                           padding: primaryAllPadding,
                           child: FutureBuilder<QuestModel>(
-                              future: Get.find<ProfileMyViewModel>()
-                                  .getEachQuestModel(userQuestModelRx[index]),
+                              future: Get.find<ProfileMyViewModel>().getEachQuestModel(userQuestModelRx[index]),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) {
                                   return Container();
@@ -1119,39 +1021,27 @@ class QuestRecordView extends StatelessWidget {
                                       //         snapshot.data);
                                     },
                                     child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Flexible(
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
                                               Text(
-                                                timeStampToStringWithHourMinute(
-                                                        snapshot.data!
-                                                            .questEndDateTime) +
+                                                timeStampToStringWithHourMinute(snapshot.data!.questEndDateTime) +
                                                     " 마감",
                                                 style: questRecordendDateTime,
                                               ),
                                               SizedBox(height: 6.w),
-                                              Text(snapshot.data!.title,
-                                                  style: questRecordTitle),
+                                              Text(snapshot.data!.title, style: questRecordTitle),
                                               SizedBox(
                                                   height: correctHeight(
-                                                      14.w,
-                                                      questRecordTitle.fontSize,
-                                                      questRecordSelection
-                                                          .fontSize)),
+                                                      14.w, questRecordTitle.fontSize, questRecordSelection.fontSize)),
                                               Text(
                                                   Get.find<ProfileMyViewModel>()
-                                                      .getUserChioce(
-                                                          snapshot.data!,
-                                                          userQuestModelRx[
-                                                              index]),
+                                                      .getUserChioce(snapshot.data!, userQuestModelRx[index]),
                                                   style: questRecordSelection),
                                               // Text(userQuestModelRx[index].selection),
                                             ],
@@ -1159,10 +1049,8 @@ class QuestRecordView extends StatelessWidget {
                                         ),
                                         SizedBox(width: 8.w),
                                         Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          mainAxisAlignment: MainAxisAlignment.end,
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             // Spacer(),
@@ -1174,8 +1062,7 @@ class QuestRecordView extends StatelessWidget {
                                               ),
                                               decoration: BoxDecoration(
                                                 color: buttonNormal,
-                                                borderRadius:
-                                                    BorderRadius.circular(8.w),
+                                                borderRadius: BorderRadius.circular(8.w),
                                               ),
 
                                               // height: 300,
@@ -1183,22 +1070,14 @@ class QuestRecordView extends StatelessWidget {
                                                 child: Text(
                                                   snapshot.data!.results == null
                                                       ? "진행 중"
-                                                      : userQuestModelRx[index]
-                                                                  .hasSucceeded ==
-                                                              true
+                                                      : userQuestModelRx[index].hasSucceeded == true
                                                           ? "예측 성공"
                                                           : "예측 실패",
-                                                  style: questRecordSelection
-                                                      .copyWith(
+                                                  style: questRecordSelection.copyWith(
                                                     fontWeight: FontWeight.w500,
-                                                    color: snapshot.data!
-                                                                .results ==
-                                                            null
+                                                    color: snapshot.data!.results == null
                                                         ? yachtBlack
-                                                        : userQuestModelRx[
-                                                                        index]
-                                                                    .hasSucceeded ==
-                                                                true
+                                                        : userQuestModelRx[index].hasSucceeded == true
                                                             ? yachtRed
                                                             : yachtGrey,
                                                   ),
@@ -1212,14 +1091,12 @@ class QuestRecordView extends StatelessWidget {
                                               ),
                                               decoration: BoxDecoration(
                                                 color: Colors.transparent,
-                                                borderRadius:
-                                                    BorderRadius.circular(8.w),
+                                                borderRadius: BorderRadius.circular(8.w),
                                               ),
                                               child: Center(
                                                 child: Text(
                                                   "예측 실패",
-                                                  style: questRecordSelection
-                                                      .copyWith(
+                                                  style: questRecordSelection.copyWith(
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.transparent,
                                                   ),
@@ -1240,11 +1117,8 @@ class QuestRecordView extends StatelessWidget {
                     ),
                   ),
                   if (index !=
-                      min(
-                              userQuestModelRx.length,
-                              isFullView
-                                  ? userQuestModelRx.length
-                                  : min(userQuestModelRx.length, maxNum)) -
+                      min(userQuestModelRx.length,
+                              isFullView ? userQuestModelRx.length : min(userQuestModelRx.length, maxNum)) -
                           1)
                     SizedBox(
                       height: 10.w,

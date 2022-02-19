@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,53 +22,93 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
   // TODO: implement controller
   AuthCheckViewModel get controller => Get.put(AuthCheckViewModel());
   UserRepository _userRepository = UserRepository();
-  final AuthService authService = locator<AuthService>();
+  // final AuthService authService = locator<AuthService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => CommunityViewModel());
     // Get.put(AuthCheckViewModel());
     return Scaffold(
-      body: Obx(() {
-        bool isUserNull = currentUser.value == null;
-        bool isUserModelReady = userModelRx.value != null;
-        print('isUserNull? : $isUserNull');
-        print('isUserModelReady? : $isUserModelReady');
-        print('current UserModel: ${userModelRx.value}');
-        if (!isUserNull && userModelRx.value == null) {
-          // print('wrong user');
-          controller.authCheck();
-        }
+        body: StreamBuilder<User?>(
+            stream: controller.authService.auth.userChanges(),
+            builder: (context, snapshot) {
+              print('snapshot: ${snapshot.data}');
+              print('snapshot.hasData: ${snapshot.hasData}');
+              return Obx(() {
+                print(userModelRx.value);
+                if (snapshot.hasData) {
+                  if (userModelRx.value == null)
+                  // if (controller.authService.auth.currentUser!.uid == "pgw3LFd36CcUGzhuFOmvbyudpTu1") {
+                  {
+                    print('userModelRx: ${userModelRx.value}');
+                    controller.mixpanelService.mixpanel
+                        .track('App Start', properties: {'uid': controller.authService.auth.currentUser!.uid});
+                    Timer(Duration(seconds: 10), () async {
+                      print('7 sec passed');
+                      controller.mixpanelService.mixpanel
+                          .track('Forced Signout', properties: {'uid': controller.authService.auth.currentUser!.uid});
+                      if (userModelRx.value == null) await controller.signOut();
+                    });
+                    // }
+                    return LoadingView();
+                  } else {
+                    return StartupView();
+                  }
+                } else {
+                  return LoginView();
+                }
+              });
+            })
+        // body: Obx(() {
+        //   bool isUserNull = currentUser.value == null;
+        //   bool isUserModelReady = userModelRx.value != null;
+        //   print('isUserNull? : $isUserNull');
+        //   print('isUserModelReady? : $isUserModelReady');
+        //   print('current UserModel: ${userModelRx.value}');
+        //   if (!isUserNull && userModelRx.value == null) {
+        //     // print('wrong user');
+        //     controller.authCheck();
+        //   }
 
-        if (controller.authService.auth.currentUser == null) {
-          return LoginView();
-        } else if (isUserNull || !isUserModelReady) {
-          return LoadingView();
-        } else {
-          return StartupView();
-          // Get.offNamed('startup');
-        }
+        //   if (currentUser.value == null) {
+        //     return LoginView();
+        //   } else if (userModelRx.value == null) {
+        //     // if (controller.authService.auth.currentUser!.uid == "pgw3LFd36CcUGzhuFOmvbyudpTu1") {
+        //     controller.mixpanelService.mixpanel
+        //         .track('App Start', properties: {'uid': controller.authService.auth.currentUser!.uid});
+        //     Timer(Duration(seconds: 10), () async {
+        //       print('7 sec passed');
+        //       controller.mixpanelService.mixpanel
+        //           .track('Forced Signout', properties: {'uid': controller.authService.auth.currentUser!.uid});
+        //       if (userModelRx.value == null) await controller.signOut();
+        //     });
+        //     // }
+        //     return LoadingView();
+        //   } else {
+        //     return StartupView();
+        //     // Get.offNamed('startup');
+        //   }
 
-        // // currentUser는 authStateChange와 관련.
-        // if (isUserNull) {
-        //   return LoginView();
-        //   // userModelRx가 없을 때
-        // } else if (!isUserModelReady) {
-        //   return Container(
-        //     color: Colors.blue,
-        //   );
-        // } else if (leagueRx.value == "") {
-        //   return LoadingView();
-        // } else {
-        //   return StartupView();
-        // }
+        //   // // currentUser는 authStateChange와 관련.
+        //   // if (isUserNull) {
+        //   //   return LoginView();
+        //   //   // userModelRx가 없을 때
+        //   // } else if (!isUserModelReady) {
+        //   //   return Container(
+        //   //     color: Colors.blue,
+        //   //   );
+        //   // } else if (leagueRx.value == "") {
+        //   //   return LoadingView();
+        //   // } else {
+        //   //   return StartupView();
+        //   // }
 
-        // (isUserNull)
-        //     ? LoginView()
-        //     : !isUserModelReady
-        //         ? LoadingView()
-        //         : StartupView();
-      }),
-    );
+        //   // (isUserNull)
+        //   //     ? LoginView()
+        //   //     : !isUserModelReady
+        //   //         ? LoadingView()
+        //   //         : StartupView();
+        // }),
+        );
   }
 }

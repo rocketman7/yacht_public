@@ -26,7 +26,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../locator.dart';
 
-const int maxRewardedAds = 10; // 하루 최대 10개 광고 볼 수 있음. (나중에 DB로?)
+const int maxRewardedAds = 5; // 하루 최대 10개 광고 볼 수 있음. (나중에 DB로?)
 const int maxFailedLoadAttempts = 10; // 광고로딩실패하면 10번까지는 계속 로딩 시도
 
 class HomeViewModel extends GetxController {

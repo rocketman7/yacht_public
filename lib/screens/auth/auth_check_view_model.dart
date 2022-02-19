@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +22,7 @@ import '../../locator.dart';
 class AuthCheckViewModel extends GetxController {
   final AuthService authService = locator<AuthService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final MixpanelService mixpanelService = locator<MixpanelService>();
 
   UserRepository _userRepository = UserRepository();
   // User currentUser;
@@ -37,28 +38,32 @@ class AuthCheckViewModel extends GetxController {
   @override
   void onInit() async {
     await checkTime();
+    // mixpanelService.mixpanel.track('checkTime', properties: {'uid': authService.auth.currentUser!.uid});
     await getLeagueInfo();
+    // mixpanelService.mixpanel.track('getLeagueInfo', properties: {'uid': authService.auth.currentUser!.uid});
     await getHolidayList();
+    // mixpanelService.mixpanel.track('getHolidayList', properties: {'uid': authService.auth.currentUser!.uid});
     await checkVersion();
+    // mixpanelService.mixpanel.track('checkVersion', properties: {'uid': authService.auth.currentUser!.uid});
 
     print('oninit: ${authService.auth.currentUser}');
 
-    currentUser(authService.auth.currentUser);
+    // currentUser(authService.auth.currentUser);
     tierSystemModelRx(await _firestoreService.getTierSystem());
-    currentUser.bindStream(authService.auth.authStateChanges());
-    currentUser.refresh();
+    // currentUser.bindStream(authService.auth.authStateChanges());
+    // currentUser.refresh();
     // leagueRx.bindStream(_firestoreService.getOpenLeague());
     // authService.auth.signOut();
-    update();
-    currentUser.listen((user) async {
-      print('listening $user');
+    // update();
 
+    authService.auth.userChanges().listen((user) async {
+      print('listening $user');
       if (user != null) {
         userModelRx.bindStream(_userRepository.getUserStream(user.uid));
         userModelRx.refresh();
         update();
-        // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
         userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
+        // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
         // leagueRx.listen((value) {
         //   if (value != "") {
         //     print('userquest binding');
@@ -90,6 +95,10 @@ class AuthCheckViewModel extends GetxController {
     //   print('currentUser value: ${currentUser!.value}');
     // });
     super.onInit();
+  }
+
+  Future signOut() async {
+    await authService.auth.signOut();
   }
 
   Future checkTime() async {

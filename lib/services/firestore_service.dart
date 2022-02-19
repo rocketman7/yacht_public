@@ -417,6 +417,8 @@ class FirestoreService extends GetxService {
         .doc(userModelRx.value!.uid)
         .collection('userAsset')
         .add(newAssetModel.toMapAwards());
+
+    // await _firestoreService.collection('admin').doc('yachtStorePurchase').collection( dateTimeToString(DateTime.now(),8)!).add()
   }
 
   // 차트 그리기 위한 Historical Price

@@ -9,6 +9,7 @@ import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/community_view.dart';
 import 'package:yachtOne/screens/community/community_view_model.dart';
+import 'package:yachtOne/screens/contents/reading_content/reading_content_view_model.dart';
 import 'package:yachtOne/screens/home/home_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 
@@ -31,6 +32,7 @@ class StartupView extends GetView<StartupViewModel> {
   CommunityViewModel communityViewModel = Get.put(CommunityViewModel());
   InsightViewModel insightViewModel = Get.put(InsightViewModel());
   ProfileMyViewModel profileViewModel = Get.put(ProfileMyViewModel());
+  ReadingContentViewModel readingContentViewModel = Get.put(ReadingContentViewModel());
   // LiveQuestViewModel liveQuestViewModel = Get.put(LiveQuestViewModel());
 
   final double iconSize = 38.w;
@@ -122,7 +124,7 @@ class StartupView extends GetView<StartupViewModel> {
                   showSelectedLabels: false,
                   showUnselectedLabels: false,
                   currentIndex: controller.selectedPage.value,
-                  onTap: (index) {
+                  onTap: (index) async {
                     // if (controller.selectedPage.value != index) {
                     //   if (controller.selectedPage.value == 0) {
                     //     _mixpanelService.mixpanel.track('Home');
@@ -180,13 +182,34 @@ class StartupView extends GetView<StartupViewModel> {
                       );
                       // HomeView().goToTop();
                     } else {
-                      // _mixpanelService.mixpanel.track('${pageList[controller.selectedPage.value]} timeEvent');
-                      // _mixpanelService.mixpanel.timeEvent('${pageList[index].toString()} timeEvent');
-                      // _mixpanelService.mixpanel.flush();
-
                       _mixpanelService.mixpanel.track(mixpanelBottomBarTrackList[index], properties: {
                         "Previous Bottom Tab": mixpanelBottomBarTrackList[controller.selectedPage.value],
                       });
+
+                      switch (index) {
+                        case 0:
+                          HomeView().onRefresh();
+                          // homeViewModel.onInit();
+                          break;
+                        case 1:
+                          readingContentViewModel.onInit();
+                          break;
+                        // case 2:
+                        //   communityViewModel.scrollController.animateTo(
+                        //     0,
+                        //     duration: Duration(milliseconds: 300),
+                        //     curve: Curves.easeInOut,
+                        //   );
+                        //   break;
+                        // case 3:
+                        //   profileViewModel.scrollController.animateTo(
+                        //     0,
+                        //     duration: Duration(milliseconds: 300),
+                        //     curve: Curves.easeInOut,
+                        //   );
+                        //   break;
+                        default:
+                      }
                       controller.selectedPage(index);
                     }
                   },
