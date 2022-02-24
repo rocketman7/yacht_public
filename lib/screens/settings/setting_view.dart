@@ -977,11 +977,11 @@ class SettingView extends StatelessWidget {
                                           onTap: () async {
                                             _mixpanelService.mixpanel.track('Sign Out Confirm');
                                             HapticFeedback.lightImpact();
-                                            _authService.auth.signOut();
                                             userModelRx(null);
                                             userQuestModelRx.value = [];
                                             leagueRx("");
                                             _kakaoApi.signOut();
+                                            _authService.auth.signOut();
                                             print("signout");
                                             Navigator.of(context).pop();
                                             // Get.find<HomeViewModel>().refreshController.dispose();

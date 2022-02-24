@@ -38,7 +38,11 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
 
               if (snapshot.hasData) {
                 print('auth check viewmodel getuser start');
-                if (userModelRx.value == null) controller.getUser(snapshot.data!.uid);
+                if (userModelRx.value == null) {
+                  controller.getUser(snapshot.data!.uid);
+                } else {
+                  controller.isGettingUser(false);
+                }
                 return Obx(() {
                   print('obx division start');
                   return (controller.isGettingUser.value || controller.isInitiating.value)
