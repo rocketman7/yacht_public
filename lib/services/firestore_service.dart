@@ -418,7 +418,19 @@ class FirestoreService extends GetxService {
         .collection('userAsset')
         .add(newAssetModel.toMapAwards());
 
-    // await _firestoreService.collection('admin').doc('yachtStorePurchase').collection( dateTimeToString(DateTime.now(),8)!).add()
+    await _firestoreService
+        .collection('admin')
+        .doc('yachtStorePurchase')
+        .collection(dateTimeToString(DateTime.now(), 8)!)
+        .add({
+      'uid': userModelRx.value!.uid,
+      'userName': userModelRx.value!.userName,
+      'phoneNumber': phoneNumber,
+      'yachtPoint': giftishowModel.realPrice,
+      'brandName': giftishowModel.brandName,
+      'goodsName': giftishowModel.goodsName,
+      'purchasedDateTime': DateTime.now(),
+    });
   }
 
   // 차트 그리기 위한 Historical Price

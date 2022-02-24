@@ -866,7 +866,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                           onTap: () {
                             _mixpanelService.mixpanel.track(
                               'My Asset',
-                              properties: {'My Asset Tab From': "유저 프로필-보유자산"},
+                              properties: {'My Asset Tap From': "유저 프로필-보유자산"},
                             );
                             yachtSnackBar("다른 유저의 보유 자산은 볼 수 없어요.");
                             // Get.to(() => AssetView());

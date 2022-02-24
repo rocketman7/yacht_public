@@ -1079,7 +1079,7 @@ class MyAssets extends StatelessWidget {
               onTap: () {
                 _mixpanelService.mixpanel.track(
                   'My Asset',
-                  properties: {'My Asset Tab From': "주식 잔고"},
+                  properties: {'My Asset Tap From': "주식 잔고"},
                 );
                 Get.to(() => AssetView());
               },
@@ -1132,7 +1132,7 @@ class MyAssets extends StatelessWidget {
             onTap: () {
               _mixpanelService.mixpanel.track(
                 'My Asset',
-                properties: {'My Asset Tab From': "요트 포인트"},
+                properties: {'My Asset Tap From': "요트 포인트"},
               );
               Get.to(() => AssetView());
             },
@@ -1279,6 +1279,10 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                           children: [
                             InkWell(
                               onTap: () {
+                                _mixpanelService.mixpanel.track(
+                                  'Yacht Point Store',
+                                  properties: {'Yacht Point Store': "홈"},
+                                );
                                 Get.to(() => YachtStoreView());
 
                                 // 여기서 트리거해주면 페이지전환 속도가 느려서.. 차라리 노티피케이션뷰를 스테이트풀 위젯으로 해주고 그 이닛스테이트에서 얘를 실행하자.

@@ -49,7 +49,7 @@ Color thinDivider = Color(0xFF879098).withOpacity(.05);
 
 const Color buttonDisabled = const Color(0xFFE6E6E6);
 const Color buttonNormal = const Color(0xFFEFF2FA);
-Color yachtShadow = Color(0xFFCDC4D9).withOpacity(.2);
+Color yachtShadow = Color(0xFFCDC4D9).withOpacity(.3);
 const Color yachtLine = Color(0xFFE6EAF1);
 const Color white = Colors.white;
 
@@ -1590,8 +1590,8 @@ Container sectionBox({
     decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
       BoxShadow(
         color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
+        blurRadius: 4.w,
+        spreadRadius: 0.w,
       )
     ]),
     child: child,

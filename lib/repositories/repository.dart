@@ -20,7 +20,7 @@ List<QuestModel>? todayQuests;
 Map<InvestAddressModel, List<ChartPriceModel>>? chartPriceMapping = <InvestAddressModel, List<ChartPriceModel>>{};
 UserModel? userModel;
 // Usermodel Rx형태로 만들어서 어디서든 구독
-// final Rxn<User> currentUser = Rxn<User>();
+final Rxn<User> currentUser = Rxn<User>();
 final Rxn<UserModel> userModelRx = Rxn<UserModel>();
 final RxList<UserQuestModel> userQuestModelRx = RxList<UserQuestModel>();
 

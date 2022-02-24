@@ -751,7 +751,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                             onTap: () {
                               _mixpanelService.mixpanel.track(
                                 'My Asset',
-                                properties: {'My Asset Tab From': "마이 페이지-보유 자산"},
+                                properties: {'My Asset Tap From': "마이 페이지-보유 자산"},
                               );
                               Get.to(() => AssetView());
                             },

@@ -1241,7 +1241,7 @@ exports.newYachtStorePurchase = functions.region('asia-northeast3').firestore.do
   
   bot.launch();
   youngjas.forEach((chat_id) => {
-    bot.telegram.sendMessage(chat_id,userName +'('+ data['uid']+')' + ' 님의 문의: ' + data['content']);
+    bot.telegram.sendMessage(chat_id,'요트 스토어 구매: '+ userName +'('+ data['uid']+') '   + data['brandName']+' ' + data['goodsName'] +' 포인트 사용: ' +data['yachtPoint']);
   });
 })
 

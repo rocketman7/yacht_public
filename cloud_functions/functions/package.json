@@ -17,6 +17,7 @@
     "dateformat": "^3.0.3",
     "firebase-admin": "^8.10.0",
     "firebase-functions": "^3.6.1",
+    "node-fetch": "^3.2.0",
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "telegraf": "^4.5.2"
