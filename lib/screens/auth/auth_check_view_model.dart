@@ -34,9 +34,13 @@ class AuthCheckViewModel extends GetxController {
   String play_store_url = "https://play.google.com/store/apps/details?id=com.team_yacht.ggook";
   bool isUrgentNotice = false;
   String urgentMessage = "";
+  RxBool isGettingUser = true.obs;
+  RxBool isInitiating = true.obs;
 
   @override
   void onInit() async {
+    isInitiating(true);
+    print('auth check init start');
     await checkTime();
     // mixpanelService.mixpanel.track('checkTime', properties: {'uid': authService.auth.currentUser!.uid});
     await getLeagueInfo();
@@ -56,30 +60,30 @@ class AuthCheckViewModel extends GetxController {
     // authService.auth.signOut();
     // update();
 
-    authService.auth.userChanges().listen((user) async {
-      print('listening $user');
-      if (user != null) {
-        userModelRx.bindStream(_userRepository.getUserStream(user.uid));
-        userModelRx.refresh();
-        update();
-        userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
-        // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
-        // leagueRx.listen((value) {
-        //   if (value != "") {
-        //     print('userquest binding');
-        //     userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
-        //   }
-        // });
+    // authService.auth.userChanges().listen((user) async {
+    //   print('listening $user');
+    //   if (user != null) {
+    //     userModelRx.bindStream(_userRepository.getUserStream(user.uid));
+    //     userModelRx.refresh();
+    //     update();
+    //     userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
+    //     // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
+    //     // leagueRx.listen((value) {
+    //     //   if (value != "") {
+    //     //     print('userquest binding');
+    //     //     userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
+    //     //   }
+    //     // });
 
-        // print('this user: ${userModelRx.value}.');
-        // userModelRx.listen((user) {
-        //   print('this user: $user');
-        // });
-      } else {
-        userModelRx.value = null;
-        print('when user is  null');
-      }
-    });
+    //     // print('this user: ${userModelRx.value}.');
+    //     // userModelRx.listen((user) {
+    //     //   print('this user: $user');
+    //     // });
+    //   } else {
+    //     userModelRx.value = null;
+    //     print('when user is  null');
+    //   }
+    // });
 
     // isLoadingData(false);
     // _authService.auth.signOut();
@@ -94,7 +98,16 @@ class AuthCheckViewModel extends GetxController {
     //   }
     //   print('currentUser value: ${currentUser!.value}');
     // });
+    isInitiating(false);
+    print('auth check init end');
     super.onInit();
+  }
+
+  Future getUser(String uid) async {
+    isGettingUser(true);
+    userModelRx(await _firestoreService.getUserModel(uid));
+    userModelRx.bindStream(_userRepository.getUserStream(uid));
+    isGettingUser(false);
   }
 
   Future signOut() async {

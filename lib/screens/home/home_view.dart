@@ -405,7 +405,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
         WidgetsBinding.instance!.addPostFrameCallback((_) async {
           termsOfUse = await rootBundle.loadString('assets/documents/termsOfUse.txt');
           privacyPolicy = await rootBundle.loadString('assets/documents/privacyPolicy.txt');
-          showTermDialog(context, widget.homeViewModel);
+          await showTermDialog(context, widget.homeViewModel);
         });
       }
     }
@@ -437,7 +437,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
     print("UUID: $uuid");
   }
 
-  showTermDialog(BuildContext context, HomeViewModel homeViewModel) {
+  showTermDialog(BuildContext termContext, HomeViewModel homeViewModel) {
     print('show term called');
     final KakaoFirebaseAuthApi _kakaoApi = KakaoFirebaseAuthApi();
     String title = "서비스를 이용하기 위해\n아래에 대한 동의가 필요합니다.";
@@ -445,12 +445,12 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
     String btnLabelCancel = "거부";
 
     showDialog(
-      context: context,
+      context: termContext,
       barrierDismissible: false,
-      builder: (context) {
+      builder: (termContext) {
         print('show term showDialog called');
         return MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            data: MediaQuery.of(termContext).copyWith(textScaleFactor: 1.0),
             child: Dialog(
               insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Padding(
@@ -594,84 +594,92 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                         child: Obx(() => Row(
                               children: [
                                 GestureDetector(
-                                  onTap: () {
-                                    Get.dialog(Dialog(
-                                        insetPadding: primaryHorizontalPadding,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Text("알림", style: dialogTitle),
-                                                    SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                                    Text("이용약관과 개인정보처리방침에 동의하지 않으면 요트 서비스를 이용할 수 없습니다. ",
-                                                        style: dialogContent),
-                                                    SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                                    Center(
-                                                      child: Text(
-                                                        " 동의를 거부하고 정말 탈퇴하시겠습니까?",
-                                                        style: dialogWarning,
-                                                        textAlign: TextAlign.center,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 14.w,
-                                                    ),
-                                                    Center(
-                                                      child: Text(
-                                                        "탈퇴 시 모든 데이터가 삭제되며 되돌릴 수 없습니다.",
-                                                        style: dialogTitle.copyWith(
-                                                          fontSize: bodySmallSize,
-                                                        ),
-                                                        textAlign: TextAlign.center,
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                    Row(
+                                  onTap: () async {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => Dialog(
+                                            insetPadding: primaryHorizontalPadding,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                    padding: EdgeInsets.fromLTRB(14.w,
+                                                        correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                                                    decoration:
+                                                        BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                                    child: Column(
+                                                      mainAxisSize: MainAxisSize.min,
                                                       children: [
-                                                        Expanded(
-                                                          child: GestureDetector(
-                                                              onTap: () async {
-                                                                homeViewModel.authService.deleteAccount();
-
-                                                                userModelRx(null);
-                                                                userQuestModelRx.value = [];
-                                                                leagueRx("");
-
-                                                                _kakaoApi.signOut();
-
-                                                                Navigator.of(context).pop();
-                                                                Navigator.of(context).pop();
-                                                                await Get.offAll(() => AuthCheckView());
-                                                                Get.find<AuthCheckViewModel>().onInit();
-                                                              },
-                                                              child: textContainerButtonWithOptions(
-                                                                text: "예",
-                                                                isDarkBackground: false,
-                                                                height: 44.w,
-                                                              )),
+                                                        Text("알림", style: dialogTitle),
+                                                        SizedBox(
+                                                            height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                        Text("이용약관과 개인정보처리방침에 동의하지 않으면 요트 서비스를 이용할 수 없습니다. ",
+                                                            style: dialogContent),
+                                                        SizedBox(
+                                                            height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                        Center(
+                                                          child: Text(
+                                                            " 동의를 거부하고 정말 탈퇴하시겠습니까?",
+                                                            style: dialogWarning,
+                                                            textAlign: TextAlign.center,
+                                                          ),
                                                         ),
-                                                        SizedBox(width: 8.w),
-                                                        Expanded(
-                                                          child: InkWell(
-                                                              onTap: () {
-                                                                Navigator.of(context).pop();
-                                                                // Get.back(closeOverlays: true);
-                                                              },
-                                                              child: textContainerButtonWithOptions(
-                                                                  text: "아니오", isDarkBackground: true, height: 44.w)),
+                                                        SizedBox(
+                                                          height: 14.w,
+                                                        ),
+                                                        Center(
+                                                          child: Text(
+                                                            "탈퇴 시 모든 데이터가 삭제되며 되돌릴 수 없습니다.",
+                                                            style: dialogTitle.copyWith(
+                                                              fontSize: bodySmallSize,
+                                                            ),
+                                                            textAlign: TextAlign.center,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                            height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: GestureDetector(
+                                                                  onTap: () async {
+                                                                    homeViewModel.authService.deleteAccount();
+
+                                                                    userModelRx(null);
+                                                                    userQuestModelRx.value = [];
+                                                                    leagueRx("");
+
+                                                                    _kakaoApi.signOut();
+
+                                                                    Navigator.of(context).pop();
+                                                                    Navigator.of(context).pop();
+                                                                    await Get.offAll(() => AuthCheckView());
+                                                                    Get.find<AuthCheckViewModel>().onInit();
+                                                                  },
+                                                                  child: textContainerButtonWithOptions(
+                                                                    text: "예",
+                                                                    isDarkBackground: false,
+                                                                    height: 44.w,
+                                                                  )),
+                                                            ),
+                                                            SizedBox(width: 8.w),
+                                                            Expanded(
+                                                              child: InkWell(
+                                                                  onTap: () {
+                                                                    Navigator.of(context).pop();
+                                                                    // Get.back(closeOverlays: true);
+                                                                  },
+                                                                  child: textContainerButtonWithOptions(
+                                                                      text: "아니오",
+                                                                      isDarkBackground: true,
+                                                                      height: 44.w)),
+                                                            )
+                                                          ],
                                                         )
                                                       ],
-                                                    )
-                                                  ],
-                                                )),
-                                          ],
-                                        )));
+                                                    )),
+                                              ],
+                                            )));
                                   },
                                   child: Container(
                                     width: 80.w,
@@ -685,7 +693,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                       if (checkTerm.value && checkFourteen.value) {
                                         await homeViewModel.agreeTerm();
                                         box.write('iosTermAgree${userModelRx.value!.uid}', true);
-                                        Navigator.of(context).pop();
+                                        Navigator.of(termContext).pop();
 
                                         // if (userModelRx.value!.isNameUpdated == null ||
                                         //     !userModelRx.value!.isNameUpdated!) {

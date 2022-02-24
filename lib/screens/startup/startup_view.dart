@@ -194,13 +194,10 @@ class StartupView extends GetView<StartupViewModel> {
                         case 1:
                           readingContentViewModel.onInit();
                           break;
-                        // case 2:
-                        //   communityViewModel.scrollController.animateTo(
-                        //     0,
-                        //     duration: Duration(milliseconds: 300),
-                        //     curve: Curves.easeInOut,
-                        //   );
-                        //   break;
+                        case 2:
+                          communityViewModel.getNotice();
+                          communityViewModel.getPost();
+                          break;
                         // case 3:
                         //   profileViewModel.scrollController.animateTo(
                         //     0,

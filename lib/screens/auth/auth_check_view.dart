@@ -26,6 +26,7 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   @override
   Widget build(BuildContext context) {
+    print('auth view start');
     Get.lazyPut(() => CommunityViewModel());
     // Get.put(AuthCheckViewModel());
     return Scaffold(
@@ -34,30 +35,44 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
             builder: (context, snapshot) {
               print('snapshot: ${snapshot.data}');
               print('snapshot.hasData: ${snapshot.hasData}');
-              return Obx(() {
-                print(userModelRx.value);
-                if (snapshot.hasData) {
-                  if (userModelRx.value == null)
-                  // if (controller.authService.auth.currentUser!.uid == "pgw3LFd36CcUGzhuFOmvbyudpTu1") {
-                  {
-                    print('userModelRx: ${userModelRx.value}');
-                    controller.mixpanelService.mixpanel
-                        .track('App Start', properties: {'uid': controller.authService.auth.currentUser!.uid});
-                    Timer(Duration(seconds: 10), () async {
-                      print('7 sec passed');
-                      controller.mixpanelService.mixpanel
-                          .track('Forced Signout', properties: {'uid': controller.authService.auth.currentUser!.uid});
-                      if (userModelRx.value == null) await controller.signOut();
-                    });
-                    // }
-                    return LoadingView();
-                  } else {
-                    return StartupView();
-                  }
-                } else {
-                  return LoginView();
-                }
-              });
+
+              if (snapshot.hasData) {
+                print('auth check viewmodel getuser start');
+                if (userModelRx.value == null) controller.getUser(snapshot.data!.uid);
+                return Obx(() {
+                  print('obx division start');
+                  return (controller.isGettingUser.value || controller.isInitiating.value)
+                      ? LoadingView()
+                      : StartupView();
+                });
+              } else {
+                return LoginView();
+              }
+
+              // return Obx(() {
+              //   print(userModelRx.value);
+              //   if (snapshot.hasData) {
+              //     if (userModelRx.value == null)
+              //     // if (controller.authService.auth.currentUser!.uid == "pgw3LFd36CcUGzhuFOmvbyudpTu1") {
+              //     {
+              //       print('userModelRx: ${userModelRx.value}');
+              //       controller.mixpanelService.mixpanel
+              //           .track('App Start', properties: {'uid': controller.authService.auth.currentUser!.uid});
+              //       Timer(Duration(seconds: 10), () async {
+              //         print('7 sec passed');
+              //         controller.mixpanelService.mixpanel
+              //             .track('Forced Signout', properties: {'uid': controller.authService.auth.currentUser!.uid});
+              //         if (userModelRx.value == null) await controller.signOut();
+              //       });
+              //       // }
+              //       return LoadingView();
+              //     } else {
+              //       return StartupView();
+              //     }
+              //   } else {
+              //     return LoginView();
+              //   }
+              // });
             })
         // body: Obx(() {
         //   bool isUserNull = currentUser.value == null;

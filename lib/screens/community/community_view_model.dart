@@ -66,10 +66,11 @@ class CommunityViewModel extends GetxController {
       // print('max: ${scrollController.position.maxScrollExtent}');
       // print(scrollController.position);
       scrollController.offset < 0 ? offset(0) : offset(scrollController.offset);
-      if ((scrollController.offset + 60.w >
-              scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .5)) &&
+      if ((scrollController.offset > scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .5)) &&
           hasNextPosts.value) {
         if (!isGettingPosts.value) {
+          print('maxextnt: ${scrollController.position.maxScrollExtent}');
+          print(scrollController.offset);
           getPost();
         }
       }
@@ -109,6 +110,9 @@ class CommunityViewModel extends GetxController {
     if (isGettingPosts.value) return;
     isGettingPosts(true);
     hasNextPosts(true);
+
+    recentNotice.value = [];
+    await getNotice();
 
     List<PostModel> newPosts = [];
     newPosts.addAll(await _firestoreService.getPosts(
