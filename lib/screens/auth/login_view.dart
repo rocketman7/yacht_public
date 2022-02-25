@@ -24,7 +24,7 @@ class LoginView extends StatelessWidget {
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
-    // _mixpanelService.mixpanel.track('login');
+    _mixpanelService.mixpanel.track('Login View');
     return Scaffold(
       body: Container(
         height: double.infinity,

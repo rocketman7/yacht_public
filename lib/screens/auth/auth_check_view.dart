@@ -38,12 +38,14 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
 
               if (snapshot.hasData) {
                 print('auth check viewmodel getuser start');
+                // controller.mixpanelService.mixpanel.track('AuthCheck Snapshot HasData');
                 // if (userModelRx.value == null) {
                 controller.getUser(snapshot.data!.uid);
                 // } else {
                 //   controller.isGettingUser(false);
                 // }
                 return Obx(() {
+                  // controller.mixpanelService.mixpanel.track('AuthCheck Obx Division');
                   print('obx division start');
                   return (controller.isGettingUser.value || controller.isInitiating.value)
                       ? LoadingView()
