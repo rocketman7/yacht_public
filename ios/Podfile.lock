@@ -345,6 +345,12 @@ PODS:
   - Analytics (4.1.6)
   - app_tracking_transparency (0.0.1):
     - Flutter
+  - appsflyer_sdk (6.4.4):
+    - AppsFlyerFramework (= 6.5.2)
+    - Flutter
+  - AppsFlyerFramework (6.5.2):
+    - AppsFlyerFramework/Main (= 6.5.2)
+  - AppsFlyerFramework/Main (6.5.2)
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
@@ -659,6 +665,7 @@ PODS:
 DEPENDENCIES:
   - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
   - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
+  - appsflyer_sdk (from `.symlinks/plugins/appsflyer_sdk/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - facebook_app_events (from `.symlinks/plugins/facebook_app_events/ios`)
@@ -695,6 +702,7 @@ SPEC REPOS:
     - abseil
     - Amplitude
     - Analytics
+    - AppsFlyerFramework
     - BoringSSL-GRPC
     - FBAEMKit
     - FBAudienceNetwork
@@ -736,6 +744,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/amplitude_flutter/ios"
   app_tracking_transparency:
     :path: ".symlinks/plugins/app_tracking_transparency/ios"
+  appsflyer_sdk:
+    :path: ".symlinks/plugins/appsflyer_sdk/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
@@ -803,6 +813,8 @@ SPEC CHECKSUMS:
   amplitude_flutter: 8ddb231989e68ed8c005c838d7fc59edbca09833
   Analytics: eefe524436f904b8bb3f8c8c3425280e43b34efc
   app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
+  appsflyer_sdk: 1e59c8c01aeeab556f299cbe66bf769862026cdb
+  AppsFlyerFramework: 9f304d91cc80b6579b1206a59220383056b58b47
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 8a183be37e2e2d9f6a48e2c082cfb344196f6823
   cloud_functions: acab801c51eb2c8772dc2f61397eb8b92012b81c

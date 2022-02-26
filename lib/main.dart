@@ -23,6 +23,7 @@ import 'package:yachtOne/screens/quest/survey_view.dart';
 import 'package:yachtOne/screens/quest/tutorial_view.dart';
 
 import 'package:yachtOne/screens/startup/startup_view.dart';
+import 'package:yachtOne/services/appsflyer_service.dart';
 
 import 'package:yachtOne/services/mixpanel_service.dart';
 
@@ -43,6 +44,7 @@ void main() async {
   //   "155a00c5962c973fc4f1d87442068894",
   // );
   setupLocator();
+  locator<AppsflyerService>().onInit();
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   await _mixpanelService.initMixpanel();
   KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";

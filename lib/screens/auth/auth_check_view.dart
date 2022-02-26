@@ -15,12 +15,12 @@ import '../../locator.dart';
 import '../../services/auth_service.dart';
 import 'login_view.dart';
 
-class AuthCheckView extends GetView<AuthCheckViewModel> {
+class AuthCheckView extends StatelessWidget {
   AuthCheckView({Key? key}) : super(key: key);
 
   @override
   // TODO: implement controller
-  AuthCheckViewModel get controller => Get.put(AuthCheckViewModel());
+  final AuthCheckViewModel controller = Get.put(AuthCheckViewModel());
   UserRepository _userRepository = UserRepository();
   // final AuthService authService = locator<AuthService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
@@ -33,12 +33,12 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
         body: StreamBuilder<User?>(
             stream: controller.authService.auth.userChanges(),
             builder: (context, snapshot) {
-              print('snapshot: ${snapshot.data}');
+              controller.mixpanelService.mixpanel.track('snapshot: ${snapshot.data}');
               print('snapshot.hasData: ${snapshot.hasData}');
 
               if (snapshot.hasData) {
                 print('auth check viewmodel getuser start');
-                // controller.mixpanelService.mixpanel.track('AuthCheck Snapshot HasData');
+                controller.mixpanelService.mixpanel.track('AuthCheck Snapshot HasData');
                 // if (userModelRx.value == null) {
                 controller.getUser(snapshot.data!.uid);
                 // } else {
@@ -47,11 +47,16 @@ class AuthCheckView extends GetView<AuthCheckViewModel> {
                 return Obx(() {
                   // controller.mixpanelService.mixpanel.track('AuthCheck Obx Division');
                   print('obx division start');
-                  return (controller.isGettingUser.value || controller.isInitiating.value)
-                      ? LoadingView()
-                      : StartupView();
+                  if (controller.isGettingUser.value || controller.isInitiating.value) {
+                    controller.mixpanelService.mixpanel.track('Obx Value true to Loading');
+                    return LoadingView();
+                  } else {
+                    controller.mixpanelService.mixpanel.track('Obx Value false to Startup');
+                    return StartupView();
+                  }
                 });
               } else {
+                controller.mixpanelService.mixpanel.track('Snapshot NoData to Login');
                 return LoginView();
               }
 

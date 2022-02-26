@@ -99,6 +99,7 @@ class AuthCheckViewModel extends GetxController {
     //   print('currentUser value: ${currentUser!.value}');
     // });
     isInitiating(false);
+    isInitiating.refresh();
     print('auth check init end');
     super.onInit();
   }
@@ -109,7 +110,18 @@ class AuthCheckViewModel extends GetxController {
     userModelRx(await _firestoreService.getUserModel(uid));
     userModelRx.bindStream(_userRepository.getUserStream(uid));
     mixpanelService.mixpanel.track('AuthCheck Controller User Get Done', properties: {'uid': uid});
+    // userQuestModelRx.bindStream(_userRepository.getUserQuestStream(uid));
+    // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
+    String leagueId = await _firestoreService.getLeagueInfo().then((value) => value.leagueName);
+    userQuestModelRx(await _firestoreService.getUserQuestModels(uid, leagueId));
+    leagueRx.listen((value) {
+      if (value != "") {
+        print('userquest binding');
+        userQuestModelRx.bindStream(_userRepository.getUserQuestStream(uid));
+      }
+    });
     isGettingUser(false);
+    isGettingUser.refresh();
   }
 
   Future signOut() async {
@@ -221,6 +233,70 @@ class AuthCheckViewModel extends GetxController {
                           child: Center(
                             child: Text(
                               '업데이트하기',
+                              style: yachtDeliveryDialogButtonText,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 14.w,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          barrierDismissible: false);
+    }
+
+    if (isUrgentNotice) {
+      Get.dialog(
+          Dialog(
+            backgroundColor: primaryBackgroundColor,
+            insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+            clipBehavior: Clip.hardEdge,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: primaryHorizontalPadding,
+                  // height: 210.w,
+                  width: 347.w,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 14.w),
+                      Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
+                      SizedBox(
+                        height: correctHeight(
+                            20.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
+                      ),
+                      Center(
+                        child: Text(
+                          urgentMessage,
+                          textAlign: TextAlign.center,
+                          style: yachtBadgesDescriptionDialogTitle,
+                        ),
+                      ),
+                      SizedBox(
+                        height: correctHeight(20.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                      ),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          exit(0);
+                        },
+                        child: Container(
+                          height: 44.w,
+                          // width: 154.5.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(70.0),
+                            color: yachtViolet,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '확인',
                               style: yachtDeliveryDialogButtonText,
                             ),
                           ),

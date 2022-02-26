@@ -162,6 +162,22 @@ class FirestoreService extends GetxService {
     await _firestoreService.collection('users').doc(uid).delete();
   }
 
+  // User Quest Model Future
+  Future<List<UserQuestModel>> getUserQuestModels(String uid, String leagueId) {
+    return _firestoreService
+        .collection('users')
+        .doc(uid)
+        .collection('userVote')
+        .doc(leagueRx.value)
+        .collection('quests')
+        .orderBy('selectDateTime', descending: true)
+        .get()
+        .then((value) => value.docs.map((doc) {
+              print('user quest: ${UserQuestModel.fromMap(doc.id, doc.data())}');
+              return UserQuestModel.fromMap(doc.id, doc.data());
+            }).toList());
+  }
+
   // User Quest Model 스트림
   Stream<List<UserQuestModel>> getUserQuestStream(
     String uid,
