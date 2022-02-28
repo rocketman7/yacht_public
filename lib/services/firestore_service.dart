@@ -62,10 +62,7 @@ class FirestoreService extends GetxService {
         .doc('leagueInfo')
         .get()
         .then((value) => LeagueAddressModel.fromMap(value.data()!));
-    // return LeagueAddressModel(
-    //     openLeague: 'league002',
-    //     leagueName: '11월 리그',
-    //     leagueEndDateTime: '2021년 11월 30일까지');
+    // return LeagueAddressModel(openLeague: 'league006', leagueName: '3월 리그', leagueEndDateTime: '2022년 3월 30일까지');
   }
 
   // 휴일 리스트
@@ -163,20 +160,20 @@ class FirestoreService extends GetxService {
   }
 
   // User Quest Model Future
-  Future<List<UserQuestModel>> getUserQuestModels(String uid, String leagueId) {
-    return _firestoreService
-        .collection('users')
-        .doc(uid)
-        .collection('userVote')
-        .doc(leagueRx.value)
-        .collection('quests')
-        .orderBy('selectDateTime', descending: true)
-        .get()
-        .then((value) => value.docs.map((doc) {
-              print('user quest: ${UserQuestModel.fromMap(doc.id, doc.data())}');
-              return UserQuestModel.fromMap(doc.id, doc.data());
-            }).toList());
-  }
+  // Future<List<UserQuestModel>> getUserQuestModels(String uid, String leagueId) {
+  //   return _firestoreService
+  //       .collection('users')
+  //       .doc(uid)
+  //       .collection('userVote')
+  //       .doc(leagueRx.value)
+  //       .collection('quests')
+  //       .orderBy('selectDateTime', descending: true)
+  //       .get()
+  //       .then((value) => value.docs.map((doc) {
+  //             print('user quest: ${UserQuestModel.fromMap(doc.id, doc.data())}');
+  //             return UserQuestModel.fromMap(doc.id, doc.data());
+  //           }).toList());
+  // }
 
   // User Quest Model 스트림
   Stream<List<UserQuestModel>> getUserQuestStream(
