@@ -143,7 +143,7 @@ class _EmailVerificationWaitingViewState extends State<EmailVerificationWaitingV
                       print("signout");
                       Navigator.of(context).pop();
                       await Get.offAll(() => AuthCheckView());
-                      Get.find<AuthCheckViewModel>().onInit();
+                      // Get.find<AuthCheckViewModel>().onInit();
                     },
                     child: Center(
                       child: Text(

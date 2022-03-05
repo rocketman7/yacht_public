@@ -13,6 +13,7 @@ import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import '../../locator.dart';
 import '../../services/auth_service.dart';
+import 'kakao_firebase_auth_api.dart';
 import 'login_view.dart';
 
 class AuthCheckView extends StatelessWidget {
@@ -21,6 +22,7 @@ class AuthCheckView extends StatelessWidget {
   @override
   // TODO: implement controller
   final AuthCheckViewModel controller = Get.put(AuthCheckViewModel());
+  final KakaoFirebaseAuthApi _kakaoApi = KakaoFirebaseAuthApi();
   UserRepository _userRepository = UserRepository();
   // final AuthService authService = locator<AuthService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
@@ -56,6 +58,15 @@ class AuthCheckView extends StatelessWidget {
                   }
                 });
               } else {
+                print("all clear");
+                // leagueRx.close();
+                // userModelRx.close();
+                // userQuestModelRx.close();
+                // leagueRx("");
+                // userModelRx(null);
+                // userQuestModelRx.value = [];
+                // _kakaoApi.signOut();
+                // controller.authService.auth.signOut();
                 controller.mixpanelService.mixpanel.track('Snapshot NoData to Login');
                 return LoginView();
               }

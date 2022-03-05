@@ -362,6 +362,7 @@ class HomeViewModel extends GetxController {
 
   // 현재 홈 뷰에 올려야 하는 퀘스트를 모두 가져온 뒤, 각 섹션에 맞게 분류
   Future getAllQuests() async {
+    print('getting all quests');
     allQuests.clear();
     newQuests.clear();
     liveQuests.clear();
@@ -440,7 +441,7 @@ class HomeViewModel extends GetxController {
             _numRewardedLoadAttempts = 0;
           },
           onAdFailedToLoad: (LoadAdError error) {
-            // print('RewardedAd failed to load: $error');
+            print('RewardedAd failed to load: $error');
             _rewardedAd = null;
             _numRewardedLoadAttempts += 1;
             if (_numRewardedLoadAttempts <= maxFailedLoadAttempts) {

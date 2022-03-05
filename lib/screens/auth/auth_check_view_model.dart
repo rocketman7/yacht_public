@@ -39,6 +39,8 @@ class AuthCheckViewModel extends GetxController {
 
   @override
   void onInit() async {
+    print('userRx: $userModelRx');
+    print('leagueRx: $leagueRx');
     isInitiating(true);
     print('auth check init start');
     // await checkTime();
@@ -51,6 +53,7 @@ class AuthCheckViewModel extends GetxController {
     mixpanelService.mixpanel.track('checkVersion');
 
     print('oninit: ${authService.auth.currentUser}');
+    print('oninit: ${userModelRx.value}');
 
     // currentUser(authService.auth.currentUser);
     tierSystemModelRx(await _firestoreService.getTierSystem());
@@ -106,23 +109,39 @@ class AuthCheckViewModel extends GetxController {
 
   Future getUser(String uid) async {
     // uid = "kakao:1993448477";
-    isGettingUser(true);
+    // isGettingUser(true);
     mixpanelService.mixpanel.track('AuthCheck Controller Getting User', properties: {'uid': uid});
-    userModelRx(await _firestoreService.getUserModel(uid));
+    // userModelRx(await _firestoreService.getUserModel(uid));
     userModelRx.bindStream(_userRepository.getUserStream(uid));
     mixpanelService.mixpanel.track('AuthCheck Controller User Get Done', properties: {'uid': uid});
     // userQuestModelRx.bindStream(_userRepository.getUserQuestStream(uid));
     // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
     // String leagueId = await _firestoreService.getLeagueInfo().then((value) => value.leagueName);
     // userQuestModelRx(await _firestoreService.getUserQuestModels(uid, leagueId));
-    leagueRx.listen((value) {
-      if (value != "") {
-        print('userquest binding');
+
+    if (leagueRx.value != "") {
+      userQuestModelRx.bindStream(_userRepository.getUserQuestStream(uid));
+    }
+
+    ever(leagueRx, (_) {
+      if (leagueRx.value != "") {
+        print('userquest binding to $uid');
         userQuestModelRx.bindStream(_userRepository.getUserQuestStream(uid));
       }
     });
-    isGettingUser(false);
-    isGettingUser.refresh();
+
+    if (userModelRx.value != null) isGettingUser(false);
+    // leagueRx.listen((value) {
+    //   print('leagueRx listening: $value');
+    // });
+    ever(userModelRx, (_) {
+      if (userModelRx.value != null) {
+        isGettingUser(false);
+      }
+    });
+    // userModelRx.listen((val) {
+    // });
+    // isGettingUser.refresh();
   }
 
   Future signOut() async {
@@ -143,9 +162,10 @@ class AuthCheckViewModel extends GetxController {
 
   Future getLeagueInfo() async {
     leagueModel(await _firestoreService.getLeagueInfo());
-    // print(leagueModel.value);
-    // leagueRx('league002');
+    print(leagueModel.value);
+    // leagueRx('');
     leagueRx(leagueModel.value!.openLeague);
+    leagueRx.refresh();
   }
 
   Future getHolidayList() async {

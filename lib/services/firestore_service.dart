@@ -105,7 +105,7 @@ class FirestoreService extends GetxService {
     return _firestoreService
         .collection('users')
         .doc(uid)
-        // .doc('IKNYOcaLDlcXSmUEKcAs4LmkcxJ2')
+        // .doc('kakao:1664094339')
         .snapshots()
         .map((snapshot) {
       print('user data stream changed, user model snapshot: ${snapshot.data()}');
@@ -180,6 +180,7 @@ class FirestoreService extends GetxService {
     String uid,
   ) {
     // print('stream starting');
+    print('get user quest stream started');
     // print(leagueRx.value);
     return _firestoreService
         .collection('users')

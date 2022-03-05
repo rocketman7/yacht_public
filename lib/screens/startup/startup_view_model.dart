@@ -12,14 +12,14 @@ import 'package:yachtOne/services/push_notification_service.dart';
 import '../../locator.dart';
 
 class StartupViewModel extends GetxController {
-  AuthService _authService = locator<AuthService>();
+  // AuthService _authService = locator<AuthService>();
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   RxInt selectedPage = 0.obs;
-  late User currentUser;
+  // late User currentUser;
   bool isNameUpdated = true;
   @override
   void onInit() {
-    currentUser = _authService.auth.currentUser!;
+    // currentUser = _authService.auth.currentUser!;
     selectedPage = 0.obs;
     checkUserNameConfirm();
     // selectedPage = 0.obs;

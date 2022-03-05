@@ -334,7 +334,8 @@ class GoodsExchangeView extends StatelessWidget {
                               builder: (context) {
                                 return InsufficientYachtPointAlertDialog();
                               });
-                        } else if (yachtStoreController.isVerificationComplete.value) {
+                        } else if (yachtStoreController.isVerificationComplete.value &&
+                            !yachtStoreController.isExchanging.value) {
                           showDialog(
                             context: context,
                             builder: (context) => ConfirmExchangeDialog(
@@ -346,12 +347,14 @@ class GoodsExchangeView extends StatelessWidget {
                           );
                         }
                       },
-                      child: conditionalButton(
-                        text: "교환하기",
-                        isEnable: yachtStoreController.isVerificationComplete.value,
-                        // isDarkBackground: true,
-                        height: 50.w,
-                        fontSize: 16.w,
+                      child: Obx(
+                        () => conditionalButton(
+                          text: yachtStoreController.isExchanging.value ? "잠시 기다려주세요" : "교환하기",
+                          isEnable: yachtStoreController.isVerificationComplete.value,
+                          // isDarkBackground: true,
+                          height: 50.w,
+                          fontSize: 16.w,
+                        ),
                       ),
                     )),
               SizedBox(
@@ -559,14 +562,17 @@ class ConfirmExchangeDialog extends StatelessWidget {
                       Expanded(
                         child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
-                            onTap: () {
+                            onTap: () async {
+                              // print(yachtStoreController.isExchanging.value);
+                              // isExchanging이 false일 때만 confirmExchange 함수
                               if (!yachtStoreController.isExchanging.value) {
-                                yachtStoreController.confirmExchange(
-                                  giftishowModel,
-                                  _phoneNumberController.text.replaceAll('-', '').trim(),
-                                  _nameController.text,
-                                );
-                                Navigator.of(context).pop();
+                                yachtStoreController
+                                    .confirmExchange(
+                                      giftishowModel,
+                                      _phoneNumberController.text.replaceAll('-', '').trim(),
+                                      _nameController.text,
+                                    )
+                                    .then((value) => Navigator.of(context).pop());
                               }
                             },
                             child: conditionalButton(

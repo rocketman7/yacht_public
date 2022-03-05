@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/link.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/auth/auth_check_view.dart';
@@ -13,7 +14,7 @@ import 'package:yachtOne/screens/profile/profile_others_view.dart';
 import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
-
+import 'package:restart_app/restart_app.dart';
 import '../../locator.dart';
 import '../../styles/yacht_design_system.dart';
 
@@ -977,13 +978,20 @@ class SettingView extends StatelessWidget {
                                           onTap: () async {
                                             _mixpanelService.mixpanel.track('Sign Out Confirm');
                                             HapticFeedback.lightImpact();
-                                            userModelRx(null);
-                                            userQuestModelRx.value = [];
                                             leagueRx("");
+                                            userModelRx.value = null;
+                                            userQuestModelRx.value = [];
+                                            todayQuests = null;
                                             _kakaoApi.signOut();
                                             _authService.auth.signOut();
-                                            print("signout");
+
+                                            // print("signout");
                                             Navigator.of(context).pop();
+                                            Restart.restartApp();
+                                            // leagueRx.close();
+                                            // userModelRx.close();
+                                            // userQuestModelRx.close();
+
                                             // Get.find<HomeViewModel>().refreshController.dispose();
                                             await Get.offAll(() => AuthCheckView());
                                             Get.find<AuthCheckViewModel>().onInit();
