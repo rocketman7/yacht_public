@@ -49,6 +49,7 @@ class LoginView extends StatelessWidget {
                   onTap: () async {
                     if (!isKakaoLoggingIn.value && !isAppleLoggingIn.value) {
                       isKakaoLoggingIn(true);
+                      _mixpanelService.mixpanel.track('Kakao Login');
                       await _kakaoAuthApi.signIn();
                       isKakaoLoggingIn(false);
                     }
@@ -81,6 +82,7 @@ class LoginView extends StatelessWidget {
                         onTap: () async {
                           if (!isKakaoLoggingIn.value && !isAppleLoggingIn.value) {
                             isAppleLoggingIn(true);
+                            _mixpanelService.mixpanel.track('Apple Login');
                             await signInWithApple();
                             isAppleLoggingIn(false);
                           }

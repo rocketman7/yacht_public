@@ -42,15 +42,14 @@ class AuthCheckViewModel extends GetxController {
     print('userRx: $userModelRx');
     print('leagueRx: $leagueRx');
     isInitiating(true);
-    print('auth check init start');
+    // print('auth check init start');
     // await checkTime();
-    mixpanelService.mixpanel.track('Auth Controller Init');
+
     await getLeagueInfo();
-    mixpanelService.mixpanel.track('getLeagueInfo');
+
     await getHolidayList();
-    mixpanelService.mixpanel.track('getHolidayList');
+
     await checkVersion();
-    mixpanelService.mixpanel.track('checkVersion');
 
     print('oninit: ${authService.auth.currentUser}');
     print('oninit: ${userModelRx.value}');
@@ -110,10 +109,8 @@ class AuthCheckViewModel extends GetxController {
   Future getUser(String uid) async {
     // uid = "kakao:1993448477";
     // isGettingUser(true);
-    mixpanelService.mixpanel.track('AuthCheck Controller Getting User', properties: {'uid': uid});
     // userModelRx(await _firestoreService.getUserModel(uid));
     userModelRx.bindStream(_userRepository.getUserStream(uid));
-    mixpanelService.mixpanel.track('AuthCheck Controller User Get Done', properties: {'uid': uid});
     // userQuestModelRx.bindStream(_userRepository.getUserQuestStream(uid));
     // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
     // String leagueId = await _firestoreService.getLeagueInfo().then((value) => value.leagueName);

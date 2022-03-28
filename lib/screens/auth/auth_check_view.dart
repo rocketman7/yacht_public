@@ -35,25 +35,20 @@ class AuthCheckView extends StatelessWidget {
         body: StreamBuilder<User?>(
             stream: controller.authService.auth.userChanges(),
             builder: (context, snapshot) {
-              controller.mixpanelService.mixpanel.track('snapshot: ${snapshot.data}');
-              print('snapshot.hasData: ${snapshot.hasData}');
+              // print('snapshot.hasData: ${snapshot.hasData}');
 
               if (snapshot.hasData) {
-                print('auth check viewmodel getuser start');
-                controller.mixpanelService.mixpanel.track('AuthCheck Snapshot HasData');
+                // print('auth check viewmodel getuser start');
                 // if (userModelRx.value == null) {
                 controller.getUser(snapshot.data!.uid);
                 // } else {
                 //   controller.isGettingUser(false);
                 // }
                 return Obx(() {
-                  // controller.mixpanelService.mixpanel.track('AuthCheck Obx Division');
                   print('obx division start');
                   if (controller.isGettingUser.value || controller.isInitiating.value) {
-                    controller.mixpanelService.mixpanel.track('Obx Value true to Loading');
                     return LoadingView();
                   } else {
-                    controller.mixpanelService.mixpanel.track('Obx Value false to Startup');
                     return StartupView();
                   }
                 });
@@ -67,7 +62,6 @@ class AuthCheckView extends StatelessWidget {
                 // userQuestModelRx.value = [];
                 // _kakaoApi.signOut();
                 // controller.authService.auth.signOut();
-                controller.mixpanelService.mixpanel.track('Snapshot NoData to Login');
                 return LoginView();
               }
 
@@ -78,12 +72,9 @@ class AuthCheckView extends StatelessWidget {
               //     // if (controller.authService.auth.currentUser!.uid == "pgw3LFd36CcUGzhuFOmvbyudpTu1") {
               //     {
               //       print('userModelRx: ${userModelRx.value}');
-              //       controller.mixpanelService.mixpanel
-              //           .track('App Start', properties: {'uid': controller.authService.auth.currentUser!.uid});
               //       Timer(Duration(seconds: 10), () async {
               //         print('7 sec passed');
-              //         controller.mixpanelService.mixpanel
-              //             .track('Forced Signout', properties: {'uid': controller.authService.auth.currentUser!.uid});
+              //
               //         if (userModelRx.value == null) await controller.signOut();
               //       });
               //       // }
@@ -111,13 +102,9 @@ class AuthCheckView extends StatelessWidget {
         //     return LoginView();
         //   } else if (userModelRx.value == null) {
         //     // if (controller.authService.auth.currentUser!.uid == "pgw3LFd36CcUGzhuFOmvbyudpTu1") {
-        //     controller.mixpanelService.mixpanel
-        //         .track('App Start', properties: {'uid': controller.authService.auth.currentUser!.uid});
-        //     Timer(Duration(seconds: 10), () async {
+        //          //     Timer(Duration(seconds: 10), () async {
         //       print('7 sec passed');
-        //       controller.mixpanelService.mixpanel
-        //           .track('Forced Signout', properties: {'uid': controller.authService.auth.currentUser!.uid});
-        //       if (userModelRx.value == null) await controller.signOut();
+        //          if (userModelRx.value == null) await controller.signOut();
         //     });
         //     // }
         //     return LoadingView();
