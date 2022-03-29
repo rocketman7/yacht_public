@@ -1063,24 +1063,31 @@ class FirestoreService extends GetxService {
     // print('on price stream');
     // print(investAddress.issueCode);
     // print(dateTimeToString(questModel.liveStartDateTime.toDate(), 14));
-    print(
-      dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
-    );
+    // print(
+    //   dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
+    // );
     return _firestoreService
         .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
         .where(
           'dateTime',
-          isGreaterThan: dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
-          // isGreaterThan: '20211001091813', //2021/10/01/81/00/00, 2021/10/01/091813
+          // isGreaterThan: dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
+          isGreaterThan: '20231001091813', //2021/10/01/81/00/00, 2021/10/01/091813
         )
         .snapshots()
         .map((element) {
+      // print('live element: ${element.docs.length == 0}');
+
+      if (element.docs.length == 0) {
+        return LiveQuestPriceModel.fromMap(
+            '${investAddress.issueCode}', [defalutChartPriceModel(dateTimeToString(DateTime.now(), 14)!)]);
+      } else {
+        return LiveQuestPriceModel.fromMap(
+            '${investAddress.issueCode}', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
+      }
       // print("get");
       //element는 다큐모음
       // print('${investAddress.issueCode}');
       // print('snapshot: ${element.docs.last.data()}');
-      return LiveQuestPriceModel.fromMap(
-          '${investAddress.issueCode}', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
     });
   }
 

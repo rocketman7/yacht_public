@@ -2,6 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+ChartPriceModel defalutChartPriceModel(String dateTime) => ChartPriceModel(
+      dateTime: dateTime,
+      updateDateTime: DateTime.now(),
+    );
+
 class ChartPriceModel {
   final String? dateTime; // Firebase에서 String으로 받아온 뒤 차트에서 String -> DateTime으로 처리하기 위함
   final dynamic updateDateTime;

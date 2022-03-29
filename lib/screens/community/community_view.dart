@@ -24,6 +24,7 @@ import 'package:paginate_firestore/paginate_firestore.dart';
 import 'package:native_admob_flutter/native_admob_flutter.dart';
 import '../../locator.dart';
 import 'community_view_model.dart';
+import 'new_feed_widget.dart';
 
 class CommunityView extends GetView<CommunityViewModel> {
   // CommunityViewModel communityViewModel = Get.put(CommunityViewModel());
@@ -209,7 +210,9 @@ class CommunityView extends GetView<CommunityViewModel> {
                                           )
                                         : Container(),
                                     // ((index + 1) % 5 == 2 && Platform.isAndroid) ? CommunityAd() : Container(),
-                                    FeedWidget(
+                                    // FeedWidget(communityViewModel: _communityViewModel,
+                                    //     post: _communityViewModel.posts[index]),
+                                    NewFeedWidget(
                                         communityViewModel: _communityViewModel,
                                         post: _communityViewModel.posts[index]),
                                     SizedBox(
