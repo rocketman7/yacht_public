@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +23,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:yachtOne/widgets/like_button.dart';
 import 'package:yachtOne/widgets/loading_container.dart';
+import '../../handlers/user_tier_handler.dart';
 import '../../locator.dart';
 import 'detail_post_view.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -40,569 +42,236 @@ class NewFeedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> imageUrls = List.generate(post.imageUrlList!.length, (index) => "");
     return GestureDetector(
-      onTapCancel: () {
-        print('tapcancel');
-        isTapping(false);
-      },
-      onTapDown: (_) {
-        print('tapdown');
-        isTapping(true);
-      },
-      onTapUp: (_) {
-        print('tapup');
-        isTapping(false);
-        Get.to(() => DetailPostView(post));
-      },
+      // onTapCancel: () {
+      //   print('tapcancel');
+      //   isTapping(false);
+      // },
+      // onTapDown: (_) {
+      //   print('tapdown');
+      //   isTapping(true);
+      // },
+      // onTapUp: (_) {
+      //   print('tapup');
+      //   isTapping(false);
+      //   Get.to(() => DetailPostView(post));
+      // },
       child: Obx(() {
         return AnimatedContainer(
           duration: Duration(milliseconds: 300),
-          padding: moduleBoxPadding(feedDateTime.fontSize!),
+          // padding: moduleBoxPadding(feedDateTime.fontSize!),
           decoration: primaryBoxDecoration.copyWith(
-              boxShadow: [primaryBoxShadow],
+              // boxShadow: [primaryBoxShadow],
               color: isTapping.value ? yachtGrey.withOpacity(.2) : primaryBoxDecoration.color),
-          child: Row(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // 아바타 이미지 임시
-              GestureDetector(
-                onTap: () {
-                  _mixpanelService.mixpanel.track('Profile From Feed', properties: {
-                    'Feed Profile Name': post.writerUserName,
-                    'Feed Profile UID': post.writerUid,
-                    'Feed Profile Post ID': post.postId,
-                  });
-                  if (post.writerUid != userModelRx.value!.uid) Get.to(() => ProfileOthersView(uid: post.writerUid));
-                  // else
-                  // Get.to(() => ProfileMyView());
-                },
+              Padding(
+                padding: primaryHorizontalPadding,
                 child: Container(
-                    width: 36.w,
-                    height: 36.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl:
-                          "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${post.writerAvatarUrl}.png",
-                    )
-
-                    // child: CachedNetworkImage(
-                    //   imageUrl:
-                    //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
-                    // )
-                    ),
+                  // color: Colors.amber[50],
+                  child: FeedHeader(post: post),
+                ),
               ),
-              SizedBox(
-                width: 6.w,
+              SizedBox(height: 4.w),
+              (post.imageUrlList == null || post.imageUrlList!.length == 0)
+                  ? Container()
+                  : ImagePageView(
+                      post: post,
+                    ),
+              SizedBox(height: 4.w),
+              Padding(
+                padding: primaryHorizontalPadding,
+                child: Container(
+                  // color: Colors.black12,
+                  child: AutoSizeText(
+                    post.content,
+                    maxLines: 3,
+                    // overflow: TextOverflow.,
+                    overflowReplacement: Text(
+                      post.content,
+                      maxLines: 3,
+                    ),
+                  ),
+                ),
               ),
-              Expanded(
+              SizedBox(height: 4.w),
+              Padding(
+                padding: primaryHorizontalPadding,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 36.w,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _mixpanelService.mixpanel.track('Post Like',
+                                properties: {'Like Post ID': post.postId, 'Like Post From Page': "Community"});
+                            HapticFeedback.lightImpact();
+                            communityViewModel.toggleLikeComment(post);
+                            communityViewModel.reloadPost();
+                          },
+                          child: Row(
                             children: [
-                              Text(
-                                post.writerUserName,
-                                style: feedWriterName,
+                              LikeButton(
+                                size: 20.w,
+                                isLiked: post.likedBy == null ? false : post.likedBy!.contains(userModelRx.value!.uid),
                               ),
                               SizedBox(
                                 width: 8.w,
                               ),
-                              GestureDetector(
-                                  onTap: () async {
-                                    _mixpanelService.mixpanel.track('Tier Pop Up');
-                                    return await showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return yachtTierInfoPopUp(context, post.writerExp ?? 0);
-                                        });
-                                  },
-                                  child: simpleTierRRectBox(exp: post.writerExp ?? 0)),
-                              Spacer(),
-                              PopupMenuButton(
-                                padding: EdgeInsets.symmetric(horizontal: 4),
-                                child: Row(children: [
-                                  SizedBox(
-                                    width: 8.w,
-                                  ),
-                                  Container(
-                                    width: 14.w,
-                                    height: 16.w,
-                                    // color: Colors.blue[50],
-                                    child: SvgPicture.asset(
-                                      'assets/icons/show_more.svg',
-                                      color: yachtBlack,
-                                    ),
-                                  ),
-                                ]),
-                                onSelected: (value) {
-                                  switch (value) {
-                                    case 'edit':
-                                      Get.bottomSheet(
-                                        EditingMyPost(
-                                          // contentFormKey: _contentFormKey,
-                                          // contentController: _contentController,
-                                          communityViewModel: communityViewModel,
-                                          post: post,
-                                        ),
-                                        isScrollControlled: true,
-                                        ignoreSafeArea: false, // add this
-                                      );
-                                      break;
-                                    case 'delete':
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return Dialog(
-                                                insetPadding: primaryHorizontalPadding,
-                                                child: Container(
-                                                    padding: EdgeInsets.fromLTRB(14.w,
-                                                        correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                                    decoration:
-                                                        BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Text("알림", style: dialogTitle),
-                                                        SizedBox(
-                                                            height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                                        SizedBox(
-                                                            height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                        Text("정말 삭제하시겠습니까?", style: dialogContent),
-                                                        Text(
-                                                          "삭제 후 되돌릴 수 없습니다.",
-                                                          style: dialogWarning,
-                                                        ),
-                                                        SizedBox(
-                                                            height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                        Row(
-                                                          children: [
-                                                            Expanded(
-                                                              child: GestureDetector(
-                                                                  onTap: () async {
-                                                                    HapticFeedback.lightImpact();
-                                                                    await communityViewModel.deletePost(post);
-                                                                    await communityViewModel.reloadPost();
-                                                                    Navigator.of(context).pop();
-                                                                    yachtSnackBar("피드가 삭제되었습니다");
-                                                                  },
-                                                                  child: textContainerButtonWithOptions(
-                                                                    text: "예",
-                                                                    isDarkBackground: true,
-                                                                    height: 44.w,
-                                                                  )),
-                                                            ),
-                                                            SizedBox(width: 8.w),
-                                                            Expanded(
-                                                              child: InkWell(
-                                                                  onTap: () {
-                                                                    Navigator.of(context).pop();
-                                                                    // Get.back(closeOverlays: true);
-                                                                  },
-                                                                  child: textContainerButtonWithOptions(
-                                                                      text: "아니오",
-                                                                      isDarkBackground: false,
-                                                                      height: 44.w)),
-                                                            )
-                                                          ],
-                                                        )
-                                                      ],
-                                                    )));
-                                          });
-                                      break;
-                                    case 'block':
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return Dialog(
-                                                insetPadding: primaryHorizontalPadding,
-                                                child: Container(
-                                                    padding: EdgeInsets.fromLTRB(14.w,
-                                                        correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                                    decoration:
-                                                        BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Text("알림", style: dialogTitle),
-                                                        SizedBox(
-                                                            height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                                        SizedBox(
-                                                            height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                        Text("유저를 차단하시겠습니까?", style: dialogContent),
-                                                        // Text(
-                                                        //   "삭제 후 되돌릴 수 없습니다.",
-                                                        //   style: dialogWarning,
-                                                        // ),
-                                                        SizedBox(
-                                                            height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                        Row(
-                                                          children: [
-                                                            Expanded(
-                                                              child: GestureDetector(
-                                                                  onTap: () async {
-                                                                    HapticFeedback.lightImpact();
-                                                                    await communityViewModel
-                                                                        .blockThisUser(post.writerUid);
-                                                                    await communityViewModel.reloadPost();
-                                                                    Navigator.of(context).pop();
-                                                                    yachtSnackBar("유저를 차단하였습니다");
-                                                                  },
-                                                                  child: textContainerButtonWithOptions(
-                                                                    text: "예",
-                                                                    isDarkBackground: true,
-                                                                    height: 44.w,
-                                                                  )),
-                                                            ),
-                                                            SizedBox(width: 8.w),
-                                                            Expanded(
-                                                              child: InkWell(
-                                                                  onTap: () {
-                                                                    Navigator.of(context).pop();
-                                                                    // Get.back(closeOverlays: true);
-                                                                  },
-                                                                  child: textContainerButtonWithOptions(
-                                                                      text: "아니오",
-                                                                      isDarkBackground: false,
-                                                                      height: 44.w)),
-                                                            )
-                                                          ],
-                                                        )
-                                                      ],
-                                                    )));
-                                          });
-                                      break;
-                                    case 'report':
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return Dialog(
-                                                insetPadding: primaryHorizontalPadding,
-                                                child: Container(
-                                                    padding: EdgeInsets.fromLTRB(14.w,
-                                                        correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                                    decoration:
-                                                        BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: [
-                                                        Text("알림", style: dialogTitle),
-                                                        SizedBox(
-                                                            height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                        Text("이 글을 신고하시겠습니까?", style: dialogContent),
-                                                        Text(
-                                                          "신고한 유저는 자동으로 차단됩니다.",
-                                                          style: dialogWarning.copyWith(color: yachtDarkGrey),
-                                                        ),
-                                                        SizedBox(
-                                                            height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                                        Row(
-                                                          children: [
-                                                            Expanded(
-                                                              child: GestureDetector(
-                                                                  onTap: () async {
-                                                                    HapticFeedback.lightImpact();
-                                                                    await communityViewModel
-                                                                        .blockThisUser(post.writerUid);
-                                                                    await communityViewModel.reportThisUser(post);
-                                                                    await communityViewModel.reloadPost();
-                                                                    Navigator.of(context).pop();
-                                                                    yachtSnackBar("유저를 신고/차단하였습니다");
-                                                                  },
-                                                                  child: textContainerButtonWithOptions(
-                                                                    text: "신고하기",
-                                                                    isDarkBackground: true,
-                                                                    height: 44.w,
-                                                                  )),
-                                                            ),
-                                                            SizedBox(width: 8.w),
-                                                            Expanded(
-                                                              child: InkWell(
-                                                                  onTap: () {
-                                                                    Navigator.of(context).pop();
-                                                                    // Get.back(closeOverlays: true);
-                                                                  },
-                                                                  child: textContainerButtonWithOptions(
-                                                                      text: "취소",
-                                                                      isDarkBackground: false,
-                                                                      height: 44.w)),
-                                                            )
-                                                          ],
-                                                        )
-                                                      ],
-                                                    )));
-                                          });
-                                      break;
-                                    default:
-                                  }
-                                },
-                                itemBuilder: (context) {
-                                  return post.writerUid == userModelRx.value!.uid
-                                      ? communityMyShowMore
-                                      : communityShowMore;
-                                },
-                              ),
                             ],
                           ),
-                          SizedBox(height: 4.w),
-                          Text(
-                            feedTimeHandler(post.writtenDateTime.toDate()),
-                            // x초전, x분 전, 일정 이후면 날짜로
-                            style: feedDateTime,
-                          ),
-                        ],
-                      ),
+                        ),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/comment.svg',
+                              color: yachtBlack,
+                            ),
+                            SizedBox(
+                              width: 8.w,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                        height: reducedPaddingWhenTextIsBothSide(6.w, feedUserName.fontSize!, feedTitle.fontSize!)),
-                    post.title == null
-                        ? Container()
-                        : Column(
-                            children: [
-                              SizedBox(
-                                height: 6.w,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  post.isPro
-                                      ? Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 1.w),
-                                                decoration: BoxDecoration(
-                                                  color: yachtRed,
-                                                  borderRadius: BorderRadius.circular(20.w),
-                                                ),
-                                                child: Text(
-                                                  "PRO",
-                                                  style: TextStyle(
-                                                    fontSize: 11.w,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: white,
-                                                    height: 1.4,
-                                                  ),
-                                                  textAlign: TextAlign.center,
-                                                )),
-                                            SizedBox(
-                                              width: 4.w,
-                                            )
-                                          ],
-                                        )
-                                      : Container(),
-                                  Text(
-                                    post.title!,
-                                    style: feedTitle,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                    SizedBox(
-                      height: 2.w,
-                    ),
-                    InkWell(
-                      onTap: () => Get.to(
-                        () => DetailPostView(post),
-                      ),
-                      child: Linkify(
-                        onOpen: (link) async {
-                          if (await canLaunch(link.url)) {
-                            await launch(link.url);
-                          } else {
-                            throw 'Could not launch $link';
-                          }
-                        },
-                        text: post.content,
-                        style: feedContent,
-                        linkStyle: feedContent.copyWith(color: yachtViolet),
-                        maxLines: (post.imageUrlList == null || post.imageUrlList!.length == 0) ? 3 : 4,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    (post.imageUrlList == null || post.imageUrlList!.length == 0)
-                        ? Container()
-                        : Column(
-                            children: [
-                              SizedBox(
-                                height: 8.w,
-                              ),
-                              Container(
-                                height: 140.w,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: post.imageUrlList!.length,
-                                    itemBuilder: (_, index) {
-                                      return Row(
-                                        children: [
-                                          ClipRRect(
-                                              borderRadius: BorderRadius.circular(5.w),
-                                              child: InkWell(
-                                                onTap: () {
-                                                  _mixpanelService.mixpanel.track('Image From Post', properties: {
-                                                    'Image From Post ID': post.postId,
-                                                    'Image From Post Write DateTime':
-                                                        post.writtenDateTime.toDate().toIso8601String(),
-                                                    'Image From Post Edit DateTime': post.editedDateTime == null
-                                                        ? post.writtenDateTime.toDate().toIso8601String()
-                                                        : post.editedDateTime.toDate().toIso8601String(),
-                                                    'Image From Post Title': post.title ?? "",
-                                                    'Image From Is Pro Post': post.isPro,
-                                                    'Image From Is Notice': post.isNotice,
-                                                    'Image From Post Writer Uid': post.writerUid,
-                                                    'Image From Post Writer User Name': post.writerUserName,
-                                                    'Image From Post Writer Exp': post.writerExp,
-                                                    'Image From Page': "Community",
-                                                  });
-                                                  // print(imageUrls);
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (context) =>
-                                                          buildPhotoPageView(context, index, imageUrls));
-                                                },
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
-                                                  height: 140.w,
-                                                  width: 140.w,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              )),
-                                          SizedBox(
-                                            width: 4.w,
-                                          ),
-                                        ],
-                                      );
-                                    }),
-                              ),
-                              // SizedBox(height: 8.w),
-                            ],
-                          ),
-                    (post.hashTags == null || post.hashTags!.length == 0)
-                        ? Container()
-                        : Wrap(
-                            spacing: 4.w,
-                            runSpacing: 4.w,
-                            children: List.generate(
-                              post.hashTags!.length,
-                              // 5,
-                              (index) {
-                                return feedHashTagContainer(post.hashTags![index]);
-                              },
-                            )),
-                    SizedBox(height: 14.w),
-                    Container(
-                      // height: 30.w,
-                      // color: Colors.yellow,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                child: InkWell(
-                                  onTap: () {
-                                    _mixpanelService.mixpanel.track('Post Detail', properties: {
-                                      'Post ID': post.postId,
-                                      'Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
-                                      'Post Edit DateTime': post.editedDateTime == null
-                                          ? post.writtenDateTime.toDate().toIso8601String()
-                                          : post.editedDateTime.toDate().toIso8601String(),
-                                      'Post Title': post.title ?? "",
-                                      'Is Pro Post': post.isPro,
-                                      'Is Notice': post.isNotice,
-                                      'Post Writer Uid': post.writerUid,
-                                      'Post Writer User Name': post.writerUserName,
-                                      'Post Writer Exp': post.writerExp,
-                                      'Post Has Image': post.imageUrlList == null
-                                          ? false
-                                          : post.imageUrlList!.length > 0
-                                              ? true
-                                              : false,
-                                    });
-                                    Get.to(
-                                      () => DetailPostView(post),
-                                    );
-                                  },
-                                  child: Container(
-                                    // color: Colors.blue,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/icons/comment.svg',
-                                          color: yachtBlack,
-                                        ),
-                                        SizedBox(
-                                          width: 8.w,
-                                        ),
-                                        Text(
-                                          post.commentedBy == null ? 0.toString() : post.commentedBy!.length.toString(),
-                                          style: feedCommentLikeCount,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Flexible(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _mixpanelService.mixpanel.track('Post Like',
-                                        properties: {'Like Post ID': post.postId, 'Like Post From Page': "Community"});
-                                    HapticFeedback.lightImpact();
-                                    communityViewModel.toggleLikeComment(post);
-                                    communityViewModel.reloadPost();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      LikeButton(
-                                        size: 20.w,
-                                        isLiked: post.likedBy == null
-                                            ? false
-                                            : post.likedBy!.contains(userModelRx.value!.uid),
-                                      ),
-                                      SizedBox(
-                                        width: 8.w,
-                                      ),
-                                      Text(
-                                        post.likedBy == null ? 0.toString() : post.likedBy!.length.toString(),
-                                        style: feedCommentLikeCount,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Flexible(child: SvgPicture.asset('assets/icons/share.svg', color: white)),
-                              Container(
-                                width: 3,
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+                    SizedBox(height: 6.w),
+                    Text(
+                      "좋아요 ${post.likedBy == null ? 0 : post.likedBy!.length}개",
+                      style: feedWriterName,
                     ),
                   ],
                 ),
               ),
+              SizedBox(height: 6.w),
+              Padding(
+                padding: primaryHorizontalPadding,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                        width: 24.w,
+                        height: 24.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${userModelRx.value!.avatarImage}.png",
+                        )
+
+                        // child: CachedNetworkImage(
+                        //   imageUrl:
+                        //       "https://firebasestorage.googleapis.com/v0/b/ggook-5fb08.appspot.com/o/avatars%2F002.png?alt=media&token=68d48250-0831-4daa-b0c9-3f10608fb24c",
+                        // )
+                        ),
+                    SizedBox(width: 4.w),
+                    Text(
+                      "댓글 남기기",
+                      style: feedContent.copyWith(
+                        color: yachtGrey,
+                        height: 1.2.w,
+                      ),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         );
       }),
+    );
+  }
+
+  // Future<String> getImageUrlFromStorage(String imageUrl) async {
+  //   return await _firebaseStorageService.downloadImageURL(imageUrl);
+  // }
+}
+
+class ImagePageView extends StatelessWidget {
+  ImagePageView({
+    Key? key,
+    required this.post,
+  }) : super(key: key);
+
+  final PostModel post;
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final RxInt imagePageIndex = 0.obs;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 350.w,
+          color: Colors.amber,
+          child: PageView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: post.imageUrlList!.length,
+              onPageChanged: (index) {
+                imagePageIndex(index);
+              },
+              itemBuilder: (_, index) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(5.w),
+                        child: InkWell(
+                          onTap: () {
+                            _mixpanelService.mixpanel.track('Image From Post', properties: {
+                              'Image From Post ID': post.postId,
+                              'Image From Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
+                              'Image From Post Edit DateTime': post.editedDateTime == null
+                                  ? post.writtenDateTime.toDate().toIso8601String()
+                                  : post.editedDateTime.toDate().toIso8601String(),
+                              'Image From Post Title': post.title ?? "",
+                              'Image From Is Pro Post': post.isPro,
+                              'Image From Is Notice': post.isNotice,
+                              'Image From Post Writer Uid': post.writerUid,
+                              'Image From Post Writer User Name': post.writerUserName,
+                              'Image From Post Writer Exp': post.writerExp,
+                              'Image From Page': "Community",
+                            });
+                            // print(imageUrls);
+                            // showDialog(
+                            // context: context, builder: (context) => buildPhotoPageView(context, index, imageUrls));
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
+                            height: ScreenUtil().screenWidth,
+                            width: ScreenUtil().screenWidth,
+                            fit: BoxFit.contain,
+                          ),
+                        )),
+                  ],
+                );
+              }),
+        ),
+        SizedBox(height: 4.w),
+        post.imageUrlList!.length == 1
+            ? Container()
+            : Obx(() => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(post.imageUrlList!.length, (index) {
+                    return Row(
+                      children: [
+                        Container(
+                          height: 4.w,
+                          width: 4.w,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: (index == imagePageIndex.value) ? yachtViolet : yachtLightGrey,
+                          ),
+                        ),
+                        (index < post.imageUrlList!.length) ? SizedBox(width: 4.w) : Container(),
+                      ],
+                    );
+                  }),
+                ))
+      ],
     );
   }
 
@@ -711,10 +380,89 @@ class NewFeedWidget extends StatelessWidget {
       ]),
     );
   }
+}
 
-  // Future<String> getImageUrlFromStorage(String imageUrl) async {
-  //   return await _firebaseStorageService.downloadImageURL(imageUrl);
-  // }
+class FeedHeader extends StatelessWidget {
+  const FeedHeader({
+    Key? key,
+    required this.post,
+  }) : super(key: key);
+
+  final PostModel post;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          children: [
+            Container(
+                width: 32.w,
+                height: 32.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${post.writerAvatarUrl}.png",
+                )),
+            SizedBox(width: 4.w),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  post.writerUserName,
+                  style: TextStyle(
+                    fontSize: 14.w,
+                    fontWeight: FontWeight.w600,
+                    wordSpacing: -.5,
+                    height: 1.2,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      getTierByExp(post.writerExp ?? 0),
+                      style: TextStyle(
+                        fontSize: 12.w,
+                        fontWeight: FontWeight.w400,
+                        color: yachtGrey,
+                        wordSpacing: -.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Container(
+              width: 18.w,
+              // height: 30.w,
+              color: Colors.transparent,
+              child: SvgPicture.asset(
+                'assets/icons/show_more.svg',
+                color: yachtBlack,
+              ),
+            ),
+            SizedBox(height: 4.w),
+            Text(
+              feedTimeHandler(post.writtenDateTime.toDate()),
+              // x초전, x분 전, 일정 이후면 날짜로
+              style: feedDateTime,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
 class EditingMyPost extends StatelessWidget {

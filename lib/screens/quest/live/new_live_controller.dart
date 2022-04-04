@@ -106,9 +106,12 @@ class NewLiveController extends GetxController {
   // }
 
   bool getPickoneByBasePrice() {
-    print(livePricesOfThisQuest[0].value.issueCode);
-    print(livePricesOfThisQuest[0].value.chartPrices);
-    print(questModel.investAddresses![0].basePrice);
+    // print(livePricesOfThisQuest[0].value.issueCode);
+    // print(livePricesOfThisQuest[0].value.chartPrices);
+    // print(questModel.investAddresses![0].basePrice);
+    // print('getpick');
+    // print(livePricesOfThisQuest[0].value.chartPrices.last.close);
+    // print(questModel.investAddresses![0].basePrice!);
     return (livePricesOfThisQuest[0].value.chartPrices.last.close ?? 0) > questModel.investAddresses![0].basePrice!;
   }
 
@@ -123,7 +126,6 @@ class NewLiveController extends GetxController {
       );
       livePricesOfThisQuest[i].refresh();
     }
-
     // sortLivePrices();
 
     // print('livePricesOfThisQuest: ${livePricesOfThisQuest[0].value.chartPrices}');

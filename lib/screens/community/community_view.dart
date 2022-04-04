@@ -179,7 +179,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                           //     }),
                           //   ),
                           ListView.builder(
-                              padding: primaryHorizontalPadding,
+                              // padding: primaryHorizontalPadding,
                               // clipBehavior: Clip.none,
                               // controller: _scrollController,
                               physics: NeverScrollableScrollPhysics(),
@@ -216,7 +216,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                                         communityViewModel: _communityViewModel,
                                         post: _communityViewModel.posts[index]),
                                     SizedBox(
-                                      height: 12.w,
+                                      height: 30.w,
                                     )
                                   ],
                                 );

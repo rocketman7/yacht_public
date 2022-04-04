@@ -1070,8 +1070,8 @@ class FirestoreService extends GetxService {
         .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
         .where(
           'dateTime',
-          // isGreaterThan: dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
-          isGreaterThan: '20231001091813', //2021/10/01/81/00/00, 2021/10/01/091813
+          isGreaterThan: dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
+          // isGreaterThan: '20231001091813', //2021/10/01/81/00/00, 2021/10/01/091813
         )
         .snapshots()
         .map((element) {

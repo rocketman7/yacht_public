@@ -110,11 +110,15 @@ class UpdownLivePriceWidget extends StatelessWidget {
         // updown에 base price가 있는지 체크
         controller.questModel.investAddresses![controller.winnerIndex.value].basePrice == null
             ? Container()
-            : Text(
-                controller.getPickoneByBasePrice()
-                    ? '실시간 결과: ${controller.questModel.choices![0]}'
-                    : '실시간 결과: ${controller.questModel.choices![1]}',
-              ),
+            : Obx(
+                () {
+                  return Text(
+                    controller.getPickoneByBasePrice()
+                        ? '실시간 결과: ${controller.questModel.choices![0]}'
+                        : '실시간 결과: ${controller.questModel.choices![1]}',
+                  );
+                },
+              )
         // Text(controller.getPickoneByBasePrice().toString()),
         // Text(controller.questModel.investAddresses![0].basePrice.toString())
       ],
@@ -137,11 +141,13 @@ class PickoneOrderLivePriceWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Text("현재 1위", style: TextStyle(color: yachtGrey, fontSize: 12.w)),
-        Text(
-          controller.investAddresses[controller.winnerIndex.value].name,
-          style: stockPriceTextStyle.copyWith(
-            fontSize: 18.w,
-            fontWeight: FontWeight.w400,
+        Obx(
+          () => Text(
+            controller.investAddresses[controller.winnerIndex.value].name,
+            style: stockPriceTextStyle.copyWith(
+              fontSize: 18.w,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
         Obx(
@@ -153,9 +159,11 @@ class PickoneOrderLivePriceWidget extends StatelessWidget {
             ),
           ),
         ),
-        Text(
-          '실시간 결과: ${controller.investAddresses[controller.winnerIndex.value].name}',
-        ),
+        Obx(
+          () => Text(
+            '실시간 결과: ${controller.investAddresses[controller.winnerIndex.value].name}',
+          ),
+        )
         // Text(
         //   controller.livePricesOfThisQuest[controller.getWinnerIndex()].value.chartPrices.last.toString(),
         //   style: stockPriceTextStyle.copyWith(
