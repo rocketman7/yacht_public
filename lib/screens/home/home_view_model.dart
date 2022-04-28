@@ -26,7 +26,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../locator.dart';
 
-const int maxRewardedAds = 10; // 하루 최대 10개 광고 볼 수 있음. (나중에 DB로?)
+const int maxRewardedAds = 3; // 하루 최대 10개 광고 볼 수 있음. (나중에 DB로?)
 const int maxFailedLoadAttempts = 10; // 광고로딩실패하면 10번까지는 계속 로딩 시도
 
 class HomeViewModel extends GetxController {
@@ -69,6 +69,7 @@ class HomeViewModel extends GetxController {
   final AwardViewModel awardViewModel = Get.put(AwardViewModel());
   bool onceInit = false;
   final RxBool isGettingQuests = true.obs;
+
   @override
   void onClose() {
     // TODO: implement onClose
@@ -362,6 +363,7 @@ class HomeViewModel extends GetxController {
 
   // 현재 홈 뷰에 올려야 하는 퀘스트를 모두 가져온 뒤, 각 섹션에 맞게 분류
   Future getAllQuests() async {
+    print('getting all quests');
     allQuests.clear();
     newQuests.clear();
     liveQuests.clear();
@@ -440,7 +442,7 @@ class HomeViewModel extends GetxController {
             _numRewardedLoadAttempts = 0;
           },
           onAdFailedToLoad: (LoadAdError error) {
-            // print('RewardedAd failed to load: $error');
+            print('RewardedAd failed to load: $error');
             _rewardedAd = null;
             _numRewardedLoadAttempts += 1;
             if (_numRewardedLoadAttempts <= maxFailedLoadAttempts) {
@@ -476,14 +478,20 @@ class HomeViewModel extends GetxController {
     );
 
     // _rewardedAd!.setImmersiveMode(true); // ??
-    _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
-      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
-      // 광고 정상적으로 잘 보면 ~
-      // Navigator.of(context).pop();
+    // _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
+    //   print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
+    //   // 광고 정상적으로 잘 보면 ~
+    //   // Navigator.of(context).pop();
+    //   await _firestoreService.updateUserItem(1);
+    //   await _firestoreService.updateUserRewardedCnt();
+    //   // doneAdsGetRawSnackbar();
+    //   // doneAdsDialog(tempContext);
+    // });
+
+    _rewardedAd!.show(onUserEarnedReward: (adWithoutView, reward) async {
+      print('$adWithoutView with reward $RewardItem(${reward.amount}, ${reward.type}');
       await _firestoreService.updateUserItem(1);
       await _firestoreService.updateUserRewardedCnt();
-      // doneAdsGetRawSnackbar();
-      // doneAdsDialog(tempContext);
     });
     _rewardedAd = null;
   }

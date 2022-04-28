@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:yachtOne/services/appsflyer_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/giftishow_api_service.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
@@ -18,4 +19,5 @@ void setupLocator() {
   locator.registerLazySingleton<AccountVerificationService>(() => AccoutVerificationServiceMydata());
   locator.registerLazySingleton(() => MixpanelService());
   locator.registerLazySingleton<GiftishowApiService>(() => GiftishowApiService());
+  locator.registerLazySingleton<AppsflyerService>(() => AppsflyerService());
 }

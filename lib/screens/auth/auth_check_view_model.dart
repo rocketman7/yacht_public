@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +22,7 @@ import '../../locator.dart';
 class AuthCheckViewModel extends GetxController {
   final AuthService authService = locator<AuthService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  final MixpanelService mixpanelService = locator<MixpanelService>();
 
   UserRepository _userRepository = UserRepository();
   // User currentUser;
@@ -33,48 +34,58 @@ class AuthCheckViewModel extends GetxController {
   String play_store_url = "https://play.google.com/store/apps/details?id=com.team_yacht.ggook";
   bool isUrgentNotice = false;
   String urgentMessage = "";
+  RxBool isGettingUser = true.obs;
+  RxBool isInitiating = true.obs;
 
   @override
   void onInit() async {
-    await checkTime();
+    print('userRx: $userModelRx');
+    print('leagueRx: $leagueRx');
+    isInitiating(true);
+    // print('auth check init start');
+    // await checkTime();
+
     await getLeagueInfo();
+
     await getHolidayList();
+
     await checkVersion();
 
     print('oninit: ${authService.auth.currentUser}');
+    print('oninit: ${userModelRx.value}');
 
-    currentUser(authService.auth.currentUser);
+    // currentUser(authService.auth.currentUser);
     tierSystemModelRx(await _firestoreService.getTierSystem());
-    currentUser.bindStream(authService.auth.authStateChanges());
-    currentUser.refresh();
+    // currentUser.bindStream(authService.auth.authStateChanges());
+    // currentUser.refresh();
     // leagueRx.bindStream(_firestoreService.getOpenLeague());
     // authService.auth.signOut();
-    update();
-    currentUser.listen((user) async {
-      print('listening $user');
+    // update();
 
-      if (user != null) {
-        userModelRx.bindStream(_userRepository.getUserStream(user.uid));
-        userModelRx.refresh();
-        update();
-        // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
-        userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
-        // leagueRx.listen((value) {
-        //   if (value != "") {
-        //     print('userquest binding');
-        //     userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
-        //   }
-        // });
+    // authService.auth.userChanges().listen((user) async {
+    //   print('listening $user');
+    //   if (user != null) {
+    //     userModelRx.bindStream(_userRepository.getUserStream(user.uid));
+    //     userModelRx.refresh();
+    //     update();
+    //     userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
+    //     // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
+    //     // leagueRx.listen((value) {
+    //     //   if (value != "") {
+    //     //     print('userquest binding');
+    //     //     userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
+    //     //   }
+    //     // });
 
-        // print('this user: ${userModelRx.value}.');
-        // userModelRx.listen((user) {
-        //   print('this user: $user');
-        // });
-      } else {
-        userModelRx.value = null;
-        print('when user is  null');
-      }
-    });
+    //     // print('this user: ${userModelRx.value}.');
+    //     // userModelRx.listen((user) {
+    //     //   print('this user: $user');
+    //     // });
+    //   } else {
+    //     userModelRx.value = null;
+    //     print('when user is  null');
+    //   }
+    // });
 
     // isLoadingData(false);
     // _authService.auth.signOut();
@@ -89,7 +100,49 @@ class AuthCheckViewModel extends GetxController {
     //   }
     //   print('currentUser value: ${currentUser!.value}');
     // });
+    isInitiating(false);
+    isInitiating.refresh();
+    print('auth check init end');
     super.onInit();
+  }
+
+  Future getUser(String uid) async {
+    // uid = "kakao:1993448477";
+    // isGettingUser(true);
+    // userModelRx(await _firestoreService.getUserModel(uid));
+    userModelRx.bindStream(_userRepository.getUserStream(uid));
+    // userQuestModelRx.bindStream(_userRepository.getUserQuestStream(uid));
+    // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
+    // String leagueId = await _firestoreService.getLeagueInfo().then((value) => value.leagueName);
+    // userQuestModelRx(await _firestoreService.getUserQuestModels(uid, leagueId));
+
+    if (leagueRx.value != "") {
+      userQuestModelRx.bindStream(_userRepository.getUserQuestStream(uid));
+    }
+
+    ever(leagueRx, (_) {
+      if (leagueRx.value != "") {
+        print('userquest binding to $uid');
+        userQuestModelRx.bindStream(_userRepository.getUserQuestStream(uid));
+      }
+    });
+
+    if (userModelRx.value != null) isGettingUser(false);
+    // leagueRx.listen((value) {
+    //   print('leagueRx listening: $value');
+    // });
+    ever(userModelRx, (_) {
+      if (userModelRx.value != null) {
+        isGettingUser(false);
+      }
+    });
+    // userModelRx.listen((val) {
+    // });
+    // isGettingUser.refresh();
+  }
+
+  Future signOut() async {
+    await authService.auth.signOut();
   }
 
   Future checkTime() async {
@@ -106,9 +159,10 @@ class AuthCheckViewModel extends GetxController {
 
   Future getLeagueInfo() async {
     leagueModel(await _firestoreService.getLeagueInfo());
-    // print(leagueModel.value);
-    // leagueRx('league002');
+    print(leagueModel.value);
+    // leagueRx('');
     leagueRx(leagueModel.value!.openLeague);
+    leagueRx.refresh();
   }
 
   Future getHolidayList() async {
@@ -197,6 +251,70 @@ class AuthCheckViewModel extends GetxController {
                           child: Center(
                             child: Text(
                               '업데이트하기',
+                              style: yachtDeliveryDialogButtonText,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 14.w,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          barrierDismissible: false);
+    }
+
+    if (isUrgentNotice) {
+      Get.dialog(
+          Dialog(
+            backgroundColor: primaryBackgroundColor,
+            insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+            clipBehavior: Clip.hardEdge,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: primaryHorizontalPadding,
+                  // height: 210.w,
+                  width: 347.w,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 14.w),
+                      Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
+                      SizedBox(
+                        height: correctHeight(
+                            20.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
+                      ),
+                      Center(
+                        child: Text(
+                          urgentMessage,
+                          textAlign: TextAlign.center,
+                          style: yachtBadgesDescriptionDialogTitle,
+                        ),
+                      ),
+                      SizedBox(
+                        height: correctHeight(20.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                      ),
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          exit(0);
+                        },
+                        child: Container(
+                          height: 44.w,
+                          // width: 154.5.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(70.0),
+                            color: yachtViolet,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '확인',
                               style: yachtDeliveryDialogButtonText,
                             ),
                           ),

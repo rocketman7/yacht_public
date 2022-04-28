@@ -866,7 +866,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                           onTap: () {
                             _mixpanelService.mixpanel.track(
                               'My Asset',
-                              properties: {'My Asset Tab From': "유저 프로필-보유자산"},
+                              properties: {'My Asset Tap From': "유저 프로필-보유자산"},
                             );
                             yachtSnackBar("다른 유저의 보유 자산은 볼 수 없어요.");
                             // Get.to(() => AssetView());
@@ -1178,60 +1178,60 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                   SizedBox(
                     height: 50.w,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 14.w, right: 0.w, bottom: 20.w),
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        profileOthersViewModel.user.badges == null
-                            ? Get.to(() => BadgesFullGridView(
-                                  badges: [],
-                                ))
-                            : Get.to(() => BadgesFullGridView(
-                                  badges: profileOthersViewModel.user.badges!,
-                                ));
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            '획득한 뱃지',
-                            style: profileHeaderTextStyle,
-                          ),
-                          Spacer(),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 28.w,
-                              ),
-                              Image.asset(
-                                'assets/icons/navigate_foward_arrow.png',
-                                height: 16.w,
-                                width: 9.w,
-                              ),
-                              SizedBox(
-                                width: 14.w,
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  GetBuilder<ProfileOthersViewModel>(
-                      id: 'profile',
-                      tag: widget.tag,
-                      // init: ProfileOthersViewModel(
-                      //     uid: profileOthersViewModel.uid),
-                      builder: (controller) {
-                        return (!controller.isUserModelLoaded ||
-                                controller.user.badges == null ||
-                                controller.user.badges!.length == 0)
-                            ? BadgesGridView(isFull: false, badges: [])
-                            : BadgesGridView(
-                                isFull: false,
-                                badges: controller.user.badges!,
-                              );
-                      }),
+                  // Padding(
+                  //   padding: EdgeInsets.only(left: 14.w, right: 0.w, bottom: 20.w),
+                  //   child: GestureDetector(
+                  //     behavior: HitTestBehavior.opaque,
+                  //     onTap: () {
+                  //       profileOthersViewModel.user.badges == null
+                  //           ? Get.to(() => BadgesFullGridView(
+                  //                 badges: [],
+                  //               ))
+                  //           : Get.to(() => BadgesFullGridView(
+                  //                 badges: profileOthersViewModel.user.badges!,
+                  //               ));
+                  //     },
+                  //     child: Row(
+                  //       children: [
+                  //         Text(
+                  //           '획득한 뱃지',
+                  //           style: profileHeaderTextStyle,
+                  //         ),
+                  //         Spacer(),
+                  //         Row(
+                  //           children: [
+                  //             SizedBox(
+                  //               width: 28.w,
+                  //             ),
+                  //             Image.asset(
+                  //               'assets/icons/navigate_foward_arrow.png',
+                  //               height: 16.w,
+                  //               width: 9.w,
+                  //             ),
+                  //             SizedBox(
+                  //               width: 14.w,
+                  //             ),
+                  //           ],
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // GetBuilder<ProfileOthersViewModel>(
+                  //     id: 'profile',
+                  //     tag: widget.tag,
+                  //     // init: ProfileOthersViewModel(
+                  //     //     uid: profileOthersViewModel.uid),
+                  //     builder: (controller) {
+                  //       return (!controller.isUserModelLoaded ||
+                  //               controller.user.badges == null ||
+                  //               controller.user.badges!.length == 0)
+                  //           ? BadgesGridView(isFull: false, badges: [])
+                  //           : BadgesGridView(
+                  //               isFull: false,
+                  //               badges: controller.user.badges!,
+                  //             );
+                  //     }),
 
                   // (controller.user.badges != null && controller.isUserModelLoaded)
                   //   ? BadgesGridView(isFull: false, badges: controller.user.badges!)

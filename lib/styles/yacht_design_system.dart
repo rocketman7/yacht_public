@@ -49,7 +49,7 @@ Color thinDivider = Color(0xFF879098).withOpacity(.05);
 
 const Color buttonDisabled = const Color(0xFFE6E6E6);
 const Color buttonNormal = const Color(0xFFEFF2FA);
-Color yachtShadow = Color(0xFFCDC4D9).withOpacity(.2);
+Color yachtShadow = Color(0xFFCDC4D9).withOpacity(.3);
 const Color yachtLine = Color(0xFFE6EAF1);
 const Color white = Colors.white;
 
@@ -673,14 +673,14 @@ const List<Color> portfolioColors = [
 // 앱 바 페이지 타이틀
 TextStyle appBarTitle = TextStyle(
   fontFamily: krFont,
-  fontSize: 22.w,
-  fontWeight: FontWeight.w300,
+  fontSize: 18.w,
+  fontWeight: FontWeight.w500,
   color: yachtBlack,
   height: primaryFontHeight,
   letterSpacing: -1.0,
 );
 TextStyle newAppBarTitle = TextStyle(
-  fontFamily: 'IMBPlex',
+  fontFamily: 'IBMPlex',
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
   color: yachtBlack,
@@ -836,7 +836,7 @@ TextStyle feedHashTag = TextStyle(
 
 TextStyle feedDateTime = TextStyle(
   fontFamily: krFont,
-  fontSize: 10.w,
+  fontSize: 12.w,
   fontWeight: FontWeight.w300,
   color: yachtBlack,
   letterSpacing: -0.5,
@@ -901,7 +901,7 @@ TextStyle snackBarStyle = TextStyle(
 TextStyle dialogTitle = TextStyle(
   fontSize: heading5Size,
   fontFamily: krFont,
-  fontWeight: FontWeight.w300,
+  fontWeight: FontWeight.w400,
   color: yachtBlack,
   letterSpacing: -0.5,
   height: primaryFontHeight,
@@ -911,6 +911,15 @@ TextStyle dialogContent = TextStyle(
   fontSize: heading5Size,
   fontFamily: krFont,
   fontWeight: FontWeight.w500,
+  color: yachtBlack,
+  letterSpacing: -0.5,
+  height: primaryFontHeight,
+);
+
+TextStyle dialogChoice = TextStyle(
+  fontSize: bodyBigSize,
+  fontFamily: krFont,
+  fontWeight: FontWeight.w600,
   color: yachtBlack,
   letterSpacing: -0.5,
   height: primaryFontHeight,
@@ -1590,8 +1599,8 @@ Container sectionBox({
     decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
       BoxShadow(
         color: yachtShadow,
-        blurRadius: 8.w,
-        spreadRadius: 1.w,
+        blurRadius: 4.w,
+        spreadRadius: 0.w,
       )
     ]),
     child: child,
@@ -2668,11 +2677,19 @@ class YachtPrimaryAppBarDelegate extends SliverPersistentHeaderDelegate {
                                       left: 0,
                                       child: buttonWidget!,
                                     )
-                                  : Positioned(
-                                      top: 12.w,
-                                      right: 0,
-                                      child: buttonWidget!,
-                                    )
+                                  : buttonPosition == 'right-center'
+                                      ? Align(
+                                          alignment: Alignment(1, 1 - opacity),
+                                          // top: 12.w,
+                                          // bottom: 0,
+                                          // right: 0,
+                                          child: buttonWidget!,
+                                        )
+                                      : Positioned(
+                                          top: 12.w,
+                                          right: 0,
+                                          child: buttonWidget!,
+                                        )
                               : Container(),
                         ],
                       )),

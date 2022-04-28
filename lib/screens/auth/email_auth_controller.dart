@@ -6,11 +6,15 @@ import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/auth_service.dart';
 
+import '../../services/mixpanel_service.dart';
+
 class EmailAuthController extends GetxController {
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   final AuthService _authService = locator<AuthService>();
   RxBool isAuthProcessing = false.obs;
   @override
   void onInit() {
+    _mixpanelService.mixpanel.track('Email Sign Up View');
     // TODO: implement onInit
     super.onInit();
   }

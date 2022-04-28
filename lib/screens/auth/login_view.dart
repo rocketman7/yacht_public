@@ -24,7 +24,7 @@ class LoginView extends StatelessWidget {
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
-    // _mixpanelService.mixpanel.track('login');
+    _mixpanelService.mixpanel.track('Login View');
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -49,6 +49,7 @@ class LoginView extends StatelessWidget {
                   onTap: () async {
                     if (!isKakaoLoggingIn.value && !isAppleLoggingIn.value) {
                       isKakaoLoggingIn(true);
+                      _mixpanelService.mixpanel.track('Kakao Login');
                       await _kakaoAuthApi.signIn();
                       isKakaoLoggingIn(false);
                     }
@@ -81,6 +82,7 @@ class LoginView extends StatelessWidget {
                         onTap: () async {
                           if (!isKakaoLoggingIn.value && !isAppleLoggingIn.value) {
                             isAppleLoggingIn(true);
+                            _mixpanelService.mixpanel.track('Apple Login');
                             await signInWithApple();
                             isAppleLoggingIn(false);
                           }

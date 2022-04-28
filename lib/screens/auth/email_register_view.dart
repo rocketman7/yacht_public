@@ -5,6 +5,8 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:email_validator/email_validator.dart';
 
+import '../../locator.dart';
+import '../../services/mixpanel_service.dart';
 import 'email_auth_controller.dart';
 
 class EmailRegisterView extends StatefulWidget {

@@ -62,10 +62,7 @@ class FirestoreService extends GetxService {
         .doc('leagueInfo')
         .get()
         .then((value) => LeagueAddressModel.fromMap(value.data()!));
-    // return LeagueAddressModel(
-    //     openLeague: 'league002',
-    //     leagueName: '11월 리그',
-    //     leagueEndDateTime: '2021년 11월 30일까지');
+    // return LeagueAddressModel(openLeague: 'league006', leagueName: '3월 리그', leagueEndDateTime: '2022년 3월 30일까지');
   }
 
   // 휴일 리스트
@@ -108,7 +105,7 @@ class FirestoreService extends GetxService {
     return _firestoreService
         .collection('users')
         .doc(uid)
-        // .doc('IKNYOcaLDlcXSmUEKcAs4LmkcxJ2')
+        // .doc('kakao:1664094339')
         .snapshots()
         .map((snapshot) {
       print('user data stream changed, user model snapshot: ${snapshot.data()}');
@@ -162,11 +159,28 @@ class FirestoreService extends GetxService {
     await _firestoreService.collection('users').doc(uid).delete();
   }
 
+  // User Quest Model Future
+  // Future<List<UserQuestModel>> getUserQuestModels(String uid, String leagueId) {
+  //   return _firestoreService
+  //       .collection('users')
+  //       .doc(uid)
+  //       .collection('userVote')
+  //       .doc(leagueRx.value)
+  //       .collection('quests')
+  //       .orderBy('selectDateTime', descending: true)
+  //       .get()
+  //       .then((value) => value.docs.map((doc) {
+  //             print('user quest: ${UserQuestModel.fromMap(doc.id, doc.data())}');
+  //             return UserQuestModel.fromMap(doc.id, doc.data());
+  //           }).toList());
+  // }
+
   // User Quest Model 스트림
   Stream<List<UserQuestModel>> getUserQuestStream(
     String uid,
   ) {
     // print('stream starting');
+    print('get user quest stream started');
     // print(leagueRx.value);
     return _firestoreService
         .collection('users')
@@ -417,6 +431,20 @@ class FirestoreService extends GetxService {
         .doc(userModelRx.value!.uid)
         .collection('userAsset')
         .add(newAssetModel.toMapAwards());
+
+    await _firestoreService
+        .collection('admin')
+        .doc('yachtStorePurchase')
+        .collection(dateTimeToString(DateTime.now(), 8)!)
+        .add({
+      'uid': userModelRx.value!.uid,
+      'userName': userModelRx.value!.userName,
+      'phoneNumber': phoneNumber,
+      'yachtPoint': giftishowModel.realPrice,
+      'brandName': giftishowModel.brandName,
+      'goodsName': giftishowModel.goodsName,
+      'purchasedDateTime': DateTime.now(),
+    });
   }
 
   // 차트 그리기 위한 Historical Price
@@ -1035,24 +1063,31 @@ class FirestoreService extends GetxService {
     // print('on price stream');
     // print(investAddress.issueCode);
     // print(dateTimeToString(questModel.liveStartDateTime.toDate(), 14));
-    print(
-      dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
-    );
+    // print(
+    //   dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
+    // );
     return _firestoreService
         .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
         .where(
           'dateTime',
           isGreaterThan: dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
-          // isGreaterThan: '20211001091813', //2021/10/01/81/00/00, 2021/10/01/091813
+          // isGreaterThan: '20231001091813', //2021/10/01/81/00/00, 2021/10/01/091813
         )
         .snapshots()
         .map((element) {
+      // print('live element: ${element.docs.length == 0}');
+
+      if (element.docs.length == 0) {
+        return LiveQuestPriceModel.fromMap(
+            '${investAddress.issueCode}', [defalutChartPriceModel(dateTimeToString(DateTime.now(), 14)!)]);
+      } else {
+        return LiveQuestPriceModel.fromMap(
+            '${investAddress.issueCode}', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
+      }
       // print("get");
       //element는 다큐모음
       // print('${investAddress.issueCode}');
       // print('snapshot: ${element.docs.last.data()}');
-      return LiveQuestPriceModel.fromMap(
-          '${investAddress.issueCode}', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
     });
   }
 
@@ -1189,7 +1224,7 @@ class FirestoreService extends GetxService {
   }
 
   // 코멘트 받아오기
-  Future getComments(PostModel post) async {
+  Future<List<CommentModel>> getComments(PostModel post) async {
     List<CommentModel> comments = [];
     await _firestoreService
         .collection('posts')
@@ -1203,6 +1238,21 @@ class FirestoreService extends GetxService {
       });
     });
     return comments;
+  }
+
+  // 코멘트 받아오기 스트림
+  Stream<List<CommentModel>> getCommentStream(PostModel post) {
+    List<CommentModel> comments = [];
+    var snap = _firestoreService
+        .collection('posts')
+        .doc(post.postId)
+        .collection('comments')
+        .orderBy('writtenDateTime', descending: false)
+        .snapshots();
+
+    return snap.map((snapshot) {
+      return snapshot.docs.map((e) => CommentModel.fromMap(e.data())).toList();
+    });
   }
 
   // 코멘트 삭제하기
@@ -1229,12 +1279,46 @@ class FirestoreService extends GetxService {
   }
 
   // 코멘트 좋아요 버튼
-  Future toggleLikeComment(PostModel post, String uid) async {
+  Future toggleLikeComment(PostModel post, CommentModel comment, String uid) async {
+    if (comment.likedBy == null) {
+      await _firestoreService
+          .collection('posts')
+          .doc(post.postId)
+          .collection('comments')
+          .doc(comment.commentId)
+          .update({
+        'likedBy': FieldValue.arrayUnion([uid])
+      });
+    } else if (comment.likedBy!.contains(uid)) {
+      print('to remove');
+      await _firestoreService
+          .collection('posts')
+          .doc(post.postId)
+          .collection('comments')
+          .doc(comment.commentId)
+          .update({
+        'likedBy': FieldValue.arrayRemove([uid])
+      });
+    } else {
+      await _firestoreService
+          .collection('posts')
+          .doc(post.postId)
+          .collection('comments')
+          .doc(comment.commentId)
+          .update({
+        'likedBy': FieldValue.arrayUnion([uid])
+      });
+    }
+  }
+
+  // 포스트 좋아요 버튼
+  Future toggleLikePost(PostModel post, String uid) async {
     if (post.likedBy == null) {
       await _firestoreService.collection('posts').doc(post.postId).update({
         'likedBy': FieldValue.arrayUnion([uid])
       });
     } else if (post.likedBy!.contains(uid)) {
+      print('to remove');
       await _firestoreService.collection('posts').doc(post.postId).update({
         'likedBy': FieldValue.arrayRemove([uid])
       });

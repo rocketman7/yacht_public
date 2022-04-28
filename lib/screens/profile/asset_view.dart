@@ -349,6 +349,10 @@ class AssetView extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
+                          _mixpanelService.mixpanel.track(
+                            'Yacht Point Store',
+                            properties: {'Yacht Point Store': "보유자산"},
+                          );
                           // print(assetViewModel.totalHoldingStocksValue);
                           _mixpanelService.mixpanel.track(
                             'Yacht Point Store',

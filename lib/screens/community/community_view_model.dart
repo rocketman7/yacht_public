@@ -39,12 +39,10 @@ class CommunityViewModel extends GetxController {
   RxDouble offset = 0.0.obs;
   RefreshController refreshController = RefreshController();
 
-//    final NativeAd myNative = NativeAd(
-//   adUnitId: AdManager.nativeAdUnitId,
-//   factoryId: 'adFactoryExample',
-//   request: AdRequest(),
-//   listener: NativeAdListener(),
-// );
+  final RxString replyToUserName = "".obs; // 대댓글이 향하는 댓글 쓴 사람 유저네임
+  final RxString replyToUserUid = "".obs; // 대댓글이 향하는 댓글 쓴 사람 UID
+  final RxString replyToCommentId = "".obs; // 대댓글이 향하는 댓글 코멘트 ID
+  final RxString hintText = "답글을 달아주세요".obs;
 
   RxBool isAdLoaded = false.obs;
   @override
@@ -55,21 +53,17 @@ class CommunityViewModel extends GetxController {
     // TODO: implement onInit
     await getNotice();
     await getPost();
-    // print('recentNotice $recentNotice');
 
-    // print('get post done');
-    // await monitorScroll();
-    // scrollController = ScrollController();
-    // print('scrollcont: ' + scrollController.hasClients.toString());
     scrollController.addListener(() {
       // print(scrollController.offset);
       // print('max: ${scrollController.position.maxScrollExtent}');
       // print(scrollController.position);
       scrollController.offset < 0 ? offset(0) : offset(scrollController.offset);
-      if ((scrollController.offset + 60.w >
-              scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .5)) &&
+      if ((scrollController.offset > scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .5)) &&
           hasNextPosts.value) {
         if (!isGettingPosts.value) {
+          print('maxextnt: ${scrollController.position.maxScrollExtent}');
+          print(scrollController.offset);
           getPost();
         }
       }
@@ -110,6 +104,9 @@ class CommunityViewModel extends GetxController {
     isGettingPosts(true);
     hasNextPosts(true);
 
+    recentNotice.value = [];
+    await getNotice();
+
     List<PostModel> newPosts = [];
     newPosts.addAll(await _firestoreService.getPosts(
       postAtOnceLimit,
@@ -127,6 +124,54 @@ class CommunityViewModel extends GetxController {
     isGettingPosts(false);
 
     // update();
+  }
+
+  // 코멘트 받아오기
+  Future<List<CommentModel>> getComments(PostModel post) async {
+    return await _firestoreService.getComments(post);
+  }
+
+  // 코멘트 받아오기 스트림
+  Stream<List<CommentModel>> getCommentStream(PostModel post) {
+    return _firestoreService.getCommentStream(post);
+  }
+
+  // 코멘트 올리기
+  Future uploadComment(PostModel post, String content) async {
+    late CommentModel newComment;
+    if (replyToUserName.value.length > 0) {
+      newComment = convertCommentToCommmentModel(post.postId!, content, true,
+          replyToUserName: replyToUserName.value,
+          replyToUserUid: replyToUserUid.value,
+          replyToCommentId: replyToCommentId.value);
+    } else {
+      newComment = convertCommentToCommmentModel(post.postId!, content, false);
+    }
+
+    // print(newComment);
+    _firestoreService.uploadNewComment(newComment);
+  }
+
+  // 댓글 내용으로 Comment Model 만들기
+  CommentModel convertCommentToCommmentModel(String commentToPostId, String content, bool isReply,
+      {String? replyToUserName, String? replyToUserUid, String? replyToCommentId}) {
+    return CommentModel(
+      commentToPostId: commentToPostId,
+      content: content,
+      isReply: isReply,
+      replyToUserName: replyToUserName,
+      replyToUserUid: replyToUserUid,
+      replyToCommentId: replyToCommentId,
+      writerUid: userModelRx.value!.uid,
+      writerUserName: userModelRx.value!.userName,
+      writerAvatarUrl: userModelRx.value!.avatarImage,
+      writerExp: userModelRx.value!.exp,
+    );
+  }
+
+  // 코멘트 삭제
+  Future deleteComment(CommentModel comment) async {
+    await _firestoreService.deleteComment(comment.commentToPostId, comment.commentId!);
   }
 
   Future getPost() async {
@@ -198,24 +243,28 @@ class CommunityViewModel extends GetxController {
 
   // 게시글 올리기 버튼
   Future uploadPost(String content) async {
-    // 이미지들 경로 이용하여 url 생성
     List<String> imageUrlList = [];
-    filePaths.forEach((element) {
-      String fileName = basename(element);
-      imageUrlList.add('posts/$fileName');
-    });
+    if (filePaths.length > 0) {
+      // 이미지들 경로 이용하여 url 생성
 
-    // 포스트 모델로 변환
-    PostModel _newPost = convertFeedtoPostModel(content).copyWith(imageUrlList: imageUrlList);
-    // print(_newPost);
-    // 포스트 모델 업로드
-    await _firestoreService.uploadNewPost(_newPost);
+      filePaths.forEach((element) {
+        String fileName = basename(element);
+        imageUrlList.add('posts/$fileName');
+      });
 
-    // 이미지 있으면 스토리지에 업로드
-    await _firebaseStorageService.uploadImages(filePaths).then((value) {
-      images!.clear();
-      filePaths = [];
-    });
+      // 이미지 있으면 스토리지에 업로드
+      await _firebaseStorageService.uploadImages(filePaths).then((value) async {
+        images!.clear();
+        filePaths = [];
+        if (value == 'success') {
+          // 포스트 모델로 변환
+          PostModel _newPost = convertFeedtoPostModel(content).copyWith(imageUrlList: imageUrlList);
+          // print(_newPost);
+          // 포스트 모델 업로드
+          await _firestoreService.uploadNewPost(_newPost);
+        }
+      });
+    }
   }
 
   Future editPost(PostModel post, String content) async {
@@ -232,8 +281,8 @@ class CommunityViewModel extends GetxController {
     return await _firebaseStorageService.downloadImageURL(imageUrl);
   }
 
-  Future toggleLikeComment(PostModel post) async {
-    await _firestoreService.toggleLikeComment(post, userModelRx.value!.uid);
+  Future toggleLikePost(PostModel post) async {
+    await _firestoreService.toggleLikePost(post, userModelRx.value!.uid);
   }
 
   Future blockThisUser(String uidToBlock) async {

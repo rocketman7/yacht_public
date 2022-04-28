@@ -180,7 +180,20 @@ class YachtStoreController extends GetxController {
     String phoneNumber,
     String userRealName,
   ) async {
+    // print('before: ${isExchanging.value}');
     isExchanging(true);
+    // print('after: ${isExchanging.value}');
+    // Future.delayed(Duration(seconds: 4)).then((_) async {
+    //   print('after 4sec');
+    //   print('after future: ${isExchanging.value}');
+    //   await firestoreService.useYachtPointToGiftishow(
+    //     giftishowModel,
+    //     phoneNumber,
+    //     userRealName,
+    //   );
+    //   isExchanging(false);
+    // });
+    // print('after future: ${isExchanging.value}');
     await giftishowApiService.requestToSendCoupon(giftishowModel, phoneNumber).then((value) async {
       if (value == '0000') {
         await firestoreService.useYachtPointToGiftishow(
@@ -189,10 +202,12 @@ class YachtStoreController extends GetxController {
           userRealName,
         );
         assetViewModel.reloadUserAsset();
+        isExchanging(false);
         isExchangeAllDone(true);
       }
     });
-    isExchanging(false);
+
+    // print('after function: ${isExchanging.value}');
   }
 
   // Future getGoodsDetail(String goodsCode) async {

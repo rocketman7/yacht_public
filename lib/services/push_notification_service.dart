@@ -30,11 +30,9 @@ class PushNotificationService {
   Future initialise() async {
     print("push notification init");
     if (Platform.isIOS) {
-      await FirebaseMessaging.instance
-          .requestPermission(alert: true, badge: true, sound: true);
+      await FirebaseMessaging.instance.requestPermission(alert: true, badge: true, sound: true);
 
-      await FirebaseMessaging.instance
-          .setForegroundNotificationPresentationOptions(
+      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
         alert: true,
         badge: true,
         sound: true,
@@ -57,10 +55,9 @@ class PushNotificationService {
 
     await FirebaseMessaging.instance.getToken().then((value) async {
       token = value!;
-      print('user token... and need to update DB' + token);
+      // print('user token... and need to update DB' + token);
 
-      if (userModelRx.value!.token == null ||
-          userModelRx.value!.token != token) {
+      if (userModelRx.value!.token == null || userModelRx.value!.token != token) {
         await _firestoreService.updateUserFCMToken(token);
 
         for (int i = 0; i < numOfPushAlarm; i++) {
@@ -122,7 +119,6 @@ class PushNotificationService {
           }
         }
         // 어차피 좀 더 세분화될거고 처음에 걸릴 것들이 많을 것 같으니 스위치문으로 바꾸는게 ??
-
       }
     });
   }

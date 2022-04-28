@@ -53,11 +53,6 @@ class InsightView extends StatelessWidget {
             SizedBox(height: 100.w),
           ]),
         )
-
-        // TodayMarketView(homeViewModel: homeViewModel),
-        // SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-        // DictionaryView(homeViewModel: homeViewModel),
-        // SizedBox(height: correctHeight(90.w, 0.0, sectionTitle.fontSize)),
       ],
     ));
   }
