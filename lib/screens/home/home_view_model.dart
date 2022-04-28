@@ -69,6 +69,7 @@ class HomeViewModel extends GetxController {
   final AwardViewModel awardViewModel = Get.put(AwardViewModel());
   bool onceInit = false;
   final RxBool isGettingQuests = true.obs;
+
   @override
   void onClose() {
     // TODO: implement onClose
@@ -477,14 +478,20 @@ class HomeViewModel extends GetxController {
     );
 
     // _rewardedAd!.setImmersiveMode(true); // ??
-    _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
-      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
-      // 광고 정상적으로 잘 보면 ~
-      // Navigator.of(context).pop();
+    // _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
+    //   print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
+    //   // 광고 정상적으로 잘 보면 ~
+    //   // Navigator.of(context).pop();
+    //   await _firestoreService.updateUserItem(1);
+    //   await _firestoreService.updateUserRewardedCnt();
+    //   // doneAdsGetRawSnackbar();
+    //   // doneAdsDialog(tempContext);
+    // });
+
+    _rewardedAd!.show(onUserEarnedReward: (adWithoutView, reward) async {
+      print('$adWithoutView with reward $RewardItem(${reward.amount}, ${reward.type}');
       await _firestoreService.updateUserItem(1);
       await _firestoreService.updateUserRewardedCnt();
-      // doneAdsGetRawSnackbar();
-      // doneAdsDialog(tempContext);
     });
     _rewardedAd = null;
   }

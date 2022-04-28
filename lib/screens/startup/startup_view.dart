@@ -24,6 +24,7 @@ import 'package:yachtOne/screens/ranks/rank_controller.dart';
 import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 class StartupView extends GetView<StartupViewModel> {
   // const StartupView({Key? key}) : super(key: key);
@@ -100,6 +101,7 @@ class StartupView extends GetView<StartupViewModel> {
 
     return Scaffold(
       extendBody: true,
+      resizeToAvoidBottomInset: false,
       body: WillPopScope(
         onWillPop: androidBackButtonAction,
         child: Obx(() => pageList[controller.selectedPage.value]
@@ -109,174 +111,176 @@ class StartupView extends GetView<StartupViewModel> {
             // ),
             ),
       ),
-      bottomNavigationBar: Obx(() => ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-              child: SizedBox(
-                // height: 82.w,
-                child: BottomNavigationBar(
-                  selectedIconTheme: IconThemeData(size: 40),
-                  selectedFontSize: 0,
-                  unselectedFontSize: 0,
-                  // elevation: 8,
-                  type: BottomNavigationBarType.fixed,
-                  backgroundColor: primaryBackgroundColor.withOpacity(.65),
-                  showSelectedLabels: false,
-                  showUnselectedLabels: false,
-                  currentIndex: controller.selectedPage.value,
-                  onTap: (index) async {
-                    // if (controller.selectedPage.value != index) {
-                    //   if (controller.selectedPage.value == 0) {
-                    //     _mixpanelService.mixpanel.track('Home');
-                    //     _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
-                    //     // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
-                    //   } else if (controller.selectedPage.value == 1) {
-                    //     _mixpanelService.mixpanel.track('Community');
-                    //     _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
-                    //     // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
-                    //   } else {
-                    //     _mixpanelService.mixpanel.track('ProfileMy');
-                    //     _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
-                    //     // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
-                    //   }
-                    //   _mixpanelService.mixpanel.track('${tabPageName[index]}-enter');
-                    // }
-                    if (index == controller.selectedPage.value) {
-                      switch (index) {
-                        case 0:
-                          homeViewModel.scrollController.animateTo(
-                            0,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
+      bottomNavigationBar: Obx(() {
+        return ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+            child: SizedBox(
+              height: controller.isKeyboardShown.value ? 0 : null,
+              child: BottomNavigationBar(
+                selectedIconTheme: IconThemeData(size: 40),
+                selectedFontSize: 0,
+                unselectedFontSize: 0,
+                // elevation: 8,
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: primaryBackgroundColor.withOpacity(.65),
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                currentIndex: controller.selectedPage.value,
+                onTap: (index) async {
+                  // if (controller.selectedPage.value != index) {
+                  //   if (controller.selectedPage.value == 0) {
+                  //     _mixpanelService.mixpanel.track('Home');
+                  //     _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
+                  //     // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
+                  //   } else if (controller.selectedPage.value == 1) {
+                  //     _mixpanelService.mixpanel.track('Community');
+                  //     _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
+                  //     // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
+                  //   } else {
+                  //     _mixpanelService.mixpanel.track('ProfileMy');
+                  //     _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}');
+                  //     // _mixpanelService.mixpanel.timeEvent('${tabPageName[index]}-enter');
+                  //   }
+                  //   _mixpanelService.mixpanel.track('${tabPageName[index]}-enter');
+                  // }
+                  if (index == controller.selectedPage.value) {
+                    switch (index) {
+                      case 0:
+                        homeViewModel.scrollController.animateTo(
+                          0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
 
-                          break;
-                        case 1:
-                          insightViewModel.scrollController.animateTo(
-                            0,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                          break;
-                        case 2:
-                          communityViewModel.scrollController.animateTo(
-                            0,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                          break;
-                        case 3:
-                          profileViewModel.scrollController.animateTo(
-                            0,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                          break;
-                        default:
-                      }
-
-                      homeViewModel.scrollController.animateTo(
-                        0,
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                      // HomeView().goToTop();
-                    } else {
-                      _mixpanelService.mixpanel.track(mixpanelBottomBarTrackList[index], properties: {
-                        "Previous Bottom Tab": mixpanelBottomBarTrackList[controller.selectedPage.value],
-                      });
-
-                      switch (index) {
-                        case 0:
-                          HomeView().onRefresh();
-                          // homeViewModel.onInit();
-                          break;
-                        case 1:
-                          readingContentViewModel.onInit();
-                          break;
-                        case 2:
-                          communityViewModel.getNotice();
-                          communityViewModel.getPost();
-                          break;
-                        // case 3:
-                        //   profileViewModel.scrollController.animateTo(
-                        //     0,
-                        //     duration: Duration(milliseconds: 300),
-                        //     curve: Curves.easeInOut,
-                        //   );
-                        //   break;
-                        default:
-                      }
-                      controller.selectedPage(index);
+                        break;
+                      case 1:
+                        insightViewModel.scrollController.animateTo(
+                          0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                        break;
+                      case 2:
+                        communityViewModel.scrollController.animateTo(
+                          0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                        break;
+                      case 3:
+                        profileViewModel.scrollController.animateTo(
+                          0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                        break;
+                      default:
                     }
-                  },
-                  items: [
-                    BottomNavigationBarItem(
+
+                    homeViewModel.scrollController.animateTo(
+                      0,
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                    // HomeView().goToTop();
+                  } else {
+                    _mixpanelService.mixpanel.track(mixpanelBottomBarTrackList[index], properties: {
+                      "Previous Bottom Tab": mixpanelBottomBarTrackList[controller.selectedPage.value],
+                    });
+
+                    switch (index) {
+                      case 0:
+                        HomeView().onRefresh();
+                        // homeViewModel.onInit();
+                        break;
+                      case 1:
+                        readingContentViewModel.onInit();
+                        break;
+                      case 2:
+                        communityViewModel.getNotice();
+                        communityViewModel.getPost();
+                        break;
+                      // case 3:
+                      //   profileViewModel.scrollController.animateTo(
+                      //     0,
+                      //     duration: Duration(milliseconds: 300),
+                      //     curve: Curves.easeInOut,
+                      //   );
+                      //   break;
+                      default:
+                    }
+                    controller.selectedPage(index);
+                  }
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Container(
+                      // color: Colors.blue,
+                      child: Image.asset(
+                        'assets/icons/bottom_navigation/home_unselected.png',
+                        width: iconSize,
+                        height: iconSize,
+                        color: yachtBlack.withOpacity(unselectedOpacity),
+                      ),
+                    ),
+                    activeIcon: Container(
+                      // color: Colors.blue,
+                      child: Image.asset(
+                        'assets/icons/bottom_navigation/home_selected.png',
+                        width: iconSize,
+                        height: iconSize,
+                      ),
+                    ),
+                    label: '',
+                  ),
+                  BottomNavigationBarItem(
                       icon: Container(
                         // color: Colors.blue,
                         child: Image.asset(
-                          'assets/icons/bottom_navigation/home_unselected.png',
-                          width: iconSize,
-                          height: iconSize,
-                          color: yachtBlack.withOpacity(unselectedOpacity),
-                        ),
-                      ),
-                      activeIcon: Container(
-                        // color: Colors.blue,
-                        child: Image.asset(
-                          'assets/icons/bottom_navigation/home_selected.png',
+                          'assets/icons/bottom_navigation/insight_unselected.png',
                           width: iconSize,
                           height: iconSize,
                         ),
                       ),
-                      label: '',
-                    ),
-                    BottomNavigationBarItem(
-                        icon: Container(
-                          // color: Colors.blue,
-                          child: Image.asset(
-                            'assets/icons/bottom_navigation/insight_unselected.png',
-                            width: iconSize,
-                            height: iconSize,
-                          ),
-                        ),
-                        activeIcon: Image.asset(
-                          'assets/icons/bottom_navigation/insight_selected.png',
-                          width: iconSize,
-                          height: iconSize,
-                        ),
-                        label: ''),
-                    BottomNavigationBarItem(
-                        icon: Image.asset(
-                          'assets/icons/bottom_navigation/community_unselected.png',
-                          width: iconSize,
-                          height: iconSize,
-                          // color: yachtBlack.withOpacity(unselectedOpacity),
-                        ),
-                        activeIcon: Image.asset(
-                          'assets/icons/bottom_navigation/community_selected.png',
-                          width: iconSize,
-                          height: iconSize,
-                        ),
-                        label: ''),
-                    BottomNavigationBarItem(
-                        icon: Image.asset(
-                          'assets/icons/bottom_navigation/my_unselected.png',
-                          width: iconSize,
-                          height: iconSize,
-                          color: yachtBlack.withOpacity(unselectedOpacity),
-                        ),
-                        activeIcon: Image.asset(
-                          'assets/icons/bottom_navigation/my_selected.png',
-                          width: iconSize,
-                          height: iconSize,
-                        ),
-                        label: '')
-                  ],
-                ),
+                      activeIcon: Image.asset(
+                        'assets/icons/bottom_navigation/insight_selected.png',
+                        width: iconSize,
+                        height: iconSize,
+                      ),
+                      label: ''),
+                  BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/icons/bottom_navigation/community_unselected.png',
+                        width: iconSize,
+                        height: iconSize,
+                        // color: yachtBlack.withOpacity(unselectedOpacity),
+                      ),
+                      activeIcon: Image.asset(
+                        'assets/icons/bottom_navigation/community_selected.png',
+                        width: iconSize,
+                        height: iconSize,
+                      ),
+                      label: ''),
+                  BottomNavigationBarItem(
+                      icon: Image.asset(
+                        'assets/icons/bottom_navigation/my_unselected.png',
+                        width: iconSize,
+                        height: iconSize,
+                        color: yachtBlack.withOpacity(unselectedOpacity),
+                      ),
+                      activeIcon: Image.asset(
+                        'assets/icons/bottom_navigation/my_selected.png',
+                        width: iconSize,
+                        height: iconSize,
+                      ),
+                      label: '')
+                ],
               ),
             ),
-          )),
+          ),
+        );
+      }),
 
       // Container(
       //   // height: _screenUtil.bottomBarHeight + 50,

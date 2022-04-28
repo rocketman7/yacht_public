@@ -565,7 +565,7 @@ class FeedWidget extends StatelessWidget {
                                     _mixpanelService.mixpanel.track('Post Like',
                                         properties: {'Like Post ID': post.postId, 'Like Post From Page': "Community"});
                                     HapticFeedback.lightImpact();
-                                    communityViewModel.toggleLikeComment(post);
+                                    // communityViewModel.toggleLikeComment(post);
                                     communityViewModel.reloadPost();
                                   },
                                   child: Row(

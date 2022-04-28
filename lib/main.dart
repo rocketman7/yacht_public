@@ -52,9 +52,9 @@ void main() async {
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate();
   await MobileAds.instance.initialize();
-  await NativeAds.MobileAds.initialize(
-    nativeAdUnitId: AdManager.nativeAdUnitId,
-  );
+  // await NativeAds.MobileAds.initialize(
+  //   nativeAdUnitId: AdManager.nativeAdUnitId,
+  // );
 
 // portrait 모드 고정
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])

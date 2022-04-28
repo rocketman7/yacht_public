@@ -27,18 +27,37 @@ class FirebaseStorageService extends StorageService {
   }
 
   // 이미지 업로드
-  Future uploadImages(List<String> filePaths) async {
+  Future<String> uploadImages(List<String> filePaths) async {
+    String result = 'success';
     filePaths.forEach((element) async {
       String fileName = basename(element);
-      try {
-        await _storageReference
-            .child('posts/$fileName')
-            .putFile(File(element))
-            .whenComplete(() => print("upload done"));
-      } on FirebaseException catch (e) {
-        print(e.message);
-      }
+
+      final UploadTask uploadTask = _storageReference.child('posts/$fileName').putFile(File(element));
+
+      uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
+        switch (taskSnapshot.state) {
+          case TaskState.running:
+            final progress = 100.0 * (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
+            print("Upload is $progress% complete.");
+            break;
+          case TaskState.paused:
+            print("Upload is paused.");
+            break;
+          case TaskState.canceled:
+            print("Upload was canceled");
+            break;
+          case TaskState.error:
+            result = 'error';
+            // Handle unsuccessful uploads
+            break;
+          case TaskState.success:
+            // Handle successful uploads on complete
+            // ...
+            break;
+        }
+      });
     });
+    return result;
   }
 }
 

@@ -81,6 +81,6 @@ class DetailPostViewModel extends GetxController {
   // }
 
   Future toggleLikeComment(PostModel post) async {
-    await _firestoreService.toggleLikeComment(thisPost.value, userModelRx.value!.uid);
+    // await _firestoreService.toggleLikeComment(thisPost.value, userModelRx.value!.uid);
   }
 }

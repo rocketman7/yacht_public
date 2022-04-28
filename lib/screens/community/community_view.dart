@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
-// import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/feed_widget.dart';
@@ -21,7 +21,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
-import 'package:native_admob_flutter/native_admob_flutter.dart';
+// import 'package:native_admob_flutter/native_admob_flutter.dart';
 import '../../locator.dart';
 import 'community_view_model.dart';
 import 'new_feed_widget.dart';
@@ -54,214 +54,145 @@ class CommunityView extends GetView<CommunityViewModel> {
     // });
 
     print("commuity view building");
-    return Scaffold(
-      // floatingActionButton: GestureDetector(
-      //   onTap: () {
-      //     Get.bottomSheet(
-      //       WritingNewPost(
-      //         // contentFormKey: _contentFormKey,
-      //         // contentController: _contentController,
-      //         communityViewModel: _communityViewModel,
-      //       ),
-      //       isScrollControlled: true,
-      //       ignoreSafeArea: false, // add this
-      //     );
-      //   },
-      //   child: Container(
-      //     decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
-      //       BoxShadow(
-      //         color: yachtShadow,
-      //         blurRadius: 8.w,
-      //         spreadRadius: 1.w,
-      //       )
-      //     ]),
-      //     height: 54,
-      //     width: 54,
-      //     child: Image.asset('assets/icons/writing.png'),
-      //   ),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-
-      body: Stack(clipBehavior: Clip.none, children: [
-        RefreshConfiguration(
-          enableScrollWhenRefreshCompleted: true,
-          headerTriggerDistance: 80.w,
-          child: SmartRefresher(
-            enablePullDown: true,
-            header: YachtCustomHeader(),
-            controller: _communityViewModel.refreshController,
-            onRefresh: _communityViewModel.onRefresh,
-            child: CustomScrollView(
-              // clipBehavior: Clip.none,
-              controller: _communityViewModel.scrollController,
-              // physics: ScrollPhysics(),
-              slivers: [
-                Obx(
-                  () => SliverPersistentHeader(
-                    floating: false,
-                    pinned: true,
-                    // 홈 뷰 앱바 구현
-                    delegate: YachtPrimaryAppBarDelegate(
+    return Stack(clipBehavior: Clip.none, children: [
+      RefreshConfiguration(
+        enableScrollWhenRefreshCompleted: true,
+        headerTriggerDistance: 80.w,
+        child: SmartRefresher(
+          enablePullDown: true,
+          header: YachtCustomHeader(),
+          controller: _communityViewModel.refreshController,
+          onRefresh: _communityViewModel.onRefresh,
+          child: CustomScrollView(
+            // clipBehavior: Clip.none,
+            controller: _communityViewModel.scrollController,
+            // physics: ScrollPhysics(),
+            slivers: [
+              Obx(
+                () => SliverPersistentHeader(
+                  floating: false,
+                  pinned: true,
+                  // 홈 뷰 앱바 구현
+                  delegate: YachtPrimaryAppBarDelegate(
                       offset: _communityViewModel.offset.value,
                       tabTitle: "커뮤니티",
-                    ),
-                  ),
+                      buttonWidget: InkWell(
+                        onTap: () {
+                          HapticFeedback.lightImpact();
+                          Get.bottomSheet(
+                            WritingNewPost(
+                              // contentFormKey: _contentFormKey,
+                              // contentController: _contentController,
+                              communityViewModel: _communityViewModel,
+                            ),
+                            isScrollControlled: true,
+                            ignoreSafeArea: false, // add this
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(
+                            7.w,
+                          ),
+                          decoration: BoxDecoration(
+                              color: buttonNormal,
+                              borderRadius: BorderRadius.circular(
+                                10.w,
+                              )),
+                          child: SvgPicture.asset(
+                            'assets/icons/writing_plus.svg',
+                            height: 23.w,
+                            width: 23.w,
+                          ),
+                        ),
+                      ),
+                      buttonPosition: 'right-center'),
                 ),
-                // 전문글만, 팔로워만 고르기
-                // Container(
-                //   height: 48.w,
-                //   // color: Colors.blueGrey,
-                //   child: Row(
-                //     children: [
-                //       Expanded(
-                //         child: Center(
-                //             child: Text(
-                //           "프로 모아보기",
-                //           style: subheadingStyle.copyWith(color: primaryButtonBackground),
-                //         )),
-                //       ),
-                //       Container(height: 32.w, width: 1.w, color: yachtLineColor),
-                //       Expanded(
-                //           child: Center(
-                //               child: Text(
-                //         "팔로워 모아보기",
-                //         style: subheadingStyle.copyWith(color: primaryButtonBackground),
-                //       )))
-                //     ],
-                //   ),
-                // ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    Obx(
-                      () => (_communityViewModel.posts.length == 0)
-                          ? Container(
-                              child: Text("게시글이 없습니다"),
-                            )
-
-                          // print(snapshot.data);
-                          // 임시로 0 index만. 위젯 블럭 제작 이후에는 Lazy List로
-                          :
-
-                          // SliverList(
-                          //     delegate: SliverChildBuilderDelegate((context, index) {
-                          //       return Column(
-                          //         children: [
-                          //           index == 0
-                          //               ? Column(
-                          //                   children: [
-                          //                     SizedBox(
-                          //                       height: 20.w,
-                          //                     ),
-                          //                     _communityViewModel.recentNotice.length > 0
-                          //                         ? Column(
-                          //                             children: [
-                          //                               NoticeWidget(
-                          //                                   communityViewModel: _communityViewModel,
-                          //                                   post: _communityViewModel.recentNotice[0]),
-                          //                               SizedBox(
-                          //                                 height: 12.w,
-                          //                               )
-                          //                             ],
-                          //                           )
-                          //                         : Container(),
-                          //                   ],
-                          //                 )
-                          //               : Container(),
-                          //           // ((index + 1) % 5 == 2 && Platform.isAndroid) ? CommunityAd() : Container(),
-                          //           FeedWidget(
-                          //               communityViewModel: _communityViewModel,
-                          //               post: _communityViewModel.posts[index]),
-                          //           SizedBox(
-                          //             height: 12.w,
-                          //           )
-                          //         ],
-                          //       );
-                          //     }),
-                          //   ),
-                          ListView.builder(
-                              // padding: primaryHorizontalPadding,
-                              // clipBehavior: Clip.none,
-                              // controller: _scrollController,
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: _communityViewModel.posts.length,
-                              itemBuilder: (_, index) {
-                                return Column(
-                                  children: [
-                                    index == 0
-                                        ? Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 20.w,
-                                              ),
-                                              _communityViewModel.recentNotice.length > 0
-                                                  ? Column(
-                                                      children: [
-                                                        NoticeWidget(
-                                                            communityViewModel: _communityViewModel,
-                                                            post: _communityViewModel.recentNotice[0]),
-                                                        SizedBox(
-                                                          height: 12.w,
-                                                        )
-                                                      ],
-                                                    )
-                                                  : Container(),
-                                            ],
-                                          )
-                                        : Container(),
-                                    // ((index + 1) % 5 == 2 && Platform.isAndroid) ? CommunityAd() : Container(),
-                                    // FeedWidget(communityViewModel: _communityViewModel,
-                                    //     post: _communityViewModel.posts[index]),
-                                    NewFeedWidget(
-                                        communityViewModel: _communityViewModel,
-                                        post: _communityViewModel.posts[index]),
-                                    SizedBox(
-                                      height: 30.w,
-                                    )
-                                  ],
-                                );
-                              }),
-                    )
-                  ]),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: SizeConfig.safeAreaBottom + 74.w,
-          right: 14.w,
-          child: InkWell(
-            onTap: () {
-              Get.bottomSheet(
-                WritingNewPost(
-                  // contentFormKey: _contentFormKey,
-                  // contentController: _contentController,
-                  communityViewModel: _communityViewModel,
-                ),
-                isScrollControlled: true,
-                ignoreSafeArea: false, // add this
-              );
-            },
-            child: Container(
-              decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
-                BoxShadow(
-                  color: yachtShadow,
-                  offset: Offset(1.w, 1.w),
-                  blurRadius: 3.w,
-                  spreadRadius: 1.w,
-                )
-              ]),
-              height: 54,
-              width: 54,
-              child: Image.asset(
-                'assets/icons/writing.png',
               ),
-            ),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Obx(
+                    () => ListView.builder(
+                        padding: EdgeInsets.zero,
+                        // clipBehavior: Clip.none,
+                        // controller: _scrollController,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _communityViewModel.posts.length,
+                        itemBuilder: (_, index) {
+                          return Column(
+                            children: [
+                              index == 0
+                                  ? Column(
+                                      children: [
+                                        // SizedBox(
+                                        //   height: 20.w,
+                                        // ),
+                                        _communityViewModel.recentNotice.length > 0
+                                            ? Column(
+                                                children: [
+                                                  NoticeWidget(
+                                                      communityViewModel: _communityViewModel,
+                                                      post: _communityViewModel.recentNotice[0]),
+                                                  SizedBox(
+                                                    height: 12.w,
+                                                  )
+                                                ],
+                                              )
+                                            : Container(),
+                                      ],
+                                    )
+                                  : Container(),
+                              // ((index == 1) && Platform.isAndroid) ? CommunityAd() : SizedBox.shrink(),
+                              // FeedWidget(communityViewModel: _communityViewModel,
+                              //     post: _communityViewModel.posts[index]),
+                              NewFeedWidget(
+                                  communityViewModel: _communityViewModel, post: _communityViewModel.posts[index]),
+                              SizedBox(
+                                height: 30.w,
+                              )
+                            ],
+                          );
+                        }),
+                  ),
+                ]),
+              ),
+            ],
           ),
         ),
-      ]),
-    );
+      ),
+      // Positioned(
+      //   bottom: SizeConfig.safeAreaBottom + 74.w,
+      //   right: 14.w,
+      //   child: InkWell(
+      //     onTap: () {
+      //       Get.bottomSheet(
+      //         WritingNewPost(
+      //           // contentFormKey: _contentFormKey,
+      //           // contentController: _contentController,
+      //           communityViewModel: _communityViewModel,
+      //         ),
+      //         isScrollControlled: true,
+      //         ignoreSafeArea: false, // add this
+      //       );
+      //     },
+      //     child: Container(
+      //       decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
+      //         BoxShadow(
+      //           color: yachtShadow,
+      //           offset: Offset(1.w, 1.w),
+      //           blurRadius: 3.w,
+      //           spreadRadius: 1.w,
+      //         )
+      //       ]),
+      //       height: 54,
+      //       width: 54,
+      //       child: Image.asset(
+      //         'assets/icons/writing.png',
+      //       ),
+      //     ),
+      //   ),
+      // ),
+    ]);
   }
 
   // Widget communityAd() {
@@ -317,62 +248,66 @@ class CommunityView extends GetView<CommunityViewModel> {
   // }
 }
 
-// class CommunityAd extends StatelessWidget {
-//   CommunityAd({Key? key}) : super(key: key);
-//   RxBool isAdLoaded = false.obs;
+class CommunityAd extends StatelessWidget {
+  CommunityAd({Key? key}) : super(key: key);
+  RxBool isAdLoaded = false.obs;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     NativeAd ad = NativeAd(
-//       adUnitId: AdManager.nativeAdUnitId,
-//       factoryId: 'listTile',
-//       request: AdRequest(),
-//       listener: NativeAdListener(
-//         onAdLoaded: (_) {
-//           // setState(() {
-//           isAdLoaded(true);
-//           // });
-//         },
-//         onAdFailedToLoad: (ad, error) {
-//           // Releases an ad resource when it fails to load
-//           ad.dispose();
+  // Future<InitializationStatus> _initGoogleMobileAds() {
+  //   // TODO: Initialize Google Mobile Ads SDK
+  //   return MobileAds.instance.initialize();
+  // }
 
-//           print('Ad load failed (code=${error.code} message=${error.message})');
-//         },
-//       ),
-//     );
+  @override
+  Widget build(BuildContext context) {
+    NativeAd ad = NativeAd(
+      adUnitId: AdManager.nativeAdUnitId,
+      factoryId: 'listTile',
+      request: AdRequest(),
+      listener: NativeAdListener(
+        onAdLoaded: (_) {
+          // setState(() {
+          isAdLoaded(true);
+          // });
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
 
-//     ad.load();
-//     return StatefulBuilder(builder: (context, setState) {
-//       return Obx(
-//         () => isAdLoaded.value
-//             ? Column(
-//                 children: [
-//                   // SizedBox(
-//                   //   height: 20.w,
-//                   // ),
-//                   Container(
-//                     padding: moduleBoxPadding(feedDateTime.fontSize!),
-//                     decoration: primaryBoxDecoration.copyWith(
-//                       boxShadow: [primaryBoxShadow],
-//                       color: primaryBoxDecoration.color,
-//                     ),
-//                     height: Platform.isAndroid ? 80.w : 110.w,
-//                     child: AdWidget(
-//                       ad: ad,
-//                     ),
-//                   ),
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    );
 
-//                   SizedBox(
-//                     height: 12.w,
-//                   ),
-//                 ],
-//               )
-//             : Container(),
-//       );
-//     });
-//   }
-// }
+    ad.load();
+    return StatefulBuilder(builder: (context, setState) {
+      return Obx(
+        () => isAdLoaded.value
+            ? Column(
+                children: [
+                  // SizedBox(
+                  //   height: 12.w,
+                  // ),
+                  Container(
+                    padding: moduleBoxPadding(feedDateTime.fontSize!),
+                    // decoration: primaryBoxDecoration.copyWith(
+                    //   boxShadow: [primaryBoxShadow],
+                    //   color: primaryBoxDecoration.color,
+                    // ),
+                    height: Platform.isAndroid ? 80.w : 110.w,
+                    child: AdWidget(
+                      ad: ad,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.w,
+                  ),
+                ],
+              )
+            : Container(),
+      );
+    });
+  }
+}
 
 // class CommunityAd extends StatefulWidget {
 //   @override
@@ -613,11 +548,18 @@ class WritingNewPost extends StatelessWidget {
                     flex: 1,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: GestureDetector(
+                      child: InkWell(
                           onTap: () {
+                            HapticFeedback.lightImpact();
                             Get.back();
                           },
-                          child: Image.asset('assets/icons/exit.png', width: 14.w, height: 14.w, color: yachtBlack)),
+                          child: Container(
+                              padding: EdgeInsets.all(8.w),
+                              width: 30.w,
+                              height: 30.w,
+                              // color: Colors.amber,
+                              child:
+                                  Image.asset('assets/icons/exit.png', width: 14.w, height: 14.w, color: yachtBlack))),
                     ),
                   ),
                   Text(
@@ -642,8 +584,8 @@ class WritingNewPost extends StatelessWidget {
                                 await _communityViewModel.uploadPost(_contentController.value.text);
                                 // print("just before reload");
                                 await _communityViewModel.reloadPost();
-                                Get.back();
                                 _communityViewModel.isUploadingNewPost(false);
+                                Get.back();
                                 yachtSnackBar("성공적으로 업로드 되었어요.");
                               }
                             },

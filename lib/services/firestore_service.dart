@@ -1224,7 +1224,7 @@ class FirestoreService extends GetxService {
   }
 
   // 코멘트 받아오기
-  Future getComments(PostModel post) async {
+  Future<List<CommentModel>> getComments(PostModel post) async {
     List<CommentModel> comments = [];
     await _firestoreService
         .collection('posts')
@@ -1238,6 +1238,21 @@ class FirestoreService extends GetxService {
       });
     });
     return comments;
+  }
+
+  // 코멘트 받아오기 스트림
+  Stream<List<CommentModel>> getCommentStream(PostModel post) {
+    List<CommentModel> comments = [];
+    var snap = _firestoreService
+        .collection('posts')
+        .doc(post.postId)
+        .collection('comments')
+        .orderBy('writtenDateTime', descending: false)
+        .snapshots();
+
+    return snap.map((snapshot) {
+      return snapshot.docs.map((e) => CommentModel.fromMap(e.data())).toList();
+    });
   }
 
   // 코멘트 삭제하기
@@ -1264,12 +1279,46 @@ class FirestoreService extends GetxService {
   }
 
   // 코멘트 좋아요 버튼
-  Future toggleLikeComment(PostModel post, String uid) async {
+  Future toggleLikeComment(PostModel post, CommentModel comment, String uid) async {
+    if (comment.likedBy == null) {
+      await _firestoreService
+          .collection('posts')
+          .doc(post.postId)
+          .collection('comments')
+          .doc(comment.commentId)
+          .update({
+        'likedBy': FieldValue.arrayUnion([uid])
+      });
+    } else if (comment.likedBy!.contains(uid)) {
+      print('to remove');
+      await _firestoreService
+          .collection('posts')
+          .doc(post.postId)
+          .collection('comments')
+          .doc(comment.commentId)
+          .update({
+        'likedBy': FieldValue.arrayRemove([uid])
+      });
+    } else {
+      await _firestoreService
+          .collection('posts')
+          .doc(post.postId)
+          .collection('comments')
+          .doc(comment.commentId)
+          .update({
+        'likedBy': FieldValue.arrayUnion([uid])
+      });
+    }
+  }
+
+  // 포스트 좋아요 버튼
+  Future toggleLikePost(PostModel post, String uid) async {
     if (post.likedBy == null) {
       await _firestoreService.collection('posts').doc(post.postId).update({
         'likedBy': FieldValue.arrayUnion([uid])
       });
     } else if (post.likedBy!.contains(uid)) {
+      print('to remove');
       await _firestoreService.collection('posts').doc(post.postId).update({
         'likedBy': FieldValue.arrayRemove([uid])
       });

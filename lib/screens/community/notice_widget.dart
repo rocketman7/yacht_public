@@ -9,19 +9,26 @@ import 'community_view_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'detail_post_view.dart';
+import 'new_feed_detail_widget.dart';
+import 'new_feed_widget_controller.dart';
 
-class NoticeWidget extends StatelessWidget {
+class NoticeWidget extends GetView {
   final CommunityViewModel communityViewModel;
   final PostModel post;
   NoticeWidget({Key? key, required this.communityViewModel, required this.post}) : super(key: key);
-  RxBool isTapping = false.obs;
+
+  final RxBool isTapping = false.obs;
+  @override
+  // TODO: implement controller
+  get controller => Get.put(NewFeedWidgetController(post), tag: post.postId);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapUp: (_) {
         print('tapup');
         isTapping(false);
-        Get.to(() => DetailPostView(post));
+        Get.to(() => NewFeedDetailWidget(post: post));
       },
       child: sectionBox(
           child: Container(
