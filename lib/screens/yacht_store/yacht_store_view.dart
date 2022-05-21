@@ -174,7 +174,7 @@ class YachtStoreView extends StatelessWidget {
                         mainAxisSpacing: 14.w,
                         childAspectRatio: 166.w / 229.w,
                       ),
-                      itemCount: yachtStoreController.goodsCodeListToShow.length,
+                      itemCount: yachtStoreController.giftishowList.length,
                       itemBuilder: (_, index) {
                         return GestureDetector(
                           onTap: () {

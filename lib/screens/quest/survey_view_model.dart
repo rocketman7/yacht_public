@@ -21,16 +21,23 @@ class SurveyViewModel extends GetxController {
   RxList userAnswerList = [].obs;
 
   RxBool isUpdating = false.obs;
-
+  RxBool isShowingTextInput = false.obs;
+  RxBool isGoodToGo = false.obs;
+  final FocusNode sentenceFocusNode = FocusNode();
   @override
   void onInit() {
-    isUpdating.listen((value) {
-      print(value);
-    });
+    // isUpdating.listen((value) {
+    //   print(value);
+    // });
     // TODO: implement onInit
     makeAnswerList();
 
     super.onInit();
+  }
+
+  void toggleInputVisibility() {
+    if (!isShowingTextInput.value) sentenceFocusNode.requestFocus();
+    isShowingTextInput(!isShowingTextInput.value);
   }
 
   void makeAnswerList() {
@@ -41,6 +48,11 @@ class SurveyViewModel extends GetxController {
           case "pickOne":
             answerList.add(null);
             break;
+
+          case "pickOrSentence":
+            answerList.add([]);
+            break;
+
           case "pickMany":
             answerList.add([]);
             break;

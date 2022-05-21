@@ -198,8 +198,8 @@ class StartupView extends GetView<StartupViewModel> {
                         readingContentViewModel.onInit();
                         break;
                       case 2:
-                        communityViewModel.getNotice();
-                        communityViewModel.getPost();
+                        // communityViewModel.getNotice();
+                        // communityViewModel.getPost();
                         break;
                       // case 3:
                       //   profileViewModel.scrollController.animateTo(

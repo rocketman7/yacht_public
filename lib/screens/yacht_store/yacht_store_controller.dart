@@ -33,15 +33,15 @@ class YachtStoreController extends GetxController {
   List<String> goodsCodeListToShow = [
     'G00001284065',
     'G00001273450',
-    'G00001273441',
+    'G00001330723',
     'G00001274315',
     'G00001274307',
     'G00000330882',
     'G00001171360',
     'G00001171341',
     'G00001171352',
-    'G00000265837',
-    'G00000265820',
+    'G00001311981',
+    'G00001311977',
     'G00001250930',
     'G00001250927',
     'G00001250931',
@@ -51,15 +51,17 @@ class YachtStoreController extends GetxController {
     'G00001283134',
     'G00001283132',
     'G00001272878',
-    'G00000440737',
-    'G00000450714',
-    'G00000450715',
-    'G00000440738',
-    'G00001273888',
-    'G00001273892',
-    'G00001273890',
-    'G00001273889',
-    'G00001284332',
+    'G00001304999',
+    'G00001305000',
+    'G00001311132',
+    'G00001311130',
+    'G00001305036',
+    'G00001311164',
+    'G00000501095',
+    'G00000501092',
+    'G00000501073',
+    'G00000501070',
+    'G00000501108',
   ];
 
   final TwilioFlutter twilioFlutter = TwilioFlutter(
@@ -90,6 +92,7 @@ class YachtStoreController extends GetxController {
     await getGoodsListFromFirestore();
     // 기프티쇼에서 받아오고 컬렉션에 넣고 indexing 하는 코드들
     // TODOS:  파이썬으로 옮겨야함s
+
     // giftishowList.forEach((element) {
     //   firestoreService.firestoreService.collection('yachtPointStore/yachtPointStore/giftishows').add(element.toMap());
     // });
