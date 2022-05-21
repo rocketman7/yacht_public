@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/admin_standards_model.dart';
@@ -62,7 +65,7 @@ class FirestoreService extends GetxService {
         .doc('leagueInfo')
         .get()
         .then((value) => LeagueAddressModel.fromMap(value.data()!));
-    // return LeagueAddressModel(openLeague: 'league006', leagueName: '3월 리그', leagueEndDateTime: '2022년 3월 30일까지');
+    // return LeagueAddressModel(openLeague: 'league008', leagueName: '3월 리그', leagueEndDateTime: '2022년 3월 30일까지');
   }
 
   // 휴일 리스트
@@ -408,6 +411,7 @@ class FirestoreService extends GetxService {
         .orderBy('index')
         .get()
         .then((snapshot) {
+      // print(snapshot.docs.length);
       return snapshot.docs.map((e) => GiftishowModel.fromMap(e.data())).toList();
     });
   }
@@ -552,6 +556,7 @@ class FirestoreService extends GetxService {
                   eachAllTimeQuest.data()['surveys'].toList().forEach((survey) {
                     surveys.add(SurveyQuestionModel.fromMap(survey));
                   });
+                  // log(surveys.toString());
                 }
                 allQuests.add(QuestModel.fromMap(eachAllTimeQuest.id, eachAllTimeQuest.data(),
                     invetAddresses.length == 0 ? null : invetAddresses, surveys.length == 0 ? null : surveys));
@@ -1170,6 +1175,7 @@ class FirestoreService extends GetxService {
     // print('docun length: ${temp.docs.length}');
 
     if (startAfterThisPostId == null) {
+      print('startAfterThisPostId');
       await getPostQuery.get().then((value) {
         value.docs.forEach((element) {
           print(element);
@@ -1177,6 +1183,7 @@ class FirestoreService extends GetxService {
         });
       });
     } else {
+      print('startAfterThisPostId is not null');
       await getPostQuery
           .startAfter([]
             ..add(Timestamp.fromMillisecondsSinceEpoch(startAfterThisPostId.toDate().toUtc().millisecondsSinceEpoch)))

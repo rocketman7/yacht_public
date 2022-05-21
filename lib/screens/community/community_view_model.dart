@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -43,7 +44,7 @@ class CommunityViewModel extends GetxController {
   final RxString replyToUserUid = "".obs; // 대댓글이 향하는 댓글 쓴 사람 UID
   final RxString replyToCommentId = "".obs; // 대댓글이 향하는 댓글 코멘트 ID
   final RxString hintText = "답글을 달아주세요".obs;
-
+  double screenHeight = ScreenUtil().screenHeight;
   RxBool isAdLoaded = false.obs;
   @override
   void onInit() async {
@@ -54,19 +55,24 @@ class CommunityViewModel extends GetxController {
     await getNotice();
     await getPost();
 
-    scrollController.addListener(() {
-      // print(scrollController.offset);
-      // print('max: ${scrollController.position.maxScrollExtent}');
-      // print(scrollController.position);
-      scrollController.offset < 0 ? offset(0) : offset(scrollController.offset);
-      if ((scrollController.offset > scrollController.position.maxScrollExtent - (ScreenUtil().screenHeight * .5)) &&
-          hasNextPosts.value) {
-        if (!isGettingPosts.value) {
-          print('maxextnt: ${scrollController.position.maxScrollExtent}');
-          print(scrollController.offset);
-          getPost();
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      // scrollController.animateTo(scrollController.position.maxScrollExtent,
+      //     duration: Duration(seconds: 2), curve: Curves.easeIn);
+
+      scrollController.addListener(() {
+        // print(scrollController.offset);
+        print('max: ${scrollController.position.maxScrollExtent}');
+        // print(scrollController.position);
+        scrollController.offset < 0 ? offset(0) : offset(scrollController.offset);
+        if ((scrollController.offset > scrollController.position.maxScrollExtent - (screenHeight * .5)) &&
+            hasNextPosts.value) {
+          if (!isGettingPosts.value) {
+            print('maxextnt: ${scrollController.position.maxScrollExtent}');
+            print(scrollController.offset);
+            getPost();
+          }
         }
-      }
+      });
     });
 
     // _createNativeAd();
@@ -100,6 +106,7 @@ class CommunityViewModel extends GetxController {
   }
 
   Future reloadPost() async {
+    print('reload started');
     if (isGettingPosts.value) return;
     isGettingPosts(true);
     hasNextPosts(true);
@@ -175,26 +182,31 @@ class CommunityViewModel extends GetxController {
   }
 
   Future getPost() async {
+    print('posts posts0: ${posts.length}');
     if (isGettingPosts.value) return;
     isGettingPosts(true);
     List<PostModel> newPosts = [];
+    print('newPosts posts0: ${newPosts.length}');
+    print('all posts0: ${posts.length}');
     newPosts.addAll(await _firestoreService.getPosts(postAtOnceLimit,
         startAfterThisPostId: posts.length > 0 ? posts.last.writtenDateTime : null));
-
+    print('newPosts posts1: ${newPosts.length}');
+    print('all posts1: ${posts.length}');
     // block list 포함된 거 삭제
     if (userModelRx.value!.blockList != null) {
       newPosts.removeWhere(
         (element) => userModelRx.value!.blockList!.contains(element.writerUid),
       );
     }
-
+    print('all posts2: ${posts.length}');
     posts.addAll(newPosts);
     // posts.sort((b, a) => a.isNotice.toString().compareTo(b.isNotice.toString()));
     if (newPosts.length < postAtOnceLimit) {
       // print('no more posts');
       hasNextPosts(false);
     }
-    // print('all posts: ${posts.length}');
+    print('newPosts posts3: ${newPosts.length}');
+    print('all posts3: ${posts.length}');
     isGettingPosts(false);
     update();
   }
@@ -264,6 +276,12 @@ class CommunityViewModel extends GetxController {
           await _firestoreService.uploadNewPost(_newPost);
         }
       });
+    } else {
+      // 포스트 모델로 변환
+      PostModel _newPost = convertFeedtoPostModel(content).copyWith(imageUrlList: imageUrlList);
+      // print(_newPost);
+      // 포스트 모델 업로드
+      await _firestoreService.uploadNewPost(_newPost);
     }
   }
 
