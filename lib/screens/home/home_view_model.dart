@@ -19,6 +19,7 @@ import 'package:yachtOne/services/push_notification_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
+import '../../models/survey_model.dart';
 import '../../services/adManager_service.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter/material.dart';
@@ -378,7 +379,6 @@ class HomeViewModel extends GetxController {
       if (element.selectMode == 'tutorial') {
         newQuests.add(element);
       } else if (element.selectMode == 'survey') {
-        // print('surv');
         newQuests.add(element);
       } else if (element.showHomeDateTime.toDate().isBefore(now) && element.liveStartDateTime.toDate().isAfter(now)) {
         // showHome ~ liveStart: 새로나온 퀘스트
@@ -393,10 +393,12 @@ class HomeViewModel extends GetxController {
         // print('result: ${element.results}');
         // print('result: ${element}');
         resultQuests.add(element);
-      } else {
-        // print("포함 안 된 quest: $element");
-      }
+      } else {}
     });
+
+    // 서베이 테스트용
+    // newQuests.add(userSurveyQuestTemplate);
+    // print("포함 안 된 quest: $element");
 
     newQuests.sort((a, b) => (a.questEndDateTime ?? Timestamp.fromDate(DateTime.now()))
         .compareTo(b.questEndDateTime ?? Timestamp.fromDate(DateTime.now())));

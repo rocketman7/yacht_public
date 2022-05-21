@@ -42,8 +42,9 @@ class NewLiveController extends GetxController {
     ever(livePricesOfThisQuest.first, (_) {
       print('ever triggered');
       Future.delayed(Duration(milliseconds: 300)).then((_) {
+        // if (investmentModelLength > 1) sortLivePricesOfThisQuest();
         getWinnerIndex();
-        if (investmentModelLength > 1) sortLivePricesOfThisQuest();
+        print('winnerIndex: $winnerIndex');
       });
     });
     // livePricesOfThisQuest.listen((p0) {

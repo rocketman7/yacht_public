@@ -21,11 +21,12 @@ class SurveyView extends GetView<SurveyViewModel> {
   // TODO: implement controller
   SurveyViewModel get controller => Get.put(SurveyViewModel(surveyQuestionPageModel: questModel.surveys!));
 
-  @override
   // TODO: implement controller
   // SurveyViewModel get controller => Get.put(SurveyViewModel());
   RxInt pageNumber = 0.obs;
   RxInt scoreSum = 0.obs;
+  final TextEditingController sentenceController = TextEditingController();
+  // final FocusNode sentenceFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -79,132 +80,282 @@ class SurveyView extends GetView<SurveyViewModel> {
                   ),
                 )
               : Expanded(
-                  child: ListView(children: [
-                    if (questModel.surveys![index].answers != null) ...{
-                      // 선지가 있고
-                      if (questModel.surveys![index].answerType == 'pickOne') ...{
-                        // 택1인 경우
-                        ...List.generate(questModel.surveys![index].answers!.length, (answerIndex) {
-                          return Column(
-                            children: [
-                              if (answerIndex == 0)
-                                SizedBox(
-                                  height: 20.w,
-                                  // color: yachtBlack.withOpacity(.4),
-                                ),
-                              GestureDetector(
-                                onTap: () async {
-                                  HapticFeedback.lightImpact();
-                                  controller.answerList[questModel.surveys![index].answersId!] = answerIndex;
+                  child: Scrollbar(
+                    child: ListView(children: [
+                      if (questModel.surveys![index].answers != null) ...{
+                        // 선지가 있고
+                        if (questModel.surveys![index].answerType == 'pickOne') ...{
+                          // 택1인 경우
+                          ...List.generate(questModel.surveys![index].answers!.length, (answerIndex) {
+                            return Column(
+                              children: [
+                                if (answerIndex == 0)
+                                  SizedBox(
+                                    height: 20.w,
+                                    // color: yachtBlack.withOpacity(.4),
+                                  ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    HapticFeedback.lightImpact();
+                                    controller.answerList[questModel.surveys![index].answersId!] = answerIndex;
 
-                                  if (questModel.surveys![pageController.page!.round()].pageType == 'quiz') {
-                                    // 유저가 지금 페이지 질문에 응답한 답
-                                    int userAnswerToThisPage = controller
-                                        .answerList[questModel.surveys![pageController.page!.round()].answersId!];
-                                    print(userAnswerToThisPage);
-                                    print(questModel.surveys![pageController.page!.round()].rightAnswer);
-                                    if (userAnswerToThisPage ==
-                                        questModel.surveys![pageController.page!.round()].rightAnswer)
-                                      scoreSum(
-                                          scoreSum.value += questModel.surveys![pageController.page!.round()].score!);
-                                  }
-
-                                  controller.update();
-                                  Future.delayed(Duration(milliseconds: 350)).then((value) {
-                                    print(controller.answerList);
-                                    if (questModel.surveys![pageController.page!.round()].redirect ?? false) {
+                                    if (questModel.surveys![pageController.page!.round()].pageType == 'quiz') {
                                       // 유저가 지금 페이지 질문에 응답한 답
                                       int userAnswerToThisPage = controller
                                           .answerList[questModel.surveys![pageController.page!.round()].answersId!];
-                                      print('userAnswerToThisPage: $userAnswerToThisPage');
-                                      // redirect 해야하는 answerId
-                                      print(questModel.surveys![pageController.page!.round()]);
-                                      int answerIdRedirectTo = questModel.surveys![pageController.page!.round()]
-                                          .redirectQuestionIndex![userAnswerToThisPage];
-                                      print('answerIdRedirectTo: $answerIdRedirectTo');
-                                      int pageNumberToGo = questModel.surveys!
-                                          .indexWhere((element) => element.answersId == answerIdRedirectTo);
-
-                                      pageController.jumpToPage(pageNumberToGo);
-
-                                      //  (duration: Duration(milliseconds: 300), curve: Curves.easeIn);
-                                    } else {
-                                      pageController.nextPage(
-                                          duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+                                      print(userAnswerToThisPage);
+                                      print(questModel.surveys![pageController.page!.round()].rightAnswer);
+                                      if (userAnswerToThisPage ==
+                                          questModel.surveys![pageController.page!.round()].rightAnswer)
+                                        scoreSum(
+                                            scoreSum.value += questModel.surveys![pageController.page!.round()].score!);
                                     }
-                                  });
-                                },
-                                child: Container(
-                                  // clipBehavior: Clip.hardEdge,
-                                  child: GetBuilder<SurveyViewModel>(builder: (controller) {
-                                    return Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 28.w),
-                                      child: AnimatedContainer(
-                                          duration: Duration(milliseconds: 300),
-                                          height: 56.w,
-                                          decoration: BoxDecoration(
-                                              color: controller.answerList[questModel.surveys![index].answersId!] ==
-                                                      answerIndex
-                                                  ? yachtViolet
-                                                  : white,
-                                              borderRadius: BorderRadius.circular(12.w),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: yachtShadow,
-                                                  blurRadius: 8.w,
-                                                  spreadRadius: 1.w,
-                                                )
-                                              ]),
-                                          padding: primaryHorizontalPadding,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Expanded(
+
+                                    controller.update();
+                                    Future.delayed(Duration(milliseconds: 350)).then((value) {
+                                      print(controller.answerList);
+                                      if (questModel.surveys![pageController.page!.round()].redirect ?? false) {
+                                        // 유저가 지금 페이지 질문에 응답한 답
+                                        int userAnswerToThisPage = controller
+                                            .answerList[questModel.surveys![pageController.page!.round()].answersId!];
+                                        print('userAnswerToThisPage: $userAnswerToThisPage');
+                                        // redirect 해야하는 answerId
+                                        print(questModel.surveys![pageController.page!.round()]);
+                                        int answerIdRedirectTo = questModel.surveys![pageController.page!.round()]
+                                            .redirectQuestionIndex![userAnswerToThisPage];
+                                        print('answerIdRedirectTo: $answerIdRedirectTo');
+                                        int pageNumberToGo = questModel.surveys!
+                                            .indexWhere((element) => element.answersId == answerIdRedirectTo);
+
+                                        pageController.jumpToPage(pageNumberToGo);
+
+                                        //  (duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+                                      } else {
+                                        pageController.nextPage(
+                                            duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+                                      }
+                                    });
+                                  },
+                                  child: Container(
+                                    // clipBehavior: Clip.hardEdge,
+                                    child: GetBuilder<SurveyViewModel>(builder: (controller) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 28.w),
+                                        child: AnimatedContainer(
+                                            duration: Duration(milliseconds: 300),
+                                            height: 56.w,
+                                            decoration: BoxDecoration(
+                                                color: controller.answerList[questModel.surveys![index].answersId!] ==
+                                                        answerIndex
+                                                    ? yachtViolet
+                                                    : white,
+                                                borderRadius: BorderRadius.circular(12.w),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: yachtShadow,
+                                                    blurRadius: 8.w,
+                                                    spreadRadius: 1.w,
+                                                  )
+                                                ]),
+                                            padding: primaryHorizontalPadding,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    questModel.surveys![index].answers![answerIndex],
+                                                    style: surveySelection.copyWith(
+                                                        color: controller.answerList[
+                                                                    questModel.surveys![index].answersId!] ==
+                                                                answerIndex
+                                                            ? buttonNormal
+                                                            : surveySelection.color),
+                                                    maxLines: 3,
+                                                  ),
+                                                ),
+                                              ],
+                                            )),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 14.w,
+                                ),
+                              ],
+                            );
+                          }),
+                        } else if (questModel.surveys![index].answerType == 'pickMany') ...{
+                          // 택1인 경우
+                          ...List.generate(questModel.surveys![index].answers!.length, (answerIndex) {
+                            return Column(
+                              children: [
+                                if (answerIndex == 0)
+                                  SizedBox(
+                                    height: 20.w,
+                                    // color: yachtBlack.withOpacity(.4),
+                                  ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    HapticFeedback.lightImpact();
+                                    controller.answerList[questModel.surveys![index].answersId!].contains(answerIndex)
+                                        ? controller.answerList[questModel.surveys![index].answersId!]
+                                            .remove(answerIndex)
+                                        : controller.answerList[questModel.surveys![index].answersId!].add(answerIndex);
+                                    controller.update();
+                                    print(controller.answerList);
+                                    if (controller.answerList[questModel.surveys![index].answersId!].length > 0) {
+                                      controller.isGoodToGo(true);
+                                    } else {
+                                      controller.isGoodToGo(false);
+                                    }
+                                  },
+                                  child: Container(
+                                    // clipBehavior: Clip.hardEdge,
+                                    child: GetBuilder<SurveyViewModel>(builder: (controller) {
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 28.w),
+                                        child: AnimatedContainer(
+                                            duration: Duration(milliseconds: 300),
+                                            height: 56.w,
+                                            decoration: BoxDecoration(
+                                                color: controller.answerList[questModel.surveys![index].answersId!]
+                                                        .contains(answerIndex)
+                                                    ? yachtViolet.withOpacity(.7)
+                                                    : white,
+                                                borderRadius: BorderRadius.circular(12.w),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: yachtShadow,
+                                                    blurRadius: 8.w,
+                                                    spreadRadius: 1.w,
+                                                  )
+                                                ]),
+                                            padding: primaryHorizontalPadding,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    questModel.surveys![index].answers![answerIndex],
+                                                    style: surveySelection.copyWith(
+                                                        color: controller
+                                                                .answerList[questModel.surveys![index].answersId!]
+                                                                .contains(answerIndex)
+                                                            ? buttonNormal
+                                                            : surveySelection.color),
+                                                    maxLines: 3,
+                                                  ),
+                                                ),
+                                              ],
+                                            )),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 14.w,
+                                ),
+                              ],
+                            );
+                          }),
+                        } else if (questModel.surveys![index].answerType == 'pickManyCircles') ...{
+                          Padding(
+                              padding: primaryHorizontalPadding,
+                              child: Wrap(
+                                clipBehavior: Clip.none,
+                                spacing: 12.w,
+                                runSpacing: 12.w,
+                                alignment: WrapAlignment.center,
+                                children: List.generate(
+                                    questModel.surveys![index].answers!.length,
+                                    (answerIndex) => GetBuilder<SurveyViewModel>(builder: (controller) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              HapticFeedback.lightImpact();
+                                              controller.answerList[questModel.surveys![index].answersId!]
+                                                      .contains(answerIndex)
+                                                  ? controller.answerList[questModel.surveys![index].answersId!]
+                                                      .remove(answerIndex)
+                                                  : controller.answerList[questModel.surveys![index].answersId!]
+                                                      .add(answerIndex);
+                                              controller.update();
+
+                                              print(controller.answerList);
+                                            },
+                                            child: AnimatedContainer(
+                                              duration: Duration(milliseconds: 300),
+                                              height: 80.w,
+                                              width: 80.w,
+                                              clipBehavior: Clip.hardEdge,
+                                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: controller.answerList[questModel.surveys![index].answersId!]
+                                                        .contains(answerIndex)
+                                                    ? yachtViolet
+                                                    : buttonNormal,
+                                              ),
+                                              child: Center(
                                                 child: Text(
                                                   questModel.surveys![index].answers![answerIndex],
-                                                  style: surveySelection.copyWith(
-                                                      color: controller
-                                                                  .answerList[questModel.surveys![index].answersId!] ==
-                                                              answerIndex
-                                                          ? buttonNormal
-                                                          : surveySelection.color),
-                                                  maxLines: 3,
+                                                  style: controller.answerList[questModel.surveys![index].answersId!]
+                                                          .contains(answerIndex)
+                                                      ? pickManyCircleName.copyWith(color: buttonNormal)
+                                                      : pickManyCircleName,
+                                                  maxLines: 2,
                                                 ),
                                               ),
-                                            ],
-                                          )),
-                                    );
-                                  }),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 14.w,
-                              ),
-                            ],
-                          );
-                        }),
-                      } else if (questModel.surveys![index].answerType == 'pickMany') ...{
-                        // 택1인 경우
-                        ...List.generate(questModel.surveys![index].answers!.length, (answerIndex) {
-                          return Column(
-                            children: [
-                              if (answerIndex == 0)
-                                SizedBox(
-                                  height: 20.w,
-                                  // color: yachtBlack.withOpacity(.4),
-                                ),
-                              GestureDetector(
-                                onTap: () async {
-                                  HapticFeedback.lightImpact();
-                                  controller.answerList[questModel.surveys![index].answersId!].contains(answerIndex)
-                                      ? controller.answerList[questModel.surveys![index].answersId!].remove(answerIndex)
-                                      : controller.answerList[questModel.surveys![index].answersId!].add(answerIndex);
-                                  controller.update();
-                                  print(controller.answerList);
-                                },
-                                child: Container(
-                                  // clipBehavior: Clip.hardEdge,
+                                            ),
+                                          );
+                                        })),
+                              )),
+                        } else if (questModel.surveys![index].answerType == 'pickOrSentence') ...{
+                          // 다수 선택 + 주관식 입력인 경우
+                          ...List.generate(questModel.surveys![index].answers!.length, (answerIndex) {
+                            return Column(
+                              children: [
+                                if (answerIndex == 0)
+                                  SizedBox(
+                                    height: 20.w,
+                                    // color: yachtBlack.withOpacity(.4),
+                                  ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    HapticFeedback.lightImpact();
+                                    if (answerIndex == questModel.surveys![index].answers!.length - 1) {
+                                      print("기타");
+                                      controller.answerList[questModel.surveys![index].answersId!].contains(answerIndex)
+                                          ? controller.answerList[questModel.surveys![index].answersId!]
+                                              .remove(answerIndex)
+                                          : controller.answerList[questModel.surveys![index].answersId!]
+                                              .add(answerIndex);
+                                      controller.toggleInputVisibility();
+                                      controller.update();
+                                    } else {
+                                      controller.answerList[questModel.surveys![index].answersId!].contains(answerIndex)
+                                          ? controller.answerList[questModel.surveys![index].answersId!]
+                                              .remove(answerIndex)
+                                          : controller.answerList[questModel.surveys![index].answersId!]
+                                              .add(answerIndex);
+                                      controller.update();
+                                    }
+                                    if (controller.answerList[questModel.surveys![index].answersId!].length > 0) {
+                                      // if (controller.answerList[questModel.surveys![index].answersId!]
+                                      //     .contains(questModel.surveys![index].answers!.length - 1)) {
+                                      //   if (sentenceController.text.length > 0) {
+                                      //     controller.isGoodToGo(true);
+                                      //   }
+                                      // } else {
+                                      controller.isGoodToGo(true);
+                                      // }
+                                    } else {
+                                      controller.isGoodToGo(false);
+                                    }
+                                    print(controller.answerList);
+                                  },
                                   child: GetBuilder<SurveyViewModel>(builder: (controller) {
                                     return Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 28.w),
@@ -246,66 +397,42 @@ class SurveyView extends GetView<SurveyViewModel> {
                                     );
                                   }),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 14.w,
-                              ),
-                            ],
-                          );
-                        }),
-                      } else if (questModel.surveys![index].answerType == 'pickManyCircles') ...{
-                        Padding(
-                            padding: primaryHorizontalPadding,
-                            child: Wrap(
-                              clipBehavior: Clip.none,
-                              spacing: 12.w,
-                              runSpacing: 12.w,
-                              alignment: WrapAlignment.center,
-                              children: List.generate(
-                                  questModel.surveys![index].answers!.length,
-                                  (answerIndex) => GetBuilder<SurveyViewModel>(builder: (controller) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            HapticFeedback.lightImpact();
-                                            controller.answerList[questModel.surveys![index].answersId!]
-                                                    .contains(answerIndex)
-                                                ? controller.answerList[questModel.surveys![index].answersId!]
-                                                    .remove(answerIndex)
-                                                : controller.answerList[questModel.surveys![index].answersId!]
-                                                    .add(answerIndex);
-                                            controller.update();
-                                            print(controller.answerList);
-                                          },
-                                          child: AnimatedContainer(
-                                            duration: Duration(milliseconds: 300),
-                                            height: 80.w,
-                                            width: 80.w,
-                                            clipBehavior: Clip.hardEdge,
-                                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: controller.answerList[questModel.surveys![index].answersId!]
-                                                      .contains(answerIndex)
-                                                  ? yachtViolet
-                                                  : buttonNormal,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                questModel.surveys![index].answers![answerIndex],
-                                                style: controller.answerList[questModel.surveys![index].answersId!]
-                                                        .contains(answerIndex)
-                                                    ? pickManyCircleName.copyWith(color: buttonNormal)
-                                                    : pickManyCircleName,
-                                                maxLines: 2,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      })),
-                            )),
+                                (answerIndex == questModel.surveys![index].answers!.length - 1)
+                                    ? Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 28.w),
+                                        child: Obx(
+                                          () => Visibility(
+                                              visible: controller.isShowingTextInput.value,
+                                              child: TextFormField(
+                                                maxLines: null,
+                                                controller: sentenceController,
+                                                focusNode: controller.sentenceFocusNode,
+                                                onChanged: (val) {
+                                                  if (val.length > 0) {
+                                                    controller.isGoodToGo(true);
+                                                  } else {
+                                                    controller.isGoodToGo(false);
+                                                  }
+                                                },
+                                                decoration: InputDecoration(
+                                                    contentPadding: EdgeInsets.symmetric(
+                                                      horizontal: 4.w,
+                                                      vertical: 0,
+                                                    ),
+                                                    hintText: "주관식 응답"),
+                                              )),
+                                        ))
+                                    : SizedBox.shrink(),
+                                SizedBox(
+                                  height: 14.w,
+                                ),
+                              ],
+                            );
+                          }),
+                        }
                       }
-                    }
-                  ]),
+                    ]),
+                  ),
                 )
         ],
       ),
@@ -500,65 +627,101 @@ class SurveyView extends GetView<SurveyViewModel> {
                               : (questModel.surveys![pageController.page!.round()].answerType == 'pickMany' ||
                                       questModel.surveys![pageController.page!.round()].answerType ==
                                           'pickManyCircles' ||
+                                      questModel.surveys![pageController.page!.round()].answerType ==
+                                          'pickOrSentence' ||
                                       questModel.surveys![pageController.page!.round()].answerType == 'none')
                                   ? Row(children: [
-                                      // InkWell(
-                                      //   onTap: () {
-                                      //     pageController.previousPage(
-                                      //         duration: Duration(milliseconds: 300), curve: Curves.easeIn);
-                                      //   },
-                                      //   child: textContainerButtonWithOptions(
-                                      //       height: 56.w,
-                                      //       text: "이전",
-                                      //       isDarkBackground: false,
-                                      //       padding: EdgeInsets.symmetric(horizontal: 32.w)),
-                                      // ),
-                                      // SizedBox(width: 10.w),
                                       Expanded(
                                         child: InkWell(
                                           onTap: () async {
-                                            // if (questModel.surveys![pageNumber.value].answerType != 'none') {
-                                            //   controller.userAnswerList.replaceRange(
-                                            //       questModel.surveys![pageNumber.value].answersId!,
-                                            //       questModel.surveys![pageNumber.value].answersId! + 2,
-                                            //       controller.answerList[questModel.surveys![pageNumber.value].answersId!]);
-                                            // }
-                                            if (questModel.surveys![pageController.page!.round()].isFinal != null &&
-                                                questModel.surveys![pageController.page!.round()].isFinal!) {
-                                              await controller.updateUserSurvey(questModel);
-                                              await controller.updateQuestParticipationReward(questModel);
-                                              todayQuests = null;
-                                              await Get.find<HomeViewModel>().getAllQuests();
-                                            }
+                                            if (questModel.surveys![pageController.page!.round()].pageType ==
+                                                "instruction") controller.isGoodToGo(true);
+                                            // print(controller.isGoodToGo.value);
+                                            // print(controller.isUpdating.value);
+                                            // print(questModel.surveys![pageController.page!.round()].isFinal);
+                                            // print(questModel.surveys!.length == pageController.page! + 1);
+                                            // 버튼을 활성화 해도 되는 조건에서 시작
+                                            print('tap 0');
+                                            if (controller.isGoodToGo.value && !controller.isUpdating.value) {
+                                              // 바로 버튼을 연타로 누를 수 없도록 조치
+                                              print('tap 1');
+                                              controller.isGoodToGo(false);
+                                              controller.isUpdating(true);
+                                              if (questModel.surveys![pageController.page!.round()].isFinal != null &&
+                                                  questModel.surveys![pageController.page!.round()].isFinal!) {
+                                                if (questModel.surveys![pageController.page!.round()].answerType ==
+                                                    'pickOrSentence') {
+                                                  controller.answerList[
+                                                          questModel.surveys![pageController.page!.round()].answersId!]
+                                                      .add(sentenceController.text);
+                                                  controller.sentenceFocusNode.unfocus();
+                                                  // sentenceController.clear();
+                                                  // controller.isShowingTextInput(false);
+                                                }
 
-                                            print(controller.answerList);
-                                            if (questModel.surveys![pageController.page!.round()].redirect ?? false) {
-                                              // 유저가 지금 페이지 질문에 응답한 답
-                                              int userAnswerToThisPage = controller.answerList[
-                                                  questModel.surveys![pageController.page!.round()].answersId!];
-                                              print('userAnswerToThisPage: $userAnswerToThisPage');
-                                              // redirect 해야하는 answerId
-                                              print(questModel.surveys![pageController.page!.round()]);
-                                              int answerIdRedirectTo = questModel.surveys![pageController.page!.round()]
-                                                  .redirectQuestionIndex![userAnswerToThisPage];
-                                              print('answerIdRedirectTo: $answerIdRedirectTo');
-                                              int pageNumberToGo = questModel.surveys!
-                                                  .indexWhere((element) => element.answersId == answerIdRedirectTo);
+                                                await controller.updateUserSurvey(questModel);
+                                                await controller.updateQuestParticipationReward(questModel);
+                                                todayQuests = null;
+                                                await Get.find<HomeViewModel>().getAllQuests();
+                                                controller.isUpdating(false);
+                                              }
 
-                                              pageController.jumpToPage(pageNumberToGo);
+                                              print(controller.answerList);
+                                              controller.isGoodToGo(true);
+                                              controller.isUpdating(false);
+                                              if (questModel.surveys![pageController.page!.round()].redirect ?? false) {
+                                                // 유저가 지금 페이지 질문에 응답한 답
 
-                                              //  (duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+                                                int userAnswerToThisPage = controller.answerList[
+                                                    questModel.surveys![pageController.page!.round()].answersId!];
+                                                print('userAnswerToThisPage: $userAnswerToThisPage');
+                                                // redirect 해야하는 answerId
+                                                print(questModel.surveys![pageController.page!.round()]);
+                                                int answerIdRedirectTo = questModel
+                                                    .surveys![pageController.page!.round()]
+                                                    .redirectQuestionIndex![userAnswerToThisPage];
+                                                print('answerIdRedirectTo: $answerIdRedirectTo');
+                                                int pageNumberToGo = questModel.surveys!
+                                                    .indexWhere((element) => element.answersId == answerIdRedirectTo);
+
+                                                pageController.jumpToPage(pageNumberToGo);
+                                                //  (duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+                                              } else {
+                                                print('here');
+                                                if (questModel.surveys![pageController.page!.round()].answerType ==
+                                                    'pickOrSentence') {
+                                                  controller.answerList[
+                                                          questModel.surveys![pageController.page!.round()].answersId!]
+                                                      .add(sentenceController.text);
+                                                  sentenceController.clear();
+                                                  controller.isShowingTextInput(false);
+                                                }
+                                                if (questModel.surveys!.length == pageController.page! + 1)
+                                                  // print();
+                                                  Get.back();
+                                                else
+                                                  pageController.nextPage(
+                                                      duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+                                              }
+                                              controller.isGoodToGo(false);
+                                              controller.isUpdating(false);
                                             } else {
-                                              pageController.nextPage(
-                                                  duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+                                              print('processing');
                                             }
                                           },
-                                          child: textContainerButtonWithOptions(
-                                            fontSize: 18.w,
-                                            height: 56.w,
-                                            text: questModel.surveys![pageController.page!.round()].instruction ??
-                                                "선택 완료",
-                                            isDarkBackground: true,
+                                          child: Obx(
+                                            () => conditionalButton(
+                                              fontSize: 18.w,
+                                              height: 56.w,
+                                              text: controller.isUpdating.value
+                                                  ? "잠시만 기다려주세요"
+                                                  : questModel.surveys![pageController.page!.round()].instruction ??
+                                                      "선택 완료",
+                                              isEnable: (questModel.surveys![pageController.page!.round()].pageType ==
+                                                      "instruction")
+                                                  ? true
+                                                  : controller.isGoodToGo.value,
+                                            ),
                                           ),
                                         ),
                                       ),

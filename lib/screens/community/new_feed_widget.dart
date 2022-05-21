@@ -96,6 +96,24 @@ class NewFeedWidget extends GetView {
             padding: primaryHorizontalPadding,
             child: InkWell(
               onTap: () {
+                _mixpanelService.mixpanel.track('Feed Detail', properties: {
+                  'Post ID': post.postId,
+                  'Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
+                  'Post Edit DateTime': post.editedDateTime == null
+                      ? post.writtenDateTime.toDate().toIso8601String()
+                      : post.editedDateTime.toDate().toIso8601String(),
+                  'Post Title': post.title ?? "",
+                  'Is Pro Post': post.isPro,
+                  'Is Notice': post.isNotice,
+                  'Post Writer Uid': post.writerUid,
+                  'Post Writer User Name': post.writerUserName,
+                  'Post Writer Exp': post.writerExp,
+                  'Post Has Image': post.imageUrlList == null
+                      ? false
+                      : post.imageUrlList!.length > 0
+                          ? true
+                          : false,
+                });
                 HapticFeedback.lightImpact();
                 Get.to(() => NewFeedDetailWidget(
                       post: controller.postRx.value!,
@@ -130,7 +148,7 @@ class NewFeedWidget extends GetView {
 }
 
 class LikeButtonWidget extends StatelessWidget {
-  const LikeButtonWidget({
+  LikeButtonWidget({
     Key? key,
     required this.post,
     required this.communityViewModel,
@@ -140,6 +158,7 @@ class LikeButtonWidget extends StatelessWidget {
   final PostModel post;
   final CommunityViewModel communityViewModel;
   final NewFeedWidgetController controller;
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -149,6 +168,24 @@ class LikeButtonWidget extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
+                _mixpanelService.mixpanel.track('Feed Detail', properties: {
+                  'Post ID': post.postId,
+                  'Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
+                  'Post Edit DateTime': post.editedDateTime == null
+                      ? post.writtenDateTime.toDate().toIso8601String()
+                      : post.editedDateTime.toDate().toIso8601String(),
+                  'Post Title': post.title ?? "",
+                  'Is Pro Post': post.isPro,
+                  'Is Notice': post.isNotice,
+                  'Post Writer Uid': post.writerUid,
+                  'Post Writer User Name': post.writerUserName,
+                  'Post Writer Exp': post.writerExp,
+                  'Post Has Image': post.imageUrlList == null
+                      ? false
+                      : post.imageUrlList!.length > 0
+                          ? true
+                          : false,
+                });
                 HapticFeedback.lightImpact();
                 // HapticFeedback.selectionClick();
                 Get.to(() => NewFeedDetailWidget(
@@ -207,7 +244,7 @@ class LikeButtonWidget extends StatelessWidget {
 }
 
 class CommentList extends StatelessWidget {
-  const CommentList({
+  CommentList({
     Key? key,
     required this.communityViewModel,
     required this.post,
@@ -221,6 +258,7 @@ class CommentList extends StatelessWidget {
   final int maxCommentLength;
   final NewFeedWidgetController controller;
   final bool isDetailComment;
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<CommentModel>>(
@@ -399,6 +437,24 @@ class CommentList extends StatelessWidget {
               if (comments.length > maxCommentLength)
                 GestureDetector(
                   onTap: () {
+                    _mixpanelService.mixpanel.track('Feed Detail', properties: {
+                      'Post ID': post.postId,
+                      'Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
+                      'Post Edit DateTime': post.editedDateTime == null
+                          ? post.writtenDateTime.toDate().toIso8601String()
+                          : post.editedDateTime.toDate().toIso8601String(),
+                      'Post Title': post.title ?? "",
+                      'Is Pro Post': post.isPro,
+                      'Is Notice': post.isNotice,
+                      'Post Writer Uid': post.writerUid,
+                      'Post Writer User Name': post.writerUserName,
+                      'Post Writer Exp': post.writerExp,
+                      'Post Has Image': post.imageUrlList == null
+                          ? false
+                          : post.imageUrlList!.length > 0
+                              ? true
+                              : false,
+                    });
                     Get.to(() => NewFeedDetailWidget(
                           post: controller.postRx.value!,
                         ));
@@ -435,6 +491,7 @@ class FeedContentWidget extends StatelessWidget {
     return textPainter.didExceedMaxLines;
   }
 
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     return Obx(() => GestureDetector(
@@ -444,6 +501,24 @@ class FeedContentWidget extends StatelessWidget {
             if (!currentFocus.hasPrimaryFocus) {
               currentFocus.unfocus();
             }
+            _mixpanelService.mixpanel.track('Feed Detail', properties: {
+              'Post ID': post.postId,
+              'Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
+              'Post Edit DateTime': post.editedDateTime == null
+                  ? post.writtenDateTime.toDate().toIso8601String()
+                  : post.editedDateTime.toDate().toIso8601String(),
+              'Post Title': post.title ?? "",
+              'Is Pro Post': post.isPro,
+              'Is Notice': post.isNotice,
+              'Post Writer Uid': post.writerUid,
+              'Post Writer User Name': post.writerUserName,
+              'Post Writer Exp': post.writerExp,
+              'Post Has Image': post.imageUrlList == null
+                  ? false
+                  : post.imageUrlList!.length > 0
+                      ? true
+                      : false,
+            });
             Get.to(() => NewFeedDetailWidget(post: post));
           },
           child: Stack(
@@ -492,6 +567,24 @@ class FeedContentWidget extends StatelessWidget {
                         feedContent,
                         maxLines: 10,
                       )) {
+                        _mixpanelService.mixpanel.track('Feed Detail', properties: {
+                          'Post ID': post.postId,
+                          'Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
+                          'Post Edit DateTime': post.editedDateTime == null
+                              ? post.writtenDateTime.toDate().toIso8601String()
+                              : post.editedDateTime.toDate().toIso8601String(),
+                          'Post Title': post.title ?? "",
+                          'Is Pro Post': post.isPro,
+                          'Is Notice': post.isNotice,
+                          'Post Writer Uid': post.writerUid,
+                          'Post Writer User Name': post.writerUserName,
+                          'Post Writer Exp': post.writerExp,
+                          'Post Has Image': post.imageUrlList == null
+                              ? false
+                              : post.imageUrlList!.length > 0
+                                  ? true
+                                  : false,
+                        });
                         Get.to(() => NewFeedDetailWidget(post: post));
                         print("TOO LONG");
                       } else {

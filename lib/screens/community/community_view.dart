@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -32,7 +33,7 @@ class CommunityView extends GetView<CommunityViewModel> {
   // ScrollController _scrollController = ScrollController();
 
   final CommunityViewModel _communityViewModel = Get.put(CommunityViewModel());
-
+  ScrollController scrollController = ScrollController();
   // void _onLoading() async {
   //   // monitor network fetch
   //   // if failed,use loadFailed(),if no data return,use LoadNodata()
@@ -50,6 +51,19 @@ class CommunityView extends GetView<CommunityViewModel> {
     //     // offset obs 값에 scroll controller offset 넣어주기
     //     // _scrollController.offset < 0 ? offset(0) : offset(_scrollController.offset);
     //     print(_scrollController.offset);
+    //   });
+    // });
+    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    //   scrollController.addListener(() {
+    //     // print(scrollController.offset);
+    //     print('max: ${scrollController.position.maxScrollExtent}');
+    //     print('current: ${scrollController.offset}');
+    //     if (scrollController.offset >
+    //         scrollController.position.maxScrollExtent - (_communityViewModel.screenHeight * .5)) {
+    //       // print('maxextnt: ${scrollController.position.maxScrollExtent}');
+    //       // print(scrollController.offset);
+    //       print('almost end');
+    //     }
     //   });
     // });
 
@@ -108,53 +122,103 @@ class CommunityView extends GetView<CommunityViewModel> {
                       buttonPosition: 'right-center'),
                 ),
               ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  Obx(
-                    () => ListView.builder(
-                        padding: EdgeInsets.zero,
-                        // clipBehavior: Clip.none,
-                        // controller: _scrollController,
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: _communityViewModel.posts.length,
-                        itemBuilder: (_, index) {
-                          return Column(
-                            children: [
-                              index == 0
-                                  ? Column(
-                                      children: [
-                                        // SizedBox(
-                                        //   height: 20.w,
-                                        // ),
-                                        _communityViewModel.recentNotice.length > 0
-                                            ? Column(
-                                                children: [
-                                                  NoticeWidget(
-                                                      communityViewModel: _communityViewModel,
-                                                      post: _communityViewModel.recentNotice[0]),
-                                                  SizedBox(
-                                                    height: 12.w,
-                                                  )
-                                                ],
+              Obx(
+                () => SliverList(
+                    // delegate: SliverChildListDelegate([
+                    //   SizedBox(height: 30.w),
+                    //   Obx(
+                    //     ()=>
+                    delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    return Obx(
+                      () => Column(
+                        children: [
+                          index == 0
+                              ? Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 20.w,
+                                    ),
+                                    _communityViewModel.recentNotice.length > 0
+                                        ? Column(
+                                            children: [
+                                              NoticeWidget(
+                                                  communityViewModel: _communityViewModel,
+                                                  post: _communityViewModel.recentNotice[0]),
+                                              SizedBox(
+                                                height: 12.w,
                                               )
-                                            : Container(),
-                                      ],
-                                    )
-                                  : Container(),
-                              // ((index == 1) && Platform.isAndroid) ? CommunityAd() : SizedBox.shrink(),
-                              // FeedWidget(communityViewModel: _communityViewModel,
-                              //     post: _communityViewModel.posts[index]),
-                              NewFeedWidget(
-                                  communityViewModel: _communityViewModel, post: _communityViewModel.posts[index]),
-                              SizedBox(
-                                height: 30.w,
-                              )
-                            ],
-                          );
-                        }),
-                  ),
-                ]),
+                                            ],
+                                          )
+                                        : Container(),
+                                  ],
+                                )
+                              : Container(),
+                          ((index == 1) && Platform.isAndroid) ? CommunityAd() : SizedBox.shrink(),
+
+                          // FeedWidget(communityViewModel: _communityViewModel,
+                          //     post: _communityViewModel.posts[index]),
+                          NewFeedWidget(
+                            communityViewModel: _communityViewModel,
+                            post: _communityViewModel.posts[index],
+                          ),
+                          Divider(),
+                          SizedBox(
+                            height: 14.w,
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                  childCount: _communityViewModel.posts.length,
+                )),
+                // () => ListView.builder(
+                //     padding: EdgeInsets.zero,
+                //     // clipBehavior: Clip.none,
+                //     // controller: _scrollController,
+                //     physics: NeverScrollableScrollPhysics(),
+                //     shrinkWrap: true,
+                //     itemCount: _communityViewModel.posts.length,
+                //     itemBuilder: (_, index) {
+                //       return Column(
+                //         children: [
+                //           index == 0
+                //               ? Column(
+                //                   children: [
+                //                     // SizedBox(
+                //                     //   height: 20.w,
+                //                     // ),
+                //                     _communityViewModel.recentNotice.length > 0
+                //                         ? Column(
+                //                             children: [
+                //                               NoticeWidget(
+                //                                   communityViewModel: _communityViewModel,
+                //                                   post: _communityViewModel.recentNotice[0]),
+                //                               SizedBox(
+                //                                 height: 12.w,
+                //                               )
+                //                             ],
+                //                           )
+                //                         : Container(),
+                //                   ],
+                //                 )
+                //               : Container(),
+                //           // ((index == 1) && Platform.isAndroid) ? CommunityAd() : SizedBox.shrink(),
+                //           // FeedWidget(communityViewModel: _communityViewModel,
+                //           //     post: _communityViewModel.posts[index]),
+                //           NewFeedWidget(
+                //             communityViewModel: _communityViewModel,
+                //             post: _communityViewModel.posts[index],
+                //           ),
+                //           Divider(),
+                //           SizedBox(
+                //             height: 14.w,
+                //           )
+                //         ],
+                //       );
+                //     }),
+                //   ),
+                // ]),
               ),
             ],
           ),

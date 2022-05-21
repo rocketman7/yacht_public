@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/screens/settings/one_on_one_view_model.dart';
 
 // class SurveyModel {
 //   final String description;
@@ -159,6 +162,144 @@ class SurveyQuestionModel {
         isFinal.hashCode;
   }
 }
+
+// 테스트용 서베이 퀘스트
+// QuestModel userSurveyQuestTemplate = QuestModel(
+//   category: '특별 퀘스트',
+//   closeHomeDateTime: null,
+//   expParticipationReward: 10,
+//   imageUrl: 'illust/factory.png',
+//   investAddresses: null,
+//   isYachtPointOneOfN: false,
+//   itemNeeded: 0,
+//   leagueId: 'allTime',
+//   leaguePointSuccessReward: 0,
+//   liveEndDateTime: null,
+//   liveStartDateTime: null,
+//   questDescription: "설문조사에 참여해주세요",
+//   questEndDateTime: null,
+//   questStartDateTime: null,
+//   resultDateTime: null,
+//   rewardDescription: "모두에게 요트 포인트 500점을 드립니다",
+//   selectInstruction: "요트 유저 설문",
+//   selectMode: 'survey',
+//   showHomeDateTime: DateTime(2022, 5, 4, 0, 0, 0),
+//   surveys: newUserSurvey,
+//   themeColor: "FFF3D3",
+//   title: "요트 유저 설문",
+//   uploadDateTime: DateTime(2022, 5, 4, 0, 0, 0),
+//   yachtPointParticipationReward: 500,
+//   yachtPointSuccessReward: 0,
+//   counts: 0,
+//   basePriceInstruction: '',
+//   questId: 'dd',
+// );
+
+// List<SurveyQuestionModel> newUserSurvey = [
+//   SurveyQuestionModel(
+//     pageType: 'instruction',
+//     answerType: 'none',
+//     question:
+//         '안녕하세요! 요트 운영진입니다. \n\n유저분들의 만족도 조사 및 향후 개선 사항을 파악해 더 발전된 요트가 되기 위한 간략한 설문을 준비해보았어요. \n\n설문에 참여해주신 분께는 500 요트포인트를 소정의 선물로 드리오니 잠시만 시간을 내주시어 꼭 참여해주시면 감사하겠습니다! \n(예상 소요시간: 2분)',
+//     answers: null,
+//   ),
+//   SurveyQuestionModel(
+//       answersId: 0,
+//       pageType: 'survey',
+//       answerType: 'pickOne',
+//       question: '요트를 사용한 경험이 만족스러운가요?',
+//       answers: ['만족', '보통', '아쉬움']),
+//   SurveyQuestionModel(
+//     answersId: 1,
+//     pageType: 'survey',
+//     answerType: 'pickOrSentence',
+//     question: '요트의 기능 중 가장 만족스러운 기능은 무엇인가요?',
+//     answers: ['예측 퀘스트와 보상', '퀘스트 주식 및 상금 주식의 기업 소개', '요트 매거진 콘텐츠', '유저 커뮤니티', '기타'],
+//   ),
+//   SurveyQuestionModel(
+//       answersId: 2,
+//       pageType: 'survey',
+//       answerType: 'pickOrSentence',
+//       question: '요트를 사용하며 느끼는 가장 아쉬운 점은 무엇인가요?.(복수 선택 가능)',
+//       answers: ['퀘스트 보상', '요트 매거진 컨텐츠', '커뮤니티', '앱의 디자인', '기타']),
+//   SurveyQuestionModel(
+//       answersId: 3,
+//       pageType: 'survey',
+//       answerType: 'pickOrSentence',
+//       question: '요트에 추가되면 좋을 것들을 선택해주세요.(복수 선택 가능)',
+//       answers: [
+//         '주제/종목별 채팅방 기능',
+//         '실시간 국내외 주식 가격 정보',
+//         '요트가 선정한 이 주의 종목 소개',
+//         '투자자산 공유하기',
+//         '기타(주관식 응답, 짧아도 괜찮아요!)',
+//       ]),
+//   SurveyQuestionModel(
+//       answersId: 4,
+//       pageType: 'survey',
+//       answerType: 'pickOrSentence',
+//       question: '증권사 앱 이외에 사용하고 있는 투자 관련 앱이나 서비스가 있나요?',
+//       answers: ['없어요', '있어요']),
+//   SurveyQuestionModel(
+//       answersId: 5,
+//       pageType: 'survey',
+//       answerType: 'pickOrSentence',
+//       question: '주식 이외에 가장 관심있는 투자 자산은? (복수 선택 가능)',
+//       answers: [
+//         '가상화폐',
+//         '채권',
+//         '부동산',
+//         '미술품',
+//         '기타(주관식 응답, 짧아도 괜찮아요!)',
+//       ]),
+//   SurveyQuestionModel(
+//       answersId: 6,
+//       pageType: 'survey',
+//       answerType: 'pickOrSentence',
+//       question: '투자를 하며 느끼는 가장 어려운 점은 무엇인가요?',
+//       answers: [
+//         '새로운 종목 발굴',
+//         '매수/매도 시점 결정',
+//         '자산 배분 방법',
+//         '기타(주관식 응답, 짧아도 괜찮아요!)',
+//       ]),
+//   SurveyQuestionModel(
+//       answersId: 7,
+//       pageType: 'survey',
+//       answerType: 'pickOrSentence',
+//       question: '요트 운영진에게 하고 싶은 말을 자유롭게 적어주세요.',
+//       answers: [
+//         '요트에게 바랍니다!',
+//       ]),
+//   // SurveyQuestionModel(
+//   //     answersId: 8,
+//   //     pageType: 'survey',
+//   //     answerType: 'pickOrSentence',
+//   //     question: '요트에 더 바라는 점이나 아쉬운 점이 있으시면 자유롭게 적어주세요',
+//   //     answers: [
+//   //       '요트에 바랍니다!',
+//   //     ]),
+//   SurveyQuestionModel(
+//     answersId: 8,
+//     pageType: 'survey',
+//     answerType: 'pickOrSentence',
+//     question:
+//         '요트의 발전을 위한 추후 심층 비대면 인터뷰에 응해주실 의향이 있으시다면, 이메일을 적어주세요. \n적어주신 분들 중 일부에게 따로 연락드리어 인터뷰를 요청드리겠습니다!\n비대면 인터뷰에 참여해주신 유저분들께는 2만원 상당의 상품권을 드립니다.(예상 소요시간: 30분)',
+//     answers: [
+//       '설문에만 참여할게요.',
+//       '심층 비대면 인터뷰에 참여할래요!',
+//     ],
+//     isFinal: true,
+//   ),
+//   SurveyQuestionModel(
+//     pageType: 'instruction',
+//     answerType: 'none',
+//     question: '참여해주셔서 감사합니다!\n아래 설문 완료버튼을 누르고 요트 포인트를 받으세요:)',
+//     answers: null,
+//     instruction: "설문 완료",
+//     // isFinal: true,
+//   )
+// ];
 
 // List<SurveyQuestionModel> surveyQuestions = [
 //   SurveyQuestionModel(
