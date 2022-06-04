@@ -48,7 +48,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
       });
     });
     return Scaffold(
-        // backgroundColor: primaryBackgroundColor,
+        // backgroundColor: white.withOpacity(.2),
         // appBar: AppBar(
         //   automaticallyImplyLeading: false,
         //   backgroundColor: white,
@@ -103,6 +103,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                         'assets/buttons/settings.png',
                         width: 30.w,
                         height: 30.w,
+                        color: white,
                       ),
                     ],
                   ),
@@ -892,6 +893,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                   'assets/icons/navigate_foward_arrow.png',
                                   height: 16.w,
                                   width: 9.w,
+                                  color: white,
                                 ),
                                 SizedBox(
                                   width: 14.w,

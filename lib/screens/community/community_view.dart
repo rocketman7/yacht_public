@@ -162,7 +162,11 @@ class CommunityView extends GetView<CommunityViewModel> {
                             communityViewModel: _communityViewModel,
                             post: _communityViewModel.posts[index],
                           ),
-                          Divider(),
+                          Divider(
+                            color: yachtGrey,
+                            height: 32.w,
+                            thickness: .3,
+                          ),
                           SizedBox(
                             height: 14.w,
                           )

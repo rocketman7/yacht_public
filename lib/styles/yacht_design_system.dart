@@ -350,7 +350,7 @@ TextStyle profileUserNameStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 20.w,
   fontWeight: FontWeight.w700,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -360,7 +360,7 @@ TextStyle profileFollowNumberStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w700,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -0.01,
   height: primaryFontHeight,
 );
@@ -370,7 +370,7 @@ TextStyle profileFollowTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 12.w,
   fontWeight: FontWeight.w400,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -0.01,
   height: primaryFontHeight,
 );
@@ -380,7 +380,7 @@ TextStyle profileFollowNickNameStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w400,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -0.5,
   height: primaryFontHeight,
 );
@@ -410,7 +410,7 @@ TextStyle profileHeaderTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -556,7 +556,7 @@ TextStyle subLeagueAwardLabelStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w400,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -566,7 +566,7 @@ TextStyle subLeagueAwardCommentStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: contentFontHeight,
 );
@@ -691,8 +691,8 @@ TextStyle newAppBarTitle = TextStyle(
 // 홈 뷰 섹션 타이틀
 TextStyle sectionTitle = TextStyle(
   fontFamily: krFont,
-  fontSize: heading5Size,
-  fontWeight: FontWeight.w500,
+  fontSize: heading4Size,
+  fontWeight: FontWeight.w600,
   color: white,
   height: primaryFontHeight,
   letterSpacing: -1.0,
@@ -756,7 +756,7 @@ TextStyle questTimerStyle = TextStyle(
 TextStyle questRewardAmoutStyle = TextStyle(
   fontSize: bodyBigSize,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -804,7 +804,7 @@ TextStyle questRewardTextStyle = TextStyle(
 TextStyle feedWriterName = TextStyle(
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -0.5,
   height: primaryFontHeight,
 );
@@ -821,7 +821,7 @@ TextStyle feedContent = TextStyle(
   fontSize: 14.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w400,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: contentFontHeight,
 );

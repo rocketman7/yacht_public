@@ -196,7 +196,7 @@ class LikeButtonWidget extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     'assets/icons/comment.svg',
-                    color: yachtBlack,
+                    color: white,
                     width: 18.w,
                   ),
                   SizedBox(
@@ -544,9 +544,9 @@ class FeedContentWidget extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                       gradient: LinearGradient(colors: [
-                    Colors.white.withOpacity(0),
-                    Colors.white.withOpacity(1),
-                    Colors.white,
+                    yachtBlack.withOpacity(0),
+                    yachtBlack.withOpacity(1),
+                    yachtBlack,
                   ], stops: [
                     0,
                     0.2,
@@ -604,7 +604,11 @@ class FeedContentWidget extends StatelessWidget {
                     ))
                         ? isMaxLineExtended.value
                             ? SizedBox.shrink()
-                            : Text("      ... 더보기")
+                            : Text("      ... 더보기",
+                                style: TextStyle(
+                                  color: white,
+                                  fontWeight: FontWeight.w600,
+                                ))
                         : SizedBox.shrink(),
                   ),
                 ),
@@ -970,6 +974,7 @@ class FeedHeader extends StatelessWidget {
                 Text(
                   post.writerUserName,
                   style: TextStyle(
+                    color: white,
                     fontSize: 14.w,
                     fontWeight: FontWeight.w600,
                     wordSpacing: -.5,
