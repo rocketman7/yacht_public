@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'style_constants.dart';
 import 'yacht_design_system.dart';
 
 ThemeData theme() {
   return ThemeData(
+    scaffoldBackgroundColor: yachtBlack,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: white,
         elevation: 0.0,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
         unselectedLabelStyle: TextStyle(color: primaryFontColor)),
-    scaffoldBackgroundColor: white,
     fontFamily: krFont,
     appBarTheme: appBarTheme(),
     // textTheme: textTheme(),
@@ -50,12 +51,13 @@ TextTheme textTheme() {
 
 AppBarTheme appBarTheme() {
   return AppBarTheme(
-    color: Colors.white,
-    elevation: 0,
-    brightness: Brightness.light,
-    iconTheme: IconThemeData(color: Colors.black),
-    textTheme: TextTheme(
-      headline6: TextStyle(color: Color(0XFF8B8B8B), fontSize: 18),
-    ),
+    systemOverlayStyle: SystemUiOverlayStyle.light,
+    // color: Colors.white,
+    // elevation: 0,
+    // // brightness: Brightness.light,
+    // iconTheme: IconThemeData(color: Colors.black),
+    // textTheme: TextTheme(
+    //   headline6: TextStyle(color: Color(0XFF8B8B8B), fontSize: 18),
+    // ),
   );
 }

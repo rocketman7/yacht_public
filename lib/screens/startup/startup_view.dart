@@ -26,6 +26,8 @@ import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
+import '../home/new_home_view.dart';
+
 class StartupView extends GetView<StartupViewModel> {
   // const StartupView({Key? key}) : super(key: key);
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -73,7 +75,8 @@ class StartupView extends GetView<StartupViewModel> {
       "My Page",
     ];
     RxList<Widget> pageList = [
-      HomeView(),
+      // HomeView(),
+      NewHomeView(),
       InsightView(),
       CommunityView(),
       // Container(color: Colors.red),
@@ -115,7 +118,13 @@ class StartupView extends GetView<StartupViewModel> {
         return ClipRRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-            child: SizedBox(
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                      top: BorderSide(
+                color: yachtGrey,
+                width: 0.3,
+              ))),
               height: controller.isKeyboardShown.value ? 0 : null,
               child: BottomNavigationBar(
                 selectedIconTheme: IconThemeData(size: 40),
@@ -123,7 +132,7 @@ class StartupView extends GetView<StartupViewModel> {
                 unselectedFontSize: 0,
                 // elevation: 8,
                 type: BottomNavigationBarType.fixed,
-                backgroundColor: primaryBackgroundColor.withOpacity(.65),
+                backgroundColor: yachtBlack.withOpacity(.9),
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
                 currentIndex: controller.selectedPage.value,
@@ -221,7 +230,7 @@ class StartupView extends GetView<StartupViewModel> {
                         'assets/icons/bottom_navigation/home_unselected.png',
                         width: iconSize,
                         height: iconSize,
-                        color: yachtBlack.withOpacity(unselectedOpacity),
+                        color: yachtGrey,
                       ),
                     ),
                     activeIcon: Container(
@@ -230,6 +239,7 @@ class StartupView extends GetView<StartupViewModel> {
                         'assets/icons/bottom_navigation/home_selected.png',
                         width: iconSize,
                         height: iconSize,
+                        color: white,
                       ),
                     ),
                     label: '',
@@ -241,25 +251,28 @@ class StartupView extends GetView<StartupViewModel> {
                           'assets/icons/bottom_navigation/insight_unselected.png',
                           width: iconSize,
                           height: iconSize,
+                          color: yachtGrey,
                         ),
                       ),
                       activeIcon: Image.asset(
                         'assets/icons/bottom_navigation/insight_selected.png',
                         width: iconSize,
                         height: iconSize,
+                        color: white,
                       ),
                       label: ''),
                   BottomNavigationBarItem(
                       icon: Image.asset(
                         'assets/icons/bottom_navigation/community_unselected.png',
                         width: iconSize,
-                        height: iconSize,
+                        height: iconSize, color: yachtGrey,
                         // color: yachtBlack.withOpacity(unselectedOpacity),
                       ),
                       activeIcon: Image.asset(
                         'assets/icons/bottom_navigation/community_selected.png',
                         width: iconSize,
                         height: iconSize,
+                        color: white,
                       ),
                       label: ''),
                   BottomNavigationBarItem(
@@ -267,12 +280,13 @@ class StartupView extends GetView<StartupViewModel> {
                         'assets/icons/bottom_navigation/my_unselected.png',
                         width: iconSize,
                         height: iconSize,
-                        color: yachtBlack.withOpacity(unselectedOpacity),
+                        color: yachtGrey,
                       ),
                       activeIcon: Image.asset(
                         'assets/icons/bottom_navigation/my_selected.png',
                         width: iconSize,
                         height: iconSize,
+                        color: white,
                       ),
                       label: '')
                 ],

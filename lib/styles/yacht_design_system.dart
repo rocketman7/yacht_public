@@ -19,6 +19,7 @@ import 'package:yachtOne/styles/style_constants.dart';
 
 // BASIC COLORS CODE
 const Color yachtBlack = const Color(0xFF101214);
+const Color yachtLightBlack = const Color(0xFF1A1C1E);
 const Color yachtViolet = const Color(0xFF798AE6);
 const Color yachtViolet80 = const Color(0xFF586DE0);
 const Color yachtDarkPurple = const Color(0xFF6073B4);
@@ -96,7 +97,7 @@ const List<Color> lineChartColors = [
 const activatedButtonColor = Color(0xFF196AB4);
 Color dividerColor = Color(0xFF94BDE0).withOpacity(0.3);
 
-const primaryBackgroundColor = white;
+const primaryBackgroundColor = yachtBlack;
 
 // 불투명 Glassmorphism 백그라운드
 Color glassmorphismBackgroundColor = Color(0xFFFBFAFD).withOpacity(.4);
@@ -154,7 +155,7 @@ EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(horizontal: primaryPa
 EdgeInsets primaryAllPadding = EdgeInsets.all(primaryPaddingSize);
 // FONTS
 
-String krFont = 'IBMPlex';
+String krFont = 'AppleSDGothicNeo';
 String krFontW400 = krFont;
 double primaryFontHeight = 1.2;
 double titleFontHeight = 1.3;
@@ -675,7 +676,7 @@ TextStyle appBarTitle = TextStyle(
   fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   height: primaryFontHeight,
   letterSpacing: -1.0,
 );
@@ -692,7 +693,7 @@ TextStyle sectionTitle = TextStyle(
   fontFamily: krFont,
   fontSize: heading5Size,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   height: primaryFontHeight,
   letterSpacing: -1.0,
 );
@@ -764,7 +765,7 @@ TextStyle questRewardAmoutStyle = TextStyle(
 TextStyle contentStyle = TextStyle(
   fontSize: bodySmallSize,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1596,7 +1597,7 @@ Container sectionBox({
     height: height,
     width: width,
     padding: padding ?? EdgeInsets.all(0),
-    decoration: BoxDecoration(color: white, borderRadius: BorderRadius.circular(12.w), boxShadow: [
+    decoration: BoxDecoration(color: yachtLightBlack, borderRadius: BorderRadius.circular(12.w), boxShadow: [
       BoxShadow(
         color: yachtShadow,
         blurRadius: 4.w,

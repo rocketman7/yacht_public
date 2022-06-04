@@ -65,7 +65,7 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
                       decoration: yachtBoxDecoration.copyWith(
                           borderRadius: BorderRadius.circular(12.w),
                           border: Border.all(
-                            color: white,
+                            color: yachtLightBlack,
                             width: 4.w,
                           )),
                       //  BoxDecoration(

@@ -48,8 +48,8 @@ class InsightView extends StatelessWidget {
             TodayMarketView(),
             SizedBox(height: 40.w),
             ReadingContentView(), // showingHome 변수 구분해서 넣는 게
-            SizedBox(height: 40.w),
-            DictionaryView(),
+            // SizedBox(height: 40.w),
+            // DictionaryView(),
             SizedBox(height: 100.w),
           ]),
         )

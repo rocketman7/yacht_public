@@ -101,6 +101,7 @@ class _MyAppState extends State<MyApp> {
   // GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     // 아이폰 프로 같은애들 기존에 지가 다크테마 쓰고있어서 스테이터스바 글씨색 하얀색일 경우를 위해
     // var lang = Localizations.localeOf(context).languageCode;
     // print("MAINLanguage is " + lang);
