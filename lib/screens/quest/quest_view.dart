@@ -78,6 +78,7 @@ class QuestView extends StatelessWidget {
               ),
               SliverToBoxAdapter(
                 child: Container(
+                  // color: yachtLightGrey,
                   padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -88,24 +89,20 @@ class QuestView extends StatelessWidget {
                         style: sectionTitle,
                       ),
                       btwHomeModuleTitleBox,
-                      Container(
-                          padding: moduleBoxPadding(questTermTextStyle.fontSize!),
-                          decoration: primaryBoxDecoration
-                              .copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              QuestCardHeader(
-                                questModel: questModel,
-                              ),
-                              btwHomeModuleTitleBox,
-                              QuestCardRewards(questModel: questModel),
-                              SizedBox(
-                                height: correctHeight(24.w, 0.0, detailedContentTextStyle.fontSize),
-                              ),
-                              QuestDescription(questModel: questModel)
-                            ],
-                          )),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          QuestCardHeader(
+                            questModel: questModel,
+                          ),
+                          btwHomeModuleTitleBox,
+                          QuestCardRewards(questModel: questModel),
+                          SizedBox(
+                            height: correctHeight(24.w, 0.0, detailedContentTextStyle.fontSize),
+                          ),
+                          QuestDescription(questModel: questModel)
+                        ],
+                      )
                       // btwHomeModule,
                     ],
                   ),
@@ -151,8 +148,8 @@ class QuestView extends StatelessWidget {
                                       child: Obx(() => Text("  ${questModel.investAddresses![index].name}  ",
                                           style: buttonTextStyle.copyWith(
                                               color: questViewModel.stockInfoIndex.value == index
-                                                  ? yachtViolet
-                                                  : yachtViolet.withOpacity(.4)))),
+                                                  ? white
+                                                  : yachtLightGrey))),
                                     ),
                                   ),
                                 ),
@@ -168,21 +165,16 @@ class QuestView extends StatelessWidget {
               // ),
               SliverToBoxAdapter(
                   child: Container(
+                // color: yachtGrey,
                 padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
                 child:
                     // 퀘스트 종목간 선택 row
 
-                    Container(
-                  // height: 1800, // temp
-                  padding: moduleBoxPadding(questTermTextStyle.fontSize!),
-                  decoration:
-                      primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
-                  child: GetBuilder<QuestViewModel>(
-                    builder: (questViewModel) {
-                      return StockInfoKRView(
-                          investAddressModel: questModel.investAddresses![questViewModel.stockInfoIndex.value]);
-                    },
-                  ),
+                    GetBuilder<QuestViewModel>(
+                  builder: (questViewModel) {
+                    return StockInfoKRView(
+                        investAddressModel: questModel.investAddresses![questViewModel.stockInfoIndex.value]);
+                  },
                 ),
               )),
               SliverToBoxAdapter(
@@ -271,7 +263,7 @@ class QuestView extends StatelessWidget {
                         width: double.infinity,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50.w),
-                          color: yachtViolet80.withOpacity(.8),
+                          color: yachtViolet.withOpacity(.8),
                         ),
                         child: Center(
                             child: Text(
@@ -928,18 +920,14 @@ class QuestDescription extends StatelessWidget {
               fontWeight: FontWeight.w500,
             )),
         SizedBox(
-          height: correctHeight(
-            14.w,
-            detailedContentTextStyle.fontSize,
-            questDescription.fontSize,
-          ),
+          height: 14.w,
         ),
         Text(
           questModel.questDescription.replaceAll('\\n', '\n'),
           style: questDescription,
         ),
         SizedBox(
-          height: correctHeight(24.w, 0.0, detailedContentTextStyle.fontSize),
+          height: 24.w,
         ),
         questModel.rewardDescription != null
             ? Column(
@@ -973,18 +961,14 @@ class QuestDescription extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                      decoration: BoxDecoration(
-                          color: buttonNormal,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.w),
-                            bottomLeft: Radius.circular(10.w),
-                          )),
                       width: double.infinity,
                       height: 39.w,
                       child: Center(
                         child: Text(
-                          "퀘스트 보상",
-                          style: questResultRewardTitle,
+                          "",
+                          style: questResultRewardTitle.copyWith(
+                              // color: yachtBlack,
+                              ),
                         ),
                       )),
                   Container(
@@ -1026,9 +1010,9 @@ class QuestDescription extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: 39.w,
-                    color: yachtYellowBackGround,
+                    // color: yachtYellowBackGround,
                     child: SvgPicture.asset(
-                      'assets/icons/league_point.svg',
+                      'assets/icons/trophy.svg',
                       width: 27.w,
                       height: 27.w,
                     ),
@@ -1072,17 +1056,17 @@ class QuestDescription extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(10.w),
-                        bottomRight: Radius.circular(10.w),
-                      ),
-                      color: yachtGreenBackGround,
-                    ),
+                    // decoration: BoxDecoration(
+                    //   borderRadius: BorderRadius.only(
+                    //     topRight: Radius.circular(10.w),
+                    //     bottomRight: Radius.circular(10.w),
+                    //   ),
+                    //   color: yachtGreenBackGround,
+                    // ),
                     width: double.infinity,
                     height: 39.w,
-                    child: Image.asset(
-                      'assets/icons/yacht_point_circle.png',
+                    child: SvgPicture.asset(
+                      'assets/icons/gem.svg',
                       width: 27.w,
                       height: 27.w,
                     ),

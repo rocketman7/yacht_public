@@ -52,7 +52,7 @@ class DescriptionView extends GetView<DescriptionViewModel> {
                     },
                     child: Text(controller.showMore.value ? "   간략히" : "  더보기",
                         style: detailedContentTextStyle.copyWith(
-                          color: yachtBlue,
+                          color: yachtLightGrey,
                           fontSize: 12.w,
                         )),
                   ),

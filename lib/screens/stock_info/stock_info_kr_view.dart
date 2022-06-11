@@ -13,6 +13,7 @@ import 'package:yachtOne/screens/stock_info/stats/stats_view_model.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'chart/new_chart_view.dart';
 import 'description/description_view.dart';
 import 'stock_info_kr_view_model.dart';
 
@@ -46,7 +47,7 @@ class StockInfoKRView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ChartView(
+        NewChartView(
           investAddressModel: investAddressModel,
           chartViewModel: chartViewModel,
         ),

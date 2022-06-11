@@ -9,6 +9,7 @@ import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/quest/time_counter_widget.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -102,43 +103,56 @@ class SquareQuestWidget extends StatelessWidget {
                     padding: primaryHorizontalPadding,
                     child: Container(
                       padding: primaryAllPadding,
-                      decoration: BoxDecoration(color: yachtLightBlack, borderRadius: BorderRadius.circular(12.w)),
+                      decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
                       width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '${questModel.itemNeeded}',
-                            style: TextStyle(
-                              color: white,
-                            ),
-                          ),
-                          Text(
-                            '${questModel.title}',
-                            style: TextStyle(
-                              color: white,
-                            ),
-                          ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SvgPicture.asset(
-                                'assets/icons/manypeople.svg',
-                                width: 17.w,
-                                color: white,
+                              Row(
+                                children: [
+                                  basicInfoButtion(
+                                    "New",
+                                    buttonColor: yachtViolet,
+                                  ),
+                                  SizedBox(width: 4.w),
+                                  basicInfoButtion(
+                                    "참여가능",
+                                    buttonColor: yachtGrey,
+                                  ),
+                                  SizedBox(width: 4.w),
+                                  basicInfoButtion(
+                                    "",
+                                    child: TimeCounterWidget(
+                                      questModel: questModel,
+                                    ),
+                                  )
+                                ],
                               ),
-                              SizedBox(width: 4.w),
-                              questModel.counts == null
-                                  ? Text(
-                                      '0',
-                                      style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
-                                    )
-                                  : Text(
-                                      '${questModel.counts}',
-                                      // '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
-                                      style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
-                                    )
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/icons/jogabi.svg',
+                                    width: 20.w,
+                                    height: 20.w,
+                                  ),
+                                  SizedBox(width: 4.w),
+                                  Text(
+                                    '${questModel.itemNeeded}개',
+                                    style: TextStyle(
+                                      color: white,
+                                      fontSize: 16.w,
+                                      // height: 1.2,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
+                          SizedBox(height: 8.w),
+                          NewQuestHeader(questModel: questModel)
                         ],
                       ),
                     ),
@@ -225,6 +239,129 @@ class SquareQuestWidget extends StatelessWidget {
     //     )
     //   ],
     // );
+  }
+}
+
+class NewQuestHeader extends StatelessWidget {
+  const NewQuestHeader({
+    Key? key,
+    required this.questModel,
+  }) : super(key: key);
+
+  final QuestModel questModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '${questModel.title}',
+          style: TextStyle(
+            color: white,
+            fontSize: 18.w,
+          ),
+        ),
+        SizedBox(height: 8.w),
+        Row(
+          children: [
+            SvgPicture.asset(
+              'assets/icons/manypeople.svg',
+              width: 17.w,
+              color: white,
+            ),
+            SizedBox(width: 4.w),
+            questModel.counts == null
+                ? Text(
+                    '0',
+                    style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                  )
+                : Text(
+                    '${questModel.counts}',
+                    // '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
+                    style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                  )
+          ],
+        ),
+        SizedBox(height: 8.w),
+        Row(
+          children: [
+            questModel.yachtPointSuccessReward == null
+                ? SizedBox.shrink()
+                : Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/gem.svg',
+                        width: 24.w,
+                        height: 24.w,
+                      ),
+                      SizedBox(width: 6.w),
+                      Text(
+                        '${toPriceKRW((questModel.yachtPointSuccessReward ?? 0) + (questModel.yachtPointParticipationReward ?? 0))}원',
+                        style: questRewardAmoutStyle,
+                      ),
+                      SizedBox(width: 6.w),
+                      (questModel.isYachtPointOneOfN == null)
+                          ? Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 1.w),
+                              decoration: BoxDecoration(
+                                color: buttonDisabled,
+                                borderRadius: BorderRadius.circular(20.w),
+                              ),
+                              child: Text("1/N",
+                                  style: TextStyle(
+                                      color: yachtBlack, fontSize: 12.w, fontWeight: FontWeight.w600, height: 1.4)),
+                            )
+                          : !questModel.isYachtPointOneOfN!
+                              ? Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.w),
+                                  decoration: BoxDecoration(
+                                    color: buttonDisabled,
+                                    borderRadius: BorderRadius.circular(20.w),
+                                  ),
+                                  child: Text("ALL",
+                                      style: TextStyle(
+                                          color: yachtDarkGrey,
+                                          fontSize: 12.w,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: krFont,
+                                          height: 1.4)),
+                                )
+                              : Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 1.w),
+                                  decoration: BoxDecoration(
+                                    color: buttonDisabled,
+                                    borderRadius: BorderRadius.circular(20.w),
+                                  ),
+                                  child: Text("1/N",
+                                      style: TextStyle(
+                                          color: yachtBlack, fontSize: 12.w, fontWeight: FontWeight.w600, height: 1.4)),
+                                )
+                    ],
+                  ),
+            SizedBox(
+              width: 20.w,
+            ),
+            (questModel.leaguePointSuccessReward == null || questModel.leaguePointSuccessReward == 0)
+                ? SizedBox.shrink()
+                : Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/trophy.svg',
+                        width: 24.w,
+                        height: 24.w,
+                      ),
+                      SizedBox(width: 6.w),
+                      Text(
+                        '${toPriceKRW((questModel.leaguePointSuccessReward ?? 0) + (questModel.yachtPointParticipationReward ?? 0))}점',
+                        style: questRewardAmoutStyle,
+                      ),
+                    ],
+                  )
+          ],
+        )
+      ],
+    );
   }
 }
 

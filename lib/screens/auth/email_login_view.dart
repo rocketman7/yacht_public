@@ -89,6 +89,10 @@ class _EmailLoginViewState extends State<EmailLoginView> {
                   TextFormField(
                     controller: _passwordController,
                     obscureText: _obscureText,
+                    style: TextStyle(
+                      color: white,
+                      fontSize: 18.w,
+                    ),
                     onChanged: (_) {
                       if (_emailController.text.length > 0 &&
                           EmailValidator.validate(_emailController.text) &&

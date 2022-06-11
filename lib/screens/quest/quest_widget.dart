@@ -9,6 +9,7 @@ import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/quest/time_counter_widget.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -306,7 +307,7 @@ class QuestCardHeader extends StatelessWidget {
         SizedBox(
           height: correctHeight(10.w, sectionTitle.fontSize, questTimerStyle.fontSize),
         ),
-        TimeToEndCounter(
+        TimeCounterWidget(
           questModel: questModel,
         ),
         SizedBox(
@@ -317,7 +318,7 @@ class QuestCardHeader extends StatelessWidget {
             SvgPicture.asset(
               'assets/icons/manypeople.svg',
               width: 17.w,
-              color: yachtBlack,
+              color: white,
             ),
             SizedBox(width: 4.w),
             questModel.counts == null

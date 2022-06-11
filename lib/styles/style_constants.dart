@@ -188,7 +188,7 @@ TextStyle questTermTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -248,7 +248,7 @@ TextStyle stockPriceChangeTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: primaryFontColor,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -258,7 +258,7 @@ TextStyle mostDetailedContentTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 10.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -322,7 +322,7 @@ Container chartToggleButton({required Widget child, required bool isSelected, re
 
 // 조가비 아이템 버튼 박스 Decoration
 BoxDecoration jogabiButtonBoxDecoration = BoxDecoration(
-  color: Colors.white,
+  color: yachtDarkGrey,
   borderRadius: BorderRadius.circular(20.w),
 );
 

@@ -20,12 +20,13 @@ import 'package:yachtOne/styles/style_constants.dart';
 // BASIC COLORS CODE
 const Color yachtBlack = const Color(0xFF101214);
 const Color yachtLightBlack = const Color(0xFF1A1C1E);
-const Color yachtViolet = const Color(0xFF798AE6);
+const Color yachtViolet = const Color(0xFF4A2EFF);
 const Color yachtViolet80 = const Color(0xFF586DE0);
 const Color yachtDarkPurple = const Color(0xFF6073B4);
-const Color yachtDarkGrey = const Color(0xFF5B6A87);
-const Color yachtGrey = const Color(0xFF879098);
-const Color yachtLightGrey = const Color(0xFFE6EAF1);
+const Color yachtDarkGrey = const Color(0xFF1A1C1E);
+const Color yachtGrey = const Color(0xFF2A2B2D);
+const Color yachtMidGrey = const Color(0xFF545758);
+const Color yachtLightGrey = const Color(0xFFB8BABC);
 const Color yachtPaleGrey = const Color(0xFFEFF2FA);
 const Color yachtRed = const Color(0xFFEE5076);
 const Color yachtBlue = Color(0xFF4A99E2);
@@ -201,7 +202,7 @@ TextStyle stockInfoNameTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 22.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -211,7 +212,7 @@ TextStyle stockPriceTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 30.w,
   fontWeight: FontWeight.w600,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -221,7 +222,7 @@ TextStyle questTitleTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: contentFontHeight,
 );
@@ -231,7 +232,7 @@ TextStyle stockInfoStatsTitle = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -241,7 +242,7 @@ TextStyle detailedContentTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: contentFontHeight,
 );
@@ -300,7 +301,7 @@ TextStyle emailRegisterTitle = TextStyle(
   fontFamily: krFont,
   fontSize: 24.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -739,7 +740,7 @@ TextStyle subheadingStyle = TextStyle(
 TextStyle jogabiNumberStyle = TextStyle(
   fontSize: 14.w,
   fontWeight: FontWeight.w600,
-  color: yachtBlack,
+  color: white,
   height: primaryFontHeight,
 );
 
@@ -757,7 +758,7 @@ TextStyle questRewardAmoutStyle = TextStyle(
   fontSize: bodyBigSize,
   fontWeight: FontWeight.w500,
   color: white,
-  letterSpacing: -1.0,
+  letterSpacing: -0.5,
   height: primaryFontHeight,
 );
 
@@ -784,7 +785,7 @@ TextStyle questResultRewardTitle = TextStyle(
   fontSize: bodySmallSize,
   // fontWeight: FontWeight.w500,
   fontFamily: krFont,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -0.5,
   height: primaryFontHeight,
 );
@@ -839,7 +840,7 @@ TextStyle feedDateTime = TextStyle(
   fontFamily: krFont,
   fontSize: 12.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: yachtLightGrey,
   letterSpacing: -0.5,
   height: primaryFontHeight,
 );
@@ -848,7 +849,7 @@ TextStyle feedCommentLikeCount = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: yachtLightGrey,
   letterSpacing: -.5,
   height: contentFontHeight,
 );
@@ -902,10 +903,9 @@ TextStyle snackBarStyle = TextStyle(
 TextStyle dialogTitle = TextStyle(
   fontSize: heading5Size,
   fontFamily: krFont,
-  fontWeight: FontWeight.w400,
+  fontWeight: FontWeight.w600,
   color: yachtBlack,
   letterSpacing: -0.5,
-  height: primaryFontHeight,
 );
 
 TextStyle dialogContent = TextStyle(
@@ -940,7 +940,7 @@ TextStyle questDescription = TextStyle(
   fontSize: bodyBigSize,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: contentFontHeight,
 );
@@ -949,7 +949,7 @@ TextStyle questTerm = TextStyle(
   fontSize: bodyBigSize,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -958,7 +958,7 @@ TextStyle questTitle = TextStyle(
   fontSize: heading5Size,
   fontFamily: krFont,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: titleFontHeight,
 );
@@ -1443,7 +1443,35 @@ TextStyle seeMore = TextStyle(
   color: Color(0xFF5A6987),
 );
 
-// BUTTONS
+//// BUTTONS
+
+// Basic Info Button
+Container basicInfoButtion(
+  String text, {
+  Color? buttonColor,
+  Color? textColor,
+  Widget? child,
+}) {
+  return Container(
+    padding: EdgeInsets.symmetric(
+      horizontal: 8.w,
+      vertical: 4.w,
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(4.w),
+      color: buttonColor ?? yachtGrey,
+    ),
+    child: child ??
+        Text(
+          text,
+          style: TextStyle(
+            color: textColor ?? white,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+  );
+}
+
 Container simpleTextContainerButton(
   String text, {
   Widget? child,
@@ -1944,7 +1972,7 @@ ClipRect glassmorphismContainer({required Widget child}) {
 // 백버튼과 타이틀이 있는 기본 앱 바
 AppBar primaryAppBar(String title) {
   return AppBar(
-    backgroundColor: white,
+    backgroundColor: yachtBlack,
     toolbarHeight: 60.w,
     title: Text(title, style: appBarTitle),
   );

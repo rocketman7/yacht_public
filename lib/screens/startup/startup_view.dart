@@ -230,7 +230,7 @@ class StartupView extends GetView<StartupViewModel> {
                         'assets/icons/bottom_navigation/home_unselected.png',
                         width: iconSize,
                         height: iconSize,
-                        color: yachtGrey,
+                        color: yachtMidGrey,
                       ),
                     ),
                     activeIcon: Container(
@@ -251,7 +251,7 @@ class StartupView extends GetView<StartupViewModel> {
                           'assets/icons/bottom_navigation/insight_unselected.png',
                           width: iconSize,
                           height: iconSize,
-                          color: yachtGrey,
+                          color: yachtMidGrey,
                         ),
                       ),
                       activeIcon: Image.asset(
@@ -265,7 +265,7 @@ class StartupView extends GetView<StartupViewModel> {
                       icon: Image.asset(
                         'assets/icons/bottom_navigation/community_unselected.png',
                         width: iconSize,
-                        height: iconSize, color: yachtGrey,
+                        height: iconSize, color: yachtMidGrey,
                         // color: yachtBlack.withOpacity(unselectedOpacity),
                       ),
                       activeIcon: Image.asset(
@@ -280,7 +280,7 @@ class StartupView extends GetView<StartupViewModel> {
                         'assets/icons/bottom_navigation/my_unselected.png',
                         width: iconSize,
                         height: iconSize,
-                        color: yachtGrey,
+                        color: yachtMidGrey,
                       ),
                       activeIcon: Image.asset(
                         'assets/icons/bottom_navigation/my_selected.png',

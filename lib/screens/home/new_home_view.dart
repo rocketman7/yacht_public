@@ -38,6 +38,7 @@ import 'package:yachtOne/screens/quest/live/live_quest_view_model.dart';
 import 'package:yachtOne/screens/quest/result/quest_results_view.dart';
 import 'package:yachtOne/screens/ranks/rank_share_view.dart';
 import 'package:yachtOne/screens/settings/push_notification_view_model.dart';
+import 'package:yachtOne/screens/stock_info/stock_info_new_view.dart';
 import 'package:yachtOne/screens/subLeague/temp_home_view.dart';
 import 'package:yachtOne/screens/yacht_store/yacht_store_view.dart';
 import 'package:yachtOne/services/auth_service.dart';
@@ -51,7 +52,9 @@ import '../../locator.dart';
 
 import '../quest/new_live_quest_widget.dart';
 import '../quest/new_quest_widget.dart';
+import '../quest/new_result_quest_widget.dart';
 import '../quest/quest_widget.dart';
+import '../stock_info/tempMainViewForYachtPicks.dart';
 
 class NewHomeView extends StatelessWidget {
   HomeViewModel homeViewModel = Get.find<HomeViewModel>();
@@ -94,8 +97,12 @@ class NewHomeView extends StatelessWidget {
       // AwardView(leagueName: leagueModel.value!.leagueName, leagueEndDateTime: leagueModel.value!.leagueEndDateTime),
 
       // 주간 요트 종목
-      Padding(
-        padding: primaryHorizontalPadding,
+      GestureDetector(
+        onTap: () {
+          Get.to(() => StockInfoNewView(
+                stockInfoNewModel: homeViewModel.stockInfoNewModels[0],
+              ));
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -110,23 +117,33 @@ class NewHomeView extends StatelessWidget {
             SizedBox(
               height: 20.w,
             ),
-            Center(
-              child: Container(
-                width: 220.w,
-                height: 220.w,
-                decoration: BoxDecoration(
-                  color: white,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            )
+            Obx(() => homeViewModel.stockInfoNewModels.length > 0
+                ? TempMainView()
+                // ? Center(
+                //     child: Container(
+                //       width: 220.w,
+                //       height: 220.w,
+                //       child: ClipRRect(
+                //         borderRadius: BorderRadius.circular(200.w),
+                //         child: CachedNetworkImage(
+                //           imageUrl:
+                //               "https://storage.googleapis.com/ggook-5fb08.appspot.com/${homeViewModel.stockInfoNewModels[0].logoUrl}",
+                //         ),
+                //       ),
+                //       decoration: BoxDecoration(
+                //         color: white,
+                //         shape: BoxShape.circle,
+                //       ),
+                //     ),
+                //   )
+                : SizedBox.shrink()),
           ],
         ),
       ),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       YachtQuests(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      Obx(() => homeViewModel.isGettingQuests.value ? Container() : LiveQuestView()),
+      // Obx(() => homeViewModel.isGettingQuests.value ? Container() : LiveQuestView()),
       // SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       // QuestResultsView(homeViewModel: homeViewModel),
       // SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
@@ -1018,8 +1035,8 @@ class YachtQuests extends StatelessWidget {
                         children: [
                           SvgPicture.asset(
                             'assets/icons/jogabi.svg',
-                            height: 18.w,
-                            width: 18.w,
+                            height: 24.w,
+                            width: 24.w,
                           ),
                           SizedBox(
                             width: 4.w,
@@ -1028,7 +1045,7 @@ class YachtQuests extends StatelessWidget {
                             // print("item changed");
                             return Text(
                               userModelRx.value == null ? 0.toString() : userModelRx.value!.item.toString(),
-                              style: questTermTextStyle.copyWith(color: Color(0xFF4D6A87), fontWeight: FontWeight.w600),
+                              style: questTermTextStyle.copyWith(color: white, fontWeight: FontWeight.w600),
                             );
                           })
                         ],
@@ -1098,41 +1115,57 @@ class YachtQuests extends StatelessWidget {
                                   questModel: homeViewModel.newQuests[index],
                                 ),
                               ),
-                              SizedBox(width: primaryPaddingSize),
+                              SizedBox(height: primaryPaddingSize),
                             ],
                           )),
+                  // ...List.generate(
+                  //     homeViewModel.liveQuests.length,
+                  //     // 1,
+                  //     (index) => Column(
+                  //           children: [
+                  //             // index == 0
+                  //             //     ? SizedBox(
+                  //             //         height: primaryPaddingSize,
+                  //             //       )
+                  //             //     : Container(),
+                  //             InkWell(
+                  //               onTap: () {
+                  //                 _mixpanelService.mixpanel.track('Live Quest', properties: {
+                  //                   'New Quest ID': homeViewModel.newQuests[index].questId,
+                  //                   'New Quest League ID': homeViewModel.newQuests[index].leagueId,
+                  //                   'New Quest Title': homeViewModel.newQuests[index].title,
+                  //                   'New Quest Category': homeViewModel.newQuests[index].category,
+                  //                   'New Quest Select Mode': homeViewModel.newQuests[index].selectMode,
+                  //                 });
+                  //                 homeViewModel.newQuests[index].selectMode == 'survey'
+                  //                     ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
+                  //                     : homeViewModel.newQuests[index].selectMode == 'tutorial'
+                  //                         ? Get.toNamed('/tutorial', arguments: homeViewModel.newQuests[index])
+                  //                         : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
+                  //               },
+                  //               child: NewLiveQuestWidget(
+                  //                 questModel: homeViewModel.liveQuests[index],
+                  //               ),
+                  //             ),
+                  //             SizedBox(width: primaryPaddingSize),
+                  //           ],
+                  //         )),
                   ...List.generate(
-                      // homeViewModel.liveQuests.length,
-                      1,
+                      homeViewModel.resultQuests.length,
                       (index) => Column(
                             children: [
-                              index == 0
-                                  ? SizedBox(
-                                      height: primaryPaddingSize,
-                                    )
-                                  : Container(),
-                              InkWell(
-                                onTap: () {
-                                  _mixpanelService.mixpanel.track('Live Quest', properties: {
-                                    'New Quest ID': homeViewModel.newQuests[index].questId,
-                                    'New Quest League ID': homeViewModel.newQuests[index].leagueId,
-                                    'New Quest Title': homeViewModel.newQuests[index].title,
-                                    'New Quest Category': homeViewModel.newQuests[index].category,
-                                    'New Quest Select Mode': homeViewModel.newQuests[index].selectMode,
-                                  });
-                                  homeViewModel.newQuests[index].selectMode == 'survey'
-                                      ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
-                                      : homeViewModel.newQuests[index].selectMode == 'tutorial'
-                                          ? Get.toNamed('/tutorial', arguments: homeViewModel.newQuests[index])
-                                          : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
-                                },
-                                child: NewLiveQuestWidget(
-                                  questModel: homeViewModel.newQuests[index],
-                                ),
+                              // index == 0
+                              //     ? SizedBox(
+                              //         height: primaryPaddingSize,
+                              //       )
+                              //     : Container(),
+                              NewResultQuestWidget(
+                                questModel: homeViewModel.resultQuests[index],
                               ),
-                              SizedBox(width: primaryPaddingSize),
+
+                              SizedBox(height: primaryPaddingSize),
                             ],
-                          )),
+                          ))
                 ]);
         })
       ],
@@ -1269,7 +1302,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get minExtent => 52.w + ScreenUtil().statusBarHeight;
 
   @override
-  double get maxExtent => minExtent + 38.w;
+  double get maxExtent => minExtent;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -1299,57 +1332,57 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                   ),
                   child: Stack(
                     children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              userModelRx.value == null ? "" : userModelRx.value!.userName,
-                              style: appBarTitle.copyWith(
-                                  fontSize: 18.w,
-                                  fontWeight: FontWeight.w600,
-                                  color: appBarTitle.color!.withOpacity(
-                                    opacity,
-                                  )),
-                            ),
-                            Text(
-                              " 님의 요트",
-                              style: appBarTitle.copyWith(
-                                  fontSize: 18.w,
-                                  fontWeight: FontWeight.w400,
-                                  color: appBarTitle.color!.withOpacity(
-                                    opacity,
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Row(
-                          children: [
-                            Obx(
-                              () => Text(
-                                userModelRx.value == null ? "" : userModelRx.value!.userName,
-                                style: appBarTitle.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    color: appBarTitle.color!.withOpacity(
-                                      1 - opacity,
-                                    )),
-                              ),
-                            ),
-                            Text(
-                              " 님의 요트",
-                              style: appBarTitle.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                  color: appBarTitle.color!.withOpacity(
-                                    1 - opacity,
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Align(
+                      //   alignment: Alignment.center,
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     children: [
+                      //       Text(
+                      //         userModelRx.value == null ? "" : userModelRx.value!.userName,
+                      //         style: appBarTitle.copyWith(
+                      //             fontSize: 18.w,
+                      //             fontWeight: FontWeight.w600,
+                      //             color: appBarTitle.color!.withOpacity(
+                      //               opacity,
+                      //             )),
+                      //       ),
+                      //       Text(
+                      //         " 님의 요트",
+                      //         style: appBarTitle.copyWith(
+                      //             fontSize: 18.w,
+                      //             fontWeight: FontWeight.w400,
+                      //             color: appBarTitle.color!.withOpacity(
+                      //               opacity,
+                      //             )),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Align(
+                      //   alignment: Alignment.bottomLeft,
+                      //   child: Row(
+                      //     children: [
+                      //       Obx(
+                      //         () => Text(
+                      //           userModelRx.value == null ? "" : userModelRx.value!.userName,
+                      //           style: appBarTitle.copyWith(
+                      //               fontWeight: FontWeight.w600,
+                      //               color: appBarTitle.color!.withOpacity(
+                      //                 1 - opacity,
+                      //               )),
+                      //         ),
+                      //       ),
+                      //       Text(
+                      //         " 님의 요트",
+                      //         style: appBarTitle.copyWith(
+                      //             fontWeight: FontWeight.w400,
+                      //             color: appBarTitle.color!.withOpacity(
+                      //               1 - opacity,
+                      //             )),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Positioned(
                         top: 12.w,
                         right: 0,

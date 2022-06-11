@@ -266,7 +266,7 @@ class CommentList extends StatelessWidget {
         initialData: [],
         builder: (context, snapshot) {
           if (snapshot.data!.length == 0) {
-            return Container();
+            return SizedBox.shrink();
           } else {
             List<CommentModel> comments = snapshot.data!;
             return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -462,7 +462,7 @@ class CommentList extends StatelessWidget {
                   child: Text(
                     "댓글 ${comments.length}개 모두 보기",
                     style: feedWriterName.copyWith(
-                      color: yachtViolet,
+                      color: yachtLightGrey,
                     ),
                   ),
                 )
@@ -606,7 +606,7 @@ class FeedContentWidget extends StatelessWidget {
                             ? SizedBox.shrink()
                             : Text("      ... 더보기",
                                 style: TextStyle(
-                                  color: white,
+                                  color: yachtLightGrey,
                                   fontWeight: FontWeight.w600,
                                 ))
                         : SizedBox.shrink(),
@@ -989,7 +989,7 @@ class FeedHeader extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12.w,
                         fontWeight: FontWeight.w400,
-                        color: yachtGrey,
+                        color: yachtLightGrey,
                         wordSpacing: -.5,
                       ),
                     ),
@@ -1196,7 +1196,7 @@ class FeedHeader extends StatelessWidget {
                 color: Colors.transparent,
                 child: SvgPicture.asset(
                   'assets/icons/show_more.svg',
-                  color: yachtBlack,
+                  color: white,
                 ),
               ),
               SizedBox(height: 8.w),
