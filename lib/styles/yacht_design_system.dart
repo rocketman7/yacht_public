@@ -823,7 +823,7 @@ TextStyle feedContent = TextStyle(
   fontFamily: krFont,
   fontWeight: FontWeight.w400,
   color: white,
-  letterSpacing: -1.0,
+  letterSpacing: -0.5,
   height: contentFontHeight,
 );
 

@@ -93,7 +93,7 @@ class NewFeedDetailWidget extends GetView {
                   width: 8.w,
                 ),
                 Expanded(
-                  child: CommentInputWidget(
+                  child: NewCommentInputWidget(
                     post: controller.postRx.value,
                     communityViewModel: communityViewModel,
                     widgetController: controller,

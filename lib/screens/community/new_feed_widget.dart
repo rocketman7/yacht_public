@@ -285,7 +285,7 @@ class CommentList extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               text: TextSpan(
                                   text: '${comments[index].writerUserName}   ',
-                                  style: feedWriterName.copyWith(fontWeight: FontWeight.w600, height: 1.4),
+                                  style: feedWriterName.copyWith(fontWeight: FontWeight.w700, height: 1.4),
                                   children: [
                                     TextSpan(
                                       text: '${comments[index].content}',
@@ -741,6 +741,103 @@ class CommentInputWidget extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class NewCommentInputWidget extends StatelessWidget {
+  NewCommentInputWidget({
+    Key? key,
+    required this.post,
+    required this.communityViewModel,
+    required this.widgetController,
+  }) : super(key: key);
+  final PostModel post;
+  final CommunityViewModel communityViewModel;
+  final TextEditingController _commentController = TextEditingController();
+  final NewFeedWidgetController widgetController;
+  @override
+  Widget build(BuildContext context) {
+    final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
+
+    // print(_commmentInputController.commentFocusNode.hasPrimaryFocus);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: TextFormField(
+            key: _key,
+            onTap: () {
+              // FocusNode focusNode = FocusScope.of(context);
+              // if (focusNode.canRequestFocus) {
+              //   focusNode.requestFocus();
+              // }
+              // _commmentInputController.commentFocusNode.requestFocus(_commmentInputController.commentFocusNode);
+
+              HapticFeedback.lightImpact();
+            },
+            focusNode: widgetController.commentFocusNode,
+            controller: _commentController,
+            minLines: 1,
+            maxLines: null,
+            textAlignVertical: TextAlignVertical.center,
+            keyboardType: TextInputType.multiline,
+            style: TextStyle(color: white),
+            decoration: InputDecoration(
+              // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+              isDense: true,
+              filled: true,
+              fillColor: yachtDarkGrey,
+              contentPadding: EdgeInsets.fromLTRB(8.w, 8.w, 8.w, 8.w),
+
+              // prefixText:
+              // prefixStyle: TextStyle(color: yachtBlack),
+              // prefixIcon: _commmentInputController.isFocused.value
+              //     ? Text(
+              //         '  ${userModelRx.value!.userName}  ',
+              //         style: TextStyle(color: yachtBlack),
+              //       )
+              //     : SizedBox.shrink(),
+              // prefixIconConstraints: BoxConstraints(minWidth: 8.w, minHeight: 0),
+              focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+              enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+              hintText: "댓글 남기기",
+              hintStyle: feedContent.copyWith(
+                color: yachtLightGrey,
+                height: 1.2.w,
+              ),
+            ),
+          ),
+        ),
+        Obx(
+          () => Visibility(
+              visible: (widgetController.isFocused.value || _commentController.text.length > 0),
+              child: GestureDetector(
+                onTap: () async {
+                  HapticFeedback.heavyImpact();
+                  await communityViewModel.uploadComment(
+                    post,
+                    _commentController.text,
+                  );
+                  _commentController.clear();
+                  widgetController.commentFocusNode.unfocus();
+                  print("게시");
+                },
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 8.w,
+                    ),
+                    basicInfoButtion(
+                      "게시",
+                      buttonColor: yachtViolet,
+                    ),
+                  ],
+                ),
+              )),
         ),
       ],
     );
