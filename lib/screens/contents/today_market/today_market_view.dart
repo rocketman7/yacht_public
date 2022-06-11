@@ -90,7 +90,9 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                                       ),
                                     ),
                                     Text(controller.todayMarkets[index].title,
-                                        style: sectionTitle.copyWith(height: 1.4)),
+                                        style: sectionTitle.copyWith(
+                                          height: 1.4,
+                                        )),
                                     SizedBox(
                                       height: correctHeight(
                                         12.w,

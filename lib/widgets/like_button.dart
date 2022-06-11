@@ -44,7 +44,7 @@ class _LikeButtonState extends State<LikeButton> {
         height: widget.size,
         width: widget.size,
         child: RiveAnimation.asset(
-          'assets/buttons/like.riv',
+          'assets/buttons/ic_like.riv',
           onInit: _onRiveInit,
           stateMachines: ['likeButton'],
         ));

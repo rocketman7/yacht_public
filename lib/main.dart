@@ -15,6 +15,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/screens/auth/auth_check_view.dart';
 import 'package:yachtOne/screens/auth/email_register_view.dart';
+import 'package:yachtOne/screens/onboarding/onboarding_new_view.dart';
 
 import 'package:yachtOne/screens/onboarding/onboarding_view.dart';
 import 'package:yachtOne/screens/quest/quest_view.dart';
@@ -68,12 +69,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   final box = GetStorage();
-  bool hasSeenOnboarding = false;
+  bool hasSeenNewOnboarding = false;
   @override
   void initState() {
     // GetStorage 지울 때 erase
     // box.erase();
-    hasSeenOnboarding = box.read('hasSeenOnboarding') ?? false;
+    hasSeenNewOnboarding = box.read('hasSeenNewOnboarding') ?? false;
     _mixpanelService.mixpanel.track('App Open');
 
     super.initState();
@@ -101,6 +102,7 @@ class _MyAppState extends State<MyApp> {
   // GlobalKey navBarGlobalKey = GlobalKey(debugLabel: 'bottomAppBar');
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     // 아이폰 프로 같은애들 기존에 지가 다크테마 쓰고있어서 스테이터스바 글씨색 하얀색일 경우를 위해
     // var lang = Localizations.localeOf(context).languageCode;
     // print("MAINLanguage is " + lang);
@@ -119,7 +121,7 @@ class _MyAppState extends State<MyApp> {
         getPages: [
           GetPage(
             name: '/',
-            page: () => hasSeenOnboarding ? AuthCheckView() : OnboardingView(),
+            page: () => hasSeenNewOnboarding ? AuthCheckView() : NewOnboardingView(),
           ),
           // GetPage(
           //     name: 'stockInfo',

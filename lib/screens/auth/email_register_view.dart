@@ -57,6 +57,10 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                 ),
                 TextFormField(
                   controller: _emailController,
+                  style: TextStyle(
+                    color: white,
+                    fontSize: 18.w,
+                  ),
                   onChanged: (_) {
                     if (_emailController.text.length > 0 &&
                         EmailValidator.validate(_emailController.text) &&
@@ -94,6 +98,10 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _obscureText,
+                      style: TextStyle(
+                        color: white,
+                        fontSize: 18.w,
+                      ),
                       onChanged: (_) {
                         if (_emailController.text.length > 0 &&
                             EmailValidator.validate(_emailController.text) &&

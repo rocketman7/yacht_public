@@ -9,7 +9,6 @@ import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
-import 'package:yachtOne/screens/quest/time_counter_widget.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -18,9 +17,9 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../locator.dart';
 
-class QuestWidget extends StatelessWidget {
+class NewLiveQuestWidget extends StatelessWidget {
   final QuestModel questModel;
-  const QuestWidget({
+  const NewLiveQuestWidget({
     Key? key,
     required this.questModel,
   }) : super(key: key);
@@ -55,27 +54,6 @@ class SquareQuestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 이 위젯에 해당하는 userQuestModel을 확인하고 userQuestModel에 넣어준다
-    // final Rxn<UserQuestModel> userQuestModel = Rxn<UserQuestModel>();
-    // // RxBool isUserQuestDone = false.obs;
-    // userQuestModelRx.listen((value) {
-    //   // print('userQuestModelRx listening: $value');
-    //   // print('listening questmodel: $value');
-    //   if (value.isNotEmpty) {
-    //     var temp = value.where((i) {
-    //       print(i);
-    //       print(i.questId);
-    //       print(questModel.questId);
-    //       return i.questId == questModel.questId;
-    //     });
-    //     if (temp.length > 0) {
-    //       userQuestModel(temp.first);
-    //     }
-    //     // print('temp $temp');
-    //     // userQuestModel(temp);
-    //     // print('userQuestModel $userQuestModel');
-    //   }
-    // });
     return questModel.selectMode == 'tutorial'
         ? SectionBoxWithBottomButtonAndBorder(
             height: height,
@@ -95,6 +73,7 @@ class SquareQuestWidget extends StatelessWidget {
             ),
           )
         : Obx(() =>
+            // 참여한 퀘스트
             (userQuestModelRx.length > 0 && userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
                 ? secondarySectionBoxWithBottomButton(
                     height: height,
@@ -118,21 +97,50 @@ class SquareQuestWidget extends StatelessWidget {
                       ],
                     ),
                   )
-                : sectionBoxWithBottomButton(
-                    height: height,
-                    width: width,
-                    padding: EdgeInsets.all(primaryPaddingSize),
-                    buttonTitle: "퀘스트 참여하기",
-                    child: Column(
-                      // mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-                        QuestImage(
-                          questModel: questModel,
-                        ),
-                        QuestCardRewards(questModel: questModel),
-                      ],
+                // 아직 참여하지 않은 퀘스트s
+                : Padding(
+                    padding: primaryHorizontalPadding,
+                    child: Container(
+                      padding: primaryAllPadding,
+                      decoration: BoxDecoration(color: yachtLightBlack, borderRadius: BorderRadius.circular(12.w)),
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${questModel.itemNeeded}',
+                            style: TextStyle(
+                              color: white,
+                            ),
+                          ),
+                          Text(
+                            '${questModel.title}',
+                            style: TextStyle(
+                              color: white,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/manypeople.svg',
+                                width: 17.w,
+                                color: white,
+                              ),
+                              SizedBox(width: 4.w),
+                              questModel.counts == null
+                                  ? Text(
+                                      '0',
+                                      style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                                    )
+                                  : Text(
+                                      '${questModel.counts}',
+                                      // '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
+                                      style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
+                                    )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ));
 
@@ -307,7 +315,7 @@ class QuestCardHeader extends StatelessWidget {
         SizedBox(
           height: correctHeight(10.w, sectionTitle.fontSize, questTimerStyle.fontSize),
         ),
-        TimeCounterWidget(
+        TimeToEndCounter(
           questModel: questModel,
         ),
         SizedBox(
@@ -318,7 +326,7 @@ class QuestCardHeader extends StatelessWidget {
             SvgPicture.asset(
               'assets/icons/manypeople.svg',
               width: 17.w,
-              color: white,
+              color: yachtBlack,
             ),
             SizedBox(width: 4.w),
             questModel.counts == null

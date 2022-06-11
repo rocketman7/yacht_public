@@ -105,17 +105,17 @@ class CommunityView extends GetView<CommunityViewModel> {
                         },
                         child: Container(
                           padding: EdgeInsets.all(
-                            7.w,
+                            4.w,
                           ),
                           decoration: BoxDecoration(
-                              color: buttonNormal,
+                              color: yachtViolet,
                               borderRadius: BorderRadius.circular(
                                 10.w,
                               )),
                           child: SvgPicture.asset(
-                            'assets/icons/writing_plus.svg',
-                            height: 23.w,
-                            width: 23.w,
+                            'assets/icons/writing_plus_violet.svg',
+                            height: 28.w,
+                            width: 28.w,
                           ),
                         ),
                       ),
@@ -162,7 +162,11 @@ class CommunityView extends GetView<CommunityViewModel> {
                             communityViewModel: _communityViewModel,
                             post: _communityViewModel.posts[index],
                           ),
-                          Divider(),
+                          Divider(
+                            color: yachtMidGrey,
+                            height: 32.w,
+                            thickness: .3,
+                          ),
                           SizedBox(
                             height: 14.w,
                           )

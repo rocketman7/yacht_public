@@ -33,6 +33,7 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
 
 import '../models/subLeague_model.dart';
+import '../screens/stock_info/stock_info_new_controller.dart';
 
 class FirestoreService extends GetxService {
   final FirebaseFirestore _firestoreService = FirebaseFirestore.instance;
@@ -66,6 +67,20 @@ class FirestoreService extends GetxService {
         .get()
         .then((value) => LeagueAddressModel.fromMap(value.data()!));
     // return LeagueAddressModel(openLeague: 'league008', leagueName: '3월 리그', leagueEndDateTime: '2022년 3월 30일까지');
+  }
+
+  // 현재 메인 요트픽 가져오기
+  Future<List<StockInfoNewModel>> getYachtPicks() async {
+    List<StockInfoNewModel> yachtPicks = [];
+    await _firestoreService
+        .collection('yachtPicks')
+        .where('showMain', isEqualTo: true)
+        .orderBy('updateTime')
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              yachtPicks.add(StockInfoNewModel.fromMap(element.data()));
+            }));
+    return yachtPicks;
   }
 
   // 휴일 리스트
@@ -108,7 +123,7 @@ class FirestoreService extends GetxService {
     return _firestoreService
         .collection('users')
         .doc(uid)
-        // .doc('kakao:1664094339')
+        // .doc('kakao:2236766968')
         .snapshots()
         .map((snapshot) {
       print('user data stream changed, user model snapshot: ${snapshot.data()}');

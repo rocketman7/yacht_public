@@ -196,7 +196,7 @@ class LikeButtonWidget extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     'assets/icons/comment.svg',
-                    color: yachtBlack,
+                    color: white,
                     width: 18.w,
                   ),
                   SizedBox(
@@ -266,7 +266,7 @@ class CommentList extends StatelessWidget {
         initialData: [],
         builder: (context, snapshot) {
           if (snapshot.data!.length == 0) {
-            return Container();
+            return SizedBox.shrink();
           } else {
             List<CommentModel> comments = snapshot.data!;
             return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -462,7 +462,7 @@ class CommentList extends StatelessWidget {
                   child: Text(
                     "댓글 ${comments.length}개 모두 보기",
                     style: feedWriterName.copyWith(
-                      color: yachtViolet,
+                      color: yachtLightGrey,
                     ),
                   ),
                 )
@@ -544,9 +544,9 @@ class FeedContentWidget extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                       gradient: LinearGradient(colors: [
-                    Colors.white.withOpacity(0),
-                    Colors.white.withOpacity(1),
-                    Colors.white,
+                    yachtBlack.withOpacity(0),
+                    yachtBlack.withOpacity(1),
+                    yachtBlack,
                   ], stops: [
                     0,
                     0.2,
@@ -604,7 +604,11 @@ class FeedContentWidget extends StatelessWidget {
                     ))
                         ? isMaxLineExtended.value
                             ? SizedBox.shrink()
-                            : Text("      ... 더보기")
+                            : Text("      ... 더보기",
+                                style: TextStyle(
+                                  color: yachtLightGrey,
+                                  fontWeight: FontWeight.w600,
+                                ))
                         : SizedBox.shrink(),
                   ),
                 ),
@@ -970,6 +974,7 @@ class FeedHeader extends StatelessWidget {
                 Text(
                   post.writerUserName,
                   style: TextStyle(
+                    color: white,
                     fontSize: 14.w,
                     fontWeight: FontWeight.w600,
                     wordSpacing: -.5,
@@ -984,7 +989,7 @@ class FeedHeader extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12.w,
                         fontWeight: FontWeight.w400,
-                        color: yachtGrey,
+                        color: yachtLightGrey,
                         wordSpacing: -.5,
                       ),
                     ),
@@ -1191,7 +1196,7 @@ class FeedHeader extends StatelessWidget {
                 color: Colors.transparent,
                 child: SvgPicture.asset(
                   'assets/icons/show_more.svg',
-                  color: yachtBlack,
+                  color: white,
                 ),
               ),
               SizedBox(height: 8.w),

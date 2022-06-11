@@ -65,6 +65,14 @@ String countDown(Duration duration) {
   }
 }
 
+String shorterCountDown(Duration duration) {
+  if (duration > Duration(days: 1)) {
+    return "${duration.inDays}D ${duration.inHours.remainder(24)}:${duration.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60)}";
+  } else {
+    return "${duration.inHours}H ${duration.inMinutes.remainder(60)}M ${duration.inSeconds.remainder(60)}s";
+  }
+}
+
 String feedTimeHandler(DateTime writtenDateTime) {
   Duration _writtenDateTimeFromNow = DateTime.now().difference(writtenDateTime);
 

@@ -84,7 +84,7 @@ class StatsView extends StatelessWidget {
                                     padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.w),
                                     child: Text(statsViewModel.toggleTerms[index],
                                         style: questTermTextStyle.copyWith(
-                                          color: statsViewModel.selectedTerm.value == index ? yachtBlack : yachtGrey,
+                                          color: statsViewModel.selectedTerm.value == index ? white : yachtMidGrey,
                                         )
                                         // contentStyle.copyWith(
                                         //     color: statsViewModel
@@ -99,7 +99,7 @@ class StatsView extends StatelessWidget {
                                   Container(
                                     width: 1.5.w,
                                     height: questTermTextStyle.fontSize,
-                                    color: yachtBlack,
+                                    color: yachtLightGrey,
                                   )
                               ],
                             ),

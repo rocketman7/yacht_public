@@ -26,6 +26,7 @@ class NewFeedDetailWidget extends GetView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: yachtLightGrey,
       appBar: primaryAppBar(""),
       body: Column(
         children: [
@@ -34,7 +35,7 @@ class NewFeedDetailWidget extends GetView {
               shrinkWrap: true,
               children: [
                 Padding(
-                  padding: primaryHorizontalPadding,
+                  padding: primaryAllPadding,
                   child: FeedHeader(
                     post: controller.postRx.value,
                     communityViewModel: communityViewModel,
@@ -145,7 +146,7 @@ class FeedDetailContentWidget extends StatelessWidget {
       },
       text: post.content,
       style: feedContent.copyWith(fontSize: 16.w),
-      linkStyle: feedContent.copyWith(color: yachtViolet),
+      linkStyle: feedContent.copyWith(color: yachtBlue),
       maxLines: 1000,
       overflow: TextOverflow.ellipsis,
       // overflow: TextOverflow.,
