@@ -737,7 +737,7 @@ adsViewDialog(BuildContext context) {
       context: context,
       builder: (context) {
         return Dialog(
-          backgroundColor: primaryBackgroundColor,
+          backgroundColor: yachtDarkGrey,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -779,9 +779,7 @@ adsViewDialog(BuildContext context) {
                                 height: 15.w,
                               ),
                               SizedBox(
-                                  height: 15.w,
-                                  width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
+                                  height: 15.w, width: 15.w, child: Image.asset('assets/icons/exit.png', color: white)),
                             ],
                           ),
                           SizedBox(

@@ -29,7 +29,7 @@ import 'new_feed_widget.dart';
 
 class CommunityView extends GetView<CommunityViewModel> {
   // CommunityViewModel communityViewModel = Get.put(CommunityViewModel());
-  CommunityViewModel communityViewModel = Get.find<CommunityViewModel>();
+  // CommunityViewModel communityViewModel = Get.find<CommunityViewModel>();
   // ScrollController _scrollController = ScrollController();
 
   final CommunityViewModel _communityViewModel = Get.put(CommunityViewModel());
@@ -154,7 +154,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                                   ],
                                 )
                               : Container(),
-                          ((index == 1) && Platform.isAndroid) ? CommunityAd() : SizedBox.shrink(),
+                          // ((index == 1) && Platform.isAndroid) ? CommunityAd() : SizedBox.shrink(),
 
                           // FeedWidget(communityViewModel: _communityViewModel,
                           //     post: _communityViewModel.posts[index]),

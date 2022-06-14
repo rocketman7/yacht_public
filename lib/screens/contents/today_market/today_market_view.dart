@@ -125,7 +125,7 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                                     width: 6.w,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: controller.newsIndex.value == index ? yachtDarkGrey : primaryButtonText,
+                                      color: controller.newsIndex.value == index ? white : yachtMidGrey,
                                     ),
                                   ),
                                   SizedBox(width: 8.w),

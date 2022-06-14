@@ -1111,6 +1111,15 @@ class FirestoreService extends GetxService {
     });
   }
 
+  // 특정 날, 특정 종목 종가 가져오기
+  Future<num> getClosePrice(String issueCode, DateTime day) async {
+    return await _firestoreService
+        .collection('stocksKR/$issueCode/historicalPrices')
+        .where('dateTime', isEqualTo: dateTimeToString(day, 8))
+        .get()
+        .then((value) => value.docs.first.data()['close']);
+  }
+
   //// 커뮤니티 관련
   // 포스트 올리기
   Future uploadNewPost(PostModel newPost) async {

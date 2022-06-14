@@ -75,88 +75,71 @@ class SquareQuestWidget extends StatelessWidget {
           )
         : Obx(() =>
             // 참여한 퀘스트
-            (userQuestModelRx.length > 0 && userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
-                ? secondarySectionBoxWithBottomButton(
-                    height: height,
-                    width: width,
-                    padding: EdgeInsets.all(primaryPaddingSize),
-                    buttonTitle: "예측 바꾸기",
-                    child: Stack(
+            Padding(
+              padding: primaryHorizontalPadding,
+              child: Container(
+                padding: primaryAllPadding,
+                decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          // mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Row(
                           children: [
-                            QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-                            QuestImage(
-                              questModel: questModel,
+                            basicInfoButtion(
+                              "New",
+                              buttonColor: yachtViolet,
                             ),
-                            QuestCardRewards(questModel: questModel),
-                          ],
-                        ),
-                        Container(color: Colors.white.withOpacity(.50)),
-                      ],
-                    ),
-                  )
-                // 아직 참여하지 않은 퀘스트s
-                : Padding(
-                    padding: primaryHorizontalPadding,
-                    child: Container(
-                      padding: primaryAllPadding,
-                      decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  basicInfoButtion(
-                                    "New",
-                                    buttonColor: yachtViolet,
-                                  ),
-                                  SizedBox(width: 4.w),
-                                  basicInfoButtion(
+                            SizedBox(width: 4.w),
+                            (userQuestModelRx.length > 0 &&
+                                    userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
+                                ? basicInfoButtion(
+                                    "참여완료",
+                                    buttonColor: yachtGrey,
+                                    textColor: yachtMidGrey,
+                                  )
+                                : basicInfoButtion(
                                     "참여가능",
                                     buttonColor: yachtGrey,
                                   ),
-                                  SizedBox(width: 4.w),
-                                  basicInfoButtion(
-                                    "",
-                                    child: TimeCounterWidget(
-                                      questModel: questModel,
-                                    ),
-                                  )
-                                ],
+                            SizedBox(width: 4.w),
+                            basicInfoButtion(
+                              "",
+                              child: TimeCounterWidget(
+                                questModel: questModel,
                               ),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/icons/jogabi.svg',
-                                    width: 20.w,
-                                    height: 20.w,
-                                  ),
-                                  SizedBox(width: 4.w),
-                                  Text(
-                                    '${questModel.itemNeeded}개',
-                                    style: TextStyle(
-                                      color: white,
-                                      fontSize: 16.w,
-                                      // height: 1.2,
-                                    ),
-                                  ),
-                                ],
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/jogabi.svg',
+                              width: 20.w,
+                              height: 20.w,
+                            ),
+                            SizedBox(width: 4.w),
+                            Text(
+                              '${questModel.itemNeeded}개',
+                              style: TextStyle(
+                                color: white,
+                                fontSize: 16.w,
+                                // height: 1.2,
                               ),
-                            ],
-                          ),
-                          SizedBox(height: 8.w),
-                          NewQuestHeader(questModel: questModel)
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ));
+                    SizedBox(height: 8.w),
+                    NewQuestHeader(questModel: questModel)
+                  ],
+                ),
+              ),
+            ));
 
     // Stack(
     //   children: [

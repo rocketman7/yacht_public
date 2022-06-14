@@ -149,7 +149,10 @@ class InsufficientYachtPointAlertDialog extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 14.w),
-                Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
+                Text('알림',
+                    style: yachtBadgesDialogTitle.copyWith(
+                      fontSize: 16.w,
+                    )),
                 SizedBox(
                   height:
                       correctHeight(20.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
@@ -169,7 +172,7 @@ class InsufficientYachtPointAlertDialog extends StatelessWidget {
                       Text(
                         "요트 포인트가 부족하여 교환할 수 없어요.",
                         textAlign: TextAlign.center,
-                        // style: yachtBadgesDescriptionDialogTitle,
+                        style: yachtBadgesDescriptionDialogContent.copyWith(color: yachtLightGrey),
                       ),
                     ],
                   ),

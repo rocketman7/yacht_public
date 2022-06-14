@@ -9,6 +9,8 @@ import 'package:yachtOne/screens/community/detail_post_view.dart';
 import 'package:yachtOne/screens/profile/my_feed_view_model.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
+import '../community/new_feed_detail_widget.dart';
+
 class MyFeedView extends GetView<MyFeedViewModel> {
   final String uid;
   const MyFeedView(this.uid, {Key? key}) : super(key: key);
@@ -20,39 +22,16 @@ class MyFeedView extends GetView<MyFeedViewModel> {
     return Column(
       children: [
         SizedBox(height: 14.w),
-        // Padding(
-        //   padding: primaryHorizontalPadding,
-        //   child: Row(
-        //     children: [
-        //       Text(
-        //         '피드 내역',
-        //         style: profileHeaderTextStyle,
-        //       ),
-        //       Spacer(),
-        //       Image.asset(
-        //         'assets/icons/navigate_foward_arrow.png',
-        //         height: 16.w,
-        //         width: 9.w,
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // SizedBox(
-        //   height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
-        // ),
         Obx(
           () => myFeedViewModel.userPosts.length > 0
               ? Container(
-                  // height: 140.w,
-
                   child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: min(myFeedViewModel.userPosts.length, 50),
                   itemBuilder: (_, index) {
                     return FutureBuilder<PostModel>(
-                        future: myFeedViewModel
-                            .getPost(myFeedViewModel.userPosts[index].postId),
+                        future: myFeedViewModel.getPost(myFeedViewModel.userPosts[index].postId),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Container();
@@ -63,20 +42,16 @@ class MyFeedView extends GetView<MyFeedViewModel> {
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      Get.to(
-                                          () => DetailPostView(snapshot.data!));
+                                      Get.to(() => NewFeedDetailWidget(post: snapshot.data!));
                                     },
                                     child: sectionBox(
                                         width: double.infinity,
                                         padding: primaryAllPadding,
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              timeStampToStringWithHourMinute(
-                                                  snapshot
-                                                      .data!.writtenDateTime),
+                                              timeStampToStringWithHourMinute(snapshot.data!.writtenDateTime),
                                               style: questRecordendDateTime,
                                             ),
                                             snapshot.data!.title != null
@@ -84,8 +59,7 @@ class MyFeedView extends GetView<MyFeedViewModel> {
                                                     snapshot.data!.title!,
                                                     style: feedTitle,
                                                     maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    overflow: TextOverflow.ellipsis,
                                                   )
                                                 : Container(),
                                             Text(
@@ -97,7 +71,7 @@ class MyFeedView extends GetView<MyFeedViewModel> {
                                           ],
                                         )),
                                   ),
-                                  SizedBox(height: 8.w),
+                                  SizedBox(height: 12.w),
                                 ],
                               ),
                             );

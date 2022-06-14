@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
@@ -19,7 +20,7 @@ class YachtStoreView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: yachtLightGrey,
       body: CustomScrollView(
         controller: yachtStoreController.scrollController,
         slivers: [
@@ -43,6 +44,7 @@ class YachtStoreView extends StatelessWidget {
                             'assets/buttons/exit.png',
                             width: 30.w,
                             height: 30.w,
+                            color: white,
                           ),
                         ],
                       ),
@@ -60,7 +62,7 @@ class YachtStoreView extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(left: 14.w, right: 14.w, top: 8.w, bottom: 8.w),
                           child: Container(
-                            decoration: BoxDecoration(color: yachtPaleGreen, borderRadius: BorderRadius.circular(10)),
+                            decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(10)),
                             child: Padding(
                               padding: EdgeInsets.all(14.w),
                               child: Container(
@@ -73,8 +75,8 @@ class YachtStoreView extends StatelessWidget {
                                       style: yachtStoreTextStyle,
                                     ),
                                     Spacer(),
-                                    Image.asset(
-                                      'assets/icons/yacht_point_circle.png',
+                                    SvgPicture.asset(
+                                      'assets/icons/gem.svg',
                                       width: 24.w,
                                       height: 24.w,
                                     ),
@@ -228,8 +230,8 @@ class YachtStoreView extends StatelessWidget {
                                   ),
                                   Row(
                                     children: [
-                                      Image.asset(
-                                        'assets/icons/yacht_point_circle.png',
+                                      SvgPicture.asset(
+                                        'assets/icons/gem.svg',
                                         height: 20.w,
                                         width: 20.w,
                                       ),
@@ -432,11 +434,11 @@ class YachtStoreSectionHeaderDelegate extends SliverPersistentHeaderDelegate {
       child: Column(
         children: [
           Container(
-            color: Colors.white,
+            color: yachtBlack,
             height: topPadding,
           ),
           Container(
-            color: Colors.white,
+            color: yachtBlack,
             alignment: Alignment.center,
             child: child,
           ),

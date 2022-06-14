@@ -25,7 +25,7 @@ class NewResultQuestWidget extends StatelessWidget {
           padding: primaryAllPadding,
           decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
           width: double.infinity,
-          child: Column(children: [
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

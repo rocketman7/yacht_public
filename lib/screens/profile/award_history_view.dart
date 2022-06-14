@@ -18,7 +18,7 @@ TextStyle awardHistoryViewTextStyle1 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -26,7 +26,7 @@ TextStyle awardHistoryViewTextStyle2 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 30.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -34,7 +34,7 @@ TextStyle awardHistoryViewTextStyle3 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 12.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -42,7 +42,7 @@ TextStyle awardHistoryViewTextStyle4 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -50,7 +50,7 @@ TextStyle awardHistoryViewTextStyle5 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: Color(0xFF879098), // yacht grey
+  color: white, // yacht grey
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -58,6 +58,7 @@ TextStyle awardHistoryViewTextStyle6 = TextStyle(
   fontFamily: 'SCore',
   fontSize: 16.w,
   fontWeight: FontWeight.w500,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -130,8 +131,10 @@ class AwardHistoryColumnWidget extends StatelessWidget {
             child: Container(
               width: double.infinity,
               // height: 30,
-              decoration:
-                  primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
+              decoration: BoxDecoration(
+                color: yachtDarkGrey,
+                borderRadius: BorderRadius.circular(12.w),
+              ),
               child: controller.allAssets.length > 0
                   ?
                   // SizedBox(
@@ -206,7 +209,7 @@ class AwardHistoryColumnWidget extends StatelessWidget {
                                               : Container(
                                                   height: 1.w,
                                                   width: SizeConfig.screenWidth - 28.w - 30.w,
-                                                  color: Color(0xFFE6EAF1), //yacht-line 색임
+                                                  color: yachtMidGrey, //yacht-line 색임
                                                 ),
                                         ],
                                       ),

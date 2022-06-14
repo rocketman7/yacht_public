@@ -108,11 +108,16 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
           child: Container(
             width: double.infinity,
             height: 50.w,
-            decoration: yachtBoxDecoration,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.w),
+              color: yachtDarkGrey,
+            ),
             child: Center(
                 child: Text(
               "모두 보기",
-              style: seeMore,
+              style: seeMore.copyWith(
+                color: white,
+              ),
             )),
           ),
         ),

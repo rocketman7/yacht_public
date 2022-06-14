@@ -85,8 +85,8 @@ class GoodsExchangeView extends StatelessWidget {
                           Text(
                             "성함",
                             style: yachtStoreTextStyle.copyWith(
-                              height: 1.4,
-                              color: yachtGrey,
+                              // height: 1.4,
+                              color: yachtLightGrey,
                             ),
                           ),
                           Expanded(
@@ -115,8 +115,8 @@ class GoodsExchangeView extends StatelessWidget {
                           Text(
                             "휴대폰 번호",
                             style: yachtStoreTextStyle.copyWith(
-                              color: yachtGrey,
-                              height: 1.4,
+                              color: yachtLightGrey,
+                              // height: 1.4,
                             ),
                           ),
                           Expanded(
@@ -190,7 +190,7 @@ class GoodsExchangeView extends StatelessWidget {
                                         "인증번호",
                                         style: yachtStoreTextStyle.copyWith(
                                           height: 1.4,
-                                          color: yachtGrey,
+                                          color: yachtLightGrey,
                                         ),
                                       ),
                                       Expanded(
@@ -527,7 +527,7 @@ class ConfirmExchangeDialog extends StatelessWidget {
                       Text(
                         '교환하기를 누르면 취소할 수 없습니다.\n교환 후 발송까지 시간이 소요될 수 있습니다.',
                         textAlign: TextAlign.center,
-                        // style: yachtBadgesDescriptionDialogTitle,
+                        style: yachtBadgesDescriptionDialogContent,
                       ),
                     ],
                   ),

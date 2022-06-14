@@ -64,6 +64,7 @@ class QuestView extends StatelessWidget {
     //   statusBarColor: Colors.blue, //or set color with: Color(0xFF0000FF)
     // ));
     return Scaffold(
+      backgroundColor: yachtBlack,
       body: Stack(
         children: [
           CustomScrollView(
@@ -78,7 +79,7 @@ class QuestView extends StatelessWidget {
               ),
               SliverToBoxAdapter(
                 child: Container(
-                  // color: yachtLightGrey,
+                  color: yachtBlack,
                   padding: textTopPadding(homeModuleTitleTextStyle.fontSize!),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -189,10 +190,13 @@ class QuestView extends StatelessWidget {
                   onTap: () {
                     questViewModel.isSelectingSheetShowing(false);
                   },
-                  child: Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    color: backgroundWhenPopup,
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      // color: ,
+                    ),
                   ),
                 )
               : Container()),
@@ -211,7 +215,7 @@ class QuestView extends StatelessWidget {
             () => Positioned(
                 left: 14.w,
                 right: 14.w,
-                bottom: 20.w,
+                bottom: ScreenUtil().bottomBarHeight + 8.w,
                 child: GestureDetector(
                   onTap: () {
                     // print(questViewModel.checkIfUserSelectedAny());
@@ -259,10 +263,10 @@ class QuestView extends StatelessWidget {
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
                       child: Container(
-                        height: 60.w,
+                        height: 55.w,
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50.w),
+                          borderRadius: BorderRadius.circular(12.w),
                           color: yachtViolet.withOpacity(.8),
                         ),
                         child: Center(
@@ -273,7 +277,7 @@ class QuestView extends StatelessWidget {
                                       questViewModel.thisUserQuestModel.value!.selectDateTime == null)
                                   ? "예측하기"
                                   : "예측 변경하기",
-                          style: buttonTextStyle.copyWith(fontSize: 24.w),
+                          style: buttonTextStyle.copyWith(fontSize: 20.w),
                         )),
                       ),
                     ),
@@ -372,13 +376,17 @@ class QuestView extends StatelessWidget {
         duration: Duration(milliseconds: 300),
         left: 14.w,
         right: 14.w,
-        bottom: questViewModel.isSelectingSheetShowing.value ? (20.w + 60.w + 20.w) : -500.w,
+        bottom: questViewModel.isSelectingSheetShowing.value ? (ScreenUtil().bottomBarHeight + 60.w + 20.w) : -500.w,
         child: Container(
-          // color: Colors.white,
           width: double.infinity,
           // height: 100,
           padding: EdgeInsets.all(14.w),
-          decoration: (primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow])),
+          decoration: (primaryBoxDecoration.copyWith(
+            boxShadow: [
+              primaryBoxShadow,
+            ],
+            color: yachtDarkGrey,
+          )),
           child: Column(
             children: [
               Align(
@@ -395,7 +403,7 @@ class QuestView extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.close,
-                          color: primaryFontColor,
+                          color: yachtLightGrey,
                           size: 30.w,
                         ),
                         SizedBox(height: reducedPaddingWhenTextIsBelow(8.w, questTitleTextStyle.fontSize!)),
@@ -430,7 +438,10 @@ class QuestView extends StatelessWidget {
                                   width: 151.w,
                                   height: 151.w,
                                   decoration: yachtChoiceBoxDecoration.copyWith(
-                                      color: questViewModel.toggleList[index] ? yachtRed : white),
+                                      boxShadow: questViewModel.toggleList[index]
+                                          ? yachtChoiceBoxDecoration.boxShadow
+                                          : [BoxShadow()],
+                                      color: questViewModel.toggleList[index] ? yachtRed : yachtMidGrey),
                                   child: Padding(
                                     padding: primaryAllPadding,
                                     child: Column(
@@ -455,7 +466,7 @@ class QuestView extends StatelessWidget {
                                         Text(
                                           questModel.investAddresses![index].name,
                                           style: yachtChoiceBoxName.copyWith(
-                                              color: questViewModel.toggleList[index] ? white : yachtBlack),
+                                              color: questViewModel.toggleList[index] ? white : yachtLightGrey),
                                         )
                                       ],
                                     ),
@@ -511,11 +522,14 @@ class QuestView extends StatelessWidget {
                                       width: 151.w,
                                       height: 151.w,
                                       decoration: yachtChoiceBoxDecoration.copyWith(
+                                          boxShadow: questViewModel.toggleList[index]
+                                              ? yachtChoiceBoxDecoration.boxShadow
+                                              : [BoxShadow()],
                                           color: index == 0 && questViewModel.toggleList[0]
                                               ? yachtRed
                                               : index == 1 && questViewModel.toggleList[1]
                                                   ? yachtBlue
-                                                  : white),
+                                                  : yachtMidGrey),
                                       child: Padding(
                                         padding: primaryAllPadding,
                                         child: Column(
@@ -540,7 +554,7 @@ class QuestView extends StatelessWidget {
                                             Text(
                                               questModel.choices![index],
                                               style: yachtChoiceBoxName.copyWith(
-                                                  color: questViewModel.toggleList[index] ? white : yachtBlack),
+                                                  color: questViewModel.toggleList[index] ? white : yachtLightGrey),
                                             )
                                           ],
                                         ),

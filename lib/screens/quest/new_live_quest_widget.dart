@@ -4,11 +4,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
+import 'package:yachtOne/screens/quest/live/live_widget_controller.dart';
+import 'package:yachtOne/screens/quest/time_counter_widget.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -16,6 +19,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../locator.dart';
+import 'live/new_live_controller.dart';
+import 'live/new_live_widget.dart';
+import 'new_quest_widget.dart';
 
 class NewLiveQuestWidget extends StatelessWidget {
   final QuestModel questModel;
@@ -54,95 +60,81 @@ class SquareQuestWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return questModel.selectMode == 'tutorial'
-        ? SectionBoxWithBottomButtonAndBorder(
-            height: height,
-            width: width,
-            padding: EdgeInsets.all(primaryPaddingSize),
-            buttonTitle: "퀘스트 참여하기",
-            child: Column(
-              // mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-                QuestImage(
-                  questModel: questModel,
-                ),
-                QuestCardRewards(questModel: questModel),
-              ],
-            ),
-          )
-        : Obx(() =>
-            // 참여한 퀘스트
-            (userQuestModelRx.length > 0 && userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
-                ? secondarySectionBoxWithBottomButton(
-                    height: height,
-                    width: width,
-                    padding: EdgeInsets.all(primaryPaddingSize),
-                    buttonTitle: "예측 바꾸기",
-                    child: Stack(
-                      children: [
-                        Column(
-                          // mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-                            QuestImage(
-                              questModel: questModel,
-                            ),
-                            QuestCardRewards(questModel: questModel),
-                          ],
-                        ),
-                        Container(color: Colors.white.withOpacity(.50)),
-                      ],
-                    ),
-                  )
-                // 아직 참여하지 않은 퀘스트s
-                : Padding(
-                    padding: primaryHorizontalPadding,
-                    child: Container(
-                      padding: primaryAllPadding,
-                      decoration: BoxDecoration(color: yachtLightBlack, borderRadius: BorderRadius.circular(12.w)),
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${questModel.itemNeeded}',
-                            style: TextStyle(
-                              color: white,
-                            ),
-                          ),
-                          Text(
-                            '${questModel.title}',
-                            style: TextStyle(
-                              color: white,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/icons/manypeople.svg',
-                                width: 17.w,
-                                color: white,
-                              ),
-                              SizedBox(width: 4.w),
-                              questModel.counts == null
-                                  ? Text(
-                                      '0',
-                                      style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
-                                    )
-                                  : Text(
-                                      '${questModel.counts}',
-                                      // '${questModel.counts!.fold<int>(0, (previous, current) => previous + current)}',
-                                      style: questRewardAmoutStyle.copyWith(fontSize: captionSize),
-                                    )
-                            ],
-                          ),
-                        ],
+    final NewLiveController controller = Get.put(
+      NewLiveController(questModel: questModel),
+      tag: questModel.questId,
+    );
+    return Padding(
+        padding: primaryHorizontalPadding,
+        child: Container(
+          padding: primaryAllPadding,
+          decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      basicInfoButtion(
+                        "LIVE",
+                        buttonColor: yachtRed,
                       ),
-                    ),
-                  ));
+                      SizedBox(width: 4.w),
+                      (userQuestModelRx.length > 0 &&
+                              userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
+                          ? basicInfoButtion(
+                              "참여완료",
+                              buttonColor: yachtGrey,
+                              textColor: yachtMidGrey,
+                            )
+                          : basicInfoButtion(
+                              "미참여",
+                              buttonColor: yachtGrey,
+                            ),
+                      SizedBox(width: 4.w),
+                      basicInfoButtion(
+                        "",
+                        child: LiveTimeCounterWidget(
+                          questModel: questModel,
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/jogabi.svg',
+                        width: 20.w,
+                        height: 20.w,
+                      ),
+                      SizedBox(width: 4.w),
+                      Text(
+                        '${questModel.itemNeeded}개',
+                        style: TextStyle(
+                          color: white,
+                          fontSize: 16.w,
+                          // height: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.w),
+              NewQuestHeader(questModel: questModel),
+              SizedBox(height: 8.w),
+              PickoneLivePriceWidget(controller: controller),
+              // (questModel.selectMode == "pickone" || questModel.selectMode == "order")
+              //     // "pickone" 이나 "order" 일 때
+              //     ? PickoneLivePriceWidget(controller: controller)
+              //     // "updown 일 때"
+              //     : UpdownLivePriceWidget(controller: controller),
+            ],
+          ),
+        ));
 
     // Stack(
     //   children: [
@@ -225,6 +217,96 @@ class SquareQuestWidget extends StatelessWidget {
     //     )
     //   ],
     // );
+  }
+}
+
+class PickoneLivePriceWidget extends StatelessWidget {
+  const PickoneLivePriceWidget({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final NewLiveController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: List.generate(controller.investmentModelLength, (index) {
+        return Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Obx(
+                () => Text(
+                  toPriceKRW(controller.livePricesOfThisQuest[index].value.chartPrices.last.close ?? 0),
+                  style: stockPriceTextStyle.copyWith(
+                    fontSize: 26.w,
+                  ),
+                ),
+              ),
+              Text(
+                controller.questModel.investAddresses![index].name,
+                style: stockPriceTextStyle.copyWith(
+                  fontSize: 18.w,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "오늘",
+                    style: TextStyle(
+                      color: yachtLightGrey,
+                      fontSize: 12.w,
+                    ),
+                  ),
+                  Obx(
+                    () => Text(
+                      controller.getStandardPriceDone.value &&
+                              (controller.livePricesOfThisQuest[index].value.chartPrices.last.close != null)
+                          ? toPriceKRW(controller.livePricesOfThisQuest[index].value.chartPrices.last.close! -
+                              controller.yesterdayClosePrices[index])
+                          : '-',
+                      style: stockPriceTextStyle.copyWith(
+                        fontSize: 12.w,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 4.w,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "기준가 대비",
+                    style: TextStyle(
+                      color: yachtLightGrey,
+                      fontSize: 12.w,
+                    ),
+                  ),
+                  Obx(
+                    () => Text(
+                      controller.getStandardPriceDone.value &&
+                              (controller.livePricesOfThisQuest[index].value.chartPrices.last.close != null)
+                          ? toPriceKRW(controller.livePricesOfThisQuest[index].value.chartPrices.last.close! -
+                              controller.beforeLiveStartDateClosePrices[index])
+                          : '-',
+                      style: stockPriceTextStyle.copyWith(
+                        fontSize: 12.w,
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        );
+      }),
+    );
   }
 }
 

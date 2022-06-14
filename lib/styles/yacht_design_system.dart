@@ -49,7 +49,7 @@ const volumeColor = yachtGrey;
 
 Color thinDivider = Color(0xFF879098).withOpacity(.05);
 
-const Color buttonDisabled = const Color(0xFFE6E6E6);
+const Color buttonDisabled = yachtMidGrey;
 const Color buttonNormal = const Color(0xFFEFF2FA);
 Color yachtShadow = Color(0xFFCDC4D9).withOpacity(.3);
 const Color yachtLine = Color(0xFFE6EAF1);
@@ -308,9 +308,9 @@ TextStyle emailRegisterTitle = TextStyle(
 // 필드 이름
 TextStyle emailRegisterFieldName = TextStyle(
   fontFamily: krFont,
-  fontSize: 12.w,
+  fontSize: 16.w,
   fontWeight: FontWeight.w500,
-  color: yachtViolet,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -320,7 +320,7 @@ TextStyle emailRegisterFieldHint = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
-  color: yachtGrey,
+  color: yachtMidGrey,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -401,7 +401,7 @@ TextStyle profileButtonTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: primaryButtonBackground,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -813,7 +813,7 @@ TextStyle feedWriterName = TextStyle(
 TextStyle feedTitle = TextStyle(
   fontSize: bodySmallSize,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -904,7 +904,7 @@ TextStyle dialogTitle = TextStyle(
   fontSize: heading5Size,
   fontFamily: krFont,
   fontWeight: FontWeight.w600,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -0.5,
 );
 
@@ -912,7 +912,7 @@ TextStyle dialogContent = TextStyle(
   fontSize: heading5Size,
   fontFamily: krFont,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -0.5,
   height: primaryFontHeight,
 );
@@ -921,7 +921,7 @@ TextStyle dialogChoice = TextStyle(
   fontSize: bodyBigSize,
   fontFamily: krFont,
   fontWeight: FontWeight.w600,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -0.5,
   height: primaryFontHeight,
 );
@@ -1007,7 +1007,7 @@ TextStyle settingLogout = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
-  color: yachtGrey,
+  color: yachtLightGrey,
   decoration: TextDecoration.underline,
   letterSpacing: -1.0,
   height: primaryFontHeight,
@@ -1043,7 +1043,7 @@ TextStyle questRecordendDateTime = TextStyle(
   fontSize: 12.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: yachtMidGrey,
   letterSpacing: -1.0,
   height: 1.4,
   // height: primaryFontHeight,
@@ -1182,7 +1182,7 @@ TextStyle yachtBadgesDialogTitle = TextStyle(
   fontSize: 18.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: 0.0,
   height: primaryFontHeight,
 );
@@ -1190,7 +1190,7 @@ TextStyle yachtBadgesDescriptionDialogTitle = TextStyle(
   fontSize: 18.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1198,7 +1198,7 @@ TextStyle yachtBadgesDescriptionDialogContent = TextStyle(
   fontSize: 16.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1294,7 +1294,7 @@ TextStyle notificationCategory = TextStyle(
   fontSize: 14.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1303,7 +1303,7 @@ TextStyle notificationContent = TextStyle(
   fontSize: 14.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1312,7 +1312,7 @@ TextStyle notificationContentForDetail = TextStyle(
   fontSize: 16.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1361,7 +1361,7 @@ TextStyle yachtStoreTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -1378,7 +1378,7 @@ TextStyle yachtStoreBrandMain = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   // fontWeight: FontWeight.w400,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1387,7 +1387,7 @@ TextStyle yachtStoreBrandDetail = TextStyle(
   fontFamily: krFont,
   fontSize: 18.w,
   // fontWeight: FontWeight.w400,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1396,7 +1396,7 @@ TextStyle yachtStoreGoodsNameMain = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w600,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1405,7 +1405,7 @@ TextStyle yachtStoreGoodsNameDetail = TextStyle(
   fontFamily: krFont,
   fontSize: 20.w,
   fontWeight: FontWeight.w600,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1414,7 +1414,7 @@ TextStyle yachtStoreGoodsPriceMain = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -1423,7 +1423,7 @@ TextStyle yachtStoreGoodsPriceDetail = TextStyle(
   fontFamily: krFont,
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -1432,7 +1432,7 @@ TextStyle yachtStoreGoodsDescription = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   // fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -1606,7 +1606,7 @@ Container bigTextContainerButton({
       child: Text(
         text,
         style: isDisabled
-            ? simpleTextButtonStyle.copyWith(color: yachtGrey, fontSize: heading5Size)
+            ? simpleTextButtonStyle.copyWith(color: yachtLightGrey, fontSize: heading5Size)
             : simpleTextButtonStyle.copyWith(fontSize: heading5Size, color: primaryButtonText),
       ),
     ),
@@ -1625,13 +1625,10 @@ Container sectionBox({
     height: height,
     width: width,
     padding: padding ?? EdgeInsets.all(0),
-    decoration: BoxDecoration(color: yachtLightBlack, borderRadius: BorderRadius.circular(12.w), boxShadow: [
-      BoxShadow(
-        color: yachtShadow,
-        blurRadius: 4.w,
-        spreadRadius: 0.w,
-      )
-    ]),
+    decoration: BoxDecoration(
+      color: yachtDarkGrey,
+      borderRadius: BorderRadius.circular(12.w),
+    ),
     child: child,
   );
 }
@@ -2011,7 +2008,7 @@ AppBar primaryAppBarWithoutBackButton(String title) {
 Container appBarWithCloseButton({required String title, double? height}) {
   return Container(
     height: height ?? 60.w,
-    color: white,
+    color: yachtDarkGrey,
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -2026,7 +2023,7 @@ Container appBarWithCloseButton({required String title, double? height}) {
               'assets/icons/exit.png',
               width: 14.w,
               height: 14.w,
-              color: yachtBlack,
+              color: white,
             ),
           ),
         )
@@ -2119,7 +2116,7 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
   print(thisUserTierTitle);
   return Dialog(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10.w),
+      borderRadius: BorderRadius.circular(12.w),
     ),
     insetPadding: primaryHorizontalPadding,
     child: InkWell(
@@ -2127,6 +2124,7 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
           Navigator.of(context).pop();
         },
         child: Container(
+          decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
           padding: EdgeInsets.fromLTRB(primaryPaddingSize, 0.0, primaryPaddingSize, primaryPaddingSize),
           width: double.infinity,
           child: Column(
@@ -2175,7 +2173,7 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
                                       ),
                                       Text(
                                         '${tierKorName[getOnlyTierTitle(tierSystemModelRx.value!.tierNames)[index]]}',
-                                        style: feedTitle,
+                                        style: feedTitle.copyWith(color: yachtBlack),
                                       ),
                                     ],
                                   ),
@@ -2193,13 +2191,13 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
                                                 : getExpNeededForEachTierTitle(tierSystemModelRx.value!.tierNames,
                                                         tierSystemModelRx.value!.tierStops)[index - 1]
                                                     .toString(),
-                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(color: white),
                                       ),
                                       Text(
                                         index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 1
                                             ? ""
                                             : " ~ ",
-                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(color: white),
                                       ),
                                       Text(
                                         index == getOnlyTierTitle(tierSystemModelRx.value!.tierNames).length - 2
@@ -2209,7 +2207,7 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
                                                 : getExpNeededForEachTierTitle(tierSystemModelRx.value!.tierNames,
                                                         tierSystemModelRx.value!.tierStops)[index]
                                                     .toString(),
-                                        style: buttonTitleStyle.copyWith(color: yachtBlack),
+                                        style: buttonTitleStyle.copyWith(color: white),
                                       ),
                                     ],
                                   )),
@@ -2242,7 +2240,7 @@ Dialog yachtTierInfoPopUp(BuildContext context, int thisUserExp) {
                                     child: Text(
                                       '현재 티어',
                                       style: TextStyle(
-                                        color: yachtViolet,
+                                        color: white,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),

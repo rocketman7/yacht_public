@@ -48,36 +48,6 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
       });
     });
     return Scaffold(
-        // backgroundColor: white.withOpacity(.2),
-        // appBar: AppBar(
-        //   automaticallyImplyLeading: false,
-        //   backgroundColor: white,
-        //   toolbarHeight: 60.w,
-        //   title: Text('프로필', style: appBarTitle),
-        //   actions: [
-        //     GestureDetector(
-        //       behavior: HitTestBehavior.opaque,
-        //       onTap: () {
-        //         Get.to(() => SettingView());
-        //       },
-        //       child: Row(
-        //         children: [
-        //           SizedBox(
-        //             width: 14.w,
-        //           ),
-        //           Image.asset(
-        //             'assets/buttons/settings.png',
-        //             width: 30.w,
-        //             height: 30.w,
-        //           ),
-        //           SizedBox(
-        //             width: 14.w,
-        //           ),
-        //         ],
-        //       ),
-        //     )
-        //   ],
-        // ),
         body: CustomScrollView(
       controller: profileViewModel.scrollController,
       slivers: [
@@ -709,7 +679,9 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                     child: Text(
                       '피드',
                       style: profileButtonTextStyle.copyWith(
-                          color: tabIndex.value == 0 ? profileButtonTextStyle.color : yachtGrey),
+                        fontSize: 16.w,
+                        color: tabIndex.value == 0 ? profileButtonTextStyle.color : yachtLightGrey,
+                      ),
                     ),
                   ),
                 ),
@@ -719,7 +691,9 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                     child: Text(
                       '활동',
                       style: profileButtonTextStyle.copyWith(
-                          color: tabIndex.value == 1 ? profileButtonTextStyle.color : yachtGrey),
+                        fontSize: 16.w,
+                        color: tabIndex.value == 1 ? profileButtonTextStyle.color : yachtLightGrey,
+                      ),
                     ),
                   ),
                 ),
@@ -909,7 +883,24 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                       height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
                     ),
                     Obx(() => userQuestModelRx.length == 0
-                        ? Image.asset('assets/illusts/not_exists/no_quest_done.png', height: 150.w)
+                        ? Padding(
+                            padding: primaryHorizontalPadding,
+                            child: Container(
+                              padding: primaryAllPadding,
+                              width: double.infinity,
+                              decoration:
+                                  BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
+                              child: Center(
+                                child: Text(
+                                  "퀘스트에 참여한 기록이 없어요.",
+                                  style: TextStyle(
+                                    color: yachtLightGrey,
+                                    fontSize: 16.w,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
                         : QuestRecordView(
                             isFullView: false,
                           )),

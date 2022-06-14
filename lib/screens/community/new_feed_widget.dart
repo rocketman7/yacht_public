@@ -273,62 +273,64 @@ class CommentList extends StatelessWidget {
               ...List.generate(
                 min(comments.length, maxCommentLength),
                 (index) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  return Column(
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              maxLines: isDetailComment ? 1000 : 3,
-                              overflow: TextOverflow.ellipsis,
-                              text: TextSpan(
-                                  text: '${comments[index].writerUserName}   ',
-                                  style: feedWriterName.copyWith(fontWeight: FontWeight.w700, height: 1.4),
-                                  children: [
-                                    TextSpan(
-                                      text: '${comments[index].content}',
-                                      style: feedContent,
-                                    )
-                                  ]),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  maxLines: isDetailComment ? 1000 : 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                      text: '${comments[index].writerUserName}   ',
+                                      style: feedWriterName.copyWith(fontWeight: FontWeight.w700, height: 1.4),
+                                      children: [
+                                        TextSpan(
+                                          text: '${comments[index].content}',
+                                          style: feedContent,
+                                        )
+                                      ]),
+                                ),
+                                SizedBox(
+                                  height: 3.w,
+                                ),
+                                isDetailComment
+                                    ? Row(
+                                        children: [
+                                          Text(
+                                            feedTimeHandler(comments[index].writtenDateTime.toDate()),
+                                            style: feedDateTime,
+                                          ),
+                                          SizedBox(
+                                            width: 20.w,
+                                          ),
+                                          (comments[index].likedBy != null && comments[index].likedBy!.length > 0)
+                                              ? Text(
+                                                  "좋아요 ${comments[index].likedBy!.length}개",
+                                                  style: feedDateTime,
+                                                )
+                                              : SizedBox.shrink()
+                                        ],
+                                      )
+                                    : SizedBox.shrink()
+                              ],
                             ),
-                            SizedBox(
-                              height: 3.w,
-                            ),
-                            isDetailComment
-                                ? Row(
-                                    children: [
-                                      Text(
-                                        feedTimeHandler(comments[index].writtenDateTime.toDate()),
-                                        style: feedDateTime,
-                                      ),
-                                      SizedBox(
-                                        width: 20.w,
-                                      ),
-                                      (comments[index].likedBy != null && comments[index].likedBy!.length > 0)
-                                          ? Text(
-                                              "좋아요 ${comments[index].likedBy!.length}개",
-                                              style: feedDateTime,
-                                            )
-                                          : SizedBox.shrink()
-                                    ],
-                                  )
-                                : SizedBox.shrink()
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 4.w,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 4.w),
-                        child: SizedBox(
-                          // color: Colors.black12,
-                          // height: 30.w,
-                          width: 26.w,
-                          child:
-                              (comments[index].writerUid == (userModelRx.value == null ? "" : userModelRx.value!.uid))
+                          ),
+                          SizedBox(
+                            width: 4.w,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 4.w),
+                            child: SizedBox(
+                              // color: Colors.black12,
+                              // height: 30.w,
+                              width: 26.w,
+                              child: (comments[index].writerUid ==
+                                      (userModelRx.value == null ? "" : userModelRx.value!.uid))
                                   ? GestureDetector(
                                       onTap: () async {
                                         await showDialog(
@@ -336,75 +338,76 @@ class CommentList extends StatelessWidget {
                                             builder: (context) {
                                               return Dialog(
                                                 insetPadding: EdgeInsets.fromLTRB(32.w, 20.w, 32.w, 20.w),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(10.w),
-                                                ),
-                                                child: Padding(
-                                                  padding: EdgeInsets.fromLTRB(14.w, 0.w, 14.w, 14.w),
-                                                  child: Column(mainAxisSize: MainAxisSize.min, children: [
-                                                    // TITLE
-                                                    SizedBox(
-                                                      height: 50.w,
-                                                      child: Center(
-                                                          child: Text(
-                                                        "알림",
-                                                        style: dialogTitle,
-                                                      )),
-                                                    ),
-                                                    // CONTENT
-                                                    Text(
-                                                      "댓글을 삭제하시겠습니까?",
-                                                      style: dialogContent,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 12.w,
-                                                    ),
-                                                    // BUTTONS
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                            child: GestureDetector(
-                                                          onTap: () async {
-                                                            await communityViewModel.deleteComment(comments[index]);
-                                                          },
-                                                          child: Container(
-                                                              height: 50.w,
-                                                              decoration: BoxDecoration(
-                                                                  color: yachtViolet,
-                                                                  borderRadius: BorderRadius.circular(8.w)),
-                                                              child: Center(
-                                                                child: Text(
-                                                                  "삭제",
-                                                                  style: dialogChoice.copyWith(
-                                                                    color: white,
-                                                                  ),
-                                                                ),
-                                                              )),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.fromLTRB(14.w, 0.w, 14.w, 14.w),
+                                                    child: Column(mainAxisSize: MainAxisSize.min, children: [
+                                                      // TITLE
+                                                      SizedBox(
+                                                        height: 50.w,
+                                                        child: Center(
+                                                            child: Text(
+                                                          "알림",
+                                                          style: dialogTitle,
                                                         )),
-                                                        SizedBox(width: 14.w),
-                                                        Expanded(
-                                                          child: GestureDetector(
-                                                              onTap: () {
-                                                                Navigator.of(context).pop();
-                                                              },
-                                                              child: Container(
-                                                                  height: 50.w,
-                                                                  decoration: BoxDecoration(
-                                                                    color: buttonDisabled,
-                                                                    borderRadius: BorderRadius.circular(8.w),
-                                                                  ),
-                                                                  child: Center(
-                                                                    child: Text(
-                                                                      "취소",
-                                                                      style: dialogChoice.copyWith(
-                                                                        color: yachtViolet,
-                                                                      ),
+                                                      ),
+                                                      // CONTENT
+                                                      Text(
+                                                        "댓글을 삭제하시겠습니까?",
+                                                        style: dialogContent,
+                                                      ),
+                                                      SizedBox(
+                                                        height: 12.w,
+                                                      ),
+                                                      // BUTTONS
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                              child: GestureDetector(
+                                                            onTap: () async {
+                                                              await communityViewModel.deleteComment(comments[index]);
+                                                            },
+                                                            child: Container(
+                                                                height: 50.w,
+                                                                decoration: BoxDecoration(
+                                                                    color: yachtViolet,
+                                                                    borderRadius: BorderRadius.circular(8.w)),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    "삭제",
+                                                                    style: dialogChoice.copyWith(
+                                                                      color: white,
                                                                     ),
-                                                                  ))),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ]),
+                                                                  ),
+                                                                )),
+                                                          )),
+                                                          SizedBox(width: 14.w),
+                                                          Expanded(
+                                                            child: GestureDetector(
+                                                                onTap: () {
+                                                                  Navigator.of(context).pop();
+                                                                },
+                                                                child: Container(
+                                                                    height: 50.w,
+                                                                    decoration: BoxDecoration(
+                                                                      color: buttonDisabled,
+                                                                      borderRadius: BorderRadius.circular(8.w),
+                                                                    ),
+                                                                    child: Center(
+                                                                      child: Text(
+                                                                        "취소",
+                                                                        style: dialogChoice.copyWith(
+                                                                          color: yachtLightGrey,
+                                                                        ),
+                                                                      ),
+                                                                    ))),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ]),
+                                                  ),
                                                 ),
                                               );
                                             });
@@ -427,8 +430,11 @@ class CommentList extends StatelessWidget {
                                             : comments[index].likedBy!.contains(userModelRx.value!.uid),
                                       ),
                                     ),
-                        ),
-                      )
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 6.w),
                     ],
                   );
                 },
@@ -1062,7 +1068,7 @@ class FeedHeader extends StatelessWidget {
                   imageUrl:
                       "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${post.writerAvatarUrl}.png",
                 )),
-            SizedBox(width: 4.w),
+            SizedBox(width: 12.w),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1097,6 +1103,7 @@ class FeedHeader extends StatelessWidget {
           ],
         ),
         PopupMenuButton(
+          color: yachtDarkGrey,
           itemBuilder: (context) {
             return post.writerUid == userModelRx.value!.uid ? communityMyShowMore : communityShowMore;
             //  : communityShowMore;
@@ -1124,7 +1131,10 @@ class FeedHeader extends StatelessWidget {
                           child: Container(
                               padding:
                                   EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.w),
+                                color: yachtDarkGrey,
+                              ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -1179,7 +1189,10 @@ class FeedHeader extends StatelessWidget {
                           child: Container(
                               padding:
                                   EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.w),
+                                color: yachtDarkGrey,
+                              ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -1234,7 +1247,10 @@ class FeedHeader extends StatelessWidget {
                           child: Container(
                               padding:
                                   EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.w),
+                                color: yachtDarkGrey,
+                              ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -1243,7 +1259,7 @@ class FeedHeader extends StatelessWidget {
                                   Text("이 글을 신고하시겠습니까?", style: dialogContent),
                                   Text(
                                     "신고한 유저는 자동으로 차단됩니다.",
-                                    style: dialogWarning.copyWith(color: yachtDarkGrey),
+                                    style: dialogWarning.copyWith(color: yachtLightGrey),
                                   ),
                                   SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
                                   Row(
@@ -1349,7 +1365,12 @@ class EditingMyPost extends StatelessWidget {
                       onTap: () {
                         Get.back();
                       },
-                      child: Image.asset('assets/icons/exit.png', width: 14.w, height: 14.w, color: yachtBlack)),
+                      child: Image.asset(
+                        'assets/icons/exit.png',
+                        width: 14.w,
+                        height: 14.w,
+                        color: white,
+                      )),
                 ),
               ),
               Text(
@@ -1361,18 +1382,32 @@ class EditingMyPost extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
-                      onTap: () async {
-                        if (_contentFormKey.currentState!.validate()) {
-                          // print("OKAY");
-                          print(_contentController.value.text);
-                          await _communityViewModel.editPost(post, _contentController.value.text);
-                          await _communityViewModel.reloadPost();
+                    onTap: () async {
+                      if (_contentFormKey.currentState!.validate()) {
+                        // print("OKAY");
+                        print(_contentController.value.text);
+                        _communityViewModel.isUploadingNewPost(true);
+                        await _communityViewModel.editPost(post, _contentController.value.text);
+                        await _communityViewModel.reloadPost();
+                        _communityViewModel.isUploadingNewPost(false);
 
-                          Get.back();
-                          yachtSnackBar("성공적으로 수정 되었어요.");
-                        }
-                      },
-                      child: simpleTextContainerButton("올리기")),
+                        Get.back();
+                        yachtSnackBar("성공적으로 수정 되었어요.");
+                      }
+                    },
+                    child: Obx(
+                      () => _communityViewModel.isUploadingNewPost.value
+                          ? simpleTextContainerButton("올리기",
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1.4.w,
+                                color: yachtViolet,
+                              ))
+                          : basicInfoButtion(
+                              "올리기",
+                              buttonColor: yachtViolet,
+                            ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1393,11 +1428,12 @@ class EditingMyPost extends StatelessWidget {
           key: _contentFormKey,
           child: Expanded(
             child: Container(
-                color: primaryBackgroundColor,
+                color: yachtBlack,
                 child: Column(
                   children: [
                     Expanded(
                       child: TextFormField(
+                        style: TextStyle(color: white),
                         // autofocus: true,
                         controller: _contentController,
                         validator: (value) {
@@ -1468,7 +1504,7 @@ class EditingMyPost extends StatelessWidget {
                       }
                     }),
                     Container(
-                      height: 40.w,
+                      height: 50.w,
                       width: double.infinity,
                       decoration: BoxDecoration(
                           color: primaryBackgroundColor,
@@ -1478,24 +1514,28 @@ class EditingMyPost extends StatelessWidget {
                           )),
                       // color: Colors.yellow,
                       child: GestureDetector(
-                        onTap: () async {
-                          await _communityViewModel.getImageFromDevice();
-                          print('image length: ${_communityViewModel.images!.length}');
-                        },
-                        child: Padding(
-                          padding: primaryHorizontalPadding,
+                          onTap: () async {
+                            await _communityViewModel.getImageFromDevice();
+                            print('image length: ${_communityViewModel.images!.length}');
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              SvgPicture.asset(
-                                'assets/icons/upload_photo.svg',
-                                height: 18.w,
-                                width: 18.w,
+                              SizedBox(
+                                width: 14.w,
                               ),
+                              Container(
+                                  padding: EdgeInsets.all(12.w),
+                                  decoration:
+                                      BoxDecoration(color: yachtGrey, borderRadius: BorderRadius.circular(10.w)),
+                                  child: SvgPicture.asset(
+                                    'assets/icons/upload_photo.svg',
+                                    color: white,
+                                    height: 20.w,
+                                    width: 20.w,
+                                  )),
                             ],
-                          ),
-                        ),
-                      ),
+                          )),
                     )
                   ],
                 )),

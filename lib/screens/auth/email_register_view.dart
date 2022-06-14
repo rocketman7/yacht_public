@@ -137,6 +137,7 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                           behavior: HitTestBehavior.opaque,
                           child: Icon(
                             Icons.remove_red_eye_outlined,
+                            color: yachtLightGrey,
                           ),
                         ))
                   ],

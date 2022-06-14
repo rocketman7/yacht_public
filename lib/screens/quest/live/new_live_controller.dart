@@ -9,6 +9,7 @@ import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 
+import '../../../handlers/date_time_handler.dart';
 import '../../../locator.dart';
 
 class NewLiveController extends GetxController {
@@ -26,8 +27,11 @@ class NewLiveController extends GetxController {
   int investmentModelLength = 0;
   RxInt winnerIndex = 0.obs;
   RxBool isUserAlreadyDone = false.obs;
+  RxBool getStandardPriceDone = false.obs;
   RxList userQuestChoice = [].obs;
   RxList livePriceRankByIndex = [].obs;
+  RxList yesterdayClosePrices = [].obs;
+  RxList beforeLiveStartDateClosePrices = [].obs;
 
   @override
   void onInit() async {
@@ -37,6 +41,8 @@ class NewLiveController extends GetxController {
     livePriceRankByIndex = List.generate(investmentModelLength, (index) => null).obs;
 
     await getLivePrice();
+    await getStandardPrice();
+
     await getUserQuest();
 
     ever(livePricesOfThisQuest.first, (_) {
@@ -44,7 +50,7 @@ class NewLiveController extends GetxController {
       Future.delayed(Duration(milliseconds: 300)).then((_) {
         // if (investmentModelLength > 1) sortLivePricesOfThisQuest();
         getWinnerIndex();
-        print('winnerIndex: $winnerIndex');
+        print('${questModel.title} winnerIndex: $winnerIndex');
       });
     });
     // livePricesOfThisQuest.listen((p0) {
@@ -52,6 +58,30 @@ class NewLiveController extends GetxController {
     //   getWinnerIndex();
     // });
     super.onInit();
+  }
+
+  getStandardPrice() async {
+    for (int i = 0; i < investmentModelLength; i++) {
+      // yesterdayClosePrices.add(i);
+
+      yesterdayClosePrices.add(await _firestoreService.getClosePrice(
+        investAddresses[i].issueCode,
+        previousBusinessDay(
+          DateTime.now(),
+        ),
+      ));
+
+      beforeLiveStartDateClosePrices.add(await _firestoreService.getClosePrice(
+        investAddresses[i].issueCode,
+        previousBusinessDay(
+          questModel.liveStartDateTime.toDate(),
+        ),
+      ));
+
+      print(investAddresses[i].issueCode + 'done');
+    }
+    print('done');
+    getStandardPriceDone(true);
   }
 
   sortLivePricesOfThisQuest() {

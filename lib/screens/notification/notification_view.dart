@@ -29,12 +29,9 @@ class _NotificationViewState extends State<NotificationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: white,
-      appBar: AppBar(
-        backgroundColor: white,
-        toolbarHeight: 60.w,
-        title: Text('알림', style: appBarTitle),
-      ),
+      // backgroundColor: white,
+      appBar: primaryAppBar('알림'),
+
       body: GetBuilder<NotificationViewModel>(
         id: 'notificationList',
         builder: (controller) {

@@ -21,7 +21,7 @@ TextStyle assetViewTextStyle1 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -29,7 +29,7 @@ TextStyle assetViewTextStyle2 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: 0.0,
   height: 1.4,
 );
@@ -37,7 +37,7 @@ TextStyle assetViewTextStyle3 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -52,7 +52,7 @@ TextStyle assetViewTextStyle5 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
-  color: Color(0xFF879098), // yacht grey
+  color: yachtLightGrey, // yacht grey
   letterSpacing: 0.0,
   height: 1.4,
 );
@@ -63,11 +63,11 @@ class AssetView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: primaryBackgroundColor,
+        // backgroundColor: yachtLightGrey,
         appBar: primaryAppBar('보유자산'),
         body: ListView(children: [
           SizedBox(
-            height: 30.w - reducePaddingOneSide(assetViewTextStyle1.fontSize!),
+            height: 30.w,
           ),
           Padding(
             padding: EdgeInsets.only(left: 14.w, right: 14.w),
@@ -76,15 +76,15 @@ class AssetView extends StatelessWidget {
               style: assetViewTextStyle1,
             ),
           ),
-          SizedBox(
-            height: 20.w - reducePaddingOneSide(assetViewTextStyle1.fontSize!),
-          ),
+          SizedBox(height: 20.w),
           Padding(
             padding: EdgeInsets.only(left: 15.w, right: 15.w),
             child: Container(
               width: double.infinity,
-              decoration:
-                  primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
+              decoration: BoxDecoration(
+                color: yachtDarkGrey,
+                borderRadius: BorderRadius.circular(12.w),
+              ),
               child: Column(
                 children: [
                   SizedBox(
@@ -132,84 +132,85 @@ class AssetView extends StatelessWidget {
                       Container(
                         width: 2.w,
                         height: 54.w, // 22+10+22
-                        color: Color(0xFFE6EAF1) // yacht-line color 임
-                        ,
+                        color: yachtMidGrey,
                       ),
                       SizedBox(
-                        width: 9.w,
+                        width: 12.w,
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            width: SizeConfig.screenWidth - 82.w, // 15, (26, 2, 9, 15), 15
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/icons/won_circle.png',
-                                  width: 22.w,
-                                  height: 22.w,
-                                ),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                Text(
-                                  '주식 잔고',
-                                  style: assetViewTextStyle2.copyWith(fontWeight: FontWeight.w300),
-                                ),
-                                Spacer(),
-                                GetBuilder<AssetViewModel>(
-                                    id: 'holdingStocks',
-                                    builder: (controller) {
-                                      if (controller.isHoldingStocksFutureLoad)
-                                        return Text(
-                                          '${toPriceKRW(controller.totalHoldingStocksValue)} 원',
-                                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
-                                        );
-                                      else
-                                        return Text('',
-                                            style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300));
-                                    }),
-                              ],
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Container(
+                              // width: SizeConfig.screenWidth - 82.w, // 15, (26, 2, 9, 15), 15
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/icons/won_circle.svg',
+                                    width: 22.w,
+                                    height: 22.w,
+                                  ),
+                                  SizedBox(
+                                    width: 4.w,
+                                  ),
+                                  Text(
+                                    '주식 잔고',
+                                    style: assetViewTextStyle2.copyWith(fontWeight: FontWeight.w300),
+                                  ),
+                                  Spacer(),
+                                  GetBuilder<AssetViewModel>(
+                                      id: 'holdingStocks',
+                                      builder: (controller) {
+                                        if (controller.isHoldingStocksFutureLoad)
+                                          return Text(
+                                            '${toPriceKRW(controller.totalHoldingStocksValue)} 원',
+                                            style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
+                                          );
+                                        else
+                                          return Text('',
+                                              style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300));
+                                      }),
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            height: 10.w,
-                          ),
-                          Container(
-                            width: SizeConfig.screenWidth - 82.w, // 15, (26, 2, 9, 15), 15
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/icons/yacht_point_circle.png',
-                                  width: 22.w,
-                                  height: 22.w,
-                                ),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                Text(
-                                  '요트 포인트',
-                                  style: assetViewTextStyle2.copyWith(fontWeight: FontWeight.w300),
-                                ),
-                                Spacer(),
-                                GetBuilder<AssetViewModel>(
-                                    id: 'holdingStocks',
-                                    builder: (controller) {
-                                      if (controller.isHoldingStocksFutureLoad)
-                                        return Text(
-                                          '${toPriceKRW(controller.totalYachtPoint)} 원',
-                                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
-                                        );
-                                      else
-                                        return Text(
-                                          '',
-                                          style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
-                                        );
-                                    }),
-                              ],
+                            SizedBox(
+                              height: 10.w,
                             ),
-                          ),
-                        ],
+                            Container(
+                              width: SizeConfig.screenWidth - 82.w, // 15, (26, 2, 9, 15), 15
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/icons/gem.svg',
+                                    width: 22.w,
+                                    height: 22.w,
+                                  ),
+                                  SizedBox(
+                                    width: 4.w,
+                                  ),
+                                  Text(
+                                    '요트 포인트',
+                                    style: assetViewTextStyle2.copyWith(fontWeight: FontWeight.w300),
+                                  ),
+                                  Spacer(),
+                                  GetBuilder<AssetViewModel>(
+                                      id: 'holdingStocks',
+                                      builder: (controller) {
+                                        if (controller.isHoldingStocksFutureLoad)
+                                          return Text(
+                                            '${toPriceKRW(controller.totalYachtPoint)} 원',
+                                            style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
+                                          );
+                                        else
+                                          return Text(
+                                            '',
+                                            style: assetViewTextStyle3.copyWith(fontWeight: FontWeight.w300),
+                                          );
+                                      }),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         width: 15.w,
@@ -315,10 +316,13 @@ class AssetView extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          'assets/icons/won_circle.png',
+                        SvgPicture.asset(
+                          'assets/icons/won_circle.svg',
                           width: 24.w,
                           height: 24.w,
+                        ),
+                        SizedBox(
+                          width: 4.w,
                         ),
                         Text(
                           '주식 잔고 출고',
@@ -342,10 +346,13 @@ class AssetView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/icons/yacht_point_circle.png',
+                      SvgPicture.asset(
+                        'assets/icons/gem.svg',
                         width: 24.w,
                         height: 24.w,
+                      ),
+                      SizedBox(
+                        width: 4.w,
                       ),
                       GestureDetector(
                         onTap: () {
@@ -400,7 +407,7 @@ class AssetView extends StatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        '더 보기',
+                        '더보기',
                         style: assetViewTextStyle5,
                       ),
                       SizedBox(
@@ -410,7 +417,7 @@ class AssetView extends StatelessWidget {
                         'assets/icons/navigate_foward_arrow.png',
                         height: 10.w,
                         width: 5.w,
-                        color: yachtGrey,
+                        color: yachtLightGrey,
                       )
                     ],
                   ),

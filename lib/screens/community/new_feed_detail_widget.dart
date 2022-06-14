@@ -21,12 +21,14 @@ class NewFeedDetailWidget extends GetView {
   final PostModel post;
 
   final CommunityViewModel communityViewModel = Get.find<CommunityViewModel>();
-  get controller => Get.find<NewFeedWidgetController>(tag: post.postId);
+  get controller => Get.put(NewFeedWidgetController(post), tag: post.postId);
+
+  // get controller =>
   double bottomBarHeight = ScreenUtil().bottomBarHeight;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: yachtLightGrey,
+      // backgroundColor: yachtLightBlack,
       appBar: primaryAppBar(""),
       body: Column(
         children: [
