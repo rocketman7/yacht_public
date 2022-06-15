@@ -33,10 +33,8 @@ class OneOnOneListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: primaryBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: white,
-          toolbarHeight: 60.w,
-          title: Text('나의 1:1 문의내역', style: appBarTitle),
+        appBar: primaryAppBar(
+          '나의 1:1 문의내역',
         ),
         body: GetBuilder<OneOnOneListViewModel>(
             init: OneOnOneListViewModel(),
@@ -54,8 +52,7 @@ class OneOnOneListView extends StatelessWidget {
                           .map((i, element) => MapEntry(
                                 i,
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 14.w, right: 14.w, bottom: 14.w),
+                                  padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 14.w),
                                   child: InkWell(
                                     onTap: () {
                                       Get.to(() => OneOnOneListDetailView(
@@ -67,34 +64,25 @@ class OneOnOneListView extends StatelessWidget {
                                       padding: primaryAllPadding,
                                       width: double.infinity,
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
                                               Text(
-                                                controller.oneOnOneListList[i]
-                                                            .answer !=
-                                                        ''
-                                                    ? '답변 완료'
-                                                    : '답변 대기중',
-                                                style: feedWriterName.copyWith(
-                                                    color: yachtRed),
+                                                controller.oneOnOneListList[i].answer != '' ? '답변 완료' : '답변 대기중',
+                                                style: feedWriterName.copyWith(color: yachtRed),
                                               ),
                                               Spacer(),
                                               SizedBox(
                                                 height: 12.w,
                                                 width: 8.w,
-                                                child: Image.asset(
-                                                    'assets/icons/right_arrow_grey.png'),
+                                                child: Image.asset('assets/icons/right_arrow_grey.png'),
                                               )
                                             ],
                                           ),
                                           SizedBox(
-                                            height: correctHeight(
-                                                10.w,
-                                                feedWriterName.fontSize,
-                                                feedWriterName.fontSize),
+                                            height:
+                                                correctHeight(10.w, feedWriterName.fontSize, feedWriterName.fontSize),
                                           ),
                                           Text(
                                             '${controller.oneOnOneListList[i].content}',
@@ -102,11 +90,8 @@ class OneOnOneListView extends StatelessWidget {
                                             maxLines: 3,
                                           ),
                                           Text(
-                                            controller.oneOnOneListList[i]
-                                                        .answer !=
-                                                    ''
-                                                ? '${controller.oneOnOneListList[i].answer}'
-                                                    .replaceAll('\\n', '\n')
+                                            controller.oneOnOneListList[i].answer != ''
+                                                ? '${controller.oneOnOneListList[i].answer}'.replaceAll('\\n', '\n')
                                                 : '아직 답변이 등록되지 않았습니다.\n조금만 더 기다려주시면 친절히 답변드릴게요!',
                                             style: feedContent,
                                             maxLines: 3,
@@ -137,10 +122,8 @@ class OneOnOneListDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: primaryBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: white,
-          toolbarHeight: 60.w,
-          title: Text('나의 1:1 문의내역', style: appBarTitle),
+        appBar: primaryAppBar(
+          '나의 1:1 문의내역',
         ),
         body: GetBuilder<OneOnOneListViewModel>(builder: (controller) {
           if (controller.isLoaded)
@@ -150,8 +133,7 @@ class OneOnOneListDetailView extends StatelessWidget {
                   height: 14.w,
                 ),
                 Padding(
-                  padding:
-                      EdgeInsets.only(left: 14.w, right: 14.w, bottom: 14.w),
+                  padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 14.w),
                   child: InkWell(
                     onTap: () {},
                     child: sectionBox(
@@ -162,35 +144,26 @@ class OneOnOneListDetailView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            controller.oneOnOneListList[index].answer != ''
-                                ? '답변 완료'
-                                : '답변 대기중',
+                            controller.oneOnOneListList[index].answer != '' ? '답변 완료' : '답변 대기중',
                             style: feedWriterName.copyWith(color: yachtRed),
                           ),
                           SizedBox(
-                            height: correctHeight(10.w, feedWriterName.fontSize,
-                                feedWriterName.fontSize),
+                            height: correctHeight(10.w, feedWriterName.fontSize, feedWriterName.fontSize),
                           ),
                           Text(
                             '${controller.oneOnOneListList[index].content}',
                             style: feedWriterName,
                           ),
                           SizedBox(
-                            height: correctHeight(
-                                10.w, feedWriterName.fontSize, 0.w),
+                            height: correctHeight(10.w, feedWriterName.fontSize, 0.w),
                           ),
-                          Container(
-                              height: 1.w,
-                              width: double.infinity,
-                              color: yachtLightGrey),
+                          Container(height: 1.w, width: double.infinity, color: yachtLightGrey),
                           SizedBox(
-                            height: correctHeight(
-                                10.w, 0.w, feedWriterName.fontSize),
+                            height: correctHeight(10.w, 0.w, feedWriterName.fontSize),
                           ),
                           Text(
                             controller.oneOnOneListList[index].answer != ''
-                                ? '${controller.oneOnOneListList[index].answer}'
-                                    .replaceAll('\\n', '\n')
+                                ? '${controller.oneOnOneListList[index].answer}'.replaceAll('\\n', '\n')
                                 : '아직 답변이 등록되지 않았습니다.\n조금만 더 기다려주시면 친절히 답변드릴게요!',
                             style: feedContent,
                           ),

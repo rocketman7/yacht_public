@@ -59,6 +59,15 @@ class FirestoreService extends GetxService {
         .then((value) => TierSystemModel.fromMap(value.data()!));
   }
 
+  // 요트's Pick 설명
+  Future<String> getYachtPickDescription() async {
+    return await _firestoreService
+        .collection('admin')
+        .doc('adminPost')
+        .get()
+        .then((value) => value.data()!['yachtPickDescription']);
+  }
+
   // 리그 모델
   Future<LeagueAddressModel> getLeagueInfo() async {
     return await _firestoreService

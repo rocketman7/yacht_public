@@ -35,7 +35,7 @@ class LastAwardDetailView extends StatelessWidget {
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       extendBodyBehindAppBar: true,
-      appBar: newPrimaryAppBar("지난 리그 자세히 보기"),
+      appBar: primaryAppBar("지난 리그 자세히 보기"),
       body: ListView(
         children: [
           Padding(
@@ -43,16 +43,6 @@ class LastAwardDetailView extends StatelessWidget {
             child: GetBuilder<LastAwardDetailViewModel>(builder: (controller) {
               return Container(
                 width: double.infinity,
-                decoration: primaryBoxDecoration.copyWith(
-                    // color: Colors.grey,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFCEC4DA).withOpacity(0.3),
-                        blurRadius: 8.w,
-                        spreadRadius: 1.w,
-                        offset: Offset(0, 0),
-                      ),
-                    ], borderRadius: BorderRadius.circular(12)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -119,8 +109,7 @@ class LastAwardDetailView extends StatelessWidget {
                                 ),
                                 Padding(
                                   // padding: EdgeInsets.only(left: 24.w, right: 24.w),
-                                  padding:
-                                      EdgeInsets.only(left: 8.w, right: 8.w),
+                                  padding: EdgeInsets.only(left: 8.w, right: 8.w),
                                   child: Container(
                                     height: 1.w,
                                     decoration: BoxDecoration(
@@ -133,56 +122,46 @@ class LastAwardDetailView extends StatelessWidget {
                                             Color(0xFF798AE6).withOpacity(0),
                                           ],
                                         ),
-                                        color:
-                                            Color(0xFF798AE6).withOpacity(0.3)),
+                                        color: Color(0xFF798AE6).withOpacity(0.3)),
                                   ),
                                 ),
                                 SizedBox(
                                   height: 16.w - 6.w,
                                 ),
-                                Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        width: 8.w,
-                                      ),
-                                      Spacer(),
-                                      Container(
-                                        // color: Colors.grey,
-                                        child: Image.asset(
-                                            'assets/icons/won_mark.png',
-                                            height: 30.w,
-                                            width: 36.w,
-                                            color: yachtDarkGrey),
-                                      ),
-                                      SizedBox(width: 7.0.w),
-                                      Container(
-                                        // color: Colors.grey,
-                                        child: Text(
-                                          '${NumbersHandler.toPriceKRW(controller.lastSubLeague.totalValue!)}',
-                                          style: lastLeagueViewAwardAmountText
-                                              .copyWith(height: 1.05),
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      SizedBox(
-                                        width: 8.w,
-                                      ),
-                                    ]),
+                                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    // color: Colors.grey,
+                                    child: Image.asset('assets/icons/won_mark.png',
+                                        height: 30.w, width: 36.w, color: yachtDarkGrey),
+                                  ),
+                                  SizedBox(width: 7.0.w),
+                                  Container(
+                                    // color: Colors.grey,
+                                    child: Text(
+                                      '${NumbersHandler.toPriceKRW(controller.lastSubLeague.totalValue!)}',
+                                      style: lastLeagueViewAwardAmountText.copyWith(height: 1.05),
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  SizedBox(
+                                    width: 8.w,
+                                  ),
+                                ]),
                                 SizedBox(height: 8.w + 1.w + 1.w),
                                 Container(
                                   // color: Colors.grey,
                                   child: Text(
                                       '상금 약 ${NumbersHandler.parseNumberKRWtoApproxiKorean(controller.lastSubLeague.totalValue!)}',
-                                      style:
-                                          lastLeagueViewAwardKoreanAmountText),
+                                      style: lastLeagueViewAwardKoreanAmountText),
                                 ),
                                 SizedBox(height: 8.w - 2.w),
                                 Padding(
                                   // padding: EdgeInsets.only(left: 24.w, right: 24.w),
-                                  padding:
-                                      EdgeInsets.only(left: 8.w, right: 8.w),
+                                  padding: EdgeInsets.only(left: 8.w, right: 8.w),
                                   child: Container(
                                     height: 1.w,
                                     decoration: BoxDecoration(
@@ -195,8 +174,7 @@ class LastAwardDetailView extends StatelessWidget {
                                             Color(0xFF798AE6).withOpacity(0),
                                           ],
                                         ),
-                                        color:
-                                            Color(0xFF798AE6).withOpacity(0.3)),
+                                        color: Color(0xFF798AE6).withOpacity(0.3)),
                                   ),
                                 ),
                                 SizedBox(
@@ -224,16 +202,13 @@ class LastAwardDetailView extends StatelessWidget {
                       child: Container(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '${controller.lastSubLeague.description}'
-                              .replaceAll('\\n', '\n'),
+                          '${controller.lastSubLeague.description}'.replaceAll('\\n', '\n'),
                           style: lastLeagueDetailViewAwardDescriptionText,
                         ),
                       ),
                     ),
                     SizedBox(
-                        height: correctHeight(
-                            12.w,
-                            lastLeagueDetailViewAwardDescriptionText.fontSize,
+                        height: correctHeight(12.w, lastLeagueDetailViewAwardDescriptionText.fontSize,
                             subLeagueAwardRulesStyle.fontSize)),
                     Padding(
                       padding: EdgeInsets.only(left: 15.5.w, right: 15.5.w),
@@ -246,9 +221,7 @@ class LastAwardDetailView extends StatelessWidget {
                     ),
                     SizedBox(
                       height: correctHeight(
-                          50.w,
-                          subLeagueAwardRulesStyle.fontSize,
-                          lastLeagueDetailViewAwardRulesText.fontSize),
+                          50.w, subLeagueAwardRulesStyle.fontSize, lastLeagueDetailViewAwardRulesText.fontSize),
                     ),
                     LeagueAwardList(),
                     Padding(
@@ -296,14 +269,18 @@ class LeagueAwardList extends StatelessWidget {
                   child: Container(
                     width: 92.w,
                     height: 123.w,
-                    decoration: primaryBoxDecoration.copyWith(boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFFCEC4DA).withOpacity(0.3),
-                        blurRadius: 8.w,
-                        spreadRadius: 1.w,
-                        offset: Offset(0, 0),
-                      ),
-                    ], borderRadius: BorderRadius.circular(10)),
+                    decoration: primaryBoxDecoration.copyWith(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xFFCEC4DA).withOpacity(0.3),
+                          blurRadius: 8.w,
+                          spreadRadius: 1.w,
+                          offset: Offset(0, 0),
+                        ),
+                      ],
+                      color: yachtDarkGrey,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
                 Positioned(
@@ -311,12 +288,7 @@ class LeagueAwardList extends StatelessWidget {
                   left: 19.w,
                   child: GestureDetector(
                     onTap: () {
-                      rankDialog(
-                          context,
-                          1,
-                          Get.find<LastAwardDetailViewModel>()
-                              .rankOrder[1]['rank']!
-                              .toInt());
+                      rankDialog(context, 1, Get.find<LastAwardDetailViewModel>().rankOrder[1]['rank']!.toInt());
                     },
                     child: Image.asset(
                       'assets/icons/silver_medal.png',
@@ -347,8 +319,9 @@ class LeagueAwardList extends StatelessWidget {
                         height: 24.w,
                         width: 76.w,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(45),
-                            color: Color(0xFFECF3FF)),
+                          borderRadius: BorderRadius.circular(45),
+                          color: yachtGrey,
+                        ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -363,8 +336,7 @@ class LeagueAwardList extends StatelessWidget {
                             SizedBox(
                               width: 3.w,
                             ),
-                            GetBuilder<LastAwardDetailViewModel>(
-                                builder: (controller) {
+                            GetBuilder<LastAwardDetailViewModel>(builder: (controller) {
                               return controller.isLastSubLeaguesAllLoaded
                                   ? Container(
                                       width: 40.w,
@@ -373,8 +345,7 @@ class LeagueAwardList extends StatelessWidget {
                                         '${toPriceKRW(controller.getAwardPrice(controller.rankOrder[1]['firstIndex']!.toInt()))}',
                                         maxLines: 1,
                                         minFontSize: 5.w,
-                                        style: lastLeagueDetailViewAmountText
-                                            .copyWith(fontSize: 14.w),
+                                        style: lastLeagueDetailViewAmountText.copyWith(fontSize: 14.w),
                                       ),
                                     )
                                   : Container();
@@ -386,8 +357,7 @@ class LeagueAwardList extends StatelessWidget {
                     left: 8.w,
                     child: Container(
                       width: 76.w,
-                      child: GetBuilder<LastAwardDetailViewModel>(
-                          builder: (controller) {
+                      child: GetBuilder<LastAwardDetailViewModel>(builder: (controller) {
                         return controller.isLastSubLeaguesAllLoaded
                             ? Center(
                                 child: Text(
@@ -395,8 +365,7 @@ class LeagueAwardList extends StatelessWidget {
                                   controller.rankOrder[1]['nums'] == 1
                                       ? '${controller.allFinalRanks[controller.rankOrder[1]['firstIndex']!.toInt()].userName}'
                                       : '총 ${controller.rankOrder[1]['nums']}명',
-                                  style: lastLeagueDetailViewNickNameText
-                                      .copyWith(fontSize: 14.w),
+                                  style: lastLeagueDetailViewNickNameText.copyWith(fontSize: 14.w),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
@@ -410,12 +379,7 @@ class LeagueAwardList extends StatelessWidget {
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      rankDialog(
-                          context,
-                          1,
-                          Get.find<LastAwardDetailViewModel>()
-                              .rankOrder[1]['rank']!
-                              .toInt());
+                      rankDialog(context, 1, Get.find<LastAwardDetailViewModel>().rankOrder[1]['rank']!.toInt());
                     },
                     child: Container(
                       width: 92.w,
@@ -436,7 +400,7 @@ class LeagueAwardList extends StatelessWidget {
                         spreadRadius: 1.w,
                         offset: Offset(0, 0),
                       ),
-                    ], borderRadius: BorderRadius.circular(10)),
+                    ], color: yachtDarkGrey, borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
                 Positioned(
@@ -444,12 +408,7 @@ class LeagueAwardList extends StatelessWidget {
                   left: 124.w,
                   child: GestureDetector(
                     onTap: () {
-                      rankDialog(
-                          context,
-                          0,
-                          Get.find<LastAwardDetailViewModel>()
-                              .rankOrder[0]['rank']!
-                              .toInt());
+                      rankDialog(context, 0, Get.find<LastAwardDetailViewModel>().rankOrder[0]['rank']!.toInt());
                     },
                     child: Image.asset(
                       'assets/icons/gold_medal.png',
@@ -480,8 +439,9 @@ class LeagueAwardList extends StatelessWidget {
                         height: 30.w,
                         width: 101.w,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(45),
-                            color: Color(0xFFECF3FF)),
+                          borderRadius: BorderRadius.circular(45),
+                          color: yachtGrey,
+                        ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -496,8 +456,7 @@ class LeagueAwardList extends StatelessWidget {
                             SizedBox(
                               width: 4.w,
                             ),
-                            GetBuilder<LastAwardDetailViewModel>(
-                                builder: (controller) {
+                            GetBuilder<LastAwardDetailViewModel>(builder: (controller) {
                               return controller.isLastSubLeaguesAllLoaded
                                   ? Container(
                                       width: 62.w,
@@ -506,8 +465,7 @@ class LeagueAwardList extends StatelessWidget {
                                         '${toPriceKRW(controller.getAwardPrice(controller.rankOrder[0]['firstIndex']!.toInt()))}',
                                         maxLines: 1,
                                         minFontSize: 5.w,
-                                        style: lastLeagueDetailViewAmountText
-                                            .copyWith(fontSize: 16.w),
+                                        style: lastLeagueDetailViewAmountText.copyWith(fontSize: 16.w),
                                       ),
                                     )
                                   : Container();
@@ -519,8 +477,7 @@ class LeagueAwardList extends StatelessWidget {
                     left: 114.w,
                     child: Container(
                       width: 101.w,
-                      child: GetBuilder<LastAwardDetailViewModel>(
-                          builder: (controller) {
+                      child: GetBuilder<LastAwardDetailViewModel>(builder: (controller) {
                         return controller.isLastSubLeaguesAllLoaded
                             ? Center(
                                 child: Text(
@@ -528,8 +485,7 @@ class LeagueAwardList extends StatelessWidget {
                                   controller.rankOrder[0]['nums'] == 1
                                       ? '${controller.allFinalRanks[controller.rankOrder[0]['firstIndex']!.toInt()].userName}'
                                       : '총 ${controller.rankOrder[0]['nums']}명',
-                                  style: lastLeagueDetailViewNickNameText
-                                      .copyWith(fontSize: 18.w),
+                                  style: lastLeagueDetailViewNickNameText.copyWith(fontSize: 18.w),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
@@ -543,12 +499,7 @@ class LeagueAwardList extends StatelessWidget {
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      rankDialog(
-                          context,
-                          0,
-                          Get.find<LastAwardDetailViewModel>()
-                              .rankOrder[0]['rank']!
-                              .toInt());
+                      rankDialog(context, 0, Get.find<LastAwardDetailViewModel>().rankOrder[0]['rank']!.toInt());
                     },
                     child: Container(
                       width: 120.w,
@@ -569,7 +520,7 @@ class LeagueAwardList extends StatelessWidget {
                         spreadRadius: 1.w,
                         offset: Offset(0, 0),
                       ),
-                    ], borderRadius: BorderRadius.circular(10)),
+                    ], color: yachtDarkGrey, borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
                 Positioned(
@@ -577,12 +528,7 @@ class LeagueAwardList extends StatelessWidget {
                   left: 255.w,
                   child: GestureDetector(
                     onTap: () {
-                      rankDialog(
-                          context,
-                          2,
-                          Get.find<LastAwardDetailViewModel>()
-                              .rankOrder[2]['rank']!
-                              .toInt());
+                      rankDialog(context, 2, Get.find<LastAwardDetailViewModel>().rankOrder[2]['rank']!.toInt());
                     },
                     child: Image.asset(
                       'assets/icons/bronze_medal.png',
@@ -613,8 +559,9 @@ class LeagueAwardList extends StatelessWidget {
                         height: 26.w,
                         width: 72.w,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(45),
-                            color: Color(0xFFECF3FF)),
+                          borderRadius: BorderRadius.circular(45),
+                          color: yachtGrey,
+                        ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -629,8 +576,7 @@ class LeagueAwardList extends StatelessWidget {
                             SizedBox(
                               width: 2.w,
                             ),
-                            GetBuilder<LastAwardDetailViewModel>(
-                                builder: (controller) {
+                            GetBuilder<LastAwardDetailViewModel>(builder: (controller) {
                               return controller.isLastSubLeaguesAllLoaded
                                   ? Container(
                                       width: 42.w,
@@ -639,8 +585,7 @@ class LeagueAwardList extends StatelessWidget {
                                         '${toPriceKRW(controller.getAwardPrice(controller.rankOrder[2]['firstIndex']!.toInt()))}',
                                         maxLines: 1,
                                         minFontSize: 5.w,
-                                        style: lastLeagueDetailViewAmountText
-                                            .copyWith(fontSize: 16.w),
+                                        style: lastLeagueDetailViewAmountText.copyWith(fontSize: 16.w),
                                       ),
                                     )
                                   : Container();
@@ -652,8 +597,7 @@ class LeagueAwardList extends StatelessWidget {
                     left: 242.w,
                     child: Container(
                       width: 72.w,
-                      child: GetBuilder<LastAwardDetailViewModel>(
-                          builder: (controller) {
+                      child: GetBuilder<LastAwardDetailViewModel>(builder: (controller) {
                         return controller.isLastSubLeaguesAllLoaded
                             ? Center(
                                 child: Text(
@@ -661,8 +605,7 @@ class LeagueAwardList extends StatelessWidget {
                                   controller.rankOrder[2]['nums'] == 1
                                       ? '${controller.allFinalRanks[controller.rankOrder[2]['firstIndex']!.toInt()].userName}'
                                       : '총 ${controller.rankOrder[2]['nums']}명',
-                                  style: lastLeagueDetailViewNickNameText
-                                      .copyWith(fontSize: 11.w),
+                                  style: lastLeagueDetailViewNickNameText.copyWith(fontSize: 11.w),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
@@ -676,12 +619,7 @@ class LeagueAwardList extends StatelessWidget {
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
-                      rankDialog(
-                          context,
-                          2,
-                          Get.find<LastAwardDetailViewModel>()
-                              .rankOrder[2]['rank']!
-                              .toInt());
+                      rankDialog(context, 2, Get.find<LastAwardDetailViewModel>().rankOrder[2]['rank']!.toInt());
                     },
                     child: Container(
                       width: 84.w,
@@ -702,11 +640,7 @@ class LeagueAwardList extends StatelessWidget {
             return controller.isLastSubLeaguesAllLoaded
                 ? Column(
                     children: controller.rankOrder
-                        .sublist(
-                            3,
-                            controller.moreRanks
-                                ? controller.rankOrder.length
-                                : 3 + 2)
+                        .sublist(3, controller.moreRanks ? controller.rankOrder.length : 3 + 2)
                         .asMap()
                         .map((i, element) => MapEntry(
                               i,
@@ -716,47 +650,26 @@ class LeagueAwardList extends StatelessWidget {
                                     height: 8.w,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 14.w, right: 14.w),
+                                    padding: EdgeInsets.only(left: 14.w, right: 14.w),
                                     child: GestureDetector(
                                       onTap: () {
-                                        rankDialog(
-                                            context,
-                                            i + 3,
-                                            controller.rankOrder[i + 3]['rank']!
-                                                .toInt());
+                                        rankDialog(context, i + 3, controller.rankOrder[i + 3]['rank']!.toInt());
                                       },
                                       child: Container(
                                           width: 320.w,
                                           height: 52.w,
-                                          decoration: primaryBoxDecoration
-                                              .copyWith(
-                                                  boxShadow: [
-                                                BoxShadow(
-                                                  color: Color(0xFFCEC4DA)
-                                                      .withOpacity(0.3),
-                                                  blurRadius: 8.w,
-                                                  spreadRadius: 1.w,
-                                                  offset: Offset(0, 0),
-                                                ),
-                                              ],
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
+                                          decoration: primaryBoxDecoration.copyWith(
+                                              boxShadow: [],
+                                              color: yachtDarkGrey,
+                                              borderRadius: BorderRadius.circular(10)),
                                           child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 11.w, right: 8.w),
+                                              padding: EdgeInsets.only(left: 11.w, right: 8.w),
                                               child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   Container(
-                                                    width: 320.w -
-                                                        11.w -
-                                                        8.w -
-                                                        1.w,
+                                                    width: 320.w - 11.w - 8.w - 1.w,
                                                     height: 52.w,
                                                     child: Row(
                                                       children: [
@@ -768,16 +681,13 @@ class LeagueAwardList extends StatelessWidget {
                                                                 Positioned(
                                                                     left: 0.w,
                                                                     top: 13.w,
-                                                                    child: Image
-                                                                        .asset(
-                                                                      controller.rankOrder[i + 3]['rank']! <=
-                                                                              5
+                                                                    child: Image.asset(
+                                                                      controller.rankOrder[i + 3]['rank']! <= 5
                                                                           ? 'assets/icons/medal.png'
                                                                           : 'assets/icons/no_medal.png',
-                                                                      height:
-                                                                          29.w,
-                                                                      width:
-                                                                          29.w,
+                                                                      color: yachtMidGrey,
+                                                                      height: 29.w,
+                                                                      width: 29.w,
                                                                     )),
                                                                 Positioned(
                                                                     left: 0.w,
@@ -786,11 +696,16 @@ class LeagueAwardList extends StatelessWidget {
                                                                         height: 29.w,
                                                                         width: 29.w,
                                                                         child: Center(
-                                                                          child:
-                                                                              Text(
+                                                                          child: Text(
                                                                             '${controller.rankOrder[i + 3]['rank']}',
                                                                             style:
-                                                                                lastLeagueDetailViewRankText.copyWith(fontSize: controller.rankOrder[i + 3]['rank']! <= 9 ? 20.w : 16.w),
+                                                                                lastLeagueDetailViewRankText.copyWith(
+                                                                                    fontSize:
+                                                                                        controller.rankOrder[i + 3]
+                                                                                                    ['rank']! <=
+                                                                                                9
+                                                                                            ? 20.w
+                                                                                            : 16.w),
                                                                           ),
                                                                         )))
                                                               ],
@@ -808,60 +723,42 @@ class LeagueAwardList extends StatelessWidget {
                                                           width: 5.w,
                                                         ),
                                                         Text(
-                                                          controller.rankOrder[
-                                                                          i + 3]
-                                                                      [
-                                                                      'nums'] ==
-                                                                  1
+                                                          controller.rankOrder[i + 3]['nums'] == 1
                                                               ? '${controller.allFinalRanks[controller.rankOrder[i + 3]['firstIndex']!.toInt()].userName}'
                                                               : '총 ${controller.rankOrder[i + 3]['nums']}명',
                                                           style:
-                                                              lastLeagueDetailViewNickNameText
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          14.w),
+                                                              lastLeagueDetailViewNickNameText.copyWith(fontSize: 14.w),
                                                         ),
                                                         Spacer(),
                                                         Container(
                                                             height: 28.w,
                                                             width: 90.w,
                                                             decoration: BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            45),
-                                                                color: Color(
-                                                                    0xFFECF3FF)),
+                                                                borderRadius: BorderRadius.circular(45),
+                                                                color: yachtGrey),
                                                             child: Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
+                                                              crossAxisAlignment: CrossAxisAlignment.center,
                                                               children: [
                                                                 SizedBox(
                                                                   width: 10.w,
                                                                 ),
                                                                 Image.asset(
                                                                   'assets/icons/won_mark_two.png',
-                                                                  height:
-                                                                      10.88.w,
-                                                                  width:
-                                                                      13.79.w,
+                                                                  height: 10.88.w,
+                                                                  width: 13.79.w,
                                                                 ),
                                                                 SizedBox(
                                                                   width: 2.21.w,
                                                                 ),
                                                                 Container(
                                                                   width: 63.w,
-                                                                  child:
-                                                                      AutoSizeText(
+                                                                  child: AutoSizeText(
                                                                     //각 상금
                                                                     '${toPriceKRW(controller.getAwardPrice(controller.rankOrder[i + 3]['firstIndex']!.toInt()))}',
                                                                     maxLines: 1,
-                                                                    minFontSize:
-                                                                        5.w,
+                                                                    minFontSize: 5.w,
                                                                     style: lastLeagueDetailViewAmountText.copyWith(
-                                                                        fontSize:
-                                                                            14.w),
+                                                                        fontSize: 14.w),
                                                                   ),
                                                                 ),
                                                               ],
@@ -888,35 +785,27 @@ class LeagueAwardList extends StatelessWidget {
                   SizedBox(
                     height: 8.w,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 14.w, right: 14.w),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.find<LastAwardDetailViewModel>().moreRanksMethod();
-                      },
+                  GestureDetector(
+                    onTap: () {
+                      Get.find<LastAwardDetailViewModel>().moreRanksMethod();
+                    },
+                    child: Padding(
+                      padding: primaryAllPadding,
                       child: Container(
-                        width: 320.w,
-                        height: 40.w,
-                        decoration: primaryBoxDecoration.copyWith(boxShadow: [
-                          BoxShadow(
-                            color: Color(0xFFCEC4DA).withOpacity(0.3),
-                            blurRadius: 8.w,
-                            spreadRadius: 1.w,
-                            offset: Offset(0, 0),
+                          width: double.infinity,
+                          height: 50.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.w),
+                            color: yachtDarkGrey,
                           ),
-                        ], borderRadius: BorderRadius.circular(10)),
-                        child: Row(
-                          children: [
-                            Spacer(),
-                            Text(
-                                Get.find<LastAwardDetailViewModel>().moreRanks
-                                    ? '수상 내역 줄이기'
-                                    : '수상 내역 더보기',
-                                style: lastLeagueDetailMoreText),
-                            Spacer(),
-                          ],
-                        ),
-                      ),
+                          child: Center(
+                            child: Text(
+                              Get.find<LastAwardDetailViewModel>().moreRanks ? '수상 내역 줄이기' : '수상 내역 더보기',
+                              style: seeMore.copyWith(
+                                color: white,
+                              ),
+                            ),
+                          )),
                     ),
                   ),
                 ],
@@ -937,22 +826,20 @@ class Portfolio extends StatelessWidget {
     return GetBuilder<LastAwardDetailViewModel>(builder: (controller) {
       return Column(
         children: [
-          SizedBox(
-              height:
-                  correctHeight(20.w, awardModuleTitleTextStyle.fontSize, 0.w)),
+          SizedBox(height: correctHeight(20.w, awardModuleTitleTextStyle.fontSize, 0.w)),
           Padding(
-            padding:
-                EdgeInsets.only(left: 14.0.w, right: 14.0.w, bottom: 18.0.w),
+            padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w, bottom: 18.0.w),
             child: Container(
               height: SizeConfig.screenWidth - 14.0.w * 4,
               width: SizeConfig.screenWidth - 14.0.w * 4,
-              color: Colors.white,
+              color: yachtBlack,
               child: PortfolioChartForLastSubLeagues(),
             ),
           ),
           Padding(
-              padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w),
-              child: PortfolioLabelForLastSubLeagues()),
+            padding: EdgeInsets.only(left: 14.0.w, right: 14.0.w),
+            child: PortfolioLabelForLastSubLeagues(),
+          ),
           SizedBox(
             height: 13.w,
           ),
@@ -963,8 +850,7 @@ class Portfolio extends StatelessWidget {
 }
 
 class PortfolioLabelForLastSubLeagues extends StatelessWidget {
-  final LastAwardDetailViewModel _lastAwardDetailViewModel =
-      Get.find<LastAwardDetailViewModel>();
+  final LastAwardDetailViewModel _lastAwardDetailViewModel = Get.find<LastAwardDetailViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -975,11 +861,9 @@ class PortfolioLabelForLastSubLeagues extends StatelessWidget {
                 Container(
                   height: 1.w,
                   width: double.infinity,
-                  color: yachtLightGrey,
+                  color: yachtLine,
                 ),
-                SizedBox(
-                    height: correctHeight(9.w, 0.w,
-                        subLeagueAwardLabelTotalValueTextStyleNew.fontSize)),
+                SizedBox(height: correctHeight(9.w, 0.w, subLeagueAwardLabelTotalValueTextStyleNew.fontSize)),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -996,19 +880,14 @@ class PortfolioLabelForLastSubLeagues extends StatelessWidget {
                         '${plusOrminusSymbol(_lastAwardDetailViewModel.totalCurrentValue, _lastAwardDetailViewModel.totalValue)}${NumbersHandler.toPriceKRW(_lastAwardDetailViewModel.totalCurrentValue - _lastAwardDetailViewModel.totalValue)} (${NumbersHandler.toPercentageChange((_lastAwardDetailViewModel.totalCurrentValue - _lastAwardDetailViewModel.totalValue) / _lastAwardDetailViewModel.totalValue)})',
                         style: subLeagueAwardLabelPLTextStyleNew.copyWith(
                             color: plusOrminusColor(
-                                _lastAwardDetailViewModel.totalCurrentValue,
-                                _lastAwardDetailViewModel.totalValue))),
+                                _lastAwardDetailViewModel.totalCurrentValue, _lastAwardDetailViewModel.totalValue))),
                   ],
                 ),
-                SizedBox(
-                    height: correctHeight(
-                        6.w,
-                        subLeagueAwardLabelTotalValueTextStyleNew.fontSize,
-                        0.w)),
+                SizedBox(height: correctHeight(6.w, subLeagueAwardLabelTotalValueTextStyleNew.fontSize, 0.w)),
                 Container(
                   height: 1.w,
                   width: double.infinity,
-                  color: yachtLightGrey,
+                  color: yachtLine,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1020,17 +899,13 @@ class PortfolioLabelForLastSubLeagues extends StatelessWidget {
                             behavior: HitTestBehavior.opaque,
                             onTap: () {
                               Get.to(() => Scaffold(
-                                    appBar: primaryAppBar(
-                                        _lastAwardDetailViewModel
-                                            .lastSubLeague.stocks[i].name),
+                                    appBar: primaryAppBar(_lastAwardDetailViewModel.lastSubLeague.stocks[i].name),
                                     body: SingleChildScrollView(
                                       child: Padding(
                                         padding: primaryHorizontalPadding,
                                         child: StockInfoKRView(
-                                            investAddressModel:
-                                                _lastAwardDetailViewModel
-                                                    .lastSubLeague.stocks[i]
-                                                    .toInvestAddressModel()),
+                                            investAddressModel: _lastAwardDetailViewModel.lastSubLeague.stocks[i]
+                                                .toInvestAddressModel()),
                                       ),
                                     ),
                                   ));
@@ -1038,11 +913,7 @@ class PortfolioLabelForLastSubLeagues extends StatelessWidget {
                             child: Column(
                               children: [
                                 SizedBox(
-                                  height: correctHeight(
-                                      9.w,
-                                      0.w,
-                                      subLeagueAwardLabelStockTextStyleNew
-                                          .fontSize),
+                                  height: correctHeight(9.w, 0.w, subLeagueAwardLabelStockTextStyleNew.fontSize),
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -1051,36 +922,22 @@ class PortfolioLabelForLastSubLeagues extends StatelessWidget {
                                       decoration: BoxDecoration(
                                         color: (i < portfolioColors.length)
                                             ? portfolioColors[i]
-                                            : portfolioColors[
-                                                    portfolioColors.length - 1]
-                                                .withOpacity(math.max(
-                                                    1.0 -
-                                                        0.4 *
-                                                            (i -
-                                                                portfolioColors
-                                                                    .length +
-                                                                1),
-                                                    0.0)),
-                                        borderRadius:
-                                            BorderRadius.circular(2.0),
+                                            : portfolioColors[portfolioColors.length - 1].withOpacity(
+                                                math.max(1.0 - 0.4 * (i - portfolioColors.length + 1), 0.0)),
+                                        borderRadius: BorderRadius.circular(2.0),
                                       ),
                                       height: 25.w,
                                       width: 25.w,
                                     ),
                                     SizedBox(
-                                      width: textSizeGet('총 상금',
-                                                  subLeagueAwardLabelTotalTextStyleNew)
-                                              .width -
-                                          25.w +
-                                          4.w,
+                                      width:
+                                          textSizeGet('총 상금', subLeagueAwardLabelTotalTextStyleNew).width - 25.w + 4.w,
                                     ),
                                     Container(
                                       width: SizeConfig.screenWidth -
                                           14.w -
                                           14.w -
-                                          textSizeGet('총 상금',
-                                                  subLeagueAwardLabelTotalTextStyleNew)
-                                              .width -
+                                          textSizeGet('총 상금', subLeagueAwardLabelTotalTextStyleNew).width -
                                           4.w -
                                           14.w -
                                           14.w,
@@ -1090,14 +947,12 @@ class PortfolioLabelForLastSubLeagues extends StatelessWidget {
                                             children: [
                                               Text(
                                                 '${_lastAwardDetailViewModel.lastSubLeague.stocks[i].name}',
-                                                style:
-                                                    subLeagueAwardLabelStockTextStyleNew,
+                                                style: subLeagueAwardLabelStockTextStyleNew,
                                               ),
                                               Spacer(),
                                               Text(
                                                 '${_lastAwardDetailViewModel.lastSubLeague.stocks[i].sharesNum}주',
-                                                style:
-                                                    subLeagueAwardLabelStockTextStyleNew,
+                                                style: subLeagueAwardLabelStockTextStyleNew,
                                               ),
                                             ],
                                           ),
@@ -1105,20 +960,15 @@ class PortfolioLabelForLastSubLeagues extends StatelessWidget {
                                             children: [
                                               Text(
                                                 '${NumbersHandler.toPriceKRW(_lastAwardDetailViewModel.getStockCurrentTotalValue(i))}원',
-                                                style:
-                                                    subLeagueAwardLabelStockPriceTextStyleNew,
+                                                style: subLeagueAwardLabelStockPriceTextStyleNew,
                                               ),
                                               Spacer(),
                                               Text(
                                                 '${plusOrminusSymbol(_lastAwardDetailViewModel.getStockCurrentTotalValue(i), _lastAwardDetailViewModel.getStockStandardTotalValue(i))}${NumbersHandler.toPriceKRW(_lastAwardDetailViewModel.getStockCurrentTotalValue(i) - _lastAwardDetailViewModel.getStockStandardTotalValue(i))} (${NumbersHandler.toPercentageChange((_lastAwardDetailViewModel.getStockCurrentTotalValue(i) - _lastAwardDetailViewModel.getStockStandardTotalValue(i)) / _lastAwardDetailViewModel.getStockStandardTotalValue(i))})',
                                                 style: subLeagueAwardLabelPLTextStyleNew.copyWith(
                                                     color: plusOrminusColor(
-                                                        _lastAwardDetailViewModel
-                                                            .getStockCurrentTotalValue(
-                                                                i),
-                                                        _lastAwardDetailViewModel
-                                                            .getStockStandardTotalValue(
-                                                                i))),
+                                                        _lastAwardDetailViewModel.getStockCurrentTotalValue(i),
+                                                        _lastAwardDetailViewModel.getStockStandardTotalValue(i))),
                                               ),
                                             ],
                                           ),
@@ -1128,16 +978,12 @@ class PortfolioLabelForLastSubLeagues extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: correctHeight(
-                                      6.w,
-                                      subLeagueAwardLabelPLTextStyleNew
-                                          .fontSize,
-                                      0.w),
+                                  height: correctHeight(6.w, subLeagueAwardLabelPLTextStyleNew.fontSize, 0.w),
                                 ),
                                 Container(
                                   height: 1.w,
                                   width: double.infinity,
-                                  color: yachtLightGrey,
+                                  color: yachtLine,
                                 ),
                               ],
                             ),
@@ -1153,8 +999,7 @@ class PortfolioLabelForLastSubLeagues extends StatelessWidget {
 }
 
 class PortfolioChartForLastSubLeagues extends StatelessWidget {
-  final LastAwardDetailViewModel _lastAwardDetailViewModel =
-      Get.find<LastAwardDetailViewModel>();
+  final LastAwardDetailViewModel _lastAwardDetailViewModel = Get.find<LastAwardDetailViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -1174,58 +1019,44 @@ class PortfolioChartForLastSubLeagues extends StatelessWidget {
   List<Widget> portfolioList() {
     List<Widget> result = [];
 
-    for (int i = 0;
-        i < _lastAwardDetailViewModel.lastSubLeague.stocks.length;
-        i++) {
+    for (int i = 0; i < _lastAwardDetailViewModel.lastSubLeague.stocks.length; i++) {
       result.add(
         GestureDetector(
           onTap: () {},
           child: CustomPaint(
-            size: Size(_lastAwardDetailViewModel.portfolioArcRadius,
-                _lastAwardDetailViewModel.portfolioArcRadius),
+            size: Size(_lastAwardDetailViewModel.portfolioArcRadius, _lastAwardDetailViewModel.portfolioArcRadius),
             painter: PortfolioArcChartPainter(
-              center: Offset(_lastAwardDetailViewModel.portfolioArcRadius / 2,
-                  _lastAwardDetailViewModel.portfolioArcRadius / 2),
+              center: Offset(
+                  _lastAwardDetailViewModel.portfolioArcRadius / 2, _lastAwardDetailViewModel.portfolioArcRadius / 2),
               color: (i < portfolioColors.length)
                   ? portfolioColors[i]
-                  : portfolioColors[portfolioColors.length - 1].withOpacity(math
-                      .max(1.0 - 0.4 * (i - portfolioColors.length + 1), 0.0)),
-              percentage1: _lastAwardDetailViewModel
-                      .subLeaguePortfolioUIModels[i].startPercentage! *
-                  100,
-              percentage2: _lastAwardDetailViewModel
-                      .subLeaguePortfolioUIModels[i].endPercentage! *
-                  100,
+                  : portfolioColors[portfolioColors.length - 1]
+                      .withOpacity(math.max(1.0 - 0.4 * (i - portfolioColors.length + 1), 0.0)),
+              percentage1: _lastAwardDetailViewModel.subLeaguePortfolioUIModels[i].startPercentage! * 100,
+              percentage2: _lastAwardDetailViewModel.subLeaguePortfolioUIModels[i].endPercentage! * 100,
             ),
           ),
         ),
       );
     }
 
-    for (int i = 0;
-        i < _lastAwardDetailViewModel.lastSubLeague.stocks.length;
-        i++) {
-      if (_lastAwardDetailViewModel
-          .subLeaguePortfolioUIModels[i].legendVisible!)
+    for (int i = 0; i < _lastAwardDetailViewModel.lastSubLeague.stocks.length; i++) {
+      if (_lastAwardDetailViewModel.subLeaguePortfolioUIModels[i].legendVisible!)
         result.add(
           Positioned(
-            left: _lastAwardDetailViewModel
-                .subLeaguePortfolioUIModels[i].portionOffsetFromCenter!.dx,
-            top: _lastAwardDetailViewModel
-                .subLeaguePortfolioUIModels[i].portionOffsetFromCenter!.dy,
+            left: _lastAwardDetailViewModel.subLeaguePortfolioUIModels[i].portionOffsetFromCenter!.dx,
+            top: _lastAwardDetailViewModel.subLeaguePortfolioUIModels[i].portionOffsetFromCenter!.dy,
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
                 Get.to(() => Scaffold(
-                      appBar: primaryAppBar(_lastAwardDetailViewModel
-                          .lastSubLeague.stocks[i].name),
+                      appBar: primaryAppBar(_lastAwardDetailViewModel.lastSubLeague.stocks[i].name),
                       body: SingleChildScrollView(
                         child: Padding(
                           padding: primaryHorizontalPadding,
                           child: StockInfoKRView(
-                              investAddressModel: _lastAwardDetailViewModel
-                                  .lastSubLeague.stocks[i]
-                                  .toInvestAddressModel()),
+                              investAddressModel:
+                                  _lastAwardDetailViewModel.lastSubLeague.stocks[i].toInvestAddressModel()),
                         ),
                       ),
                     ));
@@ -1239,27 +1070,22 @@ class PortfolioChartForLastSubLeagues extends StatelessWidget {
             ),
           ),
         );
-      if (_lastAwardDetailViewModel
-          .subLeaguePortfolioUIModels[i].legendVisible!)
+      if (_lastAwardDetailViewModel.subLeaguePortfolioUIModels[i].legendVisible!)
         result.add(
           Positioned(
-              left: _lastAwardDetailViewModel
-                  .subLeaguePortfolioUIModels[i].stockNameOffsetFromCenter!.dx,
-              top: _lastAwardDetailViewModel
-                  .subLeaguePortfolioUIModels[i].stockNameOffsetFromCenter!.dy,
+              left: _lastAwardDetailViewModel.subLeaguePortfolioUIModels[i].stockNameOffsetFromCenter!.dx,
+              top: _lastAwardDetailViewModel.subLeaguePortfolioUIModels[i].stockNameOffsetFromCenter!.dy,
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Get.to(() => Scaffold(
-                        appBar: primaryAppBar(_lastAwardDetailViewModel
-                            .lastSubLeague.stocks[i].name),
+                        appBar: primaryAppBar(_lastAwardDetailViewModel.lastSubLeague.stocks[i].name),
                         body: SingleChildScrollView(
                           child: Padding(
                             padding: primaryHorizontalPadding,
                             child: StockInfoKRView(
-                                investAddressModel: _lastAwardDetailViewModel
-                                    .lastSubLeague.stocks[i]
-                                    .toInvestAddressModel()),
+                                investAddressModel:
+                                    _lastAwardDetailViewModel.lastSubLeague.stocks[i].toInvestAddressModel()),
                           ),
                         ),
                       ));
@@ -1286,8 +1112,7 @@ class PortfolioArcChartPainter extends CustomPainter {
   double? percentage1 = 0.0;
   double? percentage2 = 0.0;
 
-  PortfolioArcChartPainter(
-      {this.center, this.color, this.percentage1, this.percentage2});
+  PortfolioArcChartPainter({this.center, this.color, this.percentage1, this.percentage2});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1308,8 +1133,7 @@ class PortfolioArcChartPainter extends CustomPainter {
 
     double arcAngle1 = 2 * math.pi * (percentage1! / 100) - math.pi / 2;
     double arcAngle2 = 2 * math.pi * (percentage2! / 100) - math.pi / 2;
-    canvas.drawArc(Rect.fromCircle(center: center!, radius: radius), arcAngle1,
-        arcAngle2 - arcAngle1, true, paint);
+    canvas.drawArc(Rect.fromCircle(center: center!, radius: radius), arcAngle1, arcAngle2 - arcAngle1, true, paint);
   }
 
   @override
@@ -1344,273 +1168,223 @@ Color plusOrminusColor(double a, double b) {
 
 //순위다이얼로그
 rankDialog(BuildContext context, int index, int rank) {
-  final LastAwardDetailViewModel _lastAwardDetailViewModel =
-      Get.find<LastAwardDetailViewModel>();
+  final LastAwardDetailViewModel _lastAwardDetailViewModel = Get.find<LastAwardDetailViewModel>();
 
   return showDialog(
       context: context,
       builder: (context) {
         return Dialog(
-          backgroundColor: primaryBackgroundColor,
-          insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
-          clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          child: Container(
-            height: 400.w,
-            // height: 506.w,
-            width: 347.w,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 21.w,
-                    ),
-                    SizedBox(
-                        height: 15.w,
-                        width: 15.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
-                    Spacer(),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 24.w,
-                        ),
-                        Text('수상 내역 자세히 보기', style: yachtBadgesDialogTitle)
-                      ],
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Row(
-                        children: [
-                          Column(
-                            children: [
-                              SizedBox(
-                                height: 24.w,
-                              ),
-                              SizedBox(
-                                  height: 15.w,
-                                  width: 15.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 39.w,
-                            width: 21.w,
-                          ),
-                        ],
+          backgroundColor: yachtDarkGrey,
+          // insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
+          // clipBehavior: Clip.hardEdge,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 21.w,
+                  ),
+                  SizedBox(
+                      height: 15.w,
+                      width: 15.w,
+                      child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
+                  Spacer(),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 24.w,
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20.w,
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 20.w,
-                    ),
-                    Text('$rank등 주식 수령 내역',
-                        style: lastLeagueDetailViewDialogTitle),
-                    Spacer(),
-                    Image.asset(
-                      'assets/icons/won_mark_two.png',
-                      height: 14.37.w,
-                      width: 17.w,
-                    ),
-                    SizedBox(
-                      width: 4.w,
-                    ),
-                    Text(
-                      '${toPriceKRW(_lastAwardDetailViewModel.getAwardPrice(_lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()))}',
-                      style: lastLeagueDetailViewDialogTitle.copyWith(
-                          color: yachtBlue,
-                          fontSize: 18.w,
-                          height: 1.79,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    SizedBox(
-                      width: 20.w,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 3.w,
-                ),
-                Padding(
-                    padding: EdgeInsets.only(left: 20.w, right: 20.w),
-                    child: Container(height: 1, color: yachtLightGrey)),
-                Column(
-                  children: _lastAwardDetailViewModel
-                      .allFinalRanks[_lastAwardDetailViewModel.rankOrder[index]
-                              ['firstIndex']!
-                          .toInt()]
-                      .award
-                      .asMap()
-                      .map((i, element) => MapEntry(
-                          i,
-                          Column(
-                            children: [
-                              SizedBox(
-                                height: 5.w,
-                              ),
-                              Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 20.w, right: 20.w),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        width: 21.5.w,
-                                        height: 18.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          color: (i < portfolioColors.length)
-                                              ? portfolioColors[i]
-                                              : portfolioColors[
-                                                      portfolioColors.length -
-                                                          1]
-                                                  .withOpacity(math.max(
-                                                      1.0 -
-                                                          0.4 *
-                                                              (i -
-                                                                  portfolioColors
-                                                                      .length +
-                                                                  1),
-                                                      0.0)),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 5.w,
-                                      ),
-                                      Text(
-                                          _lastAwardDetailViewModel
-                                                  .allFinalRanks[
-                                                      _lastAwardDetailViewModel
-                                                          .rankOrder[index]
-                                                              ['firstIndex']!
-                                                          .toInt()]
-                                                  .award[i]
-                                                  .isStock
-                                              ? '${_lastAwardDetailViewModel.lastSubLeague.stocks[_lastAwardDetailViewModel.allFinalRanks[_lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()].award[i].stocksIndex!.toInt()].name}'
-                                              : '요트포인트',
-                                          style:
-                                              lastLeagueDetailViewDialogContent),
-                                      Spacer(),
-                                      Text(
-                                          _lastAwardDetailViewModel
-                                                  .allFinalRanks[
-                                                      _lastAwardDetailViewModel
-                                                          .rankOrder[index]
-                                                              ['firstIndex']!
-                                                          .toInt()]
-                                                  .award[i]
-                                                  .isStock
-                                              ? '${_lastAwardDetailViewModel.allFinalRanks[_lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()].award[i].sharesNum}주'
-                                              : '${NumbersHandler.toPriceKRW(_lastAwardDetailViewModel.allFinalRanks[_lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()].award[i].yachtPoint!)}원',
-                                          style:
-                                              lastLeagueDetailViewDialogContent)
-                                    ],
-                                  )),
-                              SizedBox(
-                                height: 4.w,
-                              ),
-                              Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 20.w, right: 20.w),
-                                  child: Container(
-                                      height: 1, color: yachtLightGrey)),
-                            ],
-                          )))
-                      .values
-                      .toList(),
-                ),
-                SizedBox(
-                  height: 20.w,
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 20.w,
-                    ),
-                    Text('$rank등 수상자리스트',
-                        style: lastLeagueDetailViewDialogTitle),
-                    Spacer(),
-                  ],
-                ),
-                SizedBox(
-                  height: 10.w,
-                ),
-                Flexible(
-                    child: Padding(
-                  padding: EdgeInsets.only(left: 20.w, right: 20.w),
-                  child: Container(
-                    child: ListView(
+                      Text('수상 내역 자세히 보기', style: yachtBadgesDialogTitle)
+                    ],
+                  ),
+                  Spacer(),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Row(
                       children: [
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: _lastAwardDetailViewModel
-                              .getRanksModels(rank)
-                              .asMap()
-                              .map((i, element) => MapEntry(
-                                    i,
-                                    Column(
-                                      children: [
-                                        GestureDetector(
-                                          behavior: HitTestBehavior.opaque,
-                                          onTap: () {
-                                            if (element.uid !=
-                                                userModelRx.value!.uid) {
-                                              Navigator.of(context).pop();
-                                              Get.to(() => ProfileOthersView(
-                                                  uid: element.uid));
-                                            }
-                                          },
-                                          child: Row(
-                                            children: [
-                                              CachedNetworkImage(
-                                                imageUrl:
-                                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${element.avatarImage}.png",
-                                                height: 30.w,
-                                                width: 30.w,
-                                              ),
-                                              SizedBox(
-                                                width: 8.w,
-                                              ),
-                                              Text(
-                                                '${element.userName}',
-                                                style:
-                                                    lastLeagueDetailViewDialogName,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10.w,
-                                        ),
-                                      ],
-                                    ),
-                                  ))
-                              .values
-                              .toList(),
-                        )
+                          children: [
+                            SizedBox(
+                              height: 24.w,
+                            ),
+                            SizedBox(
+                                height: 15.w, width: 15.w, child: Image.asset('assets/icons/exit.png', color: white)),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 39.w,
+                          width: 21.w,
+                        ),
                       ],
                     ),
                   ),
-                )),
-                SizedBox(
-                  height: 10.w,
+                ],
+              ),
+              SizedBox(
+                height: 20.w,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Text('$rank등 주식 수령 내역', style: lastLeagueDetailViewDialogTitle),
+                  Spacer(),
+                  Image.asset(
+                    'assets/icons/won_mark_two.png',
+                    height: 14.37.w,
+                    width: 17.w,
+                  ),
+                  SizedBox(
+                    width: 4.w,
+                  ),
+                  Text(
+                    '${toPriceKRW(_lastAwardDetailViewModel.getAwardPrice(_lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()))}',
+                    style: lastLeagueDetailViewDialogTitle.copyWith(
+                        color: yachtBlue, fontSize: 18.w, height: 1.79, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 3.w,
+              ),
+              Padding(padding: EdgeInsets.only(left: 20.w, right: 20.w), child: Container(height: 1, color: yachtLine)),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: _lastAwardDetailViewModel
+                    .allFinalRanks[_lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()].award
+                    .asMap()
+                    .map((i, element) => MapEntry(
+                        i,
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 5.w,
+                            ),
+                            Padding(
+                                padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 21.5.w,
+                                      height: 18.w,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(2),
+                                        color: (i < portfolioColors.length)
+                                            ? portfolioColors[i]
+                                            : portfolioColors[portfolioColors.length - 1].withOpacity(
+                                                math.max(1.0 - 0.4 * (i - portfolioColors.length + 1), 0.0)),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 5.w,
+                                    ),
+                                    Text(
+                                        _lastAwardDetailViewModel
+                                                .allFinalRanks[
+                                                    _lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()]
+                                                .award[i]
+                                                .isStock
+                                            ? '${_lastAwardDetailViewModel.lastSubLeague.stocks[_lastAwardDetailViewModel.allFinalRanks[_lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()].award[i].stocksIndex!.toInt()].name}'
+                                            : '요트포인트',
+                                        style: lastLeagueDetailViewDialogContent),
+                                    Spacer(),
+                                    Text(
+                                        _lastAwardDetailViewModel
+                                                .allFinalRanks[
+                                                    _lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()]
+                                                .award[i]
+                                                .isStock
+                                            ? '${_lastAwardDetailViewModel.allFinalRanks[_lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()].award[i].sharesNum}주'
+                                            : '${NumbersHandler.toPriceKRW(_lastAwardDetailViewModel.allFinalRanks[_lastAwardDetailViewModel.rankOrder[index]['firstIndex']!.toInt()].award[i].yachtPoint!)}원',
+                                        style: lastLeagueDetailViewDialogContent)
+                                  ],
+                                )),
+                            SizedBox(
+                              height: 4.w,
+                            ),
+                            Padding(
+                                padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                                child: Container(height: 1, color: yachtLine)),
+                          ],
+                        )))
+                    .values
+                    .toList(),
+              ),
+              SizedBox(
+                height: 20.w,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 20.w,
+                  ),
+                  Text('$rank등 수상자리스트', style: lastLeagueDetailViewDialogTitle),
+                  Spacer(),
+                ],
+              ),
+              SizedBox(
+                height: 10.w,
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _lastAwardDetailViewModel
+                      .getRanksModels(rank)
+                      .asMap()
+                      .map((i, element) => MapEntry(
+                            i,
+                            Column(
+                              children: [
+                                GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () {
+                                    if (element.uid != userModelRx.value!.uid) {
+                                      Navigator.of(context).pop();
+                                      Get.to(() => ProfileOthersView(uid: element.uid));
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      CachedNetworkImage(
+                                        imageUrl:
+                                            "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${element.avatarImage}.png",
+                                        height: 30.w,
+                                        width: 30.w,
+                                      ),
+                                      SizedBox(
+                                        width: 8.w,
+                                      ),
+                                      Text(
+                                        '${element.userName}',
+                                        style: lastLeagueDetailViewDialogName,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10.w,
+                                ),
+                              ],
+                            ),
+                          ))
+                      .values
+                      .toList(),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 10.w,
+              ),
+            ],
           ),
         );
       });

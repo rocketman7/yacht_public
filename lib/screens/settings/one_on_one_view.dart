@@ -13,7 +13,7 @@ TextStyle categoryTextStyle = TextStyle(
   fontSize: 14.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
-  color: yachtDarkPurple,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -33,8 +33,7 @@ class OneOnOneView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double textColumnHeight =
-        correctHeight(10.w, 0.w, categoryTextStyle.fontSize) * 2 +
-            textSizeGet('가감랄뤽', categoryTextStyle).height;
+        correctHeight(10.w, 0.w, categoryTextStyle.fontSize) * 2 + textSizeGet('가감랄뤽', categoryTextStyle).height;
     double mainWindowHeight = min(
         SizeConfig.screenHeight -
             SizeConfig.safeAreaBottom -
@@ -49,11 +48,9 @@ class OneOnOneView extends StatelessWidget {
         200.w);
 
     return Scaffold(
-        backgroundColor: primaryBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: white,
-          toolbarHeight: 60.w,
-          title: Text('1:1 문의하기', style: appBarTitle),
+        backgroundColor: yachtBlack,
+        appBar: primaryAppBar(
+          '1:1 문의하기',
         ),
         body: ListView(
           children: [
@@ -63,7 +60,7 @@ class OneOnOneView extends StatelessWidget {
                   SizeConfig.safeAreaTop -
                   60.w, // AppBar's toolbarHeight
               width: SizeConfig.screenWidth,
-              color: Colors.white,
+              // color: Colors.white,
               child: Stack(
                 children: [
                   //문의내용부분
@@ -77,34 +74,30 @@ class OneOnOneView extends StatelessWidget {
                         child: Container(
                           width: 347.w,
                           height: mainWindowHeight,
-                          decoration: primaryBoxDecoration.copyWith(boxShadow: [
-                            BoxShadow(
-                              color: Color(0xFFCEC4DA).withOpacity(0.3),
-                              blurRadius: 8.w,
-                              spreadRadius: 1.w,
-                              offset: Offset(0, 0),
-                            )
-                          ], color: Colors.white),
+                          decoration: primaryBoxDecoration.copyWith(
+                            color: yachtDarkGrey,
+                          ),
                           child: Padding(
                             padding: EdgeInsets.all(14.w),
                             child: Scrollbar(
                               thickness: 4.w,
                               radius: Radius.circular(4.0),
                               child: TextFormField(
+                                style: TextStyle(
+                                  color: white,
+                                ),
                                 controller: oneOnOneViewModel.contentController,
                                 textAlignVertical: TextAlignVertical.bottom,
                                 keyboardType: TextInputType.multiline,
                                 maxLines: 1000,
                                 decoration: InputDecoration(
+                                  fillColor: yachtBlack,
                                   isDense: true,
                                   contentPadding: EdgeInsets.all(0.w),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide.none),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide.none),
+                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                                  enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                                   hintText: '문의 내용을 적어주세요.',
-                                  hintStyle: contentTextStyle.copyWith(
-                                      color: yachtGrey),
+                                  hintStyle: contentTextStyle.copyWith(color: yachtMidGrey),
                                 ),
                                 onChanged: (value) {
                                   oneOnOneViewModel.content(value);
@@ -130,19 +123,12 @@ class OneOnOneView extends StatelessWidget {
                                 width: double.infinity,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(70.0),
-                                    color: oneOnOneViewModel.content.value != ''
-                                        ? yachtViolet
-                                        : buttonDisabled),
+                                    color: oneOnOneViewModel.content.value != '' ? yachtViolet : buttonDisabled),
                                 child: Center(
                                   child: Text(
                                     '문의 보내기',
-                                    style:
-                                        profileChangeButtonTextStyle.copyWith(
-                                            color: oneOnOneViewModel
-                                                        .content.value !=
-                                                    ''
-                                                ? primaryButtonText
-                                                : yachtGrey),
+                                    style: profileChangeButtonTextStyle.copyWith(
+                                        color: oneOnOneViewModel.content.value != '' ? primaryButtonText : yachtGrey),
                                   ),
                                 ),
                               ),
@@ -158,8 +144,7 @@ class OneOnOneView extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 14.w, right: 14.w),
-                        child: Obx(() => !oneOnOneViewModel
-                                .isCategorySelect.value
+                        child: Obx(() => !oneOnOneViewModel.isCategorySelect.value
                             ? GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onTap: () {
@@ -169,43 +154,37 @@ class OneOnOneView extends StatelessWidget {
                                   children: [
                                     Container(
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(4.0),
-                                        color: buttonNormal,
+                                        borderRadius: BorderRadius.circular(4.0),
+                                        color: yachtMidGrey,
                                       ),
                                       width: 347.w,
                                       height: textColumnHeight,
                                     ),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
-                                          height: correctHeight(10.w, 0.w,
-                                              categoryTextStyle.fontSize),
+                                          height: correctHeight(10.w, 0.w, categoryTextStyle.fontSize),
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 6.w),
                                           child: Text(
-                                            category[oneOnOneViewModel
-                                                .selectedCategoryIndex.value],
+                                            category[oneOnOneViewModel.selectedCategoryIndex.value],
                                             style: categoryTextStyle,
                                           ),
                                         ),
                                       ],
                                     ),
                                     Positioned(
-                                      left: SizeConfig.screenWidth -
-                                          14.w -
-                                          13.w -
-                                          14.w -
-                                          14.w,
+                                      left: SizeConfig.screenWidth - 14.w - 13.w - 14.w - 14.w,
                                       top: 14.w,
                                       child: SizedBox(
                                           height: 7.w,
                                           width: 14.w,
                                           child: Image.asset(
-                                              'assets/icons/oneonedown.png')),
+                                            'assets/icons/oneonedown.png',
+                                            color: white,
+                                          )),
                                     ),
                                   ],
                                 ),
@@ -215,108 +194,70 @@ class OneOnOneView extends StatelessWidget {
                                   Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(4.0),
-                                      color: buttonNormal,
+                                      color: yachtMidGrey,
                                     ),
                                     width: 347.w,
-                                    height: textColumnHeight *
-                                        (category.length + 1),
+                                    height: textColumnHeight * (category.length + 1),
                                   ),
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       GestureDetector(
                                         behavior: HitTestBehavior.opaque,
                                         onTap: () {
-                                          oneOnOneViewModel
-                                              .categorySelectMethod();
+                                          oneOnOneViewModel.categorySelectMethod();
                                         },
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
-                                              height: correctHeight(10.w, 0.w,
-                                                  categoryTextStyle.fontSize),
+                                              height: correctHeight(10.w, 0.w, categoryTextStyle.fontSize),
                                             ),
                                             Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 6.w),
+                                              padding: EdgeInsets.only(left: 6.w),
                                               child: Text(
                                                 '문의 종류 선택',
-                                                style:
-                                                    categoryTextStyle.copyWith(
-                                                        color: categoryTextStyle
-                                                            .color!
-                                                            .withOpacity(0.5)),
+                                                style: categoryTextStyle.copyWith(
+                                                    color: categoryTextStyle.color!.withOpacity(0.5)),
                                               ),
                                             ),
                                             SizedBox(
-                                              height: correctHeight(
-                                                  9.w,
-                                                  categoryTextStyle.fontSize,
-                                                  0.w),
+                                              height: correctHeight(9.w, categoryTextStyle.fontSize, 0.w),
                                             ),
-                                            Container(
-                                                width: 347.w,
-                                                height: 1.w,
-                                                color: yachtLine),
+                                            Container(width: 347.w, height: 1.w, color: yachtLine),
                                           ],
                                         ),
                                       ),
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: category
                                             .asMap()
                                             .map((i, element) => MapEntry(
                                                   i,
                                                   GestureDetector(
-                                                    behavior:
-                                                        HitTestBehavior.opaque,
+                                                    behavior: HitTestBehavior.opaque,
                                                     onTap: () {
-                                                      oneOnOneViewModel
-                                                          .categoryIndexSelectMethod(
-                                                              i);
-                                                      oneOnOneViewModel
-                                                          .categorySelectMethod();
+                                                      oneOnOneViewModel.categoryIndexSelectMethod(i);
+                                                      oneOnOneViewModel.categorySelectMethod();
                                                     },
                                                     child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         SizedBox(
-                                                          height: correctHeight(
-                                                              10.w,
-                                                              0.w,
-                                                              categoryTextStyle
-                                                                  .fontSize),
+                                                          height: correctHeight(10.w, 0.w, categoryTextStyle.fontSize),
                                                         ),
                                                         Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 6.w),
+                                                          padding: EdgeInsets.only(left: 6.w),
                                                           child: Text(
                                                             category[i],
-                                                            style:
-                                                                categoryTextStyle,
+                                                            style: categoryTextStyle,
                                                           ),
                                                         ),
                                                         SizedBox(
-                                                          height: correctHeight(
-                                                              9.w,
-                                                              categoryTextStyle
-                                                                  .fontSize,
-                                                              0.w),
+                                                          height: correctHeight(9.w, categoryTextStyle.fontSize, 0.w),
                                                         ),
-                                                        (category.length - 1 !=
-                                                                i)
-                                                            ? Container(
-                                                                width: 347.w,
-                                                                height: 1.w,
-                                                                color:
-                                                                    yachtLine)
+                                                        (category.length - 1 != i)
+                                                            ? Container(width: 347.w, height: 1.w, color: yachtLine)
                                                             : Container(),
                                                       ],
                                                     ),
@@ -328,17 +269,10 @@ class OneOnOneView extends StatelessWidget {
                                     ],
                                   ),
                                   Positioned(
-                                    left: SizeConfig.screenWidth -
-                                        14.w -
-                                        13.w -
-                                        14.w -
-                                        14.w,
+                                    left: SizeConfig.screenWidth - 14.w - 13.w - 14.w - 14.w,
                                     top: 14.w,
                                     child: SizedBox(
-                                        height: 7.w,
-                                        width: 14.w,
-                                        child: Image.asset(
-                                            'assets/icons/oneoneup.png')),
+                                        height: 7.w, width: 14.w, child: Image.asset('assets/icons/oneoneup.png')),
                                   ),
                                 ],
                               )),
@@ -362,8 +296,7 @@ oneOnOneUpdateDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 167.w,
             width: 347.w,
@@ -377,17 +310,14 @@ oneOnOneUpdateDialog(BuildContext context) {
                     SizedBox(
                         height: 16.w,
                         width: 16.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
                         SizedBox(
                           height: 14.w,
                         ),
-                        Text('알림',
-                            style:
-                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                        Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
                       ],
                     ),
                     Spacer(),
@@ -406,8 +336,7 @@ oneOnOneUpdateDialog(BuildContext context) {
                               SizedBox(
                                   height: 16.w,
                                   width: 16.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -420,8 +349,8 @@ oneOnOneUpdateDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(32.5.w, yachtBadgesDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogTitle.fontSize),
+                  height: correctHeight(
+                      32.5.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Center(
                   child: Text(
@@ -431,8 +360,7 @@ oneOnOneUpdateDialog(BuildContext context) {
                   ),
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      24.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                  height: correctHeight(24.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                 ),
                 Row(
                   children: [
@@ -446,9 +374,7 @@ oneOnOneUpdateDialog(BuildContext context) {
                         Get.back();
                         oneOnOneSuccessDialog(context);
                         await Get.find<OneOnOneViewModel>().oneOnOneUpdate(
-                            category[Get.find<OneOnOneViewModel>()
-                                .selectedCategoryIndex
-                                .value],
+                            category[Get.find<OneOnOneViewModel>().selectedCategoryIndex.value],
                             Get.find<OneOnOneViewModel>().content.value);
                       },
                       child: Container(
@@ -484,8 +410,7 @@ oneOnOneUpdateDialog(BuildContext context) {
                         child: Center(
                           child: Text(
                             '취소',
-                            style: yachtDeliveryDialogButtonText.copyWith(
-                                color: yachtViolet),
+                            style: yachtDeliveryDialogButtonText.copyWith(color: yachtViolet),
                           ),
                         ),
                       ),
@@ -514,8 +439,7 @@ oneOnOneSuccessDialog(BuildContext context) {
           backgroundColor: primaryBackgroundColor,
           insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
           clipBehavior: Clip.hardEdge,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             height: 192.w,
             width: 347.w,
@@ -529,17 +453,14 @@ oneOnOneSuccessDialog(BuildContext context) {
                     SizedBox(
                         height: 16.w,
                         width: 16.w,
-                        child: Image.asset('assets/icons/exit.png',
-                            color: Colors.transparent)),
+                        child: Image.asset('assets/icons/exit.png', color: Colors.transparent)),
                     Spacer(),
                     Column(
                       children: [
                         SizedBox(
                           height: 14.w,
                         ),
-                        Text('알림',
-                            style:
-                                yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
+                        Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w))
                       ],
                     ),
                     Spacer(),
@@ -558,8 +479,7 @@ oneOnOneSuccessDialog(BuildContext context) {
                               SizedBox(
                                   height: 16.w,
                                   width: 16.w,
-                                  child: Image.asset('assets/icons/exit.png',
-                                      color: yachtBlack)),
+                                  child: Image.asset('assets/icons/exit.png', color: yachtBlack)),
                             ],
                           ),
                           SizedBox(
@@ -572,8 +492,8 @@ oneOnOneSuccessDialog(BuildContext context) {
                   ],
                 ),
                 SizedBox(
-                  height: correctHeight(32.5.w, yachtBadgesDialogTitle.fontSize,
-                      yachtBadgesDescriptionDialogTitle.fontSize),
+                  height: correctHeight(
+                      32.5.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
                 ),
                 Center(
                   child: Text(
@@ -583,8 +503,7 @@ oneOnOneSuccessDialog(BuildContext context) {
                   ),
                 ),
                 SizedBox(
-                  height: correctHeight(
-                      24.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                  height: correctHeight(24.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                 ),
                 Row(
                   children: [

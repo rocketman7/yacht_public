@@ -30,6 +30,7 @@ class NewLiveController extends GetxController {
   RxBool getStandardPriceDone = false.obs;
   RxList userQuestChoice = [].obs;
   RxList livePriceRankByIndex = [].obs;
+  RxList todayCurrentPrices = [].obs;
   RxList yesterdayClosePrices = [].obs;
   RxList beforeLiveStartDateClosePrices = [].obs;
 
@@ -39,7 +40,9 @@ class NewLiveController extends GetxController {
     investAddresses.addAll(questModel.investAddresses!);
 
     livePriceRankByIndex = List.generate(investmentModelLength, (index) => null).obs;
-
+    todayCurrentPrices = List.generate(investmentModelLength, (index) => 0).obs;
+    yesterdayClosePrices = List.generate(investmentModelLength, (index) => 0).obs;
+    beforeLiveStartDateClosePrices = List.generate(investmentModelLength, (index) => 0).obs;
     await getLivePrice();
     await getStandardPrice();
 
@@ -50,9 +53,17 @@ class NewLiveController extends GetxController {
       Future.delayed(Duration(milliseconds: 300)).then((_) {
         // if (investmentModelLength > 1) sortLivePricesOfThisQuest();
         getWinnerIndex();
+
+        for (int i = 0; i < investmentModelLength; i++) {
+          todayCurrentPrices[i] = livePricesOfThisQuest[i].value.chartPrices.last.close;
+        }
         print('${questModel.title} winnerIndex: $winnerIndex');
       });
     });
+
+    for (int i = 0; i < investmentModelLength; i++) {
+      todayCurrentPrices[i] = livePricesOfThisQuest[i].value.chartPrices.last.close;
+    }
     // livePricesOfThisQuest.listen((p0) {
     //   print('liveprice changed');
     //   getWinnerIndex();
@@ -64,19 +75,19 @@ class NewLiveController extends GetxController {
     for (int i = 0; i < investmentModelLength; i++) {
       // yesterdayClosePrices.add(i);
 
-      yesterdayClosePrices.add(await _firestoreService.getClosePrice(
+      yesterdayClosePrices[i] = await _firestoreService.getClosePrice(
         investAddresses[i].issueCode,
         previousBusinessDay(
           DateTime.now(),
         ),
-      ));
+      );
 
-      beforeLiveStartDateClosePrices.add(await _firestoreService.getClosePrice(
+      beforeLiveStartDateClosePrices[i] = await _firestoreService.getClosePrice(
         investAddresses[i].issueCode,
         previousBusinessDay(
           questModel.liveStartDateTime.toDate(),
         ),
-      ));
+      );
 
       print(investAddresses[i].issueCode + 'done');
     }

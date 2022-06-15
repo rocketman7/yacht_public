@@ -196,7 +196,7 @@ class QuestStatistics extends StatelessWidget {
                 SvgPicture.asset(
                   'assets/icons/manypeople.svg',
                   width: 17.w,
-                  color: yachtBlack,
+                  color: white,
                 ),
                 SizedBox(width: 4.w),
                 controller.questModel.counts == null
@@ -214,14 +214,20 @@ class QuestStatistics extends StatelessWidget {
             Container(
                 padding: EdgeInsets.fromLTRB(6.w, 2.w, 11.w, 2.w),
                 decoration: BoxDecoration(
-                  color: yachtPaleGrey,
+                  color: yachtDarkGrey,
                   borderRadius: BorderRadius.circular(4.w),
                 ),
                 child: Obx(() => controller.isUserAlreadyDone.value
                     ? Stack(
                         clipBehavior: Clip.none,
                         children: [
-                          Text("나의 선택"),
+                          Text(
+                            "나의 선택",
+                            style: TextStyle(
+                              fontSize: 14.w,
+                              color: white,
+                            ),
+                          ),
                           Positioned(
                             right: -5.w,
                             top: 2.w,
@@ -276,12 +282,16 @@ class QuestStatistics extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: 4.w,
+                            width: 6.w,
                           ),
                           Obx(
                             () => Stack(clipBehavior: Clip.none, children: [
                               Text(
                                 controller.questModel.choices![index],
+                                style: TextStyle(
+                                  fontSize: 14.w,
+                                  color: yachtLightGrey,
+                                ),
                               ),
                               (controller.isUserAlreadyDone.value && controller.userQuestChoice[0] == index)
                                   ? Positioned(
@@ -305,9 +315,21 @@ class QuestStatistics extends StatelessWidget {
                       Row(
                         children: [
                           controller.questModel.choiceCounts == null
-                              ? Text("0%")
-                              : Text(toSimplePercentage(
-                                  controller.questModel.choiceCounts![index] / controller.questModel.counts)),
+                              ? Text(
+                                  "0%",
+                                  style: TextStyle(
+                                    fontSize: 14.w,
+                                    color: yachtLightGrey,
+                                  ),
+                                )
+                              : Text(
+                                  toSimplePercentage(
+                                      controller.questModel.choiceCounts![index] / controller.questModel.counts),
+                                  style: TextStyle(
+                                    fontSize: 14.w,
+                                    color: yachtLightGrey,
+                                  ),
+                                ),
                         ],
                       )
                     ],

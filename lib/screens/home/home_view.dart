@@ -724,14 +724,14 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
       context: context,
       barrierDismissible: false,
       builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
+        backgroundColor: yachtDarkGrey,
         insetPadding: EdgeInsets.all(16.w),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.w),
         ),
         child: Container(
             decoration: primaryBoxDecoration.copyWith(
-              color: white,
+              color: yachtDarkGrey,
             ),
             // height: double.minPositive,
 

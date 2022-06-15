@@ -47,11 +47,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
 
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: white,
-        toolbarHeight: 60.w,
-        title: Text('프로필', style: appBarTitle),
-      ),
+      appBar: primaryAppBar('프로필'),
       body: ListView(children: [
         Padding(
             padding: EdgeInsets.only(left: 14.w, right: 14.w, top: 11.w),
@@ -360,6 +356,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                   context: context,
                                   builder: (context) {
                                     return Dialog(
+                                        backgroundColor: yachtDarkGrey,
                                         insetPadding: primaryHorizontalPadding,
                                         child: Container(
                                             padding: EdgeInsets.fromLTRB(
@@ -373,7 +370,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                                 Text("이 유저를 신고하시겠습니까?", style: dialogContent),
                                                 Text(
                                                   "신고한 유저는 자동으로 차단되며\n해당 유저의 콘텐츠를 볼 수 없습니다.",
-                                                  style: dialogWarning.copyWith(color: yachtDarkGrey),
+                                                  style: dialogWarning.copyWith(color: yachtLightGrey),
                                                 ),
                                                 SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
                                                 Row(
@@ -419,7 +416,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                   style: subLeagueAwardCommentStyle.copyWith(
                                     fontSize: 12.w,
                                     letterSpacing: -0.01,
-                                    color: yachtRed.withOpacity(.8),
+                                    color: yachtRed,
                                   ),
                                 )),
                           )
@@ -1054,6 +1051,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                                 'assets/icons/navigate_foward_arrow.png',
                                 height: 16.w,
                                 width: 9.w,
+                                color: white,
                               ),
                               Container(
                                 width: 14.w,
@@ -1068,7 +1066,24 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                     height: correctHeight(20.w, profileHeaderTextStyle.fontSize, 0.0),
                   ),
                   Obx(() => profileOthersViewModel.otherUserQuestModels.length == 0
-                          ? Image.asset('assets/illusts/not_exists/no_quest_done.png', height: 150.w)
+                          ? Padding(
+                              padding: primaryHorizontalPadding,
+                              child: Container(
+                                padding: primaryAllPadding,
+                                width: double.infinity,
+                                decoration:
+                                    BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
+                                child: Center(
+                                  child: Text(
+                                    "퀘스트에 참여한 기록이 없어요.",
+                                    style: TextStyle(
+                                      color: yachtLightGrey,
+                                      fontSize: 16.w,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
                           : QuestRecordOthersView(isFullView: false, tag: widget.tag)
                       // Column(
                       //     children: List.generate(

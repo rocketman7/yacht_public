@@ -33,10 +33,10 @@ class QuestResultsViewModel extends GetxController {
 
   @override
   void onInit() {
-    _everySecond = Timer.periodic(Duration(seconds: 1), (timer) {
-      now = DateTime.now();
-      timeLeft();
-    });
+    // _everySecond = Timer.periodic(Duration(seconds: 1), (timer) {
+    //   now = DateTime.now();
+    //   timeLeft();
+    // });
 
 // 뷰모델의 Local userQuestModel에 userQuestModel Rx value를 받아오는데
     // 이 퀘스트의 선택만 가져온다
@@ -54,8 +54,8 @@ class QuestResultsViewModel extends GetxController {
       print(expBarAfterReward.value);
     } else {
       if (userQuestModelRx.length > 0) {
-        print('init');
-        // print(uid);
+        print('questModel');
+        print(questModel.questId);
         if (userQuestModelRx.where((element) => element.questId == questModel.questId).length > 0) {
           thisUserQuestModel(userQuestModelRx.where((element) => element.questId == questModel.questId).first);
         }

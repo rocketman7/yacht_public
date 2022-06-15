@@ -80,7 +80,7 @@ class ProfileChangeView extends StatelessWidget {
                   Container(
                     height: 1.w,
                     width: double.infinity,
-                    color: yachtLine,
+                    color: yachtMidGrey,
                   ),
                   SizedBox(
                     height: correctHeight(20.w, 0.w, profileChangeTitleTextStyle.fontSize),
@@ -91,6 +91,9 @@ class ProfileChangeView extends StatelessWidget {
                         8.w, profileChangeTitleTextStyle.fontSize, profileChangeContentTextStyle.fontSize),
                   ),
                   TextFormField(
+                    style: TextStyle(
+                      color: white,
+                    ),
                     controller: profileMyViewModel.nameChangeController,
                     textAlignVertical: TextAlignVertical.bottom,
                     keyboardType: TextInputType.name,
@@ -100,7 +103,7 @@ class ProfileChangeView extends StatelessWidget {
                       focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
                       enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                       hintText: '${userModelRx.value!.userName}',
-                      hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                      hintStyle: profileChangeContentTextStyle.copyWith(color: yachtMidGrey),
                     ),
                     validator: (value) {
                       if (value != '') {
@@ -126,7 +129,7 @@ class ProfileChangeView extends StatelessWidget {
                   Container(
                     height: 1.w,
                     width: double.infinity,
-                    color: yachtLine,
+                    color: yachtMidGrey,
                   ),
                   SizedBox(
                     height: correctHeight(20.w, 0.w, profileChangeTitleTextStyle.fontSize),
@@ -137,6 +140,9 @@ class ProfileChangeView extends StatelessWidget {
                         8.w, profileChangeTitleTextStyle.fontSize, profileChangeContentTextStyle.fontSize),
                   ),
                   TextFormField(
+                    style: TextStyle(
+                      color: white,
+                    ),
                     controller: profileMyViewModel.introChangeController,
                     textAlignVertical: TextAlignVertical.bottom,
                     keyboardType: TextInputType.multiline,
@@ -149,7 +155,7 @@ class ProfileChangeView extends StatelessWidget {
                       hintText: (userModelRx.value!.intro != null && userModelRx.value!.intro != '')
                           ? '${userModelRx.value!.intro}'.replaceAll('\\n', '\n')
                           : '소개글이 없습니다.',
-                      hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
+                      hintStyle: profileChangeContentTextStyle.copyWith(color: yachtMidGrey),
                     ),
                     validator: (value) {
                       if ('\n'.allMatches(value!).length > 2) {
@@ -174,7 +180,7 @@ class ProfileChangeView extends StatelessWidget {
                   Container(
                     height: 1.w,
                     width: double.infinity,
-                    color: yachtLine,
+                    color: yachtMidGrey,
                   ),
                 ],
               ),
@@ -263,7 +269,10 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                 child: Container(
                   height: 435.w,
                   width: double.infinity,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: Colors.white),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: yachtDarkGrey,
+                  ),
                   child: Column(
                     children: [
                       SizedBox(
@@ -281,7 +290,9 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                           Spacer(),
                           Text(
                             '프로필 아바타 선택하기',
-                            style: profileAvatarChangeTextStyle,
+                            style: profileAvatarChangeTextStyle.copyWith(
+                              color: white,
+                            ),
                           ),
                           Spacer(),
                           GestureDetector(
@@ -292,7 +303,10 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                             child: SizedBox(
                               height: 15.w,
                               width: 15.w,
-                              child: Image.asset('assets/buttons/close.png'),
+                              child: Image.asset(
+                                'assets/buttons/close.png',
+                                color: white,
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -361,13 +375,18 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                     });
                   },
                   child: Container(
-                    height: 50.w,
+                    height: 55.w,
                     width: double.infinity,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(70.0), color: primaryButtonText),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.w),
+                      color: yachtViolet.withOpacity(.8),
+                    ),
                     child: Center(
                       child: Text(
                         '저장하기',
-                        style: profileChangeButtonTextStyle,
+                        style: profileChangeButtonTextStyle.copyWith(
+                          color: white,
+                        ),
                       ),
                     ),
                   ),

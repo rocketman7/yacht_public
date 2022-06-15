@@ -52,7 +52,7 @@ Color thinDivider = Color(0xFF879098).withOpacity(.05);
 const Color buttonDisabled = yachtMidGrey;
 const Color buttonNormal = const Color(0xFFEFF2FA);
 Color yachtShadow = Color(0xFFCDC4D9).withOpacity(.3);
-const Color yachtLine = Color(0xFFE6EAF1);
+const Color yachtLine = yachtMidGrey;
 const Color white = Colors.white;
 
 const Color tierNewbie = Color(0xFFFCE4A8);
@@ -64,11 +64,11 @@ const Color tierGrandMaster = Color(0xFFFEB8B8);
 Color tierName = yachtBlack.withOpacity(.8);
 
 // Area graph Color
-Color graph0 = Color(0xFF5568CF).withOpacity(.55);
-Color graph1 = Color(0xFF55C0CF).withOpacity(.55);
-Color graph2 = Color(0xFF9255CF).withOpacity(.55);
-Color graph3 = Color(0xFF55CF69).withOpacity(.55);
-Color graph4 = Color(0xFF558DCF).withOpacity(.55);
+Color graph0 = Color(0xFF5568CF).withOpacity(.85);
+Color graph1 = Color(0xFF55C0CF).withOpacity(.85);
+Color graph2 = Color(0xFF9255CF).withOpacity(.85);
+Color graph3 = Color(0xFF55CF69).withOpacity(.85);
+Color graph4 = Color(0xFF558DCF).withOpacity(.85);
 
 List<Color> graphColors = [graph0, graph1, graph2, graph3, graph4];
 
@@ -213,7 +213,7 @@ TextStyle stockPriceTextStyle = TextStyle(
   fontSize: 30.w,
   fontWeight: FontWeight.w600,
   color: white,
-  letterSpacing: -1.0,
+  letterSpacing: -0.5,
   height: primaryFontHeight,
 );
 
@@ -455,7 +455,7 @@ TextStyle profileChangeContentTextStyle = TextStyle(
 );
 TextStyle profileChangeButtonTextStyle = TextStyle(
   fontFamily: krFont,
-  fontSize: 20.w,
+  fontSize: 18.w,
   fontWeight: FontWeight.w500,
   color: primaryButtonBackground,
   letterSpacing: -1.0,
@@ -990,8 +990,8 @@ TextStyle adsWarningButton = TextStyle(
 TextStyle settingTitle = TextStyle(
   fontFamily: krFont,
   fontSize: 18.w,
-  fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  fontWeight: FontWeight.w600,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -999,7 +999,7 @@ TextStyle settingContent = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1053,7 +1053,7 @@ TextStyle questRecordTitle = TextStyle(
   fontSize: bodyBigSize,
   fontFamily: krFont,
   // fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.3,
   // height: primaryFontHeight,
@@ -1062,7 +1062,7 @@ TextStyle accountVerificationTitle = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1070,7 +1070,7 @@ TextStyle accountVerificationContent = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w400,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1094,7 +1094,7 @@ TextStyle settingFriendsCodeDialogTitle = TextStyle(
   fontSize: 18.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
-  color: yachtBlack,
+  color: white,
   letterSpacing: 0.0,
   height: primaryFontHeight,
 );
@@ -1102,7 +1102,7 @@ TextStyle settingFriendsCodeDialogContent = TextStyle(
   fontSize: 18.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: primaryFontHeight,
 );
@@ -1135,7 +1135,7 @@ TextStyle questRecordSelection = TextStyle(
   fontSize: bodySmallSize,
   fontFamily: krFont,
   fontWeight: FontWeight.w600,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: contentFontHeight,
 );
@@ -1144,7 +1144,7 @@ TextStyle questRecordResult = TextStyle(
   fontSize: bodySmallSize,
   fontFamily: krFont,
   fontWeight: FontWeight.w500,
-  color: yachtGrey,
+  color: white,
   letterSpacing: -1.0,
   height: 1.3,
 );
@@ -1472,13 +1472,42 @@ Container basicInfoButtion(
   );
 }
 
+Container basicActionButtion(
+  String text, {
+  Color? buttonColor,
+  Color? textColor,
+  double? fontSize,
+  Widget? child,
+  bool? wider,
+}) {
+  return Container(
+    padding: EdgeInsets.symmetric(
+      horizontal: (wider != null && wider) ? 16.w : 10.w,
+      vertical: 8.w,
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(4.w),
+      color: buttonColor ?? yachtGrey,
+    ),
+    child: child ??
+        Text(
+          text,
+          style: TextStyle(
+            color: textColor ?? white,
+            fontSize: fontSize ?? 14.w,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+  );
+}
+
 Container simpleTextContainerButton(
   String text, {
   Widget? child,
 }) {
   return Container(
       // alignment: Alignment.center,
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.w),
       decoration: BoxDecoration(
         color: primaryButtonText,
         borderRadius: BorderRadius.circular(50),
@@ -2035,7 +2064,7 @@ Container appBarWithCloseButton({required String title, double? height}) {
 Container appBarWithoutCloseButton({required String title, double? height}) {
   return Container(
     height: height ?? 60.w,
-    color: white,
+    color: yachtDarkGrey,
     child: Center(child: Text(title, style: appBarTitle.copyWith(fontFamily: krFont))),
   );
 }
@@ -2462,7 +2491,7 @@ class _YachtCustomHeaderState extends RefreshIndicatorState<YachtCustomHeader> {
                             : mode == RefreshStatus.canTwoLevel
                                 ? widget.canTwoLevelText ?? strings.canTwoLevelText!
                                 : "",
-        style: widget.textStyle.copyWith(color: yachtGrey));
+        style: widget.textStyle.copyWith(color: yachtLightGrey));
   }
 
   Widget _buildIcon(mode) {

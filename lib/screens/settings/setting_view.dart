@@ -34,7 +34,7 @@ class SettingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryBackgroundColor,
+      // backgroundColor: yachtLightGrey,
       appBar: primaryAppBar('설정'),
       body: ListView(children: [
         SizedBox(
@@ -873,6 +873,7 @@ class SettingView extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (context) => Dialog(
+                        backgroundColor: yachtDarkGrey,
                         insetPadding: primaryHorizontalPadding,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -880,7 +881,10 @@ class SettingView extends StatelessWidget {
                             Container(
                                 padding: EdgeInsets.fromLTRB(
                                     14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.w),
+                                  // color: yachtDarkGrey,
+                                ),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -958,6 +962,7 @@ class SettingView extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (context) => Dialog(
+                        backgroundColor: yachtDarkGrey,
                         insetPadding: primaryHorizontalPadding,
                         child: Container(
                             padding:
@@ -1049,11 +1054,7 @@ class RecommendedMeListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: primaryBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: white,
-          toolbarHeight: 60.w,
-          title: Text('나를 추천한 친구들', style: appBarTitle),
-        ),
+        appBar: primaryAppBar('나를 추천한 친구들'),
         body: userModelRx.value!.friendsUidRecommededMe != null
             ? ListView(children: [
                 Column(

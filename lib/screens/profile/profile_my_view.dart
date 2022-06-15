@@ -25,6 +25,8 @@ import '../../handlers/numbers_handler.dart';
 import '../../locator.dart';
 import '../../styles/size_config.dart';
 
+import '../award/last_award_view.dart';
+import '../quest/new_result_quest_widget.dart';
 import 'asset_view.dart';
 import 'asset_view_model.dart';
 import 'profile_change_view.dart';
@@ -845,37 +847,38 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                     Padding(
                       padding: EdgeInsets.only(left: 14.w),
                       // padding: primaryHorizontalPadding,
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          _mixpanelService.mixpanel.track('Quest Record Detail');
-                          Get.to(() => QuestRecordDetailView());
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              '퀘스트 참여기록',
-                              style: profileHeaderTextStyle,
-                            ),
-                            Spacer(),
-                            Row(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            '퀘스트 참여기록',
+                            style: profileHeaderTextStyle,
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              _mixpanelService.mixpanel.track('Previous League');
+                              Get.to(() => LastAwardView());
+                            },
+                            child: Row(
                               children: [
                                 Container(
-                                  width: 8.w,
+                                  width: 18.w,
                                 ),
-                                Image.asset(
-                                  'assets/icons/navigate_foward_arrow.png',
-                                  height: 16.w,
-                                  width: 9.w,
-                                  color: white,
+                                basicActionButtion(
+                                  '지난 리그 보기',
+                                  wider: true,
+                                  buttonColor: yachtGrey,
+                                  textColor: white,
                                 ),
                                 SizedBox(
                                   width: 14.w,
                                 ),
                               ],
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
 
@@ -901,8 +904,36 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                               ),
                             ),
                           )
-                        : QuestRecordView(
-                            isFullView: false,
+                        : Column(
+                            children: [
+                              QuestRecordView(
+                                isFullView: false,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _mixpanelService.mixpanel.track('Quest Record Detail');
+                                  Get.to(() => QuestRecordDetailView());
+                                },
+                                child: Padding(
+                                  padding: primaryAllPadding,
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 50.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12.w),
+                                      color: yachtDarkGrey,
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      "모두 보기",
+                                      style: seeMore.copyWith(
+                                        color: white,
+                                      ),
+                                    )),
+                                  ),
+                                ),
+                              )
+                            ],
                           )),
                     // Obx(() => userQuestModelRx.length == 0
                     //     ? Image.asset(
@@ -1005,8 +1036,9 @@ class QuestRecordView extends StatelessWidget {
                                     onTap: () {
                                       showDialog(
                                           context: context,
-                                          builder: (context) => ResultDialog(
+                                          builder: (context) => NewResultDialog(
                                                 questModel: snapshot.data!,
+                                                // questResultViewModel: ,
                                               ));
 
                                       // Get.toNamed('/quest',
@@ -1025,82 +1057,85 @@ class QuestRecordView extends StatelessWidget {
                                               Text(
                                                 timeStampToStringWithHourMinute(snapshot.data!.questEndDateTime) +
                                                     " 마감",
-                                                style: questRecordendDateTime,
+                                                style: questRecordendDateTime.copyWith(
+                                                  color: yachtLightGrey,
+                                                ),
                                               ),
                                               SizedBox(height: 6.w),
                                               Text(snapshot.data!.title, style: questRecordTitle),
                                               SizedBox(
                                                   height: correctHeight(
                                                       14.w, questRecordTitle.fontSize, questRecordSelection.fontSize)),
-                                              Text(
-                                                  Get.find<ProfileMyViewModel>()
-                                                      .getUserChioce(snapshot.data!, userQuestModelRx[index]),
-                                                  style: questRecordSelection),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          '나의 예측',
+                                                          style: questTitle.copyWith(
+                                                            fontSize: 14.w,
+                                                            color: yachtLightGrey,
+                                                          ),
+                                                        ),
+                                                        SizedBox(width: 8.w),
+                                                        SizedBox(
+                                                          height: 2.w,
+                                                        ),
+                                                        Text(
+                                                            Get.find<ProfileMyViewModel>()
+                                                                .getUserChioce(snapshot.data!, userQuestModelRx[index]),
+                                                            style: questRecordSelection.copyWith(
+                                                              fontSize: 16.w,
+                                                            )),
+
+                                                        // SizedBox(
+                                                        //   width: 30.w,
+                                                        // ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          '결과',
+                                                          style: questTitle.copyWith(
+                                                            fontSize: 14.w,
+                                                            color: yachtLightGrey,
+                                                          ),
+                                                        ),
+                                                        // Spacer(),
+                                                        Text(
+                                                          snapshot.data!.results == null
+                                                              ? "진행 중"
+                                                              : userQuestModelRx[index].hasSucceeded == true
+                                                                  ? "예측 성공"
+                                                                  : "예측 실패",
+                                                          style: questRecordSelection.copyWith(
+                                                            fontWeight: FontWeight.w500,
+                                                            fontSize: 16.w,
+                                                            color: snapshot.data!.results == null
+                                                                ? yachtMidGrey
+                                                                : userQuestModelRx[index].hasSucceeded == true
+                                                                    ? yachtRed
+                                                                    : yachtMidGrey,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
                                               // Text(userQuestModelRx[index].selection),
                                             ],
                                           ),
                                         ),
-                                        SizedBox(width: 8.w),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            // Spacer(),
-                                            Container(
-                                              // alignment: Alignment.bottomCenter,
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 10.w,
-                                                vertical: 5.w,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: buttonNormal,
-                                                borderRadius: BorderRadius.circular(8.w),
-                                              ),
 
-                                              // height: 300,
-                                              child: Center(
-                                                child: Text(
-                                                  snapshot.data!.results == null
-                                                      ? "진행 중"
-                                                      : userQuestModelRx[index].hasSucceeded == true
-                                                          ? "예측 성공"
-                                                          : "예측 실패",
-                                                  style: questRecordSelection.copyWith(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: snapshot.data!.results == null
-                                                        ? yachtBlack
-                                                        : userQuestModelRx[index].hasSucceeded == true
-                                                            ? yachtRed
-                                                            : yachtGrey,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 10.w,
-                                                vertical: 5.w,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: Colors.transparent,
-                                                borderRadius: BorderRadius.circular(8.w),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  "예측 실패",
-                                                  style: questRecordSelection.copyWith(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.transparent,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        // SizedBox(
-                                        //   width: 30.w,
-                                        // ),
                                         // simpleTextContainerLessRadiusButton("퀘스트 보기")
                                       ],
                                     ),

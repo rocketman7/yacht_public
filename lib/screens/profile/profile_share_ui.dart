@@ -122,11 +122,7 @@ class FollowersNFollowingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: primaryBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: white,
-          toolbarHeight: 60.w,
-          title: Text(whichfollowersOrfollowings ? '팔로워 목록' : '팔로잉 목록', style: appBarTitle),
-        ),
+        appBar: primaryAppBar(whichfollowersOrfollowings ? '팔로워 목록' : '팔로잉 목록'),
         body: ListView(children: [
           Column(
             children: followersNFollowingsUid
@@ -212,7 +208,7 @@ class FollowersNFollowingsView extends StatelessWidget {
                             Container(
                               height: 1.w,
                               width: double.infinity,
-                              color: yachtLine,
+                              color: yachtMidGrey,
                             )
                           ],
                         ),
@@ -234,10 +230,8 @@ class NullFollowersNFollowingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: primaryBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: white,
-          toolbarHeight: 60.w,
-          title: Text(whichNULLfollowersOrfollowings ? '팔로워 목록' : '팔로잉 목록', style: appBarTitle),
+        appBar: primaryAppBar(
+          whichNULLfollowersOrfollowings ? '팔로워 목록' : '팔로잉 목록',
         ),
         body: Center(
           child: Image.asset(

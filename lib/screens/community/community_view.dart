@@ -99,6 +99,7 @@ class CommunityView extends GetView<CommunityViewModel> {
                               // contentController: _contentController,
                               communityViewModel: _communityViewModel,
                             ),
+                            backgroundColor: yachtBlack,
                             isScrollControlled: true,
                             ignoreSafeArea: false, // add this
                           );
@@ -665,7 +666,7 @@ class WritingNewPost extends StatelessWidget {
                                   strokeWidth: 1.4.w,
                                   color: yachtViolet,
                                 ))
-                            : basicInfoButtion(
+                            : basicActionButtion(
                                 "올리기",
                                 buttonColor: yachtViolet,
                               ),

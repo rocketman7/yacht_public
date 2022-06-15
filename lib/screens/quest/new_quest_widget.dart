@@ -91,9 +91,10 @@ class SquareQuestWidget extends StatelessWidget {
                           children: [
                             basicInfoButtion(
                               "New",
-                              buttonColor: yachtViolet,
+                              buttonColor: white,
+                              textColor: yachtViolet,
                             ),
-                            SizedBox(width: 4.w),
+                            SizedBox(width: 6.w),
                             (userQuestModelRx.length > 0 &&
                                     userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
                                 ? basicInfoButtion(
@@ -105,7 +106,7 @@ class SquareQuestWidget extends StatelessWidget {
                                     "참여가능",
                                     buttonColor: yachtGrey,
                                   ),
-                            SizedBox(width: 4.w),
+                            SizedBox(width: 6.w),
                             basicInfoButtion(
                               "",
                               child: TimeCounterWidget(
@@ -229,10 +230,11 @@ class NewQuestHeader extends StatelessWidget {
   const NewQuestHeader({
     Key? key,
     required this.questModel,
+    this.actionButton = true,
   }) : super(key: key);
 
   final QuestModel questModel;
-
+  final bool actionButton;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -268,6 +270,7 @@ class NewQuestHeader extends StatelessWidget {
         ),
         SizedBox(height: 8.w),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             questModel.yachtPointSuccessReward == null
                 ? SizedBox.shrink()
@@ -340,7 +343,16 @@ class NewQuestHeader extends StatelessWidget {
                         style: questRewardAmoutStyle,
                       ),
                     ],
+                  ),
+            Spacer(),
+            actionButton
+                ? basicActionButtion(
+                    '참여하기',
+                    buttonColor: yachtViolet,
+                    wider: true,
+                    fontSize: 16.w,
                   )
+                : SizedBox.shrink()
           ],
         )
       ],

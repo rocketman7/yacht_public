@@ -14,7 +14,8 @@ class NewResultQuestWidget extends StatelessWidget {
   final QuestModel questModel;
   @override
   Widget build(BuildContext context) {
-    final QuestResultsViewModel questResultViewModel = Get.put(QuestResultsViewModel(questModel: questModel));
+    final QuestResultsViewModel questResultViewModel =
+        Get.put(QuestResultsViewModel(questModel: questModel), tag: questModel.questId);
     return InkWell(
       onTap: () {
         showDialog(context: context, builder: (context) => NewResultDialog(questModel: questModel));
@@ -32,17 +33,17 @@ class NewResultQuestWidget extends StatelessWidget {
                 Row(
                   children: [
                     basicInfoButtion(
-                      "결과",
-                      buttonColor: yachtBlack,
-                      textColor: yachtLightGrey,
-                    ),
-                    SizedBox(width: 4.w),
-                    basicInfoButtion(
-                      "참여마감",
+                      "결과 발표",
                       buttonColor: yachtGrey,
-                      textColor: yachtLightGrey,
+                      textColor: white,
                     ),
-                    SizedBox(width: 4.w),
+                    SizedBox(width: 6.w),
+                    // basicInfoButtion(
+                    //   "참여마감",
+                    //   buttonColor: yachtGrey,
+                    //   textColor: yachtLightGrey,
+                    // ),
+                    // SizedBox(width: 4.w),
                     // basicInfoButtion(
                     //   "",
                     //   child: TimeCounterWidget(
@@ -86,27 +87,72 @@ class NewResultQuestWidget extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    questModel.showResults(),
-                    style: questTitle.copyWith(
-                      fontSize: 20.w,
-                      color: white,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '나의 예측',
+                        style: questTitle.copyWith(
+                          fontSize: 14.w,
+                          color: yachtLightGrey,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.w,
+                      ),
+                      questResultViewModel.thisUserQuestModel.value == null
+                          ? Text(
+                              "미참여",
+                              style: questTitle.copyWith(
+                                fontSize: 20.w,
+                                color: white,
+                              ),
+                            )
+                          : Text(
+                              questResultViewModel.showUserSelection(
+                                  questResultViewModel.thisUserQuestModel.value!, questModel),
+                              style: questTitle.copyWith(
+                                fontSize: 20.w,
+                                color: white,
+                              ),
+                            ),
+                    ],
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    questResultViewModel.thisUserQuestModel.value == null
-                        ? "미참여"
-                        : questResultViewModel.thisUserQuestModel.value!.hasSucceeded == null
-                            ? "결과 대기 중"
-                            : !questResultViewModel.thisUserQuestModel.value!.hasSucceeded!
-                                ? "예측 실패"
-                                : "예측 성공!",
-                    style: questTitle.copyWith(
-                      fontSize: 20.w,
-                      color: white,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '결과',
+                        style: questTitle.copyWith(
+                          fontSize: 14.w,
+                          color: yachtLightGrey,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 2.w,
+                      ),
+                      Text(
+                        questResultViewModel.thisUserQuestModel.value == null
+                            ? questModel.showResults()
+                            : questResultViewModel.thisUserQuestModel.value!.hasSucceeded == null
+                                ? "결과 대기 중"
+                                : !questResultViewModel.thisUserQuestModel.value!.hasSucceeded!
+                                    ? "예측 실패"
+                                    : "예측 성공!",
+                        style: questTitle.copyWith(
+                          fontSize: 20.w,
+                          color: questResultViewModel.thisUserQuestModel.value == null
+                              ? white
+                              : questResultViewModel.thisUserQuestModel.value!.hasSucceeded == null
+                                  ? yachtMidGrey
+                                  : !questResultViewModel.thisUserQuestModel.value!.hasSucceeded!
+                                      ? yachtMidGrey
+                                      : yachtRed,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -123,9 +169,11 @@ class NewResultDialog extends StatelessWidget {
   final QuestModel questModel;
   @override
   Widget build(BuildContext context) {
-    QuestResultsViewModel questResultViewModel = Get.put(QuestResultsViewModel(
-      questModel: questModel,
-    ));
+    QuestResultsViewModel questResultViewModel = Get.put(
+        QuestResultsViewModel(
+          questModel: questModel,
+        ),
+        tag: questModel.questId);
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: EdgeInsets.all(16.w),
@@ -167,7 +215,10 @@ class NewResultDialog extends StatelessWidget {
               ],
             ),
             SizedBox(height: 14.w),
-            NewQuestHeader(questModel: questModel),
+            NewQuestHeader(
+              questModel: questModel,
+              actionButton: false,
+            ),
             SizedBox(height: 14.w),
             Container(
               padding: primaryAllPadding,
@@ -223,10 +274,22 @@ class NewResultDialog extends StatelessWidget {
                   height: 8.w,
                 ),
                 Text(
-                  questModel.showResults(),
+                  questResultViewModel.thisUserQuestModel.value == null
+                      ? questModel.showResults()
+                      : questResultViewModel.thisUserQuestModel.value!.hasSucceeded == null
+                          ? "결과 대기 중"
+                          : !questResultViewModel.thisUserQuestModel.value!.hasSucceeded!
+                              ? "예측 실패"
+                              : "예측 성공!",
                   style: questTitle.copyWith(
-                    color: white,
-                    fontSize: questModel.selectMode == "order" ? 18.w : 24.w,
+                    fontSize: 20.w,
+                    color: questResultViewModel.thisUserQuestModel.value == null
+                        ? white
+                        : questResultViewModel.thisUserQuestModel.value!.hasSucceeded == null
+                            ? yachtMidGrey
+                            : !questResultViewModel.thisUserQuestModel.value!.hasSucceeded!
+                                ? yachtMidGrey
+                                : yachtRed,
                   ),
                 )
               ]),

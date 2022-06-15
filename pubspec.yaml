@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.5.0+74
+version: 2.5.0+76
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -79,7 +79,7 @@ dependencies:
 
   ntp: ^2.0.0
   package_info: ^2.0.0
-  path: ^1.7.0
+  path: ^1.8.0
   path_provider: ^2.0.1
   preload_page_view: ^0.1.4
   provider: ^5.0.0
@@ -99,7 +99,7 @@ dependencies:
   universal_io: ^2.0.4
   url_launcher: ^6.0.9
   vibration: ^1.7.4-nullsafety.0
-  flutter_native_splash:
+  flutter_native_splash: ^2.1.6
   flutter_inappwebview: ^5.3.2
   webview_flutter: ^3.0.4
   pull_to_refresh: ^2.0.0
@@ -146,7 +146,7 @@ flutter_native_splash:
   # of your splash screen to a solid color.  Use background_image to set the background of your
   # splash screen to a png image.  This is useful for gradients. The image will be stretch to the
   # size of the app. Only one parameter can be used, color and background_image cannot both be set.
-  color: "#798AE6"
+  color: "#4A2EFF"
   # background_image: "assets/images/background.png"
 
   # Optional parameters are listed below.  To enable a parameter, uncomment the line by removing
@@ -205,7 +205,7 @@ flutter_native_splash:
   #  - 'ios/Runner/Info-Release.plist'
 
   # To enable support for Android 12, set the following parameter to true.  Defaults to false.
-  #android12: true
+  # android12: true
 
 dev_dependencies:
   flutter_test:
@@ -271,9 +271,9 @@ flutter:
         - asset: assets/fonts/noto_sans_kr/NotoSansKR-Black.otf
           weight: 900
 
-    - family: Default
-      fonts:
-        - asset: assets/fonts/s-core/SCDream4.otf
+    # - family: Default
+    #   fonts:
+    #     - asset: assets/fonts/s-core/SCDream4.otf
 
     - family: IBMPlex
       fonts:
@@ -291,47 +291,47 @@ flutter:
         - asset: assets/fonts/ibm_plex_sans_kr/IBMPlexSansKR-Bold.ttf
           weight: 700
 
-    - family: Pretendard
-      fonts:
-        - asset: assets/fonts/alternative/Pretendard-Regular.ttf
-        - asset: assets/fonts/alternative/Pretendard-Thin.ttf
-          weight: 100
-        - asset: assets/fonts/alternative/Pretendard-ExtraLight.ttf
-          weight: 200
-        - asset: assets/fonts/alternative/Pretendard-Light.ttf
-          weight: 300
-        - asset: assets/fonts/alternative/Pretendard-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/alternative/Pretendard-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/alternative/Pretendard-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/alternative/Pretendard-ExtraBold.ttf
-          weight: 800
-        - asset: assets/fonts/alternative/Pretendard-Black.ttf
-          weight: 900
+    # - family: Pretendard
+    #   fonts:
+    #     - asset: assets/fonts/alternative/Pretendard-Regular.ttf
+    #     - asset: assets/fonts/alternative/Pretendard-Thin.ttf
+    #       weight: 100
+    #     - asset: assets/fonts/alternative/Pretendard-ExtraLight.ttf
+    #       weight: 200
+    #     - asset: assets/fonts/alternative/Pretendard-Light.ttf
+    #       weight: 300
+    #     - asset: assets/fonts/alternative/Pretendard-Medium.ttf
+    #       weight: 500
+    #     - asset: assets/fonts/alternative/Pretendard-SemiBold.ttf
+    #       weight: 600
+    #     - asset: assets/fonts/alternative/Pretendard-Bold.ttf
+    #       weight: 700
+    #     - asset: assets/fonts/alternative/Pretendard-ExtraBold.ttf
+    #       weight: 800
+    #     - asset: assets/fonts/alternative/Pretendard-Black.ttf
+    #       weight: 900
 
-    - family: SCore
-      fonts:
-        # - asset: assets/fonts/s-core/SCDream4.otf
-        - asset: assets/fonts/s-core/SCDream1.otf
-          weight: 100
-        - asset: assets/fonts/s-core/SCDream2.otf
-          weight: 200
-        - asset: assets/fonts/s-core/SCDream3.otf
-          weight: 300
-        - asset: assets/fonts/s-core/SCDream4.otf
-          weight: 400
-        - asset: assets/fonts/s-core/SCDream5.otf
-          weight: 500
-        - asset: assets/fonts/s-core/SCDream6.otf
-          weight: 600
-        - asset: assets/fonts/s-core/SCDream7.otf
-          weight: 700
-        - asset: assets/fonts/s-core/SCDream8.otf
-          weight: 800
-        - asset: assets/fonts/s-core/SCDream9.otf
-          weight: 900
+    # - family: SCore
+    #   fonts:
+    #     # - asset: assets/fonts/s-core/SCDream4.otf
+    #     - asset: assets/fonts/s-core/SCDream1.otf
+    #       weight: 100
+    #     - asset: assets/fonts/s-core/SCDream2.otf
+    #       weight: 200
+    #     - asset: assets/fonts/s-core/SCDream3.otf
+    #       weight: 300
+    #     - asset: assets/fonts/s-core/SCDream4.otf
+    #       weight: 400
+    #     - asset: assets/fonts/s-core/SCDream5.otf
+    #       weight: 500
+    #     - asset: assets/fonts/s-core/SCDream6.otf
+    #       weight: 600
+    #     - asset: assets/fonts/s-core/SCDream7.otf
+    #       weight: 700
+    #     - asset: assets/fonts/s-core/SCDream8.otf
+    #       weight: 800
+    #     - asset: assets/fonts/s-core/SCDream9.otf
+    #       weight: 900
     - family: DmSans
       fonts:
         - asset: assets/fonts/dm_sans/DMSans-Regular.ttf

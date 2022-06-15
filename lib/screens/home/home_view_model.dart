@@ -127,6 +127,10 @@ class HomeViewModel extends GetxController {
     return await _firestoreService.isUserNameDuplicated(userName);
   }
 
+  Future<String> getYachtPickDescription() async {
+    return await _firestoreService.getYachtPickDescription();
+  }
+
   Future updateUserName(userName) async {
     await _firestoreService.updateUserName(userName);
   }

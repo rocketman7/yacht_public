@@ -23,7 +23,7 @@ class LastAwardView extends StatelessWidget {
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       extendBodyBehindAppBar: true,
-      appBar: newPrimaryAppBar('지난 리그 보기'),
+      appBar: primaryAppBar('지난 리그 보기'),
       // appBar: newPrimaryAppBarForOnlyLastLeaguesScreen('지난 리그 보기'),
       body: ListView(
         children: [
@@ -552,7 +552,7 @@ TextStyle lastLeagueDetailViewAwardDescriptionText = TextStyle(
   fontSize: 18.w,
   fontFamily: 'IBMPlex',
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -561,7 +561,7 @@ TextStyle lastLeagueDetailViewAwardRulesText = TextStyle(
   fontSize: 12.w,
   fontFamily: 'IBMPlex',
   // fontWeight: FontWeight.w500,
-  color: yachtGrey,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -570,7 +570,7 @@ TextStyle lastLeagueDetailViewTitleText = TextStyle(
   fontSize: 16.w,
   fontFamily: 'IBMPlex',
   fontWeight: FontWeight.w600,
-  color: yachtDarkGrey,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -579,7 +579,7 @@ TextStyle lastLeagueDetailViewAmountText = TextStyle(
   fontSize: 16.w,
   fontFamily: 'IBMPlex',
   fontWeight: FontWeight.w600,
-  color: yachtBlue,
+  color: white,
   letterSpacing: 0.0,
   height: 1.79,
 );
@@ -588,7 +588,7 @@ TextStyle lastLeagueDetailViewNickNameText = TextStyle(
   fontSize: 18.w,
   fontFamily: 'IBMPlex',
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -634,7 +634,7 @@ TextStyle lastLeagueDetailViewPortfolioName = TextStyle(
 TextStyle subLeagueAwardLabelTotalTextStyleNew = TextStyle(
   fontFamily: 'IBMPlex',
   fontSize: 12.w,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.0,
 );
@@ -644,7 +644,7 @@ TextStyle subLeagueAwardLabelTotalValueTextStyleNew = TextStyle(
   fontFamily: 'IBMPlex',
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.0,
 );
@@ -653,7 +653,7 @@ TextStyle subLeagueAwardLabelTotalValueTextStyleNew = TextStyle(
 TextStyle subLeagueAwardLabelStockTextStyleNew = TextStyle(
   fontFamily: 'IBMPlex',
   fontSize: 14.w,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.0,
 );
@@ -663,7 +663,7 @@ TextStyle subLeagueAwardLabelStockPriceTextStyleNew = TextStyle(
   fontFamily: 'IBMPlex',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.0,
 );
@@ -673,7 +673,7 @@ TextStyle subLeagueAwardLabelPLTextStyleNew = TextStyle(
   fontFamily: 'IBMPlex',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -0.5,
   height: 1.0,
 );
@@ -682,7 +682,7 @@ TextStyle lastLeagueDetailViewDialogTitle = TextStyle(
   fontFamily: 'IBMPlex',
   fontSize: 16.w,
   fontWeight: FontWeight.w600,
-  color: yachtBlack,
+  color: white,
   letterSpacing: 0.0,
   height: 1.0,
 );
@@ -690,7 +690,7 @@ TextStyle lastLeagueDetailViewDialogContent = TextStyle(
   fontFamily: 'IBMPlex',
   fontSize: 14.w,
   // fontWeight: FontWeight.w600,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.0,
 );
@@ -698,7 +698,7 @@ TextStyle lastLeagueDetailViewDialogName = TextStyle(
   fontFamily: 'IBMPlex',
   fontSize: 18.w,
   // fontWeight: FontWeight.w600,
-  color: yachtBlack,
+  color: white,
   letterSpacing: -1.0,
   height: 1.0,
 );

@@ -20,6 +20,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../locator.dart';
 import 'live/new_live_controller.dart';
+import 'live/new_live_detail_view.dart';
 import 'live/new_live_widget.dart';
 import 'new_quest_widget.dart';
 
@@ -64,77 +65,89 @@ class SquareQuestWidget extends StatelessWidget {
       NewLiveController(questModel: questModel),
       tag: questModel.questId,
     );
-    return Padding(
-        padding: primaryHorizontalPadding,
-        child: Container(
-          padding: primaryAllPadding,
-          decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      basicInfoButtion(
-                        "LIVE",
-                        buttonColor: yachtRed,
-                      ),
-                      SizedBox(width: 4.w),
-                      (userQuestModelRx.length > 0 &&
-                              userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
-                          ? basicInfoButtion(
-                              "참여완료",
-                              buttonColor: yachtGrey,
-                              textColor: yachtMidGrey,
-                            )
-                          : basicInfoButtion(
-                              "미참여",
-                              buttonColor: yachtGrey,
-                            ),
-                      SizedBox(width: 4.w),
-                      basicInfoButtion(
-                        "",
-                        child: LiveTimeCounterWidget(
-                          questModel: questModel,
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/jogabi.svg',
-                        width: 20.w,
-                        height: 20.w,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        '${questModel.itemNeeded}개',
-                        style: TextStyle(
-                          color: white,
-                          fontSize: 16.w,
-                          // height: 1.2,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 8.w),
-              NewQuestHeader(questModel: questModel),
-              SizedBox(height: 8.w),
-              PickoneLivePriceWidget(controller: controller),
-              // (questModel.selectMode == "pickone" || questModel.selectMode == "order")
-              //     // "pickone" 이나 "order" 일 때
-              //     ? PickoneLivePriceWidget(controller: controller)
-              //     // "updown 일 때"
-              //     : UpdownLivePriceWidget(controller: controller),
-            ],
+    return GestureDetector(
+      onTap: () {
+        Get.to(
+          () => NewLiveDetailView(
+            questModel: questModel,
+            controller: controller,
           ),
-        ));
+          // transition: Transition.downToUp,
+        );
+      },
+      child: Padding(
+          padding: primaryHorizontalPadding,
+          child: Container(
+            padding: primaryAllPadding,
+            decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        basicInfoButtion(
+                          "LIVE",
+                          textColor: yachtRed,
+                          buttonColor: Colors.black,
+                        ),
+                        SizedBox(width: 6.w),
+                        (userQuestModelRx.length > 0 &&
+                                userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
+                            ? basicInfoButtion(
+                                "참여완료",
+                                buttonColor: yachtGrey,
+                                textColor: yachtMidGrey,
+                              )
+                            : basicInfoButtion(
+                                "미참여",
+                                buttonColor: yachtGrey,
+                              ),
+                        SizedBox(width: 6.w),
+                        basicInfoButtion(
+                          "",
+                          child: LiveTimeCounterWidget(
+                            questModel: questModel,
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/jogabi.svg',
+                          width: 20.w,
+                          height: 20.w,
+                        ),
+                        SizedBox(width: 4.w),
+                        Text(
+                          '${questModel.itemNeeded}개',
+                          style: TextStyle(
+                            color: white,
+                            fontSize: 16.w,
+                            // height: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8.w),
+                // NewQuestHeader(questModel: questModel),
+                // SizedBox(height: 8.w),
+                PickoneLivePriceWidget(controller: controller),
+                // (questModel.selectMode == "pickone" || questModel.selectMode == "order")
+                //     // "pickone" 이나 "order" 일 때
+                //     ? PickoneLivePriceWidget(controller: controller)
+                //     // "updown 일 때"
+                //     : UpdownLivePriceWidget(controller: controller),
+              ],
+            ),
+          )),
+    );
 
     // Stack(
     //   children: [
@@ -230,16 +243,15 @@ class PickoneLivePriceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: List.generate(controller.investmentModelLength, (index) {
+    return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+      ...List.generate(controller.investmentModelLength, (index) {
         return Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Obx(
                 () => Text(
-                  toPriceKRW(controller.livePricesOfThisQuest[index].value.chartPrices.last.close ?? 0),
+                  toPriceKRW(controller.todayCurrentPrices[index]),
                   style: stockPriceTextStyle.copyWith(
                     fontSize: 26.w,
                   ),
@@ -253,7 +265,7 @@ class PickoneLivePriceWidget extends StatelessWidget {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "오늘",
@@ -262,18 +274,47 @@ class PickoneLivePriceWidget extends StatelessWidget {
                       fontSize: 12.w,
                     ),
                   ),
+                  Spacer(),
                   Obx(
-                    () => Text(
-                      controller.getStandardPriceDone.value &&
-                              (controller.livePricesOfThisQuest[index].value.chartPrices.last.close != null)
-                          ? toPriceKRW(controller.livePricesOfThisQuest[index].value.chartPrices.last.close! -
-                              controller.yesterdayClosePrices[index])
-                          : '-',
-                      style: stockPriceTextStyle.copyWith(
-                        fontSize: 12.w,
-                      ),
+                    () => Row(
+                      children: [
+                        Text(
+                          controller.getStandardPriceDone.value
+                              ? toPriceKRW(
+                                  controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index],
+                                )
+                              : '-',
+                          style: stockPriceTextStyle.copyWith(
+                              fontSize: 12.w,
+                              color: controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index] > 0
+                                  ? yachtRed
+                                  : controller.todayCurrentPrices[index] == controller.yesterdayClosePrices[index]
+                                      ? white
+                                      : yachtBlue),
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Text(
+                          controller.getStandardPriceDone.value
+                              ? '(${toPercentageChange((controller.todayCurrentPrices[index] / controller.yesterdayClosePrices[index]) - 1)})'
+                              : '',
+                          style: stockPriceTextStyle.copyWith(
+                              fontSize: 12.w,
+                              color: controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index] > 0
+                                  ? yachtRed
+                                  : controller.todayCurrentPrices[index] == controller.yesterdayClosePrices[index]
+                                      ? white
+                                      : yachtBlue),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
+                  index == 0
+                      ? SizedBox(
+                          width: 14.w,
+                        )
+                      : SizedBox.shrink(),
                 ],
               ),
               SizedBox(
@@ -288,25 +329,67 @@ class PickoneLivePriceWidget extends StatelessWidget {
                       fontSize: 12.w,
                     ),
                   ),
+                  Spacer(),
                   Obx(
-                    () => Text(
-                      controller.getStandardPriceDone.value &&
-                              (controller.livePricesOfThisQuest[index].value.chartPrices.last.close != null)
-                          ? toPriceKRW(controller.livePricesOfThisQuest[index].value.chartPrices.last.close! -
-                              controller.beforeLiveStartDateClosePrices[index])
-                          : '-',
-                      style: stockPriceTextStyle.copyWith(
-                        fontSize: 12.w,
-                      ),
+                    () => Row(
+                      children: [
+                        Text(
+                          controller.getStandardPriceDone.value
+                              ? toPriceKRW(
+                                  controller.todayCurrentPrices[index] -
+                                      controller.beforeLiveStartDateClosePrices[index],
+                                )
+                              : '-',
+                          style: stockPriceTextStyle.copyWith(
+                              fontSize: 12.w,
+                              color: controller.todayCurrentPrices[index] -
+                                          controller.beforeLiveStartDateClosePrices[index] >
+                                      0
+                                  ? yachtRed
+                                  : controller.todayCurrentPrices[index] ==
+                                          controller.beforeLiveStartDateClosePrices[index]
+                                      ? white
+                                      : yachtBlue),
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        Text(
+                          controller.getStandardPriceDone.value
+                              ? '(${toPercentageChange((controller.todayCurrentPrices[index] / controller.beforeLiveStartDateClosePrices[index]) - 1)})'
+                              : '',
+                          style: stockPriceTextStyle.copyWith(
+                            fontSize: 12.w,
+                            color: controller.todayCurrentPrices[index] -
+                                        controller.beforeLiveStartDateClosePrices[index] >
+                                    0
+                                ? yachtRed
+                                : controller.todayCurrentPrices[index] ==
+                                        controller.beforeLiveStartDateClosePrices[index]
+                                    ? white
+                                    : yachtBlue,
+                          ),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
+                  index == 0
+                      ? SizedBox(
+                          width: 14.w,
+                        )
+                      : SizedBox.shrink(),
                 ],
               )
             ],
           ),
         );
       }),
-    );
+      controller.investmentModelLength == 1
+          ? Expanded(
+              child: Container(),
+            )
+          : SizedBox.shrink()
+    ]);
   }
 }
 

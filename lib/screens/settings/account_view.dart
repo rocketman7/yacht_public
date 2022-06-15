@@ -367,11 +367,14 @@ class _AccountViewState extends State<AccountView> {
                 ),
               )
             : Container(),
+        SizedBox(
+          height: 8.w,
+        ),
         _accountViewModel.verificationSuccess
             ? Container()
             : Text(
                 '${_accountViewModel.verificationFailMsg}',
-                style: accountWarning.copyWith(color: yachtViolet),
+                style: accountWarning.copyWith(color: white),
               )
       ],
     );
@@ -515,7 +518,10 @@ class _AccountViewState extends State<AccountView> {
         Container(
           width: double.infinity,
           height: SizeConfig.screenHeight / 3,
-          decoration: primaryBoxDecoration.copyWith(boxShadow: [primaryBoxShadow], color: homeModuleBoxBackgroundColor),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12.w),
+            color: yachtDarkGrey,
+          ),
           child: GridView.count(
             crossAxisCount: 2,
             childAspectRatio: 6,
