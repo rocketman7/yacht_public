@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1042219718966-fng8jhkulikbmp9cqurqkbi39l2n333g.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1042219718966-fng8jhkulikbmp9cqurqkbi39l2n333g</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1042219718966-feeiidjc8k5lvb59o30rhplk5ht67frp.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBpkunRiTRyihlKCgjQR06FLHTCAt1TxNA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1042219718966</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.team-yacht.ggook</string>
+	<key>PROJECT_ID</key>
+	<string>ggook-5fb08</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ggook-5fb08.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1042219718966:ios:e58d75623ef2ae336a7b97</string>
+	<key>DATABASE_URL</key>
+	<string>https://ggook-5fb08.firebaseio.com</string>
+	<key>ADMOB_APP_ID</key>
+	<string>ca-app-pub-3726614606720353~1848726570</string>
+</dict>
+</plist>
