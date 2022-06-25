@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_text/extended_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,6 +31,7 @@ import '../../models/community/comment_model.dart';
 import 'detail_post_view.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
 
 class NewFeedWidget extends GetView {
   final CommunityViewModel communityViewModel;
@@ -43,6 +45,7 @@ class NewFeedWidget extends GetView {
 
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
+  PreviewData? previewData;
   RxBool isTapping = false.obs;
   @override
   Widget build(BuildContext context) {
@@ -67,20 +70,34 @@ class NewFeedWidget extends GetView {
             padding: primaryHorizontalPadding,
             child: FeedHeader(post: post, communityViewModel: communityViewModel),
           ),
-          // 이미지가 있을 때 이미지 뷰
-          SizedBox(height: 4.w),
-          (post.imageUrlList == null || post.imageUrlList!.length == 0)
-              ? Container()
-              : ImagePageView(
-                  post: post,
-                ),
-          SizedBox(height: 4.w),
+
+          SizedBox(height: 8.w),
           // 피드 콘텐츠
           Padding(
             padding: primaryHorizontalPadding,
             child: FeedContentWidget(post: post),
           ),
-          SizedBox(height: 4.w),
+
+          SizedBox(height: 8.w),
+          // 이미지가 있을 때 이미지 뷰
+          (post.imageUrlList == null || post.imageUrlList!.length == 0)
+              ? SizedBox.shrink()
+              : ImagePageView(
+                  post: post,
+                ),
+          SizedBox(height: 8.w),
+          // LinkPreview(
+          //   enableAnimation: true,
+          //   onPreviewDataFetched: (data) {
+          //     print('data: ${data}');
+
+          //     previewData = data;
+          //   },
+          //   previewData: previewData,
+          //   // Pass the preview data from the state
+          //   text: 'https://n.news.naver.com/mnews/article/277/0005108442?sid=101',
+          //   width: MediaQuery.of(context).size.width,
+          // ),
           // 피드에 각종 버튼 Row
           Padding(
             padding: primaryHorizontalPadding,

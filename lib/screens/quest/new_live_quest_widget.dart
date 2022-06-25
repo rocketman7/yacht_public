@@ -323,7 +323,7 @@ class PickoneLivePriceWidget extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "기준가 대비",
+                    controller.questModel.investAddresses![0].basePrice == null ? "기준일 대비" : "기준가 대비",
                     style: TextStyle(
                       color: yachtLightGrey,
                       fontSize: 12.w,
@@ -337,7 +337,8 @@ class PickoneLivePriceWidget extends StatelessWidget {
                           controller.getStandardPriceDone.value
                               ? toPriceKRW(
                                   controller.todayCurrentPrices[index] -
-                                      controller.beforeLiveStartDateClosePrices[index],
+                                      (controller.questModel.investAddresses![index].basePrice ??
+                                          controller.beforeLiveStartDateClosePrices[index]),
                                 )
                               : '-',
                           style: stockPriceTextStyle.copyWith(

@@ -39,7 +39,7 @@ class TempMainController extends GetxController {
   }
 }
 
-class TempMainView extends StatelessWidget {
+class YachtPickView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TempMainController tempMainController = Get.put(TempMainController());
@@ -58,28 +58,27 @@ class TempMainView extends StatelessWidget {
                                   stockInfoNewModel: controller.stockInfoNewModels![index],
                                 ));
                           },
-                          child: Container(
-                            // height: 210.w + 20.w + textSizeGet('갈낡퉽', yachtPickMainTextStyle).height,
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 210.w,
-                                  width: 210.w,
-                                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                                  clipBehavior: Clip.hardEdge,
-                                  child: CachedNetworkImage(
-                                      imageUrl: 'https://storage.googleapis.com/ggook-5fb08.appspot.com/' +
-                                          controller.stockInfoNewModels![index].logoUrl),
-                                ),
-                                SizedBox(
-                                  height: 20.w,
-                                ),
-                                Text(
-                                  controller.stockInfoNewModels![index].name,
-                                  style: yachtPickMainTextStyle,
-                                ),
-                              ],
-                            ),
+                          child:
+                              // height: 210.w + 20.w + textSizeGet('갈낡퉽', yachtPickMainTextStyle).height,
+                              Column(
+                            children: [
+                              Container(
+                                height: 210.w,
+                                width: 210.w,
+                                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                                clipBehavior: Clip.hardEdge,
+                                child: CachedNetworkImage(
+                                    imageUrl: 'https://storage.googleapis.com/ggook-5fb08.appspot.com/' +
+                                        controller.stockInfoNewModels![index].logoUrl),
+                              ),
+                              SizedBox(
+                                height: 20.w,
+                              ),
+                              Text(
+                                controller.stockInfoNewModels![index].name,
+                                style: yachtPickMainTextStyle,
+                              ),
+                            ],
                           ),
                         );
                       },
