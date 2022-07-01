@@ -15,7 +15,7 @@ import 'package:yachtOne/screens/stock_info/stock_info_new_controller.dart';
 import 'package:yachtOne/styles/size_config.dart';
 
 import '../../styles/yacht_design_system.dart';
-import 'tempMainViewForYachtPicks.dart';
+import 'yacht_pick_view.dart';
 
 final stockNameTextStyle = TextStyle(
   fontSize: 20.w,

@@ -30,50 +30,27 @@ class NewQuestWidget extends StatelessWidget {
     double _width = 232.w;
     double _height = 344.w;
 
-    // print('this user: $userQuestModel');
-    return SquareQuestWidget(
-      width: _width,
-      height: _height,
-      questModel: questModel,
-    );
-  }
-}
-
-class SquareQuestWidget extends StatelessWidget {
-  final double width;
-  final double height;
-  final QuestModel questModel;
-
-  SquareQuestWidget({
-    Key? key,
-    required this.width,
-    required this.height,
-    required this.questModel,
-  }) : super(key: key);
-
-  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
-
-  @override
-  Widget build(BuildContext context) {
-    return questModel.selectMode == 'tutorial'
-        ? SectionBoxWithBottomButtonAndBorder(
-            height: height,
-            width: width,
-            padding: EdgeInsets.all(primaryPaddingSize),
-            buttonTitle: "퀘스트 참여하기",
-            child: Column(
-              // mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-                QuestImage(
-                  questModel: questModel,
-                ),
-                QuestCardRewards(questModel: questModel),
-              ],
-            ),
-          )
-        : Obx(() =>
+    return
+        //  questModel.selectMode == 'tutorial'
+        // ? SectionBoxWithBottomButtonAndBorder(
+        //     height: height,
+        //     width: width,
+        //     padding: EdgeInsets.all(primaryPaddingSize),
+        //     buttonTitle: "퀘스트 참여하기",
+        //     child: Column(
+        //       // mainAxisSize: MainAxisSize.max,
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       children: [
+        //         QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
+        //         QuestImage(
+        //           questModel: questModel,
+        //         ),
+        //         QuestCardRewards(questModel: questModel),
+        //       ],
+        //     ),
+        //   )
+        // :
+        Obx(() =>
             // 참여한 퀘스트
             Padding(
               padding: primaryHorizontalPadding,
@@ -346,12 +323,21 @@ class NewQuestHeader extends StatelessWidget {
                   ),
             Spacer(),
             actionButton
-                ? basicActionButtion(
-                    '참여하기',
-                    buttonColor: yachtViolet,
-                    wider: true,
-                    fontSize: 16.w,
-                  )
+                ? (userQuestModelRx.length > 0 &&
+                        userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
+                    ? basicActionButtion(
+                        '변경하기',
+                        buttonColor: yachtMidGrey,
+                        textColor: yachtLightGrey,
+                        wider: true,
+                        fontSize: 16.w,
+                      )
+                    : basicActionButtion(
+                        '참여하기',
+                        buttonColor: yachtViolet,
+                        wider: true,
+                        fontSize: 16.w,
+                      )
                 : SizedBox.shrink()
           ],
         )

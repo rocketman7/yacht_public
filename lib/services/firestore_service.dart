@@ -31,7 +31,9 @@ import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/models/yacht_store/giftishow_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
+import 'package:yachtOne/services/auth_service.dart';
 
+import '../locator.dart';
 import '../models/subLeague_model.dart';
 import '../screens/stock_info/stock_info_new_controller.dart';
 
@@ -41,7 +43,9 @@ class FirestoreService extends GetxService {
 
   CollectionReference get _tempCollectionReference => _firestoreService.collection('temp');
   CollectionReference get tempCollectionReference => _tempCollectionReference;
-
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  // AuthService _authService = AuthService();
+  // final AuthService _authService = locator<AuthService>();
   // CollectionReference userCollectionReference = _firestoreService.collection('users');
   @override
   void onInit() {
@@ -84,7 +88,7 @@ class FirestoreService extends GetxService {
     await _firestoreService
         .collection('yachtPicks')
         .where('showMain', isEqualTo: true)
-        .orderBy('updateTime')
+        .orderBy('updateTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
               yachtPicks.add(StockInfoNewModel.fromMap(element.data()));
@@ -135,9 +139,12 @@ class FirestoreService extends GetxService {
         // .doc('kakao:2236766968')
         .snapshots()
         .map((snapshot) {
-      print('user data stream changed, user model snapshot: ${snapshot.data()}');
-
-      return UserModel.fromMap(snapshot.data()!);
+      if (snapshot.data() == null) {
+        auth.signOut();
+        print('user data stream changed, user model snapshot: ${snapshot.data()}');
+        return UserModel.fromMap(snapshot.data()!);
+      } else
+        return UserModel.fromMap(snapshot.data()!);
     });
   }
 

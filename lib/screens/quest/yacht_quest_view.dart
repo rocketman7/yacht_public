@@ -164,11 +164,6 @@ class YachtQuestView extends StatelessWidget {
                 // 1,
                 (index) => Column(
                       children: [
-                        // index == 0
-                        //     ? SizedBox(
-                        //         height: primaryPaddingSize,
-                        //       )
-                        //     : Container(),
                         InkWell(
                           onTap: () {
                             // _mixpanelService.mixpanel.track('Live Quest', properties: {
@@ -195,15 +190,9 @@ class YachtQuestView extends StatelessWidget {
                 homeViewModel.resultQuests.length,
                 (index) => Column(
                       children: [
-                        // index == 0
-                        //     ? SizedBox(
-                        //         height: primaryPaddingSize,
-                        //       )
-                        //     : Container(),
                         NewResultQuestWidget(
                           questModel: homeViewModel.resultQuests[index],
                         ),
-
                         SizedBox(height: primaryPaddingSize),
                       ],
                     ))

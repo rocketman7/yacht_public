@@ -55,7 +55,7 @@ import '../quest/new_quest_widget.dart';
 import '../quest/new_result_quest_widget.dart';
 import '../quest/quest_widget.dart';
 import '../quest/yacht_quest_view.dart';
-import '../stock_info/tempMainViewForYachtPicks.dart';
+import '../stock_info/yacht_pick_view.dart';
 
 class NewHomeView extends StatelessWidget {
   HomeViewModel homeViewModel = Get.find<HomeViewModel>();
@@ -187,7 +187,7 @@ class NewHomeView extends StatelessWidget {
             SizedBox(
               height: 20.w,
             ),
-            Obx(() => homeViewModel.stockInfoNewModels.length > 0 ? TempMainView() : SizedBox.shrink()),
+            Obx(() => homeViewModel.stockInfoNewModels.length > 0 ? YachtPickView() : SizedBox.shrink()),
           ],
         ),
       ),

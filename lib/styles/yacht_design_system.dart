@@ -1448,6 +1448,7 @@ TextStyle seeMore = TextStyle(
 // Basic Info Button
 Container basicInfoButtion(
   String text, {
+  Widget? loadingWidget,
   Color? buttonColor,
   Color? textColor,
   Widget? child,
