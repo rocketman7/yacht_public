@@ -35,6 +35,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import '../../locator.dart';
 
 import '../quest/yacht_quest_view.dart';
+import '../stock_info/yacht_pick_old_view.dart';
 import '../stock_info/yacht_pick_view.dart';
 
 class NewHomeView extends StatelessWidget {
@@ -155,7 +156,34 @@ class NewHomeView extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => YachtPickOldView());
+                },
+                child: Container(
+                  // height: 40.w,
+                  // width: 20.w,
+                  // color: Colors.red,
+                  decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(50.w)),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 10.w, bottom: 10.w),
+                    child: Text(
+                      "지난 요트 Pick",
+                      style: TextStyle(
+                        fontFamily: krFont,
+                        color: white,
+                        fontSize: 14.w,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 14.w,
+              ),
             ],
           ),
           SizedBox(

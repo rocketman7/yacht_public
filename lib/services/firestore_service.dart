@@ -41,7 +41,8 @@ class FirestoreService extends GetxService {
   final FirebaseFirestore _firestoreService = FirebaseFirestore.instance;
   FirebaseFirestore get firestoreService => _firestoreService;
 
-  CollectionReference get _tempCollectionReference => _firestoreService.collection('temp');
+  CollectionReference get _tempCollectionReference =>
+      _firestoreService.collection('temp');
   CollectionReference get tempCollectionReference => _tempCollectionReference;
   final FirebaseAuth auth = FirebaseAuth.instance;
   // AuthService _authService = AuthService();
@@ -72,6 +73,15 @@ class FirestoreService extends GetxService {
         .then((value) => value.data()!['yachtPickDescription']);
   }
 
+  // 요트's Pick 설명
+  Future<String> getTobeContinueDescription() async {
+    return await _firestoreService
+        .collection('admin')
+        .doc('adminPost')
+        .get()
+        .then((value) => value.data()!['tobeContinueDescription']);
+  }
+
   // 리그 모델
   Future<LeagueAddressModel> getLeagueInfo() async {
     return await _firestoreService
@@ -96,10 +106,41 @@ class FirestoreService extends GetxService {
     return yachtPicks;
   }
 
+  // 현재 기준 지난 요트픽 가져오기, 메인 요트픽과 showMain만 반대
+  Future<List<StockInfoNewModel>> getOldYachtPicks() async {
+    List<StockInfoNewModel> yachtPicks = [];
+    await _firestoreService
+        .collection('yachtPicks')
+        .where('showMain', isEqualTo: false)
+        .orderBy('updateTime', descending: true)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              yachtPicks.add(StockInfoNewModel.fromMap(element.data()));
+            }));
+    return yachtPicks;
+  }
+
+  // 모든 요트픽 가져오기 (테스트용)
+  Future<List<StockInfoNewModel>> getAllYachtPicks() async {
+    List<StockInfoNewModel> yachtPicks = [];
+    await _firestoreService
+        .collection('yachtPicks')
+        .orderBy('updateTime', descending: true)
+        .get()
+        .then((value) => value.docs.forEach((element) {
+              yachtPicks.add(StockInfoNewModel.fromMap(element.data()));
+            }));
+    return yachtPicks;
+  }
+
   // 휴일 리스트
   Future<List<String>> getHolidayList() async {
     List<String> holidayList = [];
-    await _firestoreService.collection('admin').doc('holiday').get().then((value) {
+    await _firestoreService
+        .collection('admin')
+        .doc('holiday')
+        .get()
+        .then((value) {
       holidayList = List<String>.from(value.data()!['KR']);
     });
     return holidayList;
@@ -108,7 +149,11 @@ class FirestoreService extends GetxService {
   // 오픈 리그
 
   Stream<String> getOpenLeague() {
-    return _firestoreService.collection('admin').doc('leagueInfo').snapshots().map((snapshot) {
+    return _firestoreService
+        .collection('admin')
+        .doc('leagueInfo')
+        .snapshots()
+        .map((snapshot) {
       // print(snapshot.data()!['openLeague']);
       return snapshot.data()!['openLeague'];
     });
@@ -118,7 +163,10 @@ class FirestoreService extends GetxService {
   // 새 USER 만들기
 
   Future makeNewUser(UserModel userModel) async {
-    await _firestoreService.collection('users').doc(userModel.uid).set(userModel.toMap());
+    await _firestoreService
+        .collection('users')
+        .doc(userModel.uid)
+        .set(userModel.toMap());
   }
 
   // User Model 가져오기
@@ -141,7 +189,8 @@ class FirestoreService extends GetxService {
         .map((snapshot) {
       if (snapshot.data() == null) {
         auth.signOut();
-        print('user data stream changed, user model snapshot: ${snapshot.data()}');
+        print(
+            'user data stream changed, user model snapshot: ${snapshot.data()}');
         return UserModel.fromMap(snapshot.data()!);
       } else
         return UserModel.fromMap(snapshot.data()!);
@@ -149,7 +198,11 @@ class FirestoreService extends GetxService {
   }
 
   Stream<String> getNameCheckResult(uid) {
-    return _firestoreService.collection('checkName').doc(uid).snapshots().map((snapshot) {
+    return _firestoreService
+        .collection('checkName')
+        .doc(uid)
+        .snapshots()
+        .map((snapshot) {
       if (snapshot.data() == null || snapshot.data()!['return'] == null) {
         print("GETNAME STREAM" + snapshot.data().toString());
         return "0";
@@ -159,17 +212,28 @@ class FirestoreService extends GetxService {
   }
 
   Future<String> checkNameUrl() async {
-    return _firestoreService.collection('admin').doc('adminPost').get().then((value) => value.data()!['checkNameUrl']);
+    return _firestoreService
+        .collection('admin')
+        .doc('adminPost')
+        .get()
+        .then((value) => value.data()!['checkNameUrl']);
   }
 
   // uid로 유저 데이터 있는지 체크하기
   Future<bool> checkIfUserDocumentExists(String uid) async {
-    return await _firestoreService.collection('users').doc(uid).get().then((value) => value.exists);
+    return await _firestoreService
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((value) => value.exists);
   }
 
   // 마지막 로그인 시간
   Future stampLastLogin() async {
-    await _firestoreService.collection('users').doc(userModelRx.value!.uid).update({
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .update({
       'lastLoginDateTime': Timestamp.fromDate(DateTime.now()),
     });
   }
@@ -179,11 +243,16 @@ class FirestoreService extends GetxService {
     await _firestoreService
         .collection('users')
         .doc(userModelRx.value!.uid)
-        .update({'lastNotificationCheckDateTime': Timestamp.fromDate(DateTime.now())});
+        .update({
+      'lastNotificationCheckDateTime': Timestamp.fromDate(DateTime.now())
+    });
   }
 
   Future stampTermAgree() async {
-    await _firestoreService.collection('users').doc(userModelRx.value!.uid).update({
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .update({
       'lastTermAgreeDateTime': Timestamp.fromDate(DateTime.now()),
     });
   }
@@ -225,7 +294,8 @@ class FirestoreService extends GetxService {
         .orderBy('selectDateTime', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
-              print('user quest: ${UserQuestModel.fromMap(doc.id, doc.data())}');
+              print(
+                  'user quest: ${UserQuestModel.fromMap(doc.id, doc.data())}');
               return UserQuestModel.fromMap(doc.id, doc.data());
             }).toList());
   }
@@ -301,8 +371,10 @@ class FirestoreService extends GetxService {
             'leagueId': leagueRx.value,
             'selection': answers,
             'selectDateTime': FieldValue.serverTimestamp(),
-            'yachtPointParticipationRewarded': questModel.yachtPointParticipationReward,
-            'leaguePointParticipationRewarded': questModel.leaguePointParticipationReward,
+            'yachtPointParticipationRewarded':
+                questModel.yachtPointParticipationReward,
+            'leaguePointParticipationRewarded':
+                questModel.leaguePointParticipationReward,
             'expParticipationRewarded': questModel.expParticipationReward,
           },
               SetOptions(
@@ -310,11 +382,14 @@ class FirestoreService extends GetxService {
               ));
 
       // 참여 리워드가 있으면 반영하기
-      if (questModel.expParticipationReward != null && questModel.expParticipationReward! > 0) {
+      if (questModel.expParticipationReward != null &&
+          questModel.expParticipationReward! > 0) {
         await _firestoreService
             .collection('users')
             .doc('${userModelRx.value!.uid}')
-            .update({'exp': FieldValue.increment(questModel.expParticipationReward!)});
+            .update({
+          'exp': FieldValue.increment(questModel.expParticipationReward!)
+        });
       }
 
       // quest 다큐에 count 추가
@@ -411,7 +486,10 @@ class FirestoreService extends GetxService {
         .collection('userAsset')
         .add(newAssetModel.toMapAwards());
 
-    await _firestoreService.collection('users').doc(userModelRx.value!.uid).update({
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .update({
       'exp': FieldValue.increment(
         questModel.expParticipationReward as int,
       )
@@ -420,7 +498,10 @@ class FirestoreService extends GetxService {
 
   Future<num> calculateYachtPoint() async {
     num yachtPoint = 0;
-    await _firestoreService.collection('users/${userModelRx.value!.uid}/userAsset').get().then((docSnapshot) {
+    await _firestoreService
+        .collection('users/${userModelRx.value!.uid}/userAsset')
+        .get()
+        .then((docSnapshot) {
       docSnapshot.docs.forEach((element) {
         if (element.data()['yachtPoint'] != null) {
           if (element.data()['assetCategory'] == 'YachtPoint') {
@@ -443,7 +524,9 @@ class FirestoreService extends GetxService {
         .get()
         .then((snapshot) {
       // print(snapshot.docs.length);
-      return snapshot.docs.map((e) => GiftishowModel.fromMap(e.data())).toList();
+      return snapshot.docs
+          .map((e) => GiftishowModel.fromMap(e.data()))
+          .toList();
     });
   }
 
@@ -456,7 +539,8 @@ class FirestoreService extends GetxService {
     AssetModel newAssetModel = AssetModel(
       assetCategory: 'UseYachtPoint',
       tradeDate: Timestamp.fromDate(DateTime.now()),
-      tradeTitle: "요트 포인트 스토어 교환: ${giftishowModel.brandName} ${giftishowModel.goodsName}",
+      tradeTitle:
+          "요트 포인트 스토어 교환: ${giftishowModel.brandName} ${giftishowModel.goodsName}",
       yachtPoint: giftishowModel.realPrice,
       phoneNumber: phoneNumber,
       userRealName: userRealName,
@@ -483,9 +567,10 @@ class FirestoreService extends GetxService {
   }
 
   // 차트 그리기 위한 Historical Price
-  Future<List<ChartPriceModel>> getPrices(InvestAddressModel investAddresses) async {
-    CollectionReference _historicalPriceRef =
-        _firestoreService.collection('stocksKR/${investAddresses.issueCode}/historicalPrices');
+  Future<List<ChartPriceModel>> getPrices(
+      InvestAddressModel investAddresses) async {
+    CollectionReference _historicalPriceRef = _firestoreService
+        .collection('stocksKR/${investAddresses.issueCode}/historicalPrices');
     List<ChartPriceModel> _priceChartModelList = [];
 
     try {
@@ -494,7 +579,8 @@ class FirestoreService extends GetxService {
           .get()
           .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
                 // print(doc.id);  // document id 출력
-                _priceChartModelList.add(ChartPriceModel.fromMap(doc.data() as Map<String, dynamic>));
+                _priceChartModelList.add(ChartPriceModel.fromMap(
+                    doc.data() as Map<String, dynamic>));
               }));
       // print(_priceChartModelList);
       return _priceChartModelList;
@@ -511,7 +597,8 @@ class FirestoreService extends GetxService {
     //     _firestoreService.collection('stocksKR/326030/stats');
     // CollectionReference _abKo =
     //     _firestoreService.collection('stocksKR/129890/stats');
-    CollectionReference _statsRef = _firestoreService.collection('stocksKR/${investAddresses.issueCode}/stats');
+    CollectionReference _statsRef = _firestoreService
+        .collection('stocksKR/${investAddresses.issueCode}/stats');
     List<StatsModel> _statstModelList = [];
 
     try {
@@ -520,7 +607,8 @@ class FirestoreService extends GetxService {
           .get()
           .then((querySnapshot) => querySnapshot.docs.forEach((doc) {
                 // print(doc.id);  // document id 출력
-                _statstModelList.add(StatsModel.fromMap(doc.data() as Map<String, dynamic>));
+                _statstModelList.add(
+                    StatsModel.fromMap(doc.data() as Map<String, dynamic>));
               }));
       // print(_statstModelList);
 
@@ -538,7 +626,10 @@ class FirestoreService extends GetxService {
         if (index == i) {
           temp[i] = temp[i] + 1;
         }
-        _firestoreService.collection('temp').doc('count').update({'count': temp});
+        _firestoreService
+            .collection('temp')
+            .doc('count')
+            .update({'count': temp});
       }
     });
     // await _firestoreService.collection('temp').doc('count').update({
@@ -563,7 +654,8 @@ class FirestoreService extends GetxService {
           .doc('allTime')
           .collection('quests')
           .get()
-          .then((userAlltimeQuests) => userAlltimeQuests.docs.forEach((userAlltimeQuestDone) {
+          .then((userAlltimeQuests) =>
+              userAlltimeQuests.docs.forEach((userAlltimeQuestDone) {
                 userAlltimeQuestDoneId.add(userAlltimeQuestDone.id);
               }));
     } catch (e) {
@@ -579,7 +671,10 @@ class FirestoreService extends GetxService {
         .then((allTimeQuests) => allTimeQuests.docs.forEach((eachAllTimeQuest) {
               if (!userAlltimeQuestDoneId.contains(eachAllTimeQuest.id)) {
                 if (eachAllTimeQuest.data()['investAddresses'] != null) {
-                  eachAllTimeQuest.data()['investAddresses'].toList().forEach((option) {
+                  eachAllTimeQuest
+                      .data()['investAddresses']
+                      .toList()
+                      .forEach((option) {
                     invetAddresses.add(InvestAddressModel.fromMap(option));
                   });
                 }
@@ -589,8 +684,11 @@ class FirestoreService extends GetxService {
                   });
                   // log(surveys.toString());
                 }
-                allQuests.add(QuestModel.fromMap(eachAllTimeQuest.id, eachAllTimeQuest.data(),
-                    invetAddresses.length == 0 ? null : invetAddresses, surveys.length == 0 ? null : surveys));
+                allQuests.add(QuestModel.fromMap(
+                    eachAllTimeQuest.id,
+                    eachAllTimeQuest.data(),
+                    invetAddresses.length == 0 ? null : invetAddresses,
+                    surveys.length == 0 ? null : surveys));
               }
             }));
 
@@ -616,7 +714,10 @@ class FirestoreService extends GetxService {
         }
 
         // print('questmodel options from db: $options');
-        allQuests.add(QuestModel.fromMap(element.id, element.data(), invetAddresses.length == 0 ? null : invetAddresses,
+        allQuests.add(QuestModel.fromMap(
+            element.id,
+            element.data(),
+            invetAddresses.length == 0 ? null : invetAddresses,
             surveys.length == 0 ? null : surveys));
         invetAddresses = [];
       });
@@ -628,7 +729,11 @@ class FirestoreService extends GetxService {
   Future<QuestModel> getEachQuest(String leagueId, String questId) async {
     List<InvestAddressModel> invetAddresses = [];
     List<SurveyQuestionModel> surveys = [];
-    return await _firestoreService.collection('leagues/$leagueId/quests').doc(questId).get().then((value) {
+    return await _firestoreService
+        .collection('leagues/$leagueId/quests')
+        .doc(questId)
+        .get()
+        .then((value) {
       if (value.data()!['investAddresses'] != null) {
         value.data()!['investAddresses'].toList().forEach((option) {
           invetAddresses.add(InvestAddressModel.fromMap(option));
@@ -639,7 +744,10 @@ class FirestoreService extends GetxService {
           surveys.add(SurveyQuestionModel.fromMap(survey));
         });
       }
-      return QuestModel.fromMap(questId, value.data()!, invetAddresses.length == 0 ? null : invetAddresses,
+      return QuestModel.fromMap(
+          questId,
+          value.data()!,
+          invetAddresses.length == 0 ? null : invetAddresses,
           surveys.length == 0 ? null : surveys);
     });
   }
@@ -653,10 +761,17 @@ class FirestoreService extends GetxService {
   // User QuestModel 업데이트
 
   // 기업 세부 정보 가져오기
-  Future<CorporationModel?> getCorporationInfo(InvestAddressModel investAddressModel) async {
-    return await _firestoreService.collection('stocksKR').doc('${investAddressModel.issueCode}').get().then((value) {
+  Future<CorporationModel?> getCorporationInfo(
+      InvestAddressModel investAddressModel) async {
+    return await _firestoreService
+        .collection('stocksKR')
+        .doc('${investAddressModel.issueCode}')
+        .get()
+        .then((value) {
       // print('copr data: ${value.data()}');
-      return value.data() == null ? null : CorporationModel.fromMap(value.data()!);
+      return value.data() == null
+          ? null
+          : CorporationModel.fromMap(value.data()!);
     });
   }
 
@@ -709,7 +824,8 @@ class FirestoreService extends GetxService {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        allLastSubLeagues.add(LastSubLeagueModel.fromMap(element.data(), element.id));
+        allLastSubLeagues
+            .add(LastSubLeagueModel.fromMap(element.data(), element.id));
       });
     });
 
@@ -903,7 +1019,10 @@ class FirestoreService extends GetxService {
             .get()
             .then((v) {
           v.docs.forEach((e) {
-            myRanksAndPoint.last = {'todayRank': e.data()['todayRank'], 'todayPoint': e.data()['todayPoint']};
+            myRanksAndPoint.last = {
+              'todayRank': e.data()['todayRank'],
+              'todayPoint': e.data()['todayPoint']
+            };
             // myRanks.add(e.data()['todayRank']);
           });
         });
@@ -936,7 +1055,10 @@ class FirestoreService extends GetxService {
             .get()
             .then((v) {
           v.docs.forEach((e) {
-            myRanksAndPoint.last = {'todayRank': e.data()['todayRank'], 'todayPoint': e.data()['todayPoint']};
+            myRanksAndPoint.last = {
+              'todayRank': e.data()['todayRank'],
+              'todayPoint': e.data()['todayPoint']
+            };
             // myRanks.add(e.data()['todayRank']);
           });
         });
@@ -1106,7 +1228,8 @@ class FirestoreService extends GetxService {
         .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
         .where(
           'dateTime',
-          isGreaterThan: dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
+          isGreaterThan:
+              dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
           // isGreaterThan: '20231001091813', //2021/10/01/81/00/00, 2021/10/01/091813
         )
         .snapshots()
@@ -1114,11 +1237,14 @@ class FirestoreService extends GetxService {
       // print('live element: ${element.docs.length == 0}');
 
       if (element.docs.length == 0) {
-        return LiveQuestPriceModel.fromMap(
-            '${investAddress.issueCode}', [defalutChartPriceModel(dateTimeToString(DateTime.now(), 14)!)]);
+        return LiveQuestPriceModel.fromMap('${investAddress.issueCode}',
+            [defalutChartPriceModel(dateTimeToString(DateTime.now(), 14)!)]);
       } else {
         return LiveQuestPriceModel.fromMap(
-            '${investAddress.issueCode}', element.docs.map((t) => ChartPriceModel.fromMap(t.data())).toList());
+            '${investAddress.issueCode}',
+            element.docs
+                .map((t) => ChartPriceModel.fromMap(t.data()))
+                .toList());
       }
       // print("get");
       //element는 다큐모음
@@ -1151,7 +1277,12 @@ class FirestoreService extends GetxService {
         .toMap());
 
     // 개인 계정 userFeed에 데이터 넣기
-    await _firestoreService.collection('users').doc(newPost.writerUid).collection('userFeed').doc(docUid).set({
+    await _firestoreService
+        .collection('users')
+        .doc(newPost.writerUid)
+        .collection('userFeed')
+        .doc(docUid)
+        .set({
       'postId': docUid,
       'writtenDateTime': timestampNow,
       'isPro': newPost.isPro,
@@ -1185,7 +1316,12 @@ class FirestoreService extends GetxService {
         .then((value) => print("user delete"))
         .catchError((error) => print("Failed to delete user: $error"));
 
-    await _firestoreService.collection('users').doc(userModelRx.value!.uid).collection('userFeed').doc(postId).delete();
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .collection('userFeed')
+        .doc(postId)
+        .delete();
   }
 
   Future getNotice() async {
@@ -1195,11 +1331,14 @@ class FirestoreService extends GetxService {
         .orderBy('writtenDateTime', descending: true)
         .limit(1)
         .get()
-        .then((value) => value.docs.length > 0 ? PostModel.fromMap(value.docs.first.data()) : null);
+        .then((value) => value.docs.length > 0
+            ? PostModel.fromMap(value.docs.first.data())
+            : null);
   }
 
   // 포스트 받아오기
-  Future<List<PostModel>> getPosts(int limit, {dynamic startAfterThisPostId}) async {
+  Future<List<PostModel>> getPosts(int limit,
+      {dynamic startAfterThisPostId}) async {
     if (startAfterThisPostId != null)
       print(
           'getpost argu: ${Timestamp.fromMillisecondsSinceEpoch(startAfterThisPostId.toDate().toUtc().millisecondsSinceEpoch)}');
@@ -1225,8 +1364,8 @@ class FirestoreService extends GetxService {
     } else {
       print('startAfterThisPostId is not null');
       await getPostQuery
-          .startAfter([]
-            ..add(Timestamp.fromMillisecondsSinceEpoch(startAfterThisPostId.toDate().toUtc().millisecondsSinceEpoch)))
+          .startAfter([]..add(Timestamp.fromMillisecondsSinceEpoch(
+              startAfterThisPostId.toDate().toUtc().millisecondsSinceEpoch)))
           .get()
           .then((value) {
         value.docs.forEach((element) {
@@ -1249,8 +1388,12 @@ class FirestoreService extends GetxService {
 
   // 코멘트 올리기
   Future uploadNewComment(CommentModel newComment) async {
-    String docUid =
-        _firestoreService.collection('posts').doc(newComment.commentToPostId).collection('comments').doc().id;
+    String docUid = _firestoreService
+        .collection('posts')
+        .doc(newComment.commentToPostId)
+        .collection('comments')
+        .doc()
+        .id;
     Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
 
     await _firestoreService
@@ -1265,7 +1408,10 @@ class FirestoreService extends GetxService {
             )
             .toMap());
 
-    await _firestoreService.collection('posts').doc(newComment.commentToPostId).update({
+    await _firestoreService
+        .collection('posts')
+        .doc(newComment.commentToPostId)
+        .update({
       'commentedBy': FieldValue.arrayUnion([docUid])
     });
   }
@@ -1326,7 +1472,8 @@ class FirestoreService extends GetxService {
   }
 
   // 코멘트 좋아요 버튼
-  Future toggleLikeComment(PostModel post, CommentModel comment, String uid) async {
+  Future toggleLikeComment(
+      PostModel post, CommentModel comment, String uid) async {
     if (comment.likedBy == null) {
       await _firestoreService
           .collection('posts')
@@ -1407,7 +1554,10 @@ class FirestoreService extends GetxService {
 
   // 유저 차단하기
   Future blockThisUser(String uidToBlock) async {
-    await _firestoreService.collection('users').doc(userModelRx.value!.uid).update({
+    await _firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .update({
       'blockList': FieldValue.arrayUnion([uidToBlock])
     });
   }
@@ -1482,7 +1632,11 @@ class FirestoreService extends GetxService {
   Future<AdminStandardsModel> getAdminStandards() async {
     var adminStandardsModel;
 
-    await _firestoreService.collection('admin').doc('standards').get().then((value) {
+    await _firestoreService
+        .collection('admin')
+        .doc('standards')
+        .get()
+        .then((value) {
       adminStandardsModel = AdminStandardsModel.fromMap(value.data()!);
     });
 
@@ -1501,7 +1655,10 @@ class FirestoreService extends GetxService {
   // 유저가 광고를 보면 아이템을 올려주거나, 퀘스트 참여시 아이템을 차감해준다.
   Future updateOtherUserItem(String uid, int itemChange) async {
     if (userModelRx.value != null)
-      await _firestoreService.collection('users').doc(uid).update({'item': FieldValue.increment(itemChange)});
+      await _firestoreService
+          .collection('users')
+          .doc(uid)
+          .update({'item': FieldValue.increment(itemChange)});
   }
 
   // 유저가 광고를 보면 오늘 본 광고갯수를 올려준다
@@ -1515,7 +1672,10 @@ class FirestoreService extends GetxService {
 
   // fcm token이 없는 유저들(처음 들어온 유저들, 혹은 기기 변경한 유저들 등)은 토큰을 업데이트
   Future updateUserFCMToken(String token) async {
-    await _firestoreService.collection('users').doc('${userModelRx.value!.uid}').update({'token': token});
+    await _firestoreService
+        .collection('users')
+        .doc('${userModelRx.value!.uid}')
+        .update({'token': token});
   }
 
   // 1:1 문의 업데이트
@@ -1523,7 +1683,11 @@ class FirestoreService extends GetxService {
     Timestamp timestampNow = Timestamp.fromDate(DateTime.now());
     String? docId;
 
-    await _firestoreService.collection('users').doc('${userModelRx.value!.uid}').collection('userOneOnOne').add({
+    await _firestoreService
+        .collection('users')
+        .doc('${userModelRx.value!.uid}')
+        .collection('userOneOnOne')
+        .add({
       'category': category,
       'content': content,
       'dateTime': timestampNow,
@@ -1565,7 +1729,8 @@ class FirestoreService extends GetxService {
   }
 
   // 유저 계좌정보 넣기
-  Future setAccInformations(String accNumber, String accName, String secName, String uid) async {
+  Future setAccInformations(
+      String accNumber, String accName, String secName, String uid) async {
     await _firestoreService.collection('users').doc(uid).update({
       'account.accNumber': accNumber,
       'account.accName': accName,
@@ -1609,17 +1774,27 @@ class FirestoreService extends GetxService {
 
   Future updateFriendsCode(String uid, String friendsCode) async {
     print("friendsCode IS" + friendsCode);
-    await _firestoreService.collection('users').doc(uid).update({'friendsCode': friendsCode});
+    await _firestoreService
+        .collection('users')
+        .doc(uid)
+        .update({'friendsCode': friendsCode});
   }
 
   Future updateFriendsCodeDone(String uid, bool friendsCodeDone) async {
     print("friendsCode IS" + friendsCodeDone.toString());
-    await _firestoreService.collection('users').doc(uid).update({'friendsCodeDone': friendsCodeDone});
+    await _firestoreService
+        .collection('users')
+        .doc(uid)
+        .update({'friendsCodeDone': friendsCodeDone});
   }
 
-  Future updateInsertedFriendsCode(String uid, String insertedFriendsCode) async {
+  Future updateInsertedFriendsCode(
+      String uid, String insertedFriendsCode) async {
     print("insertedFriendsCode IS" + insertedFriendsCode);
-    await _firestoreService.collection('users').doc(uid).update({'insertedFriendsCode': insertedFriendsCode});
+    await _firestoreService
+        .collection('users')
+        .doc(uid)
+        .update({'insertedFriendsCode': insertedFriendsCode});
   }
 
   Future friendsUidRecommededMe(String friendsUid, String myUid) async {
@@ -1643,18 +1818,24 @@ class FirestoreService extends GetxService {
     return userModel;
   }
 
-  Future<FavoriteStockModel> getFavoriteStockModel(String country, String issueCode) async {
+  Future<FavoriteStockModel> getFavoriteStockModel(
+      String country, String issueCode) async {
     var favoriteStockModel;
 
-    await firestoreService.collection('stocks' + country).doc(issueCode).get().then((value) {
+    await firestoreService
+        .collection('stocks' + country)
+        .doc(issueCode)
+        .get()
+        .then((value) {
       favoriteStockModel = FavoriteStockModel.fromMap(value.data()!);
     });
 
     return favoriteStockModel;
   }
 
-  Future<FavoriteStockHistoricalPriceModel> getFavoriteStockHistoricalPriceModel(
-      String country, String issueCode) async {
+  Future<FavoriteStockHistoricalPriceModel>
+      getFavoriteStockHistoricalPriceModel(
+          String country, String issueCode) async {
     var favoriteStockHistoricalPriceModel;
 
     //
@@ -1681,7 +1862,10 @@ class FirestoreService extends GetxService {
       val!.avatarImage = avatarImageURL;
     });
 
-    await firestoreService.collection('users').doc(userModelRx.value!.uid).update({'avatarImage': avatarImageURL});
+    await firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .update({'avatarImage': avatarImageURL});
   }
 
   // userName이 다른 유저들이랑 겹치는지 검사해준다.
@@ -1718,7 +1902,10 @@ class FirestoreService extends GetxService {
       val!.intro = intro;
     });
 
-    await firestoreService.collection('users').doc(userModelRx.value!.uid).update({'intro': intro});
+    await firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .update({'intro': intro});
   }
 
   //누군가를 팔로우하면 그 유저의 followers를 늘려주고 내 following도 늘려줘야함
@@ -1727,7 +1914,10 @@ class FirestoreService extends GetxService {
       'followers': FieldValue.arrayUnion(['${userModelRx.value!.uid}'])
     });
 
-    await firestoreService.collection('users').doc(userModelRx.value!.uid).update({
+    await firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .update({
       'followings': FieldValue.arrayUnion(['$otherUid'])
     });
   }
@@ -1738,7 +1928,10 @@ class FirestoreService extends GetxService {
       'followers': FieldValue.arrayRemove(['${userModelRx.value!.uid}'])
     });
 
-    await firestoreService.collection('users').doc(userModelRx.value!.uid).update({
+    await firestoreService
+        .collection('users')
+        .doc(userModelRx.value!.uid)
+        .update({
       'followings': FieldValue.arrayRemove(['$otherUid'])
     });
   }

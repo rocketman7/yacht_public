@@ -37,6 +37,7 @@ class StockInfoNewController extends GetxController {
 
 class StockInfoNewModel {
   final bool showMain;
+  final bool isTobeContinue;
   final String logoUrl;
   final String descriptionUrl;
   final String name;
@@ -47,6 +48,7 @@ class StockInfoNewModel {
 
   StockInfoNewModel({
     required this.showMain,
+    required this.isTobeContinue,
     required this.logoUrl,
     required this.descriptionUrl,
     required this.name,
@@ -59,6 +61,7 @@ class StockInfoNewModel {
   Map<String, dynamic> toMap() {
     return {
       'showMain': showMain,
+      'isTobeContinue': isTobeContinue,
       'logoUrl': logoUrl,
       'descriptionUrl': descriptionUrl,
       'name': name,
@@ -72,6 +75,7 @@ class StockInfoNewModel {
   factory StockInfoNewModel.fromMap(Map<String, dynamic> map) {
     return StockInfoNewModel(
       showMain: map['showMain'],
+      isTobeContinue: map['isTobeContinue'],
       logoUrl: map['logoUrl'],
       descriptionUrl: map['descriptionUrl'],
       name: map['name'],
