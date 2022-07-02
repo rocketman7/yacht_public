@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -29,6 +32,7 @@ class TempMainController extends GetxController {
 
   @override
   void onInit() async {
+    // stockInfoNewModels = await _firestoreService.getAllYachtPicks();
     stockInfoNewModels = await _firestoreService.getYachtPicks();
 
     isModelLoaded = true;
@@ -37,103 +41,253 @@ class TempMainController extends GetxController {
 
     super.onInit();
   }
+
+  Future<String> getTobeContinueDescription() async {
+    return await _firestoreService.getTobeContinueDescription();
+  }
 }
 
 class YachtPickView extends StatelessWidget {
+  final double cardWholeHeight =
+      330.w; // card widget 을 수정해주는 경우에는 왼쪽 수치들도 수정해야함.
+  final double cardWholeWidth = 210.w;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 20.w,
+        ),
+        GetBuilder<TempMainController>(
+            init: TempMainController(),
+            builder: (controller) {
+              return controller.isModelLoaded
+                  ? controller.stockInfoNewModels!.length != 0
+                      ? Container(
+                          // color: Colors.red,
+                          child: CarouselSlider.builder(
+                              itemCount: controller.stockInfoNewModels!.length,
+                              itemBuilder: (context, index, _) {
+                                return YachtPickCardForCarousel(
+                                  cardWholeHeight: cardWholeHeight,
+                                  cardWholeWidth: cardWholeWidth,
+                                  stockInfoNewModel:
+                                      controller.stockInfoNewModels![index],
+                                );
+                              },
+                              options: CarouselOptions(
+                                initialPage: 0,
+                                enableInfiniteScroll: false,
+                                enlargeCenterPage: true,
+                                disableCenter:
+                                    controller.stockInfoNewModels!.length != 1
+                                        ? true
+                                        : false,
+                                aspectRatio: ScreenUtil().screenWidth /
+                                    cardWholeHeight, // 스크린 width를 캐로셀 개별위젯의 높이로 나눠주면 됨
+                                viewportFraction: (cardWholeWidth + 10.w) /
+                                    ScreenUtil().screenWidth *
+                                    1.1, // 캐로셀 개별위젯의 너비를 스크린 width로 나눠주고 원하는 비율을 곱해주면 됨. 단, enlargeCneterPage true와 함께 쓸 때는 내가 생각했던 비율보다 좀 작게 해줘야함
+                              )),
+                        )
+                      : Container(
+                          height: cardWholeHeight,
+                        )
+                  : Container(
+                      height: cardWholeHeight,
+                      // child: Center(child: YachtWebLoadingAnimation()),
+                    );
+            })
+      ],
+    );
+  }
+}
+
+class YachtPickCardForCarousel extends StatelessWidget {
+  final double cardWholeHeight;
+  final double cardWholeWidth;
+  final StockInfoNewModel stockInfoNewModel;
+
+  YachtPickCardForCarousel(
+      {required this.cardWholeHeight,
+      required this.cardWholeWidth,
+      required this.stockInfoNewModel});
+
   @override
   Widget build(BuildContext context) {
     TempMainController tempMainController = Get.put(TempMainController());
-
-    return Column(
-      children: [
-        GetBuilder<TempMainController>(builder: (controller) {
-          return controller.isModelLoaded
-              ? controller.stockInfoNewModels!.length != 0
-                  ? CarouselSlider.builder(
-                      itemCount: controller.stockInfoNewModels!.length,
-                      itemBuilder: (context, index, _) {
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(() => StockInfoNewView(
-                                  stockInfoNewModel: controller.stockInfoNewModels![index],
-                                ));
-                          },
-                          child:
-                              // height: 210.w + 20.w + textSizeGet('갈낡퉽', yachtPickMainTextStyle).height,
-                              Column(
+    return Container(
+      height: cardWholeHeight,
+      width: cardWholeWidth + 10.w,
+      // color: Colors.grey,
+      child: Center(
+          child: Column(children: [
+        SizedBox(
+          height: 15.w,
+        ),
+        GestureDetector(
+          onTap: () {
+            if (stockInfoNewModel.isTobeContinue) {
+              HapticFeedback.lightImpact();
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Dialog(
+                        backgroundColor: yachtDarkGrey,
+                        child: Padding(
+                          padding: primaryAllPadding,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Container(
-                                height: 210.w,
-                                width: 210.w,
-                                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                                clipBehavior: Clip.hardEdge,
-                                child: CachedNetworkImage(
-                                    imageUrl: 'https://storage.googleapis.com/ggook-5fb08.appspot.com/' +
-                                        controller.stockInfoNewModels![index].logoUrl),
+                              Text(
+                                "공개 예정?",
+                                style: dialogTitle,
                               ),
                               SizedBox(
-                                height: 20.w,
+                                height: 12.w,
                               ),
-                              Text(
-                                controller.stockInfoNewModels![index].name,
-                                style: yachtPickMainTextStyle,
-                              ),
+                              FutureBuilder<String>(
+                                  future: tempMainController
+                                      .getTobeContinueDescription(),
+                                  builder: (_, snapshot) {
+                                    return snapshot.hasData
+                                        ? Text(
+                                            '${snapshot.data!}'
+                                                .replaceAll('\\n', '\n'),
+                                            style: TextStyle(
+                                                color: white,
+                                                fontSize: 16.w,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.4),
+                                          )
+                                        : Text("");
+                                  })
                             ],
                           ),
-                        );
-                      },
-                      options: CarouselOptions(
-                          initialPage: 0,
-                          aspectRatio: ScreenUtil().screenWidth /
-                              (210.w + 20.w + textSizeGet('갈낡퉽', yachtPickMainTextStyle).height),
-                          disableCenter: true,
-                          enableInfiniteScroll: false,
-                          viewportFraction: (210.w + (20.w + textSizeGet('갈낡퉽', yachtPickMainTextStyle).height) / 2) /
-                              ScreenUtil().screenWidth,
-                          enlargeCenterPage: true))
-                  : Container() // 현재 요트픽이 없을 때 보여질.
-              : CarouselSlider.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index, _) {
-                    return Container(
-                      height: 210.w + 20.w + textSizeGet('갈낡퉽', yachtPickMainTextStyle).height,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 210.w,
-                            width: 210.w,
-                            decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black87),
-                            clipBehavior: Clip.hardEdge,
-                          ),
-                          SizedBox(
-                            height: 20.w,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w), color: Colors.black87),
-                            child: Text(
-                              '                  ',
-                              style: yachtPickMainTextStyle,
-                            ),
-                          )
-                        ],
+                        ),
                       ),
                     );
-                  },
-                  options: CarouselOptions(
-                      initialPage: 0,
-                      aspectRatio:
-                          ScreenUtil().screenWidth / (210.w + 20.w + textSizeGet('갈낡퉽', yachtPickMainTextStyle).height),
-                      disableCenter: true,
-                      enableInfiniteScroll: false,
-                      viewportFraction: (210.w + (20.w + textSizeGet('갈낡퉽', yachtPickMainTextStyle).height) / 2) /
-                          ScreenUtil().screenWidth,
-                      enlargeCenterPage: true));
-        }),
-        // SizedBox(
-        //   height: 60.w,
-        // ),
-        // YachtWebLoadingAnimation(),
-      ],
+                  });
+            } else {
+              Get.to(() => StockInfoNewView(
+                    stockInfoNewModel: stockInfoNewModel,
+                  ));
+            }
+          },
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: cardWholeWidth + 10.w,
+                    width: cardWholeWidth + 10.w,
+                    // color: yachtRed,
+                    child: Center(
+                        child: Container(
+                      height: cardWholeWidth,
+                      width: cardWholeWidth,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      clipBehavior: Clip.hardEdge,
+                      child: CachedNetworkImage(
+                          imageUrl:
+                              'https://storage.googleapis.com/ggook-5fb08.appspot.com/' +
+                                  stockInfoNewModel.logoUrl),
+                    )),
+                  ),
+                  SizedBox(
+                    height: 5.w,
+                  ),
+                  Text(
+                    stockInfoNewModel.name,
+                    style: TextStyle(
+                        fontFamily: krFont,
+                        fontSize: 24.w,
+                        letterSpacing: 0.0,
+                        height: 1.0,
+                        color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: 4.w,
+                  ),
+                  Text(
+                    '36,200',
+                    style: TextStyle(
+                        fontFamily: krFont,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 24.w,
+                        letterSpacing: 0.0,
+                        height: 1.0,
+                        color: Colors.white),
+                  ),
+                  SizedBox(
+                    height: 4.w,
+                  ),
+                  Text(
+                    '+1,500(+0.78%)',
+                    style: TextStyle(
+                        fontFamily: krFont,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14.w,
+                        letterSpacing: 0.0,
+                        height: 1.0,
+                        color: yachtRed),
+                  ),
+                  SizedBox(
+                    height: 20.w,
+                  ),
+                ],
+              ),
+              stockInfoNewModel.isTobeContinue
+                  ? Container(
+                      height: cardWholeHeight - 15.w,
+                      width: cardWholeWidth + 10.w,
+                      color: yachtBlack.withOpacity(0.85),
+                    )
+                  : Container(),
+              stockInfoNewModel.isTobeContinue
+                  ? Positioned(
+                      width: cardWholeWidth,
+                      height: cardWholeWidth,
+                      top: 20.w -
+                          textSizeGet(
+                                      '공개 예정',
+                                      TextStyle(
+                                          fontFamily: krFont,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 24.w,
+                                          letterSpacing: 0.0,
+                                          height: 1.0,
+                                          color: Colors.white))
+                                  .height /
+                              2,
+                      left: 5.w,
+                      child: Center(
+                        child: Text(
+                          '공개 예정',
+                          style: TextStyle(
+                              fontFamily: krFont,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24.w,
+                              letterSpacing: 0.0,
+                              height: 1.0,
+                              color: Colors.white),
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+        ),
+      ])),
     );
   }
 }
@@ -142,10 +296,12 @@ class YachtWebLoadingAnimation extends StatefulWidget {
   const YachtWebLoadingAnimation({Key? key}) : super(key: key);
 
   @override
-  State<YachtWebLoadingAnimation> createState() => _YachtWebLoadingAnimationState();
+  State<YachtWebLoadingAnimation> createState() =>
+      _YachtWebLoadingAnimationState();
 }
 
-class _YachtWebLoadingAnimationState extends State<YachtWebLoadingAnimation> with TickerProviderStateMixin {
+class _YachtWebLoadingAnimationState extends State<YachtWebLoadingAnimation>
+    with TickerProviderStateMixin {
   List<AnimationController>? _animationControllers;
   List<Animation<double>> _animations = [];
   int animationDuration = 300;
@@ -168,12 +324,14 @@ class _YachtWebLoadingAnimationState extends State<YachtWebLoadingAnimation> wit
     _animationControllers = List.generate(
       3,
       (index) {
-        return AnimationController(vsync: this, duration: Duration(milliseconds: animationDuration));
+        return AnimationController(
+            vsync: this, duration: Duration(milliseconds: animationDuration));
       },
     ).toList();
 
     for (int i = 0; i < 3; i++) {
-      _animations.add(Tween<double>(begin: 10.w, end: -10.w).animate(_animationControllers![i]));
+      _animations.add(Tween<double>(begin: 10.w, end: -10.w)
+          .animate(_animationControllers![i]));
     }
 
     for (int i = 0; i < 3; i++) {
@@ -221,7 +379,8 @@ class _YachtWebLoadingAnimationState extends State<YachtWebLoadingAnimation> wit
                         width: 10.w,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: _animationControllers![index].status == AnimationStatus.forward
+                            color: _animationControllers![index].status ==
+                                    AnimationStatus.forward
                                 ? Color(0xFFB8BABC)
                                 : Color(0xFF545758))),
                   ),

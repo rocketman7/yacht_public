@@ -115,7 +115,8 @@ class KeepAliveWebView extends StatefulWidget {
   State<KeepAliveWebView> createState() => _KeepAliveWebViewState();
 }
 
-class _KeepAliveWebViewState extends State<KeepAliveWebView> with AutomaticKeepAliveClientMixin {
+class _KeepAliveWebViewState extends State<KeepAliveWebView>
+    with AutomaticKeepAliveClientMixin {
   bool isPageFinishied = false;
 
   @override
@@ -126,7 +127,9 @@ class _KeepAliveWebViewState extends State<KeepAliveWebView> with AutomaticKeepA
         WebView(
           backgroundColor: Color(0xFF101214),
           initialUrl: widget.url,
-          gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
+          gestureRecognizers: Set()
+            ..add(Factory<EagerGestureRecognizer>(
+                () => EagerGestureRecognizer())),
           javascriptMode: JavascriptMode.unrestricted,
           zoomEnabled: false,
           onWebViewCreated: (_) {
@@ -147,7 +150,10 @@ class _KeepAliveWebViewState extends State<KeepAliveWebView> with AutomaticKeepA
         ),
         !isPageFinishied
             ? Positioned(
-                top: ScreenUtil().screenHeight / 2 - ScreenUtil().statusBarHeight - 140.w - 30.w,
+                top: ScreenUtil().screenHeight / 2 -
+                    ScreenUtil().statusBarHeight -
+                    140.w -
+                    30.w,
                 left: 0.w,
                 child: YachtWebLoadingAnimation())
             // 아래는 임시 로딩 코드
@@ -229,49 +235,59 @@ class _StockInfoNewViewState extends State<StockInfoNewView> {
 
   @override
   Widget build(BuildContext context) {
-    StockInfoNewController stockInfoNewController =
-        Get.put(StockInfoNewController(stockInfoNewModel: widget.stockInfoNewModel));
+    StockInfoNewController stockInfoNewController = Get.put(
+        StockInfoNewController(stockInfoNewModel: widget.stockInfoNewModel));
 
+    // return Scaffold(
+    //   backgroundColor: Color(0xFF101214),
     return Scaffold(
-      backgroundColor: Color(0xFF101214),
+      backgroundColor: yachtBlack,
+      appBar: AppBar(
+          backgroundColor: primaryBackgroundColor,
+          title: Text(
+            stockInfoNewController.stockInfoNewModel.name,
+            style: appBarTitle,
+          )),
+      // body: Column(
+      //   children: [
+      //     SizedBox(
+      //       height: ScreenUtil().statusBarHeight,
+      //     ),
+      //     // 디자인 수정 필요
+      //     SizedBox(
+      //       height: 40.w,
+      //       child: Row(children: [
+      //         SizedBox(
+      //           width: 8.w,
+      //         ),
+      //         BackButton(
+      //           color: Colors.white,
+      //         ),
+      //         Spacer(),
+      //       ]),
+      //     ),
+      //     Center(
+      //       child: Container(
+      //         decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+      //         clipBehavior: Clip.hardEdge,
+      //         width: 40.w,
+      //         height: 40.w,
+      //         child: CachedNetworkImage(
+      //             imageUrl: 'https://storage.googleapis.com/ggook-5fb08.appspot.com/' +
+      //                 stockInfoNewController.stockInfoNewModel.logoUrl),
+      //       ),
+      //     ),
+      //     SizedBox(
+      //       height: 10.w,
+      //     ),
+      //     Center(
+      //       child: Text(
+      //         stockInfoNewController.stockInfoNewModel.name,
+      //         style: stockNameTextStyle,
+      //       ),
+      //     ),
       body: Column(
         children: [
-          SizedBox(
-            height: ScreenUtil().statusBarHeight,
-          ),
-          // 디자인 수정 필요
-          SizedBox(
-            height: 40.w,
-            child: Row(children: [
-              SizedBox(
-                width: 8.w,
-              ),
-              BackButton(
-                color: Colors.white,
-              ),
-              Spacer(),
-            ]),
-          ),
-          Center(
-            child: Container(
-              decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-              clipBehavior: Clip.hardEdge,
-              width: 40.w,
-              height: 40.w,
-              child: CachedNetworkImage(
-                  imageUrl: 'https://storage.googleapis.com/ggook-5fb08.appspot.com/' +
-                      stockInfoNewController.stockInfoNewModel.logoUrl),
-            ),
-          ),
-          SizedBox(
-            height: 10.w,
-          ),
-          Center(
-            child: Text(
-              stockInfoNewController.stockInfoNewModel.name,
-              style: stockNameTextStyle,
-            ),
-          ),
           SizedBox(
             height: 20.w,
           ),
@@ -296,12 +312,20 @@ class _StockInfoNewViewState extends State<StockInfoNewView> {
                                     : categoryGeneralTextStyle,
                               ),
                               SizedBox(
-                                height: 4.w,
+                                height: 13.w,
                               ),
-                              Container(
-                                height: 2.w,
-                                // width: 75.w,
-                                color: stockInfoNewController.index.value == 0 ? Color(0xFF4A2EFF) : Colors.transparent,
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: 6.w,
+                                  right: 6.w,
+                                ),
+                                child: Container(
+                                  height: 4.w,
+                                  // width: 75.w,
+                                  color: stockInfoNewController.index.value == 0
+                                      ? Color(0xFF4A2EFF)
+                                      : Colors.transparent,
+                                ),
                               ),
                             ],
                           ),
@@ -416,7 +440,10 @@ class _StockInfoNewViewState extends State<StockInfoNewView> {
               controller: stockInfoNewController.pageController,
               physics: NeverScrollableScrollPhysics(),
               children: [
-                Container(child: KeepAliveWebView(url: stockInfoNewController.stockInfoNewModel.descriptionUrl)),
+                Container(
+                    child: KeepAliveWebView(
+                        url: stockInfoNewController
+                            .stockInfoNewModel.descriptionUrl)),
                 // Container(
                 //   height: 400.w,
                 //   color: Color(0xFF101214),
