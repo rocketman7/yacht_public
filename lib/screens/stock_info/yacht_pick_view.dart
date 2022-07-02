@@ -10,6 +10,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../../locator.dart';
 import '../../../services/firestore_service.dart';
+import '../../services/mixpanel_service.dart';
 
 final yachtPickMainTextStyle = TextStyle(
   fontSize: 24.w,
@@ -40,6 +41,7 @@ class TempMainController extends GetxController {
 }
 
 class YachtPickView extends StatelessWidget {
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     TempMainController tempMainController = Get.put(TempMainController());
@@ -54,6 +56,8 @@ class YachtPickView extends StatelessWidget {
                       itemBuilder: (context, index, _) {
                         return GestureDetector(
                           onTap: () {
+                            _mixpanelService.mixpanel.track('Yacht Pick Detail',
+                                properties: {'Stock Name': controller.stockInfoNewModels![index].name});
                             Get.to(() => StockInfoNewView(
                                   stockInfoNewModel: controller.stockInfoNewModels![index],
                                 ));

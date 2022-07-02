@@ -15,45 +15,25 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
-import 'package:yachtOne/models/reading_content_model.dart';
-import 'package:yachtOne/models/users/user_model.dart';
-import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/auth/auth_check_view.dart';
 import 'package:yachtOne/screens/auth/auth_check_view_model.dart';
 import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
-import 'package:yachtOne/screens/auth/login_view.dart';
-import 'package:yachtOne/screens/award/award_view.dart';
-import 'package:yachtOne/screens/award/award_view_model.dart';
-import 'package:yachtOne/screens/contents/dictionary/dictionary_view.dart';
-import 'package:yachtOne/screens/contents/reading_content/reading_content_view.dart';
-import 'package:yachtOne/screens/contents/today_market/today_market_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/screens/notification/notification_view.dart';
 import 'package:yachtOne/screens/notification/notification_view_model.dart';
-import 'package:yachtOne/screens/quest/live/live_quest_view.dart';
 import 'package:yachtOne/screens/profile/asset_view.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
-import 'package:yachtOne/screens/quest/live/live_quest_view_model.dart';
-import 'package:yachtOne/screens/quest/result/quest_results_view.dart';
-import 'package:yachtOne/screens/ranks/rank_share_view.dart';
-import 'package:yachtOne/screens/settings/push_notification_view_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_new_view.dart';
 import 'package:yachtOne/screens/subLeague/temp_home_view.dart';
 import 'package:yachtOne/screens/yacht_store/yacht_store_view.dart';
-import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
-import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import '../../locator.dart';
 
-import '../quest/new_live_quest_widget.dart';
-import '../quest/new_quest_widget.dart';
-import '../quest/new_result_quest_widget.dart';
-import '../quest/quest_widget.dart';
 import '../quest/yacht_quest_view.dart';
 import '../stock_info/yacht_pick_view.dart';
 
@@ -98,122 +78,98 @@ class NewHomeView extends StatelessWidget {
       // AwardView(leagueName: leagueModel.value!.leagueName, leagueEndDateTime: leagueModel.value!.leagueEndDateTime),
 
       // 주간 요트 종목
-      GestureDetector(
-        onTap: () {
-          Get.to(() => StockInfoNewView(
-                stockInfoNewModel: homeViewModel.stockInfoNewModels[0],
-              ));
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Padding(
-                  padding: primaryHorizontalPadding,
-                  child: Text(
-                    "요트's Pick",
-                    style: TextStyle(
-                      color: white,
-                      fontSize: 24.w,
-                      fontWeight: FontWeight.w600,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: primaryHorizontalPadding,
+                child: Text(
+                  "요트 Pick",
+                  style: TextStyle(
+                    color: white,
+                    fontSize: 24.w,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              // SizedBox(
+              //   width: 4.w,
+              // ),
+              GestureDetector(
+                onTap: () {
+                  HapticFeedback.lightImpact();
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Dialog(
+                            backgroundColor: yachtDarkGrey,
+                            child: Padding(
+                              padding: primaryAllPadding,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "요트's Pick?",
+                                    style: dialogTitle,
+                                  ),
+                                  SizedBox(
+                                    height: 12.w,
+                                  ),
+                                  FutureBuilder<String>(
+                                      future: homeViewModel.getYachtPickDescription(),
+                                      builder: (_, snapshot) {
+                                        return snapshot.hasData
+                                            ? Text(
+                                                '${snapshot.data!}'.replaceAll('\\n', '\n'),
+                                                style: TextStyle(
+                                                    color: white,
+                                                    fontSize: 16.w,
+                                                    fontWeight: FontWeight.w400,
+                                                    height: 1.4),
+                                              )
+                                            : Text("");
+                                      })
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                },
+                child: Container(
+                  width: 40.w,
+                  height: 30.w,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: SvgPicture.asset(
+                      'assets/icons/question_mark.svg',
+                      width: 24.w,
+                      // height: 26.w,
+                      color: yachtLightGrey,
                     ),
                   ),
                 ),
-                // SizedBox(
-                //   width: 4.w,
-                // ),
-                GestureDetector(
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Dialog(
-                              backgroundColor: yachtDarkGrey,
-                              child: Padding(
-                                padding: primaryAllPadding,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "요트's Pick?",
-                                      style: dialogTitle,
-                                    ),
-                                    SizedBox(
-                                      height: 12.w,
-                                    ),
-                                    FutureBuilder<String>(
-                                        future: homeViewModel.getYachtPickDescription(),
-                                        builder: (_, snapshot) {
-                                          return snapshot.hasData
-                                              ? Text(
-                                                  '${snapshot.data!}'.replaceAll('\\n', '\n'),
-                                                  style: TextStyle(
-                                                      color: white,
-                                                      fontSize: 16.w,
-                                                      fontWeight: FontWeight.w400,
-                                                      height: 1.4),
-                                                )
-                                              : Text("");
-                                        })
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        });
-                  },
-                  child: Container(
-                    width: 40.w,
-                    height: 30.w,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: SvgPicture.asset(
-                        'assets/icons/question_mark.svg',
-                        width: 24.w,
-                        // height: 26.w,
-                        color: yachtLightGrey,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 20.w,
-            ),
-            Obx(() => homeViewModel.stockInfoNewModels.length > 0 ? YachtPickView() : SizedBox.shrink()),
-          ],
-        ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 20.w,
+          ),
+          Obx(() => homeViewModel.stockInfoNewModels.length > 0 ? YachtPickView() : SizedBox.shrink()),
+        ],
       ),
+
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       YachtQuestView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      // Obx(() => homeViewModel.isGettingQuests.value ? Container() : LiveQuestView()),
-      // SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      // QuestResultsView(homeViewModel: homeViewModel),
-      // SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      // RankHomeWidget(),
-      // SvgPicture.asset(
-      //   'assets/badges/svg.svg',
-      // ),
-      SizedBox(height: 100.w),
-      // ReadingContentView(homeViewModel: homeViewModel), // showingHome 변수 구분해서 넣는 게
-      // SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      // TodayMarketView(homeViewModel: homeViewModel),
-      // SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
-      // DictionaryView(homeViewModel: homeViewModel),
-      // SizedBox(height: correctHeight(90.w, 0.0, sectionTitle.fontSize)),
 
-      // SliverToBoxAdapter(child: SizedBox(height: 100)),
-      // OldLiveQuests(homeViewModel: homeViewModel),
-      // SliverToBoxAdapter(child: Container(height: 200, color: Colors.grey)),
-      // Admins(homeViewModel: homeViewModel),
+      SizedBox(height: 100.w),
     ];
 
     // _scrollController = ScrollController(initialScrollOffset: 0);
@@ -277,187 +233,6 @@ class NewHomeView extends StatelessWidget {
       ),
     );
   }
-
-  // showChangeNameDialog(BuildContext context) async {
-  //   showDialog<Widget>(
-  //     context: context,
-  //     builder: (context) => Dialog(
-  //       backgroundColor: yachtDarkGrey,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(10.w),
-  //       ),
-  //       insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
-  //       child: Container(
-  //           constraints: BoxConstraints.loose(
-  //             Size(double.infinity, 180.w),
-  //           ),
-  //           padding: primaryHorizontalPadding,
-  //           child: Form(
-  //             key: userNameFormKey,
-  //             child: Stack(
-  //               children: [
-  //                 Column(
-  //                   children: [
-  //                     appBarWithoutCloseButton(title: "닉네임 설정"),
-  //                     SizedBox(height: 8.w),
-  //                     TextFormField(
-  //                       controller: userNameController,
-  //                       textAlignVertical: TextAlignVertical.bottom,
-  //                       keyboardType: TextInputType.name,
-  //                       decoration: InputDecoration(
-  //                         isDense: true,
-  //                         contentPadding: EdgeInsets.all(0.w),
-  //                         focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-  //                         enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-  //                         hintText: '${userModelRx.value!.userName}',
-  //                         hintStyle: profileChangeContentTextStyle.copyWith(color: yachtGrey),
-  //                       ),
-  //                       validator: (value) {
-  //                         if (value != '') {
-  //                           final nickValidator = RegExp(r'^[a-zA-Zㄱ-ㅎ|ㅏ-ㅣ|가-힣0-9]+$');
-  //                           if (value!.length > 8 || !nickValidator.hasMatch(value) || value.contains(' ')) {
-  //                             return "! 닉네임은 8자 이하의 한글,영문,숫자 조합만 가능합니다.";
-  //                           } else {
-  //                             return null;
-  //                           }
-  //                         }
-  //                       },
-  //                       onChanged: (value) {
-  //                         if (userNameFormKey.currentState!.validate()) {
-  //                           print('good');
-  //                         } else {
-  //                           print('bad');
-  //                         }
-  //                       },
-  //                     ),
-  //                     SizedBox(height: 16.w),
-  //                     Align(
-  //                       alignment: Alignment.bottomCenter,
-  //                       child: GestureDetector(
-  //                         behavior: HitTestBehavior.opaque,
-  //                         onTap: () async {
-  //                           // Get.dialog(Dialog(
-  //                           //   child: Text("TTT"),
-  //                           // ));
-  //                           // print('tap');
-  //                           if (userNameController.text == '') {
-  //                             showSmallSnackBar(true);
-  //                             smallSnackBarText("닉네임을 입력해주세요");
-  //                             Future.delayed(Duration(seconds: 1)).then((value) {
-  //                               showSmallSnackBar(false);
-  //                               smallSnackBarText("");
-  //                             });
-  //                             // Get.rawSnackbar(
-  //                             //   messageText: Center(
-  //                             //     child: Text(
-  //                             //       "변경한 내용이 없어요.",
-  //                             //       style: snackBarStyle,
-  //                             //     ),
-  //                             //   ),
-  //                             //   backgroundColor: white.withOpacity(.5),
-  //                             //   barBlur: 8,
-  //                             //   duration: const Duration(seconds: 1, milliseconds: 100),
-  //                             // );
-  //                           } else if (userNameFormKey.currentState!.validate() &&
-  //                               isCheckingUserNameDuplicated.value == false) {
-  //                             if (userNameController.text != '') {
-  //                               print(userNameController.text);
-  //                               isCheckingUserNameDuplicated(true);
-  //                               bool isUserNameDuplicatedVar = true;
-
-  //                               isUserNameDuplicatedVar =
-  //                                   await homeViewModel.isUserNameDuplicated(userNameController.text);
-  //                               print(isUserNameDuplicatedVar);
-  //                               if (!isUserNameDuplicatedVar) {
-  //                                 await homeViewModel.updateUserName(userNameController.text);
-  //                                 showSmallSnackBar(true);
-  //                                 smallSnackBarText("닉네임이 저장되었어요");
-  //                                 Future.delayed(Duration(seconds: 1)).then((value) {
-  //                                   showSmallSnackBar(false);
-  //                                   smallSnackBarText("");
-  //                                   Navigator.of(context).pop();
-  //                                 });
-
-  //                                 // Get.rawSnackbar(
-  //                                 //   messageText: Center(
-  //                                 //     child: Text(
-  //                                 //       "변경한 내용이 저장되었어요.",
-  //                                 //       style: snackBarStyle,
-  //                                 //     ),
-  //                                 //   ),
-  //                                 //   backgroundColor: white.withOpacity(.5),
-  //                                 //   barBlur: 8,
-  //                                 //   duration: const Duration(seconds: 1, milliseconds: 100),
-  //                                 // );
-  //                               } else {
-  //                                 showSmallSnackBar(true);
-  //                                 smallSnackBarText("중복된 닉네임이 있어요");
-  //                                 Future.delayed(Duration(seconds: 1)).then((value) {
-  //                                   showSmallSnackBar(false);
-  //                                   smallSnackBarText("");
-  //                                 });
-  //                                 // userNameDuplicatedDialog();
-  //                               }
-
-  //                               isCheckingUserNameDuplicated(false);
-  //                             }
-  //                           }
-  //                         },
-  //                         child: Obx(() => Container(
-  //                               height: 50.w,
-  //                               width: double.infinity,
-  //                               decoration: BoxDecoration(
-  //                                   borderRadius: BorderRadius.circular(70.0),
-  //                                   color:
-  //                                       isCheckingUserNameDuplicated.value == false ? yachtViolet : primaryButtonText),
-  //                               child: Center(
-  //                                 child: Text(
-  //                                   isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
-  //                                   style: profileChangeButtonTextStyle.copyWith(
-  //                                       color: isCheckingUserNameDuplicated.value == false
-  //                                           ? primaryButtonText
-  //                                           : primaryButtonBackground),
-  //                                 ),
-  //                               ),
-  //                             )),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 Obx(
-  //                   () => showSmallSnackBar.value
-  //                       ? Positioned(
-  //                           top: 40.w,
-  //                           child: Align(
-  //                             alignment: Alignment(0, 0),
-  //                             child: AnimatedContainer(
-  //                               duration: Duration(milliseconds: 300),
-  //                               constraints: BoxConstraints.loose(
-  //                                 Size(double.infinity, 180.w),
-  //                               ),
-  //                               padding: EdgeInsets.all(12.w),
-  //                               color: Colors.white.withOpacity(.8),
-  //                               // height: 40.w,
-  //                               // width: double.infinity,
-  //                               child: Text(
-  //                                 smallSnackBarText.value,
-  //                                 style: TextStyle(
-  //                                   fontSize: 16.w,
-  //                                   fontWeight: FontWeight.w600,
-  //                                 ),
-  //                               ),
-  //                             ),
-  //                           ),
-  //                         )
-  //                       : Container(),
-  //                 )
-  //               ],
-  //             ),
-  //           )),
-  //     ),
-  //     barrierDismissible: false,
-  //   );
-  // }
 }
 
 class DialogReadyWidget extends StatefulWidget {
