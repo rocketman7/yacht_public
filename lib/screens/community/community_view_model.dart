@@ -61,14 +61,14 @@ class CommunityViewModel extends GetxController {
 
       scrollController.addListener(() {
         // print(scrollController.offset);
-        print('max: ${scrollController.position.maxScrollExtent}');
+        // print('max: ${scrollController.position.maxScrollExtent}');
         // print(scrollController.position);
         scrollController.offset < 0 ? offset(0) : offset(scrollController.offset);
         if ((scrollController.offset > scrollController.position.maxScrollExtent - (screenHeight * .5)) &&
             hasNextPosts.value) {
           if (!isGettingPosts.value) {
-            print('maxextnt: ${scrollController.position.maxScrollExtent}');
-            print(scrollController.offset);
+            // print('maxextnt: ${scrollController.position.maxScrollExtent}');
+            // print(scrollController.offset);
             getPost();
           }
         }

@@ -294,8 +294,8 @@ class FirestoreService extends GetxService {
         .orderBy('selectDateTime', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
-              print(
-                  'user quest: ${UserQuestModel.fromMap(doc.id, doc.data())}');
+              // print(
+              //     'user quest: ${UserQuestModel.fromMap(doc.id, doc.data())}');
               return UserQuestModel.fromMap(doc.id, doc.data());
             }).toList());
   }
@@ -1260,6 +1260,31 @@ class FirestoreService extends GetxService {
         .where('dateTime', isEqualTo: dateTimeToString(day, 8))
         .get()
         .then((value) => value.docs.first.data()['close']);
+  }
+
+  // 한 종목 최신가격 가져오기
+  Stream<num> streamOneStockPrice(String issueCode) {
+    return _firestoreService
+        .collection('stocksKR/$issueCode/realtimePrices')
+        .orderBy(
+          'dateTime',
+          descending: true,
+        )
+        .snapshots()
+        // .take(1)
+        .map((element) {
+      print('live element: ${element.docs[0].data()}');
+
+      if (element.docs.length == 0) {
+        return 0;
+      } else {
+        return (ChartPriceModel.fromMap(element.docs[0].data()).close ?? 0);
+      }
+      // print("get");
+      //element는 다큐모음
+      // print('${investAddress.issueCode}');
+      // print('snapshot: ${element.docs.last.data()}');
+    });
   }
 
   //// 커뮤니티 관련

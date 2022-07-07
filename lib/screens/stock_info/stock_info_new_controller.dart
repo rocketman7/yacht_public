@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,7 +47,6 @@ class StockInfoNewModel {
   final String assetCategory;
   final String code;
   final String country;
-
   StockInfoNewModel({
     required this.showMain,
     required this.isTobeContinue,
@@ -57,6 +58,30 @@ class StockInfoNewModel {
     required this.code,
     required this.country,
   });
+
+  StockInfoNewModel copyWith({
+    bool? showMain,
+    bool? isTobeContinue,
+    String? logoUrl,
+    String? descriptionUrl,
+    String? name,
+    Timestamp? updateTime,
+    String? assetCategory,
+    String? code,
+    String? country,
+  }) {
+    return StockInfoNewModel(
+      showMain: showMain ?? this.showMain,
+      isTobeContinue: isTobeContinue ?? this.isTobeContinue,
+      logoUrl: logoUrl ?? this.logoUrl,
+      descriptionUrl: descriptionUrl ?? this.descriptionUrl,
+      name: name ?? this.name,
+      updateTime: updateTime ?? this.updateTime,
+      assetCategory: assetCategory ?? this.assetCategory,
+      code: code ?? this.code,
+      country: country ?? this.country,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -74,15 +99,53 @@ class StockInfoNewModel {
 
   factory StockInfoNewModel.fromMap(Map<String, dynamic> map) {
     return StockInfoNewModel(
-      showMain: map['showMain'],
-      isTobeContinue: map['isTobeContinue'],
-      logoUrl: map['logoUrl'],
-      descriptionUrl: map['descriptionUrl'],
-      name: map['name'],
+      showMain: map['showMain'] ?? false,
+      isTobeContinue: map['isTobeContinue'] ?? false,
+      logoUrl: map['logoUrl'] ?? '',
+      descriptionUrl: map['descriptionUrl'] ?? '',
+      name: map['name'] ?? '',
       updateTime: map['updateTime'],
-      assetCategory: map['assetCategory'],
-      code: map['code'],
-      country: map['country'],
+      assetCategory: map['assetCategory'] ?? '',
+      code: map['code'] ?? '',
+      country: map['country'] ?? '',
     );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory StockInfoNewModel.fromJson(String source) => StockInfoNewModel.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'StockInfoNewModel(showMain: $showMain, isTobeContinue: $isTobeContinue, logoUrl: $logoUrl, descriptionUrl: $descriptionUrl, name: $name, updateTime: $updateTime, assetCategory: $assetCategory, code: $code, country: $country)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is StockInfoNewModel &&
+        other.showMain == showMain &&
+        other.isTobeContinue == isTobeContinue &&
+        other.logoUrl == logoUrl &&
+        other.descriptionUrl == descriptionUrl &&
+        other.name == name &&
+        other.updateTime == updateTime &&
+        other.assetCategory == assetCategory &&
+        other.code == code &&
+        other.country == country;
+  }
+
+  @override
+  int get hashCode {
+    return showMain.hashCode ^
+        isTobeContinue.hashCode ^
+        logoUrl.hashCode ^
+        descriptionUrl.hashCode ^
+        name.hashCode ^
+        updateTime.hashCode ^
+        assetCategory.hashCode ^
+        code.hashCode ^
+        country.hashCode;
   }
 }

@@ -57,7 +57,7 @@ class NewLiveController extends GetxController {
         for (int i = 0; i < investmentModelLength; i++) {
           todayCurrentPrices[i] = livePricesOfThisQuest[i].value.chartPrices.last.close;
         }
-        print('${questModel.title} winnerIndex: $winnerIndex');
+        // print('${questModel.title} winnerIndex: $winnerIndex');
       });
     });
 
@@ -89,9 +89,9 @@ class NewLiveController extends GetxController {
         ),
       );
 
-      print(investAddresses[i].issueCode + 'done');
+      // print(investAddresses[i].issueCode + 'done');
     }
-    print('done');
+    // print('done');
     getStandardPriceDone(true);
   }
 

@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:yachtOne/handlers/numbers_handler.dart';
+import 'package:yachtOne/screens/quest/live/new_live_controller.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_new_controller.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_new_view.dart';
 import 'package:yachtOne/styles/size_config.dart';
@@ -13,6 +15,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import '../../../locator.dart';
 import '../../../services/firestore_service.dart';
+import '../../handlers/date_time_handler.dart';
 import '../../services/mixpanel_service.dart';
 
 final yachtPickMainTextStyle = TextStyle(
@@ -25,22 +28,50 @@ final yachtPickMainTextStyle = TextStyle(
 );
 
 class TempMainController extends GetxController {
-  List<StockInfoNewModel>? stockInfoNewModels;
+  List<StockInfoNewModel> stockInfoNewModels = [];
 
   FirestoreService _firestoreService = locator<FirestoreService>();
 
   bool isModelLoaded = false;
-
+  RxList<RxNum> todayCurrentPrices = <RxNum>[].obs;
+  RxList<num> yesterdayClosePrices = <num>[].obs;
   @override
   void onInit() async {
     // stockInfoNewModels = await _firestoreService.getAllYachtPicks();
     stockInfoNewModels = await _firestoreService.getYachtPicks();
+    todayCurrentPrices = List.generate(stockInfoNewModels.length, (index) => RxNum(0)).obs;
+    yesterdayClosePrices = List.generate(stockInfoNewModels.length, (index) => 0).obs;
 
     isModelLoaded = true;
+
+    print('stockInfoNewModels: ${stockInfoNewModels[0].toString()}');
+    getLivePrice();
 
     update();
 
     super.onInit();
+  }
+
+  getLivePrice() async {
+    print('length: ${stockInfoNewModels.length}');
+    for (int i = 0; i < stockInfoNewModels.length; i++) {
+      yesterdayClosePrices[i] = await _firestoreService.getClosePrice(
+        stockInfoNewModels[i].code,
+        previousBusinessDay(
+          DateTime.now(),
+        ),
+      );
+
+      todayCurrentPrices[i].bindStream(
+        _firestoreService.streamOneStockPrice(
+          stockInfoNewModels[i].code,
+        ),
+      );
+    }
+    todayCurrentPrices.refresh();
+
+    print('yesterdayClosePrices: $yesterdayClosePrices');
+    print('todayCurrentPrices: $todayCurrentPrices');
   }
 
   Future<String> getTobeContinueDescription() async {
@@ -64,23 +95,24 @@ class YachtPickView extends StatelessWidget {
             init: TempMainController(),
             builder: (controller) {
               return controller.isModelLoaded
-                  ? controller.stockInfoNewModels!.length != 0
+                  ? controller.stockInfoNewModels.length != 0
                       ? Container(
                           // color: Colors.red,
                           child: CarouselSlider.builder(
-                              itemCount: controller.stockInfoNewModels!.length,
+                              itemCount: controller.stockInfoNewModels.length,
                               itemBuilder: (context, index, _) {
                                 return YachtPickCardForCarousel(
                                   cardWholeHeight: cardWholeHeight,
                                   cardWholeWidth: cardWholeWidth,
-                                  stockInfoNewModel: controller.stockInfoNewModels![index],
+                                  stockInfoNewModel: controller.stockInfoNewModels[index],
+                                  index: index,
                                 );
                               },
                               options: CarouselOptions(
                                 initialPage: 0,
                                 enableInfiniteScroll: false,
                                 enlargeCenterPage: true,
-                                disableCenter: controller.stockInfoNewModels!.length != 1 ? true : false,
+                                disableCenter: controller.stockInfoNewModels.length != 1 ? true : false,
                                 aspectRatio:
                                     ScreenUtil().screenWidth / cardWholeHeight, // 스크린 width를 캐로셀 개별위젯의 높이로 나눠주면 됨
                                 viewportFraction: (cardWholeWidth + 10.w) /
@@ -105,9 +137,14 @@ class YachtPickCardForCarousel extends StatelessWidget {
   final double cardWholeHeight;
   final double cardWholeWidth;
   final StockInfoNewModel stockInfoNewModel;
+  final int index;
 
-  YachtPickCardForCarousel(
-      {required this.cardWholeHeight, required this.cardWholeWidth, required this.stockInfoNewModel});
+  YachtPickCardForCarousel({
+    required this.cardWholeHeight,
+    required this.cardWholeWidth,
+    required this.stockInfoNewModel,
+    required this.index,
+  });
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
@@ -140,7 +177,7 @@ class YachtPickCardForCarousel extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                "공개 예정?",
+                                "공개 예정 요트 Pick",
                                 style: dialogTitle,
                               ),
                               SizedBox(
@@ -204,28 +241,59 @@ class YachtPickCardForCarousel extends StatelessWidget {
                   SizedBox(
                     height: 4.w,
                   ),
-                  Text(
-                    '36,200',
-                    style: TextStyle(
-                        fontFamily: krFont,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 24.w,
-                        letterSpacing: 0.0,
-                        height: 1.0,
-                        color: Colors.white),
+                  Obx(
+                    () => Text(
+                      toPriceKRW(tempMainController.todayCurrentPrices[index].value),
+                      style: TextStyle(
+                          fontFamily: krFont,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 24.w,
+                          letterSpacing: 0.0,
+                          height: 1.0,
+                          color: Colors.white),
+                    ),
                   ),
                   SizedBox(
-                    height: 4.w,
+                    height: 2.w,
                   ),
-                  Text(
-                    '+1,500(+0.78%)',
-                    style: TextStyle(
-                        fontFamily: krFont,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14.w,
-                        letterSpacing: 0.0,
-                        height: 1.0,
-                        color: yachtRed),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Obx(
+                        () => Text(
+                          toPriceKRW(tempMainController.todayCurrentPrices[index].value -
+                              tempMainController.yesterdayClosePrices[index]),
+                          style: stockPriceTextStyle.copyWith(
+                              fontSize: 14.w,
+                              height: 1.0,
+                              color: tempMainController.todayCurrentPrices[index].value -
+                                          tempMainController.yesterdayClosePrices[index] >
+                                      0
+                                  ? yachtRed
+                                  : tempMainController.todayCurrentPrices[index].value ==
+                                          tempMainController.yesterdayClosePrices[index]
+                                      ? white
+                                      : yachtBlue),
+                        ),
+                      ),
+                      SizedBox(width: 2.w),
+                      Obx(
+                        () => Text(
+                          '(${toPercentageChange((tempMainController.todayCurrentPrices[index].value / tempMainController.yesterdayClosePrices[index]) - 1)})',
+                          style: stockPriceTextStyle.copyWith(
+                              fontSize: 14.w,
+                              height: 1.0,
+                              color: tempMainController.todayCurrentPrices[index].value -
+                                          tempMainController.yesterdayClosePrices[index] >
+                                      0
+                                  ? yachtRed
+                                  : tempMainController.todayCurrentPrices[index].value ==
+                                          tempMainController.yesterdayClosePrices[index]
+                                      ? white
+                                      : yachtBlue),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 20.w,

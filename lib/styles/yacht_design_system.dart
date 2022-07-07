@@ -213,8 +213,8 @@ TextStyle stockPriceTextStyle = TextStyle(
   fontSize: 30.w,
   fontWeight: FontWeight.w600,
   color: white,
-  letterSpacing: -0.5,
-  height: primaryFontHeight,
+  letterSpacing: -0.2,
+  // height: primaryFontHeight,
 );
 
 // 퀘스트 타이틀
