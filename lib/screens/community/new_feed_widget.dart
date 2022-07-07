@@ -25,6 +25,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:yachtOne/widgets/like_button.dart';
+// import 'package:yachtOne/yacht_design_system/yds_color.dart';
+import 'package:yachtOne/yacht_design_system/yds_font.dart';
 import '../../handlers/user_tier_handler.dart';
 import '../../locator.dart';
 import '../../models/community/comment_model.dart';
@@ -60,101 +62,107 @@ class NewFeedWidget extends GetView {
         // print("hasFocus: ${currentFocus.hasFocus}");
         // WidgetsBinding.instance!.focusManager.primaryFocus?.unfocus();
       },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // 피드 헤더. 아바타, 닉네임, 레벨, 추가메뉴 등
-          Padding(
-            padding: primaryHorizontalPadding,
-            child: FeedHeader(post: post, communityViewModel: communityViewModel),
-          ),
-
-          SizedBox(height: 8.w),
-          // 피드 콘텐츠
-          Padding(
-            padding: primaryHorizontalPadding,
-            child: FeedContentWidget(post: post),
-          ),
-
-          SizedBox(height: 8.w),
-          // 이미지가 있을 때 이미지 뷰
-          (post.imageUrlList == null || post.imageUrlList!.length == 0)
-              ? SizedBox.shrink()
-              : ImagePageView(
-                  post: post,
+      child: Padding(
+        padding: primaryAllPadding,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+                width: 40.w,
+                height: 40.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
                 ),
-          SizedBox(height: 8.w),
-          // LinkPreview(
-          //   enableAnimation: true,
-          //   onPreviewDataFetched: (data) {
-          //     print('data: ${data}');
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${post.writerAvatarUrl}.png",
+                )),
+            SizedBox(width: 10.w),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // 피드 헤더. 아바타, 닉네임, 레벨, 추가메뉴 등
+                  FeedHeader(post: post, communityViewModel: communityViewModel),
+                  SizedBox(height: 6.w),
+                  // 피드 콘텐츠
+                  FeedContentWidget(post: post),
+                  // 이미지가 있을 때 이미지 뷰
+                  (post.imageUrlList == null || post.imageUrlList!.length == 0)
+                      ? SizedBox.shrink()
+                      : ImagePageView(
+                          post: post,
+                        ),
+                  SizedBox(height: 8.w),
+                  // LinkPreview(
+                  //   enableAnimation: true,
+                  //   onPreviewDataFetched: (data) {
+                  //     print('data: ${data}');
 
-          //     previewData = data;
-          //   },
-          //   previewData: previewData,
-          //   // Pass the preview data from the state
-          //   text: 'https://n.news.naver.com/mnews/article/277/0005108442?sid=101',
-          //   width: MediaQuery.of(context).size.width,
-          // ),
-          // 피드에 각종 버튼 Row
-          Padding(
-            padding: primaryHorizontalPadding,
-            child: LikeButtonWidget(
-              post: post,
-              communityViewModel: communityViewModel,
-              controller: controller,
-            ),
-          ),
-          SizedBox(height: 4.w),
-          // 댓글 리스트
-          Padding(
-            padding: primaryHorizontalPadding,
-            child: InkWell(
-              onTap: () {
-                _mixpanelService.mixpanel.track('Feed Detail', properties: {
-                  'Post ID': post.postId,
-                  'Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
-                  'Post Edit DateTime': post.editedDateTime == null
-                      ? post.writtenDateTime.toDate().toIso8601String()
-                      : post.editedDateTime.toDate().toIso8601String(),
-                  'Post Title': post.title ?? "",
-                  'Is Pro Post': post.isPro,
-                  'Is Notice': post.isNotice,
-                  'Post Writer Uid': post.writerUid,
-                  'Post Writer User Name': post.writerUserName,
-                  'Post Writer Exp': post.writerExp,
-                  'Post Has Image': post.imageUrlList == null
-                      ? false
-                      : post.imageUrlList!.length > 0
-                          ? true
-                          : false,
-                });
-                HapticFeedback.lightImpact();
-                Get.to(() => NewFeedDetailWidget(
-                      post: controller.postRx.value!,
-                    ));
-              },
-              child: CommentList(
-                communityViewModel: communityViewModel,
-                post: post,
-                maxCommentLength: 2,
-                controller: controller,
+                  //     previewData = data;
+                  //   },
+                  //   previewData: previewData,
+                  //   // Pass the preview data from the state
+                  //   text: 'https://n.news.naver.com/mnews/article/277/0005108442?sid=101',
+                  //   width: MediaQuery.of(context).size.width,
+                  // ),
+                  // 피드에 각종 버튼 Row
+                  LikeButtonWidget(
+                    post: post,
+                    communityViewModel: communityViewModel,
+                    controller: controller,
+                  ),
+                  SizedBox(height: 8.w),
+                  // 댓글 리스트
+                  InkWell(
+                    onTap: () {
+                      _mixpanelService.mixpanel.track('Feed Detail', properties: {
+                        'Post ID': post.postId,
+                        'Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
+                        'Post Edit DateTime': post.editedDateTime == null
+                            ? post.writtenDateTime.toDate().toIso8601String()
+                            : post.editedDateTime.toDate().toIso8601String(),
+                        'Post Title': post.title ?? "",
+                        'Is Pro Post': post.isPro,
+                        'Is Notice': post.isNotice,
+                        'Post Writer Uid': post.writerUid,
+                        'Post Writer User Name': post.writerUserName,
+                        'Post Writer Exp': post.writerExp,
+                        'Post Has Image': post.imageUrlList == null
+                            ? false
+                            : post.imageUrlList!.length > 0
+                                ? true
+                                : false,
+                      });
+                      HapticFeedback.lightImpact();
+                      Get.to(() => NewFeedDetailWidget(
+                            post: controller.postRx.value!,
+                          ));
+                    },
+                    child: CommentList(
+                      communityViewModel: communityViewModel,
+                      post: post,
+                      maxCommentLength: 2,
+                      controller: controller,
+                    ),
+                  ),
+                  // SizedBox(height: 6.w),
+                  // 댓글 남기는 Input 위젯. 일단 보류
+                  // Padding(
+                  //   padding: primaryHorizontalPadding,
+                  //   child: CommentInputWidget(
+                  //     post: post,
+                  //     communityViewModel: communityViewModel,
+                  //     widgetController: controller,
+                  //   ),
+                  // )
+                ],
               ),
             ),
-          ),
-          // SizedBox(height: 6.w),
-          // 댓글 남기는 Input 위젯. 일단 보류
-          // Padding(
-          //   padding: primaryHorizontalPadding,
-          //   child: CommentInputWidget(
-          //     post: post,
-          //     communityViewModel: communityViewModel,
-          //     widgetController: controller,
-          //   ),
-          // )
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -182,7 +190,32 @@ class LikeButtonWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            GestureDetector(
+              onTap: () async {
+                // _mixpanelService.mixpanel
+                //     .track('Post Like', properties: {'Like Post ID': post.postId, 'Like Post From Page': "Community"});
+                HapticFeedback.lightImpact();
+                await controller.toggleLikePost(controller.postRx.value!);
+                await controller.reloadThisPost(post);
+              },
+              child: Row(
+                children: [
+                  Obx(
+                    () => LikeButton(
+                      size: 22.w,
+                      isLiked: controller.postRx.value!.likedBy == null
+                          ? false
+                          : controller.postRx.value!.likedBy!.contains(userModelRx.value!.uid),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8.w,
+                  ),
+                ],
+              ),
+            ),
             GestureDetector(
               onTap: () {
                 _mixpanelService.mixpanel.track('Feed Detail', properties: {
@@ -222,37 +255,15 @@ class LikeButtonWidget extends StatelessWidget {
                 ],
               ),
             ),
-            GestureDetector(
-              onTap: () async {
-                // _mixpanelService.mixpanel
-                //     .track('Post Like', properties: {'Like Post ID': post.postId, 'Like Post From Page': "Community"});
-                HapticFeedback.lightImpact();
-                await controller.toggleLikePost(controller.postRx.value!);
-                await controller.reloadThisPost(post);
-              },
-              child: Row(
-                children: [
-                  Obx(
-                    () => LikeButton(
-                      size: 22.w,
-                      isLiked: controller.postRx.value!.likedBy == null
-                          ? false
-                          : controller.postRx.value!.likedBy!.contains(userModelRx.value!.uid),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 8.w,
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
         SizedBox(height: 4.w),
         Obx(
           () => Text(
             "좋아요 ${controller.postRx.value!.likedBy == null ? 0 : controller.postRx.value!.likedBy!.length}개",
-            style: feedContent,
+            style: body2Style.copyWith(
+              color: yachtLightGrey,
+            ),
           ),
         ),
       ],
@@ -308,32 +319,28 @@ class CommentList extends StatelessWidget {
                                       children: [
                                         TextSpan(
                                           text: '${comments[index].content}',
-                                          style: feedContent,
+                                          style: bodyP2LightStyle,
                                         )
                                       ]),
                                 ),
-                                SizedBox(
-                                  height: 3.w,
-                                ),
-                                isDetailComment
-                                    ? Row(
-                                        children: [
-                                          Text(
-                                            feedTimeHandler(comments[index].writtenDateTime.toDate()),
+                                SizedBox(height: 4.w),
+                                Row(
+                                  children: [
+                                    Text(
+                                      feedTimeHandler(comments[index].writtenDateTime.toDate()),
+                                      style: feedDateTime,
+                                    ),
+                                    SizedBox(
+                                      width: 20.w,
+                                    ),
+                                    (comments[index].likedBy != null && comments[index].likedBy!.length > 0)
+                                        ? Text(
+                                            "좋아요 ${comments[index].likedBy!.length}개",
                                             style: feedDateTime,
-                                          ),
-                                          SizedBox(
-                                            width: 20.w,
-                                          ),
-                                          (comments[index].likedBy != null && comments[index].likedBy!.length > 0)
-                                              ? Text(
-                                                  "좋아요 ${comments[index].likedBy!.length}개",
-                                                  style: feedDateTime,
-                                                )
-                                              : SizedBox.shrink()
-                                        ],
-                                      )
-                                    : SizedBox.shrink()
+                                          )
+                                        : SizedBox.shrink()
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -451,7 +458,7 @@ class CommentList extends StatelessWidget {
                           )
                         ],
                       ),
-                      SizedBox(height: 6.w),
+                      SizedBox(height: 8.w),
                     ],
                   );
                 },
@@ -549,15 +556,15 @@ class FeedContentWidget extends StatelessWidget {
             children: [
               Linkify(
                 onOpen: (link) async {
-                  if (await canLaunch(link.url)) {
-                    await launch(link.url);
+                  if (await canLaunchUrl(Uri.parse(link.url))) {
+                    await launchUrl(Uri.parse(link.url));
                   } else {
                     throw 'Could not launch $link';
                   }
                 },
                 text: post.content,
-                style: feedContent,
-                linkStyle: feedContent.copyWith(color: yachtViolet),
+                style: bodyP2LightStyle,
+                linkStyle: bodyP2LightStyle.copyWith(color: Color(0xFF00EAFF)),
                 maxLines: maxLinesForContent.value,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -622,7 +629,7 @@ class FeedContentWidget extends StatelessWidget {
                     },
                     child: (hasTextOverflow(
                       post.content,
-                      feedContent,
+                      bodyP2LightStyle,
                       maxLines: maxLinesForContent.value,
                     ))
                         ? isMaxLineExtended.value
@@ -881,7 +888,9 @@ class ImagePageView extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
+          // color: yachtDarkGrey,
           height: 350.w,
+          // width: 200,
           child: PageView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: post.imageUrlList!.length,
@@ -892,36 +901,37 @@ class ImagePageView extends StatelessWidget {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(5.w),
-                        child: InkWell(
-                          onTap: () {
-                            _mixpanelService.mixpanel.track('Image From Post', properties: {
-                              'Image From Post ID': post.postId,
-                              'Image From Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
-                              'Image From Post Edit DateTime': post.editedDateTime == null
-                                  ? post.writtenDateTime.toDate().toIso8601String()
-                                  : post.editedDateTime.toDate().toIso8601String(),
-                              'Image From Post Title': post.title ?? "",
-                              'Image From Is Pro Post': post.isPro,
-                              'Image From Is Notice': post.isNotice,
-                              'Image From Post Writer Uid': post.writerUid,
-                              'Image From Post Writer User Name': post.writerUserName,
-                              'Image From Post Writer Exp': post.writerExp,
-                              'Image From Page': "Community",
-                            });
-                            // print(imageUrls);
-                            // showDialog(
-                            // context: context, builder: (context) => buildPhotoPageView(context, index, imageUrls));
-                          },
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
-                            height: ScreenUtil().screenWidth,
-                            width: ScreenUtil().screenWidth,
-                            fit: BoxFit.contain,
-                          ),
-                        )),
+                    Expanded(
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(5.w),
+                          child: InkWell(
+                            onTap: () {
+                              _mixpanelService.mixpanel.track('Image From Post', properties: {
+                                'Image From Post ID': post.postId,
+                                'Image From Post Write DateTime': post.writtenDateTime.toDate().toIso8601String(),
+                                'Image From Post Edit DateTime': post.editedDateTime == null
+                                    ? post.writtenDateTime.toDate().toIso8601String()
+                                    : post.editedDateTime.toDate().toIso8601String(),
+                                'Image From Post Title': post.title ?? "",
+                                'Image From Is Pro Post': post.isPro,
+                                'Image From Is Notice': post.isNotice,
+                                'Image From Post Writer Uid': post.writerUid,
+                                'Image From Post Writer User Name': post.writerUserName,
+                                'Image From Post Writer Exp': post.writerExp,
+                                'Image From Page': "Community",
+                              });
+                              // print(imageUrls);
+                              // showDialog(
+                              // context: context, builder: (context) => buildPhotoPageView(context, index, imageUrls));
+                            },
+                            child: CachedNetworkImage(
+                                imageUrl:
+                                    "https://storage.googleapis.com/ggook-5fb08.appspot.com/${post.imageUrlList![index]}",
+                                height: ScreenUtil().screenWidth,
+                                // width: ScreenUtil().screenWidth - 90.w,
+                                fit: BoxFit.contain),
+                          )),
+                    ),
                   ],
                 );
               }),
@@ -1071,53 +1081,42 @@ class FeedHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-                width: 32.w,
-                height: 32.w,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
+        Container(
+          height: 20.w,
+          child: Row(
+            children: [
+              Text(
+                post.writerUserName,
+                style: body2BoldStyle,
+              ),
+              SizedBox(width: 4.w),
+              Text(
+                tierSystemModelRx.value!.tierKorNameMap[separateStringFromTier(getTierByExp(post.writerExp ?? 0))]!,
+                style: TextStyle(
+                  fontSize: 12.w,
+                  fontWeight: FontWeight.w400,
+                  color: yachtLightGrey,
+                  wordSpacing: -.5,
                 ),
-                child: CachedNetworkImage(
-                  imageUrl:
-                      "https://storage.googleapis.com/ggook-5fb08.appspot.com/avatars/${post.writerAvatarUrl}.png",
-                )),
-            SizedBox(width: 12.w),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  post.writerUserName,
-                  style: TextStyle(
-                    color: white,
-                    fontSize: 14.w,
-                    fontWeight: FontWeight.w600,
-                    wordSpacing: -.5,
-                    height: 1.2,
-                  ),
+              ),
+              SizedBox(width: 4.w),
+              Text(
+                '∙',
+                style: sub1Style.copyWith(
+                  color: yachtLightGrey,
+                  fontSize: 10.w,
                 ),
-                Row(
-                  children: [
-                    Text(
-                      tierSystemModelRx
-                          .value!.tierKorNameMap[separateStringFromTier(getTierByExp(post.writerExp ?? 0))]!,
-                      style: TextStyle(
-                        fontSize: 12.w,
-                        fontWeight: FontWeight.w400,
-                        color: yachtLightGrey,
-                        wordSpacing: -.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ],
+              ),
+              SizedBox(width: 4.w),
+              Text(
+                feedTimeHandler(post.writtenDateTime.toDate()),
+                // x초전, x분 전, 일정 이후면 날짜로
+                style: feedDateTime,
+              ),
+            ],
+          ),
         ),
         PopupMenuButton(
           color: yachtDarkGrey,
@@ -1125,6 +1124,20 @@ class FeedHeader extends StatelessWidget {
             return post.writerUid == userModelRx.value!.uid ? communityMyShowMore : communityShowMore;
             //  : communityShowMore;
           },
+          child: Container(
+            width: 48.w,
+            height: 20.w,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: SvgPicture.asset(
+                'assets/icons/show_more.svg',
+                color: white,
+                width: 20.w,
+                // height: 30.w,
+                // fit: BoxFit.cover,
+              ),
+            ),
+          ),
           onSelected: (value) {
             switch (value) {
               case 'edit':
@@ -1316,27 +1329,6 @@ class FeedHeader extends StatelessWidget {
               default:
             }
           },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 18.w,
-                height: 10.w,
-                color: Colors.transparent,
-                child: SvgPicture.asset(
-                  'assets/icons/show_more.svg',
-                  color: white,
-                ),
-              ),
-              SizedBox(height: 8.w),
-              Text(
-                feedTimeHandler(post.writtenDateTime.toDate()),
-                // x초전, x분 전, 일정 이후면 날짜로
-                style: feedDateTime,
-              ),
-            ],
-          ),
         ),
       ],
     );

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:yachtOne/repositories/repository.dart';
 
+DateFormat shortDate = DateFormat("M/d");
 DateFormat dateInString = DateFormat("yyyyMMdd");
 DateFormat dateTimeInString = DateFormat("yyyyMMddHHmmSS");
 DateFormat feedDateTimeInString = DateFormat("yyyy.MM.dd HH:mm");
@@ -36,6 +37,8 @@ DateTime? stringToDateTime(String dateTimeInString) {
 
 String? dateTimeToString(DateTime dateTime, int digit) {
   switch (digit) {
+    case 4:
+      return shortDate.format(dateTime);
     case 8:
       return dateInString.format(dateTime);
     case 14:

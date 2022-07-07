@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -246,103 +247,124 @@ class PickoneLivePriceWidget extends StatelessWidget {
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
       ...List.generate(controller.investmentModelLength, (index) {
         return Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Obx(
-                () => Text(
-                  toPriceKRW(controller.todayCurrentPrices[index]),
+          child: Container(
+            // color: yachtBlue.withOpacity(.5),
+            padding: EdgeInsets.only(right: 12.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 4.w),
+                Text(
+                  controller.questModel.investAddresses![index].name,
                   style: stockPriceTextStyle.copyWith(
-                    fontSize: 26.w,
+                    fontSize: 18.w,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
-              ),
-              Text(
-                controller.questModel.investAddresses![index].name,
-                style: stockPriceTextStyle.copyWith(
-                  fontSize: 18.w,
-                  fontWeight: FontWeight.w400,
+
+                Obx(
+                  () => Text(
+                    toPriceKRW(controller.todayCurrentPrices[index]),
+                    style: stockPriceTextStyle.copyWith(
+                      fontSize: 26.w,
+                    ),
+                  ),
                 ),
-              ),
-              Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "오늘",
-                    style: TextStyle(
-                      color: yachtLightGrey,
-                      fontSize: 12.w,
+
+                // SizedBox(
+                //   width: 2.w,
+                // ),
+                // Spacer(),
+                // SizedBox(width: 4.w),
+
+                Row(
+                  children: [
+                    Obx(
+                      () => Text(
+                        controller.getStandardPriceDone.value
+                            ? toPriceKRW(
+                                controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index],
+                              )
+                            : '-',
+                        style: stockPriceTextStyle.copyWith(
+                            fontSize: 14.w,
+                            height: .8,
+                            color: controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index] > 0
+                                ? yachtRed
+                                : controller.todayCurrentPrices[index] == controller.yesterdayClosePrices[index]
+                                    ? white
+                                    : yachtBlue),
+                      ),
                     ),
-                  ),
-                  Spacer(),
-                  Obx(
-                    () => Row(
-                      children: [
-                        Text(
-                          controller.getStandardPriceDone.value
-                              ? toPriceKRW(
-                                  controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index],
-                                )
-                              : '-',
-                          style: stockPriceTextStyle.copyWith(
-                              fontSize: 12.w,
-                              color: controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index] > 0
-                                  ? yachtRed
-                                  : controller.todayCurrentPrices[index] == controller.yesterdayClosePrices[index]
-                                      ? white
-                                      : yachtBlue),
-                        ),
-                        SizedBox(
-                          width: 2.w,
-                        ),
-                        Text(
-                          controller.getStandardPriceDone.value
-                              ? '(${toPercentageChange((controller.todayCurrentPrices[index] / controller.yesterdayClosePrices[index]) - 1)})'
-                              : '',
-                          style: stockPriceTextStyle.copyWith(
-                              fontSize: 12.w,
-                              color: controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index] > 0
-                                  ? yachtRed
-                                  : controller.todayCurrentPrices[index] == controller.yesterdayClosePrices[index]
-                                      ? white
-                                      : yachtBlue),
-                        ),
-                      ],
+                    SizedBox(
+                      width: 4.w,
                     ),
-                  ),
-                  index == 0
-                      ? SizedBox(
-                          width: 14.w,
-                        )
-                      : SizedBox.shrink(),
-                ],
-              ),
-              SizedBox(
-                height: 4.w,
-              ),
-              Row(
-                children: [
-                  Text(
-                    controller.questModel.investAddresses![0].basePrice == null ? "기준일 대비" : "기준가 대비",
-                    style: TextStyle(
-                      color: yachtLightGrey,
-                      fontSize: 12.w,
+                    Obx(
+                      () => Text(
+                        controller.getStandardPriceDone.value
+                            ? '(${toPercentageChange((controller.todayCurrentPrices[index] / controller.yesterdayClosePrices[index]) - 1)})'
+                            : '',
+                        // maxFontSize: 18.w,
+                        // minFontSize: 12.w,
+                        maxLines: 1,
+                        style: stockPriceTextStyle.copyWith(
+                            fontSize: 14.w,
+                            height: .8,
+                            color: controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index] > 0
+                                ? yachtRed
+                                : controller.todayCurrentPrices[index] == controller.yesterdayClosePrices[index]
+                                    ? white
+                                    : yachtBlue),
+                      ),
                     ),
-                  ),
-                  Spacer(),
-                  Obx(
-                    () => Row(
-                      children: [
-                        Text(
-                          controller.getStandardPriceDone.value
-                              ? toPriceKRW(
-                                  controller.todayCurrentPrices[index] -
-                                      (controller.questModel.investAddresses![index].basePrice ??
-                                          controller.beforeLiveStartDateClosePrices[index]),
-                                )
-                              : '-',
-                          style: stockPriceTextStyle.copyWith(
-                              fontSize: 12.w,
+                  ],
+                ),
+                SizedBox(
+                  height: 8.w,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      controller.questModel.investAddresses![0].basePrice == null
+                          ? "기준일 ${dateTimeToString(controller.questModel.liveStartDateTime.toDate(), 4)} 대비"
+                          : "기준가 ${toPriceKRW(controller.questModel.investAddresses![0].basePrice!)} 대비",
+                      style: TextStyle(
+                        color: yachtLightGrey,
+                        fontSize: 14.w,
+                      ),
+                    ),
+                    Obx(
+                      () => Row(
+                        children: [
+                          Text(
+                            controller.getStandardPriceDone.value
+                                ? toPriceKRW(
+                                    controller.todayCurrentPrices[index] -
+                                        (controller.questModel.investAddresses![index].basePrice ??
+                                            controller.beforeLiveStartDateClosePrices[index]),
+                                  )
+                                : '-',
+                            style: stockPriceTextStyle.copyWith(
+                                fontSize: 14.w,
+                                color: controller.todayCurrentPrices[index] -
+                                            controller.beforeLiveStartDateClosePrices[index] >
+                                        0
+                                    ? yachtRed
+                                    : controller.todayCurrentPrices[index] ==
+                                            controller.beforeLiveStartDateClosePrices[index]
+                                        ? white
+                                        : yachtBlue),
+                          ),
+                          SizedBox(
+                            width: 2.w,
+                          ),
+                          Text(
+                            controller.getStandardPriceDone.value
+                                ? '(${toPercentageChange((controller.todayCurrentPrices[index] / controller.beforeLiveStartDateClosePrices[index]) - 1)})'
+                                : '',
+                            style: stockPriceTextStyle.copyWith(
+                              fontSize: 14.w,
                               color: controller.todayCurrentPrices[index] -
                                           controller.beforeLiveStartDateClosePrices[index] >
                                       0
@@ -350,38 +372,19 @@ class PickoneLivePriceWidget extends StatelessWidget {
                                   : controller.todayCurrentPrices[index] ==
                                           controller.beforeLiveStartDateClosePrices[index]
                                       ? white
-                                      : yachtBlue),
-                        ),
-                        SizedBox(
-                          width: 2.w,
-                        ),
-                        Text(
-                          controller.getStandardPriceDone.value
-                              ? '(${toPercentageChange((controller.todayCurrentPrices[index] / controller.beforeLiveStartDateClosePrices[index]) - 1)})'
-                              : '',
-                          style: stockPriceTextStyle.copyWith(
-                            fontSize: 12.w,
-                            color: controller.todayCurrentPrices[index] -
-                                        controller.beforeLiveStartDateClosePrices[index] >
-                                    0
-                                ? yachtRed
-                                : controller.todayCurrentPrices[index] ==
-                                        controller.beforeLiveStartDateClosePrices[index]
-                                    ? white
-                                    : yachtBlue,
+                                      : yachtBlue,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  index == 0
-                      ? SizedBox(
-                          width: 14.w,
-                        )
-                      : SizedBox.shrink(),
-                ],
-              )
-            ],
+                    // index == 0
+
+                    // : SizedBox.shrink(),
+                  ],
+                )
+              ],
+            ),
           ),
         );
       }),
