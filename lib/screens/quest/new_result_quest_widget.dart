@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/screens/quest/result/quest_results_view_model.dart';
 import 'package:yachtOne/screens/quest/time_counter_widget.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 
 import '../../models/quest_model.dart';
 import '../../styles/yacht_design_system.dart';
@@ -12,12 +14,20 @@ import 'new_quest_widget.dart';
 class NewResultQuestWidget extends StatelessWidget {
   NewResultQuestWidget({Key? key, required this.questModel}) : super(key: key);
   final QuestModel questModel;
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     final QuestResultsViewModel questResultViewModel =
         Get.put(QuestResultsViewModel(questModel: questModel), tag: questModel.questId);
     return InkWell(
       onTap: () {
+        _mixpanelService.mixpanel.track('Quest Result', properties: {
+          'New Quest ID': questModel.questId,
+          'New Quest League ID': questModel.leagueId,
+          'New Quest Title': questModel.title,
+          'New Quest Category': questModel.category,
+          'New Quest Select Mode': questModel.selectMode,
+        });
         showDialog(context: context, builder: (context) => NewResultDialog(questModel: questModel));
       },
       child: Padding(

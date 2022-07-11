@@ -79,120 +79,7 @@ class NewHomeView extends StatelessWidget {
       // AwardView(leagueName: leagueModel.value!.leagueName, leagueEndDateTime: leagueModel.value!.leagueEndDateTime),
 
       // 주간 요트 종목
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: primaryHorizontalPadding,
-                child: Text(
-                  "요트 Pick",
-                  style: TextStyle(
-                    color: white,
-                    fontSize: 24.w,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              // SizedBox(
-              //   width: 4.w,
-              // ),
-              GestureDetector(
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Dialog(
-                            backgroundColor: yachtDarkGrey,
-                            child: Padding(
-                              padding: primaryAllPadding,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "요트's Pick?",
-                                    style: dialogTitle,
-                                  ),
-                                  SizedBox(
-                                    height: 12.w,
-                                  ),
-                                  FutureBuilder<String>(
-                                      future: homeViewModel.getYachtPickDescription(),
-                                      builder: (_, snapshot) {
-                                        return snapshot.hasData
-                                            ? Text(
-                                                '${snapshot.data!}'.replaceAll('\\n', '\n'),
-                                                style: TextStyle(
-                                                    color: white,
-                                                    fontSize: 16.w,
-                                                    fontWeight: FontWeight.w400,
-                                                    height: 1.4),
-                                              )
-                                            : Text("");
-                                      })
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      });
-                },
-                child: Container(
-                  width: 40.w,
-                  height: 30.w,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: SvgPicture.asset(
-                      'assets/icons/question_mark.svg',
-                      width: 24.w,
-                      // height: 26.w,
-                      color: yachtLightGrey,
-                    ),
-                  ),
-                ),
-              ),
-              Spacer(),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => YachtPickOldView());
-                },
-                child: Container(
-                  // height: 40.w,
-                  // width: 20.w,
-                  // color: Colors.red,
-                  decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(50.w)),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 10.w, bottom: 10.w),
-                    child: Text(
-                      "지난 요트 Pick",
-                      style: TextStyle(
-                        fontFamily: krFont,
-                        color: white,
-                        fontSize: 14.w,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 14.w,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20.w,
-          ),
-          Obx(() => homeViewModel.stockInfoNewModels.length > 0 ? YachtPickView() : SizedBox.shrink()),
-        ],
-      ),
-
+      YachtPick(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
       YachtQuestView(homeViewModel: homeViewModel),
       SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
@@ -259,6 +146,133 @@ class NewHomeView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class YachtPick extends StatelessWidget {
+  YachtPick({
+    Key? key,
+    required this.homeViewModel,
+  }) : super(key: key);
+
+  final HomeViewModel homeViewModel;
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: primaryHorizontalPadding,
+              child: Text(
+                "요트 Pick",
+                style: TextStyle(
+                  color: white,
+                  fontSize: 24.w,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            // SizedBox(
+            //   width: 4.w,
+            // ),
+            GestureDetector(
+              onTap: () {
+                HapticFeedback.lightImpact();
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Dialog(
+                          backgroundColor: yachtDarkGrey,
+                          child: Padding(
+                            padding: primaryAllPadding,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "요트's Pick?",
+                                  style: dialogTitle,
+                                ),
+                                SizedBox(
+                                  height: 12.w,
+                                ),
+                                FutureBuilder<String>(
+                                    future: homeViewModel.getYachtPickDescription(),
+                                    builder: (_, snapshot) {
+                                      return snapshot.hasData
+                                          ? Text(
+                                              '${snapshot.data!}'.replaceAll('\\n', '\n'),
+                                              style: TextStyle(
+                                                  color: white,
+                                                  fontSize: 16.w,
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 1.4),
+                                            )
+                                          : Text("");
+                                    })
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    });
+              },
+              child: Container(
+                width: 40.w,
+                height: 30.w,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: SvgPicture.asset(
+                    'assets/icons/question_mark.svg',
+                    width: 24.w,
+                    // height: 26.w,
+                    color: yachtLightGrey,
+                  ),
+                ),
+              ),
+            ),
+            Spacer(),
+            GestureDetector(
+              onTap: () {
+                _mixpanelService.mixpanel.track('Old Yacht Pick');
+                Get.to(() => YachtPickOldView());
+              },
+              child: Container(
+                // height: 40.w,
+                // width: 20.w,
+                // color: Colors.red,
+                decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(50.w)),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 10.w, bottom: 10.w),
+                  child: Text(
+                    "지난 요트 Pick",
+                    style: TextStyle(
+                      fontFamily: krFont,
+                      color: white,
+                      fontSize: 14.w,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 14.w,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20.w,
+        ),
+        Obx(() => homeViewModel.stockInfoNewModels.length > 0 ? YachtPickView() : SizedBox.shrink()),
+      ],
     );
   }
 }

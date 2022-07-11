@@ -138,20 +138,7 @@ class YachtQuestView extends StatelessWidget {
                               )
                             : Container(),
                         InkWell(
-                          onTap: () {
-                            _mixpanelService.mixpanel.track('New Quest', properties: {
-                              'New Quest ID': homeViewModel.newQuests[index].questId,
-                              'New Quest League ID': homeViewModel.newQuests[index].leagueId,
-                              'New Quest Title': homeViewModel.newQuests[index].title,
-                              'New Quest Category': homeViewModel.newQuests[index].category,
-                              'New Quest Select Mode': homeViewModel.newQuests[index].selectMode,
-                            });
-                            homeViewModel.newQuests[index].selectMode == 'survey'
-                                ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
-                                : homeViewModel.newQuests[index].selectMode == 'tutorial'
-                                    ? Get.toNamed('/tutorial', arguments: homeViewModel.newQuests[index])
-                                    : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
-                          },
+                          onTap: () {},
                           child: NewQuestWidget(
                             questModel: homeViewModel.newQuests[index],
                           ),
@@ -164,24 +151,8 @@ class YachtQuestView extends StatelessWidget {
                 // 1,
                 (index) => Column(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            // _mixpanelService.mixpanel.track('Live Quest', properties: {
-                            //   'New Quest ID': homeViewModel.newQuests[index].questId,
-                            //   'New Quest League ID': homeViewModel.newQuests[index].leagueId,
-                            //   'New Quest Title': homeViewModel.newQuests[index].title,
-                            //   'New Quest Category': homeViewModel.newQuests[index].category,
-                            //   'New Quest Select Mode': homeViewModel.newQuests[index].selectMode,
-                            // });
-                            // homeViewModel.newQuests[index].selectMode == 'survey'
-                            //     ? Get.toNamed('/survey', arguments: homeViewModel.newQuests[index])
-                            //     : homeViewModel.newQuests[index].selectMode == 'tutorial'
-                            //         ? Get.toNamed('/tutorial', arguments: homeViewModel.newQuests[index])
-                            //         : Get.toNamed('/quest', arguments: homeViewModel.newQuests[index]);
-                          },
-                          child: NewLiveQuestWidget(
-                            questModel: homeViewModel.liveQuests[index],
-                          ),
+                        NewLiveQuestWidget(
+                          questModel: homeViewModel.liveQuests[index],
                         ),
                         SizedBox(height: primaryPaddingSize),
                       ],

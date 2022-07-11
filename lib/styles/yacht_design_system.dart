@@ -16,6 +16,7 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
+import 'package:yachtOne/yacht_design_system/yds_font.dart';
 
 // BASIC COLORS CODE
 const Color yachtBlack = const Color(0xFF101214);
@@ -2716,11 +2717,11 @@ class YachtPrimaryAppBarDelegate extends SliverPersistentHeaderDelegate {
                                   children: [
                                     Text(
                                       tabTitle,
-                                      style: appBarTitle.copyWith(
-                                          fontWeight: FontWeight.w600,
+                                      style: head2Style.copyWith(
+                                          // fontWeight: FontWeight.w600,
                                           color: appBarTitle.color!.withOpacity(
-                                            1 - opacity,
-                                          )),
+                                        1 - opacity,
+                                      )),
                                     ),
                                   ],
                                 ),

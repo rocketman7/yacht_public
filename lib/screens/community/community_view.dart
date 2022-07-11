@@ -165,12 +165,12 @@ class CommunityView extends GetView<CommunityViewModel> {
                           ),
                           Divider(
                             color: yachtMidGrey,
-                            height: 32.w,
+                            height: 14.w,
                             thickness: .3,
                           ),
-                          SizedBox(
-                            height: 14.w,
-                          )
+                          // SizedBox(
+                          //   height: 14.w,
+                          // )
                         ],
                       ),
                     );

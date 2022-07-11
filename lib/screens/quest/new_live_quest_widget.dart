@@ -13,6 +13,7 @@ import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/quest/live/live_widget_controller.dart';
 import 'package:yachtOne/screens/quest/time_counter_widget.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -59,7 +60,7 @@ class SquareQuestWidget extends StatelessWidget {
   }) : super(key: key);
 
   final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     final NewLiveController controller = Get.put(
@@ -68,6 +69,14 @@ class SquareQuestWidget extends StatelessWidget {
     );
     return GestureDetector(
       onTap: () {
+        _mixpanelService.mixpanel.track('Live Quest', properties: {
+          'New Quest ID': questModel.questId,
+          'New Quest League ID': questModel.leagueId,
+          'New Quest Title': questModel.title,
+          'New Quest Category': questModel.category,
+          'New Quest Select Mode': questModel.selectMode,
+        });
+
         Get.to(
           () => NewLiveDetailView(
             questModel: questModel,

@@ -10,6 +10,7 @@ import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/models/users/user_quest_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/quest/time_counter_widget.dart';
+import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -20,104 +21,100 @@ import '../../locator.dart';
 
 class NewQuestWidget extends StatelessWidget {
   final QuestModel questModel;
-  const NewQuestWidget({
+  NewQuestWidget({
     Key? key,
     required this.questModel,
   }) : super(key: key);
-
+  final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
     double _width = 232.w;
     double _height = 344.w;
 
-    return
-        //  questModel.selectMode == 'tutorial'
-        // ? SectionBoxWithBottomButtonAndBorder(
-        //     height: height,
-        //     width: width,
-        //     padding: EdgeInsets.all(primaryPaddingSize),
-        //     buttonTitle: "퀘스트 참여하기",
-        //     child: Column(
-        //       // mainAxisSize: MainAxisSize.max,
-        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //       children: [
-        //         QuestCardHeader(questModel: questModel), // QuestCard내의 헤더부분
-        //         QuestImage(
-        //           questModel: questModel,
-        //         ),
-        //         QuestCardRewards(questModel: questModel),
-        //       ],
-        //     ),
-        //   )
-        // :
-        Obx(() =>
-            // 참여한 퀘스트
-            Padding(
-              padding: primaryHorizontalPadding,
-              child: Container(
-                padding: primaryAllPadding,
-                decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            basicInfoButtion(
-                              "New",
-                              buttonColor: white,
-                              textColor: yachtViolet,
+    return GestureDetector(
+      onTap: () {
+        _mixpanelService.mixpanel.track('New Quest', properties: {
+          'New Quest ID': questModel.questId,
+          'New Quest League ID': questModel.leagueId,
+          'New Quest Title': questModel.title,
+          'New Quest Category': questModel.category,
+          'New Quest Select Mode': questModel.selectMode,
+        });
+        questModel.selectMode == 'survey'
+            ? Get.toNamed('/survey', arguments: questModel)
+            : questModel.selectMode == 'tutorial'
+                ? Get.toNamed('/tutorial', arguments: questModel)
+                : Get.toNamed('/quest', arguments: questModel);
+      },
+      child: Obx(() =>
+          // 참여한 퀘스트
+          Padding(
+            padding: primaryHorizontalPadding,
+            child: Container(
+              padding: primaryAllPadding,
+              decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          basicInfoButtion(
+                            "New",
+                            buttonColor: white,
+                            textColor: yachtViolet,
+                          ),
+                          SizedBox(width: 6.w),
+                          (userQuestModelRx.length > 0 &&
+                                  userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
+                              ? basicInfoButtion(
+                                  "참여완료",
+                                  buttonColor: yachtGrey,
+                                  textColor: yachtMidGrey,
+                                )
+                              : basicInfoButtion(
+                                  "참여가능",
+                                  buttonColor: yachtGrey,
+                                ),
+                          SizedBox(width: 6.w),
+                          basicInfoButtion(
+                            "",
+                            child: TimeCounterWidget(
+                              questModel: questModel,
                             ),
-                            SizedBox(width: 6.w),
-                            (userQuestModelRx.length > 0 &&
-                                    userQuestModelRx.where((i) => i.questId == questModel.questId).isNotEmpty)
-                                ? basicInfoButtion(
-                                    "참여완료",
-                                    buttonColor: yachtGrey,
-                                    textColor: yachtMidGrey,
-                                  )
-                                : basicInfoButtion(
-                                    "참여가능",
-                                    buttonColor: yachtGrey,
-                                  ),
-                            SizedBox(width: 6.w),
-                            basicInfoButtion(
-                              "",
-                              child: TimeCounterWidget(
-                                questModel: questModel,
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/jogabi.svg',
-                              width: 20.w,
-                              height: 20.w,
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/jogabi.svg',
+                            width: 20.w,
+                            height: 20.w,
+                          ),
+                          SizedBox(width: 4.w),
+                          Text(
+                            '${questModel.itemNeeded}개',
+                            style: TextStyle(
+                              color: white,
+                              fontSize: 16.w,
+                              // height: 1.2,
                             ),
-                            SizedBox(width: 4.w),
-                            Text(
-                              '${questModel.itemNeeded}개',
-                              style: TextStyle(
-                                color: white,
-                                fontSize: 16.w,
-                                // height: 1.2,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8.w),
-                    NewQuestHeader(questModel: questModel)
-                  ],
-                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8.w),
+                  NewQuestHeader(questModel: questModel)
+                ],
               ),
-            ));
+            ),
+          )),
+    );
 
     // Stack(
     //   children: [

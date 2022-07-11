@@ -161,6 +161,8 @@ class YachtPickCardForCarousel extends StatelessWidget {
         GestureDetector(
           onTap: () {
             if (stockInfoNewModel.isTobeContinue) {
+              _mixpanelService.mixpanel
+                  .track('Yacht Pick Not Open Yet', properties: {'Stock Name': stockInfoNewModel.name});
               HapticFeedback.lightImpact();
               showDialog(
                   context: context,

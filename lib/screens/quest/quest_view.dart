@@ -217,7 +217,7 @@ class QuestView extends StatelessWidget {
                 right: 14.w,
                 bottom: ScreenUtil().bottomBarHeight + 8.w,
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     // print(questViewModel.checkIfUserSelectedAny());
                     if (questViewModel.isSelectingSheetShowing.value == false) {
                       questViewModel.isSelectingSheetShowing(true);
@@ -241,7 +241,7 @@ class QuestView extends StatelessWidget {
                           longerDuration: 2000,
                         );
                       } else {
-                        questViewModel.updateUserQuest();
+                        await questViewModel.updateUserQuest();
                         _mixpanelService.mixpanel.track('Quest Participate', properties: {
                           'Participate Quest ID': questModel.questId,
                           'Participate League ID': questModel.leagueId,
@@ -430,7 +430,6 @@ class QuestView extends StatelessWidget {
                               InkWell(
                                 onTap: () {
                                   questViewModel.toggleUserSelect(index);
-                                  print('$index is change to ${questViewModel.toggleList}');
                                   HapticFeedback.lightImpact();
                                 },
                                 child: AnimatedContainer(
@@ -748,7 +747,7 @@ class QuestView extends StatelessWidget {
                                                                   child: LoadingContainer(
                                                                       height: 36.w, width: 36.w, radius: 36.w));
                                                             } else {
-                                                              print(snapshot.data);
+                                                              // print(snapshot.data);
                                                               return Image.network(
                                                                 snapshot.data!,
                                                                 height: 36.w,
