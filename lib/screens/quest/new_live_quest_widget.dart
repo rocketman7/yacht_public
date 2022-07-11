@@ -357,11 +357,13 @@ class PickoneLivePriceWidget extends StatelessWidget {
                             style: stockPriceTextStyle.copyWith(
                                 fontSize: 14.w,
                                 color: controller.todayCurrentPrices[index] -
-                                            controller.beforeLiveStartDateClosePrices[index] >
+                                            (controller.questModel.investAddresses![index].basePrice ??
+                                                controller.beforeLiveStartDateClosePrices[index]) >
                                         0
                                     ? yachtRed
                                     : controller.todayCurrentPrices[index] ==
-                                            controller.beforeLiveStartDateClosePrices[index]
+                                            (controller.questModel.investAddresses![index].basePrice ??
+                                                controller.beforeLiveStartDateClosePrices[index])
                                         ? white
                                         : yachtBlue),
                           ),
@@ -370,16 +372,18 @@ class PickoneLivePriceWidget extends StatelessWidget {
                           ),
                           Text(
                             controller.getStandardPriceDone.value
-                                ? '(${toPercentageChange((controller.todayCurrentPrices[index] / controller.beforeLiveStartDateClosePrices[index]) - 1)})'
+                                ? '(${toPercentageChange((controller.todayCurrentPrices[index] / (controller.questModel.investAddresses![index].basePrice ?? controller.beforeLiveStartDateClosePrices[index])) - 1)})'
                                 : '',
                             style: stockPriceTextStyle.copyWith(
                               fontSize: 14.w,
                               color: controller.todayCurrentPrices[index] -
-                                          controller.beforeLiveStartDateClosePrices[index] >
+                                          (controller.questModel.investAddresses![index].basePrice ??
+                                              controller.beforeLiveStartDateClosePrices[index]) >
                                       0
                                   ? yachtRed
                                   : controller.todayCurrentPrices[index] ==
-                                          controller.beforeLiveStartDateClosePrices[index]
+                                          (controller.questModel.investAddresses![index].basePrice ??
+                                              controller.beforeLiveStartDateClosePrices[index])
                                       ? white
                                       : yachtBlue,
                             ),
