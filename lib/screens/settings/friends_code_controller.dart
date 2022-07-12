@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
-import 'package:kakao_flutter_sdk/link.dart';
-
+// import 'package:kakao_flutter_sdk/link.dart';
+import 'package:kakao_flutter_sdk_share/kakao_flutter_sdk_share.dart';
 import '../../services/firestore_service.dart';
 import '../../locator.dart';
 import '../../repositories/repository.dart';
@@ -35,8 +35,7 @@ class FriendsCodeController extends GetxController {
     for (int i = 0; i < 50; i++) {
       // 랜덤스트링 생성
       String genCode = randomAlphaNumeric(6);
-      bool isDuplicated =
-          await _firestoreService.isFriendsCodeDuplicated(genCode);
+      bool isDuplicated = await _firestoreService.isFriendsCodeDuplicated(genCode);
 
       if (!isDuplicated) {
         // DB에 프렌즈코드 넣어주기
@@ -50,9 +49,9 @@ class FriendsCodeController extends GetxController {
 
   void shareMyCode() async {
     try {
-      var uri = await LinkClient.instance.customWithTalk(61307,
-          templateArgs: {'key': userModelRx.value!.friendsCode!});
-      await LinkClient.instance.launchKakaoTalk(uri);
+      var uri = await ShareClient.instance
+          .shareCustom(templateId: 61307, templateArgs: {'key': userModelRx.value!.friendsCode!});
+      await ShareClient.instance.launchKakaoTalk(uri);
       // var uri = await LinkClient.instance.customWithTalk(42121,
       //     templateArgs: {'key': userModelRx.value!.friendsCode!});
       // await LinkClient.instance.launchKakaoTalk(uri);
@@ -105,11 +104,9 @@ class FriendsCodeController extends GetxController {
       } else {
         _firestoreService.updateOtherUserItem(a.toString(), 5);
         // 이 다음에 a의 (즉 코드입력받은 상대방) 피드?에 올려주든지 하면 좋을듯 (추천받아서 아이템 5개 받았다고)
-        _firestoreService.updateInsertedFriendsCode(
-            userModelRx.value!.uid, code);
+        _firestoreService.updateInsertedFriendsCode(userModelRx.value!.uid, code);
 
-        _firestoreService.friendsUidRecommededMe(
-            a.toString(), userModelRx.value!.uid);
+        _firestoreService.friendsUidRecommededMe(a.toString(), userModelRx.value!.uid);
 
         _firestoreService.updateFriendsCodeDone(userModelRx.value!.uid, true);
 

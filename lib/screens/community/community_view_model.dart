@@ -55,7 +55,7 @@ class CommunityViewModel extends GetxController {
     await getNotice();
     await getPost();
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // scrollController.animateTo(scrollController.position.maxScrollExtent,
       //     duration: Duration(seconds: 2), curve: Curves.easeIn);
 

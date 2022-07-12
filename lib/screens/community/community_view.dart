@@ -21,7 +21,6 @@ import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:paginate_firestore/paginate_firestore.dart';
 // import 'package:native_admob_flutter/native_admob_flutter.dart';
 import '../../locator.dart';
 import 'community_view_model.dart';
@@ -53,7 +52,7 @@ class CommunityView extends GetView<CommunityViewModel> {
     //     print(_scrollController.offset);
     //   });
     // });
-    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   scrollController.addListener(() {
     //     // print(scrollController.offset);
     //     print('max: ${scrollController.position.maxScrollExtent}');

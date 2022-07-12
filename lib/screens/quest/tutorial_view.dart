@@ -51,7 +51,7 @@ class _TutorialViewState extends State<TutorialView> {
   @override
   void initState() {
     Future.delayed(Duration(milliseconds: 300), showTutorial);
-    // WidgetsBinding.instance!.addPostFrameCallback((_) {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   showTutorial();
     // });
     super.initState();

@@ -160,11 +160,9 @@ class AppOpenAd extends LoadShowAd<FullScreenAdEvent> {
         'The orientation must be a valid orientation: $ORIENTATION_PORTRAIT, $ORIENTATION_LANDSCAPE',
       );
     } else {
-      final window = WidgetsBinding.instance!.window;
+      final window = WidgetsBinding.instance.window;
       final size = window.physicalSize / window.devicePixelRatio;
-      final deviceOrientation = size.width > size.height
-          ? Orientation.landscape
-          : Orientation.portrait;
+      final deviceOrientation = size.width > size.height ? Orientation.landscape : Orientation.portrait;
 
       switch (deviceOrientation) {
         case Orientation.landscape:
@@ -176,10 +174,7 @@ class AppOpenAd extends LoadShowAd<FullScreenAdEvent> {
       }
     }
     final bool loaded = (await channel.invokeMethod<bool>('loadAd', {
-      'unitId': unitId ??
-          this.unitId ??
-          MobileAds.appOpenAdUnitId ??
-          MobileAds.appOpenAdTestUnitId,
+      'unitId': unitId ?? this.unitId ?? MobileAds.appOpenAdUnitId ?? MobileAds.appOpenAdTestUnitId,
       'orientation': orientation,
       'nonPersonalizedAds': nonPersonalizedAds ?? this.nonPersonalizedAds,
       'keywords': keywords,

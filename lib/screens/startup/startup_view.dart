@@ -87,7 +87,7 @@ class StartupView extends GetView<StartupViewModel> {
     ].obs;
     // print('startup rebuild');
 
-    // WidgetsBinding.instance!.addPostFrameCallback((_) {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   // executes after build
     //   if (!controller.isNameUpdated) {
     //     Get.defaultDialog(content: Text("you need to update name"));

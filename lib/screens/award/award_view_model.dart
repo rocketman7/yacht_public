@@ -31,7 +31,7 @@ class AwardViewModel extends GetxController {
 
   @override
   void onInit() async {
-    print('award view model oninit');
+    // print('award view model oninit');
     // 실제 홈 화면에서도 얘를 가장 먼저 호출해야할듯? 가장 중요하면서 위에 있는 정보니까.
     allSubLeagues = await getAllSubLeague();
 
@@ -41,8 +41,7 @@ class AwardViewModel extends GetxController {
       //       .getCurrentStocksPrice(allSubLeagues[i].stocks[j].issueCode);
       // }
       for (var items in allSubLeagues[i].stocks) {
-        items.currentPrice =
-            await _firestoreService.getCurrentStocksPrice(items.issueCode);
+        items.currentPrice = await _firestoreService.getCurrentStocksPrice(items.issueCode);
       }
     }
 
@@ -68,20 +67,16 @@ class AwardViewModel extends GetxController {
     // award 의 갯수만큼 돌아가야함. (페이지당 하나의 어워드 = 페이지 갯수만큼)
     for (int v = 0; v < allSubLeagues.length; v++) {
       subLeaguePortfolioUIModels.add([]);
-      isMaxLabel.add(allSubLeagues[v].stocks.length > labelMaxNum
-          ? labelState.NEED_MIN
-          : labelState.NONEED);
+      isMaxLabel.add(allSubLeagues[v].stocks.length > labelMaxNum ? labelState.NEED_MIN : labelState.NONEED);
 
       // 어워드의 상금 전체 가치 계산
       totalValue.add(0.0);
       totalCurrentValue.add(0.0);
       for (int i = 0; i < allSubLeagues[v].stocks.length; i++) {
-        totalValue[v] += allSubLeagues[v].stocks[i].sharesNum *
-            allSubLeagues[v].stocks[i].standardPrice;
+        totalValue[v] += allSubLeagues[v].stocks[i].sharesNum * allSubLeagues[v].stocks[i].standardPrice;
 
         totalCurrentValue[v] += allSubLeagues[v].stocks[i].sharesNum *
-            (allSubLeagues[v].stocks[i].currentPrice ??
-                allSubLeagues[v].stocks[i].standardPrice);
+            (allSubLeagues[v].stocks[i].currentPrice ?? allSubLeagues[v].stocks[i].standardPrice);
         // 혹시 몰라서 currentPrice없으면 걍 standardPrice로
 
         // print(totalCurrentValue[v]);
@@ -97,11 +92,9 @@ class AwardViewModel extends GetxController {
           SubLeagueStocksModel tempSubLeagueStockModel;
           for (int k = j + 1; k < allSubLeagues[v].stocks.length; k++) {
             if (allSubLeagues[v].stocks[j].sharesNum *
-                    (allSubLeagues[v].stocks[j].currentPrice ??
-                        allSubLeagues[v].stocks[j].standardPrice) <
+                    (allSubLeagues[v].stocks[j].currentPrice ?? allSubLeagues[v].stocks[j].standardPrice) <
                 allSubLeagues[v].stocks[k].sharesNum *
-                    (allSubLeagues[v].stocks[k].currentPrice ??
-                        allSubLeagues[v].stocks[k].standardPrice)) {
+                    (allSubLeagues[v].stocks[k].currentPrice ?? allSubLeagues[v].stocks[k].standardPrice)) {
               tempSubLeagueStockModel = allSubLeagues[v].stocks[j];
               allSubLeagues[v].stocks[j] = allSubLeagues[v].stocks[k];
               allSubLeagues[v].stocks[k] = tempSubLeagueStockModel;
@@ -112,9 +105,7 @@ class AwardViewModel extends GetxController {
         // UI를 위한 모델을 채워준다.
         if (allSubLeagues[v].stocks.length == 1) {
           Size portionTxtSize = textSizeGet('100%', subLeagueAwardPortionStyle);
-          Size stockNameTxtSize = textSizeGet(
-              '${allSubLeagues[v].stocks[0].name}',
-              subLeagueAwardStockNameStyle);
+          Size stockNameTxtSize = textSizeGet('${allSubLeagues[v].stocks[0].name}', subLeagueAwardStockNameStyle);
 
           subLeaguePortfolioUIModels[v].add(SubLeaguePortfolioUIModel(
             legendVisible: true,
@@ -122,27 +113,20 @@ class AwardViewModel extends GetxController {
             startPercentage: 0,
             endPercentage: 100,
             portionOffsetFromCenter: Offset(
-                portfolioArcRadius / 2 - portionTxtSize.width / 2,
-                portfolioArcRadius / 2 - portionTxtSize.height),
-            stockNameOffsetFromCenter: Offset(
-                portfolioArcRadius / 2 - stockNameTxtSize.width / 2,
-                portfolioArcRadius / 2),
+                portfolioArcRadius / 2 - portionTxtSize.width / 2, portfolioArcRadius / 2 - portionTxtSize.height),
+            stockNameOffsetFromCenter:
+                Offset(portfolioArcRadius / 2 - stockNameTxtSize.width / 2, portfolioArcRadius / 2),
           ));
         } else {
           for (int j = 0; j < allSubLeagues[v].stocks.length; j++) {
-            double portion = ((allSubLeagues[v].stocks[j].currentPrice ??
-                        allSubLeagues[v].stocks[j].standardPrice) *
+            double portion = ((allSubLeagues[v].stocks[j].currentPrice ?? allSubLeagues[v].stocks[j].standardPrice) *
                     allSubLeagues[v].stocks[j].sharesNum) /
                 totalCurrentValue[v];
             double nextAccumPercentage = accumPercentage + portion;
             int portionInt = (portion * 100).round();
-            Size portionTxtSize =
-                textSizeGet('$portionInt%', subLeagueAwardPortionStyle);
-            Size stockNameTxtSize = textSizeGet(
-                '${allSubLeagues[v].stocks[j].name}',
-                subLeagueAwardStockNameStyle);
-            bool legendVisible =
-                portion >= legendVisiblePercentage ? true : false;
+            Size portionTxtSize = textSizeGet('$portionInt%', subLeagueAwardPortionStyle);
+            Size stockNameTxtSize = textSizeGet('${allSubLeagues[v].stocks[j].name}', subLeagueAwardStockNameStyle);
+            bool legendVisible = portion >= legendVisiblePercentage ? true : false;
 
             //
             subLeaguePortfolioUIModels[v].add(SubLeaguePortfolioUIModel(
@@ -154,46 +138,31 @@ class AwardViewModel extends GetxController {
                   portfolioArcRadius / 2 +
                       (portfolioArcRadius / 2) *
                           0.5 *
-                          math.cos(2 *
-                                  math.pi *
-                                  ((accumPercentage + nextAccumPercentage) /
-                                      2) -
-                              math.pi / 2) -
+                          math.cos(2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) - math.pi / 2) -
                       portionTxtSize.width / 2,
                   portfolioArcRadius / 2 +
                       (portfolioArcRadius / 2) *
                           0.5 *
-                          math.sin(2 *
-                                  math.pi *
-                                  ((accumPercentage + nextAccumPercentage) /
-                                      2) -
-                              math.pi / 2) -
+                          math.sin(2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) - math.pi / 2) -
                       portionTxtSize.height),
               stockNameOffsetFromCenter: Offset(
                   portfolioArcRadius / 2 +
                               (portfolioArcRadius / 2) *
                                   0.5 *
-                                  math.cos(2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) -
-                                      math.pi / 2) -
+                                  math.cos(2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) - math.pi / 2) -
                               stockNameTxtSize.width / 2 >
                           0
                       ? portfolioArcRadius / 2 +
                                   (portfolioArcRadius / 2) *
                                       0.5 *
-                                      math.cos(2 *
-                                              math.pi *
-                                              ((accumPercentage +
-                                                      nextAccumPercentage) /
-                                                  2) -
-                                          math.pi / 2) +
+                                      math.cos(
+                                          2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) - math.pi / 2) +
                                   stockNameTxtSize.width / 2 <
                               portfolioArcRadius
                           ? portfolioArcRadius / 2 +
                               (portfolioArcRadius / 2) *
                                   0.5 *
-                                  math.cos(
-                                      2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) -
-                                          math.pi / 2) -
+                                  math.cos(2 * math.pi * ((accumPercentage + nextAccumPercentage) / 2) - math.pi / 2) -
                               stockNameTxtSize.width / 2
                           : portfolioArcRadius - stockNameTxtSize.width
                       : 0,
@@ -215,8 +184,7 @@ class AwardViewModel extends GetxController {
     double tempValue = 0.0;
 
     tempValue += allSubLeagues[i].stocks[j].sharesNum *
-        (allSubLeagues[i].stocks[j].currentPrice ??
-            allSubLeagues[i].stocks[j].standardPrice);
+        (allSubLeagues[i].stocks[j].currentPrice ?? allSubLeagues[i].stocks[j].standardPrice);
 
     return tempValue;
   }
@@ -225,16 +193,14 @@ class AwardViewModel extends GetxController {
   double getStockStandardTotalValue(int i, int j) {
     double tempValue = 0.0;
 
-    tempValue += allSubLeagues[i].stocks[j].sharesNum *
-        allSubLeagues[i].stocks[j].standardPrice;
+    tempValue += allSubLeagues[i].stocks[j].sharesNum * allSubLeagues[i].stocks[j].standardPrice;
 
     return tempValue;
   }
 
   // 페이지 이동
   void pageNavigateToRight() {
-    if (isAllSubLeaguesLoaded &&
-        pageIndexForUI.value < (allSubLeagues.length - 1)) {
+    if (isAllSubLeaguesLoaded && pageIndexForUI.value < (allSubLeagues.length - 1)) {
       pageIndexForUI++;
     }
   }
@@ -249,8 +215,7 @@ class AwardViewModel extends GetxController {
   void moreStockOrCancel(int index) {
     if (isMaxLabel[index] == labelState.NEED_MAX)
       isMaxLabel[index] = labelState.NEED_MIN;
-    else if (isMaxLabel[index] == labelState.NEED_MIN)
-      isMaxLabel[index] = labelState.NEED_MAX;
+    else if (isMaxLabel[index] == labelState.NEED_MIN) isMaxLabel[index] = labelState.NEED_MAX;
   }
 
   // color index 고르기
@@ -260,21 +225,15 @@ class AwardViewModel extends GetxController {
     //sideOrCenter => 0 or 1
     return awardColors[index < awardColors.length
         ? index
-        : (((index - awardColors.length) / (awardColors.length - 1)).floor() %
-                    2) ==
-                1
+        : (((index - awardColors.length) / (awardColors.length - 1)).floor() % 2) == 1
             ? (index -
                     awardColors.length -
-                    ((index - awardColors.length) / (awardColors.length - 1))
-                            .floor() *
-                        (awardColors.length - 1)) +
+                    ((index - awardColors.length) / (awardColors.length - 1)).floor() * (awardColors.length - 1)) +
                 1
             : (awardColors.length - 1) -
                 (index -
                     awardColors.length -
-                    ((index - awardColors.length) / (awardColors.length - 1))
-                            .floor() *
-                        (awardColors.length - 1)) -
+                    ((index - awardColors.length) / (awardColors.length - 1)).floor() * (awardColors.length - 1)) -
                 1][sideOrCenter];
   }
 

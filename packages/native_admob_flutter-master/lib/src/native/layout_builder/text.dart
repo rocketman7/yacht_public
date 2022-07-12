@@ -62,8 +62,7 @@ class AdTextView extends AdView {
   }
 
   TextStyle? _copyStylesWithin(TextStyle? a, TextStyle? b) {
-    if (a == null && b == null)
-      return TextStyle(fontSize: 14, color: Colors.white);
+    if (a == null && b == null) return TextStyle(fontSize: 14, color: Colors.white);
     if (a == null) return b;
     if (b == null) return a;
     return a.copyWith(
@@ -77,7 +76,7 @@ class AdTextView extends AdView {
   Map<String, dynamic> toJson() {
     final json = super.toJson();
     final defaultColor = () {
-      final b = WidgetsBinding.instance!.window.platformBrightness;
+      final b = WidgetsBinding.instance.window.platformBrightness;
       switch (b) {
         case Brightness.dark:
           return Colors.white;

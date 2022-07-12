@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
-import 'package:kakao_flutter_sdk/link.dart';
+import 'package:kakao_flutter_sdk_share/kakao_flutter_sdk_share.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/repositories/repository.dart';

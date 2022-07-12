@@ -3,8 +3,9 @@ import 'dart:math';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:kakao_flutter_sdk/auth.dart';
-import 'package:kakao_flutter_sdk/user.dart' as Kakao;
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_auth.dart';
+// import 'package:kakao_flutter_sdk/auth.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_user.dart' as Kakao;
 
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:http/http.dart' as http;
@@ -86,9 +87,9 @@ class KakaoFirebaseAuthApi implements BaseAuthAPI {
     final installed = await isKakaoTalkInstalled();
     final authCode =
         installed ? await AuthCodeClient.instance.requestWithTalk() : await AuthCodeClient.instance.request();
-    AccessTokenResponse token = await AuthApi.instance.issueAccessToken(authCode);
+    OAuthToken token = await AuthApi.instance.issueAccessToken(authCode: authCode);
 
-    await TokenManager.instance.setToken(token); // Store access token in AccessTokenStore for future API requests.
+    // await TokenManager.setToken(token); // Store access token in AccessTokenStore for future API requests.
     return token.accessToken;
   }
 
@@ -147,8 +148,8 @@ class KakaoFirebaseAuthApi implements BaseAuthAPI {
   }
 
   @override
-  Future<void> signOut() {
-    TokenManager.instance.clear();
+  Future<void> signOut() async {
+    await Kakao.UserApi.instance.logout();
     return Future.value("");
   }
 

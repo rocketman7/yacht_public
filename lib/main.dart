@@ -8,7 +8,8 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
-import 'package:kakao_flutter_sdk/auth.dart';
+// import 'package:kakao_flutter_sdk/auth.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_auth.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 
@@ -34,7 +35,7 @@ import 'locator.dart';
 import 'screens/auth/email_login_view.dart';
 import 'services/adManager_service.dart';
 import 'styles/size_config.dart';
-import 'package:native_admob_flutter/native_admob_flutter.dart' as NativeAds;
+// import 'package:native_admob_flutter/native_admob_flutter.dart' as NativeAds;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,8 +48,9 @@ void main() async {
   locator<AppsflyerService>().onInit();
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   await _mixpanelService.initMixpanel();
-  KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
 
+  // KakaoContext.clientId = "3134111f38ca4de5e56473f46942e27a";
+  KakaoSdk.init(nativeAppKey: "3134111f38ca4de5e56473f46942e27a");
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate();
   await MobileAds.instance.initialize();
@@ -87,10 +89,10 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement didChangeDependencies
     SizeConfig().init(context);
     ScreenUtil.init(
-        BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
-        designSize: Size(375, 812),
-        context: context,
-        orientation: Orientation.portrait);
+      // BoxConstraints(maxWidth: MediaQuery.of(context).size.width, maxHeight: MediaQuery.of(context).size.height),
+      // designSize: Size(375, 812),
+      context, designSize: Size(375, 812),
+    );
     super.didChangeDependencies();
   }
 
