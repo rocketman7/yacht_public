@@ -42,7 +42,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       profileViewModel.scrollController.addListener(() {
         // offset obs 값에 scroll controller offset 넣어주기
         profileViewModel.scrollController.offset < 0 ? offset(0) : offset(profileViewModel.scrollController.offset);

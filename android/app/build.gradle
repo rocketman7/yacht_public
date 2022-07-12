@@ -85,6 +85,7 @@ dependencies {
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.firebase-perf'
 dependencies {
   // add the Firebase SDK for Google Analytics
   implementation platform('com.google.firebase:firebase-bom:25.12.0')

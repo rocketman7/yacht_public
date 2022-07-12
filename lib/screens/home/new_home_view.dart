@@ -305,7 +305,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       await initPlugin();
 
       await Get.find<HomeViewModel>().pushNotificationService.initialise();
@@ -319,14 +319,14 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
       //  else {
       if (userModelRx.value!.isNameUpdated == null || !userModelRx.value!.isNameUpdated!) {
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           showChangeNameDialog(context);
         });
       }
       // }
 
       if (!iosTermAgree) {
-        WidgetsBinding.instance!.addPostFrameCallback((_) async {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
           termsOfUse = await rootBundle.loadString('assets/documents/termsOfUse.txt');
           privacyPolicy = await rootBundle.loadString('assets/documents/privacyPolicy.txt');
           await showTermDialog(context, widget.homeViewModel);
@@ -643,7 +643,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
                                         // if (userModelRx.value!.isNameUpdated == null ||
                                         //     !userModelRx.value!.isNameUpdated!) {
-                                        //   WidgetsBinding.instance!.addPostFrameCallback((_) {
+                                        //   WidgetsBinding.instance.addPostFrameCallback((_) {
                                         //     showChangeNameDialog(context);
                                         //   });
                                         // }

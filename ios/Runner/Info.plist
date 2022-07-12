@@ -120,5 +120,7 @@
 	<string>V3KbK1zCVVUVPnLNqpritmYWEfVXe2m0</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<string>YES</string>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 </dict>
 </plist>

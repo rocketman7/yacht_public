@@ -21,7 +21,7 @@ class InsightView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       insightViewModel.scrollController.addListener(() {
         // offset obs 값에 scroll controller offset 넣어주기
         insightViewModel.scrollController.offset < 0 ? offset(0) : offset(insightViewModel.scrollController.offset);

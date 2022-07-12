@@ -18,7 +18,7 @@ class ReadingContentSeeAll extends GetView<ReadingContentViewModel> {
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.scrollController.addListener(() {
         // offset obs 값에 scroll controller offset 넣어주기
         controller.scrollController.offset < 0 ? offset(0) : offset(controller.scrollController.offset);
