@@ -40,6 +40,9 @@ class QuestViewModel extends GetxController {
 
   // 예측 최종 확정 중일 때 true로
   RxBool isSelectingSheetShowing = false.obs;
+
+  // 예측 확정 작업 중
+  RxBool isSelectingWorking = false.obs;
   // init(QuestModel model) {
   //   questModel = model;
   //   // update();
@@ -187,6 +190,7 @@ class QuestViewModel extends GetxController {
 
   // userQuest에 user가 선택한 정답 업데이트하는 함수
   Future updateUserQuest() async {
+    print('updating');
     // 조가비 체크
 
     // [2], [2,3], 이런식으로 넣게 됨.
