@@ -94,7 +94,7 @@ class _EmailVerificationWaitingViewState extends State<EmailVerificationWaitingV
                       fontFamily: 'Default',
                       fontSize: 16.w,
                       // fontWeight: FontWeight.w600,
-                      color: yachtDarkGrey,
+                      color: yachtLightGrey,
                       height: 1.4,
                     ),
                   ),

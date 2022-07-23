@@ -248,9 +248,9 @@ class YachtPick extends StatelessWidget {
                 // height: 40.w,
                 // width: 20.w,
                 // color: Colors.red,
-                decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(50.w)),
+                decoration: BoxDecoration(color: yachtGrey, borderRadius: BorderRadius.circular(50.w)),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 8.w, right: 8.w, top: 10.w, bottom: 10.w),
+                  padding: EdgeInsets.only(left: 14.w, right: 14.w, top: 8.w, bottom: 8.w),
                   child: Text(
                     "지난 요트 Pick",
                     style: TextStyle(
