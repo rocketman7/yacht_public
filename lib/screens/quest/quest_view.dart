@@ -219,12 +219,12 @@ class QuestView extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () async {
                     // print(questViewModel.checkIfUserSelectedAny());
+                    // 아래 팝업 창 안 열린 상태 -> 열도록
                     if (questViewModel.isSelectingSheetShowing.value == false) {
                       questViewModel.isSelectingSheetShowing(true);
                       questViewModel.syncUserSelect();
                     } else {
-                      // DateTime.now().isAfter(other)
-
+                      // 아래 팝업 창 열린 상태
                       if (!questViewModel.checkIfUserSelectedAny() && questModel.selectMode != "order") {
                         yachtSnackBarFromBottom(
                           "선택을 완료한 후 확정할 수 있습니다.",
@@ -241,21 +241,25 @@ class QuestView extends StatelessWidget {
                           longerDuration: 2000,
                         );
                       } else {
-                        await questViewModel.updateUserQuest();
-                        _mixpanelService.mixpanel.track('Quest Participate', properties: {
-                          'Participate Quest ID': questModel.questId,
-                          'Participate League ID': questModel.leagueId,
-                          'Participate Quest Title': questModel.title,
-                          'Participate Quest Category': questModel.category,
-                          'Participate Quest Select Mode': questModel.selectMode,
-                          'Participate Quest Item Used': questModel.itemNeeded,
-                          'Participate Quest Yacht Point Success Reward': questModel.yachtPointSuccessReward,
-                          'Participate Quest League Point Success Reward': questModel.leaguePointSuccessReward,
-                        });
-                        Future.delayed(Duration(milliseconds: 600)).then((_) {
-                          questViewModel.isSelectingSheetShowing(false);
-                        });
-                        yachtSnackBarFromBottom("저장되었습니다.");
+                        if (!questViewModel.isSelectingWorking.value) {
+                          questViewModel.isSelectingWorking(true);
+                          await questViewModel.updateUserQuest();
+                          _mixpanelService.mixpanel.track('Quest Participate', properties: {
+                            'Participate Quest ID': questModel.questId,
+                            'Participate League ID': questModel.leagueId,
+                            'Participate Quest Title': questModel.title,
+                            'Participate Quest Category': questModel.category,
+                            'Participate Quest Select Mode': questModel.selectMode,
+                            'Participate Quest Item Used': questModel.itemNeeded,
+                            'Participate Quest Yacht Point Success Reward': questModel.yachtPointSuccessReward,
+                            'Participate Quest League Point Success Reward': questModel.leaguePointSuccessReward,
+                          });
+                          Future.delayed(Duration(milliseconds: 600)).then((_) {
+                            questViewModel.isSelectingSheetShowing(false);
+                            questViewModel.isSelectingWorking(false);
+                          });
+                          yachtSnackBarFromBottom("저장되었습니다.");
+                        }
                       }
                     }
                   },
@@ -263,23 +267,27 @@ class QuestView extends StatelessWidget {
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
                       child: Container(
-                        height: 55.w,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.w),
-                          color: yachtViolet.withOpacity(.8),
-                        ),
-                        child: Center(
-                            child: Text(
-                          questViewModel.isSelectingSheetShowing.value
-                              ? "예측 확정하기"
-                              : (questViewModel.thisUserQuestModel.value == null ||
-                                      questViewModel.thisUserQuestModel.value!.selectDateTime == null)
-                                  ? "예측하기"
-                                  : "예측 변경하기",
-                          style: buttonTextStyle.copyWith(fontSize: 20.w),
-                        )),
-                      ),
+                          height: 55.w,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.w),
+                            color: yachtViolet.withOpacity(.8),
+                          ),
+                          child: Center(
+                            child: questViewModel.isSelectingWorking.value
+                                ? CircularProgressIndicator(
+                                    color: white,
+                                  )
+                                : Obx(() => Text(
+                                      questViewModel.isSelectingSheetShowing.value
+                                          ? "예측 확정하기"
+                                          : (questViewModel.thisUserQuestModel.value == null ||
+                                                  questViewModel.thisUserQuestModel.value!.selectDateTime == null)
+                                              ? "예측하기"
+                                              : "예측 변경하기",
+                                      style: buttonTextStyle.copyWith(fontSize: 20.w),
+                                    )),
+                          )),
                     ),
                   ),
                 )),
@@ -449,17 +457,16 @@ class QuestView extends StatelessWidget {
                                       children: [
                                         Align(
                                           alignment: Alignment.centerRight,
-                                          child: Obx(
-                                            () => Container(
-                                                width: 38.w,
-                                                height: 38.w,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: yachtGrey,
-                                                ),
-                                                child: questViewModel.logoImage.length > 0
-                                                    ? questViewModel.logoImage[index]
-                                                    : Container()),
+                                          child: Container(
+                                            width: 38.w,
+                                            height: 38.w,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: yachtGrey,
+                                            ),
+                                            child: Obx(() => questViewModel.logoImage.length > 0
+                                                ? questViewModel.logoImage[index]
+                                                : Container()),
                                           ),
                                         ),
                                         Text(
@@ -513,7 +520,7 @@ class QuestView extends StatelessWidget {
                                   InkWell(
                                     onTap: () {
                                       questViewModel.toggleUserSelect(index);
-                                      print('$index is change to ${questViewModel.toggleList}');
+                                      // print('$index is change to ${questViewModel.toggleList}');
                                       HapticFeedback.lightImpact();
                                     },
                                     child: AnimatedContainer(
