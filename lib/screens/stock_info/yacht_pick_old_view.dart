@@ -24,23 +24,27 @@ class YachtPickOldController extends GetxController {
   FirestoreService _firestoreService = locator<FirestoreService>();
 
   bool isModelLoaded = false;
+  bool isPriceLoaded = false;
 
   List<num> currentClosePrices = <num>[]; // 가장 가까운 영업일의 cycle D 히스토리컬 프라이스 종가
   List<num> previousClosePrices = <num>[]; // 그 전 영업일의 cycle D 히스토리컬 프라이스 종가
-  List<num> yachtPickClosePrices = <num>[]; // 요트픽한 가장 가까운 전 영업일 cycle D 히스토리컬 프라이스 종가
+  List<num> yachtPickClosePrices =
+      <num>[]; // 요트픽한 가장 가까운 전 영업일 cycle D 히스토리컬 프라이스 종가
 
   @override
   void onInit() async {
     stockInfoNewModels = await _firestoreService.getOldYachtPicks();
-
-    currentClosePrices = List.generate(stockInfoNewModels!.length, (index) => 0);
-    previousClosePrices = List.generate(stockInfoNewModels!.length, (index) => 0);
-    yachtPickClosePrices = List.generate(stockInfoNewModels!.length, (index) => 0);
-
-    await getPrices();
-
     isModelLoaded = true;
+    update();
 
+    currentClosePrices =
+        List.generate(stockInfoNewModels!.length, (index) => 0);
+    previousClosePrices =
+        List.generate(stockInfoNewModels!.length, (index) => 0);
+    yachtPickClosePrices =
+        List.generate(stockInfoNewModels!.length, (index) => 0);
+    await getPrices();
+    isPriceLoaded = true;
     update();
 
     super.onInit();
@@ -97,14 +101,19 @@ class YachtPickOldView extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          _mixpanelService.mixpanel.track('Old Yacht Pick Detail',
-                              properties: {'Stock Name': controller.stockInfoNewModels![index].name});
+                          _mixpanelService.mixpanel
+                              .track('Old Yacht Pick Detail', properties: {
+                            'Stock Name':
+                                controller.stockInfoNewModels![index].name
+                          });
                           Get.to(() => StockInfoNewView(
-                                stockInfoNewModel: controller.stockInfoNewModels![index],
+                                stockInfoNewModel:
+                                    controller.stockInfoNewModels![index],
                               ));
                         },
                         child: Padding(
-                          padding: EdgeInsets.only(left: 14.w, right: 14.w, bottom: 14.w),
+                          padding: EdgeInsets.only(
+                              left: 14.w, right: 14.w, bottom: 14.w),
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12.w),
@@ -115,127 +124,238 @@ class YachtPickOldView extends StatelessWidget {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 75.w,
-                                      width: 75.w,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white,
-                                      ),
-                                      clipBehavior: Clip.hardEdge,
-                                      child: CachedNetworkImage(
-                                          imageUrl: 'https://storage.googleapis.com/ggook-5fb08.appspot.com/' +
-                                              controller.stockInfoNewModels![index].logoUrl),
-                                    ),
-                                    SizedBox(
-                                      width: 10.w,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                  Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          controller.stockInfoNewModels![index].name,
-                                          style: TextStyle(
-                                              fontFamily: krFont,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 16.w,
-                                              letterSpacing: 0.0,
-                                              height: 1.0,
-                                              color: Colors.white),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: 75.w,
+                                          width: 75.w,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                          ),
+                                          clipBehavior: Clip.hardEdge,
+                                          child: CachedNetworkImage(
+                                              imageUrl:
+                                                  'https://storage.googleapis.com/ggook-5fb08.appspot.com/' +
+                                                      controller
+                                                          .stockInfoNewModels![
+                                                              index]
+                                                          .logoUrl),
                                         ),
                                         SizedBox(
-                                          height: 4.w,
+                                          width: 10.w,
                                         ),
-                                        Text(
-                                          toPriceKRW(controller.currentClosePrices[index]),
-                                          // '36,200',
-                                          style: TextStyle(
-                                              fontFamily: krFont,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 16.w,
-                                              letterSpacing: 0.0,
-                                              height: 1.0,
-                                              color: Colors.white),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              controller
+                                                  .stockInfoNewModels![index]
+                                                  .name,
+                                              style: TextStyle(
+                                                  fontFamily: krFont,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 16.w,
+                                                  letterSpacing: 0.0,
+                                                  height: 1.0,
+                                                  color: Colors.white),
+                                            ),
+                                            SizedBox(
+                                              height: 4.w,
+                                            ),
+                                            GetBuilder<YachtPickOldController>(
+                                              builder: (ctlr) {
+                                                return ctlr.isPriceLoaded
+                                                    ? Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            toPriceKRW(controller
+                                                                    .currentClosePrices[
+                                                                index]),
+                                                            // '36,200',
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    krFont,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                fontSize: 16.w,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                height: 1.0,
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 2.w,
+                                                          ),
+                                                          Text(
+                                                            // '+1,240(+0.51%)',
+                                                            toPriceKRW(controller
+                                                                            .currentClosePrices[
+                                                                        index] -
+                                                                    controller
+                                                                            .previousClosePrices[
+                                                                        index]) +
+                                                                '(' +
+                                                                toPercentageChange(
+                                                                    controller.currentClosePrices[index] /
+                                                                            controller.previousClosePrices[index] -
+                                                                        1) +
+                                                                ')',
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    krFont,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                fontSize: 12.w,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                height: 1.0,
+                                                                color: controller.currentClosePrices[index] -
+                                                                            controller.previousClosePrices[
+                                                                                index] >
+                                                                        0
+                                                                    ? yachtRed
+                                                                    : controller.currentClosePrices[index] -
+                                                                                controller.previousClosePrices[index] ==
+                                                                            0
+                                                                        ? white
+                                                                        : yachtBlue),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    : Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            '0',
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    krFont,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                fontSize: 16.w,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                height: 1.0,
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 2.w,
+                                                          ),
+                                                          Text(
+                                                            '+0(+0.00%)',
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    krFont,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                fontSize: 12.w,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                height: 1.0,
+                                                                color: white),
+                                                          ),
+                                                        ],
+                                                      );
+                                              },
+                                            ),
+                                            SizedBox(
+                                              height: 9.w,
+                                            ),
+                                            Text(
+                                              '요트픽 ' +
+                                                  timeStampToShortShortString(
+                                                      controller
+                                                          .stockInfoNewModels![
+                                                              index]
+                                                          .updateTime) +
+                                                  ' 대비',
+                                              style: TextStyle(
+                                                  fontFamily: krFont,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 12.w,
+                                                  letterSpacing: 0.0,
+                                                  height: 1.0,
+                                                  color: yachtLightGrey),
+                                            ),
+                                            SizedBox(
+                                              height: 2.w,
+                                            ),
+                                            GetBuilder<YachtPickOldController>(
+                                                builder: (ctlr) {
+                                              return ctlr.isPriceLoaded
+                                                  ? Text(
+                                                      toPriceKRW(controller
+                                                                      .currentClosePrices[
+                                                                  index] -
+                                                              controller
+                                                                      .yachtPickClosePrices[
+                                                                  index]) +
+                                                          '(' +
+                                                          toPercentageChange(
+                                                              controller.currentClosePrices[
+                                                                          index] /
+                                                                      controller
+                                                                              .yachtPickClosePrices[
+                                                                          index] -
+                                                                  1) +
+                                                          ')',
+                                                      style: TextStyle(
+                                                          fontFamily: krFont,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12.w,
+                                                          letterSpacing: 0.0,
+                                                          height: 1.0,
+                                                          color: controller.currentClosePrices[
+                                                                          index] -
+                                                                      controller
+                                                                              .yachtPickClosePrices[
+                                                                          index] >
+                                                                  0
+                                                              ? yachtRed
+                                                              : controller.currentClosePrices[
+                                                                              index] -
+                                                                          controller
+                                                                              .yachtPickClosePrices[index] ==
+                                                                      0
+                                                                  ? white
+                                                                  : yachtBlue),
+                                                    )
+                                                  : Text(
+                                                      '+0',
+                                                      style: TextStyle(
+                                                          fontFamily: krFont,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          fontSize: 12.w,
+                                                          letterSpacing: 0.0,
+                                                          height: 1.0,
+                                                          color: white),
+                                                    );
+                                            }),
+                                          ],
                                         ),
-                                        SizedBox(
-                                          height: 2.w,
-                                        ),
-                                        Text(
-                                          // '+1,240(+0.51%)',
-                                          toPriceKRW(controller.currentClosePrices[index] -
-                                                  controller.previousClosePrices[index]) +
-                                              '(' +
-                                              toPercentageChange(controller.currentClosePrices[index] /
-                                                      controller.previousClosePrices[index] -
-                                                  1) +
-                                              ')',
-                                          style: TextStyle(
-                                              fontFamily: krFont,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12.w,
-                                              letterSpacing: 0.0,
-                                              height: 1.0,
-                                              color: controller.currentClosePrices[index] -
-                                                          controller.previousClosePrices[index] >
-                                                      0
-                                                  ? yachtRed
-                                                  : controller.currentClosePrices[index] -
-                                                              controller.previousClosePrices[index] ==
-                                                          0
-                                                      ? white
-                                                      : yachtBlue),
-                                        ),
-                                        SizedBox(
-                                          height: 9.w,
-                                        ),
-                                        Text(
-                                          '요트픽 ' +
-                                              timeStampToShortShortString(
-                                                  controller.stockInfoNewModels![index].updateTime) +
-                                              ' 대비',
-                                          style: TextStyle(
-                                              fontFamily: krFont,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12.w,
-                                              letterSpacing: 0.0,
-                                              height: 1.0,
-                                              color: yachtLightGrey),
-                                        ),
-                                        SizedBox(
-                                          height: 2.w,
-                                        ),
-                                        Text(
-                                          toPriceKRW(controller.currentClosePrices[index] -
-                                                  controller.yachtPickClosePrices[index]) +
-                                              '(' +
-                                              toPercentageChange(controller.currentClosePrices[index] /
-                                                      controller.yachtPickClosePrices[index] -
-                                                  1) +
-                                              ')',
-                                          style: TextStyle(
-                                              fontFamily: krFont,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 12.w,
-                                              letterSpacing: 0.0,
-                                              height: 1.0,
-                                              color: controller.currentClosePrices[index] -
-                                                          controller.yachtPickClosePrices[index] >
-                                                      0
-                                                  ? yachtRed
-                                                  : controller.currentClosePrices[index] -
-                                                              controller.yachtPickClosePrices[index] ==
-                                                          0
-                                                      ? white
-                                                      : yachtBlue),
-                                        ),
-                                      ],
-                                    ),
-                                  ]),
+                                      ]),
                                   Spacer(),
                                   Text(
-                                    timeStampToShortString(controller.stockInfoNewModels![index].updateTime),
+                                    timeStampToShortString(controller
+                                        .stockInfoNewModels![index].updateTime),
                                     style: TextStyle(
                                         fontFamily: krFont,
                                         fontWeight: FontWeight.w400,

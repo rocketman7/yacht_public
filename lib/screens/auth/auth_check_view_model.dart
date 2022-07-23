@@ -31,7 +31,8 @@ class AuthCheckViewModel extends GetxController {
   User? user;
 
   String app_store_url = "";
-  String play_store_url = "https://play.google.com/store/apps/details?id=com.team_yacht.ggook";
+  String play_store_url =
+      "https://play.google.com/store/apps/details?id=com.team_yacht.ggook";
   bool isUrgentNotice = false;
   String urgentMessage = "";
   RxBool isGettingUser = true.obs;
@@ -173,7 +174,8 @@ class AuthCheckViewModel extends GetxController {
 
   authCheck() async {
     String uid = authService.auth.currentUser!.uid;
-    bool isUserModelExists = await _firestoreService.checkIfUserDocumentExists(uid);
+    bool isUserModelExists =
+        await _firestoreService.checkIfUserDocumentExists(uid);
     if (!isUserModelExists) {
       authService.auth.signOut();
       // authService.auth.currentUser!.delete();
@@ -192,9 +194,13 @@ class AuthCheckViewModel extends GetxController {
     ));
     // print(info.version.trim().replaceAll(".", ""));
 
-    double currentVersion = double.parse(info.version.trim().replaceAll(".", ""));
+    double currentVersion =
+        double.parse(info.version.trim().replaceAll(".", ""));
     // print(currentVersion);
-    double newVersion = double.parse(remoteConfig.getString('force_update_current_version').trim().replaceAll(".", ""));
+    double newVersion = double.parse(remoteConfig
+        .getString('force_update_current_version')
+        .trim()
+        .replaceAll(".", ""));
     // print("CURRENT VERSION IS " + currentVersion.toString());
     // print("newVersion VERSION IS " + newVersion.toString());
 
@@ -210,7 +216,8 @@ class AuthCheckViewModel extends GetxController {
             backgroundColor: primaryBackgroundColor,
             insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
             clipBehavior: Clip.hardEdge,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -221,10 +228,14 @@ class AuthCheckViewModel extends GetxController {
                   child: Column(
                     children: [
                       SizedBox(height: 14.w),
-                      Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
+                      Text('알림',
+                          style:
+                              yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
                       SizedBox(
                         height: correctHeight(
-                            20.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
+                            20.w,
+                            yachtBadgesDialogTitle.fontSize,
+                            yachtBadgesDescriptionDialogTitle.fontSize),
                       ),
                       Center(
                         child: Text(
@@ -234,12 +245,15 @@ class AuthCheckViewModel extends GetxController {
                         ),
                       ),
                       SizedBox(
-                        height: correctHeight(20.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                        height: correctHeight(20.w,
+                            yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                       ),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
-                          Platform.isIOS ? _launchURL(app_store_url) : _launchURL(play_store_url);
+                          Platform.isIOS
+                              ? _launchURL(app_store_url)
+                              : _launchURL(play_store_url);
                         },
                         child: Container(
                           height: 44.w,
@@ -274,7 +288,8 @@ class AuthCheckViewModel extends GetxController {
             backgroundColor: primaryBackgroundColor,
             insetPadding: EdgeInsets.only(left: 14.w, right: 14.w),
             clipBehavior: Clip.hardEdge,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -285,10 +300,14 @@ class AuthCheckViewModel extends GetxController {
                   child: Column(
                     children: [
                       SizedBox(height: 14.w),
-                      Text('알림', style: yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
+                      Text('알림',
+                          style:
+                              yachtBadgesDialogTitle.copyWith(fontSize: 16.w)),
                       SizedBox(
                         height: correctHeight(
-                            20.w, yachtBadgesDialogTitle.fontSize, yachtBadgesDescriptionDialogTitle.fontSize),
+                            20.w,
+                            yachtBadgesDialogTitle.fontSize,
+                            yachtBadgesDescriptionDialogTitle.fontSize),
                       ),
                       Center(
                         child: Text(
@@ -298,7 +317,8 @@ class AuthCheckViewModel extends GetxController {
                         ),
                       ),
                       SizedBox(
-                        height: correctHeight(20.w, yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
+                        height: correctHeight(20.w,
+                            yachtBadgesDescriptionDialogTitle.fontSize, 0.w),
                       ),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,

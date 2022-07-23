@@ -39,8 +39,10 @@ class TempMainController extends GetxController {
   void onInit() async {
     // stockInfoNewModels = await _firestoreService.getAllYachtPicks();
     stockInfoNewModels = await _firestoreService.getYachtPicks();
-    todayCurrentPrices = List.generate(stockInfoNewModels.length, (index) => RxNum(0)).obs;
-    yesterdayClosePrices = List.generate(stockInfoNewModels.length, (index) => 0).obs;
+    todayCurrentPrices =
+        List.generate(stockInfoNewModels.length, (index) => RxNum(0)).obs;
+    yesterdayClosePrices =
+        List.generate(stockInfoNewModels.length, (index) => 0).obs;
 
     isModelLoaded = true;
 
@@ -81,7 +83,8 @@ class TempMainController extends GetxController {
 
 class YachtPickView extends StatelessWidget {
   final MixpanelService _mixpanelService = locator<MixpanelService>();
-  final double cardWholeHeight = 330.w; // card widget 을 수정해주는 경우에는 왼쪽 수치들도 수정해야함.
+  final double cardWholeHeight =
+      330.w; // card widget 을 수정해주는 경우에는 왼쪽 수치들도 수정해야함.
   final double cardWholeWidth = 210.w;
 
   @override
@@ -104,7 +107,8 @@ class YachtPickView extends StatelessWidget {
                                 return YachtPickCardForCarousel(
                                   cardWholeHeight: cardWholeHeight,
                                   cardWholeWidth: cardWholeWidth,
-                                  stockInfoNewModel: controller.stockInfoNewModels[index],
+                                  stockInfoNewModel:
+                                      controller.stockInfoNewModels[index],
                                   index: index,
                                 );
                               },
@@ -112,9 +116,12 @@ class YachtPickView extends StatelessWidget {
                                 initialPage: 0,
                                 enableInfiniteScroll: false,
                                 enlargeCenterPage: true,
-                                disableCenter: controller.stockInfoNewModels.length != 1 ? true : false,
-                                aspectRatio:
-                                    ScreenUtil().screenWidth / cardWholeHeight, // 스크린 width를 캐로셀 개별위젯의 높이로 나눠주면 됨
+                                disableCenter:
+                                    controller.stockInfoNewModels.length != 1
+                                        ? true
+                                        : false,
+                                aspectRatio: ScreenUtil().screenWidth /
+                                    cardWholeHeight, // 스크린 width를 캐로셀 개별위젯의 높이로 나눠주면 됨
                                 viewportFraction: (cardWholeWidth + 10.w) /
                                     ScreenUtil().screenWidth *
                                     1.1, // 캐로셀 개별위젯의 너비를 스크린 width로 나눠주고 원하는 비율을 곱해주면 됨. 단, enlargeCneterPage true와 함께 쓸 때는 내가 생각했던 비율보다 좀 작게 해줘야함
@@ -152,7 +159,7 @@ class YachtPickCardForCarousel extends StatelessWidget {
     return Container(
       height: cardWholeHeight,
       width: cardWholeWidth + 10.w,
-      // color: Colors.grey,
+      // color: index % 2 == 0 ? Colors.amber : Colors.greenAccent,
       child: Center(
           child: Column(children: [
         SizedBox(
@@ -161,8 +168,8 @@ class YachtPickCardForCarousel extends StatelessWidget {
         GestureDetector(
           onTap: () {
             if (stockInfoNewModel.isTobeContinue) {
-              _mixpanelService.mixpanel
-                  .track('Yacht Pick Not Open Yet', properties: {'Stock Name': stockInfoNewModel.name});
+              _mixpanelService.mixpanel.track('Yacht Pick Not Open Yet',
+                  properties: {'Stock Name': stockInfoNewModel.name});
               HapticFeedback.lightImpact();
               showDialog(
                   context: context,
@@ -186,13 +193,18 @@ class YachtPickCardForCarousel extends StatelessWidget {
                                 height: 12.w,
                               ),
                               FutureBuilder<String>(
-                                  future: tempMainController.getTobeContinueDescription(),
+                                  future: tempMainController
+                                      .getTobeContinueDescription(),
                                   builder: (_, snapshot) {
                                     return snapshot.hasData
                                         ? Text(
-                                            '${snapshot.data!}'.replaceAll('\\n', '\n'),
+                                            '${snapshot.data!}'
+                                                .replaceAll('\\n', '\n'),
                                             style: TextStyle(
-                                                color: white, fontSize: 16.w, fontWeight: FontWeight.w400, height: 1.4),
+                                                color: white,
+                                                fontSize: 16.w,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.4),
                                           )
                                         : Text("");
                                   })
@@ -203,144 +215,170 @@ class YachtPickCardForCarousel extends StatelessWidget {
                     );
                   });
             } else {
-              _mixpanelService.mixpanel.track('Yacht Pick Detail', properties: {'Stock Name': stockInfoNewModel.name});
+              _mixpanelService.mixpanel.track('Yacht Pick Detail',
+                  properties: {'Stock Name': stockInfoNewModel.name});
               Get.to(() => StockInfoNewView(
                     stockInfoNewModel: stockInfoNewModel,
                   ));
             }
           },
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: cardWholeWidth + 10.w,
-                    width: cardWholeWidth + 10.w,
-                    // color: yachtRed,
-                    child: Center(
-                        child: Container(
-                      height: cardWholeWidth,
-                      width: cardWholeWidth,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      clipBehavior: Clip.hardEdge,
-                      child: CachedNetworkImage(
-                          imageUrl:
-                              'https://storage.googleapis.com/ggook-5fb08.appspot.com/' + stockInfoNewModel.logoUrl),
-                    )),
-                  ),
-                  SizedBox(
-                    height: 5.w,
-                  ),
-                  Text(
-                    stockInfoNewModel.name,
-                    style: TextStyle(
-                        fontFamily: krFont, fontSize: 24.w, letterSpacing: 0.0, height: 1.0, color: Colors.white),
-                  ),
-                  SizedBox(
-                    height: 4.w,
-                  ),
-                  Obx(
-                    () => Text(
-                      toPriceKRW(tempMainController.todayCurrentPrices[index].value),
+          child: Container(
+            // color: Colors.grey.withOpacity(0.5),
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: cardWholeWidth + 10.w,
+                      width: cardWholeWidth + 10.w,
+                      // color: yachtRed,
+                      child: Center(
+                          child: Container(
+                        height: cardWholeWidth,
+                        width: cardWholeWidth,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: CachedNetworkImage(
+                            imageUrl:
+                                'https://storage.googleapis.com/ggook-5fb08.appspot.com/' +
+                                    stockInfoNewModel.logoUrl),
+                      )),
+                    ),
+                    SizedBox(
+                      height: 5.w,
+                    ),
+                    Text(
+                      stockInfoNewModel.name,
                       style: TextStyle(
                           fontFamily: krFont,
-                          fontWeight: FontWeight.w700,
                           fontSize: 24.w,
                           letterSpacing: 0.0,
                           height: 1.0,
                           color: Colors.white),
                     ),
-                  ),
-                  SizedBox(
-                    height: 2.w,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Obx(
-                        () => Text(
-                          toPriceKRW(tempMainController.todayCurrentPrices[index].value -
-                              tempMainController.yesterdayClosePrices[index]),
-                          style: stockPriceTextStyle.copyWith(
-                              fontSize: 14.w,
-                              height: 1.0,
-                              color: tempMainController.todayCurrentPrices[index].value -
-                                          tempMainController.yesterdayClosePrices[index] >
-                                      0
-                                  ? yachtRed
-                                  : tempMainController.todayCurrentPrices[index].value ==
-                                          tempMainController.yesterdayClosePrices[index]
-                                      ? white
-                                      : yachtBlue),
-                        ),
+                    SizedBox(
+                      height: 4.w,
+                    ),
+                    Obx(
+                      () => Text(
+                        toPriceKRW(
+                            tempMainController.todayCurrentPrices[index].value),
+                        style: TextStyle(
+                            fontFamily: krFont,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 24.w,
+                            letterSpacing: 0.0,
+                            height: 1.0,
+                            color: Colors.white),
                       ),
-                      SizedBox(width: 2.w),
-                      Obx(
-                        () => Text(
-                          '(${toPercentageChange((tempMainController.todayCurrentPrices[index].value / tempMainController.yesterdayClosePrices[index]) - 1)})',
-                          style: stockPriceTextStyle.copyWith(
-                              fontSize: 14.w,
-                              height: 1.0,
-                              color: tempMainController.todayCurrentPrices[index].value -
-                                          tempMainController.yesterdayClosePrices[index] >
-                                      0
-                                  ? yachtRed
-                                  : tempMainController.todayCurrentPrices[index].value ==
-                                          tempMainController.yesterdayClosePrices[index]
-                                      ? white
-                                      : yachtBlue),
+                    ),
+                    SizedBox(
+                      height: 2.w,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Obx(
+                          () => Text(
+                            toPriceKRW(tempMainController
+                                    .todayCurrentPrices[index].value -
+                                tempMainController.yesterdayClosePrices[index]),
+                            style: stockPriceTextStyle.copyWith(
+                                fontSize: 14.w,
+                                height: 1.0,
+                                color: tempMainController
+                                                .todayCurrentPrices[index]
+                                                .value -
+                                            tempMainController
+                                                .yesterdayClosePrices[index] >
+                                        0
+                                    ? yachtRed
+                                    : tempMainController
+                                                .todayCurrentPrices[index]
+                                                .value ==
+                                            tempMainController
+                                                .yesterdayClosePrices[index]
+                                        ? white
+                                        : yachtBlue),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.w,
-                  ),
-                ],
-              ),
-              stockInfoNewModel.isTobeContinue
-                  ? Container(
-                      height: cardWholeHeight - 15.w,
-                      width: cardWholeWidth + 10.w,
-                      color: yachtBlack.withOpacity(0.85),
-                    )
-                  : Container(),
-              stockInfoNewModel.isTobeContinue
-                  ? Positioned(
-                      width: cardWholeWidth,
-                      height: cardWholeWidth,
-                      top: 20.w -
-                          textSizeGet(
-                                      '공개 예정',
-                                      TextStyle(
-                                          fontFamily: krFont,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 24.w,
-                                          letterSpacing: 0.0,
-                                          height: 1.0,
-                                          color: Colors.white))
-                                  .height /
-                              2,
-                      left: 5.w,
-                      child: Center(
-                        child: Text(
-                          '공개 예정',
-                          style: TextStyle(
-                              fontFamily: krFont,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 24.w,
-                              letterSpacing: 0.0,
-                              height: 1.0,
-                              color: Colors.white),
+                        SizedBox(width: 2.w),
+                        Obx(
+                          () => Text(
+                            '(${toPercentageChange((tempMainController.todayCurrentPrices[index].value / tempMainController.yesterdayClosePrices[index]) - 1)})',
+                            style: stockPriceTextStyle.copyWith(
+                                fontSize: 14.w,
+                                height: 1.0,
+                                color: tempMainController
+                                                .todayCurrentPrices[index]
+                                                .value -
+                                            tempMainController
+                                                .yesterdayClosePrices[index] >
+                                        0
+                                    ? yachtRed
+                                    : tempMainController
+                                                .todayCurrentPrices[index]
+                                                .value ==
+                                            tempMainController
+                                                .yesterdayClosePrices[index]
+                                        ? white
+                                        : yachtBlue),
+                          ),
                         ),
-                      ),
-                    )
-                  : Container(),
-            ],
+                      ],
+                    ),
+                    SizedBox(
+                      height: 22.w,
+                    ),
+                  ],
+                ),
+                stockInfoNewModel.isTobeContinue
+                    ? Positioned(
+                        left: 0.w,
+                        child: Container(
+                          height: cardWholeHeight - 15.w,
+                          width: cardWholeWidth + 32.w,
+                          color: yachtBlack.withOpacity(0.85),
+                        ),
+                      )
+                    : Container(),
+                stockInfoNewModel.isTobeContinue
+                    ? Positioned(
+                        width: cardWholeWidth,
+                        height: cardWholeWidth,
+                        top: 20.w -
+                            textSizeGet(
+                                        '공개 예정',
+                                        TextStyle(
+                                            fontFamily: krFont,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 24.w,
+                                            letterSpacing: 0.0,
+                                            height: 1.0,
+                                            color: Colors.white))
+                                    .height /
+                                2,
+                        left: 15.w,
+                        child: Center(
+                          child: Text(
+                            '공개 예정',
+                            style: TextStyle(
+                                fontFamily: krFont,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 24.w,
+                                letterSpacing: 0.0,
+                                height: 1.0,
+                                color: Colors.white),
+                          ),
+                        ),
+                      )
+                    : Container(),
+              ],
+            ),
           ),
         ),
       ])),
@@ -352,10 +390,12 @@ class YachtWebLoadingAnimation extends StatefulWidget {
   const YachtWebLoadingAnimation({Key? key}) : super(key: key);
 
   @override
-  State<YachtWebLoadingAnimation> createState() => _YachtWebLoadingAnimationState();
+  State<YachtWebLoadingAnimation> createState() =>
+      _YachtWebLoadingAnimationState();
 }
 
-class _YachtWebLoadingAnimationState extends State<YachtWebLoadingAnimation> with TickerProviderStateMixin {
+class _YachtWebLoadingAnimationState extends State<YachtWebLoadingAnimation>
+    with TickerProviderStateMixin {
   List<AnimationController>? _animationControllers;
   List<Animation<double>> _animations = [];
   int animationDuration = 300;
@@ -378,12 +418,14 @@ class _YachtWebLoadingAnimationState extends State<YachtWebLoadingAnimation> wit
     _animationControllers = List.generate(
       3,
       (index) {
-        return AnimationController(vsync: this, duration: Duration(milliseconds: animationDuration));
+        return AnimationController(
+            vsync: this, duration: Duration(milliseconds: animationDuration));
       },
     ).toList();
 
     for (int i = 0; i < 3; i++) {
-      _animations.add(Tween<double>(begin: 10.w, end: -10.w).animate(_animationControllers![i]));
+      _animations.add(Tween<double>(begin: 10.w, end: -10.w)
+          .animate(_animationControllers![i]));
     }
 
     for (int i = 0; i < 3; i++) {
@@ -431,7 +473,8 @@ class _YachtWebLoadingAnimationState extends State<YachtWebLoadingAnimation> wit
                         width: 10.w,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: _animationControllers![index].status == AnimationStatus.forward
+                            color: _animationControllers![index].status ==
+                                    AnimationStatus.forward
                                 ? Color(0xFFB8BABC)
                                 : Color(0xFF545758))),
                   ),
