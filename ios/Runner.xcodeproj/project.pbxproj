@@ -365,7 +365,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MBLAMJ4LWV;
 				ENABLE_BITCODE = NO;
-				FLUTTER_ROOT = /Users/csejun/Developer/flutter;
+				FLUTTER_ROOT = /Users/gene/SDKs/flutter;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -504,7 +504,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MBLAMJ4LWV;
 				ENABLE_BITCODE = NO;
-				FLUTTER_ROOT = /Users/csejun/Developer/flutter;
+				FLUTTER_ROOT = /Users/gene/SDKs/flutter;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
@@ -535,7 +535,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MBLAMJ4LWV;
 				ENABLE_BITCODE = NO;
-				FLUTTER_ROOT = /Users/csejun/Developer/flutter;
+				FLUTTER_ROOT = /Users/gene/SDKs/flutter;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
