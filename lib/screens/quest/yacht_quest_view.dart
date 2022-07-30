@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:yachtOne/yacht_design_system/yds_font.dart';
 
 import '../../locator.dart';
 import '../../repositories/repository.dart';
@@ -102,7 +103,7 @@ class YachtQuestView extends StatelessWidget {
         ),
         // btwHomeModuleTitleSlider,
         Obx(() {
-          return Column(children: [
+          return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             (homeViewModel.newQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +125,7 @@ class YachtQuestView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: primaryPaddingSize),
+                      SizedBox(height: 10.w),
                     ],
                   )
                 : SizedBox.shrink(),
@@ -143,9 +144,23 @@ class YachtQuestView extends StatelessWidget {
                             questModel: homeViewModel.newQuests[index],
                           ),
                         ),
-                        SizedBox(height: primaryPaddingSize),
+                        SizedBox(height: 10.w),
                       ],
                     )),
+            SizedBox(
+              height: 24.w,
+            ),
+            Padding(
+              padding: primaryHorizontalPadding,
+              child: Text(
+                "참여 마감된 퀘스트",
+                style: body1Style.copyWith(
+                  color: yachtLightGrey,
+                  // fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            SizedBox(height: 10.w),
             ...List.generate(
                 homeViewModel.liveQuests.length,
                 // 1,
@@ -154,7 +169,7 @@ class YachtQuestView extends StatelessWidget {
                         NewLiveQuestWidget(
                           questModel: homeViewModel.liveQuests[index],
                         ),
-                        SizedBox(height: primaryPaddingSize),
+                        SizedBox(height: 10.w),
                       ],
                     )),
             ...List.generate(
@@ -164,7 +179,7 @@ class YachtQuestView extends StatelessWidget {
                         NewResultQuestWidget(
                           questModel: homeViewModel.resultQuests[index],
                         ),
-                        SizedBox(height: primaryPaddingSize),
+                        SizedBox(height: 10.w),
                       ],
                     ))
           ]);
