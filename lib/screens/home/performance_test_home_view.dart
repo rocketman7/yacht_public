@@ -42,7 +42,7 @@ class PerformanceTestHomeView extends StatelessWidget {
     Size temp = textSizeGet(
         "기간  퀘스트", homeHeaderName.copyWith(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF789EC1)));
     _scrollController = ScrollController(initialScrollOffset: 0);
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     _scrollController.addListener(() {
       // offset obs 값에 scroll controller offset 넣어주기
       _scrollController.offset < 0 ? offset(0) : offset(_scrollController.offset);

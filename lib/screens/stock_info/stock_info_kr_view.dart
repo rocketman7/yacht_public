@@ -37,7 +37,7 @@ class StockInfoKRView extends StatelessWidget {
     StatsViewModel statsViewModel = Get.put(StatsViewModel(investAddressModel: investAddressModel));
     // StreamController streamController = StockInfoKRView.streamController;
     // _scrollController = ScrollController(initialScrollOffset: 0);
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     _scrollController.addListener(() {
       // offset obs 값에 scroll controller offset 넣어주기
       stockInfoViewModel.offset(_scrollController.offset);

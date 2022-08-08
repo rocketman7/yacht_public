@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
@@ -65,6 +66,7 @@ class _TimeCounterWidgetState extends State<TimeCounterWidget> {
           timeToEnd.value, // temp
           style: TextStyle(
             color: white,
+            height: 1.3.w,
           ),
         ));
   }

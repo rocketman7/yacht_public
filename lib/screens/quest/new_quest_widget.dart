@@ -87,7 +87,7 @@ class NewQuestWidget extends StatelessWidget {
                                   size: 16.w,
                                 ),
                                 SizedBox(
-                                  width: 4.w,
+                                  width: 6.w,
                                 ),
                                 TimeCounterWidget(
                                   questModel: questModel,

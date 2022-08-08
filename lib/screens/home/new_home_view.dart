@@ -88,7 +88,7 @@ class NewHomeView extends StatelessWidget {
     ];
 
     // _scrollController = ScrollController(initialScrollOffset: 0);
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       homeViewModel.scrollController.addListener(() {
         // offset obs 값에 scroll controller offset 넣어주기
         homeViewModel.scrollController.offset < 0 ? offset(0) : offset(homeViewModel.scrollController.offset);
