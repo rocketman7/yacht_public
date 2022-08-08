@@ -987,12 +987,12 @@ class SettingView extends StatelessWidget {
                                             userModelRx.value = null;
                                             userQuestModelRx.value = [];
                                             todayQuests = null;
-                                            _kakaoApi.signOut();
-                                            _authService.auth.signOut();
+                                            // _kakaoApi.signOut();
+                                            await _authService.auth.signOut();
 
                                             // print("signout");
                                             Navigator.of(context).pop();
-                                            Restart.restartApp();
+                                            // Restart.restartApp();
                                             // leagueRx.close();
                                             // userModelRx.close();
                                             // userQuestModelRx.close();

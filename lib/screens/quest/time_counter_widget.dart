@@ -49,7 +49,7 @@ class _TimeCounterWidgetState extends State<TimeCounterWidget> {
     } else {
       Duration timeLeft = widget.questModel.questEndDateTime.toDate().difference(now);
       if (timeLeft.inSeconds > 0) {
-        timeToEnd('마감까지 ${shorterCountDown(timeLeft)}');
+        timeToEnd('${shorterCountDown(timeLeft)}');
       } else {
         {
           timeToEnd('마감되었습니다');

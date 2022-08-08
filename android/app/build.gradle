@@ -87,6 +87,9 @@ dependencies {
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.firebase-perf'
 dependencies {
+
+  implementation "com.android.billingclient:billing-ktx:5.0.0"
+
   // add the Firebase SDK for Google Analytics
   implementation platform('com.google.firebase:firebase-bom:25.12.0')
   implementation 'com.firebaseui:firebase-ui-firestore:6.3.0'

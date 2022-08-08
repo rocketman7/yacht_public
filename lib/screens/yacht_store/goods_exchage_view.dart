@@ -565,8 +565,11 @@ class ConfirmExchangeDialog extends StatelessWidget {
                             onTap: () async {
                               // print(yachtStoreController.isExchanging.value);
                               // isExchanging이 false일 때만 confirmExchange 함수
+                              print('교환하기');
                               if (!yachtStoreController.isExchanging.value) {
-                                yachtStoreController
+                                yachtStoreController.isExchanging(true);
+                                print('교환하기_최종');
+                                await yachtStoreController
                                     .confirmExchange(
                                       giftishowModel,
                                       _phoneNumberController.text.replaceAll('-', '').trim(),

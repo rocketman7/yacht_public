@@ -75,15 +75,24 @@ class NewQuestWidget extends StatelessWidget {
                                   buttonColor: yachtGrey,
                                   textColor: yachtMidGrey,
                                 )
-                              : basicInfoButtion(
-                                  "참여가능",
-                                  buttonColor: yachtGrey,
-                                ),
+                              : SizedBox.shrink(),
                           SizedBox(width: 6.w),
                           basicInfoButtion(
                             "",
-                            child: TimeCounterWidget(
-                              questModel: questModel,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time,
+                                  color: white,
+                                  size: 16.w,
+                                ),
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                                TimeCounterWidget(
+                                  questModel: questModel,
+                                ),
+                              ],
                             ),
                           )
                         ],

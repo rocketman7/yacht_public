@@ -2,30 +2,24 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/handlers/date_time_handler.dart';
-import 'package:yachtOne/models/community/comment_model.dart';
 import 'package:yachtOne/models/community/post_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/community/community_widgets.dart';
-import 'package:yachtOne/screens/community/feed_widget.dart';
-import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/profile/profile_others_view.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/widgets/like_button.dart';
-import 'package:yachtOne/widgets/loading_container.dart';
 
 import '../../locator.dart';
 import 'community_view_model.dart';
@@ -1310,7 +1304,7 @@ class _CommentInputState extends State<CommentInput> {
       if (_focusNode.hasFocus)
         // 코멘트 컨트롤러 값이 변하지 않아도 포커스 노드가 열려있을 때에도 댓글창 높이를 가져와야 하므로
         // 그런데 댓글창이 모두 커진 후에 받아와야 하기 때문에 WidgetsBinding을 해준다
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           widget.bottomSpace(renderManager.getRenderData('inputField')!.height);
         });
     });
