@@ -11,6 +11,7 @@ import 'package:universal_io/io.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:yachtOne/models/stock_info_new_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_new_controller.dart';
 import 'package:yachtOne/styles/size_config.dart';
 
@@ -115,8 +116,7 @@ class KeepAliveWebView extends StatefulWidget {
   State<KeepAliveWebView> createState() => _KeepAliveWebViewState();
 }
 
-class _KeepAliveWebViewState extends State<KeepAliveWebView>
-    with AutomaticKeepAliveClientMixin {
+class _KeepAliveWebViewState extends State<KeepAliveWebView> with AutomaticKeepAliveClientMixin {
   bool isPageFinishied = false;
 
   @override
@@ -127,9 +127,7 @@ class _KeepAliveWebViewState extends State<KeepAliveWebView>
         WebView(
           backgroundColor: Color(0xFF101214),
           initialUrl: widget.url,
-          gestureRecognizers: Set()
-            ..add(Factory<EagerGestureRecognizer>(
-                () => EagerGestureRecognizer())),
+          gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
           javascriptMode: JavascriptMode.unrestricted,
           zoomEnabled: false,
           onWebViewCreated: (_) {
@@ -150,10 +148,7 @@ class _KeepAliveWebViewState extends State<KeepAliveWebView>
         ),
         !isPageFinishied
             ? Positioned(
-                top: ScreenUtil().screenHeight / 2 -
-                    ScreenUtil().statusBarHeight -
-                    140.w -
-                    30.w,
+                top: ScreenUtil().screenHeight / 2 - ScreenUtil().statusBarHeight - 140.w - 30.w,
                 left: 0.w,
                 child: YachtWebLoadingAnimation())
             // 아래는 임시 로딩 코드
@@ -235,8 +230,8 @@ class _StockInfoNewViewState extends State<StockInfoNewView> {
 
   @override
   Widget build(BuildContext context) {
-    StockInfoNewController stockInfoNewController = Get.put(
-        StockInfoNewController(stockInfoNewModel: widget.stockInfoNewModel));
+    StockInfoNewController stockInfoNewController =
+        Get.put(StockInfoNewController(stockInfoNewModel: widget.stockInfoNewModel));
 
     // return Scaffold(
     //   backgroundColor: Color(0xFF101214),
@@ -322,9 +317,8 @@ class _StockInfoNewViewState extends State<StockInfoNewView> {
                                 child: Container(
                                   height: 4.w,
                                   // width: 75.w,
-                                  color: stockInfoNewController.index.value == 0
-                                      ? Color(0xFF4A2EFF)
-                                      : Colors.transparent,
+                                  color:
+                                      stockInfoNewController.index.value == 0 ? Color(0xFF4A2EFF) : Colors.transparent,
                                 ),
                               ),
                             ],
@@ -440,10 +434,7 @@ class _StockInfoNewViewState extends State<StockInfoNewView> {
               controller: stockInfoNewController.pageController,
               physics: NeverScrollableScrollPhysics(),
               children: [
-                Container(
-                    child: KeepAliveWebView(
-                        url: stockInfoNewController
-                            .stockInfoNewModel.descriptionUrl)),
+                Container(child: KeepAliveWebView(url: stockInfoNewController.stockInfoNewModel.descriptionUrl)),
                 // Container(
                 //   height: 400.w,
                 //   color: Color(0xFF101214),

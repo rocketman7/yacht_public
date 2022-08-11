@@ -4,14 +4,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
+import 'package:yachtOne/models/stock_info_new_model.dart';
 import 'package:yachtOne/screens/quest/live/new_live_controller.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_new_controller.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_new_view.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_font.dart';
 
 import '../../../locator.dart';
 import '../../../services/firestore_service.dart';
@@ -81,7 +84,7 @@ class TempMainController extends GetxController {
 
 class YachtPickView extends StatelessWidget {
   final MixpanelService _mixpanelService = locator<MixpanelService>();
-  final double cardWholeHeight = 330.w; // card widget 을 수정해주는 경우에는 왼쪽 수치들도 수정해야함.
+  final double cardWholeHeight = 350.w; // card widget 을 수정해주는 경우에는 왼쪽 수치들도 수정해야함.
   final double cardWholeWidth = 210.w;
 
   @override
@@ -303,8 +306,34 @@ class YachtPickCardForCarousel extends StatelessWidget {
                       ],
                     ),
                     SizedBox(
-                      height: 22.w,
+                      height: 12.w,
                     ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.w),
+                        color: yachtDarkGrey,
+                      ),
+                      height: 30.w,
+                      padding: EdgeInsets.symmetric(horizontal: 14.w),
+                      // width: 40.w,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "요트 View",
+                            style: bodyP2Style,
+                          ),
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          SvgPicture.asset(
+                            'assets/icons/${stockInfoNewModel.yachtView.last.view}.svg',
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
                 stockInfoNewModel.isTobeContinue

@@ -6,6 +6,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:yachtOne/models/dictionary_model.dart';
 import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/models/stock_info_new_model.dart';
 import 'package:yachtOne/models/users/user_model.dart';
 import 'package:yachtOne/repositories/quest_repository.dart';
 import 'package:yachtOne/repositories/repository.dart';

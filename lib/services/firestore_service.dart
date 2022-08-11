@@ -22,6 +22,7 @@ import 'package:yachtOne/models/reading_content_model.dart';
 import 'package:yachtOne/models/stats_model.dart';
 import 'package:yachtOne/models/corporation_model.dart';
 import 'package:yachtOne/models/live_quest_price_model.dart';
+import 'package:yachtOne/models/stock_info_new_model.dart';
 import 'package:yachtOne/models/survey_model.dart';
 import 'package:yachtOne/models/tier_system_model.dart';
 import 'package:yachtOne/models/today_market_model.dart';
@@ -94,13 +95,29 @@ class FirestoreService extends GetxService {
   // 현재 메인 요트픽 가져오기
   Future<List<StockInfoNewModel>> getYachtPicks() async {
     List<StockInfoNewModel> yachtPicks = [];
+    List<YachtView> yachtView = [];
     await _firestoreService
         .collection('yachtPicks')
         .where('showMain', isEqualTo: true)
         .orderBy('updateTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
-              yachtPicks.add(StockInfoNewModel.fromMap(element.data()));
+              print(element.data()['yachtView']);
+              if (element.data()['yachtView'] == null) {
+                yachtView.add(YachtView(
+                  view: 'sunny',
+                  viewDate: element.data()['updateTime'],
+                ));
+              } else {
+                // yachtView.add(YachtView.fromMap(element.data()['yachtView']));
+                int length = element.data()['yachtView'].length;
+                if (length > 0) {
+                  for (int i = 0; i < length; i++) {
+                    yachtView.add(YachtView.fromMap(element.data()['yachtView'][i]));
+                  }
+                }
+              }
+              yachtPicks.add(StockInfoNewModel.fromMap(element.data(), yachtView));
             }));
     return yachtPicks;
   }
@@ -108,6 +125,7 @@ class FirestoreService extends GetxService {
   // 현재 기준 지난 요트픽 가져오기, 메인 요트픽과 showMain만 반대
   Future<List<StockInfoNewModel>> getOldYachtPicks() async {
     List<StockInfoNewModel> yachtPicks = [];
+    List<YachtView> yachtView = [];
     await _firestoreService
         .collection('yachtPicks')
         .where('showMain', isEqualTo: false)
@@ -115,7 +133,12 @@ class FirestoreService extends GetxService {
         .orderBy('updateTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
-              yachtPicks.add(StockInfoNewModel.fromMap(element.data()));
+              // if (element.data()['yachtView'] == null) {
+              // yachtView.add({'20220801': 'sunny'});
+              // } else {
+              //   yachtView = element.data()['yachtView'].map((val) => val.toMap());
+              // }
+              yachtPicks.add(StockInfoNewModel.fromMap(element.data(), yachtView));
             }));
     return yachtPicks;
   }
@@ -123,12 +146,18 @@ class FirestoreService extends GetxService {
   // 모든 요트픽 가져오기 (테스트용)
   Future<List<StockInfoNewModel>> getAllYachtPicks() async {
     List<StockInfoNewModel> yachtPicks = [];
+    List<YachtView> yachtView = [];
     await _firestoreService
         .collection('yachtPicks')
         .orderBy('updateTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
-              yachtPicks.add(StockInfoNewModel.fromMap(element.data()));
+              // if (element.data()['yachtView'] == null) {
+              // yachtView.add({'20220801': 'sunny'});
+              // } else {
+              //   yachtView = element.data()['yachtView'].map((val) => val.toMap());
+              // }
+              yachtPicks.add(StockInfoNewModel.fromMap(element.data(), yachtView));
             }));
     return yachtPicks;
   }
