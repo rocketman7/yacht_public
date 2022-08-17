@@ -50,23 +50,13 @@ String? dateTimeToString(DateTime dateTime, int digit) {
 
 DateTime marketStartKR(String date) {
   DateTime marketStart = DateTime(
-      int.parse(date.substring(0, 4)),
-      int.parse(date.substring(4, 6)),
-      int.parse(date.substring(6, 8)),
-      09,
-      00,
-      00);
+      int.parse(date.substring(0, 4)), int.parse(date.substring(4, 6)), int.parse(date.substring(6, 8)), 09, 00, 00);
   return marketStart;
 }
 
 DateTime marketEndKR(String date) {
   DateTime marketStart = DateTime(
-      int.parse(date.substring(0, 4)),
-      int.parse(date.substring(4, 6)),
-      int.parse(date.substring(6, 8)),
-      15,
-      30,
-      00);
+      int.parse(date.substring(0, 4)), int.parse(date.substring(4, 6)), int.parse(date.substring(6, 8)), 15, 30, 00);
   return marketStart;
 }
 
@@ -134,6 +124,11 @@ String timeStampToShortString(Timestamp time) {
   return DateFormat("yyyy-MM-dd").format(time.toDate());
 }
 
+// YY/MM/dd
+String timeStampToShorterString(Timestamp time) {
+  return DateFormat("yy/MM/dd").format(time.toDate());
+}
+
 // DB timeStamp형식을 x/x 형식으로 (요트픽 x/x 대비 용으로)
 String timeStampToShortShortString(Timestamp time) {
   return DateFormat("M/d").format(time.toDate());
@@ -160,18 +155,14 @@ bool isHoliday(DateTime dateTime) {
 bool isBusinessDay(DateTime dateTime) {
   // dateTime = _timezoneService.koreaTime(dateTime);
   String dateTimeStr = dateTimeToString(dateTime, 8)!;
-  return !(dateTime.weekday == 6 ||
-      dateTime.weekday == 7 ||
-      holidayListKR.contains(dateTimeStr));
+  return !(dateTime.weekday == 6 || dateTime.weekday == 7 || holidayListKR.contains(dateTimeStr));
 }
 
 DateTime closestBusinessDay(DateTime dateTime) {
   // holiday랑 주말 거르고 다음 영업일 return
   String dateTimeStr = dateTimeToString(dateTime, 8)!;
   // print("BUSINESSDAYCHECK" + dateTime.weekday.toString());
-  if (dateTime.weekday == 6 ||
-      dateTime.weekday == 7 ||
-      holidayListKR.contains(dateTimeStr)) {
+  if (dateTime.weekday == 6 || dateTime.weekday == 7 || holidayListKR.contains(dateTimeStr)) {
     return closestBusinessDay(dateTime.add(Duration(days: 1)));
   } else {
     // print("RETURNED DATETIME" + dateTime.toString());
@@ -195,11 +186,8 @@ DateTime previousBusinessDay(DateTime dateTime) {
   // dateTime = _timezoneService.koreaTime(dateTime);
   // 랭킹페이지를 위한 전영업일 불러오기
   DateTime previousDay = dateTime.add(Duration(days: -1));
-  String previousDayStr = dateTimeToString(dateTime, 8)!;
-
-  if (previousDay.weekday == 6 ||
-      previousDay.weekday == 7 ||
-      holidayListKR.contains(previousDayStr)) {
+  String previousDayStr = dateTimeToString(previousDay, 8)!;
+  if (previousDay.weekday == 6 || previousDay.weekday == 7 || holidayListKR.contains(previousDayStr)) {
     return previousBusinessDay(previousDay);
   } else {
     return previousDay;
@@ -230,18 +218,14 @@ List<DateTime> businessDaysBtwTwoDates(DateTime first, DateTime last) {
     )) {
       businessDays.add(
         DateTime(
-            first.add(Duration(days: i)).year,
-            first.add(Duration(days: i)).month,
-            first.add(Duration(days: i)).day),
+            first.add(Duration(days: i)).year, first.add(Duration(days: i)).month, first.add(Duration(days: i)).day),
       );
       break;
     } else {
       if (isBusinessDay(first.add(Duration(days: i)))) {
         businessDays.add(
           DateTime(
-              first.add(Duration(days: i)).year,
-              first.add(Duration(days: i)).month,
-              first.add(Duration(days: i)).day),
+              first.add(Duration(days: i)).year, first.add(Duration(days: i)).month, first.add(Duration(days: i)).day),
         );
       }
     }

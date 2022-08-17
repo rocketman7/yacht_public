@@ -168,7 +168,7 @@ class AuthCheckViewModel extends GetxController {
   Future getHolidayList() async {
     holidayListKR.clear();
     holidayListKR.addAll(await _firestoreService.getHolidayList());
-    // print(holidayListKR);
+    print(holidayListKR);
   }
 
   authCheck() async {

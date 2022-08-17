@@ -49,6 +49,8 @@ class TempMainController extends GetxController {
 
     print('stockInfoNewModels: ${stockInfoNewModels[0].toString()}');
     getLivePrice();
+    print(stockInfoNewModels[0].name);
+    print(stockInfoNewModels[0].yachtView);
 
     update();
 
@@ -289,7 +291,9 @@ class YachtPickCardForCarousel extends StatelessWidget {
                         SizedBox(width: 2.w),
                         Obx(
                           () => Text(
-                            '(${toPercentageChange((tempMainController.todayCurrentPrices[index].value / tempMainController.yesterdayClosePrices[index]) - 1)})',
+                            tempMainController.yesterdayClosePrices[index] == 0
+                                ? '(0.00%)'
+                                : '(${toPercentageChange((tempMainController.todayCurrentPrices[index].value / tempMainController.yesterdayClosePrices[index]) - 1)})',
                             style: stockPriceTextStyle.copyWith(
                                 fontSize: 14.w,
                                 height: 1.0,

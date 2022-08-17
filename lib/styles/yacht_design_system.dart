@@ -674,14 +674,7 @@ const List<Color> portfolioColors = [
 
 //// 홈
 // 앱 바 페이지 타이틀
-TextStyle appBarTitle = TextStyle(
-  fontFamily: krFont,
-  fontSize: 18.w,
-  fontWeight: FontWeight.w500,
-  color: white,
-  height: primaryFontHeight,
-  letterSpacing: -1.0,
-);
+TextStyle appBarTitle = head3Style.copyWith(fontWeight: FontWeight.w700);
 TextStyle newAppBarTitle = TextStyle(
   fontFamily: 'IBMPlex',
   fontSize: 18.w,

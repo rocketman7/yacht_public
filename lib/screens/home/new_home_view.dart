@@ -168,7 +168,7 @@ class YachtPick extends StatelessWidget {
             Padding(
               padding: primaryHorizontalPadding,
               child: Text(
-                "요트 Pick",
+                "오늘의 요트 Pick",
                 style: TextStyle(
                   color: white,
                   fontSize: 24.w,
@@ -197,7 +197,7 @@ class YachtPick extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  "요트's Pick?",
+                                  "요트 Pick?",
                                   style: dialogTitle,
                                 ),
                                 SizedBox(
@@ -252,7 +252,7 @@ class YachtPick extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(left: 14.w, right: 14.w, top: 8.w, bottom: 8.w),
                   child: Text(
-                    "지난 요트 Pick",
+                    "모든 요트 Pick",
                     style: TextStyle(
                       fontFamily: krFont,
                       color: white,

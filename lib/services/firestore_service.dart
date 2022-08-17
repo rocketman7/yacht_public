@@ -95,14 +95,15 @@ class FirestoreService extends GetxService {
   // 현재 메인 요트픽 가져오기
   Future<List<StockInfoNewModel>> getYachtPicks() async {
     List<StockInfoNewModel> yachtPicks = [];
-    List<YachtView> yachtView = [];
     await _firestoreService
         .collection('yachtPicks')
         .where('showMain', isEqualTo: true)
+        .orderBy('isTobeContinue')
         .orderBy('updateTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
-              print(element.data()['yachtView']);
+              // print(element.data()['yachtView']);
+              List<YachtView> yachtView = [];
               if (element.data()['yachtView'] == null) {
                 yachtView.add(YachtView(
                   view: 'sunny',
@@ -125,7 +126,6 @@ class FirestoreService extends GetxService {
   // 현재 기준 지난 요트픽 가져오기, 메인 요트픽과 showMain만 반대
   Future<List<StockInfoNewModel>> getOldYachtPicks() async {
     List<StockInfoNewModel> yachtPicks = [];
-    List<YachtView> yachtView = [];
     await _firestoreService
         .collection('yachtPicks')
         .where('showMain', isEqualTo: false)
@@ -133,11 +133,21 @@ class FirestoreService extends GetxService {
         .orderBy('updateTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
-              // if (element.data()['yachtView'] == null) {
-              // yachtView.add({'20220801': 'sunny'});
-              // } else {
-              //   yachtView = element.data()['yachtView'].map((val) => val.toMap());
-              // }
+              List<YachtView> yachtView = [];
+              if (element.data()['yachtView'] == null) {
+                yachtView.add(YachtView(
+                  view: 'sunny',
+                  viewDate: element.data()['updateTime'],
+                ));
+              } else {
+                // yachtView.add(YachtView.fromMap(element.data()['yachtView']));
+                int length = element.data()['yachtView'].length;
+                if (length > 0) {
+                  for (int i = 0; i < length; i++) {
+                    yachtView.add(YachtView.fromMap(element.data()['yachtView'][i]));
+                  }
+                }
+              }
               yachtPicks.add(StockInfoNewModel.fromMap(element.data(), yachtView));
             }));
     return yachtPicks;
@@ -1201,7 +1211,14 @@ class FirestoreService extends GetxService {
         .collection('stocksKR/$issueCode/historicalPrices')
         .where('dateTime', isEqualTo: dateTimeToString(day, 8))
         .get()
-        .then((value) => value.docs.first.data()['close']);
+        .then((value) {
+      print('value: ${value.docs.length}');
+      if (value.docs.length == 0) {
+        return 0;
+      } else {
+        return value.docs.first.data()['close'];
+      }
+    });
   }
 
   // 한 종목 최신가격 가져오기
@@ -1215,17 +1232,13 @@ class FirestoreService extends GetxService {
         .snapshots()
         // .take(1)
         .map((element) {
-      print('live element: ${element.docs[0].data()}');
+      // print('live element: ${element.docs[0].data()}');
 
       if (element.docs.length == 0) {
         return 0;
       } else {
         return (ChartPriceModel.fromMap(element.docs[0].data()).close ?? 0);
       }
-      // print("get");
-      //element는 다큐모음
-      // print('${investAddress.issueCode}');
-      // print('snapshot: ${element.docs.last.data()}');
     });
   }
 

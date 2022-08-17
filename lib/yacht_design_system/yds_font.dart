@@ -76,3 +76,9 @@ TextStyle sub1Style = TextStyle(
   // fontWeight: FontWeight.w400,
   height: defaultFontHeight,
 );
+
+TextStyle sub2Style = TextStyle(
+  fontSize: 10.w, color: yachtWhite,
+  // fontWeight: FontWeight.w400,
+  height: defaultFontHeight,
+);
