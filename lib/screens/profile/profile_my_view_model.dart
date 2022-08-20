@@ -120,7 +120,7 @@ class ProfileMyViewModel extends GetxController {
             style: snackBarStyle,
           ),
         ),
-        backgroundColor: white.withOpacity(.5),
+        backgroundColor: yachtWhite.withOpacity(.5),
         barBlur: 8,
         duration: const Duration(seconds: 1, milliseconds: 100),
       );
@@ -142,7 +142,7 @@ class ProfileMyViewModel extends GetxController {
           style: snackBarStyle,
         ),
       ),
-      backgroundColor: white.withOpacity(.5),
+      backgroundColor: yachtWhite.withOpacity(.5),
       barBlur: 8,
       duration: const Duration(seconds: 1, milliseconds: 100),
     );

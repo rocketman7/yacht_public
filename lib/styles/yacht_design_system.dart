@@ -19,6 +19,7 @@ import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/yacht_design_system/yds_font.dart';
 
 // BASIC COLORS CODE
+const Color yachtWhite = const Color(0xFFFFFFFF);
 const Color yachtBlack = const Color(0xFF101214);
 const Color yachtLightBlack = const Color(0xFF1A1C1E);
 const Color yachtViolet = const Color(0xFF4A2EFF);

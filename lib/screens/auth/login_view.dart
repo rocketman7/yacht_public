@@ -97,11 +97,11 @@ class LoginView extends StatelessWidget {
                               ),
                               title: isAppleLoggingIn.value
                                   ? CircularProgressIndicator(
-                                      color: white,
+                                      color: yachtWhite,
                                     )
                                   : Text(
                                       'Apple로 계속하기',
-                                      style: socialLogin.copyWith(color: white),
+                                      style: socialLogin.copyWith(color: yachtWhite),
                                     ),
                               loginBackgroundColor: Colors.black),
                         ),
@@ -116,7 +116,7 @@ class LoginView extends StatelessWidget {
                 // width: ,
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(width: 1.w, color: white),
+                    bottom: BorderSide(width: 1.w, color: yachtWhite),
                   ),
                 ),
                 child: InkWell(
@@ -125,7 +125,7 @@ class LoginView extends StatelessWidget {
                   },
                   child: Text(
                     " 이메일로 시작하기 ",
-                    style: socialLogin.copyWith(color: white),
+                    style: socialLogin.copyWith(color: yachtWhite),
                   ),
                 ),
               ),

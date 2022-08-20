@@ -8,6 +8,7 @@ import 'package:yachtOne/screens/quest/live/new_live_widget.dart';
 
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 class LiveQuestView extends StatelessWidget {
   final HomeViewModel homeViewModel = Get.find<HomeViewModel>();
@@ -40,7 +41,7 @@ class LiveQuestView extends StatelessWidget {
             if (homeViewModel.liveQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
             {
               return Padding(
-                padding: primaryHorizontalPadding,
+                padding: defaultHorizontalPadding,
                 child: sectionBox(
                   width: 232.w,
                   height: 180.w,
@@ -62,7 +63,7 @@ class LiveQuestView extends StatelessWidget {
                                 children: [
                                   index == 0
                                       ? SizedBox(
-                                          width: primaryHorizontalPadding.left,
+                                          width: defaultHorizontalPadding.left,
                                         )
                                       : Container(),
                                   NewLiveWidget(questModel: homeViewModel.liveQuests[index]),
@@ -74,7 +75,7 @@ class LiveQuestView extends StatelessWidget {
                           //   children: [
                           //     index == 0
                           //         ? SizedBox(
-                          //             width: primaryHorizontalPadding.left,
+                          //             width: .left,
                           //           )
                           //         : Container(),
                           //     Obx(

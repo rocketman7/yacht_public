@@ -153,20 +153,31 @@ class FirestoreService extends GetxService {
     return yachtPicks;
   }
 
-  // 모든 요트픽 가져오기 (테스트용)
+  // 모든 요트픽 가져오기
   Future<List<StockInfoNewModel>> getAllYachtPicks() async {
     List<StockInfoNewModel> yachtPicks = [];
     List<YachtView> yachtView = [];
     await _firestoreService
         .collection('yachtPicks')
-        .orderBy('updateTime', descending: true)
+        .where('releaseTime', isLessThan: DateTime.now())
+        .orderBy('releaseTime', descending: true)
         .get()
         .then((value) => value.docs.forEach((element) {
-              // if (element.data()['yachtView'] == null) {
-              // yachtView.add({'20220801': 'sunny'});
-              // } else {
-              //   yachtView = element.data()['yachtView'].map((val) => val.toMap());
-              // }
+              List<YachtView> yachtView = [];
+              if (element.data()['yachtView'] == null) {
+                yachtView.add(YachtView(
+                  view: 'sunny',
+                  viewDate: element.data()['updateTime'],
+                ));
+              } else {
+                // yachtView.add(YachtView.fromMap(element.data()['yachtView']));
+                int length = element.data()['yachtView'].length;
+                if (length > 0) {
+                  for (int i = 0; i < length; i++) {
+                    yachtView.add(YachtView.fromMap(element.data()['yachtView'][i]));
+                  }
+                }
+              }
               yachtPicks.add(StockInfoNewModel.fromMap(element.data(), yachtView));
             }));
     return yachtPicks;
@@ -1205,6 +1216,22 @@ class FirestoreService extends GetxService {
     });
   }
 
+  Stream<num> getStreamLivePrice(String country, String issueCode) {
+    return _firestoreService
+        .collection('stocksKR/$issueCode/realtimePrices')
+        .orderBy('dateTime', descending: true)
+        .limit(1)
+        .snapshots()
+        .map((element) {
+      if (element.docs.length == 0) {
+        return 0;
+      } else {
+        print('element: ${element.docs[0].data()}');
+        return element.docs[0].data()['close'];
+      }
+    });
+  }
+
   // 특정 날, 특정 종목 종가 가져오기
   Future<num> getClosePrice(String issueCode, DateTime day) async {
     return await _firestoreService
@@ -1212,11 +1239,28 @@ class FirestoreService extends GetxService {
         .where('dateTime', isEqualTo: dateTimeToString(day, 8))
         .get()
         .then((value) {
-      print('value: ${value.docs.length}');
+      // print('value: ${value.docs.length}');
       if (value.docs.length == 0) {
         return 0;
       } else {
         return value.docs.first.data()['close'];
+      }
+    });
+  }
+
+  // 특정 날, 특정 종목 종가 가져오기
+  Future<num> getOpenPrice(String issueCode, DateTime day) async {
+    return await _firestoreService
+        .collection('stocksKR/$issueCode/historicalPrices')
+        .where('dateTime', isEqualTo: dateTimeToString(day, 8))
+        .get()
+        .then((value) {
+      // print('value: $issueCode $day ${value.docs.length}');
+      if (value.docs.length == 0) {
+        return 0;
+      } else {
+        // print(value.docs.first.data());
+        return value.docs.first.data()['open'];
       }
     });
   }

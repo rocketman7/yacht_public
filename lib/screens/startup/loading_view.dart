@@ -41,7 +41,7 @@ class LoadingView extends StatelessWidget {
             height: 80,
             child: Image.asset(
               'assets/logos/white_splash.png',
-              color: white,
+              color: yachtWhite,
               // height: 20,
             ),
           ),

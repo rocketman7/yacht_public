@@ -159,7 +159,7 @@ class HomeViewModel extends GetxController {
       //       style: snackBarStyle,
       //     ),
       //   ),
-      //   backgroundColor: white.withOpacity(.5),
+      //   backgroundColor: yachtWhite.withOpacity(.5),
       //   barBlur: 8,
       //   duration: const Duration(seconds: 1, milliseconds: 100),
       // );
@@ -188,7 +188,7 @@ class HomeViewModel extends GetxController {
   //           constraints: BoxConstraints.loose(
   //             Size(double.infinity, 180.w),
   //           ),
-  //           padding: primaryHorizontalPadding,
+  //           padding: defaultHorizontalPadding,
   //           child: Form(
   //             key: userNameFormKey,
   //             child: Stack(
@@ -251,7 +251,7 @@ class HomeViewModel extends GetxController {
   //                             //       style: snackBarStyle,
   //                             //     ),
   //                             //   ),
-  //                             //   backgroundColor: white.withOpacity(.5),
+  //                             //   backgroundColor: yachtWhite.withOpacity(.5),
   //                             //   barBlur: 8,
   //                             //   duration: const Duration(seconds: 1, milliseconds: 100),
   //                             // );
@@ -281,7 +281,7 @@ class HomeViewModel extends GetxController {
   //                                 //       style: snackBarStyle,
   //                                 //     ),
   //                                 //   ),
-  //                                 //   backgroundColor: white.withOpacity(.5),
+  //                                 //   backgroundColor: yachtWhite.withOpacity(.5),
   //                                 //   barBlur: 8,
   //                                 //   duration: const Duration(seconds: 1, milliseconds: 100),
   //                                 // );
@@ -784,7 +784,9 @@ adsViewDialog(BuildContext context) {
                                 height: 15.w,
                               ),
                               SizedBox(
-                                  height: 15.w, width: 15.w, child: Image.asset('assets/icons/exit.png', color: white)),
+                                  height: 15.w,
+                                  width: 15.w,
+                                  child: Image.asset('assets/icons/exit.png', color: yachtWhite)),
                             ],
                           ),
                           SizedBox(
@@ -884,7 +886,7 @@ doneAdsGetRawSnackbar() {
       ),
     ),
     snackPosition: SnackPosition.TOP,
-    backgroundColor: white.withOpacity(.5),
+    backgroundColor: yachtWhite.withOpacity(.5),
     barBlur: 2,
     duration: const Duration(milliseconds: 1000),
   );

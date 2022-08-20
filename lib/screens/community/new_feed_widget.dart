@@ -36,6 +36,7 @@ import 'detail_post_view.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 class NewFeedWidget extends GetView {
   final CommunityViewModel communityViewModel;
@@ -66,7 +67,7 @@ class NewFeedWidget extends GetView {
     List<String> imageUrls = List.generate(controller.post.imageUrlList!.length, (index) => "");
     print('rebuild');
     return Padding(
-      padding: primaryAllPadding,
+      padding: defaultPaddingAll,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -96,7 +97,7 @@ class NewFeedWidget extends GetView {
                         link: 'https://${linkableStringInContent[0]}',
                         backgroundColor: yachtGrey,
                         titleStyle: TextStyle(
-                          color: white,
+                          color: yachtWhite,
                           fontSize: 15.w,
                         ),
                         bodyStyle: TextStyle(
@@ -167,7 +168,7 @@ class NewFeedWidget extends GetView {
                 // SizedBox(height: 6.w),
                 // 댓글 남기는 Input 위젯. 일단 보류
                 // Padding(
-                //   padding: primaryHorizontalPadding,
+                //   padding: defaultHorizontalPadding,
                 //   child: CommentInputWidget(
                 //     post: post,
                 //     communityViewModel: communityViewModel,
@@ -261,7 +262,7 @@ class LikeButtonWidget extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     'assets/icons/comment.svg',
-                    color: white,
+                    color: yachtWhite,
                     width: 18.w,
                   ),
                   SizedBox(
@@ -417,7 +418,7 @@ class CommentList extends StatelessWidget {
                                                                   child: Text(
                                                                     "삭제",
                                                                     style: dialogChoice.copyWith(
-                                                                      color: white,
+                                                                      color: yachtWhite,
                                                                     ),
                                                                   ),
                                                                 )),
@@ -833,7 +834,7 @@ class NewCommentInputWidget extends StatelessWidget {
             maxLines: null,
             textAlignVertical: TextAlignVertical.center,
             keyboardType: TextInputType.multiline,
-            style: TextStyle(color: white),
+            style: TextStyle(color: yachtWhite),
             decoration: InputDecoration(
               // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
               isDense: true,
@@ -1151,7 +1152,7 @@ class FeedHeader extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: SvgPicture.asset(
                 'assets/icons/show_more.svg',
-                color: white,
+                color: yachtWhite,
                 width: 20.w,
                 // height: 30.w,
                 // fit: BoxFit.cover,
@@ -1177,7 +1178,7 @@ class FeedHeader extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return Dialog(
-                          insetPadding: primaryHorizontalPadding,
+                          insetPadding: defaultHorizontalPadding,
                           child: Container(
                               padding:
                                   EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
@@ -1235,7 +1236,7 @@ class FeedHeader extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return Dialog(
-                          insetPadding: primaryHorizontalPadding,
+                          insetPadding: defaultHorizontalPadding,
                           child: Container(
                               padding:
                                   EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
@@ -1293,7 +1294,7 @@ class FeedHeader extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return Dialog(
-                          insetPadding: primaryHorizontalPadding,
+                          insetPadding: defaultHorizontalPadding,
                           child: Container(
                               padding:
                                   EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
@@ -1380,7 +1381,7 @@ class EditingMyPost extends StatelessWidget {
         ),
         Container(
           height: 60,
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           color: primaryBackgroundColor,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -1398,7 +1399,7 @@ class EditingMyPost extends StatelessWidget {
                         'assets/icons/exit.png',
                         width: 14.w,
                         height: 14.w,
-                        color: white,
+                        color: yachtWhite,
                       )),
                 ),
               ),
@@ -1462,7 +1463,7 @@ class EditingMyPost extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        style: TextStyle(color: white),
+                        style: TextStyle(color: yachtWhite),
                         // autofocus: true,
                         controller: _contentController,
                         validator: (value) {
@@ -1559,7 +1560,7 @@ class EditingMyPost extends StatelessWidget {
                                       BoxDecoration(color: yachtGrey, borderRadius: BorderRadius.circular(10.w)),
                                   child: SvgPicture.asset(
                                     'assets/icons/upload_photo.svg',
-                                    color: white,
+                                    color: yachtWhite,
                                     height: 20.w,
                                     width: 20.w,
                                   )),

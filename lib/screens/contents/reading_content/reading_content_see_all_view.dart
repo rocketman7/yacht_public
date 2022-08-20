@@ -90,7 +90,7 @@ class ReadingContentSeeAll extends GetView<ReadingContentViewModel> {
                       decoration: yachtBoxDecoration.copyWith(
                           borderRadius: BorderRadius.circular(12.w),
                           border: Border.all(
-                            color: white,
+                            color: yachtWhite,
                             width: 4.w,
                           )),
                       child: CachedNetworkImage(

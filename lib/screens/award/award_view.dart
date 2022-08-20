@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../locator.dart';
 import '../../styles/size_config.dart';
@@ -35,7 +36,7 @@ class AwardView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,7 +124,7 @@ class AwardView extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           width: double.infinity,
           height: ScreenUtil().screenHeight * .75,
           child: Column(

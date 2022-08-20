@@ -16,7 +16,7 @@ import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../../locator.dart';
 
 class NewQuestWidget extends StatelessWidget {
@@ -49,9 +49,9 @@ class NewQuestWidget extends StatelessWidget {
       child: Obx(() =>
           // 참여한 퀘스트
           Padding(
-            padding: primaryHorizontalPadding,
+            padding: defaultHorizontalPadding,
             child: Container(
-              padding: primaryAllPadding,
+              padding: defaultPaddingAll,
               decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
               width: double.infinity,
               child: Column(
@@ -64,7 +64,7 @@ class NewQuestWidget extends StatelessWidget {
                         children: [
                           basicInfoButtion(
                             "New",
-                            buttonColor: white,
+                            buttonColor: yachtWhite,
                             textColor: yachtViolet,
                           ),
                           SizedBox(width: 6.w),
@@ -83,7 +83,7 @@ class NewQuestWidget extends StatelessWidget {
                               children: [
                                 Icon(
                                   Icons.access_time,
-                                  color: white,
+                                  color: yachtWhite,
                                   size: 16.w,
                                 ),
                                 SizedBox(
@@ -108,7 +108,7 @@ class NewQuestWidget extends StatelessWidget {
                           Text(
                             '${questModel.itemNeeded}개',
                             style: TextStyle(
-                              color: white,
+                              color: yachtWhite,
                               fontSize: 16.w,
                               // height: 1.2,
                             ),
@@ -176,7 +176,7 @@ class NewQuestWidget extends StatelessWidget {
     //           mainAxisAlignment: MainAxisAlignment.end,
     //           children: [
     //             Padding(
-    //               padding: primaryHorizontalPadding,
+    //               padding: defaultHorizontalPadding,
     //               child: QuestCardRewards(questModel: questModel),
     //             ),
     //             SizedBox(
@@ -226,8 +226,9 @@ class NewQuestHeader extends StatelessWidget {
         Text(
           '${questModel.title}',
           style: TextStyle(
-            color: white,
+            color: yachtWhite,
             fontSize: 18.w,
+            // fontWeight: FontWeight.w400,
           ),
         ),
         SizedBox(height: 8.w),
@@ -236,7 +237,7 @@ class NewQuestHeader extends StatelessWidget {
             SvgPicture.asset(
               'assets/icons/manypeople.svg',
               width: 17.w,
-              color: white,
+              color: yachtWhite,
             ),
             SizedBox(width: 4.w),
             questModel.counts == null

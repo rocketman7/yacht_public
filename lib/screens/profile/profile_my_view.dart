@@ -20,7 +20,7 @@ import 'package:yachtOne/screens/ranks/rank_share_view.dart';
 import 'package:yachtOne/screens/yacht_store/yacht_store_view.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../../handlers/numbers_handler.dart';
 import '../../locator.dart';
 import '../../styles/size_config.dart';
@@ -75,7 +75,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
                         'assets/buttons/settings.png',
                         width: 30.w,
                         height: 30.w,
-                        color: white,
+                        color: yachtWhite,
                       ),
                     ],
                   ),
@@ -332,7 +332,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
           SizedBox(height: 8.w),
           // 유저소개글
           Padding(
-            padding: primaryHorizontalPadding,
+            padding: defaultHorizontalPadding,
             child: GetBuilder<ProfileMyViewModel>(
               id: 'profile',
               builder: (controller) {
@@ -495,7 +495,7 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
           //   height: correctHeight(30.w, 0.0, profileHeaderTextStyle.fontSize),
           // ),
           // Padding(
-          //   padding: primaryHorizontalPadding,
+          //   padding: defaultHorizontalPadding,
           //   child: Row(
           //     children: [
           //       Text(
@@ -521,10 +521,10 @@ class ProfileMyView extends GetView<ProfileMyViewModel> {
           //         (index) => Column(
           //               children: [
           //                 Padding(
-          //                   padding: primaryHorizontalPadding,
+          //                   padding: defaultHorizontalPadding,
           //                   child: Obx(
           //                     () => sectionBox(
-          //                         padding: primaryAllPadding,
+          //                         padding: defaultPaddingAll,
           //                         child: FutureBuilder<QuestModel>(
           //                             future: controller.getEachQuestModel(userQuestModelRx[index]),
           //                             builder: (context, snapshot) {
@@ -846,7 +846,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 14.w),
-                      // padding: primaryHorizontalPadding,
+                      // padding: defaultHorizontalPadding,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -870,7 +870,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                   '지난 리그 보기',
                                   wider: true,
                                   buttonColor: yachtGrey,
-                                  textColor: white,
+                                  textColor: yachtWhite,
                                 ),
                                 SizedBox(
                                   width: 14.w,
@@ -887,9 +887,9 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                     ),
                     Obx(() => userQuestModelRx.length == 0
                         ? Padding(
-                            padding: primaryHorizontalPadding,
+                            padding: defaultHorizontalPadding,
                             child: Container(
-                              padding: primaryAllPadding,
+                              padding: defaultPaddingAll,
                               width: double.infinity,
                               decoration:
                                   BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
@@ -915,7 +915,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                   Get.to(() => QuestRecordDetailView());
                                 },
                                 child: Padding(
-                                  padding: primaryAllPadding,
+                                  padding: defaultPaddingAll,
                                   child: Container(
                                     width: double.infinity,
                                     height: 50.w,
@@ -927,7 +927,7 @@ class _ProfileTabBarViewState extends State<ProfileTabBarView> with SingleTicker
                                         child: Text(
                                       "모두 보기",
                                       style: seeMore.copyWith(
-                                        color: white,
+                                        color: yachtWhite,
                                       ),
                                     )),
                                   ),
@@ -1022,10 +1022,10 @@ class QuestRecordView extends StatelessWidget {
           (index) => Column(
                 children: [
                   Padding(
-                    padding: primaryHorizontalPadding,
+                    padding: defaultHorizontalPadding,
                     child: Obx(
                       () => sectionBox(
-                          padding: primaryAllPadding,
+                          padding: defaultPaddingAll,
                           child: FutureBuilder<QuestModel>(
                               future: Get.find<ProfileMyViewModel>().getEachQuestModel(userQuestModelRx[index]),
                               builder: (context, snapshot) {

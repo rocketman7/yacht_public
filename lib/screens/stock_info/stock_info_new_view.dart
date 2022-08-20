@@ -31,7 +31,7 @@ final categorySelectTextStyle = TextStyle(
   fontSize: 16.w,
   fontWeight: FontWeight.w700,
   fontFamily: 'NotoSansKR',
-  color: white,
+  color: yachtWhite,
   letterSpacing: 0.0,
   height: 1.2,
 );

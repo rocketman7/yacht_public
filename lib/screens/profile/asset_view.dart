@@ -21,7 +21,7 @@ TextStyle assetViewTextStyle1 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 18.w,
   fontWeight: FontWeight.w500,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -29,7 +29,7 @@ TextStyle assetViewTextStyle2 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: white,
+  color: yachtWhite,
   letterSpacing: 0.0,
   height: 1.4,
 );
@@ -37,7 +37,7 @@ TextStyle assetViewTextStyle3 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );

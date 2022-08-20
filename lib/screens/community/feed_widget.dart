@@ -22,6 +22,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:yachtOne/widgets/like_button.dart';
 import 'package:yachtOne/widgets/loading_container.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../../locator.dart';
 import 'detail_post_view.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -163,7 +164,7 @@ class FeedWidget extends StatelessWidget {
                                           context: context,
                                           builder: (context) {
                                             return Dialog(
-                                                insetPadding: primaryHorizontalPadding,
+                                                insetPadding: defaultHorizontalPadding,
                                                 child: Container(
                                                     padding: EdgeInsets.fromLTRB(14.w,
                                                         correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
@@ -224,7 +225,7 @@ class FeedWidget extends StatelessWidget {
                                           context: context,
                                           builder: (context) {
                                             return Dialog(
-                                                insetPadding: primaryHorizontalPadding,
+                                                insetPadding: defaultHorizontalPadding,
                                                 child: Container(
                                                     padding: EdgeInsets.fromLTRB(14.w,
                                                         correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
@@ -286,7 +287,7 @@ class FeedWidget extends StatelessWidget {
                                           context: context,
                                           builder: (context) {
                                             return Dialog(
-                                                insetPadding: primaryHorizontalPadding,
+                                                insetPadding: defaultHorizontalPadding,
                                                 child: Container(
                                                     padding: EdgeInsets.fromLTRB(14.w,
                                                         correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
@@ -389,7 +390,7 @@ class FeedWidget extends StatelessWidget {
                                                   style: TextStyle(
                                                     fontSize: 11.w,
                                                     fontWeight: FontWeight.w500,
-                                                    color: white,
+                                                    color: yachtWhite,
                                                     height: 1.4,
                                                   ),
                                                   textAlign: TextAlign.center,
@@ -587,7 +588,7 @@ class FeedWidget extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              Flexible(child: SvgPicture.asset('assets/icons/share.svg', color: white)),
+                              Flexible(child: SvgPicture.asset('assets/icons/share.svg', color: yachtWhite)),
                               Container(
                                 width: 3,
                               )
@@ -742,7 +743,7 @@ class EditingMyPost extends StatelessWidget {
         ),
         Container(
           height: 60,
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           color: primaryBackgroundColor,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -890,7 +891,7 @@ class EditingMyPost extends StatelessWidget {
                           print('image length: ${_communityViewModel.images!.length}');
                         },
                         child: Padding(
-                          padding: primaryHorizontalPadding,
+                          padding: defaultHorizontalPadding,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [

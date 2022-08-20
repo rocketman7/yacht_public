@@ -21,6 +21,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/widgets/loading_container.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../../locator.dart';
 import 'quest_widget.dart';
 import 'package:yachtOne/styles/style_constants.dart';
@@ -276,7 +277,7 @@ class QuestView extends StatelessWidget {
                           child: Center(
                             child: questViewModel.isSelectingWorking.value
                                 ? CircularProgressIndicator(
-                                    color: white,
+                                    color: yachtWhite,
                                   )
                                 : Obx(() => Text(
                                       questViewModel.isSelectingSheetShowing.value
@@ -450,7 +451,7 @@ class QuestView extends StatelessWidget {
                                           : [BoxShadow()],
                                       color: questViewModel.toggleList[index] ? yachtRed : yachtMidGrey),
                                   child: Padding(
-                                    padding: primaryAllPadding,
+                                    padding: defaultPaddingAll,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -537,7 +538,7 @@ class QuestView extends StatelessWidget {
                                                   ? yachtBlue
                                                   : yachtMidGrey),
                                       child: Padding(
-                                        padding: primaryAllPadding,
+                                        padding: defaultPaddingAll,
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -649,7 +650,7 @@ class QuestView extends StatelessWidget {
                                                 margin: EdgeInsets.only(
                                                     bottom: index != questModel.investAddresses!.length ? 10.w : 0.0),
                                                 clipBehavior: Clip.hardEdge,
-                                                padding: primaryHorizontalPadding,
+                                                padding: defaultHorizontalPadding,
                                                 height: 50.w,
                                                 decoration: yachtBoxDecoration,
                                                 child: Column(
@@ -832,9 +833,9 @@ class QuestView extends StatelessWidget {
                                                                                 questViewModel.updownManyList[index] ==
                                                                                     1
                                                                             ? yachtBlue
-                                                                            : white),
+                                                                            : yachtWhite),
                                                                 child: Padding(
-                                                                  padding: primaryAllPadding,
+                                                                  padding: defaultPaddingAll,
                                                                   child: Column(
                                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -21,6 +21,7 @@ import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 // import 'package:native_admob_flutter/native_admob_flutter.dart';
 import '../../locator.dart';
 import 'community_view_model.dart';
@@ -565,7 +566,7 @@ class CommunityAd extends StatelessWidget {
 //                         backgroundColor: yachtViolet,
 //                       ),
 //                       textStyle: TextStyle(
-//                         color: white,
+//                         color: yachtWhite,
 //                       )),
 //                   // body: AdTextView(
 //                   //   height: 1.0,
@@ -604,7 +605,7 @@ class WritingNewPost extends StatelessWidget {
           ),
           Container(
             height: 60.w,
-            padding: primaryHorizontalPadding,
+            padding: defaultHorizontalPadding,
             color: primaryBackgroundColor,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -627,7 +628,7 @@ class WritingNewPost extends StatelessWidget {
                             'assets/icons/exit.png',
                             width: 14.w,
                             height: 14.w,
-                            color: white,
+                            color: yachtWhite,
                           ),
                         )),
                   ),
@@ -706,7 +707,7 @@ class WritingNewPost extends StatelessWidget {
                             }
                           },
                           maxLines: null,
-                          style: TextStyle(color: white),
+                          style: TextStyle(color: yachtWhite),
                           decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.all(14.w),
@@ -795,7 +796,7 @@ class WritingNewPost extends StatelessWidget {
                                         BoxDecoration(color: yachtGrey, borderRadius: BorderRadius.circular(10.w)),
                                     child: SvgPicture.asset(
                                       'assets/icons/upload_photo.svg',
-                                      color: white,
+                                      color: yachtWhite,
                                       height: 20.w,
                                       width: 20.w,
                                     )),

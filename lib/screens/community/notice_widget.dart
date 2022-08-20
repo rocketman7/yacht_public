@@ -7,7 +7,7 @@ import 'package:yachtOne/styles/yacht_design_system.dart';
 
 import 'community_view_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import 'detail_post_view.dart';
 import 'new_feed_detail_widget.dart';
 import 'new_feed_widget_controller.dart';
@@ -34,10 +34,10 @@ class NoticeWidget extends GetView {
         // Get.to(() => NewFeedDetailWidget(post: post));
       },
       child: Padding(
-        padding: primaryHorizontalPadding,
+        padding: defaultHorizontalPadding,
         child: sectionBox(
             child: Container(
-          padding: primaryAllPadding,
+          padding: defaultPaddingAll,
           width: double.infinity,
           // color: Colors.blue,
           child: Column(

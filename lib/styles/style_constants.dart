@@ -71,7 +71,7 @@ EdgeInsets textTopOpenHorizontalPadding(double textSize) {
   return EdgeInsets.fromLTRB(0, (-(textSize * 0.2).round() + 14).w, 0, 8.w);
 }
 
-// EdgeInsets primaryHorizontalPadding = EdgeInsets.symmetric(
+// EdgeInsets  = EdgeInsets.symmetric(
 //   horizontal: 14.w,
 // );
 
@@ -188,7 +188,7 @@ TextStyle questTermTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -248,7 +248,7 @@ TextStyle stockPriceChangeTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -258,7 +258,7 @@ TextStyle mostDetailedContentTextStyle = TextStyle(
   fontFamily: krFont,
   fontSize: 10.w,
   fontWeight: FontWeight.w500,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );

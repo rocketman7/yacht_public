@@ -164,7 +164,7 @@ void getRawSnackbar(String text) {
       ),
     ),
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: white.withOpacity(.5),
+    backgroundColor: yachtWhite.withOpacity(.5),
     barBlur: 2,
     duration: const Duration(milliseconds: 1000),
   );

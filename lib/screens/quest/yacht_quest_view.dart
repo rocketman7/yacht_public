@@ -13,6 +13,7 @@ import '../home/home_view_model.dart';
 import 'new_live_quest_widget.dart';
 import 'new_quest_widget.dart';
 import 'new_result_quest_widget.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 class YachtQuestView extends StatelessWidget {
   final HomeViewModel homeViewModel;
@@ -30,7 +31,7 @@ class YachtQuestView extends StatelessWidget {
       // mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           // color: Colors.red,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -69,7 +70,7 @@ class YachtQuestView extends StatelessWidget {
                             // print("item changed");
                             return Text(
                               userModelRx.value == null ? 0.toString() : userModelRx.value!.item.toString(),
-                              style: questTermTextStyle.copyWith(color: white, fontWeight: FontWeight.w600),
+                              style: questTermTextStyle.copyWith(color: yachtWhite, fontWeight: FontWeight.w600),
                             );
                           })
                         ],
@@ -109,9 +110,9 @@ class YachtQuestView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: primaryHorizontalPadding,
+                        padding: defaultHorizontalPadding,
                         child: Container(
-                          padding: primaryAllPadding,
+                          padding: defaultPaddingAll,
                           width: double.infinity,
                           decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
                           child: Center(
@@ -151,7 +152,7 @@ class YachtQuestView extends StatelessWidget {
               height: 24.w,
             ),
             Padding(
-              padding: primaryHorizontalPadding,
+              padding: defaultHorizontalPadding,
               child: Text(
                 "참여 마감된 퀘스트",
                 style: body1Style.copyWith(

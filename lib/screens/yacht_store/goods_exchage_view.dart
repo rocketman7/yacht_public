@@ -7,6 +7,7 @@ import 'package:yachtOne/models/yacht_store/giftishow_model.dart';
 import 'package:yachtOne/screens/profile/asset_view.dart';
 import 'package:yachtOne/screens/yacht_store/yacht_store_controller.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import 'yacht_store_goods_view.dart';
 
@@ -35,11 +36,11 @@ class GoodsExchangeView extends StatelessWidget {
       child: Scaffold(
         appBar: primaryAppBar("상품 교환하기"),
         body: Padding(
-          padding: primaryAllPadding,
+          padding: defaultPaddingAll,
           child: Column(
             children: [
               Padding(
-                padding: primaryAllPadding,
+                padding: defaultPaddingAll,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -239,7 +240,7 @@ class GoodsExchangeView extends StatelessWidget {
                                                     mainAxisSize: MainAxisSize.min,
                                                     children: [
                                                       Container(
-                                                        padding: primaryHorizontalPadding,
+                                                        padding: defaultHorizontalPadding,
                                                         // height: 210.w,
                                                         width: 347.w,
                                                         child: Column(
@@ -380,7 +381,7 @@ class GoodsExchangeView extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Container(
-                                      padding: primaryHorizontalPadding,
+                                      padding: defaultHorizontalPadding,
                                       // height: 210.w,
                                       width: 347.w,
                                       child: Column(
@@ -501,7 +502,7 @@ class ConfirmExchangeDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: primaryHorizontalPadding,
+            padding: defaultHorizontalPadding,
             // height: 210.w,
             width: 347.w,
             child: Column(

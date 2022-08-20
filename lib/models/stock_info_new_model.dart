@@ -60,6 +60,7 @@ class StockInfoNewModel {
   final String descriptionUrl;
   final String name;
   final Timestamp updateTime;
+  final Timestamp releaseTime;
   final String assetCategory;
   final String code;
   final String country;
@@ -71,6 +72,7 @@ class StockInfoNewModel {
     required this.descriptionUrl,
     required this.name,
     required this.updateTime,
+    required this.releaseTime,
     required this.assetCategory,
     required this.code,
     required this.country,
@@ -84,6 +86,7 @@ class StockInfoNewModel {
     String? descriptionUrl,
     String? name,
     Timestamp? updateTime,
+    Timestamp? releaseTime,
     String? assetCategory,
     String? code,
     String? country,
@@ -96,6 +99,7 @@ class StockInfoNewModel {
       descriptionUrl: descriptionUrl ?? this.descriptionUrl,
       name: name ?? this.name,
       updateTime: updateTime ?? this.updateTime,
+      releaseTime: releaseTime ?? this.releaseTime,
       assetCategory: assetCategory ?? this.assetCategory,
       code: code ?? this.code,
       country: country ?? this.country,
@@ -111,6 +115,7 @@ class StockInfoNewModel {
       'descriptionUrl': descriptionUrl,
       'name': name,
       'updateTime': updateTime,
+      'releaseTime': releaseTime,
       'assetCategory': assetCategory,
       'code': code,
       'country': country,
@@ -129,6 +134,7 @@ class StockInfoNewModel {
       descriptionUrl: map['descriptionUrl'] ?? '',
       name: map['name'] ?? '',
       updateTime: map['updateTime'],
+      releaseTime: map['releaseTime'],
       assetCategory: map['assetCategory'] ?? '',
       code: map['code'] ?? '',
       country: map['country'] ?? '',
@@ -142,7 +148,7 @@ class StockInfoNewModel {
 
   @override
   String toString() {
-    return 'StockInfoNewModel(showMain: $showMain, isTobeContinue: $isTobeContinue, logoUrl: $logoUrl, descriptionUrl: $descriptionUrl, name: $name, updateTime: $updateTime, assetCategory: $assetCategory, code: $code, country: $country, yachtView: $yachtView)';
+    return 'StockInfoNewModel(showMain: $showMain, isTobeContinue: $isTobeContinue, logoUrl: $logoUrl, descriptionUrl: $descriptionUrl, name: $name, updateTime: $updateTime, releaseTime: $releaseTime, assetCategory: $assetCategory, code: $code, country: $country, yachtView: $yachtView)';
   }
 
   @override
@@ -156,6 +162,7 @@ class StockInfoNewModel {
         other.descriptionUrl == descriptionUrl &&
         other.name == name &&
         other.updateTime == updateTime &&
+        other.releaseTime == releaseTime &&
         other.assetCategory == assetCategory &&
         other.code == code &&
         other.country == country &&
@@ -170,6 +177,7 @@ class StockInfoNewModel {
         descriptionUrl.hashCode ^
         name.hashCode ^
         updateTime.hashCode ^
+        releaseTime.hashCode ^
         assetCategory.hashCode ^
         code.hashCode ^
         country.hashCode ^

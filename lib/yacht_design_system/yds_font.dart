@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/yacht_design_system/yds_color.dart';
 
+// 기본 한글 폰트와 세팅
+// String krFont = 'AppleSDGothicNeo';
 double defaultFontHeight = 1.0;
 double paragraphFontHeight = 1.4;
 Color darkModeFontColor = yachtWhite;

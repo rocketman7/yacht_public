@@ -12,6 +12,7 @@ import 'package:yachtOne/screens/quest/result/quest_results_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../../locator.dart';
 
@@ -183,7 +184,7 @@ class _ResultDialogState extends State<ResultDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: primaryHorizontalPadding,
+                padding: defaultHorizontalPadding,
                 height: 60.w,
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
@@ -584,7 +585,7 @@ class _ResultDialogState extends State<ResultDialog> {
                                                       height: 12.w,
                                                       decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.circular(20.w),
-                                                        color: white,
+                                                        color: yachtWhite,
                                                       ),
                                                     ),
                                                   ),

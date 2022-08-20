@@ -9,7 +9,7 @@ class YachtShopView extends StatelessWidget {
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
-        backgroundColor: white,
+        backgroundColor: yachtWhite,
         toolbarHeight: 60.w,
         title: Text('요트 포인트 스토어', style: appBarTitle),
       ),
@@ -27,8 +27,7 @@ class YachtShopView extends StatelessWidget {
               child: Container(
                 width: 265.w,
                 height: 185.w,
-                child:
-                    Image.asset('assets/illusts/not_exists/no_yachtshop.png'),
+                child: Image.asset('assets/illusts/not_exists/no_yachtshop.png'),
               ),
             )
           ],

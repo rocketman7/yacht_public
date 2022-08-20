@@ -16,6 +16,7 @@ import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../locator.dart';
 
@@ -215,7 +216,7 @@ class AuthCheckViewModel extends GetxController {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: primaryHorizontalPadding,
+                  padding: defaultHorizontalPadding,
                   // height: 210.w,
                   width: 347.w,
                   child: Column(
@@ -279,7 +280,7 @@ class AuthCheckViewModel extends GetxController {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: primaryHorizontalPadding,
+                  padding: defaultHorizontalPadding,
                   // height: 210.w,
                   width: 347.w,
                   child: Column(

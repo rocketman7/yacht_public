@@ -187,7 +187,7 @@ class SquareQuestWidget extends StatelessWidget {
     //           mainAxisAlignment: MainAxisAlignment.end,
     //           children: [
     //             Padding(
-    //               padding: primaryHorizontalPadding,
+    //               padding: defaultHorizontalPadding,
     //               child: QuestCardRewards(questModel: questModel),
     //             ),
     //             SizedBox(
@@ -318,7 +318,7 @@ class QuestCardHeader extends StatelessWidget {
             SvgPicture.asset(
               'assets/icons/manypeople.svg',
               width: 17.w,
-              color: white,
+              color: yachtWhite,
             ),
             SizedBox(width: 4.w),
             questModel.counts == null

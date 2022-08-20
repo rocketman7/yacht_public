@@ -6,6 +6,7 @@ import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../../locator.dart';
 import 'today_market_view_model.dart';
@@ -40,7 +41,7 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
         //   height: heightSectionTitleAndBox,
         // ),
         Padding(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           child: sectionBox(
               height: 184.w,
               width: double.infinity,
@@ -69,7 +70,7 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                               },
                               child: Container(
                                 clipBehavior: Clip.none,
-                                padding: primaryHorizontalPadding,
+                                padding: defaultHorizontalPadding,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -138,7 +139,7 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
         //   height: 10.w,
         // ),
         // Padding(
-        //   padding: primaryHorizontalPadding,
+        //   padding: defaultHorizontalPadding,
         //   child: sectionBox(
         //       height: 184.w,
         //       width: double.infinity,
@@ -156,7 +157,7 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
         //                         await controller.launchUrl(controller.todayMarkets[index].newsUrl);
         //                       },
         //                       child: Container(
-        //                         padding: primaryHorizontalPadding,
+        //                         padding: defaultHorizontalPadding,
         //                         child: Column(
         //                           crossAxisAlignment: CrossAxisAlignment.start,
         //                           mainAxisAlignment: MainAxisAlignment.start,

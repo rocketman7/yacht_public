@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:yachtOne/handlers/numbers_handler.dart';
 import 'package:yachtOne/screens/profile/asset_view_model.dart';
 import 'package:yachtOne/screens/yacht_store/yacht_store_goods_view.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../styles/yacht_design_system.dart';
 
@@ -44,7 +45,7 @@ class YachtStoreView extends StatelessWidget {
                             'assets/buttons/exit.png',
                             width: 30.w,
                             height: 30.w,
-                            color: white,
+                            color: yachtWhite,
                           ),
                         ],
                       ),
@@ -167,7 +168,7 @@ class YachtStoreView extends StatelessWidget {
               () => yachtStoreController.giftishowList.length == 0
                   ? Container()
                   : GridView.builder(
-                      padding: primaryAllPadding,
+                      padding: defaultPaddingAll,
                       shrinkWrap: true,
                       physics: ClampingScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -258,7 +259,7 @@ class YachtStoreView extends StatelessWidget {
             //   color: yachtPaleGrey,
             // ),
             // GridView.builder(
-            //     padding: primaryAllPadding,
+            //     padding: defaultPaddingAll,
             //     shrinkWrap: true,
             //     physics: ClampingScrollPhysics(),
             //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

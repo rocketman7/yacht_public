@@ -92,7 +92,7 @@ class ProfileChangeView extends StatelessWidget {
                   ),
                   TextFormField(
                     style: TextStyle(
-                      color: white,
+                      color: yachtWhite,
                     ),
                     controller: profileMyViewModel.nameChangeController,
                     textAlignVertical: TextAlignVertical.bottom,
@@ -141,7 +141,7 @@ class ProfileChangeView extends StatelessWidget {
                   ),
                   TextFormField(
                     style: TextStyle(
-                      color: white,
+                      color: yachtWhite,
                     ),
                     controller: profileMyViewModel.introChangeController,
                     textAlignVertical: TextAlignVertical.bottom,
@@ -207,7 +207,7 @@ class ProfileChangeView extends StatelessWidget {
                             style: snackBarStyle,
                           ),
                         ),
-                        backgroundColor: white.withOpacity(.5),
+                        backgroundColor: yachtWhite.withOpacity(.5),
                         barBlur: 8,
                         duration: const Duration(seconds: 1, milliseconds: 100),
                       );
@@ -291,7 +291,7 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                           Text(
                             '프로필 아바타 선택하기',
                             style: profileAvatarChangeTextStyle.copyWith(
-                              color: white,
+                              color: yachtWhite,
                             ),
                           ),
                           Spacer(),
@@ -305,7 +305,7 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                               width: 15.w,
                               child: Image.asset(
                                 'assets/buttons/close.png',
-                                color: white,
+                                color: yachtWhite,
                               ),
                             ),
                           ),
@@ -368,7 +368,7 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                             style: snackBarStyle,
                           ),
                         ),
-                        backgroundColor: white.withOpacity(.5),
+                        backgroundColor: yachtWhite.withOpacity(.5),
                         barBlur: 8,
                         duration: const Duration(seconds: 1, milliseconds: 100),
                       );
@@ -385,7 +385,7 @@ class ProfileAvatarChangeBottomSheetWidget extends StatelessWidget {
                       child: Text(
                         '저장하기',
                         style: profileChangeButtonTextStyle.copyWith(
-                          color: white,
+                          color: yachtWhite,
                         ),
                       ),
                     ),

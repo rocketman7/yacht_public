@@ -8,7 +8,7 @@ import 'package:yachtOne/models/community/post_model.dart';
 import 'package:yachtOne/screens/community/detail_post_view.dart';
 import 'package:yachtOne/screens/profile/my_feed_view_model.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../community/new_feed_detail_widget.dart';
 
 class MyFeedView extends GetView<MyFeedViewModel> {
@@ -37,7 +37,7 @@ class MyFeedView extends GetView<MyFeedViewModel> {
                             return Container();
                           } else {
                             return Padding(
-                              padding: primaryHorizontalPadding,
+                              padding: defaultHorizontalPadding,
                               child: Column(
                                 children: [
                                   InkWell(
@@ -46,7 +46,7 @@ class MyFeedView extends GetView<MyFeedViewModel> {
                                     },
                                     child: sectionBox(
                                         width: double.infinity,
-                                        padding: primaryAllPadding,
+                                        padding: defaultPaddingAll,
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [

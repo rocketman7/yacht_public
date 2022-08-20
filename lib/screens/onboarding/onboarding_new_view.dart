@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../locator.dart';
 import '../../services/mixpanel_service.dart';
@@ -58,7 +59,7 @@ class _NewOnboardingViewState extends State<NewOnboardingView> {
             height: ScreenUtil().statusBarHeight + 14.w,
           ),
           Padding(
-            padding: primaryHorizontalPadding,
+            padding: defaultHorizontalPadding,
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -72,7 +73,7 @@ class _NewOnboardingViewState extends State<NewOnboardingView> {
                               height: 8.w,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: index == page.value ? Color(0xFF00FFB7) : white,
+                                color: index == page.value ? Color(0xFF00FFB7) : yachtWhite,
                               ),
                             ),
                           ),

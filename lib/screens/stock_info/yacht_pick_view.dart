@@ -15,6 +15,8 @@ import 'package:yachtOne/screens/stock_info/stock_info_new_view.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/yacht_design_system/yds_font.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
+import 'package:yachtOne/yacht_design_system/yds_widget.dart';
 
 import '../../../locator.dart';
 import '../../../services/firestore_service.dart';
@@ -36,6 +38,7 @@ class TempMainController extends GetxController {
   FirestoreService _firestoreService = locator<FirestoreService>();
 
   bool isModelLoaded = false;
+  RxBool isPricesLoaded = false.obs;
   RxList<RxNum> todayCurrentPrices = <RxNum>[].obs;
   RxList<num> yesterdayClosePrices = <num>[].obs;
   @override
@@ -48,10 +51,10 @@ class TempMainController extends GetxController {
     isModelLoaded = true;
 
     print('stockInfoNewModels: ${stockInfoNewModels[0].toString()}');
-    getLivePrice();
-    print(stockInfoNewModels[0].name);
-    print(stockInfoNewModels[0].yachtView);
-
+    await getLivePrice();
+    // print(stockInfoNewModels[0].name);
+    // print(stockInfoNewModels[0].yachtView);
+    isPricesLoaded(true);
     update();
 
     super.onInit();
@@ -182,7 +185,7 @@ class YachtPickCardForCarousel extends StatelessWidget {
                       child: Dialog(
                         backgroundColor: yachtDarkGrey,
                         child: Padding(
-                          padding: primaryAllPadding,
+                          padding: defaultPaddingAll,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -200,7 +203,10 @@ class YachtPickCardForCarousel extends StatelessWidget {
                                         ? Text(
                                             '${snapshot.data!}'.replaceAll('\\n', '\n'),
                                             style: TextStyle(
-                                                color: white, fontSize: 16.w, fontWeight: FontWeight.w400, height: 1.4),
+                                                color: yachtWhite,
+                                                fontSize: 16.w,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.4),
                                           )
                                         : Text("");
                                   })
@@ -254,16 +260,18 @@ class YachtPickCardForCarousel extends StatelessWidget {
                       height: 4.w,
                     ),
                     Obx(
-                      () => Text(
-                        toPriceKRW(tempMainController.todayCurrentPrices[index].value),
-                        style: TextStyle(
-                            fontFamily: krFont,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 24.w,
-                            letterSpacing: 0.0,
-                            height: 1.0,
-                            color: Colors.white),
-                      ),
+                      () => !tempMainController.isPricesLoaded.value
+                          ? TextLoadingWidget(height: 24.w, width: 80.w)
+                          : Text(
+                              toPriceKRW(tempMainController.todayCurrentPrices[index].value),
+                              style: TextStyle(
+                                  fontFamily: krFont,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 24.w,
+                                  letterSpacing: 0.0,
+                                  height: 1.0,
+                                  color: Colors.white),
+                            ),
                     ),
                     SizedBox(
                       height: 2.w,
@@ -272,21 +280,23 @@ class YachtPickCardForCarousel extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Obx(
-                          () => Text(
-                            toPriceKRW(tempMainController.todayCurrentPrices[index].value -
-                                tempMainController.yesterdayClosePrices[index]),
-                            style: stockPriceTextStyle.copyWith(
-                                fontSize: 14.w,
-                                height: 1.0,
-                                color: tempMainController.todayCurrentPrices[index].value -
-                                            tempMainController.yesterdayClosePrices[index] >
-                                        0
-                                    ? yachtRed
-                                    : tempMainController.todayCurrentPrices[index].value ==
-                                            tempMainController.yesterdayClosePrices[index]
-                                        ? white
-                                        : yachtBlue),
-                          ),
+                          () => !tempMainController.isPricesLoaded.value
+                              ? TextLoadingWidget(height: 14.w, width: 100.w)
+                              : Text(
+                                  toPriceKRW(tempMainController.todayCurrentPrices[index].value -
+                                      tempMainController.yesterdayClosePrices[index]),
+                                  style: stockPriceTextStyle.copyWith(
+                                      fontSize: 14.w,
+                                      height: 1.0,
+                                      color: tempMainController.todayCurrentPrices[index].value -
+                                                  tempMainController.yesterdayClosePrices[index] >
+                                              0
+                                          ? yachtRed
+                                          : tempMainController.todayCurrentPrices[index].value ==
+                                                  tempMainController.yesterdayClosePrices[index]
+                                              ? white
+                                              : yachtBlue),
+                                ),
                         ),
                         SizedBox(width: 2.w),
                         Obx(

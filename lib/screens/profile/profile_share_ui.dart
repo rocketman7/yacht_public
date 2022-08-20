@@ -355,7 +355,7 @@ class BadgesFullGridView extends StatelessWidget {
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
-        backgroundColor: white,
+        backgroundColor: yachtWhite,
         toolbarHeight: 60.w,
         title: Text('획득한 뱃지', style: appBarTitle),
       ),

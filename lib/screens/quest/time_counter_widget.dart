@@ -65,7 +65,7 @@ class _TimeCounterWidgetState extends State<TimeCounterWidget> {
     return Obx(() => Text(
           timeToEnd.value, // temp
           style: TextStyle(
-            color: white,
+            color: yachtWhite,
             height: 1.3.w,
           ),
         ));
@@ -128,7 +128,7 @@ class _LiveTimeCounterWidgetState extends State<LiveTimeCounterWidget> {
     return Obx(() => Text(
           timeToEnd.value, // temp
           style: TextStyle(
-            color: white,
+            color: yachtWhite,
           ),
         ));
   }

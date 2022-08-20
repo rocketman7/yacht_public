@@ -16,7 +16,7 @@ import 'package:yachtOne/screens/quest/tutorial_view_model.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 // import 'package:showcaseview/showcaseview.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -498,9 +498,9 @@ class _TutorialViewState extends State<TutorialView> {
                                     ? yachtRed
                                     : index == 1 && tutorialViewModel.toggleList[1]
                                         ? yachtBlue
-                                        : white),
+                                        : yachtWhite),
                             child: Padding(
-                              padding: primaryAllPadding,
+                              padding: defaultPaddingAll,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -627,7 +627,7 @@ yachtSnackBarFromBottomForTutorial(String title) {
       ),
     ),
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: white.withOpacity(.7),
+    backgroundColor: yachtWhite.withOpacity(.7),
     barBlur: 2,
     margin: EdgeInsets.only(bottom: 60.w /*+ SizeConfig.safeAreaBottom*/),
     duration: const Duration(seconds: 1, milliseconds: 300),

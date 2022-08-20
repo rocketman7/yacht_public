@@ -6,7 +6,7 @@ import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/screens/quest/result/quest_results_view_model.dart';
 import 'package:yachtOne/screens/quest/time_counter_widget.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../../models/quest_model.dart';
 import '../../styles/yacht_design_system.dart';
 import 'new_quest_widget.dart';
@@ -31,9 +31,9 @@ class NewResultQuestWidget extends StatelessWidget {
         showDialog(context: context, builder: (context) => NewResultDialog(questModel: questModel));
       },
       child: Padding(
-        padding: primaryHorizontalPadding,
+        padding: defaultHorizontalPadding,
         child: Container(
-          padding: primaryAllPadding,
+          padding: defaultPaddingAll,
           decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
           width: double.infinity,
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -45,7 +45,7 @@ class NewResultQuestWidget extends StatelessWidget {
                     basicInfoButtion(
                       "결과 발표",
                       buttonColor: yachtGrey,
-                      textColor: white,
+                      textColor: yachtWhite,
                     ),
                     SizedBox(width: 6.w),
                     // basicInfoButtion(
@@ -68,7 +68,7 @@ class NewResultQuestWidget extends StatelessWidget {
             Text(
               '${questModel.title}',
               style: TextStyle(
-                color: white,
+                color: yachtWhite,
                 fontSize: 18.w,
               ),
             ),
@@ -78,7 +78,7 @@ class NewResultQuestWidget extends StatelessWidget {
                 SvgPicture.asset(
                   'assets/icons/manypeople.svg',
                   width: 17.w,
-                  color: white,
+                  color: yachtWhite,
                 ),
                 SizedBox(width: 4.w),
                 questModel.counts == null
@@ -115,7 +115,7 @@ class NewResultQuestWidget extends StatelessWidget {
                               "미참여",
                               style: questTitle.copyWith(
                                 fontSize: 20.w,
-                                color: white,
+                                color: yachtWhite,
                               ),
                             )
                           : Text(
@@ -123,7 +123,7 @@ class NewResultQuestWidget extends StatelessWidget {
                                   questResultViewModel.thisUserQuestModel.value!, questModel),
                               style: questTitle.copyWith(
                                 fontSize: 20.w,
-                                color: white,
+                                color: yachtWhite,
                               ),
                             ),
                     ],
@@ -192,7 +192,7 @@ class NewResultDialog extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.w),
           color: yachtDarkGrey,
         ),
-        padding: primaryAllPadding,
+        padding: defaultPaddingAll,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -201,7 +201,7 @@ class NewResultDialog extends StatelessWidget {
                 Flexible(child: Container()),
                 Text(
                   "퀘스트 결과보기",
-                  style: dialogTitle.copyWith(color: white),
+                  style: dialogTitle.copyWith(color: yachtWhite),
                 ),
                 Flexible(
                   child: GestureDetector(
@@ -216,7 +216,7 @@ class NewResultDialog extends StatelessWidget {
                           'assets/buttons/close.png',
                           width: 12.w,
                           height: 12.w,
-                          color: white,
+                          color: yachtWhite,
                         ),
                       ),
                     ),
@@ -231,7 +231,7 @@ class NewResultDialog extends StatelessWidget {
             ),
             SizedBox(height: 14.w),
             Container(
-              padding: primaryAllPadding,
+              padding: defaultPaddingAll,
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12.w),
@@ -252,14 +252,14 @@ class NewResultDialog extends StatelessWidget {
                         "미참여",
                         style: questTitle.copyWith(
                           fontSize: 24.w,
-                          color: white,
+                          color: yachtWhite,
                         ),
                       )
                     : Text(
                         questResultViewModel.showUserSelection(
                             questResultViewModel.thisUserQuestModel.value!, questModel),
                         style: questTitle.copyWith(
-                          color: white,
+                          color: yachtWhite,
                           fontSize: questModel.selectMode == "order" ? 18.w : 24.w,
                         ),
                       )
@@ -267,7 +267,7 @@ class NewResultDialog extends StatelessWidget {
             ),
             SizedBox(height: 4.w),
             Container(
-              padding: primaryAllPadding,
+              padding: defaultPaddingAll,
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12.w),

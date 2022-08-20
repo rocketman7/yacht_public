@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:yachtOne/yacht_design_system/yds_font.dart';
 
 import 'style_constants.dart';
 import 'yacht_design_system.dart';
@@ -8,7 +9,7 @@ ThemeData theme() {
   return ThemeData(
     scaffoldBackgroundColor: yachtBlack,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: white,
+        backgroundColor: yachtWhite,
         elevation: 0.0,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
@@ -39,15 +40,15 @@ InputDecorationTheme inputDecorationTheme() {
   );
 }
 
-TextTheme textTheme() {
-  return TextTheme(
-    headline3: TextStyle(fontFamily: "AppleSD", color: primaryFontColor, fontSize: 26, fontWeight: FontWeight.w700),
-    headline5: TextStyle(fontFamily: "AppleSD", color: primaryFontColor, fontSize: 24, fontWeight: FontWeight.w700),
-    headline6: TextStyle(fontFamily: "AppleSD", color: primaryFontColor, fontSize: 20, fontWeight: FontWeight.w700),
-    bodyText1: TextStyle(fontFamily: "AppleSD", color: primaryFontColor),
-    bodyText2: TextStyle(fontFamily: "AppleSD", color: primaryFontColor),
-  );
-}
+// TextTheme textTheme() {
+//   return TextTheme(
+//     headline3: TextStyle(fontFamily: "AppleSD", color: primaryFontColor, fontSize: 26, fontWeight: FontWeight.w700),
+//     headline5: TextStyle(fontFamily: "AppleSD", color: primaryFontColor, fontSize: 24, fontWeight: FontWeight.w700),
+//     headline6: TextStyle(fontFamily: "AppleSD", color: primaryFontColor, fontSize: 20, fontWeight: FontWeight.w700),
+//     bodyText1: TextStyle(fontFamily: "AppleSD", color: primaryFontColor),
+//     bodyText2: TextStyle(fontFamily: "AppleSD", color: primaryFontColor),
+//   );
+// }
 
 AppBarTheme appBarTheme() {
   return AppBarTheme(

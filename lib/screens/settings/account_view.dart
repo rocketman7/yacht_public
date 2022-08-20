@@ -374,7 +374,7 @@ class _AccountViewState extends State<AccountView> {
             ? Container()
             : Text(
                 '${_accountViewModel.verificationFailMsg}',
-                style: accountWarning.copyWith(color: white),
+                style: accountWarning.copyWith(color: yachtWhite),
               )
       ],
     );

@@ -19,6 +19,7 @@ import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../locator.dart';
 import 'live/new_live_controller.dart';
@@ -86,9 +87,9 @@ class SquareQuestWidget extends StatelessWidget {
         );
       },
       child: Padding(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           child: Container(
-            padding: primaryAllPadding,
+            padding: defaultPaddingAll,
             decoration: BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
             width: double.infinity,
             child: Column(
@@ -136,7 +137,7 @@ class SquareQuestWidget extends StatelessWidget {
                         Text(
                           '${questModel.itemNeeded}개',
                           style: TextStyle(
-                            color: white,
+                            color: yachtWhite,
                             fontSize: 16.w,
                             // height: 1.2,
                           ),
@@ -210,7 +211,7 @@ class SquareQuestWidget extends StatelessWidget {
     //           mainAxisAlignment: MainAxisAlignment.end,
     //           children: [
     //             Padding(
-    //               padding: primaryHorizontalPadding,
+    //               padding: defaultHorizontalPadding,
     //               child: QuestCardRewards(questModel: questModel),
     //             ),
     //             SizedBox(

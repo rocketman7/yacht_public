@@ -10,7 +10,7 @@ import 'package:yachtOne/screens/profile/profile_others_view.dart';
 import 'package:yachtOne/screens/ranks/rank_share_view.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_kr_view.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import 'dart:math' as math;
 
 import '../../styles/size_config.dart';
@@ -790,7 +790,7 @@ class LeagueAwardList extends StatelessWidget {
                       Get.find<LastAwardDetailViewModel>().moreRanksMethod();
                     },
                     child: Padding(
-                      padding: primaryAllPadding,
+                      padding: defaultPaddingAll,
                       child: Container(
                           width: double.infinity,
                           height: 50.w,
@@ -802,7 +802,7 @@ class LeagueAwardList extends StatelessWidget {
                             child: Text(
                               Get.find<LastAwardDetailViewModel>().moreRanks ? '수상 내역 줄이기' : '수상 내역 더보기',
                               style: seeMore.copyWith(
-                                color: white,
+                                color: yachtWhite,
                               ),
                             ),
                           )),
@@ -902,7 +902,7 @@ class PortfolioLabelForLastSubLeagues extends StatelessWidget {
                                     appBar: primaryAppBar(_lastAwardDetailViewModel.lastSubLeague.stocks[i].name),
                                     body: SingleChildScrollView(
                                       child: Padding(
-                                        padding: primaryHorizontalPadding,
+                                        padding: defaultHorizontalPadding,
                                         child: StockInfoKRView(
                                             investAddressModel: _lastAwardDetailViewModel.lastSubLeague.stocks[i]
                                                 .toInvestAddressModel()),
@@ -1053,7 +1053,7 @@ class PortfolioChartForLastSubLeagues extends StatelessWidget {
                       appBar: primaryAppBar(_lastAwardDetailViewModel.lastSubLeague.stocks[i].name),
                       body: SingleChildScrollView(
                         child: Padding(
-                          padding: primaryHorizontalPadding,
+                          padding: defaultHorizontalPadding,
                           child: StockInfoKRView(
                               investAddressModel:
                                   _lastAwardDetailViewModel.lastSubLeague.stocks[i].toInvestAddressModel()),
@@ -1082,7 +1082,7 @@ class PortfolioChartForLastSubLeagues extends StatelessWidget {
                         appBar: primaryAppBar(_lastAwardDetailViewModel.lastSubLeague.stocks[i].name),
                         body: SingleChildScrollView(
                           child: Padding(
-                            padding: primaryHorizontalPadding,
+                            padding: defaultHorizontalPadding,
                             child: StockInfoKRView(
                                 investAddressModel:
                                     _lastAwardDetailViewModel.lastSubLeague.stocks[i].toInvestAddressModel()),
@@ -1213,7 +1213,9 @@ rankDialog(BuildContext context, int index, int rank) {
                               height: 24.w,
                             ),
                             SizedBox(
-                                height: 15.w, width: 15.w, child: Image.asset('assets/icons/exit.png', color: white)),
+                                height: 15.w,
+                                width: 15.w,
+                                child: Image.asset('assets/icons/exit.png', color: yachtWhite)),
                           ],
                         ),
                         SizedBox(

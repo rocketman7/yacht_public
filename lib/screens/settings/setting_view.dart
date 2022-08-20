@@ -15,6 +15,7 @@ import 'package:yachtOne/screens/auth/kakao_firebase_auth_api.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:restart_app/restart_app.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../../locator.dart';
 import '../../styles/yacht_design_system.dart';
 
@@ -247,7 +248,7 @@ class SettingView extends StatelessWidget {
                                             ),
                                           ),
                                           snackPosition: SnackPosition.BOTTOM,
-                                          backgroundColor: white.withOpacity(.5),
+                                          backgroundColor: yachtWhite.withOpacity(.5),
                                           barBlur: 2,
                                           duration: const Duration(seconds: 1, milliseconds: 100),
                                         );
@@ -287,7 +288,7 @@ class SettingView extends StatelessWidget {
                                           ),
                                         ),
                                         snackPosition: SnackPosition.BOTTOM,
-                                        backgroundColor: white.withOpacity(.5),
+                                        backgroundColor: yachtWhite.withOpacity(.5),
                                         barBlur: 2,
                                         duration: const Duration(seconds: 1, milliseconds: 100),
                                       );
@@ -477,7 +478,7 @@ class SettingView extends StatelessWidget {
                                                 ),
                                               ),
                                               snackPosition: SnackPosition.BOTTOM,
-                                              backgroundColor: white.withOpacity(.5),
+                                              backgroundColor: yachtWhite.withOpacity(.5),
                                               barBlur: 2,
                                               duration: const Duration(seconds: 1, milliseconds: 100),
                                             );
@@ -545,7 +546,7 @@ class SettingView extends StatelessWidget {
                   ),
                 ),
                 snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: white.withOpacity(.5),
+                backgroundColor: yachtWhite.withOpacity(.5),
                 barBlur: 2,
                 duration: const Duration(seconds: 1, milliseconds: 100),
               );
@@ -874,7 +875,7 @@ class SettingView extends StatelessWidget {
                     context: context,
                     builder: (context) => Dialog(
                         backgroundColor: yachtDarkGrey,
-                        insetPadding: primaryHorizontalPadding,
+                        insetPadding: defaultHorizontalPadding,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -963,7 +964,7 @@ class SettingView extends StatelessWidget {
                     context: context,
                     builder: (context) => Dialog(
                         backgroundColor: yachtDarkGrey,
-                        insetPadding: primaryHorizontalPadding,
+                        insetPadding: defaultHorizontalPadding,
                         child: Container(
                             padding:
                                 EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),

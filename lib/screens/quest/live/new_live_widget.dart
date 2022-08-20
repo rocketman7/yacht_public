@@ -9,6 +9,7 @@ import 'package:yachtOne/screens/quest/live/live_widget.dart';
 import 'package:yachtOne/screens/quest/live/new_live_controller.dart';
 import 'package:yachtOne/screens/quest/live/new_live_detail_view.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 class NewLiveWidget extends StatelessWidget {
   const NewLiveWidget({Key? key, required this.questModel}) : super(key: key);
@@ -32,7 +33,7 @@ class NewLiveWidget extends StatelessWidget {
         );
       },
       child: sectionBox(
-          padding: primaryAllPadding,
+          padding: defaultPaddingAll,
           width: 232.w,
           // height: 250.w,
           child: Column(
@@ -196,7 +197,7 @@ class QuestStatistics extends StatelessWidget {
                 SvgPicture.asset(
                   'assets/icons/manypeople.svg',
                   width: 17.w,
-                  color: white,
+                  color: yachtWhite,
                 ),
                 SizedBox(width: 4.w),
                 controller.questModel.counts == null
@@ -225,7 +226,7 @@ class QuestStatistics extends StatelessWidget {
                             "나의 선택",
                             style: TextStyle(
                               fontSize: 14.w,
-                              color: white,
+                              color: yachtWhite,
                             ),
                           ),
                           Positioned(

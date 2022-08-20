@@ -239,7 +239,7 @@ class StartupView extends GetView<StartupViewModel> {
                         'assets/icons/bottom_navigation/home_selected.png',
                         width: iconSize,
                         height: iconSize,
-                        color: white,
+                        color: yachtWhite,
                       ),
                     ),
                     label: '',
@@ -258,7 +258,7 @@ class StartupView extends GetView<StartupViewModel> {
                         'assets/icons/bottom_navigation/insight_selected.png',
                         width: iconSize,
                         height: iconSize,
-                        color: white,
+                        color: yachtWhite,
                       ),
                       label: ''),
                   BottomNavigationBarItem(
@@ -272,7 +272,7 @@ class StartupView extends GetView<StartupViewModel> {
                         'assets/icons/bottom_navigation/community_selected.png',
                         width: iconSize,
                         height: iconSize,
-                        color: white,
+                        color: yachtWhite,
                       ),
                       label: ''),
                   BottomNavigationBarItem(
@@ -286,7 +286,7 @@ class StartupView extends GetView<StartupViewModel> {
                         'assets/icons/bottom_navigation/my_selected.png',
                         width: iconSize,
                         height: iconSize,
-                        color: white,
+                        color: yachtWhite,
                       ),
                       label: '')
                 ],

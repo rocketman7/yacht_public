@@ -23,7 +23,7 @@ Color chartTrackingColor(ChartViewModel chartViewModel) {
       ? bullColorKR
       : (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1) < 0
           ? bearColorKR
-          : white;
+          : yachtWhite;
 }
 
 Color chartClosePriceColor(ChartViewModel chartViewModel) {
@@ -31,7 +31,7 @@ Color chartClosePriceColor(ChartViewModel chartViewModel) {
       ? bullColorKR
       : (chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!) < 0
           ? bearColorKR
-          : white;
+          : yachtWhite;
 }
 
 class NewChartView extends StatelessWidget {
@@ -43,7 +43,7 @@ class NewChartView extends StatelessWidget {
         ? bullColorKR
         : (chartViewModel.close.value / chartViewModel.chartPrices!.last.close! - 1) < 0
             ? bearColorKR
-            : white;
+            : yachtWhite;
   }
 
   Color chartClosePriceColor(ChartViewModel chartViewModel) {
@@ -51,7 +51,7 @@ class NewChartView extends StatelessWidget {
         ? bullColorKR
         : (chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!) < 0
             ? bearColorKR
-            : white;
+            : yachtWhite;
   }
 
   NewChartView({Key? key, required this.investAddressModel, required this.chartViewModel}) : super(key: key);
@@ -230,7 +230,7 @@ class NewChartView extends StatelessWidget {
                                 ? Icon(
                                     Icons.auto_graph,
                                     size: 18,
-                                    color: white,
+                                    color: yachtWhite,
                                   )
                                 : Text(
                                     chartViewModel.cycles[index],
@@ -537,7 +537,7 @@ class MainPriceDisplay extends StatelessWidget {
                     "현재 주가",
                     style: TextStyle(
                       fontSize: 14.w,
-                      color: white,
+                      color: yachtWhite,
                       // fontFamily: 'Default',
                       letterSpacing: -1.0,
                     ),
@@ -633,7 +633,7 @@ class MainPriceTrackingDisplay extends StatelessWidget {
                                     ? bullColorKR
                                     : (chartViewModel.close.value / chartViewModel.open.value - 1) < 0
                                         ? bearColorKR
-                                        : white
+                                        : yachtWhite
                                 : (chartViewModel.chartPrices!.first.close! - chartViewModel.chartPrices!.last.close!) >
                                         0
                                     ? bullColorKR
@@ -641,7 +641,7 @@ class MainPriceTrackingDisplay extends StatelessWidget {
                                                 chartViewModel.chartPrices!.last.close!) <
                                             0
                                         ? bearColorKR
-                                        : white),
+                                        : yachtWhite),
                       ),
                       SizedBox(width: 4),
                       Text(
@@ -654,7 +654,7 @@ class MainPriceTrackingDisplay extends StatelessWidget {
                                       ? bullColorKR
                                       : (chartViewModel.close.value / chartViewModel.open.value - 1) < 0
                                           ? bearColorKR
-                                          : white
+                                          : yachtWhite
                                   : (chartViewModel.chartPrices!.first.close! /
                                                   chartViewModel.chartPrices!.last.close! -
                                               1) >
@@ -665,7 +665,7 @@ class MainPriceTrackingDisplay extends StatelessWidget {
                                                   1) <
                                               0
                                           ? bearColorKR
-                                          : white))
+                                          : yachtWhite))
                     ],
                   ),
                 ],

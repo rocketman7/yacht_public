@@ -12,6 +12,7 @@ import 'package:yachtOne/screens/auth/auth_check_view_model.dart';
 import 'package:yachtOne/services/auth_service.dart';
 import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../locator.dart';
 
@@ -61,7 +62,7 @@ class _EmailVerificationWaitingViewState extends State<EmailVerificationWaitingV
       child: Scaffold(
         body: SafeArea(
           child: Padding(
-            padding: primaryAllPadding * 2,
+            padding: defaultPaddingAll * 2,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

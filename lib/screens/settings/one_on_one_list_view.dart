@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:yachtOne/styles/style_constants.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../../styles/size_config.dart';
 import '../../styles/yacht_design_system.dart';
 import 'one_on_one_list_view_model.dart';
@@ -61,7 +61,7 @@ class OneOnOneListView extends StatelessWidget {
                                     },
                                     child: sectionBox(
                                         child: Container(
-                                      padding: primaryAllPadding,
+                                      padding: defaultPaddingAll,
                                       width: double.infinity,
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +138,7 @@ class OneOnOneListDetailView extends StatelessWidget {
                     onTap: () {},
                     child: sectionBox(
                         child: Container(
-                      padding: primaryAllPadding,
+                      padding: defaultPaddingAll,
                       width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

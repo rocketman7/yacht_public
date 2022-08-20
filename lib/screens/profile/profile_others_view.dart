@@ -19,7 +19,7 @@ import 'package:yachtOne/screens/ranks/rank_share_view.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../../handlers/numbers_handler.dart';
 import '../../locator.dart';
 import '../../styles/size_config.dart';
@@ -357,7 +357,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
                                   builder: (context) {
                                     return Dialog(
                                         backgroundColor: yachtDarkGrey,
-                                        insetPadding: primaryHorizontalPadding,
+                                        insetPadding: defaultHorizontalPadding,
                                         child: Container(
                                             padding: EdgeInsets.fromLTRB(
                                                 14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
@@ -556,7 +556,7 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
         //   height: correctHeight(30.w, 0.0, profileHeaderTextStyle.fontSize),
         // ),
         // Padding(
-        //   padding: primaryHorizontalPadding,
+        //   padding: defaultHorizontalPadding,
         //   child: Row(
         //     children: [
         //       Text(
@@ -582,10 +582,10 @@ class ProfileOthersView extends GetView<ProfileOthersViewModel> {
         //         (index) => Column(
         //               children: [
         //                 Padding(
-        //                   padding: primaryHorizontalPadding,
+        //                   padding: defaultHorizontalPadding,
         //                   child: Obx(
         //                     () => sectionBox(
-        //                         padding: primaryAllPadding,
+        //                         padding: defaultPaddingAll,
         //                         child: FutureBuilder<QuestModel>(
         //                             future: controller.getEachQuestModel(
         //                                 userQuestModelRx[index]),
@@ -1029,7 +1029,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                     height: correctHeight(30.w, 0.0, profileHeaderTextStyle.fontSize),
                   ),
                   Padding(
-                    padding: primaryHorizontalPadding,
+                    padding: defaultHorizontalPadding,
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
@@ -1051,7 +1051,7 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                                 'assets/icons/navigate_foward_arrow.png',
                                 height: 16.w,
                                 width: 9.w,
-                                color: white,
+                                color: yachtWhite,
                               ),
                               Container(
                                 width: 14.w,
@@ -1067,9 +1067,9 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                   ),
                   Obx(() => profileOthersViewModel.otherUserQuestModels.length == 0
                           ? Padding(
-                              padding: primaryHorizontalPadding,
+                              padding: defaultHorizontalPadding,
                               child: Container(
-                                padding: primaryAllPadding,
+                                padding: defaultPaddingAll,
                                 width: double.infinity,
                                 decoration:
                                     BoxDecoration(color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
@@ -1094,10 +1094,10 @@ class _OtherProfileTabBarViewState extends State<OtherProfileTabBarView> with Si
                       //         (index) => Column(
                       //               children: [
                       //                 Padding(
-                      //                   padding: primaryHorizontalPadding,
+                      //                   padding: defaultHorizontalPadding,
                       //                   child: Obx(
                       //                     () => sectionBox(
-                      //                         padding: primaryAllPadding,
+                      //                         padding: defaultPaddingAll,
                       //                         child: FutureBuilder<
                       //                                 QuestModel>(
                       //                             future: profileOthersViewModel
@@ -1285,10 +1285,10 @@ class QuestRecordOthersView extends StatelessWidget {
           (index) => Column(
                 children: [
                   Padding(
-                    padding: primaryHorizontalPadding,
+                    padding: defaultHorizontalPadding,
                     child: Obx(
                       () => sectionBox(
-                          padding: primaryAllPadding,
+                          padding: defaultPaddingAll,
                           child: FutureBuilder<QuestModel>(
                               future: Get.find<ProfileOthersViewModel>(tag: tag).getEachQuestModel(
                                   Get.find<ProfileOthersViewModel>(tag: tag).otherUserQuestModels[index]),

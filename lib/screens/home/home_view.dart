@@ -9,7 +9,7 @@ import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorSt
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -184,7 +184,7 @@ class HomeView extends StatelessWidget {
             constraints: BoxConstraints.loose(
               Size(double.infinity, 180.w),
             ),
-            padding: primaryHorizontalPadding,
+            padding: defaultHorizontalPadding,
             child: Form(
               key: userNameFormKey,
               child: Stack(
@@ -247,7 +247,7 @@ class HomeView extends StatelessWidget {
                               //       style: snackBarStyle,
                               //     ),
                               //   ),
-                              //   backgroundColor: white.withOpacity(.5),
+                              //   backgroundColor: yachtWhite.withOpacity(.5),
                               //   barBlur: 8,
                               //   duration: const Duration(seconds: 1, milliseconds: 100),
                               // );
@@ -278,7 +278,7 @@ class HomeView extends StatelessWidget {
                                   //       style: snackBarStyle,
                                   //     ),
                                   //   ),
-                                  //   backgroundColor: white.withOpacity(.5),
+                                  //   backgroundColor: yachtWhite.withOpacity(.5),
                                   //   barBlur: 8,
                                   //   duration: const Duration(seconds: 1, milliseconds: 100),
                                   // );
@@ -598,7 +598,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                     showDialog(
                                         context: context,
                                         builder: (context) => Dialog(
-                                            insetPadding: primaryHorizontalPadding,
+                                            insetPadding: defaultHorizontalPadding,
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
@@ -735,7 +735,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
             ),
             // height: double.minPositive,
 
-            padding: primaryAllPadding,
+            padding: defaultPaddingAll,
             child: Form(
               key: userNameFormKey,
               child: Container(
@@ -823,7 +823,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                 //       style: snackBarStyle,
                                 //     ),
                                 //   ),
-                                //   backgroundColor: white.withOpacity(.5),
+                                //   backgroundColor: yachtWhite.withOpacity(.5),
                                 //   barBlur: 8,
                                 //   duration: const Duration(seconds: 1, milliseconds: 100),
                                 // );
@@ -856,7 +856,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                     //       style: snackBarStyle,
                                     //     ),
                                     //   ),
-                                    //   backgroundColor: white.withOpacity(.5),
+                                    //   backgroundColor: yachtWhite.withOpacity(.5),
                                     //   barBlur: 8,
                                     //   duration: const Duration(seconds: 1, milliseconds: 100),
                                     // );
@@ -951,7 +951,7 @@ class NewQuests extends StatelessWidget {
       // mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           // color: Colors.red,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,

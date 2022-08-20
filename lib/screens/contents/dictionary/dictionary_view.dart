@@ -6,7 +6,7 @@ import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../../../locator.dart';
 import 'dictionary_view_model.dart';
 
@@ -20,7 +20,7 @@ class DictionaryView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           // color: Colors.red,
           child: Text("금융 백과사전", style: sectionTitle),
         ),
@@ -28,9 +28,9 @@ class DictionaryView extends StatelessWidget {
           height: primaryPaddingSize,
         ),
         Padding(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           child: sectionBox(
-            // padding: primaryAllPadding,
+            // padding: defaultPaddingAll,
             child: Obx(() => Column(
                   children: List.generate(
                       dictionaryViewModel.dictionaries.length,
@@ -48,7 +48,7 @@ class DictionaryView extends StatelessWidget {
                             child: Column(
                               children: [
                                 Container(
-                                  padding: primaryAllPadding,
+                                  padding: defaultPaddingAll,
                                   child: Row(
                                     children: [
                                       Container(

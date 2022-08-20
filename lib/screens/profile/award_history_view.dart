@@ -18,7 +18,7 @@ TextStyle awardHistoryViewTextStyle1 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -26,7 +26,7 @@ TextStyle awardHistoryViewTextStyle2 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 30.w,
   fontWeight: FontWeight.w500,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -34,7 +34,7 @@ TextStyle awardHistoryViewTextStyle3 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 12.w,
   fontWeight: FontWeight.w300,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -42,7 +42,7 @@ TextStyle awardHistoryViewTextStyle4 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 16.w,
   fontWeight: FontWeight.w300,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -50,7 +50,7 @@ TextStyle awardHistoryViewTextStyle5 = TextStyle(
   // fontFamily: 'SCore',
   fontSize: 14.w,
   fontWeight: FontWeight.w500,
-  color: white, // yacht grey
+  color: yachtWhite, // yacht grey
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -58,7 +58,7 @@ TextStyle awardHistoryViewTextStyle6 = TextStyle(
   fontFamily: 'SCore',
   fontSize: 16.w,
   fontWeight: FontWeight.w500,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );

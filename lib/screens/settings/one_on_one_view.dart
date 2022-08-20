@@ -13,7 +13,7 @@ TextStyle categoryTextStyle = TextStyle(
   fontSize: 14.w,
   fontFamily: krFont,
   fontWeight: FontWeight.w300,
-  color: white,
+  color: yachtWhite,
   letterSpacing: -1.0,
   height: 1.4,
 );
@@ -84,7 +84,7 @@ class OneOnOneView extends StatelessWidget {
                               radius: Radius.circular(4.0),
                               child: TextFormField(
                                 style: TextStyle(
-                                  color: white,
+                                  color: yachtWhite,
                                 ),
                                 controller: oneOnOneViewModel.contentController,
                                 textAlignVertical: TextAlignVertical.bottom,
@@ -183,7 +183,7 @@ class OneOnOneView extends StatelessWidget {
                                           width: 14.w,
                                           child: Image.asset(
                                             'assets/icons/oneonedown.png',
-                                            color: white,
+                                            color: yachtWhite,
                                           )),
                                     ),
                                   ],

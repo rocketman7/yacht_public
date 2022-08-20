@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../locator.dart';
 import '../../services/mixpanel_service.dart';
@@ -35,7 +36,7 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
         key: _formKey,
         child: SafeArea(
             child: Padding(
-          padding: primaryAllPadding * 2,
+          padding: defaultPaddingAll * 2,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +59,7 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                 TextFormField(
                   controller: _emailController,
                   style: TextStyle(
-                    color: white,
+                    color: yachtWhite,
                     fontSize: 18.w,
                   ),
                   onChanged: (_) {
@@ -99,7 +100,7 @@ class _EmailRegisterViewState extends State<EmailRegisterView> {
                       controller: _passwordController,
                       obscureText: _obscureText,
                       style: TextStyle(
-                        color: white,
+                        color: yachtWhite,
                         fontSize: 18.w,
                       ),
                       onChanged: (_) {

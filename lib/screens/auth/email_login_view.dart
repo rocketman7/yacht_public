@@ -5,6 +5,7 @@ import 'package:yachtOne/screens/auth/email_auth_controller.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 class EmailLoginView extends StatefulWidget {
   EmailLoginView({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _EmailLoginViewState extends State<EmailLoginView> {
         key: _formKey,
         child: SafeArea(
             child: Padding(
-          padding: primaryAllPadding * 2,
+          padding: defaultPaddingAll * 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -90,7 +91,7 @@ class _EmailLoginViewState extends State<EmailLoginView> {
                     controller: _passwordController,
                     obscureText: _obscureText,
                     style: TextStyle(
-                      color: white,
+                      color: yachtWhite,
                       fontSize: 18.w,
                     ),
                     onChanged: (_) {

@@ -7,6 +7,7 @@ import 'package:yachtOne/repositories/repository.dart';
 import 'package:yachtOne/screens/profile/profile_my_view.dart';
 import 'package:yachtOne/screens/profile/profile_others_view.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../locator.dart';
 import 'rank_controller.dart';
@@ -21,7 +22,7 @@ class RankHomeWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -88,7 +89,7 @@ class AllRankerView extends StatelessWidget {
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
-        backgroundColor: white,
+        backgroundColor: yachtWhite,
         toolbarHeight: 60.w,
         title: Text('랭킹', style: appBarTitle),
       ),

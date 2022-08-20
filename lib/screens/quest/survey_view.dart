@@ -10,6 +10,7 @@ import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/screens/quest/survey_view_model.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/widgets/loading_container.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 class SurveyView extends GetView<SurveyViewModel> {
   SurveyView({Key? key}) : super(key: key);
@@ -148,7 +149,7 @@ class SurveyView extends GetView<SurveyViewModel> {
                                                 color: controller.answerList[questModel.surveys![index].answersId!] ==
                                                         answerIndex
                                                     ? yachtViolet
-                                                    : white,
+                                                    : yachtWhite,
                                                 borderRadius: BorderRadius.circular(12.w),
                                                 boxShadow: [
                                                   BoxShadow(
@@ -157,7 +158,7 @@ class SurveyView extends GetView<SurveyViewModel> {
                                                     spreadRadius: 1.w,
                                                   )
                                                 ]),
-                                            padding: primaryHorizontalPadding,
+                                            padding: defaultHorizontalPadding,
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
                                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -223,7 +224,7 @@ class SurveyView extends GetView<SurveyViewModel> {
                                                 color: controller.answerList[questModel.surveys![index].answersId!]
                                                         .contains(answerIndex)
                                                     ? yachtViolet.withOpacity(.7)
-                                                    : white,
+                                                    : yachtWhite,
                                                 borderRadius: BorderRadius.circular(12.w),
                                                 boxShadow: [
                                                   BoxShadow(
@@ -232,7 +233,7 @@ class SurveyView extends GetView<SurveyViewModel> {
                                                     spreadRadius: 1.w,
                                                   )
                                                 ]),
-                                            padding: primaryHorizontalPadding,
+                                            padding: defaultHorizontalPadding,
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
                                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -263,7 +264,7 @@ class SurveyView extends GetView<SurveyViewModel> {
                           }),
                         } else if (questModel.surveys![index].answerType == 'pickManyCircles') ...{
                           Padding(
-                              padding: primaryHorizontalPadding,
+                              padding: defaultHorizontalPadding,
                               child: Wrap(
                                 clipBehavior: Clip.none,
                                 spacing: 12.w,
@@ -366,7 +367,7 @@ class SurveyView extends GetView<SurveyViewModel> {
                                               color: controller.answerList[questModel.surveys![index].answersId!]
                                                       .contains(answerIndex)
                                                   ? yachtViolet.withOpacity(.7)
-                                                  : white,
+                                                  : yachtWhite,
                                               borderRadius: BorderRadius.circular(12.w),
                                               boxShadow: [
                                                 BoxShadow(
@@ -375,7 +376,7 @@ class SurveyView extends GetView<SurveyViewModel> {
                                                   spreadRadius: 1.w,
                                                 )
                                               ]),
-                                          padding: primaryHorizontalPadding,
+                                          padding: defaultHorizontalPadding,
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -443,7 +444,7 @@ class SurveyView extends GetView<SurveyViewModel> {
     });
 
     return Scaffold(
-        backgroundColor: white,
+        backgroundColor: yachtWhite,
         body: SafeArea(
           child: GetBuilder<SurveyViewModel>(
             init: SurveyViewModel(surveyQuestionPageModel: questModel.surveys!),

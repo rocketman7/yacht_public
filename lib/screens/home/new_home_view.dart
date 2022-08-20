@@ -9,7 +9,10 @@ import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorSt
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_button.dart';
+import 'package:yachtOne/yacht_design_system/yds_dialog.dart';
+import 'package:yachtOne/yacht_design_system/yds_font.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -166,11 +169,11 @@ class YachtPick extends StatelessWidget {
         Row(
           children: [
             Padding(
-              padding: primaryHorizontalPadding,
+              padding: defaultHorizontalPadding,
               child: Text(
                 "오늘의 요트 Pick",
                 style: TextStyle(
-                  color: white,
+                  color: yachtWhite,
                   fontSize: 24.w,
                   fontWeight: FontWeight.w600,
                 ),
@@ -190,18 +193,31 @@ class YachtPick extends StatelessWidget {
                           Navigator.of(context).pop();
                         },
                         child: Dialog(
-                          backgroundColor: yachtDarkGrey,
-                          child: Padding(
-                            padding: primaryAllPadding,
+                          backgroundColor: Colors.transparent,
+                          // shape: RoundedRectangleBorder(
+                          //   borderRadius: BorderRadius.circular(12.w),
+                          // ),
+                          insetPadding: EdgeInsets.symmetric(horizontal: 14.w),
+                          child: Container(
+                            padding: defaultPaddingAll.copyWith(top: 0),
+                            decoration: BoxDecoration(
+                              color: yachtDarkGrey,
+                              borderRadius: BorderRadius.circular(12.w),
+                            ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
-                                  "요트 Pick?",
-                                  style: dialogTitle,
-                                ),
-                                SizedBox(
-                                  height: 12.w,
+                                Container(
+                                  height: 60.w,
+                                  child: Center(
+                                    child: Text(
+                                      "요트 Pick?",
+                                      style: head3Style.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 FutureBuilder<String>(
                                     future: homeViewModel.getYachtPickDescription(),
@@ -209,14 +225,18 @@ class YachtPick extends StatelessWidget {
                                       return snapshot.hasData
                                           ? Text(
                                               '${snapshot.data!}'.replaceAll('\\n', '\n'),
-                                              style: TextStyle(
-                                                  color: white,
-                                                  fontSize: 16.w,
-                                                  fontWeight: FontWeight.w400,
-                                                  height: 1.4),
+                                              style: body1Style.copyWith(height: 1.4.w),
                                             )
                                           : Text("");
-                                    })
+                                    }),
+                                SizedBox(
+                                  height: 16.w,
+                                ),
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: confirmDialogButton())
                               ],
                             ),
                           ),
@@ -250,12 +270,12 @@ class YachtPick extends StatelessWidget {
                 // color: Colors.red,
                 decoration: BoxDecoration(color: yachtGrey, borderRadius: BorderRadius.circular(50.w)),
                 child: Padding(
-                  padding: EdgeInsets.only(left: 14.w, right: 14.w, top: 8.w, bottom: 8.w),
+                  padding: EdgeInsets.only(left: 18.w, right: 18.w, top: 8.w, bottom: 8.w),
                   child: Text(
                     "모든 요트 Pick",
                     style: TextStyle(
                       fontFamily: krFont,
-                      color: white,
+                      color: yachtWhite,
                       fontSize: 14.w,
                       fontWeight: FontWeight.w600,
                     ),
@@ -399,7 +419,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
                     Text("이용약관",
                         style: TextStyle(
-                          color: white,
+                          color: yachtWhite,
                         )),
                     SizedBox(
                       height: 8.w,
@@ -423,7 +443,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                 termsOfUse,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
-                                  color: white,
+                                  color: yachtWhite,
                                 ),
                               ),
                             )),
@@ -434,7 +454,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                     ),
                     Text("개인정보처리방침",
                         style: TextStyle(
-                          color: white,
+                          color: yachtWhite,
                         )),
                     SizedBox(
                       height: 8.w,
@@ -458,7 +478,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                               child: Text(
                                 privacyPolicy,
                                 style: TextStyle(
-                                  color: white,
+                                  color: yachtWhite,
                                 ),
                                 textAlign: TextAlign.left,
                               ),
@@ -480,7 +500,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                               width: 24.0,
                               child: Checkbox(
                                   activeColor: yachtViolet,
-                                  side: BorderSide(width: 2.w, color: white),
+                                  side: BorderSide(width: 2.w, color: yachtWhite),
                                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                   value: checkTerm.value,
                                   onChanged: (value) {
@@ -490,7 +510,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                             SizedBox(width: 4.w),
                             Text("이용약관 및 개인정보처리방침 동의",
                                 style: TextStyle(
-                                  color: white,
+                                  color: yachtWhite,
                                 )),
                             Text(" (필수)", style: TextStyle(color: yachtRed, fontFamily: 'Default')),
                           ],
@@ -512,7 +532,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                               width: 24.0,
                               child: Checkbox(
                                   activeColor: yachtViolet,
-                                  side: BorderSide(width: 2.w, color: white),
+                                  side: BorderSide(width: 2.w, color: yachtWhite),
                                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                   value: checkFourteen.value,
                                   onChanged: (value) {
@@ -522,7 +542,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                             SizedBox(width: 4.w),
                             Text("만 14세 이상입니다. ",
                                 style: TextStyle(
-                                  color: white,
+                                  color: yachtWhite,
                                 )),
                             Text(" (필수)", style: TextStyle(color: yachtRed, fontFamily: 'Default')),
                           ],
@@ -544,7 +564,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                         context: context,
                                         builder: (context) => Dialog(
                                             backgroundColor: yachtDarkGrey,
-                                            insetPadding: primaryHorizontalPadding,
+                                            insetPadding: defaultHorizontalPadding,
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
@@ -677,11 +697,11 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
         ),
         child: Container(
             // decoration: primaryBoxDecoration.copyWith(
-            //   // color: white,
+            //   // color: yachtWhite,
             // ),
             // height: double.minPositive,
 
-            padding: primaryAllPadding,
+            padding: defaultPaddingAll,
             child: Form(
               key: userNameFormKey,
               child: Container(
@@ -697,7 +717,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                         Container(
                           child: Text("어떤 호칭으로 불러드릴까요?",
                               style: TextStyle(
-                                  color: white,
+                                  color: yachtWhite,
                                   fontSize: 18.w,
                                   letterSpacing: -0.5,
                                   height: 1.4,
@@ -711,7 +731,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                             child: TextFormField(
                               controller: userNameController,
                               style: TextStyle(
-                                color: white,
+                                color: yachtWhite,
                               ),
                               textAlignVertical: TextAlignVertical.bottom,
                               keyboardType: TextInputType.name,
@@ -773,7 +793,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                 //       style: snackBarStyle,
                                 //     ),
                                 //   ),
-                                //   backgroundColor: white.withOpacity(.5),
+                                //   backgroundColor: yachtWhite.withOpacity(.5),
                                 //   barBlur: 8,
                                 //   duration: const Duration(seconds: 1, milliseconds: 100),
                                 // );
@@ -806,7 +826,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                     //       style: snackBarStyle,
                                     //     ),
                                     //   ),
-                                    //   backgroundColor: white.withOpacity(.5),
+                                    //   backgroundColor: yachtWhite.withOpacity(.5),
                                     //   barBlur: 8,
                                     //   duration: const Duration(seconds: 1, milliseconds: 100),
                                     // );

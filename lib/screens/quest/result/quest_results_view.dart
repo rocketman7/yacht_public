@@ -10,6 +10,7 @@ import 'package:yachtOne/screens/quest/result/quest_result_widget.dart';
 import 'package:yachtOne/screens/quest/result/quest_results_view_model.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 class QuestResultsView extends StatelessWidget {
   final HomeViewModel homeViewModel;
@@ -22,7 +23,7 @@ class QuestResultsView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           // color: Colors.red,
           child: Text("퀘스트 결과보기", style: sectionTitle),
         ),
@@ -35,7 +36,7 @@ class QuestResultsView extends StatelessWidget {
           child: Obx(() {
             return (homeViewModel.resultQuests.length == 0) // 로딩 중과 length 0인 걸 구분해야 함
                 ? Padding(
-                    padding: primaryHorizontalPadding,
+                    padding: defaultHorizontalPadding,
                     child: sectionBox(
                       child: Container(
                           child: Image.asset(

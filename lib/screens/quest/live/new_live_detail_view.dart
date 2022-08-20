@@ -7,7 +7,7 @@ import 'package:yachtOne/models/quest_model.dart';
 import 'package:yachtOne/screens/quest/live/new_live_controller.dart';
 import 'package:yachtOne/screens/quest/live/new_live_widget.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
-
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import '../quest_view.dart';
 
 class NewLiveDetailView extends StatelessWidget {
@@ -35,7 +35,7 @@ class NewLiveDetailView extends StatelessWidget {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: primaryAllPadding,
+                padding: defaultPaddingAll,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

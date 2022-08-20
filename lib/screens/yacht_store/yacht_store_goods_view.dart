@@ -7,6 +7,7 @@ import 'package:yachtOne/models/yacht_store/giftishow_model.dart';
 import 'package:yachtOne/screens/yacht_store/goods_exchage_view.dart';
 import 'package:yachtOne/screens/yacht_store/yacht_store_controller.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 class YachtStoreGoodsView extends StatelessWidget {
   const YachtStoreGoodsView({Key? key, required this.giftishowModel, required this.yachtStoreController})
@@ -22,7 +23,7 @@ class YachtStoreGoodsView extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: primaryAllPadding,
+              padding: defaultPaddingAll,
               child: Column(
                 children: [
                   Column(
@@ -143,7 +144,7 @@ class InsufficientYachtPointAlertDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: primaryHorizontalPadding,
+            padding: defaultHorizontalPadding,
             // height: 210.w,
             width: 347.w,
             child: Column(

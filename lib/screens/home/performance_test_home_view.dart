@@ -12,6 +12,7 @@ import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../quest/quest_widget.dart';
 
@@ -249,7 +250,7 @@ class LiveQuests extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           // color: Colors.red,
           child: Text("라이브", style: homeModuleTitleTextStyle),
         ),
@@ -273,7 +274,7 @@ class NewQuests extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: primaryHorizontalPadding,
+          padding: defaultHorizontalPadding,
           // color: Colors.red,
           child: Text("새로 나온 퀘스트", style: homeModuleTitleTextStyle),
         ),
@@ -332,7 +333,7 @@ class Awards extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            padding: primaryHorizontalPadding,
+            padding: defaultHorizontalPadding,
             // color: Colors.red,
             child: Text("이 달의 상금 주식", style: homeModuleTitleTextStyle),
           ),

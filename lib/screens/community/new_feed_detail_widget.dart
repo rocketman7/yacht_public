@@ -15,6 +15,7 @@ import 'package:any_link_preview/any_link_preview.dart';
 import '../../models/community/post_model.dart';
 import '../../repositories/repository.dart';
 import 'new_feed_widget.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 class NewFeedDetailWidget extends GetView {
   NewFeedDetailWidget({
@@ -49,7 +50,7 @@ class NewFeedDetailWidget extends GetView {
               shrinkWrap: true,
               children: [
                 Padding(
-                  padding: primaryAllPadding,
+                  padding: defaultPaddingAll,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -94,7 +95,7 @@ class NewFeedDetailWidget extends GetView {
                                     // bodyMaxLines: 1,
                                     backgroundColor: yachtGrey,
                                     titleStyle: TextStyle(
-                                      color: white,
+                                      color: yachtWhite,
                                       fontSize: 15.w,
                                     ),
                                     bodyStyle: TextStyle(
@@ -133,7 +134,7 @@ class NewFeedDetailWidget extends GetView {
           ),
           SizedBox(height: 12.w),
           Padding(
-            padding: primaryHorizontalPadding,
+            padding: defaultHorizontalPadding,
             child: Row(
               children: [
                 Container(
