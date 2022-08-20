@@ -157,13 +157,13 @@ class YachtPickOldView extends StatelessWidget {
                                                   width: 20.w,
                                                 ),
                                                 Text(
-                                                  " 분류된 요트 Pick 종목들로 구성",
+                                                  " 분류된 요트 Pick 종목들로 구성.",
                                                   style: body1Style.copyWith(height: 1.4.w),
                                                 ),
                                               ],
                                             ),
                                             Text(
-                                              "2) 요트 Pick 공개 직후 다음 영업일 시초가에 \n동일 금액 매수. ",
+                                              "2) 요트 Pick 공개 직후 다음 영업일 시초가에 \n동일 금액을 매수하는 전략의 수익률. ",
                                               textAlign: TextAlign.center,
                                               style: body1Style.copyWith(height: 1.4.w),
                                             ),
