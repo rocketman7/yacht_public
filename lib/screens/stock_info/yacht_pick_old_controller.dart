@@ -112,9 +112,9 @@ class YachtPickOldController extends GetxController {
     for (int i = 0; i < stockInfoNewModels!.length; i++) {
       previousClosePrices[i] = await _firestoreService.getClosePrice(
         stockInfoNewModels![i].code,
-        previousBusinessDay(previousBusinessDay(
+        previousBusinessDay(
           DateTime.now(),
-        )),
+        ),
       );
     }
 
