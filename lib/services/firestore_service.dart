@@ -1226,7 +1226,7 @@ class FirestoreService extends GetxService {
       if (element.docs.length == 0) {
         return 0;
       } else {
-        print('element: ${element.docs[0].data()}');
+        // print('element: ${element.docs[0].data()}');
         return element.docs[0].data()['close'];
       }
     });
@@ -1250,19 +1250,37 @@ class FirestoreService extends GetxService {
 
   // 특정 날, 특정 종목 종가 가져오기
   Future<num> getOpenPrice(String issueCode, DateTime day) async {
-    return await _firestoreService
-        .collection('stocksKR/$issueCode/historicalPrices')
-        .where('dateTime', isEqualTo: dateTimeToString(day, 8))
-        .get()
-        .then((value) {
-      // print('value: $issueCode $day ${value.docs.length}');
-      if (value.docs.length == 0) {
-        return 0;
-      } else {
-        // print(value.docs.first.data());
-        return value.docs.first.data()['open'];
-      }
-    });
+    if (day.isAfter(DateTime.now())) {
+      // 아직 Open Price 가져올 날이 오지 않았을 때
+      return await _firestoreService
+          .collection('stocksKR/$issueCode/historicalPrices')
+          .where('dateTime', isLessThan: dateTimeToString(day, 8))
+          .orderBy('dateTime', descending: true)
+          .get()
+          .then((value) {
+        // print('value: $issueCode $day ${value.docs.length}');
+        if (value.docs.length == 0) {
+          return 0;
+        } else {
+          // print(value.docs.first.data());
+          return value.docs.first.data()['close'];
+        }
+      });
+    } else {
+      return await _firestoreService
+          .collection('stocksKR/$issueCode/historicalPrices')
+          .where('dateTime', isEqualTo: dateTimeToString(day, 8))
+          .get()
+          .then((value) {
+        // print('value: $issueCode $day ${value.docs.length}');
+        if (value.docs.length == 0) {
+          return 0;
+        } else {
+          // print(value.docs.first.data());
+          return value.docs.first.data()['open'];
+        }
+      });
+    }
   }
 
   // 한 종목 최신가격 가져오기
