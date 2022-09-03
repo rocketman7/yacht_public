@@ -9,7 +9,7 @@ import 'package:yachtOne/screens/contents/reading_content/reading_content_view.d
 import 'package:yachtOne/screens/contents/today_market/today_market_view.dart';
 import 'package:yachtOne/screens/insight/insight_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
-import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_appbar.dart';
 
 import '../../locator.dart';
 

@@ -14,6 +14,8 @@ import 'package:yachtOne/screens/stock_info/stock_info_new_controller.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_new_view.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_button.dart';
+import 'package:yachtOne/yacht_design_system/yds_dialog.dart';
 import 'package:yachtOne/yacht_design_system/yds_font.dart';
 import 'package:yachtOne/yacht_design_system/yds_size.dart';
 import 'package:yachtOne/yacht_design_system/yds_widget.dart';
@@ -179,42 +181,15 @@ class YachtPickCardForCarousel extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     return GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Dialog(
-                        backgroundColor: yachtDarkGrey,
-                        child: Padding(
-                          padding: defaultPaddingAll,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "공개 예정 요트 Pick",
-                                style: dialogTitle,
-                              ),
-                              SizedBox(
-                                height: 12.w,
-                              ),
-                              FutureBuilder<String>(
-                                  future: tempMainController.getTobeContinueDescription(),
-                                  builder: (_, snapshot) {
-                                    return snapshot.hasData
-                                        ? Text(
-                                            '${snapshot.data!}'.replaceAll('\\n', '\n'),
-                                            style: TextStyle(
-                                                color: yachtWhite,
-                                                fontSize: 16.w,
-                                                fontWeight: FontWeight.w400,
-                                                height: 1.4),
-                                          )
-                                        : Text("");
-                                  })
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: FutureBuilder<String>(
+                          future: tempMainController.getTobeContinueDescription(),
+                          builder: (context, snapshot) {
+                            return snapshot.hasData ? infoDialog(context, info: snapshot.data!) : infoDialog(context);
+                          },
+                        ));
                   });
             } else {
               _mixpanelService.mixpanel.track('Yacht Pick Detail', properties: {'Stock Name': stockInfoNewModel.name});

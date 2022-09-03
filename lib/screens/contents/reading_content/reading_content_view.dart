@@ -6,10 +6,14 @@ import 'package:yachtOne/screens/contents/reading_content/reading_content_view_m
 import 'package:yachtOne/screens/contents/reading_content/reading_content_see_all_view.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
-import 'package:yachtOne/styles/yacht_design_system.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:yachtOne/widgets/loading_container.dart';
+import 'package:yachtOne/yacht_design_system/yds_appbar.dart';
+import 'package:yachtOne/yacht_design_system/yds_color.dart';
+import 'package:yachtOne/yacht_design_system/yds_font.dart';
+import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../../locator.dart';
 
@@ -23,12 +27,15 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start, children: [
       Container(
-        padding: EdgeInsets.symmetric(horizontal: primaryPaddingSize),
+        padding: EdgeInsets.symmetric(horizontal: defaultPaddingSize),
         // color: Colors.red,
-        child: Text("요트 매거진", style: sectionTitle),
+        child: Text("요트 매거진",
+            style: body1Style.copyWith(
+              fontWeight: FontWeight.bold,
+            )),
       ),
       SizedBox(
-        height: primaryPaddingSize,
+        height: defaultPaddingSize,
       ),
       Obx(() => controller.readingContents.length > 0
           ? GridView.builder(
@@ -62,12 +69,12 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
                   },
                   child: Container(
                       // padding: EdgeInsets.all(4.w),
-                      decoration: yachtBoxDecoration.copyWith(
-                          borderRadius: BorderRadius.circular(12.w),
-                          border: Border.all(
-                            color: yachtLightBlack,
-                            width: 4.w,
-                          )),
+                      // decoration: yachtBoxDecoration.copyWith(
+                      //     borderRadius: BorderRadius.circular(12.w),
+                      //     border: Border.all(
+                      //       color: yachtLightBlack,
+                      //       width: 4.w,
+                      //     )),
                       //  BoxDecoration(
 
                       //     borderRadius: BorderRadius.circular(12.w),
@@ -77,23 +84,23 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
                       //       width: 4.w,
                       //     )),
                       child: CachedNetworkImage(
-                        imageUrl:
-                            "https://storage.googleapis.com/ggook-5fb08.appspot.com/${controller.readingContents[index].thumbnailUrl}",
-                        // width: 270.w,
-                        // height: 240.w,
-                        filterQuality: FilterQuality.high,
-                        progressIndicatorBuilder: (_, __, DownloadProgress progress) {
-                          // progress.totalSize
-                          // if (progress == null) return child;
-                          return LayoutBuilder(builder: (context, constraints) {
-                            return LoadingContainer(
-                              width: constraints.maxWidth,
-                              height: constraints.maxHeight,
-                              radius: 10.w,
-                            );
-                          });
-                        },
-                      )),
+                    imageUrl:
+                        "https://storage.googleapis.com/ggook-5fb08.appspot.com/${controller.readingContents[index].thumbnailUrl}",
+                    // width: 270.w,
+                    // height: 240.w,
+                    filterQuality: FilterQuality.high,
+                    progressIndicatorBuilder: (_, __, DownloadProgress progress) {
+                      // progress.totalSize
+                      // if (progress == null) return child;
+                      return LayoutBuilder(builder: (context, constraints) {
+                        return LoadingContainer(
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight,
+                          radius: 10.w,
+                        );
+                      });
+                    },
+                  )),
                 );
               },
             )
@@ -104,7 +111,7 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
           Get.to(ReadingContentSeeAll());
         },
         child: Padding(
-          padding: primaryAllPadding,
+          padding: defaultPaddingAll,
           child: Container(
             width: double.infinity,
             height: 50.w,
@@ -115,8 +122,8 @@ class ReadingContentView extends GetView<ReadingContentViewModel> {
             child: Center(
                 child: Text(
               "모두 보기",
-              style: seeMore.copyWith(
-                color: white,
+              style: body1Style.copyWith(
+                color: yachtWhite,
               ),
             )),
           ),
@@ -215,8 +222,8 @@ class _ReadingContentWebViewState extends State<ReadingContentWebView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: primaryAppBar(widget.readingContent.title),
-      backgroundColor: primaryBackgroundColor,
+      appBar: defaultAppBar(widget.readingContent.title),
+      backgroundColor: yachtBlack,
       body: SafeArea(
         child: Column(
           children: [
@@ -226,7 +233,7 @@ class _ReadingContentWebViewState extends State<ReadingContentWebView> {
                   child: progessPercent.value < 1.0
                       ? LinearProgressIndicator(
                           value: progessPercent.value,
-                          backgroundColor: primaryButtonText,
+                          backgroundColor: yachtLightGrey,
                           valueColor: AlwaysStoppedAnimation<Color>(yachtViolet),
                         )
                       : Container()),

@@ -4,8 +4,12 @@ import 'package:get/get.dart';
 import 'package:yachtOne/models/today_market_model.dart';
 import 'package:yachtOne/screens/home/home_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
-import 'package:yachtOne/styles/yacht_design_system.dart';
+// import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yachtOne/yacht_design_system/yds_appbar.dart';
+import 'package:yachtOne/yacht_design_system/yds_color.dart';
+import 'package:yachtOne/yacht_design_system/yds_container.dart';
+import 'package:yachtOne/yacht_design_system/yds_font.dart';
 import 'package:yachtOne/yacht_design_system/yds_size.dart';
 
 import '../../../locator.dart';
@@ -42,76 +46,73 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
         // ),
         Padding(
           padding: defaultHorizontalPadding,
-          child: sectionBox(
+          child: defaultContainer(
               height: 184.w,
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: primaryPaddingSize),
+              // width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: defaultPaddingSize),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Obx(
                     () => Flexible(
-                      child: PageView.builder(
-                          itemCount: controller.todayMarkets.length,
-                          controller: pageController,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                _mixpanelService.mixpanel.track('Today Market', properties: {
-                                  'Today Market Category': controller.todayMarkets[index].category,
-                                  'Today Market Title': controller.todayMarkets[index].title,
-                                  'Today Market Url': controller.todayMarkets[index].newsUrl,
-                                  'Today Market DateTime':
-                                      controller.todayMarkets[index].dateTime.toDate().toIso8601String(),
-                                  'Today Market Newspapaer': controller.todayMarkets[index].newspaper,
-                                  'Today Market Image Url': controller.todayMarkets[index].imageUrl ?? "",
-                                });
-                                _mixpanelService.mixpanel.flush();
-                                Get.to(() => TodayMarketWebView(todayMarket: controller.todayMarkets[index]));
-                              },
-                              child: Container(
-                                clipBehavior: Clip.none,
-                                padding: defaultHorizontalPadding,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '#${controller.todayMarkets[index].category}',
-                                      style: subheadingStyle.copyWith(
-                                        color: yachtViolet,
-                                        fontWeight: FontWeight.w500,
-                                        // height: 1.1,
+                      child: SizedBox(
+                        // height: 160.w,
+                        child: PageView.builder(
+                            itemCount: controller.todayMarkets.length,
+                            controller: pageController,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  _mixpanelService.mixpanel.track('Today Market', properties: {
+                                    'Today Market Category': controller.todayMarkets[index].category,
+                                    'Today Market Title': controller.todayMarkets[index].title,
+                                    'Today Market Url': controller.todayMarkets[index].newsUrl,
+                                    'Today Market DateTime':
+                                        controller.todayMarkets[index].dateTime.toDate().toIso8601String(),
+                                    'Today Market Newspapaer': controller.todayMarkets[index].newspaper,
+                                    'Today Market Image Url': controller.todayMarkets[index].imageUrl ?? "",
+                                  });
+                                  _mixpanelService.mixpanel.flush();
+                                  Get.to(() => TodayMarketWebView(todayMarket: controller.todayMarkets[index]));
+                                },
+                                child: Container(
+                                  clipBehavior: Clip.none,
+                                  padding: defaultHorizontalPadding,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '#${controller.todayMarkets[index].category}',
+                                        style: body2Style.copyWith(
+                                          color: yachtBlue,
+                                          fontWeight: FontWeight.w500,
+                                          // height: 1.1,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      height: correctHeight(
-                                        20.w,
-                                        subheadingStyle.fontSize,
-                                        sectionTitle.fontSize,
+                                      SizedBox(
+                                        height: 20.w,
                                       ),
-                                    ),
-                                    Text(controller.todayMarkets[index].title,
-                                        style: sectionTitle.copyWith(
-                                          height: 1.4,
-                                        )),
-                                    SizedBox(
-                                      height: correctHeight(
-                                        12.w,
-                                        sectionTitle.fontSize,
-                                        contentStyle.fontSize,
+                                      Text(controller.todayMarkets[index].title,
+                                          style: head2Style.copyWith(
+                                            height: 1.4,
+                                          )),
+                                      SizedBox(
+                                        height: 12.w,
                                       ),
-                                    ),
-                                    Text(
-                                      controller.todayMarkets[index].summary ?? "",
-                                      style: contentStyle.copyWith(height: 1.4),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
+                                      Text(
+                                        controller.todayMarkets[index].summary ?? "",
+                                        style: body2Style.copyWith(height: 1.4),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
+                              );
+                            }),
+                      ),
                     ),
                   ),
                   Obx(() => Row(
@@ -126,7 +127,7 @@ class TodayMarketView extends GetView<TodayMarketViewModel> {
                                     width: 6.w,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: controller.newsIndex.value == index ? white : yachtMidGrey,
+                                      color: controller.newsIndex.value == index ? yachtWhite : yachtMidGrey,
                                     ),
                                   ),
                                   SizedBox(width: 8.w),
@@ -244,8 +245,8 @@ class _TodayMarketWebViewState extends State<TodayMarketWebView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: primaryAppBar(widget.todayMarket.category),
-      backgroundColor: primaryBackgroundColor,
+      appBar: defaultAppBar(widget.todayMarket.category),
+      backgroundColor: yachtBlack,
       body: SafeArea(
         child: Column(
           children: [
@@ -255,7 +256,7 @@ class _TodayMarketWebViewState extends State<TodayMarketWebView> {
                   child: progessPercent.value < 1.0
                       ? LinearProgressIndicator(
                           value: progessPercent.value,
-                          backgroundColor: primaryButtonText,
+                          backgroundColor: yachtLightGrey,
                           valueColor: AlwaysStoppedAnimation<Color>(yachtViolet),
                         )
                       : Container()),

@@ -3,8 +3,10 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yachtOne/models/community/post_model.dart';
-import 'package:yachtOne/styles/yacht_design_system.dart';
+import 'package:yachtOne/yacht_design_system/yds_container.dart';
+import 'package:yachtOne/yacht_design_system/yds_font.dart';
 
+import '../../yacht_design_system/yds_color.dart';
 import 'community_view_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yachtOne/yacht_design_system/yds_size.dart';
@@ -35,7 +37,7 @@ class NoticeWidget extends GetView {
       },
       child: Padding(
         padding: defaultHorizontalPadding,
-        child: sectionBox(
+        child: defaultContainer(
             child: Container(
           padding: defaultPaddingAll,
           width: double.infinity,
@@ -45,14 +47,14 @@ class NoticeWidget extends GetView {
             children: [
               Text(
                 "[공지사항]",
-                style: feedWriterName.copyWith(color: yachtRed),
+                style: body2BoldStyle.copyWith(color: yachtRed),
               ),
               SizedBox(
-                height: correctHeight(10.w, feedWriterName.fontSize, feedWriterName.fontSize),
+                height: 10.w,
               ),
               Text(
                 post.title ?? "",
-                style: feedWriterName,
+                style: body2BoldStyle,
               ),
               InkWell(
                 onTap: () {
@@ -69,8 +71,8 @@ class NoticeWidget extends GetView {
                     }
                   },
                   text: post.content,
-                  style: feedContent,
-                  linkStyle: feedContent.copyWith(color: yachtViolet),
+                  style: bodyP2LightStyle,
+                  linkStyle: bodyP2LightStyle.copyWith(color: yachtViolet),
                   maxLines: (post.imageUrlList == null || post.imageUrlList!.length == 0) ? 3 : 4,
                   overflow: TextOverflow.ellipsis,
                 ),

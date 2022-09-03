@@ -14,6 +14,7 @@ import 'package:yachtOne/screens/stock_info/stock_info_new_view.dart';
 import 'package:yachtOne/screens/stock_info/yacht_pick_view.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/yacht_design_system/yds_button.dart';
+import 'package:yachtOne/yacht_design_system/yds_color.dart';
 import 'package:yachtOne/yacht_design_system/yds_dialog.dart';
 import 'package:yachtOne/yacht_design_system/yds_font.dart';
 import 'package:yachtOne/yacht_design_system/yds_size.dart';
@@ -24,7 +25,6 @@ import '../../handlers/numbers_handler.dart';
 import '../../locator.dart';
 import '../../services/firestore_service.dart';
 import '../../styles/size_config.dart';
-import '../../styles/yacht_design_system.dart';
 import 'stock_info_new_controller.dart';
 import 'yacht_pick_old_controller.dart';
 
@@ -57,10 +57,10 @@ class YachtPickOldView extends StatelessWidget {
       backgroundColor: yachtBlack,
       appBar: AppBar(
           elevation: 0,
-          backgroundColor: primaryBackgroundColor,
+          backgroundColor: yachtBlack,
           title: Text(
-            "요트 Pick",
-            style: appBarTitle,
+            "모든 요트 Pick",
+            style: head3Style.copyWith(fontWeight: FontWeight.w700),
           )),
       body: GetBuilder<YachtPickOldController>(
           init: YachtPickOldController(),
@@ -253,7 +253,7 @@ class YachtPickOldView extends StatelessWidget {
                                               color: !controller.isPriceLoaded.value
                                                   ? yachtRed
                                                   : controller.sunnyPicksReturn.value == 0.0
-                                                      ? white
+                                                      ? yachtWhite
                                                       : controller.sunnyPicksReturn.value > 0
                                                           ? yachtRed
                                                           : yachtBlue,
@@ -355,7 +355,6 @@ class YachtPickOldView extends StatelessWidget {
                                               Text(
                                                 controller.stockInfoNewModels![index].name,
                                                 style: TextStyle(
-                                                    fontFamily: krFont,
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 16.w,
                                                     letterSpacing: 0.0,
@@ -376,7 +375,6 @@ class YachtPickOldView extends StatelessWidget {
                                                         ? Text(
                                                             toPriceKRW(controller.currentClosePrices[index].value),
                                                             style: TextStyle(
-                                                                fontFamily: krFont,
                                                                 fontWeight: FontWeight.w400,
                                                                 fontSize: 16.w,
                                                                 letterSpacing: 0.0,
@@ -423,7 +421,6 @@ class YachtPickOldView extends StatelessWidget {
                                                                             1) +
                                                                     ')',
                                                                 style: TextStyle(
-                                                                    fontFamily: krFont,
                                                                     fontWeight: FontWeight.w400,
                                                                     fontSize: 14.w,
                                                                     letterSpacing: 0.0,
@@ -436,7 +433,7 @@ class YachtPickOldView extends StatelessWidget {
                                                                                     controller
                                                                                         .previousClosePrices[index] ==
                                                                                 0
-                                                                            ? white
+                                                                            ? yachtWhite
                                                                             : yachtBlue),
                                                               ),
                                                             ],
@@ -460,7 +457,6 @@ class YachtPickOldView extends StatelessWidget {
                                                     //     ' 대비',
                                                     'Pick 이후',
                                                     style: TextStyle(
-                                                        fontFamily: krFont,
                                                         fontWeight: FontWeight.w400,
                                                         fontSize: 14.w,
                                                         letterSpacing: 0.0,
@@ -482,7 +478,6 @@ class YachtPickOldView extends StatelessWidget {
                                                                           1) +
                                                                       ')',
                                                                   style: TextStyle(
-                                                                      fontFamily: krFont,
                                                                       fontWeight: FontWeight.w400,
                                                                       fontSize: 14.w,
                                                                       letterSpacing: 0.0,
@@ -497,7 +492,7 @@ class YachtPickOldView extends StatelessWidget {
                                                                                       controller
                                                                                           .yachtPickOpenPrices[index] ==
                                                                                   0
-                                                                              ? white
+                                                                              ? yachtWhite
                                                                               : yachtBlue),
                                                                 )
                                                               : TextLoadingWidget(

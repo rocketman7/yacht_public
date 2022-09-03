@@ -24,9 +24,12 @@ import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/services/storage_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:yachtOne/widgets/like_button.dart';
+import 'package:yachtOne/yacht_design_system/yds_button.dart';
+import 'package:yachtOne/yacht_design_system/yds_color.dart';
+import 'package:yachtOne/yacht_design_system/yds_container.dart';
+import 'package:yachtOne/yacht_design_system/yds_dialog.dart';
 // import 'package:yachtOne/yacht_design_system/yds_color.dart';
 import 'package:yachtOne/yacht_design_system/yds_font.dart';
 import '../../handlers/user_tier_handler.dart';
@@ -331,7 +334,7 @@ class CommentList extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   text: TextSpan(
                                       text: '${comments[index].writerUserName}   ',
-                                      style: feedWriterName.copyWith(fontWeight: FontWeight.w700, height: 1.4),
+                                      style: body2BoldStyle.copyWith(fontWeight: FontWeight.w700, height: 1.4),
                                       children: [
                                         TextSpan(
                                           text: '${comments[index].content}',
@@ -344,7 +347,7 @@ class CommentList extends StatelessWidget {
                                   children: [
                                     Text(
                                       feedTimeHandler(comments[index].writtenDateTime.toDate()),
-                                      style: feedDateTime,
+                                      style: sub1Style.copyWith(color: yachtLightGrey),
                                     ),
                                     SizedBox(
                                       width: 20.w,
@@ -352,7 +355,7 @@ class CommentList extends StatelessWidget {
                                     (comments[index].likedBy != null && comments[index].likedBy!.length > 0)
                                         ? Text(
                                             "좋아요 ${comments[index].likedBy!.length}개",
-                                            style: feedDateTime,
+                                            style: sub1Style..copyWith(color: yachtLightGrey),
                                           )
                                         : SizedBox.shrink()
                                   ],
@@ -377,79 +380,108 @@ class CommentList extends StatelessWidget {
                                             context: context,
                                             builder: (context) {
                                               return Dialog(
-                                                insetPadding: EdgeInsets.fromLTRB(32.w, 20.w, 32.w, 20.w),
+                                                backgroundColor: Colors.transparent,
+                                                insetPadding: EdgeInsets.symmetric(horizontal: 14.w),
                                                 child: Container(
-                                                  decoration: BoxDecoration(
-                                                      color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
-                                                  child: Padding(
-                                                    padding: EdgeInsets.fromLTRB(14.w, 0.w, 14.w, 14.w),
-                                                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                                                      // TITLE
-                                                      SizedBox(
-                                                        height: 50.w,
+                                                  padding: defaultPaddingAll.copyWith(top: 0),
+                                                  decoration: defaultBoxDecoration,
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Container(
+                                                        height: 60.w,
                                                         child: Center(
-                                                            child: Text(
-                                                          "알림",
-                                                          style: dialogTitle,
-                                                        )),
-                                                      ),
-                                                      // CONTENT
-                                                      Text(
-                                                        "댓글을 삭제하시겠습니까?",
-                                                        style: dialogContent,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 12.w,
-                                                      ),
-                                                      // BUTTONS
-                                                      Row(
-                                                        children: [
-                                                          Expanded(
-                                                              child: GestureDetector(
-                                                            onTap: () async {
-                                                              await communityViewModel.deleteComment(comments[index]);
-                                                            },
-                                                            child: Container(
-                                                                height: 50.w,
-                                                                decoration: BoxDecoration(
-                                                                    color: yachtViolet,
-                                                                    borderRadius: BorderRadius.circular(8.w)),
-                                                                child: Center(
-                                                                  child: Text(
-                                                                    "삭제",
-                                                                    style: dialogChoice.copyWith(
-                                                                      color: yachtWhite,
-                                                                    ),
-                                                                  ),
-                                                                )),
-                                                          )),
-                                                          SizedBox(width: 14.w),
-                                                          Expanded(
-                                                            child: GestureDetector(
-                                                                onTap: () {
-                                                                  Navigator.of(context).pop();
-                                                                },
-                                                                child: Container(
-                                                                    height: 50.w,
-                                                                    decoration: BoxDecoration(
-                                                                      color: buttonDisabled,
-                                                                      borderRadius: BorderRadius.circular(8.w),
-                                                                    ),
-                                                                    child: Center(
-                                                                      child: Text(
-                                                                        "취소",
-                                                                        style: dialogChoice.copyWith(
-                                                                          color: yachtLightGrey,
-                                                                        ),
-                                                                      ),
-                                                                    ))),
+                                                          child: Text(
+                                                            "title",
+                                                            style: head3Style.copyWith(
+                                                              fontWeight: FontWeight.w700,
+                                                            ),
                                                           ),
-                                                        ],
-                                                      )
-                                                    ]),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               );
+
+                                              // Dialog(
+                                              //   insetPadding: EdgeInsets.fromLTRB(32.w, 20.w, 32.w, 20.w),
+                                              //   child: Container(
+                                              //     decoration: BoxDecoration(
+                                              //         color: yachtDarkGrey, borderRadius: BorderRadius.circular(12.w)),
+                                              //     child: Padding(
+                                              //       padding: EdgeInsets.fromLTRB(14.w, 0.w, 14.w, 14.w),
+                                              //       child: Column(mainAxisSize: MainAxisSize.min, children: [
+                                              //         // TITLE
+                                              //         SizedBox(
+                                              //           height: 50.w,
+                                              //           child: Center(
+                                              //               child: Text(
+                                              //             "알림",
+                                              //             style: head3Style.copyWith(
+                                              //               fontWeight: FontWeight.bold,
+                                              //             ),
+                                              //           )),
+                                              //         ),
+                                              //         // CONTENT
+                                              //         Text(
+                                              //           "댓글을 삭제하시겠습니까?",
+                                              //           style: head3Style,
+                                              //         ),
+                                              //         SizedBox(
+                                              //           height: 12.w,
+                                              //         ),
+                                              //         // BUTTONS
+                                              //         Row(
+                                              //           children: [
+                                              //             Expanded(
+                                              //                 child: GestureDetector(
+                                              //               onTap: () async {
+                                              //                 await communityViewModel.deleteComment(comments[index]);
+                                              //               },
+                                              //               child: Container(
+                                              //                   height: 50.w,
+                                              //                   decoration: BoxDecoration(
+                                              //                       color: yachtViolet,
+                                              //                       borderRadius: BorderRadius.circular(8.w)),
+                                              //                   child: Center(
+                                              //                     child: Text(
+                                              //                       "삭제",
+                                              //                       style: body1Style.copyWith(
+                                              //                         color: yachtWhite,
+                                              //                         fontWeight: FontWeight.bold,
+                                              //                       ),
+                                              //                     ),
+                                              //                   )),
+                                              //             )),
+                                              //             SizedBox(width: 14.w),
+                                              //             Expanded(
+                                              //               child: GestureDetector(
+                                              //                   onTap: () {
+                                              //                     Navigator.of(context).pop();
+                                              //                   },
+                                              //                   child: Container(
+                                              //                       height: 50.w,
+                                              //                       decoration: BoxDecoration(
+                                              //                         color: yachtMidGrey,
+                                              //                         borderRadius: BorderRadius.circular(8.w),
+                                              //                       ),
+                                              //                       child: Center(
+                                              //                         child: Text(
+                                              //                           "취소",
+                                              //                           style: body1Style.copyWith(
+                                              //                             color: yachtLightGrey,
+                                              //                             fontWeight: FontWeight.bold,
+                                              //                           ),
+                                              //                         ),
+                                              //                       ))),
+                                              //             ),
+                                              //           ],
+                                              //         )
+                                              //       ]),
+                                              //     ),
+                                              //   ),
+                                              // );
                                             });
                                       },
                                       child: SvgPicture.asset(
@@ -507,7 +539,7 @@ class CommentList extends StatelessWidget {
                   },
                   child: Text(
                     "댓글 ${comments.length}개 모두 보기",
-                    style: feedWriterName.copyWith(
+                    style: sub1Style.copyWith(
                       color: const Color(0xFF00EAFF),
                     ),
                   ),
@@ -613,7 +645,7 @@ class FeedContentWidget extends StatelessWidget {
                       // 텍스트 최종 길이에 따라서 더보기 누를 때 다르게 반응
                       if (hasTextOverflow(
                         post.content,
-                        feedContent,
+                        bodyP2LightStyle,
                         maxLines: 10,
                       )) {
                         _mixpanelService.mixpanel.track('Feed Detail', properties: {
@@ -691,110 +723,110 @@ class FeedContentWidget extends StatelessWidget {
   }
 }
 
-class CommentInputWidget extends StatelessWidget {
-  CommentInputWidget({
-    Key? key,
-    required this.post,
-    required this.communityViewModel,
-    required this.widgetController,
-  }) : super(key: key);
-  final PostModel post;
-  final CommunityViewModel communityViewModel;
-  final TextEditingController _commentController = TextEditingController();
-  final NewFeedWidgetController widgetController;
-  @override
-  Widget build(BuildContext context) {
-    final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
+// class CommentInputWidget extends StatelessWidget {
+//   CommentInputWidget({
+//     Key? key,
+//     required this.post,
+//     required this.communityViewModel,
+//     required this.widgetController,
+//   }) : super(key: key);
+//   final PostModel post;
+//   final CommunityViewModel communityViewModel;
+//   final TextEditingController _commentController = TextEditingController();
+//   final NewFeedWidgetController widgetController;
+//   @override
+//   Widget build(BuildContext context) {
+//     final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
 
-    // print(_commmentInputController.commentFocusNode.hasPrimaryFocus);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Obx(
-                () => Center(
-                  child: TextFormField(
-                    key: _key,
-                    onTap: () {
-                      // FocusNode focusNode = FocusScope.of(context);
-                      // if (focusNode.canRequestFocus) {
-                      //   focusNode.requestFocus();
-                      // }
-                      // _commmentInputController.commentFocusNode.requestFocus(_commmentInputController.commentFocusNode);
+//     // print(_commmentInputController.commentFocusNode.hasPrimaryFocus);
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.start,
+//       children: [
+//         Expanded(
+//           child: Stack(
+//             alignment: Alignment.center,
+//             children: [
+//               Obx(
+//                 () => Center(
+//                   child: TextFormField(
+//                     key: _key,
+//                     onTap: () {
+//                       // FocusNode focusNode = FocusScope.of(context);
+//                       // if (focusNode.canRequestFocus) {
+//                       //   focusNode.requestFocus();
+//                       // }
+//                       // _commmentInputController.commentFocusNode.requestFocus(_commmentInputController.commentFocusNode);
 
-                      HapticFeedback.lightImpact();
-                    },
-                    focusNode: widgetController.commentFocusNode,
-                    controller: _commentController,
-                    minLines: 1,
-                    maxLines: null,
-                    textAlignVertical: TextAlignVertical.center,
-                    keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration(
-                      // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
-                      isDense: true,
-                      filled: true,
-                      fillColor: widgetController.isFocused.value ? yachtPaleGrey : yachtPaleGrey,
-                      contentPadding: EdgeInsets.fromLTRB(8.w, 8.w, 40.w, 8.w),
-                      // prefixText:
-                      // prefixStyle: TextStyle(color: yachtBlack),
-                      // prefixIcon: _commmentInputController.isFocused.value
-                      //     ? Text(
-                      //         '  ${userModelRx.value!.userName}  ',
-                      //         style: TextStyle(color: yachtBlack),
-                      //       )
-                      //     : SizedBox.shrink(),
-                      // prefixIconConstraints: BoxConstraints(minWidth: 8.w, minHeight: 0),
-                      focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                      enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                      hintText: "댓글 남기기",
-                      hintStyle: feedContent.copyWith(
-                        color: yachtGrey,
-                        height: 1.2.w,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Obx(
-                () => Visibility(
-                  visible: widgetController.isFocused.value,
-                  child: Positioned(
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () async {
-                          HapticFeedback.heavyImpact();
-                          await communityViewModel.uploadComment(
-                            post,
-                            _commentController.text,
-                          );
-                          _commentController.clear();
-                          widgetController.commentFocusNode.unfocus();
-                          print("게시");
-                        },
-                        child: SizedBox(
-                          // height: double.infinity,
-                          width: 40.w,
-                          child: Text(
-                            "게시",
-                            style: feedWriterName.copyWith(
-                              color: yachtViolet,
-                            ),
-                          ),
-                        ),
-                      )),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
+//                       HapticFeedback.lightImpact();
+//                     },
+//                     focusNode: widgetController.commentFocusNode,
+//                     controller: _commentController,
+//                     minLines: 1,
+//                     maxLines: null,
+//                     textAlignVertical: TextAlignVertical.center,
+//                     keyboardType: TextInputType.multiline,
+//                     decoration: InputDecoration(
+//                       // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+//                       isDense: true,
+//                       filled: true,
+//                       fillColor: widgetController.isFocused.value ? yachtPaleGrey : yachtPaleGrey,
+//                       contentPadding: EdgeInsets.fromLTRB(8.w, 8.w, 40.w, 8.w),
+//                       // prefixText:
+//                       // prefixStyle: TextStyle(color: yachtBlack),
+//                       // prefixIcon: _commmentInputController.isFocused.value
+//                       //     ? Text(
+//                       //         '  ${userModelRx.value!.userName}  ',
+//                       //         style: TextStyle(color: yachtBlack),
+//                       //       )
+//                       //     : SizedBox.shrink(),
+//                       // prefixIconConstraints: BoxConstraints(minWidth: 8.w, minHeight: 0),
+//                       focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
+//                       enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+//                       hintText: "댓글 남기기",
+//                       hintStyle: feedContent.copyWith(
+//                         color: yachtGrey,
+//                         height: 1.2.w,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//               Obx(
+//                 () => Visibility(
+//                   visible: widgetController.isFocused.value,
+//                   child: Positioned(
+//                       right: 0,
+//                       child: GestureDetector(
+//                         onTap: () async {
+//                           HapticFeedback.heavyImpact();
+//                           await communityViewModel.uploadComment(
+//                             post,
+//                             _commentController.text,
+//                           );
+//                           _commentController.clear();
+//                           widgetController.commentFocusNode.unfocus();
+//                           print("게시");
+//                         },
+//                         child: SizedBox(
+//                           // height: double.infinity,
+//                           width: 40.w,
+//                           child: Text(
+//                             "게시",
+//                             style: feedWriterName.copyWith(
+//                               color: yachtViolet,
+//                             ),
+//                           ),
+//                         ),
+//                       )),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class NewCommentInputWidget extends StatelessWidget {
   NewCommentInputWidget({
@@ -854,7 +886,7 @@ class NewCommentInputWidget extends StatelessWidget {
               focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
               enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
               hintText: "댓글 남기기",
-              hintStyle: feedContent.copyWith(
+              hintStyle: body2Style.copyWith(
                 color: yachtLightGrey,
                 height: 1.2.w,
               ),
@@ -1134,7 +1166,7 @@ class FeedHeader extends StatelessWidget {
               Text(
                 feedTimeHandler(post.writtenDateTime.toDate()),
                 // x초전, x분 전, 일정 이후면 날짜로
-                style: feedDateTime,
+                style: sub1Style.copyWith(color: yachtLightGrey),
               ),
             ],
           ),
@@ -1180,8 +1212,7 @@ class FeedHeader extends StatelessWidget {
                       return Dialog(
                           insetPadding: defaultHorizontalPadding,
                           child: Container(
-                              padding:
-                                  EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                              padding: EdgeInsets.fromLTRB(14.w, 14.w, 14.w, 14.w),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.w),
                                 color: yachtDarkGrey,
@@ -1189,15 +1220,24 @@ class FeedHeader extends StatelessWidget {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text("알림", style: dialogTitle),
-                                  SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                  SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                  Text("정말 삭제하시겠습니까?", style: dialogContent),
+                                  Text("알림",
+                                      style: head3Style.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  SizedBox(
+                                    height: 14.w,
+                                  ),
+                                  SizedBox(
+                                    height: 24.w,
+                                  ),
+                                  Text("정말 삭제하시겠습니까?", style: head3Style),
                                   Text(
                                     "삭제 후 되돌릴 수 없습니다.",
-                                    style: dialogWarning,
+                                    style: head3Style.copyWith(color: yachtRed),
                                   ),
-                                  SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                  SizedBox(
+                                    height: 24.w,
+                                  ),
                                   Row(
                                     children: [
                                       Expanded(
@@ -1238,8 +1278,7 @@ class FeedHeader extends StatelessWidget {
                       return Dialog(
                           insetPadding: defaultHorizontalPadding,
                           child: Container(
-                              padding:
-                                  EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                              padding: EdgeInsets.fromLTRB(14.w, 14.w, 14.w, 14.w),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.w),
                                 color: yachtDarkGrey,
@@ -1247,15 +1286,24 @@ class FeedHeader extends StatelessWidget {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text("알림", style: dialogTitle),
-                                  SizedBox(height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
-                                  SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                  Text("유저를 차단하시겠습니까?", style: dialogContent),
+                                  Text("알림",
+                                      style: head3Style.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  SizedBox(
+                                    height: 14.w,
+                                  ),
+                                  SizedBox(
+                                    height: 24.w,
+                                  ),
+                                  Text("유저를 차단하시겠습니까?", style: head3Style),
                                   // Text(
                                   //   "삭제 후 되돌릴 수 없습니다.",
                                   //   style: dialogWarning,
                                   // ),
-                                  SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                  SizedBox(
+                                    height: 24.w,
+                                  ),
                                   Row(
                                     children: [
                                       Expanded(
@@ -1296,8 +1344,7 @@ class FeedHeader extends StatelessWidget {
                       return Dialog(
                           insetPadding: defaultHorizontalPadding,
                           child: Container(
-                              padding:
-                                  EdgeInsets.fromLTRB(14.w, correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                              padding: EdgeInsets.fromLTRB(14.w, 14.w, 14.w, 14.w),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.w),
                                 color: yachtDarkGrey,
@@ -1305,14 +1352,21 @@ class FeedHeader extends StatelessWidget {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text("알림", style: dialogTitle),
-                                  SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
-                                  Text("이 글을 신고하시겠습니까?", style: dialogContent),
+                                  Text("알림",
+                                      style: head3Style.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  SizedBox(
+                                    height: 24.w,
+                                  ),
+                                  Text("이 글을 신고하시겠습니까?", style: head3Style),
                                   Text(
                                     "신고한 유저는 자동으로 차단됩니다.",
-                                    style: dialogWarning.copyWith(color: yachtLightGrey),
+                                    style: head3Style.copyWith(color: yachtLightGrey),
                                   ),
-                                  SizedBox(height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                  SizedBox(
+                                    height: 24.w,
+                                  ),
                                   Row(
                                     children: [
                                       Expanded(
@@ -1376,13 +1430,13 @@ class EditingMyPost extends StatelessWidget {
     return Column(
       children: [
         Container(
-          color: primaryBackgroundColor,
+          color: yachtBlack,
           height: MediaQuery.of(context).padding.top,
         ),
         Container(
           height: 60,
           padding: defaultHorizontalPadding,
-          color: primaryBackgroundColor,
+          color: yachtBlack,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1405,7 +1459,7 @@ class EditingMyPost extends StatelessWidget {
               ),
               Text(
                 "나의 글 수정하기",
-                style: appBarTitle,
+                style: head3Style.copyWith(fontWeight: FontWeight.w700),
               ),
               Flexible(
                 flex: 1,
@@ -1447,12 +1501,12 @@ class EditingMyPost extends StatelessWidget {
           height: 52.w,
           width: double.infinity,
           decoration: BoxDecoration(
-              color: primaryBackgroundColor,
+              color: yachtBlack,
               border: Border(
                 bottom: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
                 top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
               )),
-          child: Center(child: Text("피드", style: sectionTitle)),
+          child: Center(child: Text("피드", style: head2Style)),
         ),
         Form(
           key: _contentFormKey,
@@ -1480,7 +1534,7 @@ class EditingMyPost extends StatelessWidget {
                             focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
                             enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                             hintText: '글을 입력해주세요.',
-                            hintStyle: feedContent.copyWith(color: feedContent.color!.withOpacity(.5))),
+                            hintStyle: bodyP2Style.copyWith(color: bodyP2Style.color!.withOpacity(.5))),
                       ),
                     ),
                     // 업로드한 이미지 미리보기하는 부분
@@ -1537,7 +1591,7 @@ class EditingMyPost extends StatelessWidget {
                       height: 50.w,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          color: primaryBackgroundColor,
+                          color: yachtBlack,
                           border: Border(
                             bottom: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),
                             top: BorderSide(color: Colors.black.withOpacity(.05), width: 1.w),

@@ -3,8 +3,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorState;
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
@@ -34,9 +33,11 @@ import 'package:yachtOne/services/firestore_service.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/style_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yachtOne/styles/yacht_design_system.dart';
+// import 'package:yachtOne/styles/yacht_design_system.dart';
 import '../../locator.dart';
 
+import '../../yacht_design_system/yds_color.dart';
+import '../../yacht_design_system/yds_widget.dart';
 import '../quest/yacht_quest_view.dart';
 import '../stock_info/yacht_pick_old_view.dart';
 import '../stock_info/yacht_pick_view.dart';
@@ -73,19 +74,18 @@ class NewHomeView extends StatelessWidget {
       DialogReadyWidget(homeViewModel: homeViewModel),
       // MyAssets(),
       SizedBox(
-          height: correctHeight(
-        30.w,
-        0.0,
-        sectionTitle.fontSize,
-      )),
+        height: 30.w,
+      ),
       // 이달의 상금 주식
       // AwardView(leagueName: leagueModel.value!.leagueName, leagueEndDateTime: leagueModel.value!.leagueEndDateTime),
 
       // 주간 요트 종목
       YachtPick(homeViewModel: homeViewModel),
-      SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
+      SizedBox(height: 50.w),
       YachtQuestView(homeViewModel: homeViewModel),
-      SizedBox(height: correctHeight(50.w, 0.0, sectionTitle.fontSize)),
+      SizedBox(
+        height: 50.w,
+      ),
 
       SizedBox(height: 100.w),
     ];
@@ -189,59 +189,68 @@ class YachtPick extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Dialog(
-                          backgroundColor: Colors.transparent,
-                          // shape: RoundedRectangleBorder(
-                          //   borderRadius: BorderRadius.circular(12.w),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: FutureBuilder<String>(
+                            future: homeViewModel.getYachtPickDescription(),
+                            builder: (context, snapshot) {
+                              return snapshot.hasData
+                                  ? infoDialog(context,
+                                      title: "요트 Pick?", info: snapshot.data!, textAlign: TextAlign.start)
+                                  : infoDialog(context, title: "요트 Pick?");
+                            },
+                          )
+                          // Dialog(
+                          //   backgroundColor: Colors.transparent,
+                          //   // shape: RoundedRectangleBorder(
+                          //   //   borderRadius: BorderRadius.circular(12.w),
+                          //   // ),
+                          //   insetPadding: EdgeInsets.symmetric(horizontal: 14.w),
+                          //   child: Container(
+                          //     padding: defaultPaddingAll.copyWith(top: 0),
+                          //     decoration: BoxDecoration(
+                          //       color: yachtDarkGrey,
+                          //       borderRadius: BorderRadius.circular(12.w),
+                          //     ),
+                          //     child: Column(
+                          //       mainAxisSize: MainAxisSize.min,
+                          //       crossAxisAlignment: CrossAxisAlignment.center,
+                          //       children: [
+                          //         Container(
+                          //           height: 60.w,
+                          //           child: Center(
+                          //             child: Text(
+                          //               "요트 Pick?",
+                          //               style: head3Style.copyWith(
+                          //                 fontWeight: FontWeight.w700,
+                          //               ),
+                          //             ),
+                          //           ),
+                          //         ),
+                          //         FutureBuilder<String>(
+                          //             future: homeViewModel.getYachtPickDescription(),
+                          //             builder: (_, snapshot) {
+                          //               return snapshot.hasData
+                          //                   ? Text(
+                          //                       '${snapshot.data!}'.replaceAll('\\n', '\n'),
+                          //                       style: body1Style.copyWith(height: 1.4.w),
+                          //                     )
+                          //                   : Text("");
+                          //             }),
+                          //         SizedBox(
+                          //           height: 16.w,
+                          //         ),
+                          //         GestureDetector(
+                          //             onTap: () {
+                          //               Navigator.of(context).pop();
+                          //             },
+                          //             child: confirmDialogButton())
+                          //       ],
+                          //     ),
+                          //   ),
                           // ),
-                          insetPadding: EdgeInsets.symmetric(horizontal: 14.w),
-                          child: Container(
-                            padding: defaultPaddingAll.copyWith(top: 0),
-                            decoration: BoxDecoration(
-                              color: yachtDarkGrey,
-                              borderRadius: BorderRadius.circular(12.w),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 60.w,
-                                  child: Center(
-                                    child: Text(
-                                      "요트 Pick?",
-                                      style: head3Style.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                FutureBuilder<String>(
-                                    future: homeViewModel.getYachtPickDescription(),
-                                    builder: (_, snapshot) {
-                                      return snapshot.hasData
-                                          ? Text(
-                                              '${snapshot.data!}'.replaceAll('\\n', '\n'),
-                                              style: body1Style.copyWith(height: 1.4.w),
-                                            )
-                                          : Text("");
-                                    }),
-                                SizedBox(
-                                  height: 16.w,
-                                ),
-                                GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: confirmDialogButton())
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
+                          );
                     });
               },
               child: Container(
@@ -274,7 +283,6 @@ class YachtPick extends StatelessWidget {
                   child: Text(
                     "모든 요트 Pick",
                     style: TextStyle(
-                      fontFamily: krFont,
                       color: yachtWhite,
                       fontSize: 14.w,
                       fontWeight: FontWeight.w600,
@@ -408,8 +416,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                     Center(
                       child: Text(title,
                           textAlign: TextAlign.center,
-                          style: dialogTitle.copyWith(
-                            fontSize: bodyBigSize,
+                          style: body1Style.copyWith(
                             fontWeight: FontWeight.w600,
                           )),
                     ),
@@ -433,7 +440,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                       height: ScreenUtil().screenHeight * .21,
                       // width: 240,
                       child: Scrollbar(
-                        isAlwaysShown: true,
+                        thumbVisibility: true,
                         controller: _termScrollController,
                         child: SingleChildScrollView(
                             controller: _termScrollController,
@@ -469,7 +476,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                       height: ScreenUtil().screenHeight * .21,
                       // width: 240,
                       child: Scrollbar(
-                        isAlwaysShown: true,
+                        thumbVisibility: true,
                         controller: _termScrollController,
                         child: SingleChildScrollView(
                             controller: _privacyScrollController,
@@ -569,24 +576,25 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 Container(
-                                                    padding: EdgeInsets.fromLTRB(14.w,
-                                                        correctHeight(14.w, 0.0, dialogTitle.fontSize), 14.w, 14.w),
+                                                    padding: EdgeInsets.fromLTRB(14.w, 14.w, 14.w, 14.w),
                                                     decoration:
                                                         BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
                                                     child: Column(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
-                                                        Text("알림", style: dialogTitle),
+                                                        Text("알림", style: body1Style),
                                                         SizedBox(
-                                                            height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                          height: 14.w,
+                                                        ),
                                                         Text("이용약관과 개인정보처리방침에 동의하지 않으면 요트 서비스를 이용할 수 없습니다. ",
-                                                            style: dialogContent),
+                                                            style: head3Style),
                                                         SizedBox(
-                                                            height: correctHeight(14.w, 0.0, dialogTitle.fontSize)),
+                                                          height: 14.w,
+                                                        ),
                                                         Center(
                                                           child: Text(
                                                             " 동의를 거부하고 정말 탈퇴하시겠습니까?",
-                                                            style: dialogWarning,
+                                                            style: head3Style,
                                                             textAlign: TextAlign.center,
                                                           ),
                                                         ),
@@ -596,14 +604,13 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                                         Center(
                                                           child: Text(
                                                             "탈퇴 시 모든 데이터가 삭제되며 되돌릴 수 없습니다.",
-                                                            style: dialogTitle.copyWith(
-                                                              fontSize: bodySmallSize,
-                                                            ),
+                                                            style: body2Style,
                                                             textAlign: TextAlign.center,
                                                           ),
                                                         ),
                                                         SizedBox(
-                                                            height: correctHeight(24.w, 0.w, dialogContent.fontSize)),
+                                                          height: 24.w,
+                                                        ),
                                                         Row(
                                                           children: [
                                                             Expanded(
@@ -746,7 +753,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                 focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
                                 enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
                                 hintText: '${userModelRx.value!.userName}',
-                                hintStyle: profileChangeContentTextStyle.copyWith(color: yachtLightGrey),
+                                hintStyle: body1Style.copyWith(color: yachtLightGrey),
                               ),
                               validator: (value) {
                                 if (value != '') {
@@ -851,14 +858,14 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
                                       borderRadius: BorderRadius.circular(12.w),
                                       color: isCheckingUserNameDuplicated.value == false
                                           ? yachtViolet
-                                          : primaryButtonText),
+                                          : Color(0xFFEFF2FA)),
                                   child: Center(
                                     child: Text(
                                       isCheckingUserNameDuplicated.value == false ? '저장하기' : '닉네임 중복 검사 중',
-                                      style: profileChangeButtonTextStyle.copyWith(
+                                      style: head3Style.copyWith(
                                           color: isCheckingUserNameDuplicated.value == false
-                                              ? primaryButtonText
-                                              : primaryButtonBackground),
+                                              ? Color(0xFFEFF2FA)
+                                              : yachtViolet),
                                     ),
                                   ),
                                 )),
@@ -908,122 +915,122 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
   }
 }
 
-class MyAssets extends StatelessWidget {
-  final AssetViewModel _assetViewModel = Get.find<AssetViewModel>();
-  final MixpanelService _mixpanelService = locator<MixpanelService>();
-  // final AssetViewModel _assetViewModel = Get.put(AssetViewModel());
+// class MyAssets extends StatelessWidget {
+//   final AssetViewModel _assetViewModel = Get.find<AssetViewModel>();
+//   final MixpanelService _mixpanelService = locator<MixpanelService>();
+//   // final AssetViewModel _assetViewModel = Get.put(AssetViewModel());
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // height: offset.w > 100.w ? 0 : 100.w - offset.w,
-      height: 100.w,
-      child: Row(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                _mixpanelService.mixpanel.track(
-                  'My Asset',
-                  properties: {'My Asset Tap From': "주식 잔고"},
-                );
-                Get.to(() => AssetView());
-              },
-              child: Container(
-                // color: Colors.blue,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/icons/won_circle.png',
-                          width: 20.w,
-                          height: 20.w,
-                        ),
-                        SizedBox(width: 4.w),
-                        Text(
-                          "주식 잔고",
-                          style: myAssetTitle,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
-                    GetBuilder<AssetViewModel>(
-                        id: 'holdingStocks',
-                        builder: (controller) {
-                          return RichText(
-                              text: TextSpan(
-                                  text: controller.isHoldingStocksFutureLoad
-                                      ? "${toPriceKRW(_assetViewModel.totalHoldingStocksValue)}"
-                                      : "0",
-                                  style: myAssetAmount,
-                                  children: [
-                                TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
-                              ]));
-                        }),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          VerticalDivider(
-            color: primaryFontColor.withOpacity(.5),
-            indent: 16.w,
-            endIndent: 16.w,
-          ),
-          Expanded(
-              child: GestureDetector(
-            onTap: () {
-              _mixpanelService.mixpanel.track(
-                'My Asset',
-                properties: {'My Asset Tap From': "요트 포인트"},
-              );
-              Get.to(() => AssetView());
-            },
-            child: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/icons/yacht_point_circle.png',
-                        width: 20.w,
-                        height: 20.w,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        "요트 포인트",
-                        style: myAssetTitle,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
-                  GetBuilder<AssetViewModel>(
-                      id: 'holdingStocks',
-                      builder: (controller) {
-                        return RichText(
-                            text: TextSpan(
-                                text: controller.isHoldingStocksFutureLoad
-                                    ? "${toPriceKRW(_assetViewModel.totalYachtPoint)}"
-                                    : "0",
-                                style: myAssetAmount,
-                                children: [
-                              TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
-                            ]));
-                      }),
-                ],
-              ),
-            ),
-          ))
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       // height: offset.w > 100.w ? 0 : 100.w - offset.w,
+//       height: 100.w,
+//       child: Row(
+//         children: [
+//           Expanded(
+//             child: GestureDetector(
+//               onTap: () {
+//                 _mixpanelService.mixpanel.track(
+//                   'My Asset',
+//                   properties: {'My Asset Tap From': "주식 잔고"},
+//                 );
+//                 Get.to(() => AssetView());
+//               },
+//               child: Container(
+//                 // color: Colors.blue,
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.center,
+//                       children: [
+//                         Image.asset(
+//                           'assets/icons/won_circle.png',
+//                           width: 20.w,
+//                           height: 20.w,
+//                         ),
+//                         SizedBox(width: 4.w),
+//                         Text(
+//                           "주식 잔고",
+//                           style: myAssetTitle,
+//                         ),
+//                       ],
+//                     ),
+//                     SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
+//                     GetBuilder<AssetViewModel>(
+//                         id: 'holdingStocks',
+//                         builder: (controller) {
+//                           return RichText(
+//                               text: TextSpan(
+//                                   text: controller.isHoldingStocksFutureLoad
+//                                       ? "${toPriceKRW(_assetViewModel.totalHoldingStocksValue)}"
+//                                       : "0",
+//                                   style: myAssetAmount,
+//                                   children: [
+//                                 TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
+//                               ]));
+//                         }),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//           VerticalDivider(
+//             color: primaryFontColor.withOpacity(.5),
+//             indent: 16.w,
+//             endIndent: 16.w,
+//           ),
+//           Expanded(
+//               child: GestureDetector(
+//             onTap: () {
+//               _mixpanelService.mixpanel.track(
+//                 'My Asset',
+//                 properties: {'My Asset Tap From': "요트 포인트"},
+//               );
+//               Get.to(() => AssetView());
+//             },
+//             child: Container(
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 children: [
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: [
+//                       Image.asset(
+//                         'assets/icons/yacht_point_circle.png',
+//                         width: 20.w,
+//                         height: 20.w,
+//                       ),
+//                       SizedBox(width: 4.w),
+//                       Text(
+//                         "요트 포인트",
+//                         style: myAssetTitle,
+//                       ),
+//                     ],
+//                   ),
+//                   SizedBox(height: reducedPaddingWhenTextIsBelow(14.w, detailedContentTextStyle.fontSize!)),
+//                   GetBuilder<AssetViewModel>(
+//                       id: 'holdingStocks',
+//                       builder: (controller) {
+//                         return RichText(
+//                             text: TextSpan(
+//                                 text: controller.isHoldingStocksFutureLoad
+//                                     ? "${toPriceKRW(_assetViewModel.totalYachtPoint)}"
+//                                     : "0",
+//                                 style: myAssetAmount,
+//                                 children: [
+//                               TextSpan(text: " 원", style: myAssetAmount.copyWith(fontWeight: FontWeight.w300))
+//                             ]));
+//                       }),
+//                 ],
+//               ),
+//             ),
+//           ))
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
   final MixpanelService _mixpanelService = locator<MixpanelService>();
@@ -1051,7 +1058,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
         // padding: EdgeInsets.only(top: safeAreaPadding.top),
 
         height: maxExtent,
-        color: primaryBackgroundColor.withOpacity(.65),
+        color: yachtBlack.withOpacity(.65),
         // color: Colors.blue.withOpacity(.65),
 
         child: Column(
@@ -1060,9 +1067,9 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
             Expanded(
               child: Padding(
                   padding: EdgeInsets.fromLTRB(
-                    primaryPaddingSize,
+                    defaultPaddingSize,
                     0,
-                    primaryPaddingSize,
+                    defaultPaddingSize,
                     0,
                   ),
                   child: Stack(
