@@ -1233,9 +1233,9 @@ class FirestoreService extends GetxService {
   }
 
   // 특정 날, 특정 종목 종가 가져오기
-  Future<num> getClosePrice(String issueCode, DateTime day) async {
+  Future<num> getClosePrice(String country, String issueCode, DateTime day) async {
     return await _firestoreService
-        .collection('stocksKR/$issueCode/historicalPrices')
+        .collection('stocks$country/$issueCode/historicalPrices')
         .where('dateTime', isEqualTo: dateTimeToString(day, 8))
         .get()
         .then((value) {
@@ -1284,9 +1284,9 @@ class FirestoreService extends GetxService {
   }
 
   // 한 종목 최신가격 가져오기
-  Stream<num> streamOneStockPrice(String issueCode) {
+  Stream<num> streamOneStockPrice(String country, String issueCode) {
     return _firestoreService
-        .collection('stocksKR/$issueCode/realtimePrices')
+        .collection('stocks$country/$issueCode/realtimePrices')
         .orderBy(
           'dateTime',
           descending: true,

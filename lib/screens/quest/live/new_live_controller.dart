@@ -76,6 +76,7 @@ class NewLiveController extends GetxController {
       // yesterdayClosePrices.add(i);
 
       yesterdayClosePrices[i] = await _firestoreService.getClosePrice(
+        investAddresses[i].country,
         investAddresses[i].issueCode,
         previousBusinessDay(
           DateTime.now(),
@@ -83,6 +84,7 @@ class NewLiveController extends GetxController {
       );
 
       beforeLiveStartDateClosePrices[i] = await _firestoreService.getClosePrice(
+        investAddresses[i].country,
         investAddresses[i].issueCode,
         previousBusinessDay(
           questModel.liveStartDateTime.toDate(),

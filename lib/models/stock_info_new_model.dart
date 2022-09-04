@@ -137,7 +137,7 @@ class StockInfoNewModel {
       releaseTime: map['releaseTime'],
       assetCategory: map['assetCategory'] ?? '',
       code: map['code'] ?? '',
-      country: map['country'] ?? '',
+      country: map['country'] ?? 'KR',
       yachtView: yachtView,
     );
   }

@@ -12,6 +12,7 @@ import 'package:yachtOne/models/stock_info_new_model.dart';
 import 'package:yachtOne/screens/quest/live/new_live_controller.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_new_controller.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_new_view.dart';
+import 'package:yachtOne/screens/stock_info/yacht_pick_view_model.dart';
 import 'package:yachtOne/styles/size_config.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:yachtOne/yacht_design_system/yds_button.dart';
@@ -34,61 +35,6 @@ final yachtPickMainTextStyle = TextStyle(
   height: 1.0,
 );
 
-class TempMainController extends GetxController {
-  List<StockInfoNewModel> stockInfoNewModels = [];
-
-  FirestoreService _firestoreService = locator<FirestoreService>();
-
-  bool isModelLoaded = false;
-  RxBool isPricesLoaded = false.obs;
-  RxList<RxNum> todayCurrentPrices = <RxNum>[].obs;
-  RxList<num> yesterdayClosePrices = <num>[].obs;
-  @override
-  void onInit() async {
-    // stockInfoNewModels = await _firestoreService.getAllYachtPicks();
-    stockInfoNewModels = await _firestoreService.getYachtPicks();
-    todayCurrentPrices = List.generate(stockInfoNewModels.length, (index) => RxNum(0)).obs;
-    yesterdayClosePrices = List.generate(stockInfoNewModels.length, (index) => 0).obs;
-
-    isModelLoaded = true;
-
-    print('stockInfoNewModels: ${stockInfoNewModels[0].toString()}');
-    await getLivePrice();
-    // print(stockInfoNewModels[0].name);
-    // print(stockInfoNewModels[0].yachtView);
-    isPricesLoaded(true);
-    update();
-
-    super.onInit();
-  }
-
-  getLivePrice() async {
-    print('length: ${stockInfoNewModels.length}');
-    for (int i = 0; i < stockInfoNewModels.length; i++) {
-      yesterdayClosePrices[i] = await _firestoreService.getClosePrice(
-        stockInfoNewModels[i].code,
-        previousBusinessDay(
-          DateTime.now(),
-        ),
-      );
-
-      todayCurrentPrices[i].bindStream(
-        _firestoreService.streamOneStockPrice(
-          stockInfoNewModels[i].code,
-        ),
-      );
-    }
-    todayCurrentPrices.refresh();
-
-    print('yesterdayClosePrices: $yesterdayClosePrices');
-    print('todayCurrentPrices: $todayCurrentPrices');
-  }
-
-  Future<String> getTobeContinueDescription() async {
-    return await _firestoreService.getTobeContinueDescription();
-  }
-}
-
 class YachtPickView extends StatelessWidget {
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   final double cardWholeHeight = 350.w; // card widget 을 수정해주는 경우에는 왼쪽 수치들도 수정해야함.
@@ -101,8 +47,8 @@ class YachtPickView extends StatelessWidget {
         SizedBox(
           height: 20.w,
         ),
-        GetBuilder<TempMainController>(
-            init: TempMainController(),
+        GetBuilder<YahctPickViewModel>(
+            init: YahctPickViewModel(),
             builder: (controller) {
               return controller.isModelLoaded
                   ? controller.stockInfoNewModels.length != 0
@@ -161,7 +107,7 @@ class YachtPickCardForCarousel extends StatelessWidget {
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
-    TempMainController tempMainController = Get.put(TempMainController());
+    YahctPickViewModel tempMainController = Get.put(YahctPickViewModel());
     return Container(
       height: cardWholeHeight,
       width: cardWholeWidth + 10.w,

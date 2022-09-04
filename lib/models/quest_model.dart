@@ -398,7 +398,7 @@ class InvestAddressModel {
   factory InvestAddressModel.fromMap(Map<String, dynamic> map) {
     return InvestAddressModel(
       market: map['market'],
-      country: map['country'],
+      country: map['country'] ?? "KR",
       isIndex: map['isIndex'],
       issueCode: map['issueCode'],
       name: map['name'],
