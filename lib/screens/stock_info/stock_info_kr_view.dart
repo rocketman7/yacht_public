@@ -54,7 +54,7 @@ class StockInfoKRView extends StatelessWidget {
                 investAddressModel: investAddressModel,
                 chartViewModel: chartViewModel,
               )
-            : TradingviewChartView(investAddressModel: investAddressModel),
+            : TradingViewChartView(investAddressModel: investAddressModel),
         btwHomeModule,
         DescriptionView(investAddressModel: investAddressModel),
         btwHomeModule,

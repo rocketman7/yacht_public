@@ -82,6 +82,15 @@ class FirestoreService extends GetxService {
         .then((value) => value.data()!['tobeContinueDescription']);
   }
 
+  // 트레이딩 뷰 URL
+  Future<String> getTradingViewUrl() async {
+    return await _firestoreService
+        .collection('admin')
+        .doc('adminPost')
+        .get()
+        .then((value) => value.data()!['tradingViewUrl']);
+  }
+
   // 리그 모델
   Future<LeagueAddressModel> getLeagueInfo() async {
     return await _firestoreService

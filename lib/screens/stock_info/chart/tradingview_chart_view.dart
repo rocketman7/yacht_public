@@ -2,26 +2,31 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:yachtOne/models/quest_model.dart';
+import 'package:yachtOne/screens/stock_info/chart/tradingview_chart_view_model.dart';
 import 'package:yachtOne/screens/stock_info/yacht_pick_view.dart';
 
-class TradingviewChartView extends StatelessWidget {
-  TradingviewChartView({Key? key, required this.investAddressModel}) : super(key: key);
+class TradingViewChartView extends StatelessWidget {
+  TradingViewChartView({Key? key, required this.investAddressModel}) : super(key: key);
 
   final InvestAddressModel investAddressModel;
-
+  final TradingViewChartViewModel tradingviewChartViewModel = Get.put(TradingViewChartViewModel());
   @override
   Widget build(BuildContext context) {
     return Container(
         height: 400.w,
         child: FutureBuilder<String>(
-            future: null,
+            future: tradingviewChartViewModel.getTradingViewUrl(),
             builder: (context, snapshot) {
-              return KeepAliveWebViewForTVChart(
-                // url: "https://63130e679c4ac346f072c737--cosmic-swan-b4e1b1.netlify.app/?${investAddressModel.issueCode}",
-                url: "https://63130e679c4ac346f072c737--cosmic-swan-b4e1b1.netlify.app/?FTCH",
-              );
+              return snapshot.hasData
+                  ? KeepAliveWebViewForTVChart(
+                      // url: "https://63130e679c4ac346f072c737--cosmic-swan-b4e1b1.netlify.app/?${investAddressModel.issueCode}",
+                      // url: "https://63130e679c4ac346f072c737--cosmic-swan-b4e1b1.netlify.app/?FTCH",
+                      url: '${snapshot.data}?${investAddressModel.issueCode}',
+                    )
+                  : SizedBox.shrink();
             }));
   }
 }
