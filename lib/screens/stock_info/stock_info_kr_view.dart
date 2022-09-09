@@ -49,7 +49,7 @@ class StockInfoKRView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        investAddressModel.country != "KR"
+        investAddressModel.country == "KR"
             ? NewChartView(
                 investAddressModel: investAddressModel,
                 chartViewModel: chartViewModel,

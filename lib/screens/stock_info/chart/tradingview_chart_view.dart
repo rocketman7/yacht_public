@@ -20,11 +20,13 @@ class TradingViewChartView extends StatelessWidget {
         child: FutureBuilder<String>(
             future: tradingviewChartViewModel.getTradingViewUrl(),
             builder: (context, snapshot) {
+              if (snapshot.hasData) print('${snapshot.data}?FTCH');
               return snapshot.hasData
                   ? KeepAliveWebViewForTVChart(
                       // url: "https://63130e679c4ac346f072c737--cosmic-swan-b4e1b1.netlify.app/?${investAddressModel.issueCode}",
                       // url: "https://63130e679c4ac346f072c737--cosmic-swan-b4e1b1.netlify.app/?FTCH",
                       url: '${snapshot.data}?${investAddressModel.issueCode}',
+                      // url: '${snapshot.data}?FTCH',
                     )
                   : SizedBox.shrink();
             }));
