@@ -4,9 +4,9 @@ import 'package:yachtOne/yacht_design_system/yds_color.dart';
 
 // 기본 한글 폰트와 세팅
 // String krFont = 'AppleSDGothicNeo';
-double defaultFontHeight = 1.0;
-double paragraphFontHeight = 1.4;
-Color darkModeFontColor = yachtWhite;
+const double defaultFontHeight = 1.0;
+const double paragraphFontHeight = 1.4;
+const Color darkModeFontColor = yachtWhite;
 
 TextStyle priceStyle = TextStyle(
   fontSize: 28.w,
@@ -87,4 +87,8 @@ TextStyle sub2Style = TextStyle(
 
 // Font Category
 
-// Content 
+//// Content Title
+// 메뉴별 메인페이지 컨텐츠의 최상위 타이틀
+TextStyle contentTitleStyle = head2Style.copyWith(
+  fontWeight: FontWeight.w700,
+);
