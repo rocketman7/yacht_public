@@ -1228,7 +1228,7 @@ class FirestoreService extends GetxService {
 
   Stream<num> getStreamLivePrice(String country, String issueCode) {
     return _firestoreService
-        .collection('stocksKR/$issueCode/realtimePrices')
+        .collection('stocks$country/$issueCode/realtimePrices')
         .orderBy('dateTime', descending: true)
         .limit(1)
         .snapshots()
@@ -1254,18 +1254,18 @@ class FirestoreService extends GetxService {
       if (value.docs.length == 0) {
         return 0.0;
       } else {
-        print('value: ${value.docs.first.data()['close']}');
+        // print('value: ${value.docs.first.data()['close']}');
         return value.docs.first.data()['close'].toDouble();
       }
     });
   }
 
   // 특정 날, 특정 종목 종가 가져오기
-  Future<num> getOpenPrice(String issueCode, DateTime day) async {
+  Future<num> getOpenPrice(String country, String issueCode, DateTime day) async {
     if (day.isAfter(DateTime.now())) {
       // 아직 Open Price 가져올 날이 오지 않았을 때
       return await _firestoreService
-          .collection('stocksKR/$issueCode/historicalPrices')
+          .collection('stocks$country/$issueCode/historicalPrices')
           .where('dateTime', isLessThan: dateTimeToString(day, 8))
           .orderBy('dateTime', descending: true)
           .get()
@@ -1280,7 +1280,7 @@ class FirestoreService extends GetxService {
       });
     } else {
       return await _firestoreService
-          .collection('stocksKR/$issueCode/historicalPrices')
+          .collection('stocks$country/$issueCode/historicalPrices')
           .where('dateTime', isEqualTo: dateTimeToString(day, 8))
           .get()
           .then((value) {

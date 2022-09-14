@@ -6,7 +6,7 @@ import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/models/stock_info_new_model.dart';
 import 'package:yachtOne/screens/stock_info/stock_info_new_controller.dart';
 import 'package:yachtOne/services/firestore_service.dart';
-
+import 'package:timezone/timezone.dart' as tz;
 import '../../locator.dart';
 
 class YachtPickOldController extends GetxController {
@@ -22,11 +22,14 @@ class YachtPickOldController extends GetxController {
   // List<num> yachtPickClosePrices = <num>[]; // 요트픽한 가장 가까운 전 영업일 cycle D 히스토리컬 프라이스 종가
   List<num> yachtPickOpenPrices = <num>[]; // 요트픽한 가장 가까운 영업일 cycle D 히스토리컬 프라이스 시가
 
+  final chicagoTime = tz.getLocation('America/Chicago');
+
   RxInt pickWeather = 0.obs;
   final RxDouble sunnyPicksReturn = 0.0.obs;
   RxDouble randomNumber = 0.0.obs;
   // final RxString testString = "aaaa".obs;
   late Timer randomizer;
+
   @override
   void onInit() async {
     rng();
@@ -34,9 +37,9 @@ class YachtPickOldController extends GetxController {
     isModelLoaded = true;
     update();
     currentClosePrices = RxList.generate(stockInfoNewModels!.length, (index) => RxNum(0));
-    previousClosePrices = List.generate(stockInfoNewModels!.length, (index) => 0);
+    previousClosePrices = List.generate(stockInfoNewModels!.length, (index) => 0.0);
     // yachtPickClosePrices = List.generate(stockInfoNewModels!.length, (index) => 0);
-    yachtPickOpenPrices = List.generate(stockInfoNewModels!.length, (index) => 0);
+    yachtPickOpenPrices = List.generate(stockInfoNewModels!.length, (index) => 0.0);
     await getLivePriceStream();
     await getPrices();
 
@@ -57,7 +60,8 @@ class YachtPickOldController extends GetxController {
   getLivePriceStream() {
     print(getLivePriceStream);
     for (int i = 0; i < currentClosePrices.length; i++) {
-      currentClosePrices[i].bindStream(_firestoreService.getStreamLivePrice("KR", stockInfoNewModels![i].code));
+      currentClosePrices[i].bindStream(
+          _firestoreService.getStreamLivePrice(stockInfoNewModels![i].country, stockInfoNewModels![i].code));
       // print(currentClosePrices[i]);
       ever(currentClosePrices[i], (_) {
         // print('trigger');
@@ -114,13 +118,14 @@ class YachtPickOldController extends GetxController {
         stockInfoNewModels![i].country,
         stockInfoNewModels![i].code,
         previousBusinessDay(
-          DateTime.now(),
+          stockInfoNewModels![i].country == "KR" ? DateTime.now() : tz.TZDateTime.now(chicagoTime),
         ),
       );
     }
 
     for (int i = 0; i < stockInfoNewModels!.length; i++) {
       yachtPickOpenPrices[i] = await _firestoreService.getOpenPrice(
+        stockInfoNewModels![i].country,
         stockInfoNewModels![i].code,
         closestBusinessDay(
           stockInfoNewModels![i].releaseTime.toDate(),

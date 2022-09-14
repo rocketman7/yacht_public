@@ -373,7 +373,10 @@ class YachtPickOldView extends StatelessWidget {
                                                   Obx(
                                                     () => controller.isPriceLoaded.value
                                                         ? Text(
-                                                            toPriceKRW(controller.currentClosePrices[index].value),
+                                                            controller.stockInfoNewModels![index].country == "KR"
+                                                                ? toPriceKRW(controller.currentClosePrices[index].value)
+                                                                : toPriceUSD(
+                                                                    controller.currentClosePrices[index].value),
                                                             style: TextStyle(
                                                                 fontWeight: FontWeight.w400,
                                                                 fontSize: 16.w,
@@ -411,15 +414,25 @@ class YachtPickOldView extends StatelessWidget {
                                                             children: [
                                                               Text(
                                                                 // '+1,240(+0.51%)',
-                                                                toPriceChangeKRW(
-                                                                        controller.currentClosePrices[index].value -
-                                                                            controller.previousClosePrices[index]) +
-                                                                    ' (' +
-                                                                    toPercentageChange(
-                                                                        controller.currentClosePrices[index].value /
+                                                                controller.stockInfoNewModels![index].country == "KR"
+                                                                    ? toPriceChangeKRW(
+                                                                            controller.currentClosePrices[index].value -
+                                                                                controller.previousClosePrices[index]) +
+                                                                        ' (' +
+                                                                        toPercentageChange(controller
+                                                                                    .currentClosePrices[index].value /
                                                                                 controller.previousClosePrices[index] -
                                                                             1) +
-                                                                    ')',
+                                                                        ')'
+                                                                    : toPriceChangeUSD(
+                                                                            controller.currentClosePrices[index].value -
+                                                                                controller.previousClosePrices[index]) +
+                                                                        ' (' +
+                                                                        toPercentageChange(controller
+                                                                                    .currentClosePrices[index].value /
+                                                                                controller.previousClosePrices[index] -
+                                                                            1) +
+                                                                        ')',
                                                                 style: TextStyle(
                                                                     fontWeight: FontWeight.w400,
                                                                     fontSize: 14.w,
@@ -468,15 +481,26 @@ class YachtPickOldView extends StatelessWidget {
                                                         children: [
                                                           controller.isPriceLoaded.value
                                                               ? Text(
-                                                                  toPriceChangeKRW(
-                                                                          controller.currentClosePrices[index].value -
+                                                                  controller.stockInfoNewModels![index].country == "KR"
+                                                                      ? toPriceChangeKRW(controller
+                                                                                  .currentClosePrices[index].value -
                                                                               controller.yachtPickOpenPrices[index]) +
-                                                                      ' (' +
-                                                                      toPercentageChange(controller
-                                                                                  .currentClosePrices[index].value /
-                                                                              controller.yachtPickOpenPrices[index] -
-                                                                          1) +
-                                                                      ')',
+                                                                          ' (' +
+                                                                          toPercentageChange(controller
+                                                                                      .currentClosePrices[index].value /
+                                                                                  controller
+                                                                                      .yachtPickOpenPrices[index] -
+                                                                              1) +
+                                                                          ')'
+                                                                      : toPriceChangeUSD(controller
+                                                                                  .currentClosePrices[index].value -
+                                                                              controller.yachtPickOpenPrices[index]) +
+                                                                          ' (' +
+                                                                          toPercentageChange(controller
+                                                                                      .currentClosePrices[index].value /
+                                                                                  controller.yachtPickOpenPrices[index] -
+                                                                              1) +
+                                                                          ')',
                                                                   style: TextStyle(
                                                                       fontWeight: FontWeight.w400,
                                                                       fontSize: 14.w,
