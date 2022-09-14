@@ -3,6 +3,7 @@ import 'package:yachtOne/handlers/date_time_handler.dart';
 import 'package:yachtOne/locator.dart';
 import 'package:yachtOne/models/stock_info_new_model.dart';
 import 'package:yachtOne/services/firestore_service.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class YahctPickViewModel extends GetxController {
   List<StockInfoNewModel> stockInfoNewModels = [];
@@ -13,12 +14,13 @@ class YahctPickViewModel extends GetxController {
   RxBool isPricesLoaded = false.obs;
   RxList<RxNum> todayCurrentPrices = <RxNum>[].obs;
   RxList<num> yesterdayClosePrices = <num>[].obs;
+  final chicagoTime = tz.getLocation('America/Chicago');
   @override
   void onInit() async {
     // stockInfoNewModels = await _firestoreService.getAllYachtPicks();
     stockInfoNewModels = await _firestoreService.getYachtPicks();
     todayCurrentPrices = List.generate(stockInfoNewModels.length, (index) => RxNum(0)).obs;
-    yesterdayClosePrices = List.generate(stockInfoNewModels.length, (index) => 0).obs;
+    yesterdayClosePrices = List.generate(stockInfoNewModels.length, (index) => 0.0).obs;
 
     isModelLoaded = true;
 
@@ -39,7 +41,7 @@ class YahctPickViewModel extends GetxController {
         stockInfoNewModels[i].country,
         stockInfoNewModels[i].code,
         previousBusinessDay(
-          DateTime.now(),
+          stockInfoNewModels[i].country == "KR" ? DateTime.now() : tz.TZDateTime.now(chicagoTime),
         ),
       );
 

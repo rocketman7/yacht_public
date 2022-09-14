@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 // 가격
 NumberFormat formatPriceKRW = NumberFormat("#,###");
-NumberFormat formatPriceUSD = NumberFormat("#,###.00");
+NumberFormat formatPriceUSD = NumberFormat("#,##0.00");
 // 가격 변동  ex) +56,750 or -27,050
 // KRW는 일의 자리까지, USD는 소수 둘째 자리까지
 NumberFormat formatPriceChangeKRW = NumberFormat("+#,###; -#,###");

@@ -274,7 +274,9 @@ class PickoneLivePriceWidget extends StatelessWidget {
 
                 Obx(
                   () => Text(
-                    toPriceKRW(controller.todayCurrentPrices[index]),
+                    controller.questModel.investAddresses![index].country == "KR"
+                        ? toPriceKRW(controller.todayCurrentPrices[index])
+                        : toPriceUSD(controller.todayCurrentPrices[index]),
                     style: stockPriceTextStyle.copyWith(
                       fontSize: 26.w,
                     ),
@@ -292,9 +294,13 @@ class PickoneLivePriceWidget extends StatelessWidget {
                     Obx(
                       () => Text(
                         controller.getStandardPriceDone.value
-                            ? toPriceKRW(
-                                controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index],
-                              )
+                            ? controller.questModel.investAddresses![index].country == "KR"
+                                ? toPriceKRW(
+                                    controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index],
+                                  )
+                                : toPriceUSD(
+                                    controller.todayCurrentPrices[index] - controller.yesterdayClosePrices[index],
+                                  )
                             : '-',
                         style: stockPriceTextStyle.copyWith(
                             fontSize: 14.w,
@@ -338,7 +344,9 @@ class PickoneLivePriceWidget extends StatelessWidget {
                     Text(
                       controller.questModel.investAddresses![0].basePrice == null
                           ? "기준일 ${dateTimeToString(controller.questModel.liveStartDateTime.toDate(), 4)} 대비"
-                          : "기준가 ${toPriceKRW(controller.questModel.investAddresses![0].basePrice!)} 대비",
+                          : controller.questModel.investAddresses![0].country == "KR"
+                              ? "기준가 ${toPriceKRW(controller.questModel.investAddresses![0].basePrice!)} 대비"
+                              : "기준가 ${toPriceUSD(controller.questModel.investAddresses![0].basePrice!)} 대비",
                       style: TextStyle(
                         color: yachtLightGrey,
                         fontSize: 14.w,
@@ -349,11 +357,17 @@ class PickoneLivePriceWidget extends StatelessWidget {
                         children: [
                           Text(
                             controller.getStandardPriceDone.value
-                                ? toPriceKRW(
-                                    controller.todayCurrentPrices[index] -
-                                        (controller.questModel.investAddresses![index].basePrice ??
-                                            controller.beforeLiveStartDateClosePrices[index]),
-                                  )
+                                ? controller.questModel.investAddresses![index].country == "KR"
+                                    ? toPriceKRW(
+                                        controller.todayCurrentPrices[index] -
+                                            (controller.questModel.investAddresses![index].basePrice ??
+                                                controller.beforeLiveStartDateClosePrices[index]),
+                                      )
+                                    : toPriceUSD(
+                                        controller.todayCurrentPrices[index] -
+                                            (controller.questModel.investAddresses![index].basePrice ??
+                                                controller.beforeLiveStartDateClosePrices[index]),
+                                      )
                                 : '-',
                             style: stockPriceTextStyle.copyWith(
                                 fontSize: 14.w,

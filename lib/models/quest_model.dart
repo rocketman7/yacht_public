@@ -348,7 +348,7 @@ class InvestAddressModel {
   final String name;
   final String? indexIncluded;
   final String? logoUrl;
-  final int? basePrice;
+  final num? basePrice;
   InvestAddressModel({
     required this.market,
     required this.country,

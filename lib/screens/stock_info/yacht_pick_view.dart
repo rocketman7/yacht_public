@@ -107,7 +107,7 @@ class YachtPickCardForCarousel extends StatelessWidget {
   final MixpanelService _mixpanelService = locator<MixpanelService>();
   @override
   Widget build(BuildContext context) {
-    YahctPickViewModel tempMainController = Get.put(YahctPickViewModel());
+    YahctPickViewModel yachtPickViewModel = Get.put(YahctPickViewModel());
     return Container(
       height: cardWholeHeight,
       width: cardWholeWidth + 10.w,
@@ -131,7 +131,7 @@ class YachtPickCardForCarousel extends StatelessWidget {
                           Navigator.of(context).pop();
                         },
                         child: FutureBuilder<String>(
-                          future: tempMainController.getTobeContinueDescription(),
+                          future: yachtPickViewModel.getTobeContinueDescription(),
                           builder: (context, snapshot) {
                             return snapshot.hasData ? infoDialog(context, info: snapshot.data!) : infoDialog(context);
                           },
@@ -181,10 +181,12 @@ class YachtPickCardForCarousel extends StatelessWidget {
                       height: 4.w,
                     ),
                     Obx(
-                      () => !tempMainController.isPricesLoaded.value
+                      () => !yachtPickViewModel.isPricesLoaded.value
                           ? TextLoadingWidget(height: 24.w, width: 80.w)
                           : Text(
-                              toPriceKRW(tempMainController.todayCurrentPrices[index].value),
+                              stockInfoNewModel.country == "KR"
+                                  ? toPriceKRW(yachtPickViewModel.todayCurrentPrices[index].value)
+                                  : toPriceUSD(yachtPickViewModel.todayCurrentPrices[index].value),
                               style: TextStyle(
                                   fontFamily: krFont,
                                   fontWeight: FontWeight.w700,
@@ -201,20 +203,23 @@ class YachtPickCardForCarousel extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Obx(
-                          () => !tempMainController.isPricesLoaded.value
+                          () => !yachtPickViewModel.isPricesLoaded.value
                               ? TextLoadingWidget(height: 14.w, width: 100.w)
                               : Text(
-                                  toPriceKRW(tempMainController.todayCurrentPrices[index].value -
-                                      tempMainController.yesterdayClosePrices[index]),
+                                  stockInfoNewModel.country == "KR"
+                                      ? toPriceChangeKRW(yachtPickViewModel.todayCurrentPrices[index].value -
+                                          yachtPickViewModel.yesterdayClosePrices[index])
+                                      : toPriceChangeUSD(yachtPickViewModel.todayCurrentPrices[index].value -
+                                          yachtPickViewModel.yesterdayClosePrices[index]),
                                   style: stockPriceTextStyle.copyWith(
                                       fontSize: 14.w,
                                       height: 1.0,
-                                      color: tempMainController.todayCurrentPrices[index].value -
-                                                  tempMainController.yesterdayClosePrices[index] >
+                                      color: yachtPickViewModel.todayCurrentPrices[index].value -
+                                                  yachtPickViewModel.yesterdayClosePrices[index] >
                                               0
                                           ? yachtRed
-                                          : tempMainController.todayCurrentPrices[index].value ==
-                                                  tempMainController.yesterdayClosePrices[index]
+                                          : yachtPickViewModel.todayCurrentPrices[index].value ==
+                                                  yachtPickViewModel.yesterdayClosePrices[index]
                                               ? white
                                               : yachtBlue),
                                 ),
@@ -222,18 +227,18 @@ class YachtPickCardForCarousel extends StatelessWidget {
                         SizedBox(width: 2.w),
                         Obx(
                           () => Text(
-                            tempMainController.yesterdayClosePrices[index] == 0
+                            yachtPickViewModel.yesterdayClosePrices[index] == 0
                                 ? '(0.00%)'
-                                : '(${toPercentageChange((tempMainController.todayCurrentPrices[index].value / tempMainController.yesterdayClosePrices[index]) - 1)})',
+                                : '(${toPercentageChange((yachtPickViewModel.todayCurrentPrices[index].value / yachtPickViewModel.yesterdayClosePrices[index]) - 1)})',
                             style: stockPriceTextStyle.copyWith(
                                 fontSize: 14.w,
                                 height: 1.0,
-                                color: tempMainController.todayCurrentPrices[index].value -
-                                            tempMainController.yesterdayClosePrices[index] >
+                                color: yachtPickViewModel.todayCurrentPrices[index].value -
+                                            yachtPickViewModel.yesterdayClosePrices[index] >
                                         0
                                     ? yachtRed
-                                    : tempMainController.todayCurrentPrices[index].value ==
-                                            tempMainController.yesterdayClosePrices[index]
+                                    : yachtPickViewModel.todayCurrentPrices[index].value ==
+                                            yachtPickViewModel.yesterdayClosePrices[index]
                                         ? white
                                         : yachtBlue),
                           ),
@@ -248,7 +253,7 @@ class YachtPickCardForCarousel extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.w),
                         color: yachtDarkGrey,
                       ),
-                      height: 30.w,
+                      height: 29.w,
                       padding: EdgeInsets.symmetric(horizontal: 14.w),
                       // width: 40.w,
                       child: Row(

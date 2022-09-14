@@ -188,6 +188,7 @@ class FirestoreService extends GetxService {
                 }
               }
               yachtPicks.add(StockInfoNewModel.fromMap(element.data(), yachtView));
+              print('yachtPicks: ${element.data()['name']}');
             }));
     return yachtPicks;
   }
@@ -1201,7 +1202,7 @@ class FirestoreService extends GetxService {
     //   dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
     // );
     return _firestoreService
-        .collection('stocksKR/${investAddress.issueCode}/realtimePrices')
+        .collection('stocks${investAddress.country}/${investAddress.issueCode}/realtimePrices')
         .where(
           'dateTime',
           isGreaterThan: dateTimeToString(questModel.liveStartDateTime.toDate(), 14),
@@ -1243,6 +1244,7 @@ class FirestoreService extends GetxService {
 
   // 특정 날, 특정 종목 종가 가져오기
   Future<num> getClosePrice(String country, String issueCode, DateTime day) async {
+    print(dateTimeToString(day, 8));
     return await _firestoreService
         .collection('stocks$country/$issueCode/historicalPrices')
         .where('dateTime', isEqualTo: dateTimeToString(day, 8))
@@ -1250,9 +1252,10 @@ class FirestoreService extends GetxService {
         .then((value) {
       // print('value: ${value.docs.length}');
       if (value.docs.length == 0) {
-        return 0;
+        return 0.0;
       } else {
-        return value.docs.first.data()['close'];
+        print('value: ${value.docs.first.data()['close']}');
+        return value.docs.first.data()['close'].toDouble();
       }
     });
   }

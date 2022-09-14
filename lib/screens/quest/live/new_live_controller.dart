@@ -11,6 +11,7 @@ import 'package:yachtOne/services/firestore_service.dart';
 
 import '../../../handlers/date_time_handler.dart';
 import '../../../locator.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class NewLiveController extends GetxController {
   NewLiveController({
@@ -34,15 +35,16 @@ class NewLiveController extends GetxController {
   RxList yesterdayClosePrices = [].obs;
   RxList beforeLiveStartDateClosePrices = [].obs;
 
+  final chicagoTime = tz.getLocation('America/Chicago');
   @override
   void onInit() async {
     investmentModelLength = questModel.investAddresses!.length;
     investAddresses.addAll(questModel.investAddresses!);
 
-    livePriceRankByIndex = List.generate(investmentModelLength, (index) => null).obs;
-    todayCurrentPrices = List.generate(investmentModelLength, (index) => 0).obs;
-    yesterdayClosePrices = List.generate(investmentModelLength, (index) => 0).obs;
-    beforeLiveStartDateClosePrices = List.generate(investmentModelLength, (index) => 0).obs;
+    livePriceRankByIndex = List.generate(investmentModelLength, (index) => 0.0).obs;
+    todayCurrentPrices = List.generate(investmentModelLength, (index) => 0.0).obs;
+    yesterdayClosePrices = List.generate(investmentModelLength, (index) => 0.0).obs;
+    beforeLiveStartDateClosePrices = List.generate(investmentModelLength, (index) => 0.0).obs;
     await getLivePrice();
     await getStandardPrice();
 
@@ -62,7 +64,9 @@ class NewLiveController extends GetxController {
     });
 
     for (int i = 0; i < investmentModelLength; i++) {
-      todayCurrentPrices[i] = livePricesOfThisQuest[i].value.chartPrices.last.close;
+      print(livePricesOfThisQuest[i].value.chartPrices.last.close);
+      print(livePricesOfThisQuest[i].value.issueCode);
+      todayCurrentPrices[i] = livePricesOfThisQuest[i].value.chartPrices.last.close ?? 0.0;
     }
     // livePricesOfThisQuest.listen((p0) {
     //   print('liveprice changed');
@@ -79,7 +83,7 @@ class NewLiveController extends GetxController {
         investAddresses[i].country,
         investAddresses[i].issueCode,
         previousBusinessDay(
-          DateTime.now(),
+          investAddresses[i].country == "KR" ? DateTime.now() : tz.TZDateTime.now(chicagoTime),
         ),
       );
 
