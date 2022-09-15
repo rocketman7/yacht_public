@@ -1237,7 +1237,7 @@ class FirestoreService extends GetxService {
         return 0;
       } else {
         // print('element: ${element.docs[0].data()}');
-        return element.docs[0].data()['close'];
+        return element.docs[0].data()['close'].toDouble();
       }
     });
   }
