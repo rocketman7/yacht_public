@@ -38,4 +38,28 @@ class AdManager {
       throw new UnsupportedError("Unsupported platform");
     }
   }
+
+  static String get bannerAdUnitId {
+    if (Platform.isAndroid) {
+      // return "ca-app-pub-3726614606720353/3671140756";
+      return "ca-app-pub-3726614606720353/6169650190";
+    } else if (Platform.isIOS) {
+      // return "ca-app-pub-3726614606720353/2848820155";
+      return "ca-app-pub-3726614606720353/2641506715";
+    } else {
+      throw new UnsupportedError("Unsupported platform");
+    }
+  }
+
+  static String get bannerBottomAdUnitId {
+    if (Platform.isAndroid) {
+      // return "ca-app-pub-3726614606720353/3671140756";
+      return "ca-app-pub-3726614606720353/6705547258";
+    } else if (Platform.isIOS) {
+      // return "ca-app-pub-3726614606720353/2848820155";
+      return "ca-app-pub-3726614606720353/9651274797";
+    } else {
+      throw new UnsupportedError("Unsupported platform");
+    }
+  }
 }

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart' hide RefreshIndicator, RefreshIndicatorSt
 import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/yacht_design_system/yds_button.dart';
 import 'package:yachtOne/yacht_design_system/yds_dialog.dart';
 import 'package:yachtOne/yacht_design_system/yds_font.dart';
@@ -113,38 +114,57 @@ class NewHomeView extends StatelessWidget {
           header: YachtCustomHeader(),
           controller: homeViewModel.refreshController,
           onRefresh: onRefresh,
-          child: CustomScrollView(
-            controller: homeViewModel.scrollController,
-            slivers: [
-              // 앱바
+          child: Stack(
+            children: [
+              CustomScrollView(
+                controller: homeViewModel.scrollController,
+                slivers: [
+                  // 앱바
+                  Obx(
+                    () => SliverPersistentHeader(
+                        floating: false,
+                        pinned: true,
+                        // 홈 뷰 앱바 구현
+                        delegate: _GlassmorphismAppBarDelegate(
+                          MediaQuery.of(context).padding,
+                          offset.value,
+                          homeViewModel,
+                        )),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 14.w,
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      homeWidgets,
+                      // addRepaintBoundaries: false,
+                      // addAutomaticKeepAlives: true,
+                    ),
+                  )
+                  // SliverList(
+                  //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                  //       return homeWidgets[index];
+                  //     }, childCount: homeWidgets.length),
+                  //   ),
+                ],
+              ),
               Obx(
-                () => SliverPersistentHeader(
-                    floating: false,
-                    pinned: true,
-                    // 홈 뷰 앱바 구현
-                    delegate: _GlassmorphismAppBarDelegate(
-                      MediaQuery.of(context).padding,
-                      offset.value,
-                      homeViewModel,
-                    )),
+                () => (homeViewModel.isBannerAdLoaded.value && homeViewModel.bannerAdPosition.value == 'bottom_fixed')
+                    ? Positioned(
+                        bottom: ScreenUtil().bottomBarHeight + 60.w,
+                        left: (ScreenUtil().screenWidth - homeViewModel.myBanner!.sizes[0].width.toDouble()) / 2,
+                        child: Center(
+                          child: Container(
+                            height: homeViewModel.myBanner!.sizes[0].height.toDouble(),
+                            width: homeViewModel.myBanner!.sizes[0].width.toDouble(),
+                            // width: ScreenUtil().screenWidth,
+                            child: AdWidget(ad: homeViewModel.myBanner!),
+                          ),
+                        ))
+                    : SizedBox.shrink(),
               ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 14.w,
-                ),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  homeWidgets,
-                  // addRepaintBoundaries: false,
-                  // addAutomaticKeepAlives: true,
-                ),
-              )
-              // SliverList(
-              //     delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-              //       return homeWidgets[index];
-              //     }, childCount: homeWidgets.length),
-              //   ),
             ],
           ),
         ),

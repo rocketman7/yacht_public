@@ -65,7 +65,7 @@ dependencies:
   get_it: ^6.1.1
   get_storage:
   google_mobile_ads:
-    ^2.0.0
+    ^2.0.1
     # git:
     #   url: https://github.com/googleads/googleads-mobile-flutter
     #   ref: 356875362ddb2ac2e0056385d2729c093722fb8d

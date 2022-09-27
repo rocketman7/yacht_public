@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:yachtOne/yacht_design_system/yds_font.dart';
 
 import '../../locator.dart';
@@ -150,6 +151,25 @@ class YachtQuestView extends StatelessWidget {
                     )),
             SizedBox(
               height: 24.w,
+            ),
+            Obx(
+              () => (homeViewModel.isBannerAdLoaded.value && homeViewModel.bannerAdPosition.value == 'middle')
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Container(
+                            height: homeViewModel.myBanner!.sizes[0].height.toDouble(),
+                            width: homeViewModel.myBanner!.sizes[0].width.toDouble(),
+                            child: AdWidget(ad: homeViewModel.myBanner!),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 24.w,
+                        ),
+                      ],
+                    )
+                  : SizedBox.shrink(),
             ),
             Padding(
               padding: defaultHorizontalPadding,

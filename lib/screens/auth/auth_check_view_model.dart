@@ -40,8 +40,8 @@ class AuthCheckViewModel extends GetxController {
 
   @override
   void onInit() async {
-    print('userRx: $userModelRx');
-    print('leagueRx: $leagueRx');
+    // print('userRx: $userModelRx');
+    // print('leagueRx: $leagueRx');
     isInitiating(true);
     // print('auth check init start');
     // await checkTime();
@@ -52,8 +52,8 @@ class AuthCheckViewModel extends GetxController {
 
     await checkVersion();
 
-    print('oninit: ${authService.auth.currentUser}');
-    print('oninit: ${userModelRx.value}');
+    // print('oninit: ${authService.auth.currentUser}');
+    // print('oninit: ${userModelRx.value}');
 
     // currentUser(authService.auth.currentUser);
     tierSystemModelRx(await _firestoreService.getTierSystem());

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -75,6 +76,13 @@ class HomeViewModel extends GetxController {
   RxList<StockInfoNewModel> stockInfoNewModels = <StockInfoNewModel>[].obs;
   // bool isModelLoaded = false;
 
+  // Banner Ad
+  AdManagerBannerAdListener? listener;
+  AdManagerBannerAd? myBanner;
+  RxBool isBannerAdLoaded = false.obs;
+  RxString bannerAdPosition = "".obs;
+
+  final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
   @override
   void onClose() {
     // TODO: implement onClose
@@ -86,8 +94,16 @@ class HomeViewModel extends GetxController {
   @override
   void onInit() async {
     _mixpanelService.mixpanel.identify(userModelRx.value!.uid);
-
     _mixpanelService.mixpanel.flush();
+
+    await remoteConfig.fetchAndActivate();
+    await remoteConfig.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: Duration(seconds: 10),
+      minimumFetchInterval: Duration(seconds: 1),
+    ));
+
+    bannerAdPosition(remoteConfig.getString('banner_ad_position'));
+    print('bannerAdPosition: $bannerAdPosition');
     // TODO: implement onInit
     isLoading(true);
     stockInfoNewModels(await _firestoreService.getYachtPicks());
@@ -113,6 +129,9 @@ class HomeViewModel extends GetxController {
     _mixpanelService.mixpanel.track('Home');
 
     _createRewardedAd();
+
+    instantiateBannerAd();
+
     if (userModelRx.value != null) {
       // print('usermodel name update' + userModelRx.value!.isNameUpdated.toString());
       noNeedShowUserNameDialog(userModelRx.value!.isNameUpdated ?? false);
@@ -122,6 +141,35 @@ class HomeViewModel extends GetxController {
     }
 
     super.onInit();
+  }
+
+  instantiateBannerAd() {
+    listener = AdManagerBannerAdListener(
+      // Called when an ad is successfully received.
+      onAdLoaded: (Ad ad) {
+        print('Ad loaded.');
+        isBannerAdLoaded(true);
+      },
+      // Called when an ad request failed.
+      onAdFailedToLoad: (Ad ad, LoadAdError error) {
+        // Dispose the ad here to free resources.
+        ad.dispose();
+        print('Ad failed to load: $error');
+      },
+      // Called when an ad opens an overlay that covers the screen.
+      onAdOpened: (Ad ad) => print('Ad opened.'),
+      // Called when an ad removes an overlay that covers the screen.
+      onAdClosed: (Ad ad) => print('Ad closed.'),
+      // Called when an impression occurs on the ad.
+      onAdImpression: (Ad ad) => print('Ad impression.'),
+    );
+    myBanner = AdManagerBannerAd(
+      adUnitId: bannerAdPosition.value == "middle" ? AdManager.bannerAdUnitId : AdManager.bannerBottomAdUnitId,
+      sizes: [AdSize.banner],
+      request: AdManagerAdRequest(),
+      listener: listener!,
+    )..load();
+    // myBanner.load();
   }
 
   Future<bool> isUserNameDuplicated(String userName) async {
