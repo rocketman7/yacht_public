@@ -41,7 +41,9 @@ class YahctPickViewModel extends GetxController {
         stockInfoNewModels[i].country,
         stockInfoNewModels[i].code,
         previousBusinessDay(
-          stockInfoNewModels[i].country == "KR" ? DateTime.now() : tz.TZDateTime.now(chicagoTime),
+          (stockInfoNewModels[i].country == "KR" || stockInfoNewModels[i].country == "JP")
+              ? DateTime.now()
+              : tz.TZDateTime.now(chicagoTime),
         ),
       );
 

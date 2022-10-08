@@ -58,6 +58,7 @@ class HomeViewModel extends GetxController {
 
   //rewardedAds 관련
   RewardedAd? _rewardedAd;
+  RxBool isRewardedAdLoaded = false.obs;
   int _numRewardedLoadAttempts = 0;
   ScrollController scrollController = ScrollController();
 
@@ -497,12 +498,13 @@ class HomeViewModel extends GetxController {
         */
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           onAdLoaded: (RewardedAd ad) {
-            print('$ad loaded.');
+            print('Rewarded Ads loaded.');
+            isRewardedAdLoaded(true);
             _rewardedAd = ad;
             _numRewardedLoadAttempts = 0;
           },
           onAdFailedToLoad: (LoadAdError error) {
-            print('RewardedAd failed to load: $error');
+            // print('RewardedAd failed to load: $error');
             _rewardedAd = null;
             _numRewardedLoadAttempts += 1;
             if (_numRewardedLoadAttempts <= maxFailedLoadAttempts) {

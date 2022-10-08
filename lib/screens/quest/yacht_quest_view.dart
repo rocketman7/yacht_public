@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:yachtOne/yacht_design_system/yds_dialog.dart';
 import 'package:yachtOne/yacht_design_system/yds_font.dart';
 
 import '../../locator.dart';
@@ -41,14 +42,29 @@ class YachtQuestView extends StatelessWidget {
               Container(
                   // color: Colors.blue,
                   child: Text("요트 퀘스트", style: sectionTitle.copyWith(height: 1.0))),
+              // Obx(
+              //   () => Text(
+              //     homeViewModel.isRewardedAdLoaded.value ? "광고 로드 완료" : "광고 로딩",
+              //     style: head3Style,
+              //   ),
+              // ),
               Spacer(),
               GestureDetector(
                 onTap: () {
                   _mixpanelService.mixpanel.track('Jogabi Get');
-                  if (userModelRx.value!.rewardedCnt! < maxRewardedAds) {
-                    adsViewDialog(context);
+                  if (homeViewModel.isRewardedAdLoaded.value) {
+                    if (userModelRx.value!.rewardedCnt! < maxRewardedAds) {
+                      adsViewDialog(context);
+                    } else {
+                      maxRewardedAdsDialog(context);
+                    }
                   } else {
-                    maxRewardedAdsDialog(context);
+                    print("not load");
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return infoDialog(context, info: "광고를 불러오는 중이에요.\n잠시 후에 시도해주세요.");
+                        });
                   }
                 },
                 child: Stack(
