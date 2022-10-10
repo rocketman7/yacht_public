@@ -71,14 +71,14 @@ class YachtQuestView extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.w),
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.w),
                       decoration: jogabiButtonBoxDecoration.copyWith(boxShadow: [primaryBoxShadow]),
                       child: Row(
                         children: [
                           SvgPicture.asset(
-                            'assets/icons/jogabi.svg',
-                            height: 24.w,
-                            width: 24.w,
+                            'assets/icons/jogabi_without_circle.svg',
+                            height: 28.w,
+                            width: 28.w,
                           ),
                           SizedBox(
                             width: 4.w,
@@ -89,24 +89,27 @@ class YachtQuestView extends StatelessWidget {
                               userModelRx.value == null ? 0.toString() : userModelRx.value!.item.toString(),
                               style: questTermTextStyle.copyWith(color: yachtWhite, fontWeight: FontWeight.w600),
                             );
-                          })
+                          }),
+                          SizedBox(
+                            width: 4.w,
+                          ),
                         ],
                       ),
                     ),
-                    Positioned(
-                      right: -10.w,
-                      top: -10.w,
-                      child: Container(
-                        padding: EdgeInsets.all(3.5.w),
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-                        height: 20.w,
-                        width: 20.w,
-                        child: SvgPicture.asset(
-                          'assets/buttons/add.svg',
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
+                    // Positioned(
+                    //   right: -10.w,
+                    //   top: -10.w,
+                    //   child: Container(
+                    //     padding: EdgeInsets.all(3.5.w),
+                    //     decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                    //     height: 20.w,
+                    //     width: 20.w,
+                    //     child: SvgPicture.asset(
+                    //       'assets/buttons/add.svg',
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),

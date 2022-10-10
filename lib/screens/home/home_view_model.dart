@@ -81,7 +81,7 @@ class HomeViewModel extends GetxController {
   AdManagerBannerAdListener? listener;
   AdManagerBannerAd? myBanner;
   RxBool isBannerAdLoaded = false.obs;
-  RxString bannerAdPosition = "".obs;
+  RxString bannerAdPosition = "middle".obs;
 
   final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
   @override
@@ -103,8 +103,8 @@ class HomeViewModel extends GetxController {
       minimumFetchInterval: Duration(seconds: 1),
     ));
 
-    bannerAdPosition(remoteConfig.getString('banner_ad_position'));
-    print('bannerAdPosition: $bannerAdPosition');
+    // bannerAdPosition(remoteConfig.getString('banner_ad_position'));
+    // print('bannerAdPosition: $bannerAdPosition');
     // TODO: implement onInit
     isLoading(true);
     stockInfoNewModels(await _firestoreService.getYachtPicks());
@@ -165,7 +165,7 @@ class HomeViewModel extends GetxController {
       onAdImpression: (Ad ad) => print('Ad impression.'),
     );
     myBanner = AdManagerBannerAd(
-      adUnitId: bannerAdPosition.value == "middle" ? AdManager.bannerAdUnitId : AdManager.bannerBottomAdUnitId,
+      adUnitId: AdManager.bannerAdUnitId,
       sizes: [AdSize.banner],
       request: AdManagerAdRequest(),
       listener: listener!,

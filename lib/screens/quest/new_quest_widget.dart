@@ -100,9 +100,9 @@ class NewQuestWidget extends StatelessWidget {
                       Row(
                         children: [
                           SvgPicture.asset(
-                            'assets/icons/jogabi.svg',
-                            width: 20.w,
-                            height: 20.w,
+                            'assets/icons/jogabi_without_circle.svg',
+                            width: 24.w,
+                            height: 24.w,
                           ),
                           SizedBox(width: 4.w),
                           Text(

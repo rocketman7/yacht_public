@@ -8,12 +8,13 @@ import 'yacht_design_system.dart';
 ThemeData theme() {
   return ThemeData(
     scaffoldBackgroundColor: yachtBlack,
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: yachtWhite,
-        elevation: 0.0,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        unselectedLabelStyle: TextStyle(color: primaryFontColor)),
+    // bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    //     backgroundColor: yachtWhite,
+    //     elevation: 0.0,
+    //     selectedItemColor: white,
+    //     // selectedLabelStyle: sub1Style,
+    //     unselectedItemColor: yachtMidGrey,
+    //     unselectedLabelStyle: TextStyle(color: white)),
     fontFamily: krFont,
     appBarTheme: appBarTheme(),
     // textTheme: textTheme(),

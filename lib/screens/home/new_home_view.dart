@@ -150,21 +150,21 @@ class NewHomeView extends StatelessWidget {
                   //   ),
                 ],
               ),
-              Obx(
-                () => (homeViewModel.isBannerAdLoaded.value && homeViewModel.bannerAdPosition.value == 'bottom_fixed')
-                    ? Positioned(
-                        bottom: ScreenUtil().bottomBarHeight + 60.w,
-                        left: (ScreenUtil().screenWidth - homeViewModel.myBanner!.sizes[0].width.toDouble()) / 2,
-                        child: Center(
-                          child: Container(
-                            height: homeViewModel.myBanner!.sizes[0].height.toDouble(),
-                            width: homeViewModel.myBanner!.sizes[0].width.toDouble(),
-                            // width: ScreenUtil().screenWidth,
-                            child: AdWidget(ad: homeViewModel.myBanner!),
-                          ),
-                        ))
-                    : SizedBox.shrink(),
-              ),
+              // Obx(
+              //   () => (homeViewModel.isBannerAdLoaded.value && homeViewModel.bannerAdPosition.value == 'bottom_fixed')
+              //       ? Positioned(
+              //           bottom: ScreenUtil().bottomBarHeight + 60.w,
+              //           left: (ScreenUtil().screenWidth - homeViewModel.myBanner!.sizes[0].width.toDouble()) / 2,
+              //           child: Center(
+              //             child: Container(
+              //               height: homeViewModel.myBanner!.sizes[0].height.toDouble(),
+              //               width: homeViewModel.myBanner!.sizes[0].width.toDouble(),
+              //               // width: ScreenUtil().screenWidth,
+              //               child: AdWidget(ad: homeViewModel.myBanner!),
+              //             ),
+              //           ))
+              //       : SizedBox.shrink(),
+              // ),
             ],
           ),
         ),
@@ -1153,6 +1153,72 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                             InkWell(
                               onTap: () {
                                 _mixpanelService.mixpanel.track(
+                                  'Jogabi Get',
+                                  properties: {'Position': "AppBar"},
+                                );
+                                if (homeViewModel.isRewardedAdLoaded.value) {
+                                  if (userModelRx.value!.rewardedCnt! < maxRewardedAds) {
+                                    adsViewDialog(context);
+                                  } else {
+                                    maxRewardedAdsDialog(context);
+                                  }
+                                } else {
+                                  print("not load");
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return infoDialog(context, info: "광고를 불러오는 중이에요.\n잠시 후에 시도해주세요.");
+                                      });
+                                }
+
+                                // 여기서 트리거해주면 페이지전환 속도가 느려서.. 차라리 노티피케이션뷰를 스테이트풀 위젯으로 해주고 그 이닛스테이트에서 얘를 실행하자.
+                                // Get.find<NotificationViewModel>()
+                                //     .lastNotificationCheckTimeUpdate();
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 2.w,
+                                          color: yachtWhite,
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                          8.w,
+                                        )),
+
+                                    height: 28.w,
+                                    // width: 24.w,
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/icons/jogabi_without_circle.svg',
+                                          height: 24.w,
+                                          width: 24.w,
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/buttons/add.svg',
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          width: 3.w,
+                                        )
+                                      ],
+                                    ),
+                                    // Image.asset('assets/icons/notification.png'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: 14.w,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                _mixpanelService.mixpanel.track(
                                   'Yacht Point Store',
                                   properties: {'Yacht Point Store': "홈"},
                                 );
@@ -1183,6 +1249,7 @@ class _GlassmorphismAppBarDelegate extends SliverPersistentHeaderDelegate {
                             InkWell(
                               onTap: () async {
                                 _mixpanelService.mixpanel.track('Notification');
+                                // 'NeedLoad' arg를 붙여서 보내면, 유저 정보에 noti 확인한 시간 stamp
                                 if (userModelRx.value!.lastNotificationCheckDateTime == null) {
                                   Get.to(() => NotificationView(), arguments: 'NeedLoad');
                                 } else {

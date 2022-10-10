@@ -25,6 +25,7 @@ import 'package:yachtOne/screens/startup/startup_view_model.dart';
 import 'package:yachtOne/services/mixpanel_service.dart';
 import 'package:yachtOne/styles/yacht_design_system.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:yachtOne/yacht_design_system/yds_font.dart';
 
 import '../home/new_home_view.dart';
 
@@ -128,13 +129,14 @@ class StartupView extends GetView<StartupViewModel> {
               height: controller.isKeyboardShown.value ? 0 : null,
               child: BottomNavigationBar(
                 selectedIconTheme: IconThemeData(size: 40),
-                selectedFontSize: 0,
-                unselectedFontSize: 0,
+                selectedFontSize: 0.w,
+                unselectedFontSize: 0.w,
+
                 // elevation: 8,
                 type: BottomNavigationBarType.fixed,
                 backgroundColor: yachtBlack.withOpacity(.9),
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
+                showSelectedLabels: true,
+                showUnselectedLabels: true,
                 currentIndex: controller.selectedPage.value,
                 onTap: (index) async {
                   // if (controller.selectedPage.value != index) {
@@ -224,69 +226,142 @@ class StartupView extends GetView<StartupViewModel> {
                 },
                 items: [
                   BottomNavigationBarItem(
-                    icon: Container(
-                      // color: Colors.blue,
-                      child: Image.asset(
-                        'assets/icons/bottom_navigation/home_unselected.png',
-                        width: iconSize,
-                        height: iconSize,
-                        color: yachtMidGrey,
-                      ),
+                    icon: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(bottom: 6.w),
+                          // color: Colors.blue,
+                          child: Image.asset(
+                            'assets/icons/bottom_navigation/home_unselected.png',
+                            width: iconSize,
+                            height: iconSize,
+                            color: yachtMidGrey,
+                          ),
+                        ),
+                        Text(
+                          "홈",
+                          style: sub1Style.copyWith(color: yachtMidGrey),
+                        )
+                      ],
                     ),
-                    activeIcon: Container(
-                      // color: Colors.blue,
-                      child: Image.asset(
-                        'assets/icons/bottom_navigation/home_selected.png',
-                        width: iconSize,
-                        height: iconSize,
-                        color: yachtWhite,
-                      ),
+                    activeIcon: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(bottom: 6.w),
+                          // color: Colors.blue,
+                          child: Image.asset(
+                            'assets/icons/bottom_navigation/home_selected.png',
+                            width: iconSize,
+                            height: iconSize,
+                            color: yachtWhite,
+                          ),
+                        ),
+                        Text(
+                          "홈",
+                          style: sub1Style,
+                        )
+                      ],
                     ),
                     label: '',
                   ),
                   BottomNavigationBarItem(
-                      icon: Container(
-                        // color: Colors.blue,
-                        child: Image.asset(
-                          'assets/icons/bottom_navigation/insight_unselected.png',
-                          width: iconSize,
-                          height: iconSize,
-                          color: yachtMidGrey,
-                        ),
+                      icon: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(bottom: 6.w),
+                            // color: Colors.blue,
+                            child: Image.asset(
+                              'assets/icons/bottom_navigation/insight_unselected.png',
+                              width: iconSize,
+                              height: iconSize,
+                              color: yachtMidGrey,
+                            ),
+                          ),
+                          Text(
+                            "인사이트",
+                            style: sub1Style.copyWith(color: yachtMidGrey),
+                          )
+                        ],
                       ),
-                      activeIcon: Image.asset(
-                        'assets/icons/bottom_navigation/insight_selected.png',
-                        width: iconSize,
-                        height: iconSize,
-                        color: yachtWhite,
+                      activeIcon: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(bottom: 6.w),
+                            child: Image.asset(
+                              'assets/icons/bottom_navigation/insight_selected.png',
+                              width: iconSize,
+                              height: iconSize,
+                              color: yachtWhite,
+                            ),
+                          ),
+                          Text("인사이트", style: sub1Style)
+                        ],
                       ),
                       label: ''),
                   BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/icons/bottom_navigation/community_unselected.png',
-                        width: iconSize,
-                        height: iconSize, color: yachtMidGrey,
-                        // color: yachtBlack.withOpacity(unselectedOpacity),
+                      icon: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(bottom: 6.w),
+                            child: Image.asset(
+                              'assets/icons/bottom_navigation/community_unselected.png',
+                              width: iconSize,
+                              height: iconSize, color: yachtMidGrey,
+                              // color: yachtBlack.withOpacity(unselectedOpacity),
+                            ),
+                          ),
+                          Text(
+                            "커뮤니티",
+                            style: sub1Style.copyWith(color: yachtMidGrey),
+                          )
+                        ],
                       ),
-                      activeIcon: Image.asset(
-                        'assets/icons/bottom_navigation/community_selected.png',
-                        width: iconSize,
-                        height: iconSize,
-                        color: yachtWhite,
+                      activeIcon: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(bottom: 6.w),
+                            child: Image.asset(
+                              'assets/icons/bottom_navigation/community_selected.png',
+                              width: iconSize,
+                              height: iconSize,
+                              color: yachtWhite,
+                            ),
+                          ),
+                          Text("커뮤니티", style: sub1Style)
+                        ],
                       ),
                       label: ''),
                   BottomNavigationBarItem(
-                      icon: Image.asset(
-                        'assets/icons/bottom_navigation/my_unselected.png',
-                        width: iconSize,
-                        height: iconSize,
-                        color: yachtMidGrey,
+                      icon: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(bottom: 6.w),
+                            child: Image.asset(
+                              'assets/icons/bottom_navigation/my_unselected.png',
+                              width: iconSize,
+                              height: iconSize,
+                              color: yachtMidGrey,
+                            ),
+                          ),
+                          Text(
+                            "MY",
+                            style: sub1Style.copyWith(color: yachtMidGrey),
+                          )
+                        ],
                       ),
-                      activeIcon: Image.asset(
-                        'assets/icons/bottom_navigation/my_selected.png',
-                        width: iconSize,
-                        height: iconSize,
-                        color: yachtWhite,
+                      activeIcon: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(bottom: 6.w),
+                            child: Image.asset(
+                              'assets/icons/bottom_navigation/my_selected.png',
+                              width: iconSize,
+                              height: iconSize,
+                              color: yachtWhite,
+                            ),
+                          ),
+                          Text("MY", style: sub1Style)
+                        ],
                       ),
                       label: '')
                 ],
