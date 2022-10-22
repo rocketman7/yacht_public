@@ -9,6 +9,8 @@ import 'package:flutter/physics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:yachtOne/screens/webview/temp_web_view.dart';
 import 'package:yachtOne/yacht_design_system/yds_button.dart';
 import 'package:yachtOne/yacht_design_system/yds_dialog.dart';
 import 'package:yachtOne/yacht_design_system/yds_font.dart';
@@ -343,10 +345,12 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
   final box = GetStorage();
   bool iosTermAgree = true;
+  bool newTermAgree = true;
   String termsOfUse = "";
   String privacyPolicy = "";
   RxBool checkTerm = false.obs;
   RxBool checkFourteen = false.obs;
+  RxBool checkNewTerm = false.obs;
 
   ScrollController _termScrollController = ScrollController();
   ScrollController _privacyScrollController = ScrollController();
@@ -364,7 +368,7 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
       widget.homeViewModel.onceInit = true;
       print('after init: ${widget.homeViewModel.onceInit}');
       iosTermAgree = box.read('iosTermAgree${userModelRx.value!.uid}') ?? false;
-
+      newTermAgree = box.read('newTermAgree${userModelRx.value!.uid}') ?? false;
       //  else {
       if (userModelRx.value!.isNameUpdated == null || !userModelRx.value!.isNameUpdated!) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -373,11 +377,135 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
       }
       // }
 
-      if (!iosTermAgree) {
+      // ios 약관 동의
+      // if (!iosTermAgree) {
+      // WidgetsBinding.instance.addPostFrameCallback((_) async {
+      //   termsOfUse = await rootBundle.loadString('assets/documents/termsOfUse.txt');
+      //   privacyPolicy = await rootBundle.loadString('assets/documents/privacyPolicy.txt');
+      //   await showTermDialog(context, widget.homeViewModel);
+      // });
+      // }
+
+      // WidgetsBinding.instance.addPostFrameCallback((_) async {
+      //   await showNewTermDialog(context);
+      // });
+
+      // 상단 다이얼로그 테스트
+      if (!newTermAgree) {
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          termsOfUse = await rootBundle.loadString('assets/documents/termsOfUse.txt');
-          privacyPolicy = await rootBundle.loadString('assets/documents/privacyPolicy.txt');
-          await showTermDialog(context, widget.homeViewModel);
+          await showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                RxBool seeTerm = false.obs;
+                return Dialog(
+                  backgroundColor: Colors.transparent,
+                  alignment: Alignment.topCenter,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.w),
+                  ),
+                  insetPadding: EdgeInsets.fromLTRB(14.w, 24.w, 14.w, 24.w),
+                  child: Container(
+                    padding: defaultPaddingAll.copyWith(top: 0),
+                    decoration: BoxDecoration(
+                      color: yachtDarkGrey,
+                      borderRadius: BorderRadius.circular(12.w),
+                    ),
+                    // width: 200,
+                    // height: 100,
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 60.w,
+                            child: Center(
+                              child: Text(
+                                "알림",
+                                style: head3Style.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "새롭게 변경된 이용약관에 동의해주세요",
+                            style: head3Style.copyWith(height: 1.4.w),
+                          ),
+                          SizedBox(
+                            height: 16.w,
+                          ),
+                          Obx(() => seeTerm.value
+                              ? Expanded(
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: WebView(
+                                          backgroundColor: Color(0xFF101214),
+                                          initialUrl:
+                                              "https://brave-cinnamon-fa9.notion.site/2022-10-15-ef93f9fee66541f8a64e7feddf424dea",
+                                          // gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
+                                          javascriptMode: JavascriptMode.unrestricted,
+                                          zoomEnabled: false,
+                                          onWebViewCreated: (_) {
+                                            print('onWebViewCreated' + _.toString());
+                                          },
+                                          onPageStarted: (_) {
+                                            print('onPageStarted' + _.toString());
+                                          },
+                                          onProgress: (_) {
+                                            print('onProgress' + _.toString());
+                                          },
+                                          onPageFinished: (_) {
+                                            print('onPageFinished' + _.toString());
+                                            // setState(() {
+                                            //   // isPageFinishied = true;
+                                            // });
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 16.w,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox.shrink()),
+                          Container(
+                              height: 48.w,
+                              // width: 30,
+                              // color: Colors.red,
+                              child: Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () async {
+                                      seeTerm(true);
+                                      // Get.to(TempWebView(
+                                      //     url:
+                                      //         "https://brave-cinnamon-fa9.notion.site/2022-10-20-ef93f9fee66541f8a64e7feddf424dea"));
+                                    },
+                                    child: Container(
+                                      // width: 120.w,
+                                      child: bigTextContainerButton(text: "이용약관 확인", isDisabled: true),
+                                    ),
+                                  ),
+                                  SizedBox(width: 14.w),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        await widget.homeViewModel.agreeTerm();
+                                        box.write('newTermAgree${userModelRx.value!.uid}', true);
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: bigTextContainerButton(text: "동의하고 시작하기", isDisabled: false),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ]),
+                  ),
+                );
+              });
         });
       }
     }
@@ -407,6 +535,202 @@ class _DialogReadyWidgetState extends State<DialogReadyWidget> {
 
     final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
     print("UUID: $uuid");
+  }
+
+  showNewTermDialog(BuildContext context) {
+    showDialog(
+        context: (context),
+        barrierDismissible: false,
+        builder: (context) {
+          return Dialog(
+            // backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.w),
+            ),
+
+            insetPadding: EdgeInsets.symmetric(horizontal: 14.w),
+            child: Container(
+              color: yachtBlack,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 300.w,
+                    child: WebView(
+                      backgroundColor: Color(0xFF101214),
+                      initialUrl: "https://brave-cinnamon-fa9.notion.site/2022-10-15-ef93f9fee66541f8a64e7feddf424dea",
+                      // gestureRecognizers: Set()..add(Factory<EagerGestureRecognizer>(() => EagerGestureRecognizer())),
+                      javascriptMode: JavascriptMode.unrestricted,
+                      zoomEnabled: false,
+                      onWebViewCreated: (_) {
+                        print('onWebViewCreated' + _.toString());
+                      },
+                      onPageStarted: (_) {
+                        print('onPageStarted' + _.toString());
+                      },
+                      onProgress: (_) {
+                        print('onProgress' + _.toString());
+                      },
+                      onPageFinished: (_) {
+                        print('onPageFinished' + _.toString());
+                        // setState(() {
+                        //   // isPageFinishied = true;
+                        // });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 14.w,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 24.0,
+                        width: 24.0,
+                        child: Obx(
+                          () => Checkbox(
+                              activeColor: yachtViolet,
+                              side: BorderSide(width: 2.w, color: yachtWhite),
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              value: checkNewTerm.value,
+                              onChanged: (value) {
+                                checkNewTerm(value);
+                              }),
+                        ),
+                      ),
+                      SizedBox(width: 4.w),
+                      Text("이용약관에 동의합니다.", style: body1Style),
+                      Text(" (필수)", style: body1Style.copyWith(color: yachtRed)),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 14.w,
+                  ),
+                  Container(
+                      height: 48.w,
+                      // width: 30,
+                      // color: Colors.red,
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => Dialog(
+                                      backgroundColor: yachtDarkGrey,
+                                      insetPadding: defaultHorizontalPadding,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                              padding: EdgeInsets.fromLTRB(14.w, 14.w, 14.w, 14.w),
+                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.w)),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text("알림", style: body1Style),
+                                                  SizedBox(
+                                                    height: 14.w,
+                                                  ),
+                                                  Text("이용약관에 동의하지 않으면 요트 서비스를 이용할 수 없습니다. ", style: head3Style),
+                                                  SizedBox(
+                                                    height: 14.w,
+                                                  ),
+                                                  Center(
+                                                    child: Text(
+                                                      " 동의를 거부하고 정말 탈퇴하시겠습니까?",
+                                                      style: head3Style,
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 14.w,
+                                                  ),
+                                                  Center(
+                                                    child: Text(
+                                                      "탈퇴 시 모든 데이터가 삭제되며 되돌릴 수 없습니다.",
+                                                      style: body2Style,
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 24.w,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: GestureDetector(
+                                                            onTap: () async {
+                                                              // homeViewModel.authService.deleteAccount();
+
+                                                              userModelRx(null);
+                                                              userQuestModelRx.value = [];
+                                                              leagueRx("");
+
+                                                              // _kakaoApi.signOut();
+
+                                                              Navigator.of(context).pop();
+                                                              Navigator.of(context).pop();
+                                                              await Get.offAll(() => AuthCheckView());
+                                                              Get.find<AuthCheckViewModel>().onInit();
+                                                            },
+                                                            child: textContainerButtonWithOptions(
+                                                              text: "예",
+                                                              isDarkBackground: false,
+                                                              height: 44.w,
+                                                            )),
+                                                      ),
+                                                      SizedBox(width: 8.w),
+                                                      Expanded(
+                                                        child: InkWell(
+                                                            onTap: () {
+                                                              Navigator.of(context).pop();
+                                                              // Get.back(closeOverlays: true);
+                                                            },
+                                                            child: textContainerButtonWithOptions(
+                                                                text: "아니오", isDarkBackground: true, height: 44.w)),
+                                                      )
+                                                    ],
+                                                  )
+                                                ],
+                                              )),
+                                        ],
+                                      )));
+                            },
+                            child: Container(
+                              width: 80.w,
+                              child: bigTextContainerButton(text: "취소", isDisabled: true),
+                            ),
+                          ),
+                          SizedBox(width: 14.w),
+                          Expanded(
+                            child: Obx(
+                              () => GestureDetector(
+                                onTap: () async {
+                                  if (checkNewTerm.value) {
+                                    if (userModelRx.value!.isNameUpdated == null ||
+                                        !userModelRx.value!.isNameUpdated!) {
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        showChangeNameDialog(context);
+                                      });
+                                    }
+                                  } else {
+                                    yachtSnackBar("새로운 이용약관에 동의한 후 시작할 수 있습니다.");
+                                  }
+                                },
+                                child: bigTextContainerButton(text: "시작하기", isDisabled: !(checkNewTerm.value)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   showTermDialog(BuildContext termContext, HomeViewModel homeViewModel) {

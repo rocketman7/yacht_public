@@ -30,7 +30,7 @@ Container bigTextContainerButton({
     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.w),
     decoration: BoxDecoration(
       color: isDisabled ? buttonDisabled : primaryButtonBackground,
-      borderRadius: BorderRadius.circular(50),
+      borderRadius: BorderRadius.circular(8.w),
     ),
     child: Center(
       child: Text(

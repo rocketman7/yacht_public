@@ -99,6 +99,7 @@ class NewFeedWidget extends GetView {
                     ? AnyLinkPreview(
                         link: 'https://${linkableStringInContent[0]}',
                         backgroundColor: yachtGrey,
+                        boxShadow: [],
                         titleStyle: TextStyle(
                           color: yachtWhite,
                           fontSize: 15.w,

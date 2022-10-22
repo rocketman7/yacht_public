@@ -12,7 +12,13 @@ import 'package:yachtOne/yacht_design_system/yds_size.dart';
 //   return Dialog()
 // }
 
-Dialog infoDialog(BuildContext context, {String? title, String? info, String? subInfo, TextAlign? textAlign}) {
+Dialog infoDialog(
+  BuildContext context, {
+  String? title,
+  String? info,
+  String? subInfo,
+  TextAlign? textAlign,
+}) {
   return Dialog(
     backgroundColor: Colors.transparent,
     // shape: RoundedRectangleBorder(
@@ -79,7 +85,7 @@ yachtSnackBar(String title) {
       ),
     ),
     snackPosition: SnackPosition.TOP,
-    backgroundColor: yachtWhite.withOpacity(.7),
+    backgroundColor: yachtWhite.withOpacity(.8),
     barBlur: 2,
     margin: EdgeInsets.only(top: 60.w),
     duration: const Duration(seconds: 1, milliseconds: 300),
