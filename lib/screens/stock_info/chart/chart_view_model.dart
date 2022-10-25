@@ -122,10 +122,10 @@ class ChartViewModel extends GetxController {
     // Future.delayed(Duration(seconds: 1), () {
     if (showingCandleChart.value) {
       if (trackballArgs.chartPointInfo.seriesIndex == 0) {
-        open(trackballArgs.chartPointInfo.chartDataPoint!.open as int);
-        close(trackballArgs.chartPointInfo.chartDataPoint!.close as int);
-        high(trackballArgs.chartPointInfo.chartDataPoint!.high as int);
-        low(trackballArgs.chartPointInfo.chartDataPoint!.low as int);
+        open(trackballArgs.chartPointInfo.chartDataPoint!.open.toInt());
+        close(trackballArgs.chartPointInfo.chartDataPoint!.close.toInt());
+        high(trackballArgs.chartPointInfo.chartDataPoint!.high.toInt());
+        low(trackballArgs.chartPointInfo.chartDataPoint!.low.toInt());
         // date(trackballArgs.chartPointInfo.chartDataPoint!.x as DateTime);
         dateEnd(dateTimeToStringKorean(trackballArgs.chartPointInfo.chartDataPoint!.x as DateTime, true));
         switch (cycles[selectedCycle.value]) {
@@ -160,7 +160,7 @@ class ChartViewModel extends GetxController {
       }
     } else {
       // // print(trackballArgs.chartPointInfo.chartDataPoint!.y);
-      close(trackballArgs.chartPointInfo.chartDataPoint!.y as int);
+      close(trackballArgs.chartPointInfo.chartDataPoint!.y.toInt());
     }
 
     // });

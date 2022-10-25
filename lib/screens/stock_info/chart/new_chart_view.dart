@@ -83,7 +83,7 @@ class NewChartView extends StatelessWidget {
                       opacity: 1 - chartViewModel.opacity.value < 0 ? 0 : 1 - chartViewModel.opacity.value,
                       child: DetailedPriceDisplayVer2(chartViewModel: chartViewModel),
                     )
-                  : Container(),
+                  : SizedBox.shrink(),
               // 트래킹 안할 때 기본 차트 뷰 헤더
               Opacity(
                 opacity: !chartViewModel.showingCandleChart.value
@@ -448,7 +448,7 @@ class DetailedPriceDisplayVer2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Container(
-        height: 120.w,
+        height: 121.w,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -591,7 +591,7 @@ class MainPriceTrackingDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Container(
-          height: 120.w,
+          height: 121.w,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
