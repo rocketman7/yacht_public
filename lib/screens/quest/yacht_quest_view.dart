@@ -96,20 +96,20 @@ class YachtQuestView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    // Positioned(
-                    //   right: -10.w,
-                    //   top: -10.w,
-                    //   child: Container(
-                    //     padding: EdgeInsets.all(3.5.w),
-                    //     decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-                    //     height: 20.w,
-                    //     width: 20.w,
-                    //     child: SvgPicture.asset(
-                    //       'assets/buttons/add.svg',
-                    //       color: Colors.white,
-                    //     ),
-                    //   ),
-                    // )
+                    Positioned(
+                      right: -10.w,
+                      top: -10.w,
+                      child: Container(
+                        padding: EdgeInsets.all(3.5.w),
+                        decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                        height: 20.w,
+                        width: 20.w,
+                        child: SvgPicture.asset(
+                          'assets/buttons/add.svg',
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
