@@ -115,7 +115,7 @@ class YachtPickCardForCarousel extends StatelessWidget {
       child: Center(
           child: Column(children: [
         SizedBox(
-          height: 15.w,
+          height: 14.w,
         ),
         GestureDetector(
           onTap: () {

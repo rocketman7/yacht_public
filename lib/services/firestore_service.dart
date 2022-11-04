@@ -109,6 +109,7 @@ class FirestoreService extends GetxService {
         .where('showMain', isEqualTo: true)
         .orderBy('isTobeContinue')
         .orderBy('updateTime', descending: true)
+        // .limit(1)
         .get()
         .then((value) => value.docs.forEach((element) {
               // print(element.data()['yachtView']);
@@ -698,6 +699,7 @@ class FirestoreService extends GetxService {
         .doc(leagueRx.value)
         .collection('quests')
         .orderBy('liveStartDateTime')
+        // .limit(20)
         .get()
         .then((value) {
       value.docs.forEach((element) {
