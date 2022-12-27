@@ -94,6 +94,7 @@ class HomeViewModel extends GetxController {
 
   @override
   void onInit() async {
+    final appStartTime = DateTime.now();
     _mixpanelService.mixpanel.identify(userModelRx.value!.uid);
     _mixpanelService.mixpanel.flush();
 
@@ -102,15 +103,17 @@ class HomeViewModel extends GetxController {
       fetchTimeout: Duration(seconds: 10),
       minimumFetchInterval: Duration(seconds: 1),
     ));
-
+    print("step1: ${DateTime.now().difference(appStartTime)}");
     // bannerAdPosition(remoteConfig.getString('banner_ad_position'));
     // print('bannerAdPosition: $bannerAdPosition');
     // TODO: implement onInit
     isLoading(true);
     stockInfoNewModels(await _firestoreService.getYachtPicks());
     // isModelLoaded = true;
+    print("step2: ${DateTime.now().difference(appStartTime)}");
     isGettingQuests(true);
     await getAllQuests();
+    print("step3: ${DateTime.now().difference(appStartTime)}");
     isGettingQuests(false);
     await _firestoreService.stampLastLogin();
 
@@ -423,7 +426,7 @@ class HomeViewModel extends GetxController {
 
   // 현재 홈 뷰에 올려야 하는 퀘스트를 모두 가져온 뒤, 각 섹션에 맞게 분류
   Future getAllQuests() async {
-    print('getting all quests');
+    // print('getting all quests');
     allQuests.clear();
     newQuests.clear();
     liveQuests.clear();
@@ -469,6 +472,7 @@ class HomeViewModel extends GetxController {
         .compareTo(b.liveEndDateTime ?? Timestamp.fromDate(DateTime.now())));
     // print('triggered done');
     // update();
+
     // print('home view live');
     liveQuests.refresh();
     // print('liveQuests from homeViewModel $liveQuests');

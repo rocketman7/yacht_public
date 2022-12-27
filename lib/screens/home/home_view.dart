@@ -70,8 +70,8 @@ class HomeView extends StatelessWidget {
     // await Future.delayed(Duration(milliseconds: 1200));
     todayQuests = null;
     await homeViewModel.getAllQuests();
-    homeViewModel.rankController.onInit();
-    homeViewModel.awardViewModel.onInit();
+    // homeViewModel.rankController.onInit();
+    // homeViewModel.awardViewModel.onInit();
     print('refreshed');
     // if failed,use refreshFailed()
     homeViewModel.refreshController.refreshCompleted();

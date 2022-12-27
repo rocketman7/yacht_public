@@ -291,6 +291,7 @@ class AssetViewModel extends GetxController {
         totalDeliveriedValue += allAssets[i].yachtPoint!;
       }
     }
+    if (totalYachtPoint <= 0) totalYachtPoint = 0;
 
     // Award 당시 평단 계산
     Map<String, double> stocksAccumPrice = {};
@@ -431,6 +432,8 @@ class AssetViewModel extends GetxController {
         return "요트 포인트 획득";
       case "UseYachtPoint":
         return "요트 포인트 사용";
+      case "YachtPointExpired":
+        return "기한만료";
       default:
         return "";
     }
@@ -492,7 +495,7 @@ class AssetViewModel extends GetxController {
       case "UseYachtPoint":
         return yachtBlue;
       default:
-        return yachtBlack;
+        return yachtMidGrey;
     }
   }
 }

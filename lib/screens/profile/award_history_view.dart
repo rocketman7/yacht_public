@@ -169,27 +169,18 @@ class AwardHistoryColumnWidget extends StatelessWidget {
                                                       '${timeStampToString(controller.allAssets[i].tradeDate)}',
                                                       style: awardHistoryViewTextStyle3,
                                                     ),
-                                                    SizedBox(
-                                                        height: 4.w -
-                                                            reducePaddingOneSide(awardHistoryViewTextStyle3.fontSize!)),
+                                                    SizedBox(height: 4.w),
                                                     Text(
                                                       '${controller.allAssets[i].tradeTitle}',
                                                       style: awardHistoryViewTextStyle4,
                                                       // maxLines: 2,
                                                     ),
-                                                    SizedBox(
-                                                      height: 14.w -
-                                                          reducePaddingOneSide(awardHistoryViewTextStyle4.fontSize!) -
-                                                          reducePaddingOneSide(awardHistoryViewTextStyle5.fontSize!),
-                                                    ),
+                                                    SizedBox(height: 14.w),
                                                     Text(
                                                       '${controller.getStringTradeDetail(i)}',
                                                       style: awardHistoryViewTextStyle5,
                                                     ),
-                                                    SizedBox(
-                                                      height: 14.w -
-                                                          reducePaddingOneSide(awardHistoryViewTextStyle5.fontSize!),
-                                                    ),
+                                                    SizedBox(height: 14.w),
                                                   ],
                                                 ),
                                               ),

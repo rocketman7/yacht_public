@@ -77,14 +77,19 @@ class NewHomeView extends StatelessWidget {
       DialogReadyWidget(homeViewModel: homeViewModel),
       // MyAssets(),
       SizedBox(
-        height: 30.w,
+        height: 14.w,
       ),
       // 이달의 상금 주식
       // AwardView(leagueName: leagueModel.value!.leagueName, leagueEndDateTime: leagueModel.value!.leagueEndDateTime),
 
       // 주간 요트 종목
-      YachtPick(homeViewModel: homeViewModel),
-      SizedBox(height: 50.w),
+      // YachtPick(homeViewModel: homeViewModel),
+      // SizedBox(height: 50.w),
+      // Container(
+      //   height: 1400,
+      //   width: double.infinity,
+      //   color: yachtBlue,
+      // ),
       YachtQuestView(homeViewModel: homeViewModel),
       SizedBox(
         height: 50.w,
@@ -201,9 +206,6 @@ class YachtPick extends StatelessWidget {
                 ),
               ),
             ),
-            // SizedBox(
-            //   width: 4.w,
-            // ),
             GestureDetector(
               onTap: () {
                 HapticFeedback.lightImpact();
@@ -222,57 +224,7 @@ class YachtPick extends StatelessWidget {
                                       title: "요트 Pick?", info: snapshot.data!, textAlign: TextAlign.start)
                                   : infoDialog(context, title: "요트 Pick?");
                             },
-                          )
-                          // Dialog(
-                          //   backgroundColor: Colors.transparent,
-                          //   // shape: RoundedRectangleBorder(
-                          //   //   borderRadius: BorderRadius.circular(12.w),
-                          //   // ),
-                          //   insetPadding: EdgeInsets.symmetric(horizontal: 14.w),
-                          //   child: Container(
-                          //     padding: defaultPaddingAll.copyWith(top: 0),
-                          //     decoration: BoxDecoration(
-                          //       color: yachtDarkGrey,
-                          //       borderRadius: BorderRadius.circular(12.w),
-                          //     ),
-                          //     child: Column(
-                          //       mainAxisSize: MainAxisSize.min,
-                          //       crossAxisAlignment: CrossAxisAlignment.center,
-                          //       children: [
-                          //         Container(
-                          //           height: 60.w,
-                          //           child: Center(
-                          //             child: Text(
-                          //               "요트 Pick?",
-                          //               style: head3Style.copyWith(
-                          //                 fontWeight: FontWeight.w700,
-                          //               ),
-                          //             ),
-                          //           ),
-                          //         ),
-                          //         FutureBuilder<String>(
-                          //             future: homeViewModel.getYachtPickDescription(),
-                          //             builder: (_, snapshot) {
-                          //               return snapshot.hasData
-                          //                   ? Text(
-                          //                       '${snapshot.data!}'.replaceAll('\\n', '\n'),
-                          //                       style: body1Style.copyWith(height: 1.4.w),
-                          //                     )
-                          //                   : Text("");
-                          //             }),
-                          //         SizedBox(
-                          //           height: 16.w,
-                          //         ),
-                          //         GestureDetector(
-                          //             onTap: () {
-                          //               Navigator.of(context).pop();
-                          //             },
-                          //             child: confirmDialogButton())
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                          );
+                          ));
                     });
               },
               child: Container(

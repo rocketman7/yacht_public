@@ -28,64 +28,33 @@ class AuthCheckView extends StatelessWidget {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   @override
   Widget build(BuildContext context) {
+    DateTime time = DateTime.now();
     print('auth view start');
-    Get.lazyPut(() => CommunityViewModel());
+    // Get.lazyPut(() => CommunityViewModel());
     // Get.put(AuthCheckViewModel());
     return Scaffold(
         body: StreamBuilder<User?>(
             stream: controller.authService.auth.userChanges(),
             builder: (context, snapshot) {
-              // print('snapshot.hasData: ${snapshot.hasData}');
-
               if (snapshot.hasData) {
-                // print('auth check viewmodel getuser start');
-                // if (userModelRx.value == null) {
                 controller.getUser(snapshot.data!.uid);
-                // } else {
-                //   controller.isGettingUser(false);
-                // }
                 return Obx(() {
-                  print('obx division start');
+                  // print('obx division start');
+                  print(
+                      'time to isGettingUser: ${controller.isGettingUser.value} ${-time.difference(DateTime.now()).inMilliseconds}');
+                  print(
+                      'time to isInitiating: ${controller.isInitiating.value} ${-time.difference(DateTime.now()).inMilliseconds}');
                   if (controller.isGettingUser.value || controller.isInitiating.value) {
                     return LoadingView();
                   } else {
+                    print("time to going Startup: ${-time.difference(DateTime.now()).inSeconds}");
                     return StartupView();
                   }
                 });
               } else {
-                print("all clear");
-                // leagueRx.close();
-                // userModelRx.close();
-                // userQuestModelRx.close();
-                // leagueRx("");
-                // userModelRx(null);
-                // userQuestModelRx.value = [];
-                // _kakaoApi.signOut();
-                // controller.authService.auth.signOut();
+                print("all clear: ${-time.difference(DateTime.now()).inMilliseconds}");
                 return LoginView();
               }
-
-              // return Obx(() {
-              //   print(userModelRx.value);
-              //   if (snapshot.hasData) {
-              //     if (userModelRx.value == null)
-              //     // if (controller.authService.auth.currentUser!.uid == "pgw3LFd36CcUGzhuFOmvbyudpTu1") {
-              //     {
-              //       print('userModelRx: ${userModelRx.value}');
-              //       Timer(Duration(seconds: 10), () async {
-              //         print('7 sec passed');
-              //
-              //         if (userModelRx.value == null) await controller.signOut();
-              //       });
-              //       // }
-              //       return LoadingView();
-              //     } else {
-              //       return StartupView();
-              //     }
-              //   } else {
-              //     return LoginView();
-              //   }
-              // });
             })
         // body: Obx(() {
         //   bool isUserNull = currentUser.value == null;

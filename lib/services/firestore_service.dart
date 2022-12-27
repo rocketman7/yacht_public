@@ -312,7 +312,8 @@ class FirestoreService extends GetxService {
     String uid,
   ) {
     // print('stream starting');
-    print('get user quest stream started');
+    // print('get user quest stream started');
+
     // print(leagueRx.value);
     return _firestoreService
         .collection('users')
@@ -323,6 +324,7 @@ class FirestoreService extends GetxService {
         .orderBy('selectDateTime', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
+              // print("user quest binding");
               // print(
               //     'user quest: ${UserQuestModel.fromMap(doc.id, doc.data())}');
               return UserQuestModel.fromMap(doc.id, doc.data());
@@ -650,6 +652,7 @@ class FirestoreService extends GetxService {
 
   // 홈에서 띄울 모든 Quest 가져오기
   Future<List<QuestModel>> getAllQuests() async {
+    final questFetchStartTime = DateTime.now();
     final List<QuestModel> allQuests = [];
     List<InvestAddressModel> invetAddresses = [];
     List<SurveyQuestionModel> surveys = [];
@@ -669,7 +672,7 @@ class FirestoreService extends GetxService {
     } catch (e) {
       print(e);
     }
-
+    print("quests step1: ${DateTime.now().difference(questFetchStartTime)}");
     // alltime 리그에서는 마감기한이 없는 퀘스트나 서베이들
     await _firestoreService
         .collection('leagues')
@@ -693,7 +696,7 @@ class FirestoreService extends GetxService {
                     invetAddresses.length == 0 ? null : invetAddresses, surveys.length == 0 ? null : surveys));
               }
             }));
-
+    print("quests step2: ${DateTime.now().difference(questFetchStartTime)}");
     await _firestoreService
         .collection('leagues')
         .doc(leagueRx.value)
@@ -722,6 +725,7 @@ class FirestoreService extends GetxService {
         invetAddresses = [];
       });
     });
+    print("quests step3: ${DateTime.now().difference(questFetchStartTime)}");
     return allQuests;
   }
 

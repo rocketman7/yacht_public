@@ -37,72 +37,23 @@ class AuthCheckViewModel extends GetxController {
   String urgentMessage = "";
   RxBool isGettingUser = true.obs;
   RxBool isInitiating = true.obs;
+  // RxBool everTest = false.obs;
 
   @override
   void onInit() async {
-    // print('userRx: $userModelRx');
-    // print('leagueRx: $leagueRx');
     isInitiating(true);
-    // print('auth check init start');
-    // await checkTime();
 
+    // 현재 league 정보 가져오기
     await getLeagueInfo();
-
+    // 휴일 리스트 가져오기
     await getHolidayList();
-
+    // App 버전 체크
     await checkVersion();
-
-    // print('oninit: ${authService.auth.currentUser}');
-    // print('oninit: ${userModelRx.value}');
-
-    // currentUser(authService.auth.currentUser);
+    // 티어 분류 (to be deleted)
     tierSystemModelRx(await _firestoreService.getTierSystem());
-    // currentUser.bindStream(authService.auth.authStateChanges());
-    // currentUser.refresh();
-    // leagueRx.bindStream(_firestoreService.getOpenLeague());
-    // authService.auth.signOut();
-    // update();
 
-    // authService.auth.userChanges().listen((user) async {
-    //   print('listening $user');
-    //   if (user != null) {
-    //     userModelRx.bindStream(_userRepository.getUserStream(user.uid));
-    //     userModelRx.refresh();
-    //     update();
-    //     userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
-    //     // userModelRx.bindStream(_userRepository.getUserStream("kakao:1531290810"));
-    //     // leagueRx.listen((value) {
-    //     //   if (value != "") {
-    //     //     print('userquest binding');
-    //     //     userQuestModelRx.bindStream(_userRepository.getUserQuestStream(user.uid));
-    //     //   }
-    //     // });
-
-    //     // print('this user: ${userModelRx.value}.');
-    //     // userModelRx.listen((user) {
-    //     //   print('this user: $user');
-    //     // });
-    //   } else {
-    //     userModelRx.value = null;
-    //     print('when user is  null');
-    //   }
-    // });
-
-    // isLoadingData(false);
-    // _authService.auth.signOut();
-    // _authService.auth.authStateChanges().listen((event) {
-    //   print(event == null);
-    //   print('event : ${event.toString()}');
-    //   if (event == null) {
-    //     print("event is null now");
-    //     currentUser!(event);
-    //   } else {
-    //     currentUser!(event);
-    //   }
-    //   print('currentUser value: ${currentUser!.value}');
-    // });
     isInitiating(false);
-    isInitiating.refresh();
+    // isInitiating.refresh();
     print('auth check init end');
     super.onInit();
   }
@@ -123,17 +74,22 @@ class AuthCheckViewModel extends GetxController {
 
     ever(leagueRx, (_) {
       if (leagueRx.value != "") {
+        DateTime time = DateTime.now();
         print('userquest binding to $uid');
         userQuestModelRx.bindStream(_userRepository.getUserQuestStream(uid));
       }
     });
 
-    if (userModelRx.value != null) isGettingUser(false);
+    if (userModelRx.value != null) {
+      print('usermodel ever #1 triggered');
+      isGettingUser(false);
+    }
     // leagueRx.listen((value) {
     //   print('leagueRx listening: $value');
     // });
     ever(userModelRx, (_) {
       if (userModelRx.value != null) {
+        print('usermodel ever #2 triggered');
         isGettingUser(false);
       }
     });
@@ -160,8 +116,6 @@ class AuthCheckViewModel extends GetxController {
 
   Future getLeagueInfo() async {
     leagueModel(await _firestoreService.getLeagueInfo());
-    print(leagueModel.value);
-    // leagueRx('');
     leagueRx(leagueModel.value!.openLeague);
     leagueRx.refresh();
   }

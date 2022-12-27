@@ -80,8 +80,22 @@ class StartupView extends GetView<StartupViewModel> {
       NewHomeView(),
       InsightView(),
       CommunityView(),
+      // SingleChildScrollView(
+      //   child: Column(
+      //     children: List.generate(
+      //       15,
+      //       (index) => Container(
+      //         color: index % 2 == 0 ? yachtViolet : yachtRed,
+      //         width: double.infinity,
+      //         height: 140,
+      //       ),
+      //     ),
+      //   ),
+      // ),
       // Container(color: Colors.red),
-      // Container(color: yachtViolet),
+
+      // Container(color: yachtWhite),
+      // Container(color: yachtWhite), Container(color: yachtWhite),
       // ProfileView(uid: _auth.currentUser.uid) //, null value error
       // ProfileView(uid: userModelRx.value!.uid) //
       ProfileMyView(),

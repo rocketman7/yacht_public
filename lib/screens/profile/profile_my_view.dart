@@ -37,7 +37,7 @@ import 'quest_record_detail_view.dart';
 class ProfileMyView extends GetView<ProfileMyViewModel> {
   final ProfileMyViewModel profileViewModel = Get.find<ProfileMyViewModel>();
   final MixpanelService _mixpanelService = locator<MixpanelService>();
-  // final RankController rankController = Get.put(RankController());
+  final RankController rankController = Get.put(RankController());
   RxDouble offset = 0.0.obs;
 
   @override
