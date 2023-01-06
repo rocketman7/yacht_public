@@ -231,7 +231,12 @@ class AssetViewModel extends GetxController {
     // allAssets = await getAllAssets('kakao:1513684681');
     allAssets = await getAllAssets(userModelRx.value!.uid);
 
+    // Reward Expire 기준일: 매일 1년전 00:00시를
+    // collection('admin').doc('adminPost')['rewardExpireDate']에 넣음.
+    //해당 날짜를 가져옴
     rewardExpireDate = await getRewardExpireDate();
+    // this user의 가장 최근에 만료된 assetCategory "YachtPoint"의 날짜
+    // 이후에 이 날짜에 +365일 더하여 만료된 yachtPoint 사용 기준일을 만듬
     myRecentYachtPointBeforeExpire = await getMyRecentYachtPointBeforeExpire();
 
     checkNameUrl = await _firestoreService.checkNameUrl();
@@ -262,7 +267,7 @@ class AssetViewModel extends GetxController {
         .get()
         .then((value) {
       print('myrecentYPbeforeExpire: ${value.docs.first['tradeDate'].toDate()}');
-      return value.docs.first['tradeDate'];
+      return value.docs.length > 0 ? value.docs.first['tradeDate'] : Timestamp(0, 0);
     });
   }
 
@@ -317,12 +322,16 @@ class AssetViewModel extends GetxController {
         }
       } else if (allAssets[i].assetCategory == "YachtPoint" &&
           allAssets[i].tradeDate.compareTo(rewardExpireDate) >= 0) {
+        // 현재로부터 과거 1년 이내에 획득한 포인트
         aliveYachtPoint += allAssets[i].yachtPoint!.toInt();
       } else if (allAssets[i].assetCategory == "YachtPoint" && allAssets[i].tradeDate.compareTo(rewardExpireDate) < 0) {
+        // 만료된 획득 포인트
         expiredYachtPoint += allAssets[i].yachtPoint!.toInt();
       } else if (allAssets[i].assetCategory == "UseYachtPoint") {
+        // 사용한 포인트를 만료된 포인트 사용과 만료 이후 획득한 포인트 사용으로 구분.
+        // 기준이 되는 날짜는 가장 최근에 만료된 포인트 획득일 + 365일
         if (allAssets[i].tradeDate.compareTo(Timestamp(
-                myRecentYachtPointBeforeExpire.seconds + (31536000), myRecentYachtPointBeforeExpire.nanoseconds)) >=
+                myRecentYachtPointBeforeExpire.seconds + 31536000, myRecentYachtPointBeforeExpire.nanoseconds)) >=
             0) {
           usedYahctPointAfterStandard += allAssets[i].yachtPoint!.toInt();
         } else {
