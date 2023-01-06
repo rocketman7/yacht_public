@@ -192,6 +192,12 @@ class AssetViewModel extends GetxController {
   late List<HoldingAwardModel> allHoldingStocks = [];
   bool isHoldingStocksFutureLoad = false;
   int totalYachtPoint = 0;
+
+  int expiredYachtPoint = 0;
+  int aliveYachtPoint = 0;
+  int usedYachtPointBeforeStandard = 0;
+  int usedYahctPointAfterStandard = 0;
+
   double totalHoldingStocksValue = 0.0;
   double totalDeliveriedValue = 0.0;
   //주식 잔고 출고 페이지에서 사용자가 값을 바꾸는 obs 변수들
@@ -203,6 +209,8 @@ class AssetViewModel extends GetxController {
   RxString checkNameExists = "0".obs;
   //
   RxBool isDeliveryIng = false.obs;
+  Timestamp rewardExpireDate = Timestamp(0, 0);
+  Timestamp myRecentYachtPointBeforeExpire = Timestamp(0, 0);
 
   @override
   void onInit() async {
@@ -213,6 +221,7 @@ class AssetViewModel extends GetxController {
     allHoldingStocks = [];
     isHoldingStocksFutureLoad = false;
     totalYachtPoint = 0;
+
     totalHoldingStocksValue = 0.0;
     totalDeliveriedValue = 0.0;
     //주식 잔고 출고 페이지에서 사용자가 값을 바꾸는 obs 변수들
@@ -221,6 +230,9 @@ class AssetViewModel extends GetxController {
     // allAssets = await getAllAssets('kakao:1518231402');
     // allAssets = await getAllAssets('kakao:1513684681');
     allAssets = await getAllAssets(userModelRx.value!.uid);
+
+    rewardExpireDate = await getRewardExpireDate();
+    myRecentYachtPointBeforeExpire = await getMyRecentYachtPointBeforeExpire();
 
     checkNameUrl = await _firestoreService.checkNameUrl();
     checkNameExists.bindStream(_firestoreService.getNameCheckResult(userModelRx.value!.uid));
@@ -233,6 +245,25 @@ class AssetViewModel extends GetxController {
     await calcAllHoldingStocks();
     print('totalHoldingStocksValue: $totalHoldingStocksValue');
     super.onInit();
+  }
+
+  Future<Timestamp> getRewardExpireDate() async {
+    return _firestoreService.firestoreService.collection('admin').doc('adminPost').get().then((value) {
+      print('rewardExpireDate: ${value['rewardExpireDate'].toDate()}');
+      return value['rewardExpireDate'];
+    });
+  }
+
+  Future<Timestamp> getMyRecentYachtPointBeforeExpire() async {
+    return _firestoreService.firestoreService
+        .collection('users/${userModelRx.value!.uid}/userAsset')
+        .orderBy('tradeDate', descending: true)
+        .where('tradeDate', isLessThan: rewardExpireDate)
+        .get()
+        .then((value) {
+      print('myrecentYPbeforeExpire: ${value.docs.first['tradeDate'].toDate()}');
+      return value.docs.first['tradeDate'];
+    });
   }
 
   // 현재 보유 중인 주식을 계산해준다.
@@ -284,15 +315,49 @@ class AssetViewModel extends GetxController {
 
           totalDeliveriedValue += allAssets[i].awards![j].priceAtTrade * allAssets[i].awards![j].sharesNum;
         }
-      } else if (allAssets[i].assetCategory == "YachtPoint") {
-        totalYachtPoint += allAssets[i].yachtPoint!.toInt();
+      } else if (allAssets[i].assetCategory == "YachtPoint" &&
+          allAssets[i].tradeDate.compareTo(rewardExpireDate) >= 0) {
+        aliveYachtPoint += allAssets[i].yachtPoint!.toInt();
+      } else if (allAssets[i].assetCategory == "YachtPoint" && allAssets[i].tradeDate.compareTo(rewardExpireDate) < 0) {
+        expiredYachtPoint += allAssets[i].yachtPoint!.toInt();
       } else if (allAssets[i].assetCategory == "UseYachtPoint") {
-        totalYachtPoint -= allAssets[i].yachtPoint!.toInt();
-        totalDeliveriedValue += allAssets[i].yachtPoint!;
+        if (allAssets[i].tradeDate.compareTo(Timestamp(
+                myRecentYachtPointBeforeExpire.seconds + (31536000), myRecentYachtPointBeforeExpire.nanoseconds)) >=
+            0) {
+          usedYahctPointAfterStandard += allAssets[i].yachtPoint!.toInt();
+        } else {
+          usedYachtPointBeforeStandard += allAssets[i].yachtPoint!.toInt();
+        }
       }
-    }
-    if (totalYachtPoint <= 0) totalYachtPoint = 0;
 
+      //  else if (allAssets[i].assetCategory == "UseYachtPoint" &&
+      //     allAssets[i].tradeDate.compareTo(Timestamp(
+      //             myRecentYachtPointBeforeExpire.seconds + (31536000), myRecentYachtPointBeforeExpire.nanoseconds)) >=
+      //         0) {
+      //   print('use after expire: ${allAssets[i].yachtPoint}');
+      //   totalYachtPoint -= allAssets[i].yachtPoint!.toInt();
+      //   totalDeliveriedValue += allAssets[i].yachtPoint!;
+      // }
+
+      // } else if (allAssets[i].assetCategory == "YachtPoint") {
+      //   totalYachtPoint += allAssets[i].yachtPoint!.toInt();
+      // } else if (allAssets[i].assetCategory == "UseYachtPoint") {
+      //   totalYachtPoint -= allAssets[i].yachtPoint!.toInt();
+      //   totalDeliveriedValue += allAssets[i].yachtPoint!;
+      // }
+    }
+    print(
+        'point breakdown: $aliveYachtPoint $expiredYachtPoint $usedYachtPointBeforeStandard $usedYahctPointAfterStandard');
+
+    if (expiredYachtPoint < usedYachtPointBeforeStandard) {
+      totalYachtPoint =
+          expiredYachtPoint + aliveYachtPoint - usedYachtPointBeforeStandard - usedYahctPointAfterStandard;
+    } else {
+      totalYachtPoint = aliveYachtPoint - usedYahctPointAfterStandard;
+    }
+
+    if (totalYachtPoint <= 0) totalYachtPoint = 0;
+    print('totalYachtPoint: $totalYachtPoint');
     // Award 당시 평단 계산
     Map<String, double> stocksAccumPrice = {};
     Map<String, int> stocksSharesNum = {};
