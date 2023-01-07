@@ -229,7 +229,6 @@ class AssetViewModel extends GetxController {
     totalDeliveryValue = 0.0.obs;
     // allAssets = await getAllAssets('kakao:1518231402');
     // allAssets = await getAllAssets('kakao:1513684681');
-    allAssets = await getAllAssets(userModelRx.value!.uid);
 
     // Reward Expire 기준일: 매일 1년전 00:00시를
     // collection('admin').doc('adminPost')['rewardExpireDate']에 넣음.
@@ -238,6 +237,8 @@ class AssetViewModel extends GetxController {
     // this user의 가장 최근에 만료된 assetCategory "YachtPoint"의 날짜
     // 이후에 이 날짜에 +365일 더하여 만료된 yachtPoint 사용 기준일을 만듬
     myRecentYachtPointBeforeExpire = await getMyRecentYachtPointBeforeExpire();
+
+    allAssets = await getAllAssets(userModelRx.value!.uid);
 
     checkNameUrl = await _firestoreService.checkNameUrl();
     checkNameExists.bindStream(_firestoreService.getNameCheckResult(userModelRx.value!.uid));
@@ -503,11 +504,15 @@ class AssetViewModel extends GetxController {
       case "Delivery":
         return "출고 완료";
       case "YachtPoint":
-        return "요트 포인트 획득";
+        if (allAssets[index].tradeDate.compareTo(rewardExpireDate) >= 0) {
+          return "요트 포인트 획득";
+        } else
+          return "요트 포인트 획득 - 만료";
       case "UseYachtPoint":
         return "요트 포인트 사용";
-      case "YachtPointExpired":
-        return "기한만료";
+
+      // case "YachtPointExpired":
+      //   return "기한만료";
       default:
         return "";
     }
