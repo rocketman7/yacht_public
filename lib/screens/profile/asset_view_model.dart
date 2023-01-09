@@ -265,6 +265,8 @@ class AssetViewModel extends GetxController {
         .collection('users/${userModelRx.value!.uid}/userAsset')
         .orderBy('tradeDate', descending: true)
         .where('tradeDate', isLessThan: rewardExpireDate)
+        .where('assetCategory', isEqualTo: "YachtPoint")
+        // .where('yachtPoint', isGreaterThan: 0)
         .get()
         .then((value) {
       print('myrecentYPbeforeExpire: ${value.docs.first['tradeDate'].toDate()}');
@@ -331,6 +333,10 @@ class AssetViewModel extends GetxController {
       } else if (allAssets[i].assetCategory == "UseYachtPoint") {
         // 사용한 포인트를 만료된 포인트 사용과 만료 이후 획득한 포인트 사용으로 구분.
         // 기준이 되는 날짜는 가장 최근에 만료된 포인트 획득일 + 365일
+        print(allAssets[i].tradeDate.toDate());
+        print(Timestamp(myRecentYachtPointBeforeExpire.seconds + 31536000, myRecentYachtPointBeforeExpire.nanoseconds)
+            .toDate());
+
         if (allAssets[i].tradeDate.compareTo(Timestamp(
                 myRecentYachtPointBeforeExpire.seconds + 31536000, myRecentYachtPointBeforeExpire.nanoseconds)) >=
             0) {
