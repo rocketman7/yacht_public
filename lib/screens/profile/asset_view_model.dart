@@ -269,7 +269,8 @@ class AssetViewModel extends GetxController {
         // .where('yachtPoint', isGreaterThan: 0)
         .get()
         .then((value) {
-      print('myrecentYPbeforeExpire: ${value.docs.first['tradeDate'].toDate()}');
+      print(
+          'get my recent: ${value.docs.length} ${Timestamp(0, 0).toDate()}'); // print('myrecentYPbeforeExpire: ${value.docs.first['tradeDate'].toDate()}');
       return value.docs.length > 0 ? value.docs.first['tradeDate'] : Timestamp(0, 0);
     });
   }
