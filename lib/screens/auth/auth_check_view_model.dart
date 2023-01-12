@@ -157,8 +157,7 @@ class AuthCheckViewModel extends GetxController {
     app_store_url = remoteConfig.getString('app_store_url');
     play_store_url = remoteConfig.getString('play_store_url');
 
-    isUrgentNotice =
-        userModelRx.value!.uid == "b3LzXl2sRqVMrhTHJ6iKqEpQ4j63" ? false : remoteConfig.getBool('is_urgent_notice');
+    isUrgentNotice = remoteConfig.getBool('is_urgent_notice');
     urgentMessage = remoteConfig.getString('urgent_message');
 
     if (newVersion > currentVersion) {
