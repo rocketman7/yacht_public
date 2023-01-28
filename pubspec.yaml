@@ -23,46 +23,46 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  align_positioned: ^2.0.1
+  align_positioned: ^3.0.0
   appsflyer_sdk: ^6.5.2
   animated_text_kit: ^4.2.1
   animated_digit: ^3.2.1
   app_tracking_transparency: ^2.0.2+1
   auto_size_text: ^3.0.0-nullsafety.0
-  back_button_interceptor: ^5.0.0
-  blobs: ^1.2.0
+  back_button_interceptor: ^6.0.2
+  blobs: ^2.0.0
   bubble: ^1.1.9+1
   cached_network_image: ^3.1.0
   carousel_slider: ^4.0.0-nullsafety.0
-  charts_flutter: ^0.10.0
+  charts_flutter: ^0.12.0
   circular_check_box: ^1.0.4
-  cloud_firestore: ^3.1.18
-  cloud_functions: ^3.0.4
-  confetti: ^0.6.0-nullsafety
+  cloud_firestore: ^4.3.1
+  cloud_functions: ^4.0.7
+  confetti: ^0.7.0
   countup: ^0.1.4
   animated_flip_counter: ^0.2.5
   cupertino_icons: ^1.0.3
   dio: ^4.0.4
   expandable_page_view: ^1.0.6
-  firebase_analytics: ^9.1.10
-  firebase_auth: ^3.3.20
-  firebase_core: ^1.18.0
-  firebase_in_app_messaging: ^0.5.0+10
-  firebase_messaging: ^11.4.2
-  firebase_remote_config: ^2.0.9
-  firebase_storage: ^10.2.18
+  firebase_analytics: ^10.1.0
+  firebase_auth: ^4.2.5
+  firebase_core: ^2.4.1
+  firebase_in_app_messaging: ^0.7.0+10
+  firebase_messaging: ^14.2.1
+  firebase_remote_config: ^3.0.9
+  firebase_storage: ^11.0.10
   flare_flutter: ^3.0.0
   flutter_cache_manager: ^3.0.2
-  flutter_chat_bubble: ^1.0.2
-  flutter_launcher_icons: ^0.9.2
+  flutter_chat_bubble: ^2.0.0
+  flutter_launcher_icons: ^0.11.0
   flutter_screenutil: ^5.0.0+2
   flutter_svg: ^1.0.0
-  flutter_link_previewer: ^2.6.6
-  any_link_preview: ^2.0.9
+  flutter_link_previewer: ^3.2.0
+  any_link_preview: ^3.0.0
   fluttertoast: ^8.0.7
-  font_awesome_flutter: ^9.0.0
+  font_awesome_flutter: ^10.3.0
   get: ^4.6.1
-  get_it: ^6.1.1
+  get_it: ^7.2.0
   get_storage:
   google_mobile_ads:
     ^2.0.1
@@ -78,29 +78,29 @@ dependencies:
   http: ^0.13.3
   image_picker: ^0.8.3
   intl: ^0.17.0
-  kakao_flutter_sdk: ^1.1.1
+  kakao_flutter_sdk: ^1.4.0
   like_button: ^2.0.2
-  lite_rolling_switch: ^0.1.1
-  mixpanel_flutter: ^1.4.4
+  lite_rolling_switch: ^1.0.0
+  mixpanel_flutter: ^2.0.0
 
   ntp: ^2.0.0
   package_info: ^2.0.0
   path: ^1.8.0
   path_provider: ^2.0.1
   preload_page_view: ^0.1.4
-  provider: ^5.0.0
+  provider: ^6.0.5
   quiver: ^3.0.1
   random_string: ^2.2.0-nullsafety
-  rive: ^0.7.28
+  rive: ^0.10.1
   rflutter_alert: ^2.0.2
   rxdart: ^0.27.0
   shared_preferences: ^2.0.5
-  stacked: ^2.1.6
-  syncfusion_flutter_charts: ^19.3.57
-  timezone: ^0.7.0
-  toggle_switch: ^0.1.8
+  stacked: ^3.1.0+2
+  syncfusion_flutter_charts: ^20.4.44
+  timezone: ^0.9.1
+  toggle_switch: ^2.0.1
   tutorial_coach_mark: ^1.1.1
-  showcaseview: ^1.1.1
+  showcaseview: ^2.0.0+1
   restart_app: ^1.1.0
   universal_io: ^2.0.4
   url_launcher: ^6.0.9
@@ -109,15 +109,15 @@ dependencies:
   flutter_inappwebview: ^5.4.3+7
   webview_flutter: ^3.0.4
   pull_to_refresh: ^2.0.0
-  introduction_screen: ^2.1.0
-  sign_in_with_apple: ^3.2.0
+  introduction_screen: ^3.1.4
+  sign_in_with_apple: ^4.3.0
   flutter_linkify: ^5.0.2
   render_metrics: ^2.0.1
-  styled_widget: ^0.3.1+2
+  styled_widget: ^0.4.1
   email_validator: ^2.0.1
   # paginate_firestore: ^1.0.2
   dotted_border: ^2.0.0+1
-  firebase_app_check: ^0.0.2+2
+  firebase_app_check: ^0.1.1+8
   flutter_keyboard_visibility: ^5.2.0
   # native_admob_flutter:
   #   path: packages/native_admob_flutter-master
@@ -127,14 +127,14 @@ dependencies:
   # git:
   #   url: https://github.com/fluttercandies/extended_image.git
   #   ref: 47def694fd10481d725bb7b992f491c43599ed5d
-  extended_text: ^9.0.0
+  # extended_text: ^9.1.2
   facebook_audience_network: ^1.0.1
   facebook_app_events:
     git:
       url: https://github.com/yanivshaked/flutter_facebook_app_events.git
       ref: "fbc72fb"
   twilio_flutter: ^0.0.9
-  firebase_performance: ^0.8.1+1
+  firebase_performance: ^0.9.0+10
   # flutter_facebook_sdk: ^1.0.0
 
 flutter_icons:

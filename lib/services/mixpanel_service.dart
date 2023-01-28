@@ -13,7 +13,10 @@ class MixpanelService {
   // };'
 
   Future initMixpanel() async {
-    mixpanel = await Mixpanel.init(token);
+    mixpanel = await Mixpanel.init(
+      token,
+      trackAutomaticEvents: true,
+    );
     mixpanel.flush();
   }
 }

@@ -159,7 +159,7 @@ class _TutorialViewState extends State<TutorialView> {
     );
 
     tutorialCoachMark = TutorialCoachMark(
-      context,
+      // context,
       targets: targets,
       colorShadow: Color(0xFF343434),
       opacityShadow: 0.5,
@@ -181,7 +181,7 @@ class _TutorialViewState extends State<TutorialView> {
       onClickOverlay: (target) {
         print('onClickOverlay: $target');
       },
-    )..show();
+    )..show(context: context);
   }
 
   void showTutorial2() {
@@ -234,7 +234,6 @@ class _TutorialViewState extends State<TutorialView> {
     );
 
     tutorialCoachMark2 = TutorialCoachMark(
-      context,
       targets: targets2,
       colorShadow: Color(0xFF343434),
       opacityShadow: 0.5,
@@ -252,7 +251,9 @@ class _TutorialViewState extends State<TutorialView> {
       onClickTarget: (target) {},
       onSkip: () {},
       onClickOverlay: (target) {},
-    )..show();
+    )..show(
+        context: context,
+      );
   }
 
   @override

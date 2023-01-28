@@ -86,7 +86,7 @@ class KakaoFirebaseAuthApi implements BaseAuthAPI {
   Future<String> _retrieveToken() async {
     final installed = await isKakaoTalkInstalled();
     final authCode =
-        installed ? await AuthCodeClient.instance.requestWithTalk() : await AuthCodeClient.instance.request();
+        installed ? await AuthCodeClient.instance.authorizeWithTalk() : await AuthCodeClient.instance.authorize();
     OAuthToken token = await AuthApi.instance.issueAccessToken(authCode: authCode);
 
     // await TokenManager.setToken(token); // Store access token in AccessTokenStore for future API requests.

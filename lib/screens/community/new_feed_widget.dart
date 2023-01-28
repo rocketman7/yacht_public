@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:extended_text/extended_text.dart';
+// import 'package:extended_text/extended_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
