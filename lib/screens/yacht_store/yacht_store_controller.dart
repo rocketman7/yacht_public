@@ -70,9 +70,9 @@ class YachtStoreController extends GetxController {
   ];
 
   final TwilioFlutter twilioFlutter = TwilioFlutter(
-    accountSid: 'AC682579cfee31cc3eaf8576251bd898ac',
-    authToken: '87e39d1157ee394797ee3b22d2bd21d0',
-    twilioNumber: '+17853775118',
+    accountSid: 'OPEN_API_KEY',
+    authToken: 'OPEN_API_KEY',
+    twilioNumber: '+OPEN_API_KEY',
   );
 
   // 인증절차 관련한 것들
