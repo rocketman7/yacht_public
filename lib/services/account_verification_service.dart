@@ -14,7 +14,6 @@ abstract class AccountVerificationService {
 class AccoutVerificationServiceMydata extends AccountVerificationService {
   //나중에 DB로 옮기는게..?
   //test token
-  // final String _token = 'ed1ff970f8c64e73857026e430dca5484aa2933e';
   //real token
   final String _token = 'YOUR_API_KEY';
 
