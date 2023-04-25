@@ -9,8 +9,8 @@ import 'package:yachtOne/models/yacht_store/giftishow_model.dart';
 import 'package:yachtOne/repositories/repository.dart';
 
 class GiftishowApiService extends GetxService {
-  final String customAuthCode = 'REALf42cca844b9b4bf7a54825acbd8b84a8';
-  final String customAuthToken = 'JMQUBA5aFkfxDXuWdOA9IA==';
+  final String customAuthCode = 'YOUR_API_KEY';
+  final String customAuthToken = 'YOUR_API_KEY==';
 
   final String goodsAddress = 'https://bizapi.giftishow.com/bizApi/goods/';
   final String sendCouponAddress = 'https://bizapi.giftishow.com/bizApi/send/';

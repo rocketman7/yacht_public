@@ -3,10 +3,8 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 
 abstract class AccountVerificationService {
-  Future<List<dynamic>> accOwnerVerification(
-      String accNum, String bankCode, String custName);
-  Future<List<dynamic>> accOccupyVerification(
-      String accNum, String bankCode, String authText);
+  Future<List<dynamic>> accOwnerVerification(String accNum, String bankCode, String custName);
+  Future<List<dynamic>> accOccupyVerification(String accNum, String bankCode, String authText);
   int authTextGenerate();
   int getBankListLength();
   Map<String, String> getBankList();
@@ -18,7 +16,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
   //test token
   // final String _token = 'ed1ff970f8c64e73857026e430dca5484aa2933e';
   //real token
-  final String _token = 'a65548647c7b477786f6b20a9413bbef60014c6f';
+  final String _token = 'YOUR_API_KEY';
 
   //나중에 DB로 옮기는게..?
   final Map<String, String> bankList = {
@@ -83,8 +81,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
   };
 
   @override
-  Future<List<dynamic>> accOwnerVerification(
-      String accNum, String bankCode, String custName) async {
+  Future<List<dynamic>> accOwnerVerification(String accNum, String bankCode, String custName) async {
     http.Response resp;
     Map<String, dynamic> body = {
       'OID': null,
@@ -96,8 +93,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
     print("BODY" + body.toString());
     resp = await http.post(
         // 'https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOwner',
-        Uri.parse(
-            'https://api.mydatahub.co.kr/scrap/common/settlebank/accountOwner'),
+        Uri.parse('https://api.mydatahub.co.kr/scrap/common/settlebank/accountOwner'),
         headers: {
           'Authorization': 'Token $_token',
           // 'Host': 'datahub-dev.scraping.co.kr',
@@ -113,8 +109,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
 
     if (resp.statusCode == 200) {
       print(respBody);
-      if (respBody['errCode'] == '0000') if (respBody['data']['OUTSTATCD'] ==
-          '0021')
+      if (respBody['errCode'] == '0000') if (respBody['data']['OUTSTATCD'] == '0021')
         return [true, 'success'];
       else
         return [false, '다시 시도해주세요:${respBody['data']['OUTRSLTMSG']}'];
@@ -126,8 +121,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
   }
 
   @override
-  Future<List<dynamic>> accOccupyVerification(
-      String accNum, String bankCode, String authText) async {
+  Future<List<dynamic>> accOccupyVerification(String accNum, String bankCode, String authText) async {
     http.Response resp;
     Map<String, dynamic> body = {
       'OID': null,
@@ -139,8 +133,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
 
     resp = await http.post(
         // 'https://datahub-dev.scraping.co.kr/scrap/common/settlebank/accountOccupation',
-        Uri.parse(
-            'https://api.mydatahub.co.kr/scrap/common/settlebank/accountOccupation'),
+        Uri.parse('https://api.mydatahub.co.kr/scrap/common/settlebank/accountOccupation'),
         headers: {
           'Authorization': 'Token $_token',
           // 'Host': 'datahub-dev.scraping.co.kr',
@@ -155,8 +148,7 @@ class AccoutVerificationServiceMydata extends AccountVerificationService {
     print('$respBody');
 
     if (resp.statusCode == 200) {
-      if (respBody['errCode'] == '0000') if (respBody['data']['OUTSTATCD'] ==
-          '0021') {
+      if (respBody['errCode'] == '0000') if (respBody['data']['OUTSTATCD'] == '0021') {
         return [true, 'success'];
       } else
         return [false, '다시 시도해주세요:${respBody['data']['OUTRSLTMSG']}'];

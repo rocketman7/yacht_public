@@ -1167,7 +1167,7 @@ exports.newComments = functions.region('asia-northeast3').firestore.document('/p
   {
     method: 'GET',
     headers: {
-      'Authorization': 'key=' + 'AAAA8qki2TY:APA91bFO6iE9SmMrzvaOCuddjiTKqONs_5C0iRsj_ytSUVCAyI0HBWBSh0a3V-irHzks227g5CqBnN7r-fr788MEn43Lfe9bGcVPcy3mVyEXC4Mso2eOGDxpZqbBk-fbXQJO7fcjANQ0',
+      'Authorization': 'key=' + 'YOUR_API_KEY',
     },
   });
 
